@@ -1,4 +1,3 @@
 <template>
-zwoo
-<test />
+<router-view />
 </template>
