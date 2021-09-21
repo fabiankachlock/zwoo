@@ -1,0 +1,27 @@
+{
+  "name": "zwoo",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "pinia": "^2.0.0-rc.9",
+    "vue": "^3.2.6",
+    "vue-router": "4.x.x"
+  },
+  "devDependencies": {
+    "@iconify/json": "^1.1.404",
+    "@types/vue": "^2.0.0",
+    "@types/vue-router": "^2.0.0",
+    "@vitejs/plugin-vue": "^1.6.1",
+    "@vue/compiler-sfc": "^3.2.6",
+    "prettier": "^2.4.1",
+    "typescript": "^4.4.3",
+    "vite": "^2.5.4",
+    "vite-plugin-components": "^0.13.3",
+    "vite-plugin-icons": "^0.6.5",
+    "vue-tsc": "^0.3.0"
+  }
+}
