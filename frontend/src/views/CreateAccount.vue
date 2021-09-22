@@ -1,10 +1,7 @@
+
 <template>
-  <router-view />
+Create Account
 </template>
 
 <script setup lang="ts">
 </script>
-
-<style>
-
-</style>
