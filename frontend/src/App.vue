@@ -4,8 +4,12 @@
       <header>
         <div id="row">
           <h1 id="title">zwoo</h1>
-          <div id="menu">menu</div>
+          <div id="menu">
+            <div @click="toggleMenu" id="menu-button">
+              <Icon :icon="icon" />
+            </div>
           </div>
+        </div>
       </header>
     </div>
     <p style="font-size: var(--f-s)">Test</p>
@@ -18,6 +22,15 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+import { ref, computed } from 'vue';
+
+const isMenuOpen = ref(false);
+const icon = computed(() => (isMenuOpen.value ? 'mdi:menu-open' : 'mdi:menu'));
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 </script>
 
 <style scoped>
@@ -30,7 +43,7 @@
 }
 
 #header-wrapper {
-  height: 40px;
+  height: 48px;
   background-color: var(--bg-darker);
   border-bottom: 1px solid var(--primary);
   box-shadow: 0px 3px 5px 2px var(--shadow-dark);
@@ -57,11 +70,24 @@ header {
 
 #menu {
   height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#menu-button {
+  display: none;
+  height: var(--f-xl);
+  font-size: var(--f-xl);
+  transition: 200ms linear all;
+  color: var(--primary);
 }
 
 @media screen and (min-width: 768px) {
   #header-wrapper {
     height: 60px;
+  }
+  #menu-button {
+    display: block;
   }
 }
 </style>
