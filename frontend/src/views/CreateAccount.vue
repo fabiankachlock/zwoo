@@ -1,7 +1,3 @@
+<template>Create Account</template>
 
-<template>
-Create Account
-</template>
-
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>

@@ -1,8 +1,3 @@
+<template>Login</template>
 
-
-<template>
-    Login
-</template>
-
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>

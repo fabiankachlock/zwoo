@@ -1,8 +1,6 @@
-
 <template>
-Menu
-<router-view></router-view>
+  Menu
+  <router-view></router-view>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
