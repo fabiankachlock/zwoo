@@ -1,0 +1,107 @@
+:root {
+	--primary: #2c88c3;
+	--secondary: #cc2936;
+
+	--bg-lighter: #fbfcf5;
+	--bg-light: #f5f4ed;
+	--bg-main: #e5e4dd;
+	--bg-dark: #e0dfd2;
+	--bg-darker: #d4d3c8;
+
+	--shadow-main: rgba(14, 30, 62, 0.3);
+	--shadow-dark: rgba(8, 19, 41, 0.4);
+	--shadow-light: rgba(44, 64, 102, 0.2);
+
+	--bp-xs: 576px;
+	--bp-m: 768px;
+	--bp-l: 992px;
+	--bp-xl: 1200px;
+	--bp-xxl: 1400px;
+
+	--f-s: 0.75rem;
+	--f-m: 1rem;
+	--f-l: 1.5rem;
+	--f-xl: 2rem;
+	--f-xxl: 3rem;
+}
+
+body.dark {
+	--primary: #3066be;
+	--secondary: #991d1d;
+
+	--bg-lighter: #525677;
+	--bg-light: #3c3f58;
+	--bg-main: #2d3047;
+	--bg-dark: #23263b;
+	--bg-darker: #161925;
+
+	--shadow-main: rgba(121, 137, 168, 0.3);
+	--shadow-dark: rgba(114, 130, 163, 0.2);
+	--shadow-light: rgba(181, 195, 224, 0.4);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+	font-family: 'sans', apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+	display: block;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body {
+	min-height: 100vh;
+	background-color: var(--bg-main);
+}
+
+html {
+	font-size: 16px;
+}
+
+@media screen and (min-width: 768px) {
+	html {
+		font-size: 20px;
+	}
+}
