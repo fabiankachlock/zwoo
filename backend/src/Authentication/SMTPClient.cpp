@@ -1,4 +1,4 @@
-#include "SMTPClass.h"
+#include "SMTPClient.h"
 
 namespace Backend::Authentication
 {
@@ -7,12 +7,12 @@ namespace Backend::Authentication
    };
 
 
-   SMTPClass::SMTPClass()
+   SMTPClient::SMTPClient()
    {
 
    }
 
-   SMTPClass::~SMTPClass()
+   SMTPClient::~SMTPClient()
    {
 
    }
