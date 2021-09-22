@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(zwoo_backend VERSION 0.1.0)
 
-include(CTest)
-enable_testing()
+# Setting Output Directorys
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+
+include_directories(include/)
 
 set(SRC_FILES
     "src/main.cpp"
@@ -11,8 +16,3 @@ set(SRC_FILES
 )
 
 add_executable(main ${SRC_FILES})
-
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
