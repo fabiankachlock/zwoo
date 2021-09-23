@@ -39,35 +39,35 @@
 	}
 
 	.bc-main {
-		@apply bg-_bg-light dark:bg-_bg-dark;
+		@apply border-_bg-light dark:border-_bg-dark;
 	}
 	.bc-light {
-		@apply bg-_bg-light-light dark:bg-_bg-dark-light;
+		@apply border-_bg-light-light dark:border-_bg-dark-light;
 	}
 	.bc-lightest {
-		@apply bg-_bg-light-lightest dark:bg-_bg-dark-lightest;
+		@apply border-_bg-light-lightest dark:border-_bg-dark-lightest;
 	}
 	.bc-dark {
-		@apply bg-_bg-light-dark dark:bg-_bg-dark-dark;
+		@apply border-_bg-light-dark dark:border-_bg-dark-dark;
 	}
 	.bc-darkest {
-		@apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest;
+		@apply border-_bg-light-darkest dark:border-_bg-dark-darkest;
 	}
 
 	.bc-invert-main {
-		@apply bg-_bg-dark dark:bg-_bg-light;
+		@apply border-_bg-dark dark:border-_bg-light;
 	}
 	.bc-invert-light {
-		@apply bg-_bg-dark-light dark:bg-_bg-light-light;
+		@apply border-_bg-dark-light dark:border-_bg-light-light;
 	}
 	.bc-invert-lightest {
-		@apply bg-_bg-dark-lightest dark:bg-_bg-light-lightest;
+		@apply border-_bg-dark-lightest dark:border-_bg-light-lightest;
 	}
 	.bc-invert-dark {
-		@apply bg-_bg-dark-dark dark:bg-_bg-light-dark;
+		@apply border-_bg-dark-dark dark:border-_bg-light-dark;
 	}
 	.bc-invert-darkest {
-		@apply bg-_bg-dark-darkest dark:bg-_bg-light-darkest;
+		@apply border-_bg-dark-darkest dark:border-_bg-light-darkest;
 	}
 
 	.bc-primary {
@@ -114,7 +114,11 @@ body.dark {
 
 body {
 	min-height: 100vh;
-	background-color: var(--bg-main);
+}
+
+#app {
+	min-height: 100vh;
+	@apply bg-_bg-light dark:bg-_bg-dark;
 }
 
 html {
