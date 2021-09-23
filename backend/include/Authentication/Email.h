@@ -3,6 +3,8 @@
 
 #include "zwoo.h"
 
+#include <libwebsockets.h>
+
 namespace Backend::Authentication
 {
 
@@ -14,10 +16,8 @@ namespace Backend::Authentication
 
         void AddLine(std::string line);
 
-        std::string m_recipient;
-        std::string m_subject;
-
-        std::string m_emailText;
+    private:
+        // m_email;
     };
 
 }

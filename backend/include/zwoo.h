@@ -1,8 +1,6 @@
 #ifndef _ZWOO_H_
 #define _ZWOO_H_
 
-#define Linux
-
 #define SMTP_HOST "smtp.gmail.com"
 #define SMTP_PORT 465
 
