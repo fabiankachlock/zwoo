@@ -3,6 +3,8 @@
 #include "Email.h"
 #include "zwoo.h"
 
+#include <curl/curl.h>
+
 namespace Backend::Authentication
 {   
     class SMTPClient {
