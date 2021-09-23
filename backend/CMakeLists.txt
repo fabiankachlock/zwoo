@@ -6,8 +6,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+include_directories(include/ ${LIBWEBSOCKETS_INCLUDE_DIRS})
 
-include_directories(include/)
+find_package(libwebsockets REQUIRED)
 
 set(SRC_FILES
     "src/main.cpp"
@@ -16,3 +17,4 @@ set(SRC_FILES
 )
 
 add_executable(main ${SRC_FILES})
+target_link_libraries(main ${LIBWEBSOCKETS_LIBRARIES})
