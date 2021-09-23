@@ -4,25 +4,45 @@ module.exports = {
     theme: {
         colors: {
             primary: {
-                DEFAULT: '#3066be'
+                light: '#336ECC',
+                DEFAULT: '#3066BE',
+                dark: '#2D60B3',
+                'text-dark': '#2659AB',
+                'text-light': '#679DF5'
             },
             secondary: {
-                DEFAULT: '#991d1d'
+                light: '#B32222',
+                DEFAULT: '#A61F1F',
+                dark: '#991D1D',
+                'text-dark': '#991A1A',
+                'text-light': 'FF6666'
             },
             '_bg-light': {
-                lightest: '#fbfaf3',
-                light: '#f0efe8',
-                DEFAULT: '#e5e4dd',
-                dark: '#dad9d2',
-                darkest: '#cfcec7',
+                lightest: '#FFFEF7',
+                light: '#F2F1EB',
+                DEFAULT: '#E5E4DD',
+                dark: '#D9D8D2',
+                darkest: '#CCCBC6'
             },
             '_bg-dark': {
-                lightest: '#43465d',
-                light: '#383b52',
-                DEFAULT: '#2d3047',
-                dark: '#22253c',
-                darkest: '#171a31'
+                lightest: '#3D4161',
+                light: '#353954',
+                DEFAULT: '#2D3047',
+                dark: '#25273B',
+                darkest: '#1D1F2E'
             },
+            '_text-light': {
+                light: '#F0EFEB',
+                DEFAULT: '#E6E5E1',
+                dark: '#DEDDD9',
+                secondary: '#BFBEBA'
+            },
+            '_text-dark': {
+                light: '#191936',
+                DEFAULT: '#07071C',
+                dark: '#050514',
+                secondary: '#4B4B61',
+            }
         },
         extend: {
             fontFamily: {

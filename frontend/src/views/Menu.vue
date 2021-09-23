@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-darkest h-10 border-primary border-b-2 shadow-sm">
+  <div class="bg-darkest h-10 bc-primary border-b-1 shadow-sm">
     <header class="h-full">
       <div class="h-full mx-4 my-0 relative flex justify-between items-center flex-row">
-        <h1 class="text-primary text-4xl">zwoo</h1>
+        <h1 class="tc-primary text-4xl">zwoo</h1>
         <div class="h-full flex items-center">
-          <div @click="toggleMenu" class="md:hidden text-3xl">
-            <Icon :icon="icon" />
+          <div @click="toggleMenu" class="md:hidden text-3xl tc-main-secondary">
+            <Icon :icon="icon" class="tc-main-secondary" />
           </div>
         </div>
       </div>
