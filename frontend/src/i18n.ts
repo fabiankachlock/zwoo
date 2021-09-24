@@ -2,7 +2,6 @@ import { createI18n, LocaleMessages, VueMessageType } from 'vue-i18n';
 
 export const supportedLanguages = ['en', 'de'];
 export const defaultLanguage = 'en';
-export const languageKey = 'zwoo:lng';
 
 /**
  * Load locale messages

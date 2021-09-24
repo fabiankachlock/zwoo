@@ -27,5 +27,16 @@ module.exports = {
       .type('javascript/auto')
       .use('i18n')
       .loader('@intlify/vue-i18n-loader')
+  },
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: "javascript/auto"
+        }
+      ]
+    }
   }
 };

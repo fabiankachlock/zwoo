@@ -14,27 +14,23 @@
 </template>
 
 <script setup lang="ts">
-import { supportedLanguages, defaultLanguage, languageKey } from '@/i18n';
+import { supportedLanguages } from '@/i18n';
+import { useConfig } from '@/stores/config';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-const { t, locale } = useI18n();
 
+const { t } = useI18n();
+const config = useConfig();
 const selection = ref<HTMLSelectElement>();
 
 onMounted(() => {
-  const stored = localStorage.getItem(languageKey);
-  if (stored && selection.value) {
-    selection.value.value = stored;
-    locale.value = stored;
-  } else if (selection.value) {
-    selection.value.value = defaultLanguage;
-    localStorage.setItem(languageKey, defaultLanguage);
+  if (selection.value) {
+    selection.value.value = config.language;
   }
 
   selection.value?.addEventListener('change', () => {
-    const lng = selection.value?.value || '';
-    localStorage.setItem(languageKey, lng);
-    locale.value = lng;
+    const lng = selection.value?.value || 'en';
+    config.setLanguage(lng);
   });
 });
 </script>
