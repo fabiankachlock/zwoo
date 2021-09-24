@@ -1,13 +1,15 @@
 #include <iostream>
 
-#include "SMTPClient.h"
+#include "Authentication/SMTPClient.h"
 
 int main()
 {
     
-    auto smtpClient = Backend::Authentication::SMTPClient();
+    //auto smtpClient = Backend::Authentication::SMTPClient();
 
-    smtpClient.SetSMTPHost(SMTP_HOST, SMTP_PORT);
+    //smtpClient.SetSMTPHost(SMTP_HOST, SMTP_PORT);
+
+    
 
     std::cout << "Hello World!" << std::endl;
 

@@ -10,13 +10,12 @@ set(SRC_FILES
     "src/main.cpp"
 
     "src/Authentication/SMTPClient.cpp"
+    "src/Authentication/Email.cpp"
 )
 
 find_package(CURL REQUIRED)
 
-message("Files: " ${SRC_FILES})
-
-include_directories(include/ CURL_INCLUDE_DIRS)
+include_directories(include/ ${CURL_INCLUDE_DIRS})
 
 add_executable(main ${SRC_FILES})
-target_link_libraries(main CURL_LIBRARIES)
+target_link_libraries(main ${CURL_LIBRARIES})

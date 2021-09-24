@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Email.h"
+#include <cstring>
+
+#include "Authentication/Email.h"
 #include "zwoo.h"
 
 #include <curl/curl.h>
@@ -16,19 +18,22 @@ namespace Backend::Authentication
         std::string m_senderName;
         std::string m_senderEmail;
 
-        std::string m_serverName;
-        unsigned short m_serverPort;
+        static std::vector<std::string> m_messagePayload;
 
-        int m_socket;
+        CURL* curl;
 
     public:
         SMTPClient();
         ~SMTPClient();
 
-        void SetSMTPHost(const char* server, const unsigned short port = 0);
+        //void SetSMTPHost(std::string server, const unsigned short port = 0);
 
         bool SendEmail(Email* email);
         int ConnectToServer();
+
+    private:
+
+        static size_t PayloadSource(void *ptr, size_t size, size_t nmemb, void *userp);
     };
 
 } // namespace Backend::Authentication
