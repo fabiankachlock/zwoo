@@ -1,8 +1,12 @@
 <template>
-  <button @click="toggleDarkMode">use {{ isDarkMode ? 'light' : 'dark' }}</button>
+  <button @click="toggleDarkMode" class="tc-main text-xl transform ease-linear transition-transform hover:scale-110">
+    <Icon icon="ri:moon-fill" v-show="!isDarkMode" />
+    <Icon icon="ri:sun-fill" v-show="isDarkMode" />
+  </button>
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
 import { ref, watch } from 'vue';
 const isDarkMode = ref(false);
 const storageKey = 'zwoo:ui';

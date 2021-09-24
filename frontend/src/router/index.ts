@@ -3,6 +3,7 @@ import CreateAccount from '../views/CreateAccount.vue';
 import Login from '../views/Login.vue';
 import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
+import Settings from '../views/Settings.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -11,6 +12,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Menu,
     redirect: '/home',
     children: [
+      {
+        path: '/settings',
+        component: Settings
+      },
       {
         path: '/login',
         component: Login
