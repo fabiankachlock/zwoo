@@ -22,6 +22,6 @@ defineProps<{
 
 <style scoped>
 .link {
-  @apply flex flex-row justify-start items-center transform ease-linear transition-transform md:hover:-translate-y-1 md:hover:translate-x-0 hover:translate-x-1;
+  @apply flex flex-row justify-start cursor-pointer items-center transform ease-linear transition-transform md:hover:-translate-y-1 md:hover:translate-x-0 hover:translate-x-1;
 }
 </style>

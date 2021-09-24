@@ -2,7 +2,9 @@
   <div class="bg-darkest h-10 bc-primary border-b-1 shadow-sm">
     <header class="h-full">
       <div class="h-full mx-4 my-0 relative flex justify-between items-center flex-row">
-        <h1 class="tc-primary text-4xl">zwoo</h1>
+        <router-link to="/home" class="cursor-pointer">
+          <h1 class="tc-primary text-4xl">zwoo</h1>
+        </router-link>
         <NavBar />
       </div>
     </header>
