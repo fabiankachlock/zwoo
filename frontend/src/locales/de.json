@@ -1,3 +1,10 @@
 {
-    "test2": "hallo i18n de !!"
+  "settings": {
+    "darkmode": "Dunkler Modus",
+    "language": "Sprache"
+  },
+  "lng": {
+    "de": "Deutsch",
+    "en": "Englisch"
   }
+}

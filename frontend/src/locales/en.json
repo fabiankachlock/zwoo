@@ -1,3 +1,10 @@
 {
-  "test2": "hello i18n !!"
+  "settings": {
+    "darkmode": "Dark Mode",
+    "language": "Language"
+  },
+  "lng": {
+    "de": "German",
+    "en": "English"
+  }
 }
