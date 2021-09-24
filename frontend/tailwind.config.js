@@ -42,7 +42,7 @@ module.exports = {
                     light: '#191936',
                     DEFAULT: '#07071C',
                     dark: '#050514',
-                    secondary: '#4B4B61',
+                    secondary: '#49495E',
                 }
             },
             fontFamily: {

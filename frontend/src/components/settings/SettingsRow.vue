@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-row justify-between items-center bg-dark px-1 py-3 my-4 rounded-lg">
-    <div class="h-full flex-1 mx-2 tc-main-dark">
+    <div class="h-full flex-1 mx-2 tc-main-secondary">
       {{ t('settings.' + title) }}
     </div>
     <div class="mx-2 h-full flex items-center justify-end">

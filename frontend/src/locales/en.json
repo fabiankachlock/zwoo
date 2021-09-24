@@ -1,10 +1,18 @@
 {
   "settings": {
+    "title": "Settings",
     "darkmode": "Dark Mode",
     "language": "Language"
   },
   "lng": {
     "de": "German",
     "en": "English"
+  },
+  "nav": {
+    "login": "Login",
+    "createAccount": "Create Account",
+    "idea": "New Idea?",
+    "github": "Github",
+    "logout": "Logout"
   }
 }

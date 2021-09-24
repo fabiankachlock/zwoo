@@ -14,12 +14,10 @@
 </template>
 
 <script setup lang="ts">
-import { supportedLanguages, defaultLanguage } from '@/i18n';
+import { supportedLanguages, defaultLanguage, languageKey } from '@/i18n';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 const { t, locale } = useI18n();
-
-const languageKey = 'zwoo:lng';
 
 const selection = ref<HTMLSelectElement>();
 
