@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "title": "Einstellungen",
+    "darkmode": "Dunkler Modus",
+    "language": "Sprache"
+  },
+  "lng": {
+    "de": "Deutsch",
+    "en": "Englisch"
+  },
+  "nav": {
+    "login": "Anmelden",
+    "createAccount": "Account erstellen",
+    "idea": "Neue Idee?",
+    "github": "Github",
+    "logout": "Abmelden",
+    "settings": "Einstellungen"
+  }
+}
