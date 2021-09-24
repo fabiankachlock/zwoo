@@ -13,6 +13,7 @@
     "createAccount": "Create Account",
     "idea": "New Idea?",
     "github": "Github",
-    "logout": "Logout"
+    "logout": "Logout",
+    "settings": "Settings"
   }
 }

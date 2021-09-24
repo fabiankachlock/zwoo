@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex items-center relative">
-    <div @click="toggleMenu" class="md:hidden text-3xl tc-main-secondary">
+    <div @click="toggleMenu" class="md:hidden text-3xl tc-main-secondary cursor-pointer">
       <Icon :icon="icon" class="tc-main-secondary" />
     </div>
     <div

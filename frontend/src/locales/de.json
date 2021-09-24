@@ -13,6 +13,7 @@
     "createAccount": "Account erstellen",
     "idea": "Neue Idee?",
     "github": "Github",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "settings": "Einstellungen"
   }
 }
