@@ -19,21 +19,21 @@ module.exports = {
                     'text-light': 'FF6666'
                 },
                 '_bg-light': {
-                    lightest: '#FFFEF7',
-                    light: '#F2F1EB',
-                    DEFAULT: '#E5E4DD',
-                    dark: '#D9D8D2',
-                    darkest: '#CCCBC6'
+                    lightest: '#FFFFFC',
+                    light: '#F2F2F0',
+                    DEFAULT: '#E6E5E3',
+                    dark: '#D9D8D7',
+                    darkest: '#CCCCCA'
                 },
                 '_bg-dark': {
-                    lightest: '#3D4161',
-                    light: '#353954',
-                    DEFAULT: '#2D3047',
-                    dark: '#25273B',
-                    darkest: '#1D1F2E'
+                    lightest: '#4A4C61',
+                    light: '#404254',
+                    DEFAULT: '#363847',
+                    dark: '#2D2E3B',
+                    darkest: '#23242E'
                 },
                 '_text-light': {
-                    light: '#F0EFEB',
+                    light: '#EDECE8',
                     DEFAULT: '#E6E5E1',
                     dark: '#DEDDD9',
                     secondary: '#BFBEBA'
