@@ -1,11 +1,13 @@
 <template>
   <router-view />
+  <Error title="test" />
 </template>
 
 <script setup lang="ts">
 import { defaultLanguage, languageKey } from '@/i18n';
 import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import Error from './components/misc/Error.vue';
 const { locale } = useI18n();
 
 onMounted(() => {

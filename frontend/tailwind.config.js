@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 module.exports = {
     purge: ['./public/index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     darkMode: 'class',
@@ -43,6 +45,14 @@ module.exports = {
                     DEFAULT: '#07071C',
                     dark: '#050514',
                     secondary: '#49495E',
+                },
+                error: {
+                    'light-bg': colors.red[500] + '80', // add alpha
+                    'light-border': colors.red[500],
+                    'dark-bg': colors.red[700] + '80', // add alpha
+                    'dark-border': colors.red[700],
+                    'light-text': colors.gray[800],
+                    'dark-text': colors.gray[100],
                 }
             },
             fontFamily: {
