@@ -6,15 +6,17 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-include_directories(include/ ${LIBWEBSOCKETS_INCLUDE_DIRS})
-
-find_package(libwebsockets REQUIRED)
-
 set(SRC_FILES
     "src/main.cpp"
 
-    "src/Authentication/SMTPClass.cpp"
+    "src/Authentication/SMTPClient.cpp"
 )
 
+find_package(CURL REQUIRED)
+
+message("Files: " ${SRC_FILES})
+
+include_directories(include/ CURL_INCLUDE_DIRS)
+
 add_executable(main ${SRC_FILES})
-target_link_libraries(main ${LIBWEBSOCKETS_LIBRARIES})
+target_link_libraries(main CURL_LIBRARIES)
