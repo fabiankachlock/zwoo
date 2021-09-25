@@ -6,36 +6,15 @@
 </template>
 
 <script setup lang="ts">
+import { useConfig } from '@/stores/config';
 import { Icon } from '@iconify/vue';
-import { ref, watch } from 'vue';
-const isDarkMode = ref(false);
-const storageKey = 'zwoo:ui';
-const stored = localStorage.getItem(storageKey);
+import { ref } from 'vue';
 
-const setDarkMode = (isOn: boolean) => {
-  if (isOn) {
-    document.body.classList.add('dark');
-  } else {
-    document.body.classList.remove('dark');
-  }
-};
+const config = useConfig();
+const isDarkMode = ref(config.useDarkMode);
 
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value;
+  config.setDarkMode(isDarkMode.value);
 };
-
-if (stored) {
-  const isDark = stored === 'dark';
-  isDarkMode.value = isDark;
-} else {
-  const userPreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  isDarkMode.value = userPreference;
-}
-
-setDarkMode(isDarkMode.value);
-
-watch(isDarkMode, () => {
-  localStorage.setItem(storageKey, isDarkMode.value ? 'dark' : 'ligth');
-  setDarkMode(isDarkMode.value);
-});
 </script>
