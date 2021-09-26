@@ -4,14 +4,25 @@
 
 int main()
 {
-    
-    //auto smtpClient = Backend::Authentication::SMTPClient();
+    auto client = Backend::Authentication::SMTPClient();
 
-    //smtpClient.SetSMTPHost(SMTP_HOST, SMTP_PORT);
+    client.m_password = "";
+    client.m_username = "zwoo.auth@gmail.com";
+    //client.m_senderName = "zwoo";
 
-    
+    Backend::Authentication::Email mail = Backend::Authentication::Email();
 
-    std::cout << "Hello World!" << std::endl;
+    mail.from = "<zwoo.auth@gmail.com>";
+    mail.to = "<contact@fabiankachlock.dev>";
+    mail.subject = "Test Mail";
+    mail.header = "Header";
+
+    mail.AddLine("");
+    mail.AddLine("This is a Test Mail!");
+    mail.AddLine("Hopefully it works...");
+    mail.AddLine("Please Send Respons via Discord.");
+
+    client.SendEmail(mail);
 
     return 0;
 }

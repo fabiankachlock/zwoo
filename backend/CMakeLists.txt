@@ -10,7 +10,6 @@ set(SRC_FILES
     "src/main.cpp"
 
     "src/Authentication/SMTPClient.cpp"
-    "src/Authentication/Email.cpp"
 )
 
 find_package(CURL REQUIRED)
