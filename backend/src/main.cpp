@@ -1,13 +1,14 @@
 #include <iostream>
 
+#include "../login_data.h"
 #include "Authentication/SMTPClient.h"
 
 int main()
 {
     auto client = Backend::Authentication::SMTPClient();
 
-    client.m_password = "";
-    client.m_username = "zwoo.auth@gmail.com";
+    client.m_password = PASSWORD;
+    client.m_username = USERNAME;
 
     Backend::Authentication::Email mail = Backend::Authentication::Email();
 
