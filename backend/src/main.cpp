@@ -8,7 +8,6 @@ int main()
 
     client.m_password = "";
     client.m_username = "zwoo.auth@gmail.com";
-    //client.m_senderName = "zwoo";
 
     Backend::Authentication::Email mail = Backend::Authentication::Email();
 

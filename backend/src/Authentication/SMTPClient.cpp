@@ -2,7 +2,6 @@
 
 namespace Backend::Authentication
 {
-    void print_vector(std::vector<std::string> vec);
     static std::vector<std::string> m_payload;
 
     struct s_UploadStatus
@@ -54,8 +53,6 @@ namespace Backend::Authentication
                 m_payload.push_back(line + "\r\n");
 
             m_payload.push_back("NULL");
-
-            print_vector(m_payload);
 
             // Set SMTP Server and Login data
             curl_easy_setopt(curl, CURLOPT_USERNAME, m_username.c_str());
@@ -115,11 +112,4 @@ namespace Backend::Authentication
 
         return 0;
     }
-
-    void print_vector(std::vector<std::string> vec)
-    {
-        for (auto line : vec)
-            std::cout << line << "\n";
-    }
-
 }

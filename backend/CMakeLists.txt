@@ -10,6 +10,7 @@ set(SRC_FILES
     "src/main.cpp"
 
     "src/Authentication/SMTPClient.cpp"
+    "src/Authentication/Authentication.cpp"
 )
 
 find_package(CURL REQUIRED)

@@ -1,3 +1,5 @@
 .DS_Store
 *.log
 .vscode/
+
+login_data.h
