@@ -9,19 +9,21 @@
         }
       "
         class="
+          bg-darkest
           shadow
           appearance-none
           border
-          bc-invert-main
+          bc-main
           rounded
           w-full
           py-2
           px-3
-          tc-main-dark
+          tc-main-light
           leading-tight
-          focus:outline-none focus:shadow-outline focus:border-primary
+          focus:outline-none focus:shadow-outline focus:border-primary-light
+          dark:focus:border-primary-dark
         "
-        type="text"
+        :type="isPassword ? 'password' : 'text'"
         :id="id"
         :placeholder="placeholder"
         @keyup="updateInput"
@@ -44,6 +46,7 @@ const props = defineProps<{
   modelValue: string;
   validate?: (str: string) => [boolean, string];
   placeholder?: string;
+  isPassword?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -52,7 +55,7 @@ const emit = defineEmits<{
 }>();
 
 const input = ref<HTMLInputElement>();
-const isValid = ref<boolean>(!!props.validate);
+const isValid = ref<boolean>(true);
 const error = ref<string>('');
 
 const { t } = useI18n();
@@ -60,7 +63,6 @@ const { t } = useI18n();
 const updateInput = () => {
   const newValue = input.value?.value || '';
   [isValid.value, error.value] = props.validate ? props.validate(newValue) : [true, ''];
-  console.log(props.validate!(newValue));
 
   emit('update:modelValue', newValue);
   emit('update:isValid', isValid.value);

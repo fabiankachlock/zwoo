@@ -15,5 +15,12 @@
     "github": "Github",
     "logout": "Abmelden",
     "settings": "Einstellungen"
+  },
+  "login": {
+    "title": "Anmeldung",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "login": "Anmelden",
+    "resetPassword": "Passwort zurücksetzten"
   }
 }
