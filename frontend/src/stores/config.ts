@@ -20,18 +20,9 @@ const changeUIMode = (isDark: boolean) => {
 
 export const useConfig = defineStore('config', {
   state: () => {
-    const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
-    i18n.global.locale.value = storedLng;
-
-    const rawStoredDarkMode = localStorage.getItem(uiKey);
-    const storedDarkMode = rawStoredDarkMode
-      ? rawStoredDarkMode === 'dark'
-      : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    changeUIMode(storedDarkMode);
-
     return {
-      useDarkMode: storedDarkMode,
-      language: storedLng,
+      useDarkMode: false,
+      language: 'en',
       isLoggedIn: false
     };
   },
@@ -44,6 +35,21 @@ export const useConfig = defineStore('config', {
     setLanguage(lng: string) {
       this.language = lng;
       changeLanguage(lng);
+    },
+    configure() {
+      const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
+      i18n.global.locale.value = storedLng;
+
+      const rawStoredDarkMode = localStorage.getItem(uiKey);
+      const storedDarkMode = rawStoredDarkMode
+        ? rawStoredDarkMode === 'dark'
+        : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      changeUIMode(storedDarkMode);
+
+      this.$patch({
+        useDarkMode: storedDarkMode,
+        language: storedLng
+      });
     }
   }
 });
