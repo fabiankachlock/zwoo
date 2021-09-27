@@ -12,6 +12,7 @@
         <button
           class="bg-darkest tc-main-light font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform transition hover:scale-95"
           type="button"
+          @click="logIn"
         >
           {{ t('login.login') }}
         </button>
@@ -24,12 +25,18 @@
 </template>
 
 <script setup lang="ts">
+import { useConfig } from '@/core/adapter/config';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import TextInput from '../components/misc/TextInput.vue';
 
 const { t } = useI18n();
+const config = useConfig();
 
 const username = ref('');
 const password = ref('');
+
+const logIn = () => {
+  config.login(username.value, password.value);
+};
 </script>

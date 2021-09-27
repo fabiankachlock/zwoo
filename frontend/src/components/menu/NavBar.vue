@@ -17,11 +17,13 @@
 </template>
 
 <script setup lang="ts">
+import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
 import { ref, computed } from 'vue';
 import NavBarLinks from './NavBarLinks.vue';
+const config = useConfig();
 
-const isLoggedIn = true; // TODO: Placeholder
+const isLoggedIn = computed(() => config.isLoggedIn);
 const isMenuOpen = ref(false);
 const icon = computed(() => (isMenuOpen.value ? 'gg:close' : 'gg:menu-grid-o'));
 
