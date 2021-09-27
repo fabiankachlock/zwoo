@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { Validator } from '@/core/services/validator/_type';
 import { defineProps, defineEmits, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Error from './Error.vue';
@@ -44,7 +45,7 @@ const props = defineProps<{
   id: string;
   labelKey: string;
   modelValue: string;
-  validate?: (str: string) => [boolean, string];
+  validator?: Validator<string>;
   placeholder?: string;
   isPassword?: boolean;
 }>();
@@ -62,7 +63,12 @@ const { t } = useI18n();
 
 const updateInput = () => {
   const newValue = input.value?.value || '';
-  [isValid.value, error.value] = props.validate ? props.validate(newValue) : [true, ''];
+  const validationResult = props.validator ? props.validator.validate(newValue) : undefined;
+
+  if (validationResult) {
+    isValid.value = validationResult.isValid;
+    error.value = validationResult.getErrors().join('\n');
+  }
 
   emit('update:modelValue', newValue);
   emit('update:isValid', isValid.value);
