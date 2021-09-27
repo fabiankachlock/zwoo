@@ -1,5 +1,9 @@
 import i18n, { defaultLanguage } from '@/i18n';
 import { defineStore } from 'pinia';
+import { AuthenticationService } from '../services/api/Authentication';
+import { EmailValidator } from '../services/validator/email';
+import { PasswordValidator } from '../services/validator/password';
+import { PasswordMatchValidator } from '../services/validator/passwordMatch';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -23,6 +27,7 @@ export const useConfig = defineStore('config', {
     return {
       useDarkMode: false,
       language: 'en',
+      username: '',
       isLoggedIn: false
     };
   },
@@ -35,6 +40,35 @@ export const useConfig = defineStore('config', {
     setLanguage(lng: string) {
       this.language = lng;
       changeLanguage(lng);
+    },
+    async login(username: string, password: string) {
+      const status = await AuthenticationService.performLogin(username, password);
+
+      this.$patch({
+        username: status.username,
+        isLoggedIn: status.isLoggedIn
+      });
+    },
+    async logout() {
+      const status = await AuthenticationService.performLogout();
+
+      this.$patch({
+        username: status.username,
+        isLoggedIn: status.isLoggedIn
+      });
+    },
+    async createAccount(username: string, email: string, password: string, repeatPassword: string) {
+      // re validate data
+      if (!new EmailValidator().validate(email).isValid) return;
+      if (!new PasswordValidator().validate(password).isValid) return;
+      if (!new PasswordMatchValidator().validate([password, repeatPassword]).isValid) return;
+
+      const status = await AuthenticationService.performCreateAccount(username, email, password);
+
+      this.$patch({
+        username: status.username,
+        isLoggedIn: status.isLoggedIn
+      });
     },
     configure() {
       const storedLng = localStorage.getItem(languageKey) || defaultLanguage;

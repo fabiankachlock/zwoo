@@ -22,5 +22,13 @@
     "password": "Password",
     "login": "Login",
     "resetPassword": "Reset Password"
+  },
+  "errors": {
+    "error": "Error",
+    "invalidEmail": "Email is invalid.",
+    "passwordsDontMatch": "The Passwords don't match.",
+    "passwordNotLongEnough": "Password should be at least 8 Characters long.",
+    "shouldContainNumber": "Password should contain at least one number.",
+    "shouldContainSpecialChar": "Password should contain at least one special character."
   }
 }

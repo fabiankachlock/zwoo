@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { useConfig } from '@/stores/config';
+import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 
