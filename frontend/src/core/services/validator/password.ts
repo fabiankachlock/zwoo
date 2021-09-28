@@ -11,7 +11,7 @@ export class PasswordValidator implements Validator<string> {
     const errors = [] as string[];
 
     if (!longEnough) {
-      errors.push('error.passwordNotLongEnough');
+      errors.push('errors.passwordNotLongEnough');
     }
 
     if (!containsNumber) {

@@ -23,6 +23,15 @@
     "login": "Anmelden",
     "resetPassword": "Passwort zurücksetzten"
   },
+  "createAccount": {
+    "title": "Account Erstellen",
+    "email": "E-Mail",
+    "emailExample": "jemand{0}beispiel.de",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "create": "Erstellen",
+    "passwordRepeat": "Passwort Wiederholen"
+  },
   "errors": {
     "error": "Error",
     "invalidEmail": "Die Email ist ungültig",

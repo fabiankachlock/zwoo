@@ -28,3 +28,4 @@ pnpm-debug.log*
 .firebaserc
 firebase.json
 .firebase/
+.env.private

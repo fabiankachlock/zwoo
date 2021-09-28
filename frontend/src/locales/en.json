@@ -23,6 +23,15 @@
     "login": "Login",
     "resetPassword": "Reset Password"
   },
+  "createAccount": {
+    "title": "Create Account",
+    "email": "E-Mail",
+    "emailExample": "someone{0}example.com",
+    "username": "Username",
+    "password": "Password",
+    "create": "Create",
+    "passwordRepeat": "Repeat Password"
+  },
   "errors": {
     "error": "Error",
     "invalidEmail": "Email is invalid.",

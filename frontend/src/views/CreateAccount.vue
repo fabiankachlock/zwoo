@@ -1,3 +1,78 @@
-<template>Create Account</template>
+<template>
+  <div class="w-full sm:max-w-xs mx-auto">
+    <form class="bg-lightest shadow-md sm:rounded-sm px-6 py-4 mb-4 mt-8">
+      <h1 class="tc-main my-3 text-center text-3xl">{{ t('createAccount.title') }}</h1>
+      <div class="mb-4">
+        <TextInput id="username" v-model="username" labelKey="createAccount.username" :placeholder="t('createAccount.username')" />
+      </div>
+      <div class="mb-4">
+        <TextInput
+          id="email"
+          v-model="email"
+          labelKey="createAccount.email"
+          :placeholder="t('createAccount.emailExample', ['@'])"
+          :validator="emailValidator"
+        />
+      </div>
+      <div class="mb-4">
+        <TextInput
+          id="password"
+          v-model="password"
+          labelKey="createAccount.password"
+          is-password
+          placeholder="******"
+          :validator="passwordValidator"
+        />
+      </div>
+      <div class="mb-4">
+        <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
+      </div>
+      <div class="m-2">
+        <Error v-if="matchError !== undefined" :title="matchError" />
+      </div>
+      <div class="flex items-center flex-col justify-center">
+        <button
+          class="bg-darkest tc-main-light font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform transition hover:scale-95"
+          type="button"
+          @click="create"
+        >
+          {{ t('createAccount.create') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useConfig } from '@/core/adapter/config';
+import { EmailValidator } from '@/core/services/validator/email';
+import { PasswordValidator } from '@/core/services/validator/password';
+import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import TextInput from '../components/misc/TextInput.vue';
+import Error from '../components/misc/Error.vue';
+
+const { t } = useI18n();
+const config = useConfig();
+
+const username = ref('');
+const email = ref('');
+const password = ref('');
+const passwordRepeat = ref('');
+const matchError = ref<string | undefined>(undefined);
+
+const emailValidator = new EmailValidator();
+const passwordValidator = new PasswordValidator();
+const passwordMatchValidator = new PasswordMatchValidator();
+
+watch([password, passwordRepeat], ([password, passwordRepeat]) => {
+  const result = passwordMatchValidator.validate([password, passwordRepeat]);
+  console.log(result.getErrors());
+  matchError.value = result.isValid ? undefined : result.getErrors().join('<br />');
+});
+
+const create = () => {
+  config.createAccount(username.value, email.value, password.value, passwordRepeat.value);
+};
+</script>
