@@ -3,7 +3,9 @@ import CreateAccount from '../views/CreateAccount.vue';
 import Login from '../views/Login.vue';
 import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
+import Landing from '../views/Landing.vue';
 import Settings from '../views/Settings.vue';
+import { useConfig } from '@/core/adapter/config';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -26,7 +28,15 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/home',
-        component: Home
+        component: Home,
+        meta: {
+          requiresAuth: true,
+          redirect: '/landing'
+        }
+      },
+      {
+        path: '/landing',
+        component: Landing
       }
     ]
   },
@@ -40,6 +50,14 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+});
+
+router.beforeEach((to, _from, next) => {
+  console.log(to, useConfig().isLoggedIn);
+  if (to.meta['requiresAuth'] === true && !useConfig().isLoggedIn) {
+    return next((to.meta['redirect'] as string) || '/');
+  }
+  next();
 });
 
 export default router;
