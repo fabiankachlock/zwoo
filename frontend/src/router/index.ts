@@ -53,7 +53,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
-  console.log(to, useConfig().isLoggedIn);
   if (to.meta['requiresAuth'] === true && !useConfig().isLoggedIn) {
     return next((to.meta['redirect'] as string) || '/');
   }
