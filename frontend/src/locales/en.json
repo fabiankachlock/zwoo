@@ -35,7 +35,8 @@
   "errors": {
     "error": "Error",
     "invalidEmail": "Email is invalid.",
-    "passwordsDontMatch": "The Passwords don't match.",
+    "usernameToShort": "Username should be at least 4 Characters long.",
+    "passwordsDontMatch": "Passwords don't match.",
     "passwordNotLongEnough": "Password should be at least 8 Characters long.",
     "shouldContainNumber": "Password should contain at least one number.",
     "shouldContainNormalChar": "Password should contain at least one letter character.",

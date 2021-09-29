@@ -35,6 +35,7 @@
   "errors": {
     "error": "Error",
     "invalidEmail": "Die Email ist ungültig",
+    "usernameToShort": "Der Benutzername muss mindestens 4 Zeichen lang sein.",
     "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
     "passwordNotLongEnough": "Das Passwort sollte mindestens 8 Zeichen lang sein.",
     "shouldContainNumber": "Das Passwort sollte mindestens eine Zahl beinhalten.",

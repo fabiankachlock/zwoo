@@ -5,6 +5,7 @@ import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
 import Router from '@/router';
+import { UsernameValidator } from '../services/validator/username';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -65,6 +66,9 @@ export const useConfig = defineStore('config', {
     async createAccount(username: string, email: string, password: string, repeatPassword: string) {
       const emailValid = new EmailValidator().validate(email);
       if (!emailValid.isValid) throw emailValid.getErrors();
+
+      const usernameValid = new UsernameValidator().validate(password);
+      if (!usernameValid.isValid) throw usernameValid.getErrors();
 
       const passwordValid = new PasswordValidator().validate(password);
       if (!passwordValid.isValid) throw passwordValid.getErrors();

@@ -3,7 +3,13 @@
     <form class="bg-lightest shadow-md sm:rounded-sm px-6 py-4 mb-4 mt-8">
       <h1 class="tc-main my-3 text-center text-3xl">{{ t('createAccount.title') }}</h1>
       <div class="mb-4">
-        <TextInput id="username" v-model="username" labelKey="createAccount.username" :placeholder="t('createAccount.username')" />
+        <TextInput
+          id="username"
+          v-model="username"
+          labelKey="createAccount.username"
+          :placeholder="t('createAccount.username')"
+          :validator="usernameValidator"
+        />
       </div>
       <div class="mb-4">
         <TextInput
@@ -55,6 +61,7 @@ import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import TextInput from '../components/misc/TextInput.vue';
 import Error from '../components/misc/Error.vue';
+import { UsernameValidator } from '@/core/services/validator/username';
 
 const { t } = useI18n();
 const config = useConfig();
@@ -67,6 +74,7 @@ const matchError = ref<string | undefined>(undefined);
 const error = ref<string | undefined>(undefined);
 
 const emailValidator = new EmailValidator();
+const usernameValidator = new UsernameValidator();
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();
 
@@ -74,6 +82,11 @@ watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   const result = passwordMatchValidator.validate([password, passwordRepeat]);
   console.log(result.getErrors());
   matchError.value = result.isValid ? undefined : result.getErrors().join('<br />');
+});
+
+watch([username, email, password, passwordRepeat], () => {
+  // clear error since there are changes
+  error.value = undefined;
 });
 
 const create = async () => {
