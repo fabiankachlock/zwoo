@@ -30,6 +30,9 @@
       <div class="m-2">
         <Error v-if="matchError !== undefined" :title="matchError" />
       </div>
+      <div class="m-2">
+        <Error v-if="error !== undefined" :title="error" />
+      </div>
       <div class="flex items-center flex-col justify-center">
         <button
           class="bg-darkest tc-main-light font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform transition hover:scale-95"
@@ -61,6 +64,7 @@ const email = ref('');
 const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string | undefined>(undefined);
+const error = ref<string | undefined>(undefined);
 
 const emailValidator = new EmailValidator();
 const passwordValidator = new PasswordValidator();
@@ -72,7 +76,13 @@ watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   matchError.value = result.isValid ? undefined : result.getErrors().join('<br />');
 });
 
-const create = () => {
-  config.createAccount(username.value, email.value, password.value, passwordRepeat.value);
+const create = async () => {
+  try {
+    await config.createAccount(username.value, email.value, password.value, passwordRepeat.value);
+  } catch (e) {
+    if (Array.isArray(e)) {
+      error.value = e.join('\n');
+    }
+  }
 };
 </script>

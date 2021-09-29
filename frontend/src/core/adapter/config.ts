@@ -63,10 +63,14 @@ export const useConfig = defineStore('config', {
       Router.push('/landing');
     },
     async createAccount(username: string, email: string, password: string, repeatPassword: string) {
-      // re validate data
-      if (!new EmailValidator().validate(email).isValid) return;
-      if (!new PasswordValidator().validate(password).isValid) return;
-      if (!new PasswordMatchValidator().validate([password, repeatPassword]).isValid) return;
+      const emailValid = new EmailValidator().validate(email);
+      if (!emailValid.isValid) throw emailValid.getErrors();
+
+      const passwordValid = new PasswordValidator().validate(password);
+      if (!passwordValid.isValid) throw passwordValid.getErrors();
+
+      const passwordMatchValid = new PasswordMatchValidator().validate([password, repeatPassword]);
+      if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
 
       const status = await AuthenticationService.performCreateAccount(username, email, password);
 
