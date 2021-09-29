@@ -38,6 +38,7 @@
     "passwordsDontMatch": "The Passwords don't match.",
     "passwordNotLongEnough": "Password should be at least 8 Characters long.",
     "shouldContainNumber": "Password should contain at least one number.",
+    "shouldContainNormalChar": "Password should contain at least one letter character.",
     "shouldContainSpecialChar": "Password should contain at least one special character."
   }
 }

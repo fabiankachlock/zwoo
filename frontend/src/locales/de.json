@@ -38,6 +38,7 @@
     "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
     "passwordNotLongEnough": "Das Passwort sollte mindestens 8 Zeichen lang sein.",
     "shouldContainNumber": "Das Passwort sollte mindestens eine Zahl beinhalten.",
-    "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen behalten."
+    "shouldContainNormalChar": "Das Passwort sollte mindestens einen Buchstaben enthalten.",
+    "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten."
   }
 }
