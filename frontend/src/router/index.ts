@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import CreateAccount from '../views/CreateAccount.vue';
 import Login from '../views/Login.vue';
+import Logout from '../views/Logout.vue';
 import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
@@ -21,6 +22,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/login',
         component: Login
+      },
+      {
+        path: '/logout',
+        component: Logout
       },
       {
         path: '/create-account',
