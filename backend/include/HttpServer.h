@@ -3,7 +3,18 @@
 
 namespace Backend
 {
-    
+    // Authentication Callbacks
+    constexpr char* kCreateAccount = "authentication/create";
+    constexpr char* kLoginAccount = "authentication/login";
+
+    class HttpServer
+    {
+    private:
+        /* data */
+    public:
+        HttpServer(/* args */);
+        ~HttpServer();
+    };
 } // namespace Backend
 
 #endif
