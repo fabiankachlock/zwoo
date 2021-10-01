@@ -43,17 +43,15 @@ describe('services > validator > email', () => {
 
   const validator = new EmailValidator();
 
-  test('test', () => {
-    expect(true).toBeTruthy();
-  });
-
-  it('should detect all invalid addresses', () => {
+  it('should detect all valid addresses', () => {
     valid.forEach(email => {
       const isValid = validator.validate(email).isValid;
       if (!isValid) console.log(email);
       expect(isValid).toBe(true);
     });
+  });
 
+  it('should detect all invalid addresses', () => {
     invalid.forEach(email => {
       const isValid = validator.validate(email).isValid;
       if (isValid) console.log(email);
