@@ -1,14 +1,21 @@
 <template>
   <div class="w-full p-1 rounded bg-error-light-bg dark:bg-error-dark-bg border-2 border-error-light-border dark:border-error-dark-border">
-    <pre class="text-error-light-text dark:text-error-dark-text text-xs italic error-value">{{ title }}</pre>
+    <pre class="text-error-light-text dark:text-error-dark-text text-xs italic error-value">{{ errorText }}</pre>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-defineProps<{
-  title: string;
+import { defineProps, computed, toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+const props = defineProps<{
+  errors: string[];
 }>();
+const { errors } = toRefs(props);
+
+const transformError = (key: string) => `${t('errors.error')}: ${t(key)}`;
+const errorText = computed(() => errors.value.map(transformError).join('\n'));
 </script>
 
 <style scoped>

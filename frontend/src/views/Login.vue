@@ -9,7 +9,7 @@
         <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />
       </div>
       <div class="m-2">
-        <Error v-if="error !== undefined" :title="error" />
+        <Error v-if="error.length > 0" :errors="error" />
       </div>
       <div class="flex items-center flex-col justify-center">
         <button
@@ -39,14 +39,14 @@ const config = useConfig();
 
 const username = ref('');
 const password = ref('');
-const error = ref<string | undefined>(undefined);
+const error = ref<string[]>([]);
 
 const logIn = async () => {
   try {
     await config.login(username.value, password.value);
   } catch (e) {
     if (Array.isArray(e)) {
-      error.value = e.join('\n');
+      error.value = e;
     }
   }
 };

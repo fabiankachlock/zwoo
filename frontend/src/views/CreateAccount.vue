@@ -34,10 +34,10 @@
         <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
       </div>
       <div class="m-2">
-        <Error v-if="matchError !== undefined" :title="matchError" />
+        <Error v-if="matchError.length > 0" :errors="matchError" />
       </div>
       <div class="m-2">
-        <Error v-if="error !== undefined" :title="error" />
+        <Error v-if="error.length > 0" :errors="error" />
       </div>
       <div class="flex items-center flex-col justify-center">
         <button
@@ -70,8 +70,8 @@ const username = ref('');
 const email = ref('');
 const password = ref('');
 const passwordRepeat = ref('');
-const matchError = ref<string | undefined>(undefined);
-const error = ref<string | undefined>(undefined);
+const matchError = ref<string[]>([]);
+const error = ref<string[]>([]);
 
 const emailValidator = new EmailValidator();
 const usernameValidator = new UsernameValidator();
@@ -80,13 +80,12 @@ const passwordMatchValidator = new PasswordMatchValidator();
 
 watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   const result = passwordMatchValidator.validate([password, passwordRepeat]);
-  console.log(result.getErrors());
-  matchError.value = result.isValid ? undefined : result.getErrors().join('<br />');
+  matchError.value = result.isValid ? [] : result.getErrors();
 });
 
 watch([username, email, password, passwordRepeat], () => {
   // clear error since there are changes
-  error.value = undefined;
+  error.value = [];
 });
 
 const create = async () => {
@@ -94,7 +93,7 @@ const create = async () => {
     await config.createAccount(username.value, email.value, password.value, passwordRepeat.value);
   } catch (e) {
     if (Array.isArray(e)) {
-      error.value = e.join('\n');
+      error.value = e;
     }
   }
 };

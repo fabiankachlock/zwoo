@@ -1,7 +1,7 @@
 <template>
   <div class="w-full sm:max-w-xs mx-auto">
     <div class="m-2">
-      <Error v-if="error !== undefined" :title="error" />
+      <Error v-if="error.length > 0" :errors="error" />
     </div>
   </div>
 </template>
@@ -11,14 +11,14 @@ import { ref } from 'vue';
 import { useConfig } from '@/core/adapter/config';
 import Error from '../components/misc/Error.vue';
 
-const error = ref<string | undefined>(undefined);
+const error = ref<string[]>([]);
 
 const logout = async () => {
   try {
     await useConfig().logout();
   } catch (e) {
     if (Array.isArray(e)) {
-      error.value = e.join('\n');
+      error.value = e;
     }
   }
 };

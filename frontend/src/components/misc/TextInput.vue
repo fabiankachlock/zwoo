@@ -29,7 +29,7 @@
         @keyup="updateInput"
       />
       <div class="my-2">
-        <Error v-show="!isValid" :title="error" />
+        <Error v-show="!isValid" :errors="error" />
       </div>
     </div>
   </div>
@@ -57,7 +57,7 @@ const emit = defineEmits<{
 
 const input = ref<HTMLInputElement>();
 const isValid = ref<boolean>(true);
-const error = ref<string>('');
+const error = ref<string[]>([]);
 
 const { t } = useI18n();
 
@@ -67,7 +67,7 @@ const updateInput = () => {
 
   if (validationResult) {
     isValid.value = validationResult.isValid;
-    error.value = validationResult.getErrors().join('\n');
+    error.value = validationResult.getErrors();
   }
 
   emit('update:modelValue', newValue);
