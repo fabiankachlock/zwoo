@@ -1,6 +1,8 @@
 module.exports = {
   preset: "@vue/cli-plugin-unit-jest/presets/typescript-and-babel",
+  verbose: true,
   transform: {
-    "^.+\\.(vue|ts)$": "vue-jest",
+    "^.+\\.vue$": "vue-jest",
+    "^.+\\.ts$": "ts-jest",
   },
 };
