@@ -89,12 +89,12 @@ watch([username, email, password, passwordRepeat], () => {
 });
 
 const create = async () => {
+  error.value = [];
+
   try {
     await config.createAccount(username.value, email.value, password.value, passwordRepeat.value);
-  } catch (e) {
-    if (Array.isArray(e)) {
-      error.value = e;
-    }
+  } catch (e: any) {
+    error.value = Array.isArray(e) ? e : [e.toString()];
   }
 };
 </script>

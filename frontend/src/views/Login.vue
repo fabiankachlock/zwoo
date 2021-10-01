@@ -42,12 +42,12 @@ const password = ref('');
 const error = ref<string[]>([]);
 
 const logIn = async () => {
+  error.value = [];
+
   try {
     await config.login(username.value, password.value);
-  } catch (e) {
-    if (Array.isArray(e)) {
-      error.value = e;
-    }
+  } catch (e: any) {
+    error.value = Array.isArray(e) ? e : [e.toString()];
   }
 };
 </script>

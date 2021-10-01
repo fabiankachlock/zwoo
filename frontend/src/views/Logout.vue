@@ -14,12 +14,12 @@ import Error from '../components/misc/Error.vue';
 const error = ref<string[]>([]);
 
 const logout = async () => {
+  error.value = [];
+
   try {
     await useConfig().logout();
-  } catch (e) {
-    if (Array.isArray(e)) {
-      error.value = e;
-    }
+  } catch (e: any) {
+    error.value = Array.isArray(e) ? e : [e.toString()];
   }
 };
 logout();
