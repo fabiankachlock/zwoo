@@ -2,7 +2,9 @@
   "settings": {
     "title": "Settings",
     "darkmode": "Dark Mode",
-    "language": "Language"
+    "language": "Language",
+    "fullscreen": "Fullscreen",
+    "quickMenu": "Quick Menu"
   },
   "lng": {
     "de": "German",
@@ -31,6 +33,12 @@
     "password": "Password",
     "create": "Create",
     "passwordRepeat": "Repeat Password"
+  },
+  "landing": {
+    "tagline": "-- tagline --",
+    "login": "Log In To An Existing Account",
+    "create": "Create A New Account",
+    "tutorial": "Play The tutorial"
   },
   "errors": {
     "error": "Error",

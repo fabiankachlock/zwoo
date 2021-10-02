@@ -6,19 +6,19 @@
       <div class="action bg-dark">
         <router-link class="link" to="/login">
           <Icon class="icon tc-secondary" icon="mdi:login-variant" />
-          <p class="tc-main-light">Log in to a existing account</p>
+          <p class="tc-main-light">{{ t('landing.login') }}</p>
         </router-link>
       </div>
       <div class="action bg-dark">
         <router-link class="link" to="/create-account">
           <Icon class="icon tc-secondary" icon="gridicons:create" />
-          <p class="tc-main-light">Create a Account</p>
+          <p class="tc-main-light">{{ t('landing.create') }}</p>
         </router-link>
       </div>
       <div class="action bg-dark">
         <router-link class="link" to="/tutorial">
           <Icon class="icon tc-secondary" icon="mdi:arrow-right-bold-box-outline" />
-          <p class="tc-main-light">Play the tutorial</p>
+          <p class="tc-main-light">{{ t('landing.tutorial') }}</p>
         </router-link>
       </div>
     </div>
@@ -27,6 +27,9 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 </script>
 
 <style scoped>

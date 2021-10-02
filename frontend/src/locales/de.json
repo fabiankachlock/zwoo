@@ -2,6 +2,8 @@
   "settings": {
     "title": "Einstellungen",
     "darkmode": "Dunkler Modus",
+    "fullscreen": "Vollbildschirm",
+    "quickMenu": "Schnellmenü",
     "language": "Sprache"
   },
   "lng": {
@@ -31,6 +33,12 @@
     "password": "Passwort",
     "create": "Erstellen",
     "passwordRepeat": "Passwort Wiederholen"
+  },
+  "landing": {
+    "tagline": "-- tagline --",
+    "login": "In Einen Bestehenden Account Einloggen",
+    "create": "Einen neuen Account erstellen",
+    "tutorial": "Das Tutorial spielen"
   },
   "errors": {
     "error": "Error",
