@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-3 left-3 rounded-full bg-dark flex flex-row items-center">
+  <div v-if="visible" class="fixed bottom-3 left-3 rounded-full bg-dark flex flex-row items-center">
     <div
       class="h-full bg-darkest p-2 rounded-full transform transition-transform duration-300 ease-out hover:scale-90"
       :class="{ 'rotate-90': isOpen }"
@@ -22,13 +22,16 @@
 </template>
 
 <script setup lang="ts">
+import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import DarkModeSwitch from '../settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '../settings/FullScreenSwitch.vue';
 
+const config = useConfig();
 const isOpen = ref(false);
 const toggleOpen = () => (isOpen.value = !isOpen.value);
+const visible = computed(() => config.showQuickMenu);
 </script>
 
 <style scoped>

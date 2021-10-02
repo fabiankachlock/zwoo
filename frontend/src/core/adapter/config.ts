@@ -9,6 +9,7 @@ import { UsernameValidator } from '../services/validator/username';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
+const quickMenuKey = 'zwoo:qm';
 
 const changeLanguage = (lng: string) => {
   i18n.global.locale.value = lng;
@@ -39,7 +40,8 @@ export const useConfig = defineStore('config', {
       language: 'en',
       username: '',
       useFullScreen: false,
-      isLoggedIn: false
+      isLoggedIn: false,
+      showQuickMenu: false
     };
   },
 
@@ -55,6 +57,10 @@ export const useConfig = defineStore('config', {
     setFullScreen(enabled: boolean) {
       this.useFullScreen = enabled;
       changeFullscreen(enabled);
+    },
+    setQuickMenu(visible: boolean) {
+      this.showQuickMenu = visible;
+      localStorage.setItem(quickMenuKey, visible ? 'on' : 'off');
     },
     async login(username: string, password: string) {
       const status = await AuthenticationService.performLogin(username, password);
@@ -110,7 +116,8 @@ export const useConfig = defineStore('config', {
 
       this.$patch({
         useDarkMode: storedDarkMode,
-        language: storedLng
+        language: storedLng,
+        showQuickMenu: localStorage.getItem(quickMenuKey) === 'on'
       });
     }
   }
