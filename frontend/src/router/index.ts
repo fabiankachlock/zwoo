@@ -6,6 +6,7 @@ import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
 import Settings from '../views/Settings.vue';
+import Tutorial from '../views/Tutorial.vue';
 import { useConfig } from '@/core/adapter/config';
 
 const routes: Array<RouteRecordRaw> = [
@@ -30,6 +31,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/create-account',
         component: CreateAccount
+      },
+      {
+        path: '/tutorial',
+        component: Tutorial
       },
       {
         path: '/home',
