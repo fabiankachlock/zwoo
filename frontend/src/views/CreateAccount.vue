@@ -1,6 +1,9 @@
 <template>
   <div class="w-full sm:max-w-xs mx-auto">
-    <form class="bg-lightest shadow-md sm:rounded-sm px-6 py-4 mb-4 mt-8">
+    <form class="bg-lightest shadow-md sm:rounded-sm px-6 py-4 mb-4 mt-8 relative">
+      <router-link to="/" class="tc-main-secondary absolute left-3 top-3 text-xl transform transition-transform hover:-translate-x-1">
+        <Icon icon="mdi:chevron-left" />
+      </router-link>
       <h1 class="tc-main my-3 text-center text-3xl">{{ t('createAccount.title') }}</h1>
       <div class="mb-4">
         <TextInput
@@ -53,6 +56,7 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
 import { useConfig } from '@/core/adapter/config';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
