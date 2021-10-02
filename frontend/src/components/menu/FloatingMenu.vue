@@ -9,11 +9,12 @@
     </div>
     <!-- can't be w-auto, otherwise the transition won't work-->
     <div
-      :class="{ 'w-8 p-2': isOpen }"
+      :class="{ 'w-16 p-2': isOpen }"
       class="w-0 p-0 h-full transition overflow-hidden duration-300 ease-out"
       style="transition-property: width, padding"
     >
-      <div class="h-full flex flex-row items-center justify-end">
+      <div class="h-full flex flex-row items-center justify-end" id="content">
+        <FullScreenSwitch />
         <DarkModeSwitch />
       </div>
     </div>
@@ -24,7 +25,14 @@
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import DarkModeSwitch from '../settings/DarkModeSwitch.vue';
+import FullScreenSwitch from '../settings/FullScreenSwitch.vue';
 
 const isOpen = ref(false);
 const toggleOpen = () => (isOpen.value = !isOpen.value);
 </script>
+
+<style scoped>
+#content > * {
+  @apply mx-1;
+}
+</style>

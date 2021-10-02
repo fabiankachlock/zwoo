@@ -24,12 +24,21 @@ const changeUIMode = (isDark: boolean) => {
   }
 };
 
+const changeFullscreen = (enabled: boolean) => {
+  if (enabled) {
+    document.documentElement.requestFullscreen();
+  } else if (document.fullscreenElement) {
+    document.exitFullscreen();
+  }
+};
+
 export const useConfig = defineStore('config', {
   state: () => {
     return {
       useDarkMode: false,
       language: 'en',
       username: '',
+      useFullScreen: false,
       isLoggedIn: false
     };
   },
@@ -42,6 +51,10 @@ export const useConfig = defineStore('config', {
     setLanguage(lng: string) {
       this.language = lng;
       changeLanguage(lng);
+    },
+    setFullScreen(enabled: boolean) {
+      this.useFullScreen = enabled;
+      changeFullscreen(enabled);
     },
     async login(username: string, password: string) {
       const status = await AuthenticationService.performLogin(username, password);
