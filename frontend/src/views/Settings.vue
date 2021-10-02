@@ -1,7 +1,7 @@
 <template>
   <h1 class="tc-main text-4xl mx-6 my-5">{{ t('settings.title') }}</h1>
   <div class="mx-6 my-5">
-    <div class="relative w-full p-2 flex flex-col justify-end items-stretch bg-lightest rounded-lg">
+    <div class="relative w-full p-2 flex flex-col justify-end items-stretch bg-light rounded-lg">
       <SettingsRow title="darkmode">
         <DarkModeSwitch />
       </SettingsRow>

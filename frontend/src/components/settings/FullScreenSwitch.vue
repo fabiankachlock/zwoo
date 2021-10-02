@@ -8,13 +8,12 @@
 <script setup lang="ts">
 import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
-import { ref } from 'vue';
+import { computed } from 'vue';
 
 const config = useConfig();
-const useFullScreen = ref(config.useFullScreen);
+const useFullScreen = computed(() => config.useFullScreen);
 
 const toggleFullScreen = () => {
-  useFullScreen.value = !useFullScreen.value;
-  config.setFullScreen(useFullScreen.value);
+  config.setFullScreen(!useFullScreen.value);
 };
 </script>

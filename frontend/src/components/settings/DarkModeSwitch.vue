@@ -8,13 +8,12 @@
 <script setup lang="ts">
 import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
-import { ref } from 'vue';
+import { computed } from 'vue';
 
 const config = useConfig();
-const isDarkMode = ref(config.useDarkMode);
+const isDarkMode = computed(() => config.useDarkMode);
 
 const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value;
-  config.setDarkMode(isDarkMode.value);
+  config.setDarkMode(!isDarkMode.value);
 };
 </script>
