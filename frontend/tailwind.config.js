@@ -18,7 +18,7 @@ module.exports = {
                     DEFAULT: '#A61F1F',
                     dark: '#991D1D',
                     'text-dark': '#991A1A',
-                    'text-light': 'FF6666'
+                    'text-light': '#FF6666'
                 },
                 '_bg-light': {
                     lightest: '#FFFFFC',
