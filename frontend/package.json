@@ -24,7 +24,7 @@
     "vue-router": "^4.0.0-0"
   },
   "lint-staged": {
-    "src/**/!(*test).(ts|vue|css|html)": [
+    "src/**/!(*test).(ts|vue|html)": [
       "yarn lint"
     ],
     "src/**/*.(ts|vue|css|html)": [
