@@ -4,6 +4,12 @@
     "sections": {
       "general": "General"
     },
+    "status": {
+      "boolean": {
+        "on": "activated",
+        "off": "deactivated"
+      }
+    },
     "darkmode": "Dark Mode",
     "language": "Language",
     "fullscreen": "Fullscreen",

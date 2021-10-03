@@ -4,6 +4,12 @@
     "sections": {
       "general": "Allgemein"
     },
+    "status": {
+      "boolean": {
+        "on": "aktiviert",
+        "off": "deaktiviert"
+      }
+    },
     "darkmode": "Dunkler Modus",
     "fullscreen": "Vollbildschirm",
     "quickMenu": "Schnellmenü",

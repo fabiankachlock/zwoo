@@ -1,15 +1,15 @@
 <template>
   <SettingsSection :title="t('settings.sections.general')">
-    <SettingsRow title="darkmode">
+    <SettingsRow :title="t('settings.darkmode')" :status="t('settings.status.boolean.' + (darkModeOn ? 'on' : 'off'))">
       <DarkModeSwitch />
     </SettingsRow>
-    <SettingsRow title="fullscreen">
+    <SettingsRow :title="t('settings.fullscreen')" :status="t('settings.status.boolean.' + (fullScreenOn ? 'on' : 'off'))">
       <FullScreenSwitch />
     </SettingsRow>
-    <SettingsRow title="quickMenu">
+    <SettingsRow :title="t('settings.quickMenu')" :status="t('settings.status.boolean.' + (quickMenuOn ? 'on' : 'off'))">
       <QuickMenuSwitch />
     </SettingsRow>
-    <SettingsRow title="language">
+    <SettingsRow :title="t('settings.language')">
       <LanguageSelection />
     </SettingsRow>
   </SettingsSection>
@@ -23,6 +23,12 @@ import LanguageSelection from '@/components/settings/LanguageSelection.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import QuickMenuSwitch from '@/components/settings/QuickMenuSwitch.vue';
 import { useI18n } from 'vue-i18n';
+import { useConfig } from '@/core/adapter/config';
+import { computed } from 'vue';
 
 const { t } = useI18n();
+const config = useConfig();
+const darkModeOn = computed(() => config.useDarkMode);
+const fullScreenOn = computed(() => config.useFullScreen);
+const quickMenuOn = computed(() => config.showQuickMenu);
 </script>
