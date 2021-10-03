@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "Settings",
+    "sections": {
+      "general": "General"
+    },
     "darkmode": "Dark Mode",
     "language": "Language",
     "fullscreen": "Fullscreen",

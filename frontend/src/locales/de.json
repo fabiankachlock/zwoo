@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "Einstellungen",
+    "sections": {
+      "general": "Allgemein"
+    },
     "darkmode": "Dunkler Modus",
     "fullscreen": "Vollbildschirm",
     "quickMenu": "Schnellmenü",
