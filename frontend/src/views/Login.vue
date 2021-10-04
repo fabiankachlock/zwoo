@@ -25,6 +25,11 @@
         <a class="inline-block align-baseline italic text-xs tc-main-secondary my-1 tc-main-dark hover:opacity-70 transition" href="#">{{
           t('login.resetPassword')
         }}</a>
+        <router-link
+          class="inline-block align-baseline italic text-sm tc-main-secondary my-1 tc-main-dark hover:opacity-70 transition"
+          to="/create-account"
+          >{{ t('createAccount.title') }}</router-link
+        >
       </div>
     </form>
   </div>
