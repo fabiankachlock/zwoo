@@ -19,13 +19,14 @@ import Error from '../components/misc/Error.vue';
 import { useRouter } from 'vue-router';
 
 const error = ref<string[]>([]);
+const router = useRouter();
 
 const logout = async () => {
   error.value = [];
 
   try {
     await useConfig().logout();
-    useRouter().push('/landing');
+    router.push('/landing');
   } catch (e: any) {
     error.value = Array.isArray(e) ? e : [e.toString()];
   }
