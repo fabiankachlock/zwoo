@@ -5,6 +5,7 @@ namespace Backend
 {
     // Authentication Callbacks
     constexpr char* kCreateAccount = "authentication/create";
+    constexpr char* kVerifyAccount = "authentication/verify";
     constexpr char* kLoginAccount = "authentication/login";
 
     class HttpServer
