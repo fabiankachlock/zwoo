@@ -43,6 +43,13 @@
     "create": "Create",
     "passwordRepeat": "Repeat Password"
   },
+  "createGame": {
+    "title": "Create Game",
+    "name": "Name",
+    "isPublic": "Public",
+    "password": "Password",
+    "create": "Create"
+  },
   "landing": {
     "tagline": "-- tagline --",
     "login": "Log In To An Existing Account",
@@ -57,6 +64,7 @@
     "passwordNotLongEnough": "Password should be at least 8 Characters long.",
     "shouldContainNumber": "Password should contain at least one number.",
     "shouldContainNormalChar": "Password should contain at least one letter character.",
-    "shouldContainSpecialChar": "Password should contain at least one special character."
+    "shouldContainSpecialChar": "Password should contain at least one special character.",
+    "gameNameToShort": "Name should be at least 3 Characters long."
   }
 }

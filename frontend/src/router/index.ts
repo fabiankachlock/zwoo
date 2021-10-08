@@ -50,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/create-game',
         component: CreateGame,
         meta: {
-          requiresAuth: true
+          // requiresAuth: true
         }
       },
       {
