@@ -39,8 +39,12 @@ import TextInput from '../components/misc/TextInput.vue';
 import Error from '../components/misc/Error.vue';
 import { GameNameValidator } from '@/core/services/validator/gameName';
 import Checkbox from '@/components/misc/Checkbox.vue';
+import { useGameConfig } from '@/core/adapter/game';
+import { useRouter } from 'vue-router';
 
+const gameConfig = useGameConfig();
 const nameValidator = new GameNameValidator();
+const router = useRouter();
 
 const { t } = useI18n();
 
@@ -55,6 +59,14 @@ watch([name, isPublic, password], () => {
 });
 
 const create = async () => {
-  console.log('create game');
+  error.value = [];
+
+  try {
+    await gameConfig.create(name.value, isPublic.value, password.value);
+
+    router.push('/game/room');
+  } catch (e: any) {
+    error.value = Array.isArray(e) ? e : [e.toString()];
+  }
 };
 </script>
