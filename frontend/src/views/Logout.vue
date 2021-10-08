@@ -16,6 +16,7 @@ import { ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useConfig } from '@/core/adapter/config';
 import Error from '../components/misc/Error.vue';
+import { useRouter } from 'vue-router';
 
 const error = ref<string[]>([]);
 
@@ -24,6 +25,7 @@ const logout = async () => {
 
   try {
     await useConfig().logout();
+    useRouter().push('/landing');
   } catch (e: any) {
     error.value = Array.isArray(e) ? e : [e.toString()];
   }

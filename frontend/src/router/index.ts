@@ -7,6 +7,8 @@ import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
 import Settings from '../views/Settings.vue';
 import Tutorial from '../views/Tutorial.vue';
+import CreateGame from '../views/CreateGame.vue';
+import JoinGame from '../views/JoinGame.vue';
 import { useConfig } from '@/core/adapter/config';
 
 const routes: Array<RouteRecordRaw> = [
@@ -35,6 +37,25 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/tutorial',
         component: Tutorial
+      },
+      {
+        path: '/home',
+        component: Home,
+        meta: {
+          requiresAuth: true,
+          redirect: '/landing'
+        }
+      },
+      {
+        path: '/create-game',
+        component: CreateGame,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/join/:id',
+        component: JoinGame
       },
       {
         path: '/home',

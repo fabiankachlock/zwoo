@@ -27,8 +27,8 @@
         }}</a>
         <router-link
           class="inline-block align-baseline italic text-sm tc-main-secondary my-1 tc-main-dark hover:opacity-70 transition"
-          to="/create-account"
-          >{{ t('createAccount.title') }}</router-link
+          :to="'/create-account?' + joinQuery(route.query)"
+          >{{ t('nav.createAccount') }}</router-link
         >
       </div>
     </form>
@@ -42,9 +42,13 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Error from '../components/misc/Error.vue';
 import TextInput from '../components/misc/TextInput.vue';
+import { useRoute, useRouter } from 'vue-router';
+import { joinQuery } from '@/core/services/utils';
 
 const { t } = useI18n();
 const config = useConfig();
+const route = useRoute();
+const router = useRouter();
 
 const username = ref('');
 const password = ref('');
@@ -55,6 +59,14 @@ const logIn = async () => {
 
   try {
     await config.login(username.value, password.value);
+    const redirect = route.query['redirect'] as string;
+
+    if (redirect) {
+      router.push(redirect);
+      return;
+    }
+
+    router.push('/home');
   } catch (e: any) {
     error.value = Array.isArray(e) ? e : [e.toString()];
   }

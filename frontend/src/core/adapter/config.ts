@@ -4,7 +4,6 @@ import { AuthenticationService } from '../services/api/Authentication';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
-import Router from '@/router';
 import { UsernameValidator } from '../services/validator/username';
 
 const languageKey = 'zwoo:lng';
@@ -69,8 +68,6 @@ export const useConfig = defineStore('config', {
         username: status.username,
         isLoggedIn: status.isLoggedIn
       });
-
-      Router.push('/home');
     },
     async logout() {
       const status = await AuthenticationService.performLogout();
@@ -79,8 +76,6 @@ export const useConfig = defineStore('config', {
         username: status.username,
         isLoggedIn: status.isLoggedIn
       });
-
-      Router.push('/landing');
     },
     async createAccount(username: string, email: string, password: string, repeatPassword: string) {
       const usernameValid = new UsernameValidator().validate(username);
@@ -101,8 +96,6 @@ export const useConfig = defineStore('config', {
         username: status.username,
         isLoggedIn: status.isLoggedIn
       });
-
-      Router.push('/home');
     },
     configure() {
       const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
