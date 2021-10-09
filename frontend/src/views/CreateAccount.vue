@@ -1,75 +1,48 @@
 <template>
-  <div class="w-full sm:max-w-xs mx-auto">
-    <form class="bg-lightest shadow-md sm:rounded-sm px-6 py-4 mb-4 mt-8 relative">
-      <router-link to="/" class="tc-main-secondary absolute left-3 top-3 text-xl transform transition-transform hover:-translate-x-1">
-        <Icon icon="mdi:chevron-left" />
-      </router-link>
-      <h1 class="tc-main my-3 text-center text-3xl">{{ t('createAccount.title') }}</h1>
-      <div class="mb-4">
-        <TextInput
-          id="username"
-          v-model="username"
-          labelKey="createAccount.username"
-          :placeholder="t('createAccount.username')"
-          :validator="usernameValidator"
-        />
-      </div>
-      <div class="mb-4">
-        <TextInput
-          id="email"
-          v-model="email"
-          labelKey="createAccount.email"
-          :placeholder="t('createAccount.emailExample', ['@'])"
-          :validator="emailValidator"
-        />
-      </div>
-      <div class="mb-4">
-        <TextInput
-          id="password"
-          v-model="password"
-          labelKey="createAccount.password"
-          is-password
-          placeholder="******"
-          :validator="passwordValidator"
-        />
-      </div>
-      <div class="mb-4">
-        <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
-      </div>
-      <div class="m-2">
-        <Error v-if="matchError.length > 0" :errors="matchError" />
-      </div>
-      <div class="m-2">
-        <Error v-if="error.length > 0" :errors="error" />
-      </div>
-      <div class="flex items-center flex-col justify-center">
-        <button
-          class="bg-darkest tc-main-light font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform transition hover:scale-95"
-          type="button"
-          @click="create"
-        >
+  <FlatDialog>
+    <Form>
+      <FormTitle>
+        {{ t('createAccount.title') }}
+      </FormTitle>
+      <TextInput
+        id="username"
+        v-model="username"
+        labelKey="createAccount.username"
+        :placeholder="t('createAccount.username')"
+        :validator="usernameValidator"
+      />
+      <TextInput
+        id="email"
+        v-model="email"
+        labelKey="createAccount.email"
+        :placeholder="t('createAccount.emailExample', ['@'])"
+        :validator="emailValidator"
+      />
+      <TextInput id="password" v-model="password" labelKey="createAccount.password" is-password placeholder="******" :validator="passwordValidator" />
+      <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
+      <FormError :error="matchError" />
+      <FormError :error="error" />
+      <FormActions>
+        <FormSubmit @click="create">
           {{ t('createAccount.create') }}
-        </button>
-        <router-link
-          class="inline-block align-baseline italic text-sm tc-main-secondary my-1 tc-main-dark hover:opacity-70 transition"
-          :to="'/login?' + joinQuery(route.query)"
-          >{{ t('nav.login') }}</router-link
-        >
-      </div>
-    </form>
-  </div>
+        </FormSubmit>
+        <FormAlternativeAction>
+          <router-link :to="'/login?' + joinQuery(route.query)">{{ t('nav.login') }}</router-link>
+        </FormAlternativeAction>
+      </FormActions>
+    </Form>
+  </FlatDialog>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
+import { Form, FormTitle, FormError, TextInput, FormAlternativeAction, FormSecondaryAction, FormSubmit, FormActions } from '@/components/forms/index';
+import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useConfig } from '@/core/adapter/config';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import TextInput from '../components/forms/TextInput.vue';
-import Error from '../components/misc/Error.vue';
 import { UsernameValidator } from '@/core/services/validator/username';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';

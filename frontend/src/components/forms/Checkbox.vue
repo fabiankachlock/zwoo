@@ -1,7 +1,12 @@
 <template>
-  <div :class="styles" @click="toggle">
-    <Icon v-show="!checked" icon="akar-icons:box" />
-    <Icon v-show="checked" icon="akar-icons:check" />
+  <div class="m-2 mb-4 flex no-wrap items-center">
+    <label class="tc-main-secondary text-sm font-bold my-2 relative">
+      <slot></slot>
+    </label>
+    <div :class="styles" @click="toggle">
+      <Icon v-show="!checked" icon="akar-icons:box" />
+      <Icon v-show="checked" icon="akar-icons:check" />
+    </div>
   </div>
 </template>
 

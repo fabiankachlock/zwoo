@@ -22,12 +22,12 @@
 
 <script setup lang="ts">
 import { Form, FormTitle, FormError, TextInput, FormAlternativeAction, FormSecondaryAction, FormSubmit, FormActions } from '@/components/forms/index';
+import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useConfig } from '@/core/adapter/config';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
 
 const { t } = useI18n();
 const config = useConfig();
