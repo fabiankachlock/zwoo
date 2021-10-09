@@ -14,9 +14,16 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-control-regex": "off"
+    "no-control-regex": "off",
+    "sort-imports": ["error", {
+      "memberSyntaxSortOrder": ["multiple", "single", "all", "none"],
+      "ignoreDeclarationSort": true
+    }]
+
   },
   overrides: [
     {

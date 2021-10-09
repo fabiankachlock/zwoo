@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { Form, FormTitle, FormError, TextInput, FormAlternativeAction, FormSecondaryAction, FormSubmit, FormActions } from '@/components/forms/index';
+import { Form, FormActions, FormAlternativeAction, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useConfig } from '@/core/adapter/config';
 import { ref } from 'vue';

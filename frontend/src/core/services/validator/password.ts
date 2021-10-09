@@ -5,7 +5,7 @@ const SpecialCharacterRegex = /[!#$%&'*+/=?^_´{|}\-[\]]+/;
 const NormalCharacterRegex = /[a-zA-Z]+/;
 
 export class PasswordValidator implements Validator<string> {
-  public validate = (password: string) => {
+  public validate = (password: string): ValidationResult => {
     const containsNumber = NumberRegex.test(password);
     const containsNormalChar = NormalCharacterRegex.test(password);
     const containsSpecialChar = SpecialCharacterRegex.test(password);

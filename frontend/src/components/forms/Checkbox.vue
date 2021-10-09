@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { ref, defineEmits, defineProps, toRefs, watch } from 'vue';
+import { defineEmits, defineProps, ref, toRefs, watch } from 'vue';
 
 const checked = ref(false);
 

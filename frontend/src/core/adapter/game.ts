@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { stringifyQuery } from 'vue-router';
 import { GameManagementService } from '../services/api/GameManagement';
 import { GameNameValidator } from '../services/validator/gameName';
 

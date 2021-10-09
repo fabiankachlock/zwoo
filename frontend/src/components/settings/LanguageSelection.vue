@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { supportedLanguages } from '@/i18n';
 import { useConfig } from '@/core/adapter/config';
-import { onMounted, ref, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { Form, FormTitle, FormError, TextInput, Checkbox, FormSubmit, FormActions } from '@/components/forms/index';
+import { Checkbox, Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';

@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { Validator } from '@/core/services/validator/_type';
-import { defineProps, defineEmits, ref } from 'vue';
+import { defineEmits, defineProps, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Error from '../misc/Error.vue';
 

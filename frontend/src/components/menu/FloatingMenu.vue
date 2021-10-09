@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 import DarkModeSwitch from '../settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '../settings/FullScreenSwitch.vue';
 

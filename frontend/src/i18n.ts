@@ -1,4 +1,4 @@
-import { createI18n, LocaleMessages, VueMessageType } from 'vue-i18n';
+import { LocaleMessages, VueMessageType, createI18n } from 'vue-i18n';
 
 export const supportedLanguages = ['en', 'de'];
 export const defaultLanguage = 'en';

@@ -1,5 +1,3 @@
-import i18n from '@/i18n';
-
 export class ValidationResult {
   constructor(public isValid: boolean, private error: string | string[]) {}
 

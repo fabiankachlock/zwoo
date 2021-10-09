@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, defineProps } from 'vue';
+import { defineProps, toRefs } from 'vue';
 
 const props = defineProps<{
   title: string;

@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 import NavBarLinks from './NavBarLinks.vue';
 const config = useConfig();
 
