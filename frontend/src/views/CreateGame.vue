@@ -35,10 +35,10 @@
 import { Icon } from '@iconify/vue';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import TextInput from '../components/misc/TextInput.vue';
+import TextInput from '../components/forms/TextInput.vue';
 import Error from '../components/misc/Error.vue';
 import { GameNameValidator } from '@/core/services/validator/gameName';
-import Checkbox from '@/components/misc/Checkbox.vue';
+import Checkbox from '@/components/forms/Checkbox.vue';
 import { useGameConfig } from '@/core/adapter/game';
 import { useRouter } from 'vue-router';
 

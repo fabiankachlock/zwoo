@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="w-full mb-4">
     <div class="m-2">
       <label class="block tc-main-secondary text-sm font-bold mb-2" :for="id">{{ t(labelKey) }}</label>
       <input
@@ -39,7 +39,7 @@
 import { Validator } from '@/core/services/validator/_type';
 import { defineProps, defineEmits, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import Error from './Error.vue';
+import Error from '../misc/Error.vue';
 
 const props = defineProps<{
   id: string;

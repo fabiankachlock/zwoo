@@ -68,7 +68,7 @@ import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import TextInput from '../components/misc/TextInput.vue';
+import TextInput from '../components/forms/TextInput.vue';
 import Error from '../components/misc/Error.vue';
 import { UsernameValidator } from '@/core/services/validator/username';
 import { useRoute, useRouter } from 'vue-router';
