@@ -1,7 +1,14 @@
 <template>
   <div class="max-w-lg sm:w-full mx-auto h-full">
     <div class="mx-4 sm:mx-0 pb-2">
-      <h2 class="tc-main text-4xl mb-2 py-3 sticky top-0 z-10 bg-main">{{ t('list.title') }}</h2>
+      <div class="w-full flex flex-row justify-between items-center">
+        <h2 class="tc-main text-4xl mb-2 py-3 sticky top-0 z-10 bg-main">{{ t('list.title') }}</h2>
+        <div class="refresh p-2 rounded bg-lightest tc-main-dark" @click="refresh">
+          <div class="wrapper">
+            <Icon icon="iconoir:refresh" class="icon" :class="{ 'animate-spin': refreshing }"></Icon>
+          </div>
+        </div>
+      </div>
       <div class="relative overflow-y-scroll h-1/4 max-h-full">
         <div class="relative flex flex-col flex-nowrap">
           <div
@@ -15,15 +22,6 @@
               <span class="tc-main-secondary text-sm italic mx-3">({{ t('list.players', game.playerCount) }})</span>
             </p>
           </div>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
-          <p class="my-32">A</p>
         </div>
       </div>
     </div>
@@ -33,13 +31,29 @@
 <script setup lang="ts">
 import { GameManagementService, GamesList } from '@/core/services/api/GameManagement';
 import { onMounted, ref } from 'vue';
+import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
 const games = ref<GamesList>([]);
+const refreshing = ref(false);
 
 onMounted(async () => {
   games.value = await GameManagementService.listAll();
 });
+
+const refresh = async () => {
+  games.value = await GameManagementService.listAll();
+  refreshing.value = true;
+  setTimeout(() => {
+    refreshing.value = false;
+  }, 1000);
+};
 </script>
+
+<style scoped>
+.refresh .wrapper {
+  @apply transform transition-transform hover:scale-125;
+}
+</style>
