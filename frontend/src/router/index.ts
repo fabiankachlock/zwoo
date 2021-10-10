@@ -3,13 +3,12 @@ import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
 import { useConfig } from '@/core/adapter/config';
-import { GameRoutes } from './game';
+import { GameRoute } from './game';
 import { MenuRoutes } from './menu';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'menu',
     component: Menu,
     redirect: '/home',
     children: [
@@ -28,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
       ...MenuRoutes
     ]
   },
-  ...GameRoutes
+  GameRoute
 ];
 
 const router = createRouter({
