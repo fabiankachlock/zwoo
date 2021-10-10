@@ -37,7 +37,13 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
   if (to.meta['requiresAuth'] === true && !useConfig().isLoggedIn) {
-    return next((to.meta['redirect'] as string) || '/');
+    const redirect = to.meta['redirect'] as string | boolean | undefined;
+
+    if (redirect === true) {
+      return next('/login?redirect=' + to.fullPath);
+    }
+
+    return next(redirect || '/');
   }
   next();
 });

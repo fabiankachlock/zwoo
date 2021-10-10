@@ -1,7 +1,3 @@
-<template>
-  <FloatingDialog> Test </FloatingDialog>
-</template>
+<template>Home</template>
 
-<script setup lang="ts">
-import FloatingDialog from '@/components/misc/FloatingDialog.vue';
-</script>
+<script setup lang="ts"></script>
