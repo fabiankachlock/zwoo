@@ -9,18 +9,20 @@
 <script setup lang="ts">
 import { Form, FormError } from '@/components/forms/index';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
+import { useAuth } from '@/core/adapter/auth';
 import { ref } from 'vue';
-import { useConfig } from '@/core/adapter/config';
 import { useRouter } from 'vue-router';
 
-const error = ref<string[]>([]);
 const router = useRouter();
+const auth = useAuth();
+
+const error = ref<string[]>([]);
 
 const logout = async () => {
   error.value = [];
 
   try {
-    await useConfig().logout();
+    await auth.logout();
     router.push('/landing');
   } catch (e: any) {
     error.value = Array.isArray(e) ? e : [e.toString()];

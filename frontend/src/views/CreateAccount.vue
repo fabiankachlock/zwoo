@@ -37,7 +37,6 @@
 <script setup lang="ts">
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
-import { useConfig } from '@/core/adapter/config';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
@@ -46,9 +45,10 @@ import { useI18n } from 'vue-i18n';
 import { UsernameValidator } from '@/core/services/validator/username';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
+import { useAuth } from '@/core/adapter/auth';
 
 const { t } = useI18n();
-const config = useConfig();
+const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
 
@@ -78,7 +78,7 @@ const create = async () => {
   error.value = [];
 
   try {
-    await config.createAccount(username.value, email.value, password.value, passwordRepeat.value);
+    await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value);
     const redirect = route.query['redirect'] as string;
 
     if (redirect) {
