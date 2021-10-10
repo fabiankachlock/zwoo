@@ -11,9 +11,11 @@
   </div>
   <FloatingMenu />
   <div class="h-screen w-screen relative flex flex-col overflow-hidden">
-    <div class="pt-10 h-full w-full relative overflow-y-auto">
-      <div class="relative">
-        <router-view></router-view>
+    <div class="pt-10 h-full w-full">
+      <div class="relative w-full h-full">
+        <div class="absolute top-0 bottom-0 left-0 right-0 overflow-y-auto">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </div>
