@@ -1,3 +1,3 @@
-<template>Play</template>
+<template>Summary</template>
 
 <script setup lang="ts"></script>

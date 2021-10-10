@@ -10,6 +10,7 @@ import Tutorial from '../views/Tutorial.vue';
 import CreateGame from '../views/CreateGame.vue';
 import JoinGame from '../views/JoinGame.vue';
 import { useConfig } from '@/core/adapter/config';
+import { GameRoutes } from './game';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -39,18 +40,10 @@ const routes: Array<RouteRecordRaw> = [
         component: Tutorial
       },
       {
-        path: '/home',
-        component: Home,
-        meta: {
-          requiresAuth: true,
-          redirect: '/landing'
-        }
-      },
-      {
         path: '/create-game',
         component: CreateGame,
         meta: {
-          // requiresAuth: true
+          requiresAuth: true
         }
       },
       {
@@ -71,11 +64,7 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: '/play',
-    name: 'In Game',
-    component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Play.vue')
-  }
+  ...GameRoutes
 ];
 
 const router = createRouter({

@@ -1,3 +1,3 @@
-<template>Play</template>
+<template>Waiting</template>
 
 <script setup lang="ts"></script>
