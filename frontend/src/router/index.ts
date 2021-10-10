@@ -2,9 +2,9 @@ import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
-import { useConfig } from '@/core/adapter/config';
 import { GameRoute } from './game';
 import { MenuRoutes } from './menu';
+import { useAuth } from '@/core/adapter/auth';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,15 +35,23 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach((to, _from, next) => {
-  if (to.meta['requiresAuth'] === true && !useConfig().isLoggedIn) {
-    const redirect = to.meta['redirect'] as string | boolean | undefined;
+router.beforeEach(async (to, _from, next) => {
+  const auth = useAuth();
 
-    if (redirect === true) {
-      return next('/login?redirect=' + to.fullPath);
+  if (to.meta['requiresAuth'] === true) {
+    if (!auth.isInitialized) {
+      await auth.askStatus();
     }
 
-    return next(redirect || '/');
+    if (!auth.isLoggedIn) {
+      const redirect = to.meta['redirect'] as string | boolean | undefined;
+
+      if (redirect === true) {
+        return next('/login?redirect=' + to.fullPath);
+      }
+
+      return next(redirect || '/');
+    }
   }
   next();
 });

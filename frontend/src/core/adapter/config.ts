@@ -1,10 +1,5 @@
 import i18n, { defaultLanguage } from '@/i18n';
 import { defineStore } from 'pinia';
-import { AuthenticationService } from '../services/api/Authentication';
-import { EmailValidator } from '../services/validator/email';
-import { PasswordValidator } from '../services/validator/password';
-import { PasswordMatchValidator } from '../services/validator/passwordMatch';
-import { UsernameValidator } from '../services/validator/username';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -37,9 +32,7 @@ export const useConfig = defineStore('config', {
     return {
       useDarkMode: false,
       language: 'en',
-      username: '',
       useFullScreen: false,
-      isLoggedIn: false,
       showQuickMenu: false
     };
   },
@@ -60,42 +53,6 @@ export const useConfig = defineStore('config', {
     setQuickMenu(visible: boolean) {
       this.showQuickMenu = visible;
       localStorage.setItem(quickMenuKey, visible ? 'on' : 'off');
-    },
-    async login(username: string, password: string) {
-      const status = await AuthenticationService.performLogin(username, password);
-
-      this.$patch({
-        username: status.username,
-        isLoggedIn: status.isLoggedIn
-      });
-    },
-    async logout() {
-      const status = await AuthenticationService.performLogout();
-
-      this.$patch({
-        username: status.username,
-        isLoggedIn: status.isLoggedIn
-      });
-    },
-    async createAccount(username: string, email: string, password: string, repeatPassword: string) {
-      const usernameValid = new UsernameValidator().validate(username);
-      if (!usernameValid.isValid) throw usernameValid.getErrors();
-
-      const emailValid = new EmailValidator().validate(email);
-      if (!emailValid.isValid) throw emailValid.getErrors();
-
-      const passwordValid = new PasswordValidator().validate(password);
-      if (!passwordValid.isValid) throw passwordValid.getErrors();
-
-      const passwordMatchValid = new PasswordMatchValidator().validate([password, repeatPassword]);
-      if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
-
-      const status = await AuthenticationService.performCreateAccount(username, email, password);
-
-      this.$patch({
-        username: status.username,
-        isLoggedIn: status.isLoggedIn
-      });
     },
     configure() {
       const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
