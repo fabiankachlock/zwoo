@@ -10,8 +10,12 @@
     </header>
   </div>
   <FloatingMenu />
-  <div class="pt-10 relative">
-    <router-view></router-view>
+  <div class="h-screen w-screen relative flex flex-col overflow-hidden">
+    <div class="pt-10 h-full w-full relative overflow-y-auto">
+      <div class="relative">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
