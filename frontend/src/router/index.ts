@@ -1,16 +1,10 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
-import CreateAccount from '../views/CreateAccount.vue';
-import Login from '../views/Login.vue';
-import Logout from '../views/Logout.vue';
 import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
-import Settings from '../views/Settings.vue';
-import Tutorial from '../views/Tutorial.vue';
-import CreateGame from '../views/CreateGame.vue';
-import JoinGame from '../views/JoinGame.vue';
 import { useConfig } from '@/core/adapter/config';
 import { GameRoutes } from './game';
+import { MenuRoutes } from './menu';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,37 +13,6 @@ const routes: Array<RouteRecordRaw> = [
     component: Menu,
     redirect: '/home',
     children: [
-      {
-        path: '/settings',
-        component: Settings
-      },
-      {
-        path: '/login',
-        component: Login
-      },
-      {
-        path: '/logout',
-        component: Logout
-      },
-      {
-        path: '/create-account',
-        component: CreateAccount
-      },
-      {
-        path: '/tutorial',
-        component: Tutorial
-      },
-      {
-        path: '/create-game',
-        component: CreateGame,
-        meta: {
-          requiresAuth: true
-        }
-      },
-      {
-        path: '/join/:id',
-        component: JoinGame
-      },
       {
         path: '/home',
         component: Home,
@@ -61,7 +24,8 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/landing',
         component: Landing
-      }
+      },
+      ...MenuRoutes
     ]
   },
   ...GameRoutes
