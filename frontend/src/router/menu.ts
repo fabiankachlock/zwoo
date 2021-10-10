@@ -35,5 +35,17 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
       requiresAuth: true,
       redirect: true
     }
+  },
+  {
+    path: '/available-games',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/GamesList.vue'),
+    meta: {
+      // requiresAuth: true
+    }
+  },
+  {
+    path: '/games',
+    alias: ['/available', '/list'],
+    redirect: '/available-games'
   }
 ];

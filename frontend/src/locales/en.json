@@ -56,6 +56,11 @@
     "create": "Create A New Account",
     "tutorial": "Play The tutorial"
   },
+  "list": {
+    "title": "Available Games",
+    "players": "no Players | 1 Player | {count} Players",
+    "private": "Private"
+  },
   "errors": {
     "error": "Error",
     "invalidEmail": "Email is invalid.",
