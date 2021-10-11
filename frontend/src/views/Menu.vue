@@ -12,12 +12,10 @@
   <div class="relative z-50">
     <FloatingMenu />
   </div>
-  <div class="h-screen w-screen relative flex flex-col overflow-hidden z-10">
+  <div class="w-screen relative">
     <div class="pt-10 h-full w-full">
       <div class="relative w-full h-full">
-        <div class="absolute top-0 bottom-0 left-0 right-0 overflow-y-auto">
-          <router-view></router-view>
-        </div>
+        <router-view></router-view>
       </div>
     </div>
   </div>
