@@ -1,10 +1,10 @@
 <template>
   <div class="max-w-lg sm:w-full mx-auto h-full">
     <div class="mx-4 sm:mx-0 pb-2">
-      <div class="w-full flex flex-row justify-between items-center">
-        <h2 class="tc-main text-4xl mb-2 py-3 sticky top-0 z-10 bg-main">{{ t('list.title') }}</h2>
-        <div class="refresh p-2 rounded bg-lightest tc-main-dark" @click="refresh">
-          <div class="wrapper">
+      <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-10">
+        <h2 class="tc-main text-4xl mb-2 py-3">{{ t('list.title') }}</h2>
+        <div class="refresh rounded bg-lightest hover:bg-light tc-main-dark" @click="refresh">
+          <div class="wrapper p-2">
             <Icon icon="iconoir:refresh" class="icon" :class="{ 'animate-spin': refreshing }"></Icon>
           </div>
         </div>
@@ -14,13 +14,15 @@
           <div
             v-for="game of games"
             :key="game.id"
-            class="item my-1 rounded-xl border bc-lightest transition hover:bc-primary bg-dark px-3 py-2 cursor-pointer"
+            class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-pointer"
           >
-            <p class="text tc-main-light">
-              {{ game.name }}
-              <span v-if="!game.isPublic" class="tc-main-secondary text-sm italic mx-3">{{ t('list.private') }}</span>
-              <span class="tc-main-secondary text-sm italic mx-3">({{ t('list.players', game.playerCount) }})</span>
-            </p>
+            <router-link :to="'/join/' + game.id">
+              <p class="text tc-main-light">
+                {{ game.name }}
+                <span v-if="!game.isPublic" class="tc-main-secondary text-sm italic mx-3">{{ t('list.private') }}</span>
+                <span class="tc-main-secondary text-sm italic mx-3 whitespace-nowrap">({{ t('list.players', game.playerCount) }})</span>
+              </p>
+            </router-link>
           </div>
         </div>
       </div>
