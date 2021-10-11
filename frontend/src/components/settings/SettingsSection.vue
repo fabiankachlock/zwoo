@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full p-2 flex flex-col justify-end items-stretch bg-light rounded-lg">
+  <div class="relative w-full p-2 flex flex-col justify-end items-stretch bg-lightest rounded-lg">
     <h3 class="tc-main text-2xl mx-2 my-1" v-if="title.length > 0">{{ title }}</h3>
     <slot></slot>
   </div>

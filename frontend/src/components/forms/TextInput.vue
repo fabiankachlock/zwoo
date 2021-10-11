@@ -9,7 +9,7 @@
         }
       "
         class="
-          bg-darkest
+          bg-dark
           shadow
           appearance-none
           border
@@ -20,7 +20,7 @@
           px-3
           tc-main-light
           leading-tight
-          focus:outline-none focus:shadow-outline focus:border-primary-light
+          focus:outline-none focus:shadow-outline focus:border-primary-light focus:bg-darkest
           dark:focus:border-primary-dark
         "
         :type="isPassword ? 'password' : 'text'"
