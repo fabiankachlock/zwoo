@@ -56,6 +56,11 @@
     "create": "Create A New Account",
     "tutorial": "Play The tutorial"
   },
+  "home": {
+    "create": "Create Game",
+    "join": "Join Game",
+    "stats": "Show Statistic"
+  },
   "list": {
     "title": "Available Games",
     "players": "no Players | 1 Player | {count} Players",
