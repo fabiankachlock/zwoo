@@ -55,4 +55,8 @@ export class GameManagementService {
       }, 3000)
     );
   };
+
+  static joinGame = async (gameId: string, password: string) => {
+    console.log('join game', gameId, password);
+  };
 }
