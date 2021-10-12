@@ -3,7 +3,7 @@
     <label class="tc-main-secondary text-sm font-bold my-2 relative">
       <slot></slot>
     </label>
-    <div :class="styles" @click="toggle">
+    <div :class="styles" class="hover:bc-primary border border-transparent rounded" @click="toggle">
       <Icon v-show="!checked" icon="akar-icons:box" />
       <Icon v-show="checked" icon="akar-icons:check" />
     </div>
