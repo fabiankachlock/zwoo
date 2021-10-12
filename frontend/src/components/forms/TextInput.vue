@@ -20,8 +20,7 @@
           px-3
           tc-main-light
           leading-tight
-          focus:outline-none focus:shadow-outline focus:border-primary-light focus:bg-darkest
-          dark:focus:border-primary-dark
+          focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest
         "
         :type="isPassword ? 'password' : 'text'"
         :id="id"
