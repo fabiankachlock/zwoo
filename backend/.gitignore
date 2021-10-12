@@ -11,5 +11,7 @@ CPackSourceConfig.cmake
 CTestTestfile.cmake
 DartConfiguration.tcl
 
+login_data.h
+
 
 Makefile
