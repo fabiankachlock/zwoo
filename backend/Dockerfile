@@ -3,18 +3,13 @@
 # See https://hub.docker.com/r/library/gcc/ for all supported GCC
 # tags from Docker Hub.
 # See https://docs.docker.com/samples/library/gcc/ for more on how to use this image
-FROM rikorose/gcc-cmake
+FROM ubuntu:20.04
 
 # These commands copy your files into the specified directory in the image
 # and set that as the working location
 COPY . .
 
-RUN sudo apt update
-RUN sudo apt install libboost-all-dev
-
-# This command compiles your app using GCC, adjust for your source code
-RUN cmake .
-RUN make
+ENTRYPOINT [ "sh", "./setup.sh" ]
 
 # This command runs your application, comment out this line to compile only
 CMD ["./bin/main"]
