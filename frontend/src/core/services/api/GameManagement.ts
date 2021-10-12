@@ -9,6 +9,11 @@ export type GameMeta = {
   playerCount: number;
 };
 
+export type GameJoinMeta = {
+  name: string;
+  needsValidation: boolean;
+};
+
 export type GamesList = GameMeta[];
 
 export class GameManagementService {
@@ -38,5 +43,16 @@ export class GameManagementService {
         playerCount: 5
       }
     ];
+  };
+
+  static getJoinMeta = async (gameId: string): Promise<GameJoinMeta> => {
+    return new Promise(res =>
+      setTimeout(() => {
+        res({
+          needsValidation: true,
+          name: `Some-Game (${gameId})`
+        });
+      }, 3000)
+    );
   };
 }

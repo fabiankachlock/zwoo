@@ -50,6 +50,12 @@
     "password": "Passwort",
     "create": "Erstellen"
   },
+  "join": {
+    "join": "{0} Beitreten",
+    "enterPassword": "Password eingeben",
+    "password": "Passwort",
+    "enter": "Spiel Beitreten"
+  },
   "landing": {
     "tagline": "-- tagline --",
     "login": "In Einen Bestehenden Account Einloggen",

@@ -50,6 +50,12 @@
     "password": "Password",
     "create": "Create"
   },
+  "join": {
+    "join": "Join {0}",
+    "enterPassword": "Enter Password",
+    "password": "Password",
+    "enter": "Join Game"
+  },
   "landing": {
     "tagline": "-- tagline --",
     "login": "Log In To An Existing Account",
