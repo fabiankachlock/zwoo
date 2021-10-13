@@ -119,9 +119,9 @@ body {
 }
 
 #app {
-	height: 100vh;
-	overflow-y: scroll;
+	min-height: 100vh;
 	@apply bg-_bg-light dark:bg-_bg-dark;
+	padding-bottom: 20px;
 }
 
 html {
