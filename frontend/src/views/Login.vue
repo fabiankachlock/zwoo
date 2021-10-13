@@ -46,7 +46,7 @@ const logIn = async () => {
     const redirect = route.query['redirect'] as string;
 
     if (redirect) {
-      router.push(redirect);
+      router.replace(redirect);
       return;
     }
 
