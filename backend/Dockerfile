@@ -3,13 +3,13 @@
 # See https://hub.docker.com/r/library/gcc/ for all supported GCC
 # tags from Docker Hub.
 # See https://docs.docker.com/samples/library/gcc/ for more on how to use this image
-FROM ubuntu:20.04
+FROM ubuntu:latest
+
+RUN sudo apt-get update && apt-get install -y \ build-essential \ cmake \ libboost-all-dev
 
 # These commands copy your files into the specified directory in the image
 # and set that as the working location
 COPY . .
-
-ENTRYPOINT [ "sh", "./setup.sh" ]
 
 # This command runs your application, comment out this line to compile only
 CMD ["./bin/main"]

@@ -1,7 +1,3 @@
-apt-get update && apt-get install -y \
-build-essential \
-cmake \
-libboost-all-dev
+#!/bin/bash
 
-cmake .
-make
+apt-get update && apt-get install -y \ build-essential \ cmake \ libboost-all-dev

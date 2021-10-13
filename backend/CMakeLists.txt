@@ -16,8 +16,9 @@ set(SRC_FILES
 )
 
 find_package(CURL REQUIRED)
+find_package(Boost REQUIRED)
 
-include_directories(include/ ${CURL_INCLUDE_DIRS} lib/SimpleJSON)
+include_directories(include/ lib/SimpleJSON lib/served ${Boost_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS})
 
 add_executable(main ${SRC_FILES})
-target_link_libraries(main ${CURL_LIBRARIES} ${LIBMONGOCXX_LIBRARIES} ${LIBBSONCXX_LIBRARIES})
+target_link_libraries(main ${CURL_LIBRARIES} ${Boost_LIBRARIES})
