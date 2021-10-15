@@ -1,8 +1,6 @@
 version: '3.4'
 
 services:
-
-  
   db:
     image: "postgres"
     container_name: postgres
@@ -15,10 +13,14 @@ services:
       - POSTGRES_USER:root
       - POSTGRES_PASSWORD:admin
       - POSTGRES_HOST_AUTH_METHOD=trust
-
-
+  
   backend:
     image: backend
     build:
       context: .
       dockerfile: ./Dockerfile
+
+
+  volumes:
+    db-data:
+      driver: local

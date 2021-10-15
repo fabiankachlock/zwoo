@@ -5,11 +5,13 @@
 # See https://docs.docker.com/samples/library/gcc/ for more on how to use this image
 FROM ubuntu:latest
 
-RUN sudo apt-get update && apt-get install -y \ build-essential \ cmake \ libboost-all-dev
+WORKDIR /backend
 
 # These commands copy your files into the specified directory in the image
 # and set that as the working location
-COPY . .
+COPY . /backend
+
+RUN ./setup.sh
 
 # This command runs your application, comment out this line to compile only
 CMD ["./bin/main"]
