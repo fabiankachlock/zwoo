@@ -2,6 +2,7 @@ import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
+import CatchAll from '../views/404.vue';
 import { GameRoute } from './game';
 import { MenuRoutes } from './menu';
 import { useAuth } from '@/core/adapter/auth';
@@ -27,7 +28,11 @@ const routes: Array<RouteRecordRaw> = [
       ...MenuRoutes
     ]
   },
-  GameRoute
+  GameRoute,
+  {
+    path: '/:pathMatch(.*)*',
+    component: CatchAll
+  }
 ];
 
 const router = createRouter({

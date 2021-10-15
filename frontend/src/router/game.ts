@@ -5,7 +5,7 @@ export const GameRoute: RouteRecordRaw = {
   component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Index.vue'),
   children: [
     {
-      path: '/play',
+      path: 'play',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Play.vue'),
       meta: {
         requiresAuth: true,
@@ -13,14 +13,14 @@ export const GameRoute: RouteRecordRaw = {
       }
     },
     {
-      path: '/wait',
+      path: 'wait',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/WaitingRoom.vue'),
       meta: {
         requiresAuth: true
       }
     },
     {
-      path: '/summary',
+      path: 'summary',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Summary.vue'),
       meta: {
         requiresAuth: true
