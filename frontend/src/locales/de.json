@@ -62,6 +62,11 @@
     "create": "Einen neuen Account erstellen",
     "tutorial": "Das Tutorial spielen"
   },
+  "home": {
+    "create": "Spiel Erstellen",
+    "join": "Spiel Beitreten",
+    "stats": "Statistiken zeigen"
+  },
   "list": {
     "title": "Verfügbare Spiele",
     "players": "keine Spieler | 1 Spieler | {count} Spieler",

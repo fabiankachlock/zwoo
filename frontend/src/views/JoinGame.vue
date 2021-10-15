@@ -58,7 +58,7 @@ onMounted(async () => {
   needsValidation.value = gameData.needsValidation;
 
   if (!gameData.needsValidation) {
-    router.push('/game/wait');
+    router.replace('/game/wait');
   }
 });
 </script>

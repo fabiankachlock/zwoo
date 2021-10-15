@@ -4,26 +4,26 @@
     <p class="text-2xl italic tc-main text-center">-- tagline --</p>
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative flex-1 w-full grid grid-cols-3">
-        <div class="action main bg-dark">
+        <div class="action main bg-dark hover:bg-darkest">
           <router-link class="link" to="/create-game">
             <Icon class="icon tc-secondary" icon="fluent:window-new-16-regular" />
             <p class="tc-main-light">{{ t('home.create') }}</p>
           </router-link>
         </div>
-        <div class="action main bg-dark">
+        <div class="action main bg-dark hover:bg-darkest">
           <router-link class="link" to="/available-games">
             <Icon class="icon tc-secondary" icon="fluent:square-arrow-forward-32-regular" />
             <p class="tc-main-light">{{ t('home.join') }}</p>
           </router-link>
         </div>
-        <div class="action main bg-dark">
+        <div class="action main bg-dark hover:bg-darkest">
           <router-link class="link" to="/stats">
             <Icon class="icon tc-secondary" icon="fluent:ribbon-star-20-regular" />
             <p class="tc-main-light">{{ t('home.stats') }}</p>
           </router-link>
         </div>
       </div>
-      <div class="action px-4 py-1 rounded m-2 bg-dark">
+      <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
         <router-link class="flex flex-row items-center" to="/tutorial">
           <Icon class="icon tc-secondary" icon="mdi:arrow-right-bold-box-outline" />
           <p class="tc-main-light inline-block mx-1">{{ t('landing.tutorial') }}</p>

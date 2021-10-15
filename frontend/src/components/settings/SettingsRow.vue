@@ -1,5 +1,19 @@
 <template>
-  <div class="w-full flex flex-row justify-between items-center bg-darkest px-1 py-3 my-3 rounded-lg border border-transparent hover:bc-primary">
+  <div
+    class="
+      w-full
+      flex flex-row
+      justify-between
+      items-center
+      bg-darkest
+      px-1
+      py-3
+      my-3
+      rounded-lg
+      border border-transparent
+      hover:bc-primary hover:bg-dark
+    "
+  >
     <div class="h-full flex-1 mx-2 tc-main-light">
       <span>{{ title }}</span>
       <span v-if="status" class="text-sm mx-1 tc-main-secondary">({{ status }})</span>
