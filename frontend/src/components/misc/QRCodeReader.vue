@@ -99,7 +99,11 @@ const scanQrCode = async () => {
 const closeCamera = async () => {
   cameraOn.value = false;
   mediaStream.value?.getTracks().forEach(track => track.stop());
-  emit('close');
+  setTimeout(() => {
+    if (!cameraOn.value) {
+      emit('close');
+    }
+  }, 1000);
 };
 
 const render = async () => {
@@ -107,8 +111,9 @@ const render = async () => {
     const barCodes = await decoder?.detect(videoElement.value!);
     if (barCodes && barCodes.length > 0) {
       status.value = barCodes[0].rawValue;
-      closeCamera();
-      validateAndRedirect();
+      if (validateAndRedirect()) {
+        closeCamera();
+      }
     }
   } catch (e: unknown) {
     console.log(e);
@@ -125,12 +130,19 @@ const renderLoop = () => {
 
 const validCodeRegex = /^zwooj:(.*)$/;
 
+let navigated = false;
+
 const validateAndRedirect = () => {
   const result = validCodeRegex.exec(status.value);
   if (result && result?.length > 1) {
-    router.push('/join/' + result[1]);
-    return;
+    if (!navigated) {
+      router.push('/join/' + result[1]);
+      navigated = true;
+    }
+    return true;
   }
-  status.value = t('join.notValid');
+
+  status.value = t('join.notValid', [status.value]);
+  return false;
 };
 </script>
