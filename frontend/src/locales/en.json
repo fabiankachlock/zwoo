@@ -54,7 +54,13 @@
     "join": "Join {0}",
     "enterPassword": "Enter Password",
     "password": "Password",
-    "enter": "Join Game"
+    "enter": "Join Game",
+    "scanCode": "Scan QR Code",
+    "closeCam": "Close Camera",
+    "nothingFound": "Nothing found",
+    "found": "Found {0}",
+    "notValid": "Wrong Format: {0}",
+    "enableCam": "Please enable your camera."
   },
   "landing": {
     "tagline": "-- tagline --",
