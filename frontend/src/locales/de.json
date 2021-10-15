@@ -54,7 +54,13 @@
     "join": "{0} Beitreten",
     "enterPassword": "Password eingeben",
     "password": "Passwort",
-    "enter": "Spiel Beitreten"
+    "enter": "Spiel Beitreten",
+    "scanCode": "QR Code scannen",
+    "closeCam": "Kamera schließen",
+    "nothingFound": "Nix gefunden",
+    "found": "{0} gefunden",
+    "notValid": "Falsches Format: {0}",
+    "enableCam": "Bitte Kamera aktivieren."
   },
   "landing": {
     "tagline": "-- tagline --",
