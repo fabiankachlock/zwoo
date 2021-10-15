@@ -77,5 +77,6 @@
     "shouldContainNormalChar": "Das Passwort sollte mindestens einen Buchstaben enthalten.",
     "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
     "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein."
-  }
+  },
+  "version": "Version"
 }

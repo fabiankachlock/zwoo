@@ -5,6 +5,11 @@ const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
 const quickMenuKey = 'zwoo:qm';
 
+const versionInfo = {
+  version: process.env.VUE_APP_VERSION as string,
+  hash: process.env.VUE_APP_VERSION_HASH as string
+};
+
 const changeLanguage = (lng: string) => {
   i18n.global.locale.value = lng;
   localStorage.setItem(languageKey, lng);
@@ -35,6 +40,12 @@ export const useConfig = defineStore('config', {
       useFullScreen: false,
       showQuickMenu: false
     };
+  },
+
+  getters: {
+    versionInfo() {
+      return versionInfo;
+    }
   },
 
   actions: {

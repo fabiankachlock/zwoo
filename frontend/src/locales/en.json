@@ -82,5 +82,6 @@
     "shouldContainNormalChar": "Password should contain at least one letter character.",
     "shouldContainSpecialChar": "Password should contain at least one special character.",
     "gameNameToShort": "Name should be at least 3 Characters long."
-  }
+  },
+  "version": "Version"
 }
