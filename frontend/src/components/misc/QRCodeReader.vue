@@ -10,7 +10,7 @@
     </div>
     <div>
       <div class="flex justify-center items-center my-2">
-        <button class="bg-lightest px-6 py-2 rounded hover:bg-light transform transition-transform hover:scale-95" @click="handleButtonClick">
+        <button class="bg-darkest tc-main px-6 py-2 rounded hover:bg-dark transform transition-transform hover:scale-95" @click="handleButtonClick">
           {{ t(cameraOn ? 'join.closeCam' : 'join.scanCode') }}
         </button>
       </div>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { defineEmits, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -50,6 +50,10 @@ declare var BarcodeDetector: {
   getSupportedFormats(): Promise<string[]>;
   new (): typeof BarcodeDetector;
 };
+
+const emit = defineEmits<{
+  (event: 'close'): void;
+}>();
 
 const { t } = useI18n();
 const router = useRouter();
@@ -95,6 +99,7 @@ const scanQrCode = async () => {
 const closeCamera = async () => {
   cameraOn.value = false;
   mediaStream.value?.getTracks().forEach(track => track.stop());
+  emit('close');
 };
 
 const render = async () => {
