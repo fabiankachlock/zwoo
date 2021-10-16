@@ -1,4 +1,4 @@
-import i18n, { defaultLanguage } from '@/i18n';
+import { defaultLanguage, setI18nLanguage } from '@/i18n';
 import { defineStore } from 'pinia';
 
 const languageKey = 'zwoo:lng';
@@ -11,7 +11,7 @@ const versionInfo = {
 };
 
 const changeLanguage = (lng: string) => {
-  i18n.global.locale.value = lng;
+  setI18nLanguage(lng);
   localStorage.setItem(languageKey, lng);
 };
 
@@ -67,7 +67,7 @@ export const useConfig = defineStore('config', {
     },
     configure() {
       const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
-      i18n.global.locale.value = storedLng;
+      setI18nLanguage(storedLng);
 
       const rawStoredDarkMode = localStorage.getItem(uiKey);
       const storedDarkMode = rawStoredDarkMode
