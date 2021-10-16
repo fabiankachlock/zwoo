@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, ref } from 'vue';
+import { defineEmits, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -68,6 +68,12 @@ const videoElement = ref<HTMLVideoElement>();
 //  @ts-ignore
 const decoder = isSupported.value ? new BarcodeDetector() : undefined;
 /* eslint-enable */
+
+onUnmounted(() => {
+  if (cameraOn.value) {
+    closeCamera();
+  }
+});
 
 const handleButtonClick = () => {
   if (cameraOn.value) {
