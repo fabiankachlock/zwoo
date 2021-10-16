@@ -8,6 +8,7 @@
           input = r as HTMLInputElement;
         }
       "
+        autocomplete=""
         class="
           bg-dark
           shadow
