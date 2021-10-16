@@ -9,11 +9,12 @@
     </div>
     <!-- can't be w-auto, otherwise the transition won't work-->
     <div
-      :class="{ 'w-16 p-2': isOpen }"
+      :class="{ 'open p-2': isOpen }"
       class="w-0 p-0 h-full transition overflow-hidden duration-300 ease-out"
       style="transition-property: width, padding"
     >
       <div class="h-full flex flex-row items-center justify-end" id="content">
+        <HomeButton />
         <FullScreenSwitch />
         <DarkModeSwitch />
       </div>
@@ -27,6 +28,7 @@ import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
 import DarkModeSwitch from '../settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '../settings/FullScreenSwitch.vue';
+import HomeButton from '../settings/HomeButton.vue';
 
 const config = useConfig();
 const isOpen = ref(false);
@@ -37,5 +39,9 @@ const visible = computed(() => config.showQuickMenu);
 <style scoped>
 #content > * {
   @apply mx-1;
+}
+
+.open {
+  width: 6rem; /* w-24 */
 }
 </style>
