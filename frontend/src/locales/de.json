@@ -76,7 +76,9 @@
   "list": {
     "title": "Verfügbare Spiele",
     "players": "keine Spieler | 1 Spieler | {count} Spieler",
-    "private": "Privat"
+    "private": "Privat",
+    "reload": "Aktualisieren",
+    "nothingFound": "Es konnte kein Spiel gefunden werden."
   },
   "errors": {
     "error": "Error",

@@ -36,6 +36,31 @@
               </p>
             </router-link>
           </div>
+          <div
+            v-if="games.length === 0"
+            class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-default"
+          >
+            <div>
+              <p class="text-center tc-main my-1">
+                {{ t('list.nothingFound') }}
+              </p>
+              <div class="flex flex-row justify-center">
+                <button class="nothing-found-btn bg-main hover:bg-light">
+                  <router-link to="/create-game" class="text-sm tc-main-secondary block">{{ t('home.create') }}</router-link>
+                </button>
+                <button
+                  @click="refresh()"
+                  class="nothing-found-btn bg-main hover:bg-light transform transition-transform"
+                  :class="{ 'scale-95 opacity-50 pointer-events-none cursor-default': refreshing }"
+                  :disabled="refreshing"
+                >
+                  <p class="text-sm tc-main-secondary">
+                    {{ t('list.reload') }}
+                  </p>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -84,5 +109,10 @@ const onScanClose = () => {
 
 .btn-wrapper {
   @apply rounded m-2;
+}
+
+.nothing-found-btn {
+  flex-basis: 100%;
+  @apply rounded p-1 mx-2 my-1;
 }
 </style>
