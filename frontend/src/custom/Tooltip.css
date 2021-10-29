@@ -8,7 +8,7 @@
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
-	bottom: 115%;
+	bottom: calc(100% + 0.5em);
 	font-size: 0.75rem;
 	line-height: 1.125rem;
 	@apply transform transition-transform -translate-x-1/2 translate-y-1/2 scale-y-0 px-1 py-0.5 rounded z-50 text-center;

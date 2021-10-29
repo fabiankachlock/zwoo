@@ -5,9 +5,13 @@
         <p class="text-3xl tc-main font-bold m-2 text-center">#GameName#</p>
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
-          <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">{{ t('wait.start') }}</button>
-          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
-          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+          <template v-if="isHost">
+            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">{{ t('wait.start') }}</button>
+            <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
+          </template>
+          <template v-if="!isHost">
+            <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+          </template>
         </div>
       </div>
     </header>
@@ -71,6 +75,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
+const isHost = computed(() => gameConfig.host);
 const gameId = computed(() => gameConfig.gameId);
 const players = [
   {
