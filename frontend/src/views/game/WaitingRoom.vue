@@ -13,22 +13,90 @@
     </header>
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
-        <div class="bg-lightest md:row-span-2">&lt; Players &gt;</div>
-        <div class="bg-lightest">&lt; Rules &gt;</div>
-        <div class="bg-lightest">&lt; QRCode &gt;</div>
+        <div class="bg-light md:row-span-2">
+          <p class="text-xl tc-main my-2">#Players#</p>
+          <div class="w-full flex flex-col">
+            <div
+              v-for="player of players"
+              :key="player.id"
+              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-light"
+            >
+              <span class="text-lg tc-main-dark">
+                {{ player.name }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-light">
+          <p class="text-xl tc-main my-2">#Rules#</p>
+          <div class="w-full flex flex-col">
+            <div
+              v-for="rule of rules"
+              :key="rule"
+              @click="selectRule(rule)"
+              v-tooltip="openRule === rule ? 'wait.collapse' : 'wait.expand'"
+              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-light cursor-pointer"
+            >
+              <p class="text-lg tc-main-dark">{{ t(`rules.${rule}.title`) }}</p>
+              <div v-if="openRule === rule">
+                <div class="divider w-full my-2 bc-invert-darkest border-b"></div>
+                <div class="content">
+                  <p class="text-sm italic tc-main-secondary">
+                    {{ t(`rules.${rule}.info`) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-light">
+          <p class="text-xl tc-main my-2">#QRCode#</p>
+          <div class="qrcode-wrapper mx-auto max-w-xs">
+            <QRCode :data="'game id' + gameId" :width="256" :height="256" />
+          </div>
+        </div>
       </div>
     </main>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useGameConfig } from '@/core/adapter/game';
+import { computed, ref } from 'vue';
+import QRCode from '@/components/misc/QRCode.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+const gameConfig = useGameConfig();
+const gameId = computed(() => gameConfig.gameId);
+const players = [
+  {
+    name: 'player 1',
+    id: '123'
+  },
+  {
+    name: 'player 2',
+    id: '234'
+  }
+];
+const rules = ['key-1', 'key-2'];
+
+const openRule = ref<string | undefined>(undefined);
+const selectRule = (ruleKey: string) => {
+  openRule.value = openRule.value === ruleKey ? undefined : ruleKey;
+};
+</script>
 
 <style>
 .actions button {
   @apply mx-1 px-2 py-1 rounded-sm;
 }
 
-.main-content div {
+.main-content > div {
   @apply rounded-md p-3;
+}
+
+.qrcode-wrapper img {
+  width: 100%;
 }
 </style>
