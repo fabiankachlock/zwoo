@@ -15,7 +15,7 @@
 	@apply text-_text-dark-secondary dark:text-_text-light-secondary bg-_bg-light-lightest dark:bg-_bg-dark-lightest;
 }
 
-.zwoo--tooltip::before {
+.zwoo--tooltip.tooltip__underline::before {
 	content: '';
 	position: absolute;
 	left: 0;
