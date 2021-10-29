@@ -91,5 +91,22 @@
     "shouldContainSpecialChar": "Password should contain at least one special character.",
     "gameNameToShort": "Name should be at least 3 Characters long."
   },
-  "version": "Version"
+  "version": "Version",
+  "wait": {
+    "start": "Start",
+    "stop": "Stop",
+    "leave": "Leave",
+    "players": "Players",
+    "rules": "Rules",
+    "qrcode": "QRCode",
+    "qrcodeInfo": "Other Player an join the game directly with the QRCode.",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  },
+  "rules": {
+    "test-1": {
+      "title": "Test Rule",
+      "info": "Test rule description - optional extrem long text..."
+    }
+  }
 }

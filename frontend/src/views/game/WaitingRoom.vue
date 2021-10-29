@@ -5,16 +5,16 @@
         <p class="text-3xl tc-main font-bold m-2 text-center">#GameName#</p>
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
-          <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">#start#</button>
-          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">#close#</button>
-          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">#leave#</button>
+          <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">{{ t('wait.start') }}</button>
+          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
+          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
         </div>
       </div>
     </header>
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
         <div class="bg-light md:row-span-2">
-          <p class="text-xl tc-main my-2">#Players#</p>
+          <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
           <div class="w-full flex flex-col">
             <div
               v-for="player of players"
@@ -28,13 +28,13 @@
           </div>
         </div>
         <div class="bg-light">
-          <p class="text-xl tc-main my-2">#Rules#</p>
+          <p class="text-xl tc-main my-2">{{ t('wait.rules') }}</p>
           <div class="w-full flex flex-col">
             <div
               v-for="rule of rules"
               :key="rule"
               @click="selectRule(rule)"
-              v-tooltip="openRule === rule ? 'wait.collapse' : 'wait.expand'"
+              v-tooltip="t(openRule === rule ? 'wait.collapse' : 'wait.expand')"
               class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-light cursor-pointer"
             >
               <p class="text-lg tc-main-dark">{{ t(`rules.${rule}.title`) }}</p>
@@ -50,7 +50,10 @@
           </div>
         </div>
         <div class="bg-light">
-          <p class="text-xl tc-main my-2">#QRCode#</p>
+          <p class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</p>
+          <p class="my-1 text-sm italic tc-main-secondary">
+            {{ t('wait.qrcodeInfo') }}
+          </p>
           <div class="qrcode-wrapper mx-auto max-w-xs">
             <QRCode :data="'game id' + gameId" :width="256" :height="256" />
           </div>
@@ -79,7 +82,7 @@ const players = [
     id: '234'
   }
 ];
-const rules = ['key-1', 'key-2'];
+const rules = ['test-1', 'key-2'];
 
 const openRule = ref<string | undefined>(undefined);
 const selectRule = (ruleKey: string) => {
@@ -89,7 +92,7 @@ const selectRule = (ruleKey: string) => {
 
 <style>
 .actions button {
-  @apply mx-1 px-2 py-1 rounded-sm;
+  @apply mx-1 px-2 py-1 rounded;
 }
 
 .main-content > div {
