@@ -16,6 +16,8 @@ set(SRC_FILES
 
     "src/Authentication/SMTPClient.cpp"
     "src/Authentication/Authentication.cpp"
+
+	"src/Database/DatabaseHandler.cpp"
 )
 
 set(SERVED_SRC 
@@ -39,9 +41,23 @@ set(SERVED_SRC
 )
 
 find_package(CURL REQUIRED)
+find_package(libmongocxx REQUIRED)
+find_package(libbsoncxx REQUIRED)
 
-include_directories(include/ lib/ ${CURL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} /usr/include/)
+if(UNIX AND NOT APPLE)
+    include_directories("/usr/local/include/mongocxx/v_noabi")
+    include_directories("/usr/local/include/bsoncxx/v_noabi")
+    include_directories("/usr/local/include/libmongoc-1.0")
+    include_directories("/usr/local/include/libbson-1.0")
+    include_directories("/usr/local/lib")
+else()
+    message("Trying other Include dirs")
+    include_directories(${LIBMONGOCXX_INCLUDE_DIR})
+    include_directories(${LIBBSONCXX_INCLUDE_DIR})
+endif()
+
+include_directories(include/ lib/ ${CURL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} )
 # add_definitions("-lcrypto" "-lssl")
 
 add_executable(main ${SRC_FILES} ${SERVED_SRC})
-target_link_libraries(main ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} -lpqxx -lpq)
+target_link_libraries(main ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} ${LIBMONGOCXX_LIBRARIES} ${LIBBSONCXX_LIBRARIES})
