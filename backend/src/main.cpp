@@ -1,6 +1,5 @@
 #include <iostream>
 #include "served/multiplexer.hpp"
-
 #include "HttpServer.h"
 
 int main()

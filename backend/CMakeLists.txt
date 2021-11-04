@@ -16,6 +16,10 @@ set(SRC_FILES
 
     "src/Authentication/SMTPClient.cpp"
     "src/Authentication/Authentication.cpp"
+
+	"src/Game/GameManager.cpp"
+	"src/Game/Game.cpp"
+	"src/Game/Player.cpp"
 )
 
 set(SERVED_SRC 
