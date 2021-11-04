@@ -1,13 +1,13 @@
 # Datenbank Anforderungen
 
 ## Erstellen Eines Spielers
-Ich möchte Mithilfe der Spielerdaten in der lage sein einen Neuen Datenbankeintrag hinzuzufügen der als Temporäre Spalte einen Verifikationscode besitzt die Funktion soll diesen Code zurückgeben
+Ich möchte mit Hilfe der Spielerdaten in der Lage sein einen neuen Datenbankeintrag hinzuzufügen der als Temporäre Spalte einen Verifikationscode besitzt die Funktion soll diesen Code zurückgeben.
 
 ## Verifizieren eines Spielers
-Ich möchte mithilfe eines Verifikationscodes in der lage sein einen Spieler zu verifizieren und ihn somit zu aktivieren
+Ich möchte mit hilfe eines Verifikationscodes in der lage sein einen Spieler zu verifizieren und ihn somit zu aktivieren.
 
 ## Ist Spieler Aktiviert
-Ich möchte mithilfe der SpielerID herausfinden ob ein Spieler Verifiziert ist. Dieser Wert soll als Boolean zurück gegeben werden
+Ich möchte mit hilfe der SpielerID herausfinden ob ein Spieler Verifiziert ist. Dieser Wert soll als Boolean zurück gegeben werden
 
 ## Erhalte von Spieler Daten
 Diese Funktion sollte aus einer Playerid, einem Playername oder einer Email alle Daten zum Spieler zurück geben
