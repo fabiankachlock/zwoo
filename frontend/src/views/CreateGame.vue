@@ -50,7 +50,7 @@ const create = async () => {
   try {
     await gameConfig.create(name.value, isPublic.value, password.value);
 
-    router.push('/game/room');
+    router.push('/game/wait');
   } catch (e: any) {
     error.value = Array.isArray(e) ? e : [e.toString()];
   }
