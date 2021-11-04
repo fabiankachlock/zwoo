@@ -1,1 +1,3 @@
 # zwoo
+
+zwoo ist eine Webanwendung mit Backend. Ziel des Spieles ist es keine Karten mehr auf der Hand zu haben es gibt vier Farben und die Zahlen von 1 bis 9 desweiteren gibt es abhängig vom Spielmodus weiter Karten wie zwei ziehen, Richtungswechsel und Aussetzen. Neben den Farben gibt es noch Farbwahlkarten mit denen man die Farbe mit der weitergespielt wird entscheiden kann es gibt auch hier verschiedene Varianten wie die Farbwahl mit vier ziehen oder Farbwahl mit zwei ziehen.
