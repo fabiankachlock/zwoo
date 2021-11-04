@@ -15,7 +15,7 @@ set(SRC_FILES
     "src/main.cpp"
 
     "src/Authentication/SMTPClient.cpp"
-    "src/Authentication/Authentication.cpp"
+    "src/Authentication/AuthenticationManager.cpp"
 
 	"src/Game/GameManager.cpp"
 	"src/Game/Game.cpp"

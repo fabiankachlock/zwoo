@@ -10,9 +10,9 @@
 namespace Backend
 {
     // Authentication Callbacks
-    constexpr char *kCreateAccount = "authentication/create";
-    constexpr char *kVerifyAccount = "authentication/verify";
-    constexpr char *kLoginAccount = "authentication/login";
+    constexpr char *kCreateAccount = "api/authentication/create";
+    constexpr char *kVerifyAccount = "api/authentication/verify";
+    constexpr char *kLoginAccount = "api/authentication/login";
 
     constexpr char *kHelloWorld = "hello-world";
 
