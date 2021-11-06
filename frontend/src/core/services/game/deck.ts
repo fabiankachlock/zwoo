@@ -28,7 +28,7 @@ export class CardDeck {
 
   pushCard = (card: Card) => {
     const existingIndex = this.content.findIndex(_card => _card.id === card.id);
-    if (!existingIndex) {
+    if (existingIndex < 0) {
       this.content.push(card);
     }
   };

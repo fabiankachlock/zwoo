@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-darkest rounded-lg py-1 px-3 h-12 relative" @click="click">
+  <div class="deck bg-darkest rounded-lg py-1 px-3 relative">
     <div class="absolute left-0 right-0 bottom-2 z-10 overflow-hidden px-2 flex flex-nowrap justify-center">
       <div
         v-for="card of cards"
-        :key="card"
+        :key="card.id"
         :style="getComputedCardWrapperStyle"
         :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
         class="card-wrapper relative overflow-visible"
@@ -15,35 +15,44 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { useGameCardDeck } from '@/core/adapter/play/deck';
+import { useGameState } from '@/core/adapter/play/gameState';
+import { Card } from '@/core/type/game';
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 const CARD_ASPECT_RATIO = 476 / 716;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
 
-const cardsActive = ref(false);
-const cards = ref([0]);
+const deckStore = useGameCardDeck();
+const stateStore = useGameState();
+
+const cardsActive = computed(() => stateStore.activePlayer);
+const cards = computed(() => deckStore.cards);
+watch(cards, () => {
+  resizeCards();
+});
 
 const isCardOverlap = ref(false);
+const cardWidth = ref(0);
+const deckWidth = ref(0);
 const dimensions = reactive({
   width: window.innerWidth,
   height: window.innerHeight
 });
 
-const cardWidth = ref(0);
-const deckWidth = ref(0);
-
-// TODO: remove,just a temp handler
-const click = () => {
-  cardsActive.value = !cardsActive.value;
-  if (cardsActive.value) {
-    cards.value.push(cards.value.length);
-    calculateCardWidth();
-    console.log(cards.value.length);
-  }
-};
-
 // register resize events
 onMounted(() => {
+  deckStore.setState(
+    (() => {
+      const cards: Card[] = [];
+      for (let i = 0; i < 5; i++) {
+        cards.push({
+          id: i.toString()
+        });
+      }
+      return cards;
+    })()
+  );
   window.addEventListener('resize', onResize);
   onResize();
 });
@@ -57,14 +66,14 @@ const onResize = () => {
   dimensions.height = window.innerHeight;
   dimensions.width = window.innerWidth;
   deckWidth.value = dimensions.width - 60;
-  calculateCardWidth();
+  resizeCards();
 };
 
 const deckFilledFactor = computed(() => {
   return (cards.value.length * dimensions.width * CARD_BASE_WIDTH_MULTIPLIER) / deckWidth.value;
 });
 
-const calculateCardWidth = () => {
+const resizeCards = () => {
   const dimensionsMultiplier = adjustCardSize(deckFilledFactor.value);
 
   const cardMaxWidth = dimensions.width * dimensionsMultiplier.width;
@@ -82,7 +91,6 @@ const calculateCardWidth = () => {
 };
 
 const adjustCardSize = (filledFactor: number): { width: number; height: number } => {
-  console.log(filledFactor);
   if (filledFactor < 3) {
     return { width: CARD_BASE_WIDTH_MULTIPLIER, height: CARD_BASE_HEIGHT_MULTIPLIER };
   } else if (filledFactor < 7) {
@@ -115,6 +123,10 @@ const getComputedCardStyle = computed((): { [key: string]: string } => {
 </script>
 
 <style>
+.deck {
+  height: calc(0.5rem + 6vh);
+}
+
 .card-wrapper {
   @apply transition-all;
 }

@@ -25,7 +25,7 @@
               <div class="menu-section">
                 <p class="tc-main text-lg">#Actions#</p>
                 <div>
-                  <button class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">#Leave#</button>
+                  <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">#Leave#</button>
                 </div>
               </div>
               <!--
@@ -45,8 +45,20 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
+import { useGameState } from '@/core/adapter/play/gameState';
+import { useGameCardDeck } from '@/core/adapter/play/deck';
 
+const stateStore = useGameState();
+const deckState = useGameCardDeck();
 const menuOpen = ref(false);
+
+const handleLeave = () => {
+  // TODO: Just Temp
+  stateStore.setIsActive(!stateStore.activePlayer);
+  deckState.addCard({
+    id: deckState.cards.length.toString()
+  });
+};
 </script>
 
 <style>
