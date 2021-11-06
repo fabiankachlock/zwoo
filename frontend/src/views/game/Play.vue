@@ -3,7 +3,10 @@
     <div class="w-full h-full relative">
       <div class="layout-grid">
         <InGameMenu />
-        <div class="h-full">Main</div>
+        <div class="h-full">
+          Main
+          <CardDetail />
+        </div>
         <CardDeck />
       </div>
     </div>
@@ -13,6 +16,7 @@
 <script setup lang="ts">
 import InGameMenu from '@/components/game/InGameMenu.vue';
 import CardDeck from '@/components/game/CardDeck.vue';
+import CardDetail from '@/components/game/CardDetail.vue';
 </script>
 
 <style>

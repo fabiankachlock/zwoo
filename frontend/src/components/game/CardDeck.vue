@@ -4,6 +4,7 @@
       <div
         v-for="card of cards"
         :key="card.id"
+        @click="selectCard(card.id)"
         :style="getComputedCardWrapperStyle"
         :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
         class="card-wrapper relative overflow-visible"
@@ -120,6 +121,10 @@ const getComputedCardStyle = computed((): { [key: string]: string } => {
     transform: `translateX(${(-28 - Math.log2(cards.value.length) * 2).toString()}%`
   };
 });
+
+const selectCard = (id: string) => {
+  deckStore.selectCard(id);
+};
 </script>
 
 <style>
