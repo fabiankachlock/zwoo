@@ -38,7 +38,8 @@ export const useConfig = defineStore('config', {
       useDarkMode: false,
       language: 'en',
       useFullScreen: false,
-      showQuickMenu: false
+      showQuickMenu: false,
+      sortCards: false
     };
   },
 
