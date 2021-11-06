@@ -1,31 +1,48 @@
 <template>
-  <div class="bg-darkest rounded-lg py-1 px-3 h-12 relative">
+  <div class="bg-darkest rounded-lg py-1 px-3 h-12 relative" @click="click">
     <div class="absolute left-0 right-0 bottom-2 z-10 overflow-hidden px-2 flex flex-nowrap justify-center">
-      <img
+      <div
         v-for="card of cards"
         :key="card"
-        :style="getComputedCardStyle()"
-        :class="{ active: cardsActive, idle: !cardsActive }"
-        class="card"
-        src="/img/dummy_card.svg"
-        alt=""
-      />
+        :style="getComputedCardWrapperStyle"
+        :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
+        class="card-wrapper relative overflow-visible"
+      >
+        <img class="card relative" :style="getComputedCardStyle" src="/img/dummy_card.svg" alt="" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
 const CARD_ASPECT_RATIO = 476 / 716;
+const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
+const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
 
 const cardsActive = ref(false);
+const cards = ref([0]);
+
+const isCardOverlap = ref(false);
 const dimensions = reactive({
   width: window.innerWidth,
   height: window.innerHeight
 });
+
 const cardWidth = ref(0);
 const deckWidth = ref(0);
 
+// TODO: remove,just a temp handler
+const click = () => {
+  cardsActive.value = !cardsActive.value;
+  if (cardsActive.value) {
+    cards.value.push(cards.value.length);
+    calculateCardWidth();
+    console.log(cards.value.length);
+  }
+};
+
+// register resize events
 onMounted(() => {
   window.addEventListener('resize', onResize);
   onResize();
@@ -35,6 +52,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', onResize);
 });
 
+// handle resize
 const onResize = () => {
   dimensions.height = window.innerHeight;
   dimensions.width = window.innerWidth;
@@ -42,9 +60,15 @@ const onResize = () => {
   calculateCardWidth();
 };
 
+const deckFilledFactor = computed(() => {
+  return (cards.value.length * dimensions.width * CARD_BASE_WIDTH_MULTIPLIER) / deckWidth.value;
+});
+
 const calculateCardWidth = () => {
-  const cardMaxWidth = dimensions.width * 0.25;
-  const cardMaxHeight = dimensions.height * 0.3;
+  const dimensionsMultiplier = adjustCardSize(deckFilledFactor.value);
+
+  const cardMaxWidth = dimensions.width * dimensionsMultiplier.width;
+  const cardMaxHeight = dimensions.height * dimensionsMultiplier.height;
   const cardCalculatedHeight = cardMaxWidth / CARD_ASPECT_RATIO;
   const cardCalculatedWidth = cardMaxHeight * CARD_ASPECT_RATIO;
 
@@ -53,30 +77,62 @@ const calculateCardWidth = () => {
   } else {
     cardWidth.value = cardMaxWidth;
   }
+
+  isCardOverlap.value = cardWidth.value * cards.value.length > deckWidth.value * 0.9; // 10% threshold
 };
 
-const cards = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const getComputedCardStyle = (): { [key: string]: string } => {
-  return {
-    width: Math.round(deckWidth.value / cards.length).toString() + 'px'
-  };
+const adjustCardSize = (filledFactor: number): { width: number; height: number } => {
+  console.log(filledFactor);
+  if (filledFactor < 3) {
+    return { width: CARD_BASE_WIDTH_MULTIPLIER, height: CARD_BASE_HEIGHT_MULTIPLIER };
+  } else if (filledFactor < 7) {
+    return { width: CARD_BASE_WIDTH_MULTIPLIER * 0.8, height: CARD_BASE_HEIGHT_MULTIPLIER * 0.8 };
+  } else if (filledFactor < 11) {
+    return { width: CARD_BASE_WIDTH_MULTIPLIER * 0.5, height: CARD_BASE_HEIGHT_MULTIPLIER * 0.5 };
+  }
+  return { width: CARD_BASE_WIDTH_MULTIPLIER * 0.3, height: CARD_BASE_HEIGHT_MULTIPLIER * 0.3 };
 };
+
+// compute styles
+const getComputedCardWrapperStyle = computed((): { [key: string]: string } => {
+  if (isCardOverlap.value) {
+    return {
+      width: Math.round(deckWidth.value / (cards.value.length + Math.log2(cards.value.length))).toString() + 'px'
+    };
+  }
+
+  return {
+    width: Math.round(cardWidth.value).toString() + 'px'
+  };
+});
+
+const getComputedCardStyle = computed((): { [key: string]: string } => {
+  return {
+    width: Math.round(cardWidth.value) + 'px',
+    transform: `translateX(${(-28 - Math.log2(cards.value.length) * 2).toString()}%`
+  };
+});
 </script>
 
 <style>
-.card {
-  max-height: 30vh;
-  max-width: 25vw;
+.card-wrapper {
   @apply transition-all;
 }
 
-.card.active {
+.card-wrapper.active {
   transform: translateY(30%);
 }
 
-.card.idle {
+.card-wrapper.idle {
   transform: translateY(70%);
-  opacity: 0.8;
-  filter: grayscale(0.5);
+  filter: grayscale(1);
+}
+
+.card {
+  max-width: unset;
+}
+
+.card-wrapper:not(.overlap) .card {
+  transform: unset !important;
 }
 </style>
