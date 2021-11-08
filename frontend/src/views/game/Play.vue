@@ -5,7 +5,7 @@
         <InGameMenu />
         <div class="h-full">
           Main
-          <CardDetail />
+          <CardDetail v-if="showCardDetail" />
         </div>
         <CardDeck />
       </div>
@@ -17,6 +17,11 @@
 import InGameMenu from '@/components/game/InGameMenu.vue';
 import CardDeck from '@/components/game/CardDeck.vue';
 import CardDetail from '@/components/game/CardDetail.vue';
+import { useConfig } from '@/core/adapter/config';
+import { computed } from 'vue';
+
+const config = useConfig();
+const showCardDetail = computed(() => config.showCardDetail);
 </script>
 
 <style>

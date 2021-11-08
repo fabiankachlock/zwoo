@@ -4,6 +4,8 @@ import { defineStore } from 'pinia';
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
 const quickMenuKey = 'zwoo:qm';
+const sortCardsKey = 'zwoo:sc';
+const showCardDetailKey = 'zwoo:cd';
 
 const versionInfo = {
   version: process.env.VUE_APP_VERSION as string,
@@ -39,7 +41,8 @@ export const useConfig = defineStore('config', {
       language: 'en',
       useFullScreen: false,
       showQuickMenu: false,
-      sortCards: false
+      sortCards: false,
+      showCardDetail: false
     };
   },
 
@@ -66,9 +69,24 @@ export const useConfig = defineStore('config', {
       this.showQuickMenu = visible;
       localStorage.setItem(quickMenuKey, visible ? 'on' : 'off');
     },
+    setSortCards(sort: boolean) {
+      this.sortCards = sort;
+      localStorage.setItem(sortCardsKey, sort ? 'on' : 'off');
+    },
+    setShowCardDetail(show: boolean) {
+      this.showCardDetail = show;
+      localStorage.setItem(showCardDetailKey, show ? 'on' : 'off');
+    },
     configure() {
       const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
       setI18nLanguage(storedLng);
+
+      let storedShowCardDetail = localStorage.getItem(showCardDetailKey);
+      if (!storedShowCardDetail) {
+        const hoverNotAvailable = 'ontouchstart' in document.documentElement;
+        storedShowCardDetail = hoverNotAvailable ? 'on' : 'off';
+        this.setShowCardDetail(hoverNotAvailable);
+      }
 
       const rawStoredDarkMode = localStorage.getItem(uiKey);
       const storedDarkMode = rawStoredDarkMode
@@ -79,7 +97,9 @@ export const useConfig = defineStore('config', {
       this.$patch({
         useDarkMode: storedDarkMode,
         language: storedLng,
-        showQuickMenu: localStorage.getItem(quickMenuKey) === 'on'
+        showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
+        sortCards: localStorage.getItem(sortCardsKey) === 'on',
+        showCardDetail: storedShowCardDetail === 'on'
       });
     }
   }
