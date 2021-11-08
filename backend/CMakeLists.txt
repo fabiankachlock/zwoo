@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(zwoo_backend VERSION 0.1.0)
 
-find_package(Threads)
 find_package(Boost REQUIRED)
+
+if (UNIX)
+    if (NOT APPLE)
+        find_package(Threads REQUIRED)
+        find_package(X11 REQUIRED)
+    endif()
+endif()
 
 # Setting Output Directorys
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
