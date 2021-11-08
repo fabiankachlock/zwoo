@@ -2,7 +2,8 @@
   "settings": {
     "title": "Settings",
     "sections": {
-      "general": "General"
+      "general": "General",
+      "game": "Game"
     },
     "status": {
       "boolean": {
@@ -13,7 +14,9 @@
     "darkmode": "Dark Mode",
     "language": "Language",
     "fullscreen": "Fullscreen",
-    "quickMenu": "Quick Menu"
+    "quickMenu": "Quick Menu",
+    "showCardDetail": "Show Card Detail before playing",
+    "sortCards": "Sort cards in deck"
   },
   "lng": {
     "de": "German",

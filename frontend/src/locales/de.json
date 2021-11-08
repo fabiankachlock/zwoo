@@ -2,7 +2,8 @@
   "settings": {
     "title": "Einstellungen",
     "sections": {
-      "general": "Allgemein"
+      "general": "Allgemein",
+      "game": "Spiel"
     },
     "status": {
       "boolean": {
@@ -13,7 +14,9 @@
     "darkmode": "Dunkler Modus",
     "fullscreen": "Vollbildschirm",
     "quickMenu": "Schnellmenü",
-    "language": "Sprache"
+    "language": "Sprache",
+    "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
+    "sortCards": "Karten im Deck sortieren"
   },
   "lng": {
     "de": "Deutsch",

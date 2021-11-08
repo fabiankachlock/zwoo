@@ -2,6 +2,7 @@
   <h1 class="tc-main text-4xl mx-6 my-5">{{ t('settings.title') }}</h1>
   <div class="mx-6 my-5">
     <SettingsSectionGeneral />
+    <SettingsSectionGame />
     <Version />
   </div>
 </template>
@@ -10,6 +11,7 @@
 import SettingsSectionGeneral from '@/components/settings/sections/SettingsSectionGeneral.vue';
 import { useI18n } from 'vue-i18n';
 import Version from '@/components/misc/Version.vue';
+import SettingsSectionGame from '@/components/settings/sections/SettingsSectionGame.vue';
 
 const { t } = useI18n();
 </script>
