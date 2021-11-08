@@ -11,7 +11,7 @@
       </div>
       <div class="action bg-dark hover:bg-darkest">
         <router-link class="link" to="/create-account">
-          <Icon class="icon tc-secondary" icon="gridicons:create" />
+          <Icon class="icon tc-secondary" icon="ic:outline-add-box" />
           <p class="tc-main-light">{{ t('landing.create') }}</p>
         </router-link>
       </div>
