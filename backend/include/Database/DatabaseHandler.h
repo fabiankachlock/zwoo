@@ -13,4 +13,4 @@ namespace Backend::Database
     private:
     };
 }
-#endif _DATABASE_HANDLER_H_
+#endif // _DATABASE_HANDLER_H_

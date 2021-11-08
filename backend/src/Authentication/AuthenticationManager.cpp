@@ -13,8 +13,8 @@ namespace Backend
     void AuthenticationManager::SendVerificationEmail(const char *email_address, const char *link)
     {
         Authentication::SMTPClient client = Authentication::SMTPClient();
-        client.m_password = ;
-        client.m_username = ;
+        client.m_password = "";
+        client.m_username = "";
 
         Authentication::Email email = Authentication::Email();
 

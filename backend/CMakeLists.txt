@@ -6,7 +6,6 @@ find_package(Boost REQUIRED)
 if (UNIX)
     if (NOT APPLE)
         find_package(Threads REQUIRED)
-        find_package(X11 REQUIRED)
     endif()
 endif()
 
@@ -48,10 +47,14 @@ set(SERVED_SRC
 	"lib/served/net/server.cpp"
 )
 
+set(SQLITE_SRC
+	"lib/sqlite/sqlite3.c"
+)
+
+
 find_package(CURL REQUIRED)
 
 include_directories(include/ lib/ ${CURL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} )
-# add_definitions("-lcrypto" "-lssl")
 
-add_executable(main ${SRC_FILES} ${SERVED_SRC})
+add_executable(main ${SERVED_SRC} ${SQLITE_SRC} ${SRC_FILES})
 target_link_libraries(main ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
