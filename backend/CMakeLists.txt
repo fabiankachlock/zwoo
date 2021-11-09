@@ -47,14 +47,13 @@ set(SERVED_SRC
 	"lib/served/net/server.cpp"
 )
 
-set(SQLITE_SRC
-	"lib/sqlite/sqlite3.c"
-)
-
+add_subdirectory(lib/sqlite)
 
 find_package(CURL REQUIRED)
+
+message("Libs: " ${CMAKE_DL_LIBS})
 
 include_directories(include/ lib/ ${CURL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} )
 
 add_executable(main ${SERVED_SRC} ${SQLITE_SRC} ${SRC_FILES})
-target_link_libraries(main ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_link_libraries(main ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${Boost_LIBRARIES} )
