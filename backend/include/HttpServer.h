@@ -10,9 +10,20 @@
 namespace Backend
 {
     // Authentication Callbacks
-    constexpr char *kCreateAccount = "api/authentication/create";
-    constexpr char *kVerifyAccount = "api/authentication/verify";
-    constexpr char *kLoginAccount = "api/authentication/login";
+    constexpr char *kCreateAccount = "authentication/create";
+    constexpr char *kVerifyAccount = "authentication/verify";
+    constexpr char *kLoginAccount = "authentication/login";
+
+    // GameId && PlayerId (Player who creates the Game)
+    constexpr char *kCreateGame = "gamemanager/create";
+    // GameId && PlayerId (Player who wants to delete Game)
+    constexpr char *kDeleteGame = "gamemanager/delete";
+    // GameId && PlayerId
+    constexpr char *kPlayerJoin = "gamemanager/join";
+    // GameId && PlayerId
+    constexpr char *kPlayerLeave = "gamemanager/leave"
+
+    constexpr char *kChangeGameSettings = "game/settings";
 
     constexpr char *kHelloWorld = "hello-world";
 

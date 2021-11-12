@@ -12,11 +12,12 @@ namespace Backend::Game
     {
     public:
         Game(/* args */);
-        ~Game();
+        ~Game() {}
 
-    private:
+    public:
         const char *game_name = "";
         std::vector<Player> v_players;
+        int game_id;
 
         GameSettings *s_settings;
     };

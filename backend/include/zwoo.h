@@ -4,7 +4,7 @@
 #define SMTP_HOST "smtp.gmail.com"
 #define SMTP_PORT 465
 
-#define DOMAIN ".xyz"
+#define DOMAIN "igd20.de/zwoo/api"
 
 #include <iostream>
 #include <stdio.h>
@@ -12,8 +12,5 @@
 #include <assert.h>
 #include <string>
 #include <chrono>
-
-
-
 
 #endif

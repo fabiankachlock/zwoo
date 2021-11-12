@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "Game/Game.h"
+
 namespace Backend::Game
 {
 
@@ -10,9 +12,16 @@ namespace Backend::Game
     {
     public:
         GameManager(/* args */);
-        ~GameManager();
+        ~GameManager() {}
+
+        int AddGame(Game* game);
+        Game* GetGame(int* game_id);
+
+        std::vector<Game*> games;
     private:
-        void AddGame();
+        int GetNewUID();
+
+        int tmp = 0;
     };
 
 } // namespace Backend::Game
