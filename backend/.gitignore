@@ -1,4 +1,5 @@
 .vscode/
+.idea/
 build/
 bin/
 CMakeFiles/
@@ -16,5 +17,6 @@ login_data.h
 
 *.a
 *.o
+*.cbp
 
 Makefile
