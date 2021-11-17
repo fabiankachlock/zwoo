@@ -2,6 +2,7 @@
 #define _GAMEMANAGER_H_
 
 #include <vector>
+#include <algorithm>
 
 #include "Game/Game.h"
 
@@ -11,11 +12,12 @@ namespace Backend::Game
     class GameManager
     {
     public:
-        GameManager(/* args */);
+        GameManager();
         ~GameManager() {}
 
         int AddGame(Game* game);
-        Game* GetGame(int* game_id);
+        Game* GetGame(const int* game_id);
+        bool DeleteGame(const int* game_id);
 
         std::vector<Game*> games;
     private:

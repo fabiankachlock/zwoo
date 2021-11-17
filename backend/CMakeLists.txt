@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(zwoo_backend VERSION 0.1.0)
 
-# Setting Output Directorys
+# Setting Output Directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(SRC_FILES
     "src/main.cpp"
+	"src/HttpServer.cpp"
 
     "src/Authentication/SMTPClient.cpp"
     "src/Authentication/AuthenticationManager.cpp"

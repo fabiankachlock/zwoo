@@ -5,27 +5,24 @@
 #include "served/uri.hpp"
 #include "served/net/server.hpp"
 
-#include "SimpleJSON/json.hpp"
+// #include "SimpleJSON/json.hpp"
+
+#include "Game/GameManager.h"
 
 namespace Backend
 {
     // Authentication Callbacks
-    constexpr char *kCreateAccount = "authentication/create";
-    constexpr char *kVerifyAccount = "authentication/verify";
-    constexpr char *kLoginAccount = "authentication/login";
-
-    // GameId && PlayerId (Player who creates the Game)
-    constexpr char *kCreateGame = "gamemanager/create";
+    constexpr char *kCreateAccount = "auth/create";
+    constexpr char *kVerifyAccount = "auth/verify";
+    constexpr char *kLoginAccount = "auth/login";
     // GameId && PlayerId (Player who wants to delete Game)
     constexpr char *kDeleteGame = "gamemanager/delete";
     // GameId && PlayerId
     constexpr char *kPlayerJoin = "gamemanager/join";
     // GameId && PlayerId
-    constexpr char *kPlayerLeave = "gamemanager/leave"
+    constexpr char *kPlayerLeave = "gamemanager/leave";
 
     constexpr char *kChangeGameSettings = "game/settings";
-
-    constexpr char *kHelloWorld = "hello-world";
 
     constexpr char kIpAddress[] = "0.0.0.0";
     constexpr char kPort[] = "5000";
@@ -36,23 +33,13 @@ namespace Backend
     private:
         served::multiplexer multiplexer;
 
+        Backend::Game::GameManager gamemanager;
+
+
     public:
-        HttpServer(served::multiplexer m) : multiplexer(m) {}
+        HttpServer(served::multiplexer m);
 
-        auto HelloWorld()
-        {
-            return [&](served::response &response, const served::request &request)
-            {
-                response << "{ \"message\": \"Hello World!\" }";
-                // return if instert was successesful or not
-                return served::response::stock_reply(200, response);
-            };
-        }
-
-        void InitEndpoints()
-        {
-            multiplexer.handle(kHelloWorld).get(HelloWorld());
-        }
+        void InitEndpoints();
 
         void StartServer()
         {
@@ -60,6 +47,39 @@ namespace Backend
             std::cout << "Starting Server on Port " << kPort << " ...\n";
             server.run(10);
         }
+
+        auto HelloWorld()
+        {
+            return [&](served::response &response, const served::request &request)
+            {
+                response << "{ \"message\": \"Hello World!\" }";
+                // return if insert was successful or not
+                return served::response::stock_reply(200, response);
+            };
+        }
+
+        auto CreateGame()
+        {
+            return [&](served::response &response, const served::request &request)
+            {
+                if (request.header("player_id") != "" && request.header("game_name") != "")
+                {
+                    auto game = Game::Game();
+                    game.game_name = request.header("game_name").c_str();
+
+                    response << "{ \"game_id\": \"" << std::to_string(gamemanager.AddGame(&game)) << "\" }";
+
+                    std::cout << game.game_name << " created!" << std::endl;
+
+                    return served::response::stock_reply(200, response);
+                }
+                else
+                {
+                    return served::response::stock_reply(400, response);
+                }
+            };
+        }
+
     };
 } // namespace Backend
 
