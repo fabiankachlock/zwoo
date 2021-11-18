@@ -69,7 +69,7 @@ namespace Backend
 
                     response << "{ \"game_id\": \"" << std::to_string(gamemanager.AddGame(&game)) << "\" }";
 
-                    std::cout << game.game_name << " created!" << std::endl;
+                    std::cout << request.header("game_name") << " created! " << game.game_name << std::endl;
 
                     return served::response::stock_reply(200, response);
                 }
