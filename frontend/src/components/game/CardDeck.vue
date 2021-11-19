@@ -1,6 +1,9 @@
 <template>
   <div class="deck bg-darkest rounded-lg py-1 px-3 relative">
-    <div class="absolute left-0 right-0 bottom-2 z-10 overflow-hidden px-2 flex flex-nowrap justify-center">
+    <div
+      :class="{ 'pointer-events-none': !cardsActive }"
+      class="absolute left-0 right-0 bottom-2 z-10 overflow-hidden px-2 flex flex-nowrap justify-center"
+    >
       <div
         v-for="card of cards"
         :key="card.id"
