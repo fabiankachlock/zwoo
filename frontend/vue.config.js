@@ -35,6 +35,7 @@ module.exports = {
       .plugin('html')
       .tap(args => {
         args[0].title = "zwoo";
+        args[0].recaptchakey = "6LdVYE0dAAAAAPkDshZhPtnlqklX8fCH_2xMJvsm";
         return args;
       })
   },
