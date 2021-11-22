@@ -5,7 +5,8 @@ import Landing from '../views/Landing.vue';
 import CatchAll from '../views/404.vue';
 import { GameRoute } from './game';
 import { MenuRoutes } from './menu';
-import { useAuth } from '@/core/adapter/auth';
+import { RouterInterceptor } from './types';
+import { AuthGuard } from '@/core/services/security/AuthGuard';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -40,25 +41,36 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach(async (to, _from, next) => {
-  const auth = useAuth();
+const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [new AuthGuard().beforeEach];
+const BeforeEachAsyncGuards: RouterInterceptor['beforeEachAsync'][] = [];
 
-  if (to.meta['requiresAuth'] === true) {
-    if (!auth.isInitialized) {
-      await auth.askStatus();
-    }
-
-    if (!auth.isLoggedIn) {
-      const redirect = to.meta['redirect'] as string | boolean | undefined;
-
-      if (redirect === true) {
-        return next('/login?redirect=' + to.fullPath);
-      }
-
-      return next(redirect || '/');
+router.beforeEach(async (to, from, next) => {
+  let called = false;
+  for (const guard of BeforeEachSyncGuards) {
+    if (guard) {
+      const redirected = await guard(to, from, next);
+      called ||= redirected;
     }
   }
-  next();
+
+  if (!called) {
+    next();
+  }
+
+  Promise.all([...BeforeEachAsyncGuards.filter(guard => guard)]);
+});
+
+const AfterEachSyncGuards: RouterInterceptor['afterEach'][] = [];
+const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [];
+
+router.afterEach(async (to, from, failure) => {
+  for (const guard of AfterEachSyncGuards) {
+    if (guard) {
+      await guard(from, to, failure);
+    }
+  }
+
+  Promise.all([...AfterEachAsyncGuards.filter(guard => guard)]);
 });
 
 export default router;
