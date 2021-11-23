@@ -39,14 +39,19 @@ export class ReCaptchaService {
   };
 
   private verify = async (token: string): Promise<ReCaptchaResponse> => {
-    return fetch('/verify', {
-      method: 'POST',
-      body: JSON.stringify({
-        token: token
-      })
-    })
-      .then(res => res.json() as Promise<ReCaptchaResponse>)
-      .then(res => res); // TODO: optional data casting;
+    // return fetch('/verify', {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     token: token
+    //   })
+    // })
+    //   .then(res => res.json() as Promise<ReCaptchaResponse>)
+    //   .then(res => res); // TODO: optional data casting;
+    console.log(token);
+    return Promise.resolve({
+      success: Math.random() > 0.5,
+      score: Math.random()
+    });
   };
 
   static checkUser = ReCaptchaService.instance.performCheck;

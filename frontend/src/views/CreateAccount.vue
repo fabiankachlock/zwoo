@@ -21,6 +21,7 @@
       <TextInput id="password" v-model="password" labelKey="createAccount.password" is-password placeholder="******" :validator="passwordValidator" />
       <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
+      <NotARobot />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="create">
@@ -46,6 +47,7 @@ import { UsernameValidator } from '@/core/services/validator/username';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
 import { useAuth } from '@/core/adapter/auth';
+import NotARobot from '@/components/security/NotARobot.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
