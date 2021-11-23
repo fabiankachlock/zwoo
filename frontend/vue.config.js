@@ -14,6 +14,7 @@ module.exports = {
       fullInstall: true,
     },
   },
+
   chainWebpack: config => {
     config.module
       .rule('i18n-resource')
@@ -38,6 +39,7 @@ module.exports = {
         return args;
       })
   },
+
   configureWebpack: {
     plugins: [new BundleAnalyzerPlugin()],
     resolve: {
