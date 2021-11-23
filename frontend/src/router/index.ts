@@ -7,6 +7,7 @@ import { GameRoute } from './game';
 import { MenuRoutes } from './menu';
 import { RouterInterceptor } from './types';
 import { AuthGuard } from '@/core/services/security/AuthGuard';
+import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptchaTerms';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -57,11 +58,20 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 
-  Promise.all([...BeforeEachAsyncGuards.filter(guard => guard)]);
+  Promise.all([
+    ...BeforeEachAsyncGuards.map(guard => {
+      if (guard) {
+        guard(to, from);
+      }
+    })
+  ]);
 });
 
 const AfterEachSyncGuards: RouterInterceptor['afterEach'][] = [];
-const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [];
+const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [new ReCaptchaTermsRouteInterceptor().afterEachAsync];
+// (async () => ([
+//   new (await import(/* webpackChunkName: "recaptcha" */ '../core/services/security/ReCaptchaTerms')).default().afterEachAsync
+// ]));
 
 router.afterEach(async (to, from, failure) => {
   for (const guard of AfterEachSyncGuards) {
@@ -70,7 +80,13 @@ router.afterEach(async (to, from, failure) => {
     }
   }
 
-  Promise.all([...AfterEachAsyncGuards.filter(guard => guard)]);
+  Promise.all([
+    ...AfterEachAsyncGuards.map(guard => {
+      if (guard) {
+        guard(from, to, failure);
+      }
+    })
+  ]);
 });
 
 export default router;

@@ -133,3 +133,8 @@ html {
 		font-size: 20px;
 	}
 }
+
+.grecaptcha-badge.hidden {
+	visibility: hidden;
+	display: none;
+}
