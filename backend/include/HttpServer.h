@@ -1,11 +1,8 @@
 #ifndef _HTTP_SERVER_H_
 #define _HTTP_SERVER_H_
 
-#include "served/multiplexer.hpp"
-#include "served/uri.hpp"
-#include "served/net/server.hpp"
-
 // #include "SimpleJSON/json.hpp"
+#include <iostream>
 
 #include "Game/GameManager.h"
 
@@ -31,55 +28,19 @@ namespace Backend
     class HttpServer
     {
     private:
-        served::multiplexer multiplexer;
 
         Backend::Game::GameManager gamemanager;
 
 
     public:
-        HttpServer(served::multiplexer m);
+        HttpServer();
 
         void InitEndpoints();
 
         void StartServer()
         {
-            served::net::server server("0.0.0.0", "5000", multiplexer);
             std::cout << "Starting Server on Port " << kPort << " ...\n";
-            server.run(10);
         }
-
-        auto HelloWorld()
-        {
-            return [&](served::response &response, const served::request &request)
-            {
-                response << "{ \"message\": \"Hello World!\" }";
-                // return if insert was successful or not
-                return served::response::stock_reply(200, response);
-            };
-        }
-
-        auto CreateGame()
-        {
-            return [&](served::response &response, const served::request &request)
-            {
-                if (request.header("player_id") != "" && request.header("game_name") != "")
-                {
-                    auto game = Game::Game();
-                    game.game_name = request.header("game_name").c_str();
-
-                    response << "{ \"game_id\": \"" << std::to_string(gamemanager.AddGame(&game)) << "\" }";
-
-                    std::cout << request.header("game_name") << " created! " << game.game_name << std::endl;
-
-                    return served::response::stock_reply(200, response);
-                }
-                else
-                {
-                    return served::response::stock_reply(400, response);
-                }
-            };
-        }
-
     };
 } // namespace Backend
 
