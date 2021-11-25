@@ -1,19 +1,6 @@
 version: '3.4'
 
 services:
-  db:
-    image: "postgres"
-    container_name: postgres
-    volumes:
-      - test-data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_DB:root
-      - POSTGRES_USER:root
-      - POSTGRES_PASSWORD:admin
-      - POSTGRES_HOST_AUTH_METHOD=trust
-  
   backend:
     image: backend
     build:

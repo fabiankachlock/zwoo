@@ -17,7 +17,7 @@ namespace Backend::Authentication
     {
     }
 
-    std::string GetFormatedTime()
+    std::string GetFormattedTime()
     {
         std::stringstream string_stream;
         auto timer = std::time(NULL);
@@ -41,7 +41,7 @@ namespace Backend::Authentication
         if (curl)
         {
             m_payload = {
-                "Date: " + GetFormatedTime() + "\r\n",
+                "Date: " + GetFormattedTime() + "\r\n",
                 "From: " + email.from + "\r\n",
                 "To: " + email.to + "\r\n",
                 "Subject: " + email.subject + "\r\n",

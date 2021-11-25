@@ -1,3 +1,0 @@
-[submodule "backend/lib/served"]
-	path = backend/lib/served
-	url = https://github.com/evanugarte/served.git

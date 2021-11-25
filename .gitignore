@@ -3,3 +3,4 @@
 .vscode/
 
 login_data.h
+backend/test.db

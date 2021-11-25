@@ -1,47 +1,44 @@
+# TODO: Cleanup
+
 cmake_minimum_required(VERSION 3.0.0)
 project(zwoo_backend VERSION 0.1.0)
 
-find_package(Threads)
-find_package(Boost REQUIRED)
-
-# Setting Output Directorys
+# Setting Output Directory
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set (CMAKE_CXX_STANDARD 17)
+option(BUILD_SWAGGER "build with Swagger" ON)
+
+find_package(oatpp          1.3.0 REQUIRED)
+find_package(CURL                 REQUIRED)
 
 set(SRC_FILES
     "src/main.cpp"
+	"src/HttpServer.cpp"
 
     "src/Authentication/SMTPClient.cpp"
-    "src/Authentication/Authentication.cpp"
-)
+    "src/Authentication/AuthenticationManager.cpp"
 
-set(SERVED_SRC 
-	"lib/served/methods_handler.cpp"
-	"lib/served/multiplexer.cpp"
-	"lib/served/parameters.cpp"
-	"lib/served/request_parser_impl.cpp"
-	"lib/served/request_parser.cpp"
-	"lib/served/request.cpp"
-	"lib/served/response.cpp"
-	"lib/served/status.cpp"
-	"lib/served/uri.cpp"
+	"src/Game/GameManager.cpp"
+	"src/Game/Game.cpp"
+	"src/Game/Player.cpp"
+		include/Server/ErrorHandler.cpp)
 
-	"lib/served/mux/regex_matcher.cpp"
-	"lib/served/mux/static_matcher.cpp"
-	"lib/served/mux/variable_matcher.cpp"
+add_subdirectory(lib/sqlite)
 
-	"lib/served/net/connection_manager.cpp"
-	"lib/served/net/connection.cpp"
-	"lib/served/net/server.cpp"
-)
+include_directories(include/ lib/ ${CURL_INCLUDE_DIRS})
 
-find_package(CURL REQUIRED)
+add_executable(main ${SRC_FILES})
+target_link_libraries(main sqlite3 oatpp::oatpp ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
-include_directories(include/ lib/ ${CURL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} /usr/include/)
-# add_definitions("-lcrypto" "-lssl")
+if(${BUILD_SWAGGER})
+	find_package(oatpp-swagger  1.3.0 REQUIRED)
+	add_definitions(-DBUILD_SWAGGER=1 -DOATPP_SWAGGER_RES_PATH="${oatpp-swagger_INCLUDE_DIRS}/../bin/oatpp-swagger/res")
+	target_link_libraries(main oatpp::oatpp-swagger)
+endif(${BUILD_SWAGGER})
 
-add_executable(main ${SRC_FILES} ${SERVED_SRC})
-target_link_libraries(main ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} -lpqxx -lpq)
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
+    find_package(Threads REQUIRED)
+    target_link_libraries(main ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+endif()

@@ -1,53 +1,63 @@
 #ifndef _HTTP_SERVER_H_
 #define _HTTP_SERVER_H_
 
-#include "served/multiplexer.hpp"
-#include "served/uri.hpp"
-#include "served/net/server.hpp"
+#include "oatpp/network/Server.hpp"
 
-#include "SimpleJSON/json.hpp"
+#include "Server/ServerComponent.hpp"
+#include "Server/controller/AuthenticationController.hpp"
+
+#include "Game/GameManager.h"
+
+#ifdef BUILD_SWAGGER
+#include "oatpp-swagger/Controller.hpp"
+#endif // BUILD_SWAGGER
 
 namespace Backend
 {
-    // Authentication Callbacks
-    constexpr char *kCreateAccount = "authentication/create";
-    constexpr char *kVerifyAccount = "authentication/verify";
-    constexpr char *kLoginAccount = "authentication/login";
-
-    constexpr char *kHelloWorld = "hello-world";
-
-    constexpr char kIpAddress[] = "0.0.0.0";
-    constexpr char kPort[] = "5000";
-    constexpr char kThreads = 10;
-
     class HttpServer
     {
     private:
-        served::multiplexer multiplexer;
+
+        Backend::Game::GameManager gamemanager;
 
     public:
-        HttpServer(served::multiplexer m) : multiplexer(m) {}
+        HttpServer();
 
-        auto HelloWorld()
+        void RunServer()
         {
-            return [&](served::response &response, const served::request &request)
-            {
-                response << "{ \"message\": \"Hello World!\" }";
-                // return if instert was successesful or not
-                return served::response::stock_reply(200, response);
-            };
-        }
+            oatpp::base::Environment::init();
 
-        void InitEndpoints()
-        {
-            multiplexer.handle(kHelloWorld).get(HelloWorld());
-        }
+            ServerComponent components;
 
-        void StartServer()
-        {
-            served::net::server server("0.0.0.0", "5000", multiplexer);
-            std::cout << "Starting Server on Port " << kPort << " ...\n";
-            server.run(10);
+            /* Get router component */
+            OATPP_COMPONENT(std::shared_ptr<oatpp::web::server::HttpRouter>, router);
+
+#ifdef BUILD_SWAGGER
+            oatpp::web::server::api::Endpoints docEndpoints;
+
+            // All API Controllers here
+            docEndpoints.append(router->addController(AuthenticationController::createShared())->getEndpoints());
+
+            router->addController(oatpp::swagger::Controller::createShared(docEndpoints));
+#endif // BUILD_SWAGGER
+
+            router->addController(AuthenticationController::createShared());
+
+            /* Get connection handler component */
+            OATPP_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, connectionHandler);
+
+            /* Get connection provider component */
+            OATPP_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, connectionProvider);
+
+            /* create server */
+            oatpp::network::Server server(connectionProvider,
+                                          connectionHandler);
+
+            OATPP_LOGD("Server", "Running on port %s...", connectionProvider->getProperty("port").toString()->c_str());
+
+            server.run();
+
+            oatpp::base::Environment::destroy();
         }
     };
 } // namespace Backend
