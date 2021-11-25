@@ -1,3 +1,5 @@
+# TODO: Cleanup
+
 cmake_minimum_required(VERSION 3.0.0)
 project(zwoo_backend VERSION 0.1.0)
 
@@ -21,7 +23,7 @@ set(SRC_FILES
 	"src/Game/GameManager.cpp"
 	"src/Game/Game.cpp"
 	"src/Game/Player.cpp"
-)
+		include/Server/ErrorHandler.cpp)
 
 add_subdirectory(lib/sqlite)
 
@@ -32,7 +34,7 @@ target_link_libraries(main sqlite3 oatpp::oatpp ${CURL_LIBRARIES} ${CMAKE_THREAD
 
 if(${BUILD_SWAGGER})
 	find_package(oatpp-swagger  1.3.0 REQUIRED)
-	add_definitions(-DBUILD_SWAGGER=1)
+	add_definitions(-DBUILD_SWAGGER=1 -DOATPP_SWAGGER_RES_PATH="${oatpp-swagger_INCLUDE_DIRS}/../bin/oatpp-swagger/res")
 	target_link_libraries(main oatpp::oatpp-swagger)
 endif(${BUILD_SWAGGER})
 

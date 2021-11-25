@@ -8,9 +8,4 @@ namespace Backend
         gamemanager = Game::GameManager();
     }
 
-    void HttpServer::InitEndpoints()
-    {
-        
-    }
-
 }
