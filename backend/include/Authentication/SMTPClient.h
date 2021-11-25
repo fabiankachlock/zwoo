@@ -1,34 +1,42 @@
 #pragma once
 
-#include "Email.h"
+#include <cstring>
+#include <iomanip>
+
 #include "zwoo.h"
 
 #include <curl/curl.h>
 
 namespace Backend::Authentication
-{   
-    class SMTPClient {
-    private:
+{
+    struct Email
+    {
+        std::string from;
+        std::string to;
+
+        std::string subject = "";
+        std::string header = "";
+
+        std::vector<std::string> message;
+
+        void AddLine(std::string line) { message.push_back(line); }
+    };
+
+    class SMTPClient
+    {
+    public:
         // Login Data
         std::string m_password;
         std::string m_username;
-
-        std::string m_senderName;
-        std::string m_senderEmail;
-
-        std::string m_serverName;
-        unsigned short m_serverPort;
-
-        int m_socket;
 
     public:
         SMTPClient();
         ~SMTPClient();
 
-        void SetSMTPHost(const char* server, const unsigned short port = 0);
+        int SendEmail(Email email);
 
-        bool SendEmail(Email* email);
-        int ConnectToServer();
+    private:
+        static size_t PayloadSource(void *ptr, size_t size, size_t nmemb, void *userp);
     };
 
 } // namespace Backend::Authentication
