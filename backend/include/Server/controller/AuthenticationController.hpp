@@ -26,18 +26,7 @@ public:
     }
 
     ENDPOINT("GET", "/hello-world", helloWorld) {
-        const char* html =
-                "<html lang='en'>"
-                "  <head>"
-                "    <meta charset=utf-8/>"
-                "  </head>"
-                "  <body>"
-                "    <p>Hello World</p>"
-                "    <a href='swagger/ui'>Swagger-UI page</a>"
-                "  </body>"
-                "</html>";
-        auto response = createResponse(Status::CODE_200, html);
-        response->putHeader(Header::CONTENT_TYPE, "text/html");
+        auto response = createResponse(Status::CODE_200, "");
         return response;
     }
 
