@@ -1,6 +1,7 @@
 .DS_Store
 *.log
 .vscode/
+.idea/
 
 login_data.h
 backend/test.db
