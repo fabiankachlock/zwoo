@@ -74,4 +74,3 @@ const updateInput = () => {
   emit('update:isValid', isValid.value);
 };
 </script>
-

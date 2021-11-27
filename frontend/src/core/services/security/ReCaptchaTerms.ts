@@ -47,4 +47,3 @@ export class ReCaptchaTermsRouteInterceptor implements RouterInterceptor {
 }
 
 export default ReCaptchaTermsRouteInterceptor;
-

@@ -26,4 +26,3 @@ export class AuthGuard implements RouterInterceptor {
     return false;
   };
 }
-

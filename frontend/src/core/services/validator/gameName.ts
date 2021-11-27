@@ -5,4 +5,3 @@ export class GameNameValidator implements Validator<string> {
     return new ValidationResult(name.length >= 3, 'errors.gameNameToShort');
   };
 }
-

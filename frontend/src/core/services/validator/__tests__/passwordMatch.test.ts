@@ -27,4 +27,3 @@ describe('services > validator > passwordMatch', () => {
     });
   });
 });
-

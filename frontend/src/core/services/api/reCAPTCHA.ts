@@ -60,4 +60,3 @@ export class ReCaptchaService {
 }
 
 export default ReCaptchaService;
-

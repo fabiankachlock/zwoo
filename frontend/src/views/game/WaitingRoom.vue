@@ -108,4 +108,3 @@ const selectRule = (ruleKey: string) => {
   width: 100%;
 }
 </style>
-

@@ -59,4 +59,3 @@ describe('services > validator > email', () => {
     });
   });
 });
-

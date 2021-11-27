@@ -78,4 +78,3 @@ const handleLeave = () => {
   @apply flex justify-between items-center m-2;
 }
 </style>
-

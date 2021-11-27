@@ -25,4 +25,3 @@
 import NavBar from '@/components/menu/NavBar.vue';
 import FloatingMenu from '@/components/menu/FloatingMenu.vue';
 </script>
-

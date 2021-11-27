@@ -30,4 +30,3 @@ const showCardDetail = computed(() => config.showCardDetail);
   grid-template-rows: min-content auto min-content;
 }
 </style>
-

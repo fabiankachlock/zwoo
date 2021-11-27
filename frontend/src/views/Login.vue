@@ -56,4 +56,3 @@ const logIn = async () => {
   }
 };
 </script>
-
