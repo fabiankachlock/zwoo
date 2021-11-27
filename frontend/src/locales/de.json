@@ -1,0 +1,116 @@
+{
+  "settings": {
+    "title": "Einstellungen",
+    "sections": {
+      "general": "Allgemein",
+      "game": "Spiel"
+    },
+    "status": {
+      "boolean": {
+        "on": "aktiviert",
+        "off": "deaktiviert"
+      }
+    },
+    "darkmode": "Dunkler Modus",
+    "fullscreen": "Vollbildschirm",
+    "quickMenu": "Schnellmenü",
+    "language": "Sprache",
+    "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
+    "sortCards": "Karten im Deck sortieren"
+  },
+  "lng": {
+    "de": "Deutsch",
+    "en": "Englisch"
+  },
+  "nav": {
+    "login": "Anmelden",
+    "createAccount": "Account erstellen",
+    "idea": "Neue Idee?",
+    "github": "Github",
+    "logout": "Abmelden",
+    "settings": "Einstellungen"
+  },
+  "login": {
+    "title": "Anmeldung",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "login": "Anmelden",
+    "resetPassword": "Passwort zurücksetzten"
+  },
+  "createAccount": {
+    "title": "Account Erstellen",
+    "email": "E-Mail",
+    "emailExample": "jemand{0}beispiel.de",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "create": "Erstellen",
+    "passwordRepeat": "Passwort Wiederholen"
+  },
+  "createGame": {
+    "title": "Spiel Erstellen",
+    "name": "Name",
+    "isPublic": "Öffentlich",
+    "password": "Passwort",
+    "create": "Erstellen"
+  },
+  "join": {
+    "join": "{0} Beitreten",
+    "enterPassword": "Password eingeben",
+    "password": "Passwort",
+    "enter": "Spiel Beitreten",
+    "scanCode": "QR Code scannen",
+    "closeCam": "Kamera schließen",
+    "nothingFound": "Nix gefunden",
+    "found": "{0} gefunden",
+    "notValid": "Falsches Format: {0}",
+    "enableCam": "Bitte Kamera aktivieren."
+  },
+  "landing": {
+    "tagline": "-- tagline --",
+    "login": "In Einen Bestehenden Account Einloggen",
+    "create": "Einen neuen Account erstellen",
+    "tutorial": "Das Tutorial spielen"
+  },
+  "home": {
+    "create": "Spiel Erstellen",
+    "join": "Spiel Beitreten",
+    "stats": "Statistiken zeigen"
+  },
+  "list": {
+    "title": "Verfügbare Spiele",
+    "players": "keine Spieler | 1 Spieler | {count} Spieler",
+    "private": "Privat",
+    "reload": "Aktualisieren",
+    "nothingFound": "Es konnte kein Spiel gefunden werden."
+  },
+  "errors": {
+    "error": "Error",
+    "invalidEmail": "Die Email ist ungültig",
+    "usernameToShort": "Der Benutzername muss mindestens 4 Zeichen lang sein.",
+    "passwordsDontMatch": "Die Passwörter stimmen nicht überein.",
+    "passwordNotLongEnough": "Das Passwort sollte mindestens 8 Zeichen lang sein.",
+    "shouldContainNumber": "Das Passwort sollte mindestens eine Zahl beinhalten.",
+    "shouldContainNormalChar": "Das Passwort sollte mindestens einen Buchstaben enthalten.",
+    "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
+    "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein."
+  },
+  "version": "Version",
+  "wait": {
+    "start": "Start",
+    "stop": "Stop",
+    "leave": "Verlassen",
+    "players": "Spieler",
+    "rules": "Regeln",
+    "qrcode": "QR-Code",
+    "qrcodeInfo": "Andere Spieler können über den QR-Code direkt dem Spiel beitreten.",
+    "expand": "Mehr Anzeigen",
+    "collapse": "Weniger"
+  },
+  "rules": {
+    "test-1": {
+      "title": "Test Regel",
+      "info": "Test Regel Erklärung - optional extrem langer text..."
+    }
+  }
+}
+
