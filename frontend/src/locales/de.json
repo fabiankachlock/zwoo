@@ -92,7 +92,8 @@
     "shouldContainNumber": "Das Passwort sollte mindestens eine Zahl beinhalten.",
     "shouldContainNormalChar": "Das Passwort sollte mindestens einen Buchstaben enthalten.",
     "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
-    "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein."
+    "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein.",
+    "recaptcha": "Die Bot-Challenge muss bestanden sein."
   },
   "version": "Version",
   "wait": {

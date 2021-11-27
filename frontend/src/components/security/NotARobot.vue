@@ -14,9 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import { ReCaptchaService } from '@/core/services/api/reCAPTCHA';
-import { computed, ref } from 'vue';
+import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/reCAPTCHA';
+import { computed, defineEmits, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+const emit = defineEmits<{
+  (event: 'responseChanged', response: ReCaptchaResponse): void;
+}>();
 
 const { t } = useI18n();
 const verifyState = ref<'none' | 'verifying' | 'done' | 'error'>('none');
@@ -41,6 +45,7 @@ const handleClick = async (evt: Event) => {
     verifyState.value = 'done';
 
     if (response) {
+      emit('responseChanged', response);
       success.value = response.success;
       humanRate.value = response.score;
     }
