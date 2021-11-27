@@ -4,6 +4,7 @@
       <FormTitle> {{ t('login.title') }} </FormTitle>
       <TextInput id="username" v-model="username" labelKey="login.username" :placeholder="t('login.username')" />
       <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />
+      <NotARobot />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="logIn">
@@ -28,6 +29,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
 import { useAuth } from '@/core/adapter/auth';
+import NotARobot from '@/components/security/NotARobot.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
