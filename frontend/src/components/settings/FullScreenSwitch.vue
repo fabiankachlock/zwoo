@@ -17,3 +17,4 @@ const toggleFullScreen = () => {
   config.setFullScreen(!useFullScreen.value);
 };
 </script>
+

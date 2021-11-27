@@ -17,3 +17,4 @@ const toggleDarkMode = () => {
   config.setDarkMode(!isDarkMode.value);
 };
 </script>
+

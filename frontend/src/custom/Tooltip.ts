@@ -13,3 +13,4 @@ export const Tooltip: ObjectDirective<HTMLElement, string> = {
     el.setAttribute('data-text', binding.value);
   }
 };
+

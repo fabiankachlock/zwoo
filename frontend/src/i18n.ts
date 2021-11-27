@@ -35,3 +35,4 @@ loadLocaleMessages('en');
 setI18nLanguage(defaultLanguage);
 
 export default _i18n;
+

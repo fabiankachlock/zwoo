@@ -156,3 +156,4 @@ const selectCard = (id: string) => {
   transform: unset !important;
 }
 </style>
+

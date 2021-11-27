@@ -17,3 +17,4 @@ const toggleShouldShowDetail = () => {
   config.setShowCardDetail(!shouldShowDetail.value);
 };
 </script>
+

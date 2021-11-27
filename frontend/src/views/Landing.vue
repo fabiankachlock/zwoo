@@ -56,3 +56,4 @@ const { t } = useI18n();
   @apply scale-125;
 }
 </style>
+

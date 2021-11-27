@@ -36,3 +36,4 @@ const handleDialogClick = (event: Event) => {
   background-color: rgba(37, 37, 37, 0.4);
 }
 </style>
+

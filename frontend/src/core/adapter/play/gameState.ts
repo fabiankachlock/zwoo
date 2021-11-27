@@ -10,3 +10,4 @@ export const useGameState = defineStore('game-state', {
     }
   }
 });
+

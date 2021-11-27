@@ -76,3 +76,4 @@ const handleNextAfter = () => {
   max-width: 40vw;
 }
 </style>
+

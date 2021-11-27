@@ -31,3 +31,4 @@ defineProps<{
   @apply h-0 my-2 border border-solid border-t-0 opacity-50 md:hidden;
 }
 </style>
+

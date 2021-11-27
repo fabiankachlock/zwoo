@@ -23,3 +23,4 @@ const config = useConfig();
 const sortCards = computed(() => config.sortCards);
 const showCardDetail = computed(() => config.showCardDetail);
 </script>
+

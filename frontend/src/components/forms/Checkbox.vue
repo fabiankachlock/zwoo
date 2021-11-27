@@ -37,3 +37,4 @@ const toggle = () => {
   emit('update:modelValue', checked.value);
 };
 </script>
+

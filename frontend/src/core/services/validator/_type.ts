@@ -15,3 +15,4 @@ export class ValidationResult {
 export abstract class Validator<Data> {
   abstract validate: (data: Data) => ValidationResult;
 }
+

@@ -14,3 +14,4 @@ export declare global {
 		grecaptcha: GoogleReCaptcha;
 	}
 }
+

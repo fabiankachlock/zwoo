@@ -9,3 +9,4 @@ import { useConfig } from '@/core/adapter/config';
 
 const info = useConfig().versionInfo;
 </script>
+

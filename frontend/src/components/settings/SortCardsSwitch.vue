@@ -17,3 +17,4 @@ const toggleSortCards = () => {
   config.setSortCards(!shouldSortCards.value);
 };
 </script>
+

@@ -23,3 +23,4 @@ module.exports = (on, config) => {
     supportFile: "tests/e2e/support/index.js",
   });
 };
+

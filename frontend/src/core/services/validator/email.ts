@@ -8,3 +8,4 @@ export class EmailValidator implements Validator<string> {
     return new ValidationResult(matches, 'errors.invalidEmail');
   };
 }
+

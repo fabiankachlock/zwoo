@@ -2,6 +2,7 @@ FROM node:14-alpine as builder
 
 WORKDIR /frontend
 
+
 COPY package.json ./
 COPY yarn.lock ./
 

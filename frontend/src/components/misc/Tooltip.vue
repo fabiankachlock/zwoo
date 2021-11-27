@@ -11,3 +11,4 @@ defineProps<{
   title: string;
 }>();
 </script>
+

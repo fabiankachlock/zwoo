@@ -6,3 +6,4 @@ export class PasswordMatchValidator implements Validator<[string, string]> {
     return new ValidationResult(passwords[0] === passwords[1], 'errors.passwordsDontMatch');
   };
 }
+

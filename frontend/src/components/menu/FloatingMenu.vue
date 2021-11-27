@@ -45,3 +45,4 @@ const visible = computed(() => config.showQuickMenu);
   width: 6rem; /* w-24 */
 }
 </style>
+

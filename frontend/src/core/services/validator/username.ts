@@ -5,3 +5,4 @@ export class UsernameValidator implements Validator<string> {
     return new ValidationResult(username.length >= 4, 'errors.usernameToShort');
   };
 }
+

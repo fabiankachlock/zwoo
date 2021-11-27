@@ -90,3 +90,4 @@ router.afterEach(async (to, from, failure) => {
 });
 
 export default router;
+
