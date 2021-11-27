@@ -39,7 +39,7 @@ export class ReCaptchaService {
   };
 
   private verify = async (token: string): Promise<ReCaptchaResponse> => {
-    // return fetch('/verify', {
+    // return fetch('/auth/recaptcha', {
     //   method: 'POST',
     //   body: JSON.stringify({
     //     token: token
