@@ -9,7 +9,7 @@
 #include "oatpp/web/protocol/http/Http.hpp"
 #include "oatpp/core/macro/component.hpp"
 
-// #include "Server/dto/AuthenticationDTO.hpp"
+#include "Server/dto/AuthenticationDTO.hpp"
 
 #include OATPP_CODEGEN_BEGIN(ApiController) // <- Begin Codegen
 

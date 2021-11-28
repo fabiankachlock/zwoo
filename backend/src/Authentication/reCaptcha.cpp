@@ -14,12 +14,11 @@ namespace Backend::Authentication {
         curl = curl_easy_init();
 
         if (curl) {
-            curl_easy_setopt(curl, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
 
             std::stringstream str;
-            str << "secret=" << SITESECRET << "&response=" << token;
+            str << "https://www.google.com/recaptcha/api/siteverify?" << "secret=" << SITESECRET << "&response=" << token;
 
-            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, str.str().c_str());
+            curl_easy_setopt(curl, CURLOPT_URL, str.str().c_str());
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 
