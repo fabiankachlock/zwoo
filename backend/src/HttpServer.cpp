@@ -3,9 +3,6 @@
 namespace Backend
 {
 
-    HttpServer::HttpServer()
-    {
-        gamemanager = Game::GameManager();
-    }
+
 
 }

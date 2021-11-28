@@ -15,15 +15,17 @@ find_package(CURL                 REQUIRED)
 
 set(SRC_FILES
     "src/main.cpp"
-	"src/HttpServer.cpp"
 
     "src/Authentication/SMTPClient.cpp"
     "src/Authentication/AuthenticationManager.cpp"
+	"src/Authentication/reCaptcha.cpp"
 
 	"src/Game/GameManager.cpp"
 	"src/Game/Game.cpp"
 	"src/Game/Player.cpp"
-		include/Server/ErrorHandler.cpp)
+
+	"include/Server/ErrorHandler.cpp"
+)
 
 add_subdirectory(lib/sqlite)
 
