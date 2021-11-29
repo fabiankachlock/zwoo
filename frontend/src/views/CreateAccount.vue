@@ -21,7 +21,7 @@
       <TextInput id="password" v-model="password" labelKey="createAccount.password" is-password placeholder="******" :validator="passwordValidator" />
       <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
-      <NotARobot />
+      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="create">
@@ -47,7 +47,9 @@ import { UsernameValidator } from '@/core/services/validator/username';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
 import { useAuth } from '@/core/adapter/auth';
-import NotARobot from '@/components/security/NotARobot.vue';
+import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
+import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
+import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
 
 const { t } = useI18n();
 const auth = useAuth();
@@ -59,12 +61,14 @@ const email = ref('');
 const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
+const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 
 const emailValidator = new EmailValidator();
 const usernameValidator = new UsernameValidator();
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();
+const reCaptchaValidator = new RecaptchaValidator();
 
 watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   const result = passwordMatchValidator.validate([password, passwordRepeat]);
@@ -80,7 +84,7 @@ const create = async () => {
   error.value = [];
 
   try {
-    await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value);
+    await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, reCaptchaResponse.value);
     const redirect = route.query['redirect'] as string;
 
     if (redirect) {
