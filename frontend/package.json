@@ -1,11 +1,11 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "VUE_APP_USE_BACKEND=true vue-cli-service build",
+    "build:preview": "VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
