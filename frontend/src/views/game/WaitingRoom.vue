@@ -59,7 +59,7 @@
             {{ t('wait.qrcodeInfo') }}
           </p>
           <div class="qrcode-wrapper mx-auto max-w-xs">
-            <QRCode :data="'game id' + gameId" :width="256" :height="256" />
+            <QRCode :data="'https://zwoo-ui.web.app/join/' + gameId" :width="256" :height="256" />
           </div>
         </div>
       </div>
@@ -108,4 +108,3 @@ const selectRule = (ruleKey: string) => {
   width: 100%;
 }
 </style>
-
