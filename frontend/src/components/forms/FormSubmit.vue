@@ -1,7 +1,7 @@
 <template>
   <button
     class="
-      bg-darkest
+      bg-dark
       tc-main-light
       font-bold
       py-2
@@ -10,7 +10,7 @@
       focus:outline-none focus:shadow-outline
       transform
       transition
-      hover:scale-95 hover:bg-dark
+      hover:scale-95 hover:bg-darkest
       relative
     "
     type="button"

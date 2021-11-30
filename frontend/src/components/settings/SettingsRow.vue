@@ -5,13 +5,13 @@
       flex flex-row
       justify-between
       items-center
-      bg-darkest
+      bg-dark
       px-1
       py-3
       my-3
       rounded-lg
       border border-transparent
-      hover:bc-primary hover:bg-dark
+      hover:bc-primary hover:bg-darkest
     "
   >
     <div class="h-full flex-1 mx-2 tc-main-light">

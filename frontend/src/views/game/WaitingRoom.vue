@@ -17,13 +17,13 @@
     </header>
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
-        <div class="bg-light md:row-span-2">
+        <div class="bg-lightest md:row-span-2">
           <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
           <div class="w-full flex flex-col">
             <div
               v-for="player of players"
               :key="player.id"
-              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-light"
+              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest"
             >
               <span class="text-lg tc-main-dark">
                 {{ player.name }}
@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="bg-light">
+        <div class="bg-lightest">
           <p class="text-xl tc-main my-2">{{ t('wait.rules') }}</p>
           <div class="w-full flex flex-col">
             <div
@@ -39,7 +39,7 @@
               :key="rule"
               @click="selectRule(rule)"
               v-tooltip="t(openRule === rule ? 'wait.collapse' : 'wait.expand')"
-              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-light cursor-pointer"
+              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest cursor-pointer"
             >
               <p class="text-lg tc-main-dark">{{ t(`rules.${rule}.title`) }}</p>
               <div v-if="openRule === rule">
@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <div class="bg-light">
+        <div class="bg-lightest">
           <p class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</p>
           <p class="my-1 text-sm italic tc-main-secondary">
             {{ t('wait.qrcodeInfo') }}
