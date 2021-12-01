@@ -21,7 +21,10 @@ namespace Backend
         Backend::Game::GameManager gamemanager;
 
     public:
-        HttpServer();
+        HttpServer()
+        {
+            gamemanager = Game::GameManager();
+        }
 
         void RunServer()
         {

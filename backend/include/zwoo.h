@@ -7,6 +7,8 @@
 #define DOMAIN "0.0.0.0"
 #define PORT 8000
 
+#define SITESECRET "<sitesecret here>"
+
 #include <iostream>
 #include <stdio.h>
 #include <vector>
