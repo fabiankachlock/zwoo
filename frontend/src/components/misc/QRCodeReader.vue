@@ -134,15 +134,15 @@ const renderLoop = () => {
   }
 };
 
-const validCodeRegex = /^zwooj:(.*)$/;
+const joinCodeRegex = /^http(s?):\/\/(zwoo-ui\.web\.app|zwoo\.igd20\.de)\/join\/(.*)$/;
 
 let navigated = false;
 
 const validateAndRedirect = () => {
-  const result = validCodeRegex.exec(status.value);
-  if (result && result?.length > 1) {
+  const result = joinCodeRegex.exec(status.value);
+  if (result && result?.length > 3) {
     if (!navigated) {
-      router.push('/join/' + result[1]);
+      router.push('/join/' + result[3]);
       navigated = true;
     }
     return true;
