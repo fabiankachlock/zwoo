@@ -15,4 +15,3 @@ import SettingsSectionGame from '@/components/settings/sections/SettingsSectionG
 
 const { t } = useI18n();
 </script>
-

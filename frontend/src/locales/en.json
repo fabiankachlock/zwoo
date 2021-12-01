@@ -92,7 +92,8 @@
     "shouldContainNumber": "Password should contain at least one number.",
     "shouldContainNormalChar": "Password should contain at least one letter character.",
     "shouldContainSpecialChar": "Password should contain at least one special character.",
-    "gameNameToShort": "Name should be at least 3 Characters long."
+    "gameNameToShort": "Name should be at least 3 Characters long.",
+    "recaptcha": "The Bot-Challenge must be passed."
   },
   "version": "Version",
   "wait": {
@@ -111,6 +112,15 @@
       "title": "Test Rule",
       "info": "Test rule description - optional extrem long text..."
     }
+  },
+  "recaptcha": {
+    "title": "I'm not a robot",
+    "loading": "loading...",
+    "error": "Some error occurred in the checking process. - Please retry later.",
+    "result": {
+      "success": "All good",
+      "fail": "Failed Bot Check! - Please retry later.",
+      "half": "Result: Cyborg, but that's ok try acting less like a bot in the future."
+    }
   }
 }
-

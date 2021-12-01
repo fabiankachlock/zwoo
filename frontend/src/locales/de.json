@@ -92,7 +92,8 @@
     "shouldContainNumber": "Das Passwort sollte mindestens eine Zahl beinhalten.",
     "shouldContainNormalChar": "Das Passwort sollte mindestens einen Buchstaben enthalten.",
     "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
-    "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein."
+    "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein.",
+    "recaptcha": "Die Bot-Challenge muss bestanden sein."
   },
   "version": "Version",
   "wait": {
@@ -111,6 +112,15 @@
       "title": "Test Regel",
       "info": "Test Regel Erklärung - optional extrem langer text..."
     }
+  },
+  "recaptcha": {
+    "title": "Ich bin kein Roboter",
+    "loading": "laden...",
+    "error": "Ein fehler ist bei checken aufgetreten. - Versuche es später nochmal.",
+    "result": {
+      "success": "Alles gut",
+      "fail": "Check fehlgeschlagen! - Versuche es später nochmal.",
+      "half": "Ergebnis: Cyborg, aber das ist ok, versuche dich weniger wie ein Roboter in der Zukunft zu verhalten."
+    }
   }
 }
-

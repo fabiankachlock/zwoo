@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia';
 import { AuthenticationService } from '../services/api/Authentication';
+import { ReCaptchaResponse } from '../services/api/reCAPTCHA';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
+import { RecaptchaValidator } from '../services/validator/recaptcha';
 import { UsernameValidator } from '../services/validator/username';
 
 export const useAuth = defineStore('auth', {
@@ -16,7 +18,10 @@ export const useAuth = defineStore('auth', {
     };
   },
   actions: {
-    async login(username: string, password: string) {
+    async login(username: string, password: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
+      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+
       const status = await AuthenticationService.performLogin(username, password);
 
       this.$patch({
@@ -32,7 +37,7 @@ export const useAuth = defineStore('auth', {
         isLoggedIn: status.isLoggedIn
       });
     },
-    async createAccount(username: string, email: string, password: string, repeatPassword: string) {
+    async createAccount(username: string, email: string, password: string, repeatPassword: string, recaptchaResponse: ReCaptchaResponse | undefined) {
       const usernameValid = new UsernameValidator().validate(username);
       if (!usernameValid.isValid) throw usernameValid.getErrors();
 
@@ -44,6 +49,9 @@ export const useAuth = defineStore('auth', {
 
       const passwordMatchValid = new PasswordMatchValidator().validate([password, repeatPassword]);
       if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
+
+      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
+      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
       const status = await AuthenticationService.performCreateAccount(username, email, password);
 
@@ -60,4 +68,3 @@ export const useAuth = defineStore('auth', {
     }
   }
 });
-

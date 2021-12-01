@@ -23,4 +23,3 @@ export const useGameConfig = defineStore('game-config', {
     }
   }
 });
-

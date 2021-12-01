@@ -39,15 +39,14 @@ export class ReCaptchaService {
   };
 
   private verify = async (token: string): Promise<ReCaptchaResponse> => {
-    // return fetch('/verify', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     token: token
-    //   })
-    // })
-    //   .then(res => res.json() as Promise<ReCaptchaResponse>)
-    //   .then(res => res); // TODO: optional data casting;
-    console.log(token);
+    if (process.env.VUE_APP_USE_BACKEND === 'true') {
+      return fetch('/auth/recaptcha', {
+        method: 'POST',
+        body: token
+      })
+        .then(res => res.json() as Promise<ReCaptchaResponse>)
+        .then(res => res); // TODO: optional data casting;
+    }
     return Promise.resolve({
       success: Math.random() > 0.5,
       score: Math.random()
@@ -60,4 +59,3 @@ export class ReCaptchaService {
 }
 
 export default ReCaptchaService;
-

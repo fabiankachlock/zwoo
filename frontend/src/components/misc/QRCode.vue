@@ -13,4 +13,3 @@ defineProps<{
   width?: number;
 }>();
 </script>
-

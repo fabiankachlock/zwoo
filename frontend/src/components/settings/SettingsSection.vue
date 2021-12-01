@@ -14,4 +14,3 @@ const props = defineProps<{
 
 const { title } = toRefs(props);
 </script>
-

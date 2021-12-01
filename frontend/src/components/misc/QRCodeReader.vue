@@ -152,4 +152,3 @@ const validateAndRedirect = () => {
   return false;
 };
 </script>
-

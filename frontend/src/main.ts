@@ -15,4 +15,3 @@ app.use(router);
 app.directive('tooltip', Tooltip);
 
 app.mount('#app');
-

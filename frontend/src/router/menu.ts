@@ -45,4 +45,3 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     }
   }
 ];
-

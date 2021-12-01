@@ -60,4 +60,3 @@ export class GameManagementService {
     console.log('join game', gameId, password);
   };
 }
-

@@ -37,4 +37,3 @@ defineProps<{
   tooltip?: string;
 }>();
 </script>
-

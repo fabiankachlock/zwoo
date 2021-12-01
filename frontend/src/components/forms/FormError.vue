@@ -12,4 +12,3 @@ defineProps<{
   error: string[];
 }>();
 </script>
-

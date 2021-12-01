@@ -31,3 +31,5 @@ firebase.json
 .firebase/
 .env.private
 coverage
+
+/dist-preview

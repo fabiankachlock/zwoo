@@ -116,4 +116,3 @@ const onScanClose = () => {
   @apply rounded p-1 mx-2 my-1;
 }
 </style>
-

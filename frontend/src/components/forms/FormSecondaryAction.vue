@@ -15,4 +15,3 @@ const emit = defineEmits<{
   (event: 'click'): void;
 }>();
 </script>
-

@@ -31,4 +31,3 @@ export class PasswordValidator implements Validator<string> {
     return new ValidationResult(longEnough && containsNumber && containsSpecialChar, errors);
   };
 }
-

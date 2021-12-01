@@ -6,4 +6,3 @@ export interface RouterInterceptor {
   afterEach?: (from: RouteLocationNormalized, current: RouteLocationNormalized, failure: void | NavigationFailure | undefined) => void;
   afterEachAsync?: (from: RouteLocationNormalized, current: RouteLocationNormalized, failure: void | NavigationFailure | undefined) => void;
 }
-

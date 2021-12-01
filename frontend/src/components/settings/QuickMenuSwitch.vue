@@ -17,4 +17,3 @@ const toggleQuickMenu = () => {
   config.setQuickMenu(!showQuickMenu.value);
 };
 </script>
-

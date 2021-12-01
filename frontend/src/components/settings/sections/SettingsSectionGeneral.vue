@@ -32,4 +32,3 @@ const darkModeOn = computed(() => config.useDarkMode);
 const fullScreenOn = computed(() => config.useFullScreen);
 const quickMenuOn = computed(() => config.showQuickMenu);
 </script>
-
