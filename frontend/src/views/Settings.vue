@@ -4,7 +4,9 @@
     <SettingsSectionGeneral />
     <SettingsSectionGame />
     <Version />
+    <UpdateDaemon />
   </div>
+  <div class="h-12"></div>
 </template>
 
 <script setup lang="ts">
@@ -12,6 +14,7 @@ import SettingsSectionGeneral from '@/components/settings/sections/SettingsSecti
 import { useI18n } from 'vue-i18n';
 import Version from '@/components/misc/Version.vue';
 import SettingsSectionGame from '@/components/settings/sections/SettingsSectionGame.vue';
+import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
 
 const { t } = useI18n();
 </script>
