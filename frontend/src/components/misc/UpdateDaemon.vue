@@ -19,8 +19,8 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const registration = ref<ServiceWorkerRegistration | null>(null);
-const updateExists = ref<boolean>(true);
-const refreshing = ref<boolean>(true);
+const updateExists = ref<boolean>(false);
+const refreshing = ref<boolean>(false);
 
 onMounted(() => {
   // Listen for our custom event from the SW registration
