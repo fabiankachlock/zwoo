@@ -5,6 +5,11 @@
       "general": "General",
       "game": "Game"
     },
+    "update": {
+      "available": "An update is available",
+      "downloading": "Downloading Update...",
+      "updateNow": "Update Now!"
+    },
     "status": {
       "boolean": {
         "on": "activated",

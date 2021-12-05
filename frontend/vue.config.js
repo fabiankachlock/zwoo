@@ -57,5 +57,9 @@ module.exports = {
         }
       ]
     }
+  },
+
+  pwa: {
+    name: 'zwoo'
   }
 };
