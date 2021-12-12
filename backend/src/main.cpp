@@ -1,4 +1,5 @@
 #include "HttpServer.h"
+#include "Database/DatabaseHandler.h"
 
 int main()
 {

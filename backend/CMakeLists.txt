@@ -1,5 +1,4 @@
 # TODO: Cleanup
-
 cmake_minimum_required(VERSION 3.0.0)
 project(zwoo_backend VERSION 0.1.0)
 
@@ -11,6 +10,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SWAGGER "build with Swagger" ON)
 
 find_package(oatpp          1.3.0 REQUIRED)
+find_package(oatpp-mongo    1.3.0 REQUIRED)
+find_package(mongocxx             REQUIRED)
 find_package(CURL                 REQUIRED)
 
 set(SRC_FILES
@@ -27,12 +28,10 @@ set(SRC_FILES
 	"include/Server/ErrorHandler.cpp"
 )
 
-add_subdirectory(lib/sqlite)
-
 include_directories(include/ lib/ ${CURL_INCLUDE_DIRS})
 
 add_executable(main ${SRC_FILES})
-target_link_libraries(main sqlite3 oatpp::oatpp ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(main oatpp::oatpp oatpp::oatpp-mongo ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} mongo::mongocxx_shared)
 
 if(${BUILD_SWAGGER})
 	find_package(oatpp-swagger  1.3.0 REQUIRED)
