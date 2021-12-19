@@ -28,18 +28,27 @@ set(SRC_FILES
 	"include/Server/ErrorHandler.cpp"
 )
 
-include_directories(include/ lib/ ${CURL_INCLUDE_DIRS})
+set(LIBS
+	oatpp::oatpp 
+	oatpp::oatpp-mongo
+	CURL::libcurl
+	mongo::mongocxx_shared
+	${CMAKE_THREAD_LIBS_INIT}
+)
+
+include_directories(include/ lib/)
 
 add_executable(main ${SRC_FILES})
-target_link_libraries(main oatpp::oatpp oatpp::oatpp-mongo ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} mongo::mongocxx_shared)
 
 if(${BUILD_SWAGGER})
 	find_package(oatpp-swagger  1.3.0 REQUIRED)
 	add_definitions(-DBUILD_SWAGGER=1 -DOATPP_SWAGGER_RES_PATH="${oatpp-swagger_INCLUDE_DIRS}/../bin/oatpp-swagger/res")
-	target_link_libraries(main oatpp::oatpp-swagger)
+	set(LIBS ${LIBS} oatpp::oatpp-swagger)
 endif(${BUILD_SWAGGER})
 
 if(CMAKE_SYSTEM_NAME MATCHES Linux)
     find_package(Threads REQUIRED)
-    target_link_libraries(main ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+	set(LIBS ${LIBS} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 endif()
+
+target_link_libraries(main ${LIBS})

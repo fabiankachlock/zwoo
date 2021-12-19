@@ -1,10 +1,7 @@
-#include "HttpServer.h"
 #include "Database/DatabaseHandler.h"
+#include "HttpServer.h"
 
-int main()
-{
-    auto server = Backend::HttpServer();
-    server.RunServer();
+int main() {
 
     return 0;
 }
