@@ -81,7 +81,7 @@ cleanup() {
     rm lib -rdf
     rm include -rdf
     apt remove -y build-essential cmake protobuf-compiler git wget pkg-config python3 autoconf libtool zip
-    apt remove -y libmongoc-1.0-0 libbson-1.0-0 libbson-dev libsasl2-dev zlib1g-dev libcurl4-openssl-dev
+    apt remove -y libmongoc-1.0-0 libbson-1.0-0 libbson-dev libsasl2-dev zlib1g-dev
     apt autoremove -y 
 }
 
@@ -89,7 +89,7 @@ main() {
     get_build_deps
     install_oatpp
 
-    cmake . && make
+    cmake . && make -j$(nproc)
 
     cleanup
 }
