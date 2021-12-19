@@ -11,6 +11,8 @@
 
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 
+#include "oatpp/core/macro/component.hpp"
+
 #ifdef BUILD_SWAGGER
 #include "SwaggerComponent.hpp"
 #endif
