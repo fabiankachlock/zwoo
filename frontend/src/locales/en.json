@@ -98,7 +98,8 @@
     "shouldContainNormalChar": "Password should contain at least one letter character.",
     "shouldContainSpecialChar": "Password should contain at least one special character.",
     "gameNameToShort": "Name should be at least 3 Characters long.",
-    "recaptcha": "The Bot-Challenge must be passed."
+    "recaptcha": "The Bot-Challenge must be passed.",
+    "inputTooLong": "Your input is too long."
   },
   "version": "Version",
   "wait": {
