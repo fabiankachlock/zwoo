@@ -6,10 +6,14 @@ const NormalCharacterRegex = /[a-zA-Z]+/;
 
 export class PasswordValidator implements Validator<string> {
   public validate = (password: string): ValidationResult => {
+    if (password.length > 50) {
+      return new ValidationResult(false, 'errors.inputTooLong');
+    }
+
     const containsNumber = NumberRegex.test(password);
     const containsNormalChar = NormalCharacterRegex.test(password);
     const containsSpecialChar = SpecialCharacterRegex.test(password);
-    const longEnough = password.length >= 8;
+    const longEnough = password.length >= 8; // 50
     const errors = [] as string[];
 
     if (!longEnough) {
