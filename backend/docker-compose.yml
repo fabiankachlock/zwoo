@@ -7,7 +7,6 @@ services:
       context: .
       dockerfile: ./Dockerfile
 
-
   volumes:
     db-data:
       driver: local

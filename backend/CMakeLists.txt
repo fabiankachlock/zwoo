@@ -13,6 +13,7 @@ find_package(oatpp          1.3.0 REQUIRED)
 find_package(oatpp-mongo    1.3.0 REQUIRED)
 find_package(mongocxx             REQUIRED)
 find_package(CURL                 REQUIRED)
+find_package(OpenSSL              REQUIRED)
 
 set(SRC_FILES
     "src/main.cpp"
@@ -24,6 +25,8 @@ set(SRC_FILES
 	"src/Game/GameManager.cpp"
 	"src/Game/Game.cpp"
 	"src/Game/Player.cpp"
+
+	"src/util/SHA512.cpp"
 
 	"include/Server/ErrorHandler.cpp"
 )
