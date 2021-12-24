@@ -11,7 +11,7 @@
 
 #include "dto/User.hpp"
 
-namespace Backend::Database
+namespace Backend
 {
     class Database
     {

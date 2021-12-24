@@ -17,6 +17,8 @@
 #include "SwaggerComponent.hpp"
 #endif
 
+#include "Database/Database.h"
+
 class ServerComponent {
 public:
 #ifdef BUILD_SWAGGER
@@ -58,6 +60,18 @@ public:
         return connectionHandler;
 
     }());
+
+    OATPP_CREATE_COMPONENT(std::shared_ptr<Backend::Database>, database)([this] {
+
+    oatpp::String connectionString = std::getenv("MONGO_CONN_STR");
+    if(!connectionString){
+      connectionString = m_cmdArgs.getNamedArgumentValue("--conn-str", "mongodb://localhost/zwoo");
+    }
+
+    mongocxx::uri uri(*connectionString);
+    return std::make_shared<Backend::Database>(uri, "zwoo", "users");
+
+  }());
 };
 
 #endif // _SERVER_COMPONENT_HPP_

@@ -6,7 +6,7 @@
 #include <mongocxx/exception/operation_exception.hpp>
 #include <mongocxx/options/insert.hpp>
 
-namespace Backend::Database {
+namespace Backend {
         
 
     bsoncxx::document::value Database::createMongoDocument(const oatpp::Void &polymorph)
