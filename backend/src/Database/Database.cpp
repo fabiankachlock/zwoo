@@ -7,8 +7,7 @@
 #include <mongocxx/options/insert.hpp>
 
 namespace Backend::Database {
-    Database::Database(const mongocxx::uri &uri, const std::string &dbName, const std::string &collectionName)
-        : m_pool(std::make_shared<mongocxx::pool>(uri)), m_databaseName(dbName), m_collectionName(collectionName) {}
+        
 
     bsoncxx::document::value Database::createMongoDocument(const oatpp::Void &polymorph)
     {
@@ -26,5 +25,7 @@ namespace Backend::Database {
         
 
         collection.insert_one(createMongoDocument(userFromDto(userDto)));
+
+        return nullptr;
     }
 }// namespace Backend::Database

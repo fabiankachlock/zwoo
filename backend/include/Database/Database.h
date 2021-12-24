@@ -9,6 +9,8 @@
 #include <mongocxx/pool.hpp>
 #include <bsoncxx/document/value.hpp>
 
+#include "dto/User.hpp"
+
 namespace Backend::Database
 {
     class Database
@@ -21,7 +23,9 @@ namespace Backend::Database
 
         bsoncxx::document::value createMongoDocument(const oatpp::Void &polymorph);
     public:
-        Database::Database(const mongocxx::uri &uri, const std::string &dbName, const std::string &collectionName);
+        Database() {}
+        Database(const mongocxx::uri &uri, const std::string &dbName, const std::string &collectionName) 
+        : m_pool(std::make_shared<mongocxx::pool>(uri)), m_databaseName(dbName), m_collectionName(collectionName) {}
 
         oatpp::Object<UserDTO> createUser(std::string user_name, std::string email, std::string password);
     };
