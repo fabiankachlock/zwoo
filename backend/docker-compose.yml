@@ -6,6 +6,10 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    environment:
+      - ZWOO_USERNAME=""
+      - ZWOO_EMAIL=""
+      - ZWOO_PASSWORD=""
 
   volumes:
     db-data:

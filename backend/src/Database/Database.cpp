@@ -1,4 +1,5 @@
-#include "Database/Database.h"
+#include "Server/Database/Database.h"
+#include "Server/Database/dto/CreateUser.hpp"
 
 #include "oatpp/core/data/stream/BufferStream.hpp"
 
@@ -17,15 +18,20 @@ namespace Backend {
         return bsoncxx::document::value(view);
     }
 
-    oatpp::Object<UserDTO> Database::createUser(std::string user_name, std::string email, std::string password) 
+    bool Database::createUser(std::string user_name, std::string email, std::string password) 
     {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
-
         
+        auto usr = CreateUserDTO::createShared();
 
-        collection.insert_one(createMongoDocument(userFromDto(userDto)));
+        usr->username = user_name;
+        usr->email = email;
+        usr->password = password;
+        usr->verified = false;
 
-        return nullptr;
+        collection.insert_one(createMongoDocument(usr));
+
+        return true;
     }
 }// namespace Backend::Database

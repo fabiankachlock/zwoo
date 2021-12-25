@@ -3,6 +3,8 @@
 
 #include "oatpp/network/Server.hpp"
 
+#include <mongocxx/instance.hpp>
+
 #include "Server/ServerComponent.hpp"
 #include "Server/controller/AuthenticationController.hpp"
 
@@ -21,16 +23,18 @@ namespace Backend
         Backend::Game::GameManager gamemanager;
 
     public:
-        HttpServer()
+        HttpServer() 
         {
             gamemanager = Game::GameManager();
         }
 
-        void RunServer()
+        void RunServer(const oatpp::base::CommandLineArguments& args)
         {
+            mongocxx::instance instance{};
+
             oatpp::base::Environment::init();
 
-            ServerComponent components;
+            ServerComponent components(args);
 
             /* Get router component */
             OATPP_COMPONENT(std::shared_ptr<oatpp::web::server::HttpRouter>, router);

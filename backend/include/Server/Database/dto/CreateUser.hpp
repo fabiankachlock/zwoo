@@ -14,6 +14,7 @@ class CreateUserDTO : public oatpp::DTO
     DTO_FIELD(String, username);
     DTO_FIELD(String, email);
     DTO_FIELD(String, password);
+    DTO_FIELD(Boolean, verified);
 };
 
 #include OATPP_CODEGEN_END(DTO)

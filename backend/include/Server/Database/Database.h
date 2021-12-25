@@ -27,7 +27,7 @@ namespace Backend
         Database(const mongocxx::uri &uri, const std::string &dbName, const std::string &collectionName) 
         : m_pool(std::make_shared<mongocxx::pool>(uri)), m_databaseName(dbName), m_collectionName(collectionName) {}
 
-        oatpp::Object<UserDTO> createUser(std::string user_name, std::string email, std::string password);
+        bool createUser(std::string user_name, std::string email, std::string password);
     };
 }
 #endif // _DATABASE_HANDLER_H_
