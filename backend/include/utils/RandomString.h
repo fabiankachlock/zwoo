@@ -4,6 +4,7 @@
 #include <ctime>
 #include <iostream>
 #include <unistd.h>
+#include <random>
 
 namespace Backend {
     std::string randomString(const int len) 
@@ -20,6 +21,29 @@ namespace Backend {
         }
 
         return tmp_s;
+    }
+
+    int randomNumberInRange(int min, int max)
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(min, max);
+        return dis(gen);
+    }
+
+    std::string randomNDigitNumber(int n)
+    {
+        std::string out = "";
+        out.reserve(n);
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, 9);
+
+        for (int i = 0; i < n; ++i)
+            out += (char)(dis(gen) + 48);
+
+        return out;
     }
 }// namespace Backend
 

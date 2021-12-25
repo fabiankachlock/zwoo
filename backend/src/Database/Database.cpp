@@ -8,30 +8,60 @@
 #include <mongocxx/options/insert.hpp>
 
 namespace Backend {
-        
 
-    bsoncxx::document::value Database::createMongoDocument(const oatpp::Void &polymorph)
-    {
+
+    bsoncxx::document::value Database::createMongoDocument(const oatpp::Void &polymorph) {
         oatpp::data::stream::BufferOutputStream stream;
         m_objectMapper.write(&stream, polymorph);
         bsoncxx::document::view view(stream.getData(), stream.getCurrentPosition());
         return bsoncxx::document::value(view);
     }
 
-    bool Database::createUser(std::string user_name, std::string email, std::string password) 
-    {
+    bool Database::createUser(std::string user_name, std::string email, std::string password, std::string code) {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
-        
-        auto usr = CreateUserDTO::createShared();
 
+        auto usr = UserDTO::createShared();
+
+        usr->_id = email;
         usr->username = user_name;
         usr->email = email;
         usr->password = password;
+        usr->wins = 0;
         usr->verified = false;
+        usr->validation_code = code;
 
         collection.insert_one(createMongoDocument(usr));
 
         return true;
     }
-}// namespace Backend::Database
+
+    bool Database::entrieExists(std::string field, std::string value) {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        auto result =
+                collection.find_one(createMongoDocument(// <-- Filter
+                        oatpp::Fields<oatpp::String>({{field, value}})));
+
+        return result ? true : false;
+    }
+
+    oatpp::Object<GetUserDTO> Database::getUser(std::string email) {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        auto result =
+                collection.find_one(createMongoDocument(// <-- Filter
+                        oatpp::Fields<oatpp::String>({{"email", email}})));
+
+        if (result) {
+            auto view = result->view();
+            auto bson = oatpp::String((const char *) view.data(), view.length());
+            auto user = m_objectMapper.readFromString<oatpp::Object<GetUserDTO>>(bson);
+            return user;
+        }
+
+        return nullptr;
+    }
+}// namespace Backend
