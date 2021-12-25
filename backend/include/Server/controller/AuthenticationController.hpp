@@ -11,14 +11,17 @@
 #include "oatpp/core/macro/component.hpp"
 
 #include "Server/dto/AuthenticationDTO.hpp"
-
 #include "Server/Database/Database.h"
+#include "utils/RandomString.h"
+#include "utils/SHA512.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController) // <- Begin Codegen
 
 class AuthenticationController : public oatpp::web::server::api::ApiController {
 private:
     OATPP_COMPONENT(std::shared_ptr<Backend::Database>, m_database);
+
+    SHA512 sha512 = SHA512();
 
 public:
 
@@ -64,9 +67,14 @@ public:
 
         if (create_user_dto->email != "" && create_user_dto->password != "" && create_user_dto->username != "")
         {
-            // TODO: validate values
+            // TODO: validate values (regex)
             // TODO: Check if Email or Username exists already
-            bool status = m_database->createUser(create_user_dto->username.getValue(""), create_user_dto->email.getValue(""), create_user_dto->password.getValue(""));
+
+            std::string salt = Backend::randomString(16);
+            std::string hash = sha512.hash(salt + create_user_dto->password.getValue(""));
+            std::string hash_str = "sha512:" + salt + ":" + hash;
+
+            bool status = m_database->createUser(create_user_dto->username.getValue(""), create_user_dto->email.getValue(""), hash_str);
             if (status)
             {
                 SendVerificationEmail(create_user_dto->email.getValue("").c_str(), "https://zwoo/auth/verify?code=000000");
