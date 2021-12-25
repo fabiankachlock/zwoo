@@ -10,6 +10,7 @@ services:
       - ZWOO_USERNAME=""
       - ZWOO_EMAIL=""
       - ZWOO_PASSWORD=""
+      - ZWOO_SIDESECRET=""
 
   volumes:
     db-data:

@@ -11,7 +11,7 @@
 #define DOMAIN "0.0.0.0"
 #define PORT 8000
 
-#define SITESECRET "<sitesecret here>"
+#define SITESECRET std::getenv("ZWOO_SITESECRET")
 
 #include <iostream>
 #include <stdio.h>
