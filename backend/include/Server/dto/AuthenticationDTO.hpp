@@ -27,6 +27,27 @@ class CreateUserBodyDTO : public oatpp::DTO {
 
 };
 
+class GetUserResponseDTO : public oatpp::DTO {
+
+    DTO_INIT(GetUserResponseDTO, DTO)
+
+    DTO_FIELD_INFO(username) {
+        info->description = "Username";
+    }
+    DTO_FIELD(String, username);
+
+    DTO_FIELD_INFO(email) {
+        info->description = "Users email";
+    }
+    DTO_FIELD(String, email);
+
+    DTO_FIELD_INFO(wins) {
+        info->description = "Users email";
+    }
+    DTO_FIELD(Int32, wins);
+
+};
+
 #include OATPP_CODEGEN_END(DTO)
 
 #endif // _AUTHENTICATIONDTO_HPP_

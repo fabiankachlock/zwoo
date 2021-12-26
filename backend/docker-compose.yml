@@ -11,6 +11,7 @@ services:
       - ZWOO_EMAIL=""
       - ZWOO_PASSWORD=""
       - ZWOO_SIDESECRET=""
+      - ZWOO_PORT=8000
 
   volumes:
     db-data:

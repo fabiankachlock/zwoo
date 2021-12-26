@@ -97,7 +97,8 @@ public:
 
             bool status = m_database->createUser(create_user_dto->username.getValue(""), create_user_dto->email.getValue(""), hash_str, code);
             if (status) {
-                std::string str = "https://zwoo/auth/verify?code=" + code;
+                std::string d = DOMAIN;
+                std::string str = d + "/auth/verify?code=" + code;
                 SendVerificationEmail(create_user_dto->email.getValue("").c_str(), str.c_str());
                 return createResponse(Status::CODE_200, "User created Email Send");
             } else
@@ -112,6 +113,27 @@ public:
 
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_400, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+    ENDPOINT("GET", "auth/verify", verify, QUERY(String, code, "code")) {
+
+        auto user = m_database->getUser("validation_code", code);
+
+        if (user) {
+            bool status = m_database->updateUserField("email", user->email, "verified", "true");
+            return createResponse(Status::CODE_200, "User verified");
+        }
+        else
+            return createResponse(Status::CODE_400, "invalide code");
+        
+        return createResponse(Status::CODE_501, "Not Implemented");
+    }
+    ENDPOINT_INFO(verify) {
+        info->description = "Endpoint for verifying the user.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
@@ -140,6 +162,34 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
+
+    ENDPOINT("GET", "auth/user", getUser, QUERY(String, email, "email")) {
+        if (!isValidEmail(email.getValue("").c_str()))
+            return createResponse(Status::CODE_400, "invalide Email");
+
+        auto user = m_database->getUser(email.getValue(""));
+        if (user)
+        {
+            auto usr = GetUserResponseDTO::createShared();
+            
+            usr->username = user->username;
+            usr->email = user->email;
+            usr->wins = user->wins;
+
+            return createDtoResponse(Status::CODE_200, usr);
+        }
+        else
+            return createResponse(Status::CODE_400, "No user with this email");
+        return createResponse(Status::CODE_501, "Not Implemented");
+    }
+    ENDPOINT_INFO(getUser) {
+        info->description = "Endpoint for getting player data.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
 
     void SendVerificationEmail(const char *email_address, const char *link) {
         auto client = Backend::Authentication::SMTPClient();

@@ -3,6 +3,8 @@
 
 #include "zwoo.h"
 
+#include <sstream>
+
 #include "ErrorHandler.hpp"
 
 #include "oatpp/network/tcp/server/ConnectionProvider.hpp"
@@ -51,7 +53,10 @@ public:
    */
     OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)
     ([] {
-        return oatpp::network::tcp::server::ConnectionProvider::createShared({DOMAIN, PORT, oatpp::network::Address::IP_4});
+        v_uint16 port;
+        std::stringstream s(PORT);
+        s >> port;
+        return oatpp::network::tcp::server::ConnectionProvider::createShared({DOMAIN, port, oatpp::network::Address::IP_4});
     }());
 
     /**

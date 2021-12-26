@@ -36,6 +36,34 @@ namespace Backend {
         return true;
     }
 
+    bool Database::updateUserField(std::string filter_field, std::string filter_value, std::string field, std::string value) {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        auto filter = createMongoDocument(// <-- Filter
+                oatpp::Fields<oatpp::String>({{filter_field, filter_value}}));
+
+        auto doc = createMongoDocument(// <-- Set
+                oatpp::Fields<oatpp::Any>({
+                        // map
+                        {                                                       // pair
+                         "$set", oatpp::Fields<oatpp::String>({                 // you can also define a "strict" DTO for $set operation.
+                                                               {field, value}})}// pair
+                })                                                              // map
+        );
+        collection.update_one(createMongoDocument(// <-- Filter
+                                      oatpp::Fields<oatpp::String>({{filter_field, filter_value}})),
+                              createMongoDocument(// <-- Set
+                                      oatpp::Fields<oatpp::Any>({
+                                              // map
+                                              {                                                       // pair
+                                               "$set", oatpp::Fields<oatpp::String>({                 // you can also define a "strict" DTO for $set operation.
+                                                                                     {field, value}})}// pair
+                                      })                                                              // map
+                                      ));
+        return true;
+    }
+
     bool Database::entrieExists(std::string field, std::string value) {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
@@ -54,6 +82,24 @@ namespace Backend {
         auto result =
                 collection.find_one(createMongoDocument(// <-- Filter
                         oatpp::Fields<oatpp::String>({{"email", email}})));
+
+        if (result) {
+            auto view = result->view();
+            auto bson = oatpp::String((const char *) view.data(), view.length());
+            auto user = m_objectMapper.readFromString<oatpp::Object<GetUserDTO>>(bson);
+            return user;
+        }
+
+        return nullptr;
+    }
+
+    oatpp::Object<GetUserDTO> Database::getUser(std::string field, std::string value) {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        auto result =
+                collection.find_one(createMongoDocument(// <-- Filter
+                        oatpp::Fields<oatpp::String>({{field, value}})));
 
         if (result) {
             auto view = result->view();

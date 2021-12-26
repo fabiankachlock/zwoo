@@ -8,8 +8,8 @@
 #define ZWOO_EMAIL std::getenv("ZWOO_EMAIL")
 #define ZWOO_PASSWORD std::getenv("ZWOO_PASSWORD")
 
-#define DOMAIN "0.0.0.0"
-#define PORT 8000
+#define DOMAIN std::getenv("ZWOO_DOMAIN")
+#define PORT std::getenv("ZWOO_PORT")
 
 #define SITESECRET std::getenv("ZWOO_SITESECRET")
 
