@@ -30,6 +30,7 @@ namespace Backend
 
         bool createUser(std::string user_name, std::string email, std::string password, std::string code);
         bool updateUserField(std::string filter_field, std::string filter_value, std::string field, std::string value);
+        bool updateUserField(std::string filter_field, std::string filter_value, std::string field, bool value);
         oatpp::Object<GetUserDTO> getUser(std::string email);
         oatpp::Object<GetUserDTO> getUser(std::string field, std::string value);
         bool entrieExists(std::string field, std::string value);

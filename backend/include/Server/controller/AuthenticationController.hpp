@@ -122,7 +122,9 @@ public:
         auto user = m_database->getUser("validation_code", code);
 
         if (user) {
-            bool status = m_database->updateUserField("email", user->email, "verified", "true");
+
+            bool status1 = m_database->updateUserField("email", user->email.getValue(""), "verified", true);
+            bool status2 = m_database->updateUserField("email", user->email.getValue(""), "validation_code", "");
             return createResponse(Status::CODE_200, "User verified");
         }
         else
@@ -189,7 +191,6 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
-
 
     void SendVerificationEmail(const char *email_address, const char *link) {
         auto client = Backend::Authentication::SMTPClient();

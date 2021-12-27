@@ -36,31 +36,46 @@ namespace Backend {
         return true;
     }
 
+
     bool Database::updateUserField(std::string filter_field, std::string filter_value, std::string field, std::string value) {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
 
-        auto filter = createMongoDocument(// <-- Filter
-                oatpp::Fields<oatpp::String>({{filter_field, filter_value}}));
-
-        auto doc = createMongoDocument(// <-- Set
-                oatpp::Fields<oatpp::Any>({
-                        // map
-                        {                                                       // pair
-                         "$set", oatpp::Fields<oatpp::String>({                 // you can also define a "strict" DTO for $set operation.
-                                                               {field, value}})}// pair
-                })                                                              // map
+        collection.update_one(
+            createMongoDocument( // <-- Filter
+            oatpp::Fields<oatpp::String>({
+                { filter_field, filter_value }
+            })
+            ),
+            createMongoDocument( // <-- Set
+            oatpp::Fields<oatpp::Any>({ // map
+                { // pair
+                    "$set", oatpp::Fields<oatpp::String>({{field, value}})
+                } // pair
+            }) // map
+            )
         );
-        collection.update_one(createMongoDocument(// <-- Filter
-                                      oatpp::Fields<oatpp::String>({{filter_field, filter_value}})),
-                              createMongoDocument(// <-- Set
-                                      oatpp::Fields<oatpp::Any>({
-                                              // map
-                                              {                                                       // pair
-                                               "$set", oatpp::Fields<oatpp::String>({                 // you can also define a "strict" DTO for $set operation.
-                                                                                     {field, value}})}// pair
-                                      })                                                              // map
-                                      ));
+        return true;
+    }
+
+    bool Database::updateUserField(std::string filter_field, std::string filter_value, std::string field, bool value) {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        collection.update_one(
+            createMongoDocument( // <-- Filter
+            oatpp::Fields<oatpp::String>({
+                { filter_field, filter_value }
+            })
+            ),
+            createMongoDocument( // <-- Set
+            oatpp::Fields<oatpp::Any>({ // map
+                { // pair
+                    "$set", oatpp::Fields<oatpp::Boolean>({{field, value}})
+                } // pair
+            }) // map
+            )
+        );
         return true;
     }
 
