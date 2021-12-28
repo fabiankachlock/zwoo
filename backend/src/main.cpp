@@ -1,9 +1,10 @@
 #include "HttpServer.h"
 
-int main()
+int main(int argc, const char * argv[]) 
 {
     auto server = Backend::HttpServer();
-    server.RunServer();
+    server.RunServer(oatpp::base::CommandLineArguments(argc, argv));
+
 
     return 0;
 }
