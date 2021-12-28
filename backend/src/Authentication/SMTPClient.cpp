@@ -71,7 +71,7 @@ namespace Backend::Authentication
             curl_easy_setopt(curl, CURLOPT_READFUNCTION, PayloadSource);
             curl_easy_setopt(curl, CURLOPT_READDATA, &upload_ctx);
             curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
-            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+            // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
             res = curl_easy_perform(curl);
 
