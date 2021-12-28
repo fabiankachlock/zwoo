@@ -48,6 +48,15 @@ class GetUserResponseDTO : public oatpp::DTO {
 
 };
 
+class DeleteUserBodyDTO : public oatpp::DTO {
+    DTO_INIT(DeleteUserBodyDTO, DTO)
+
+    DTO_FIELD_INFO(email) {
+        info->description = "Users email";
+    }
+    DTO_FIELD(String, email);
+};
+
 #include OATPP_CODEGEN_END(DTO)
 
 #endif // _AUTHENTICATIONDTO_HPP_

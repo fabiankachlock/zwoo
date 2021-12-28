@@ -24,9 +24,9 @@ class AuthenticationController : public oatpp::web::server::api::ApiController {
 private:
     OATPP_COMPONENT(std::shared_ptr<Backend::Database>, m_database);
 
-    std::regex email_regex;
     SHA512 sha512 = SHA512();
 
+    const char* TAG = "Server";
 public:
     AuthenticationController(const std::shared_ptr<ObjectMapper> &objectMapper)
         : oatpp::web::server::api::ApiController(objectMapper)
@@ -100,6 +100,9 @@ public:
                 std::string d = DOMAIN;
                 std::string str = d + "/auth/verify?code=" + code;
                 SendVerificationEmail(create_user_dto->email.getValue("").c_str(), str.c_str());
+
+                OATPP_LOGD(TAG, " Created %s", create_user_dto->email.getValue("").c_str());
+
                 return createResponse(Status::CODE_200, "User created Email Send");
             } else
                 return createResponse(Status::CODE_500, "Unkown Error");
@@ -125,6 +128,9 @@ public:
 
             bool status1 = m_database->updateUserField("email", user->email.getValue(""), "verified", true);
             bool status2 = m_database->updateUserField("email", user->email.getValue(""), "validation_code", "");
+            
+            OATPP_LOGD(TAG, " Verified %s", user->email.getValue("").c_str());
+
             return createResponse(Status::CODE_200, "User verified");
         }
         else
@@ -159,6 +165,34 @@ public:
     }
     ENDPOINT_INFO(verified) {
         info->description = "Endpoint for checking if user is verified.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+    ENDPOINT("POST", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserBodyDTO>, delete_user_dto)) {
+
+        if (delete_user_dto->email != "") {
+            // Check for data
+            if (!isValidEmail(delete_user_dto->email.getValue("").c_str()))
+                return createResponse(Status::CODE_400, "invalide Email");
+
+            if (!m_database->entrieExists("email", delete_user_dto->email.getValue("")))
+                return createResponse(Status::CODE_400, "Email does not exist");
+
+            bool status = m_database->deleteUser(delete_user_dto->email.getValue(""));
+            OATPP_LOGD(TAG, " Deleted User %s", delete_user_dto->email.getValue("").c_str());
+
+            return createResponse(Status::CODE_200, R"({ "message": "user successfully deleted"})"); 
+
+        } else {
+            return createResponse(Status::CODE_400, "No Email");
+        }
+        return createResponse(Status::CODE_501, "Not Implemented");
+    }
+    ENDPOINT_INFO(deleteUser) {
+        info->description = "Endpoint for deleting Users.";
 
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");

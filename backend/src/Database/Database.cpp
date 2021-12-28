@@ -36,7 +36,6 @@ namespace Backend {
         return true;
     }
 
-
     bool Database::updateUserField(std::string filter_field, std::string filter_value, std::string field, std::string value) {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
@@ -79,6 +78,27 @@ namespace Backend {
         return true;
     }
 
+    bool Database::incrementField(std::string filter_field, std::string filter_value, std::string field, int amount) {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        collection.update_one(
+            createMongoDocument( // <-- Filter
+            oatpp::Fields<oatpp::String>({
+                { filter_field, filter_value }
+            })
+            ),
+            createMongoDocument( // <-- Set
+            oatpp::Fields<oatpp::Any>({ // map
+                { // pair
+                    "$inc", oatpp::Fields<oatpp::Int32>({{ field, amount }})
+                } // pair
+            }) // map
+            )
+        );
+        return true;
+    }
+
     bool Database::entrieExists(std::string field, std::string value) {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
@@ -88,6 +108,14 @@ namespace Backend {
                         oatpp::Fields<oatpp::String>({{field, value}})));
 
         return result ? true : false;
+    }
+
+    bool Database::deleteUser(std::string email) {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        collection.delete_one(createMongoDocument(oatpp::Fields<oatpp::String>({{"email", email}})));
+        return true;
     }
 
     oatpp::Object<GetUserDTO> Database::getUser(std::string email) {
