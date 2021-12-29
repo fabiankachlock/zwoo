@@ -56,7 +56,9 @@ public:
         v_uint16 port;
         std::stringstream s(PORT);
         s >> port;
-        return oatpp::network::tcp::server::ConnectionProvider::createShared({DOMAIN, port, oatpp::network::Address::IP_4});
+        std::string d = DOMAIN;
+        d.erase(std::remove(d.begin(), d.end(), '"'), d.end());
+        return oatpp::network::tcp::server::ConnectionProvider::createShared({d.c_str(), port, oatpp::network::Address::IP_4});
     }());
 
     /**
@@ -81,15 +83,11 @@ public:
     }());
 
     OATPP_CREATE_COMPONENT(std::shared_ptr<Backend::Database>, database)
-    ([this] {
-        printf("Initializing Database\n");
-        
+    ([this] {   
         const char* connectionString = std::getenv("MONGO_CONN_STR");
         if (connectionString == "") {
             connectionString = m_cmdArgs.getNamedArgumentValue("--conn-str", "mongodb://localhost/zwoo");
         }
-
-        printf("Mongo Connection string: \"%s\"\n", connectionString);
         
         mongocxx::uri uri(connectionString);
         return std::make_shared<Backend::Database>(uri, "zwoo", "users");
