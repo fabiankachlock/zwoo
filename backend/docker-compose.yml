@@ -12,7 +12,16 @@ services:
       - ZWOO_PASSWORD=""
       - ZWOO_SIDESECRET=""
       - ZWOO_PORT=8000
-
-  volumes:
-    db-data:
-      driver: local
+      - ZWOO_DOMAIN=0.0.0.0
+      - MONGO_CONN_STR='mongodb://127.0.0.1:27019'
+  db:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - '27017-27019:27017-27019'
+    volumes:
+      - mongodb_data_container:/data/db
+volumes:
+  db-data:
