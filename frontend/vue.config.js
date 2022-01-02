@@ -60,6 +60,11 @@ module.exports = {
   },
 
   pwa: {
-    name: 'zwoo'
+    name: 'zwoo',
+    themeColor: '#3066BE',
+    msTileColor: '#404254',
+    manifestOptions: {
+      background_color: '#404254'
+    }
   }
 };
