@@ -28,10 +28,10 @@ onMounted(() => {
 
   // Prevent multiple refreshes
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    console.log('controller change');
-
-    if (refreshing.value) return;
-    window.location.reload();
+    if (refreshing.value) {
+      window.location.reload();
+      refreshing.value = false;
+    }
   });
 });
 
