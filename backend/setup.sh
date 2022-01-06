@@ -21,7 +21,7 @@ build_mongo_drivers(){
   cd mongo-c-driver-1.20.0
   mkdir cmake-build
   cd cmake-build
-  cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DENABLE_MONGODB_AWS_AUTH=OFF ..
+  cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DENABLE_MONGODB_AWS_AUTH=OFF -DENABLE_SSL=OPENSSL -DCMAKE_BUILD_TYPE=Release ..
   make install -j$(nproc)
 
   git clone https://github.com/mongodb/mongo-cxx-driver.git \
@@ -31,7 +31,8 @@ build_mongo_drivers(){
   cmake .. \
       -DCMAKE_BUILD_TYPE=Release \
       -DBSONCXX_POLY_USE_MNMLSTC=1 \
-      -DCMAKE_INSTALL_PREFIX=/usr/local
+      -DCMAKE_INSTALL_PREFIX=/usr/local \
+      -DENABLE_TESTS=OFF
 
   make -j$(nproc)
   make install
@@ -44,7 +45,7 @@ install_oatpp_swagger() {
     cd oatpp-swagger
 
     mkdir build && cd build
-    cmake ..
+    cmake -DOATPP_BUILD_TESTS=OFF ..
     make install -j$(nproc)
 
     cd ../..
@@ -56,7 +57,7 @@ install_oatpp_base() {
     cd oatpp
 
     mkdir build && cd build
-    cmake ..
+    cmake -DOATPP_BUILD_TESTS=OFF ..
     make install -j$(nproc)
 
     cd ../..
@@ -72,7 +73,7 @@ install_oatpp() {
 get_build_deps() {
     apt update && DEBIAN_FRONTEND="noninteractive" TZ="Germany/Berlin" apt-get install -y tzdata
     apt install -y build-essential cmake protobuf-compiler git wget pkg-config python3 autoconf libtool zip
-    apt install -y libmongoc-1.0-0 libbson-1.0-0 libbson-dev libsasl2-dev zlib1g-dev libcurl4-openssl-dev
+    apt install -y libmongoc-1.0-0 libbson-1.0-0 libbson-dev libsasl2-dev zlib1g-dev libcurl4-openssl-dev libssl-dev
 }
 
 cleanup() {
