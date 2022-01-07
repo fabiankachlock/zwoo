@@ -10,6 +10,7 @@ option(BUILD_SWAGGER "build with Swagger" ON)
 
 set(SRC_FILES
     "src/main.cpp"
+	"src/HttpServer.cpp"
 
     "src/Authentication/SMTPClient.cpp"
 	"src/Authentication/reCaptcha.cpp"
@@ -21,6 +22,8 @@ set(SRC_FILES
 	"src/Game/Player.cpp"
 
 	"src/util/SHA512.cpp"
+	"src/util/Validator.cpp"
+	"src/util/RandomString.cpp"
 
 	"include/Server/ErrorHandler.cpp"
 )
