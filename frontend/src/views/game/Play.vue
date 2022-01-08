@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen absolute p-3 overflow-hidden">
+  <div id="main" class="w-screen absolute p-3 overflow-hidden">
     <div class="w-full h-full relative">
       <div class="layout-grid">
         <InGameMenu />
@@ -25,6 +25,10 @@ const showCardDetail = computed(() => config.showCardDetail);
 </script>
 
 <style>
+#main {
+  height: calc(100vh - calc(100vh - 100%));
+}
+
 .layout-grid {
   @apply grid h-full w-full;
   grid-template-rows: min-content auto min-content;

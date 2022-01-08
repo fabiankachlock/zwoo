@@ -115,13 +115,13 @@ body.dark {
 }
 
 body {
-	min-height: 100vh;
+	overflow: hidden;
 }
 
 #app {
-	min-height: 100vh;
+	height: 100vh;
+	max-height: calc(100vh - calc(100vh - 100%));
 	@apply bg-_bg-light dark:bg-_bg-dark;
-	padding-bottom: 20px;
 }
 
 html {
