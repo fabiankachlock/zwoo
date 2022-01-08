@@ -12,7 +12,9 @@
         :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
         class="card-wrapper relative overflow-visible"
       >
-        <img class="card relative" :style="getComputedCardStyle" src="/img/dummy_card.svg" alt="" />
+        <div class="card relative" :style="getComputedCardStyle">
+          <img src="/img/dummy_card.svg" alt="" />
+        </div>
       </div>
     </div>
   </div>
@@ -141,6 +143,10 @@ const selectCard = (id: string) => {
 
 .card-wrapper.active {
   transform: translateY(30%);
+}
+
+.card-wrapper.active .card:hover img {
+  transform: scale(1.3, 1.3);
 }
 
 .card-wrapper.idle {
