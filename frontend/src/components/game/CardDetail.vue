@@ -22,22 +22,33 @@
         </div>
         <div class="card-to-play flex flex-col flex-nowrap justify-center items-center">
           <div class="relative">
-            <div class="absolute" :class="{ 'animation-from-left z-10': isAnimatingFromLeft }">
+            <div class="absolute" :class="{ 'animation-from-left z-10': isAnimatingFromLeft, 'animate-from-left-card': !isAnimatingFromLeft }">
               <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
             </div>
-            <div class="absolute" :class="{ 'animation-from-right z-10': isAnimatingFromRight }">
+            <div class="absolute" :class="{ 'animation-from-right z-10': isAnimatingFromRight, 'animate-from-right-card': !isAnimatingFromRight }">
               <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
             </div>
             <img
               id="detailCard"
               :ref="r => (detailCard = r as HTMLElement)"
               class="selected-card relative cursor-pointer"
-              :class="{ 'play-card-animation': isPlayingCard }"
+              :class="{
+                'play-card-animation': isPlayingCard
+              }"
               src="/img/dummy_card.svg"
               alt=""
             />
           </div>
-          <button @click.stop="handlePlayCard()" class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main">#play card#</button>
+          <button
+            @click.stop="handlePlayCard()"
+            class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent"
+            :class="{
+              'border-green-600': canPlayCard === CardState.allowed,
+              'border-red-500': canPlayCard === CardState.disallowed
+            }"
+          >
+            #play card#
+          </button>
         </div>
       </div>
       <div class="w-18 md:w-14 ml-4 md:ml-0">
@@ -59,6 +70,13 @@ import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { Card } from '@/core/type/game';
 import { computed, onMounted, ref, watch } from 'vue';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
+import { CardChecker } from '@/core/services/api/CardCheck';
+
+enum CardState {
+  allowed,
+  disallowed,
+  none
+}
 
 const ANIMATION_DURATION = 300;
 
@@ -71,6 +89,7 @@ const isAnimatingFromLeft = ref<boolean>(false);
 const isAnimatingFromRight = ref<boolean>(false);
 const isPlayingCard = ref<boolean>(false);
 const detailCard = ref<HTMLElement | undefined>(undefined);
+const canPlayCard = ref<CardState>(CardState.none);
 
 onMounted(() => {
   useSwipeGesture(detailCard, () => handlePlayCard(), SWIPE_DIRECTION.up, 200);
@@ -78,9 +97,13 @@ onMounted(() => {
   useSwipeGesture(detailCard, () => handleNextAfter(), SWIPE_DIRECTION.right);
 });
 
-watch(selectedCard, () => {
+watch(selectedCard, async () => {
   nextBefore.value = deckState.prefetchNext(false);
   nextAfter.value = deckState.prefetchNext(true);
+  canPlayCard.value = CardState.none;
+  if (selectedCard.value) {
+    canPlayCard.value = (await CardChecker.canPlayCard(selectedCard.value)) ? CardState.allowed : CardState.disallowed;
+  }
 });
 
 const handleNextBefore = () => {
