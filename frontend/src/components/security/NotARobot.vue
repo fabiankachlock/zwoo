@@ -39,7 +39,6 @@ const handleClick = async (evt: Event) => {
   evt.preventDefault();
   verifyState.value = 'verifying';
 
-  console.log('recaptcha check');
   try {
     const response = await ReCaptchaService.checkUser();
     verifyState.value = 'done';

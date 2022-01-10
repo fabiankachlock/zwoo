@@ -29,7 +29,6 @@ export const useSwipeGesture = (
   const endPosition = ref<Point | undefined>(undefined);
 
   const handleTouchStart = (event: TouchEvent): void => {
-    console.log('start');
     const touch = getTouch(event.changedTouches);
     if (!startPosition.value && !endPosition.value && touch) {
       startPosition.value = {
@@ -40,7 +39,6 @@ export const useSwipeGesture = (
   };
 
   const handleTouchEnd = (event: TouchEvent): void => {
-    console.log('end');
     const touch = getTouch(event.changedTouches);
     if (startPosition.value && !endPosition.value && touch) {
       endPosition.value = {
@@ -66,18 +64,15 @@ export const useSwipeGesture = (
   };
 
   watch(element, (curr, prev) => {
-    console.log({ prev, curr });
     if (prev) {
       prev.removeEventListener('touchstart', handleTouchStart);
       prev.removeEventListener('touchend', handleTouchEnd);
-      console.log('unmount');
     }
     if (curr) {
       curr.removeEventListener('touchstart', handleTouchStart);
       curr.removeEventListener('touchend', handleTouchEnd);
       curr.addEventListener('touchstart', handleTouchStart, false);
       curr.addEventListener('touchend', handleTouchEnd, false);
-      console.log('mount');
     }
   });
 };

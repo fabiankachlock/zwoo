@@ -79,11 +79,8 @@ onMounted(() => {
 });
 
 watch(selectedCard, () => {
-  console.log('current', selectedCard.value);
   nextBefore.value = deckState.prefetchNext(false);
-  console.log('before', nextBefore.value);
   nextAfter.value = deckState.prefetchNext(true);
-  console.log('after', nextAfter.value);
 });
 
 const handleNextBefore = () => {
