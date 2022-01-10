@@ -9,20 +9,7 @@
         }
       "
         autocomplete=""
-        class="
-          bg-dark
-          shadow
-          appearance-none
-          border
-          bc-main
-          rounded
-          w-full
-          py-2
-          px-3
-          tc-main-light
-          leading-tight
-          focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest
-        "
+        class="bg-dark shadow appearance-none border bc-main rounded w-full py-2 px-3 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
         :type="isPassword ? 'password' : 'text'"
         :id="id"
         :placeholder="placeholder"

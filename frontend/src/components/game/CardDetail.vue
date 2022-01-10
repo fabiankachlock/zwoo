@@ -3,12 +3,16 @@
     <div class="backdrop absolute inset-0 z-0 transition-all"></div>
     <div class="z-10 relative h-full w-full flex justify-center items-center flex-nowrap">
       <div class="absolute top-10 right-10">
-        <button @click.stop="closeDetail" class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-2 m-2 rounded">
+        <button @click.stop="closeDetail" class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded">
           <Icon icon="akar-icons:cross" />
         </button>
       </div>
-      <div class="w-14">
-        <button v-if="nextBefore" @click.stop="handleNextBefore" class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-2 m-2 rounded">
+      <div class="w-18 md:w-14 mr-4 md:mr-0">
+        <button
+          @click.stop="handleNextBefore"
+          :class="{ 'opacity-0': !nextBefore }"
+          class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+        >
           <Icon icon="akar-icons:arrow-left" />
         </button>
       </div>
@@ -25,7 +29,8 @@
               <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
             </div>
             <img
-              @click.stop="handlePlayCard()"
+              id="detailCard"
+              :ref="r => (detailCard = r as HTMLElement)"
               class="selected-card relative cursor-pointer"
               :class="{ 'play-card-animation': isPlayingCard }"
               src="/img/dummy_card.svg"
@@ -35,8 +40,12 @@
           <button @click.stop="handlePlayCard()" class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main">#play card#</button>
         </div>
       </div>
-      <div class="w-14">
-        <button v-if="nextAfter" @click.stop="handleNextAfter" class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-2 m-2 rounded">
+      <div class="w-18 md:w-14 ml-4 md:ml-0">
+        <button
+          :class="{ 'opacity-0': !nextAfter }"
+          @click.stop="handleNextAfter"
+          class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+        >
           <Icon icon="akar-icons:arrow-right" />
         </button>
       </div>
@@ -48,7 +57,8 @@
 import { Icon } from '@iconify/vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { Card } from '@/core/type/game';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
 
 const ANIMATION_DURATION = 300;
 
@@ -60,6 +70,13 @@ const nextAfter = ref<Card | undefined>(undefined);
 const isAnimatingFromLeft = ref<boolean>(false);
 const isAnimatingFromRight = ref<boolean>(false);
 const isPlayingCard = ref<boolean>(false);
+const detailCard = ref<HTMLElement | undefined>(undefined);
+
+onMounted(() => {
+  useSwipeGesture(detailCard, () => handlePlayCard(), SWIPE_DIRECTION.up, 200);
+  useSwipeGesture(detailCard, () => handleNextBefore(), SWIPE_DIRECTION.left);
+  useSwipeGesture(detailCard, () => handleNextAfter(), SWIPE_DIRECTION.right);
+});
 
 watch(selectedCard, () => {
   console.log('current', selectedCard.value);
