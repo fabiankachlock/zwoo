@@ -1,13 +1,19 @@
 <template>
   <div id="main" class="w-screen absolute p-3 overflow-hidden">
-    <div class="w-full h-full relative">
+    <div class="w-full h-full relative max-w-full max-h-full">
       <div class="layout-grid">
-        <InGameMenu />
-        <div class="h-full">
-          Main
+        <div class="z-10 min-w-0">
+          <InGameMenu />
+        </div>
+        <div class="h-full min-w-0">
+          <div class="relative flex flex-col flex-nowrap py-4">
+            <Opponents />
+          </div>
           <CardDetail v-if="showCardDetail" />
         </div>
-        <CardDeck />
+        <div class="relative min-w-0">
+          <CardDeck />
+        </div>
       </div>
     </div>
   </div>
@@ -19,6 +25,7 @@ import CardDeck from '@/components/game/CardDeck.vue';
 import CardDetail from '@/components/game/CardDetail.vue';
 import { useConfig } from '@/core/adapter/config';
 import { computed } from 'vue';
+import Opponents from '@/components/game/OpponentsStrip.vue';
 
 const config = useConfig();
 const showCardDetail = computed(() => config.showCardDetail);
@@ -30,7 +37,7 @@ const showCardDetail = computed(() => config.showCardDetail);
 }
 
 .layout-grid {
-  @apply grid h-full w-full;
+  @apply grid h-full w-full max-w-full;
   grid-template-rows: min-content auto min-content;
 }
 </style>
