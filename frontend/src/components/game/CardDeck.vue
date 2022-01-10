@@ -21,10 +21,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Card } from '@/core/type/game';
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 const CARD_ASPECT_RATIO = 476 / 716;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
@@ -135,6 +135,10 @@ const selectCard = (id: string) => {
 <style>
 .deck {
   height: calc(0.5rem + 6vh);
+}
+
+.card-wrapper .card img {
+  @apply transition-transform;
 }
 
 .card-wrapper {
