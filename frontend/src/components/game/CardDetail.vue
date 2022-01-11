@@ -1,9 +1,18 @@
 <template>
-  <div class="fixed z-50 inset-0" v-if="selectedCard">
-    <div class="backdrop absolute inset-0 z-0"></div>
+  <div class="fixed z-50 inset-0" v-if="selectedCard" @click="closeDetail()">
+    <div class="backdrop absolute inset-0 z-0 transition-all"></div>
     <div class="z-10 relative h-full w-full flex justify-center items-center flex-nowrap">
-      <div class="w-14">
-        <button v-if="nextBefore" @click="handleNextBefore" class="bg-lightest flex flex-nowrap tc-main text-2xl p-2 m-2 rounded">
+      <div class="absolute top-10 right-10">
+        <button @click.stop="closeDetail" class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded">
+          <Icon icon="akar-icons:cross" />
+        </button>
+      </div>
+      <div class="w-18 md:w-14 mr-4 md:mr-0">
+        <button
+          @click.stop="handleNextBefore"
+          :class="{ 'opacity-0': !nextBefore }"
+          class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+        >
           <Icon icon="akar-icons:arrow-left" />
         </button>
       </div>
@@ -12,14 +21,42 @@
           <img class="target-card relative" src="/img/dummy_card.svg" alt="" />
         </div>
         <div class="card-to-play flex flex-col flex-nowrap justify-center items-center">
-          <div>
-            <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
+          <div class="relative">
+            <div class="absolute" :class="{ 'animation-from-left z-10': isAnimatingFromLeft, 'animate-from-left-card': !isAnimatingFromLeft }">
+              <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
+            </div>
+            <div class="absolute" :class="{ 'animation-from-right z-10': isAnimatingFromRight, 'animate-from-right-card': !isAnimatingFromRight }">
+              <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
+            </div>
+            <img
+              id="detailCard"
+              :ref="r => (detailCard = r as HTMLElement)"
+              class="selected-card relative cursor-pointer"
+              :class="{
+                'play-card-animation': isPlayingCard
+              }"
+              src="/img/dummy_card.svg"
+              alt=""
+            />
           </div>
-          <button class="bg-lightest px-4 py-2 my-2 rounded tc-main">#play card#</button>
+          <button
+            @click.stop="handlePlayCard()"
+            class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent"
+            :class="{
+              'border-green-600': canPlayCard === CardState.allowed,
+              'border-red-500': canPlayCard === CardState.disallowed
+            }"
+          >
+            #play card#
+          </button>
         </div>
       </div>
-      <div class="w-14">
-        <button v-if="nextAfter" @click="handleNextAfter" class="bg-lightest flex flex-nowrap tc-main text-2xl p-2 m-2 rounded">
+      <div class="w-18 md:w-14 ml-4 md:ml-0">
+        <button
+          :class="{ 'opacity-0': !nextAfter }"
+          @click.stop="handleNextAfter"
+          class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+        >
           <Icon icon="akar-icons:arrow-right" />
         </button>
       </div>
@@ -31,29 +68,77 @@
 import { Icon } from '@iconify/vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { Card } from '@/core/type/game';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
+import { CardChecker } from '@/core/services/api/CardCheck';
+
+enum CardState {
+  allowed,
+  disallowed,
+  none
+}
+
+const ANIMATION_DURATION = 300;
 
 const deckState = useGameCardDeck();
 
 const selectedCard = computed(() => deckState.selectedCard);
 const nextBefore = ref<Card | undefined>(undefined);
 const nextAfter = ref<Card | undefined>(undefined);
+const isAnimatingFromLeft = ref<boolean>(false);
+const isAnimatingFromRight = ref<boolean>(false);
+const isPlayingCard = ref<boolean>(false);
+const detailCard = ref<HTMLElement | undefined>(undefined);
+const canPlayCard = ref<CardState>(CardState.none);
 
-watch(selectedCard, () => {
+onMounted(() => {
+  useSwipeGesture(detailCard, () => handlePlayCard(), SWIPE_DIRECTION.up, 200);
+  useSwipeGesture(detailCard, () => handleNextBefore(), SWIPE_DIRECTION.left);
+  useSwipeGesture(detailCard, () => handleNextAfter(), SWIPE_DIRECTION.right);
+});
+
+watch(selectedCard, async () => {
   nextBefore.value = deckState.prefetchNext(false);
   nextAfter.value = deckState.prefetchNext(true);
+  canPlayCard.value = CardState.none;
+  if (selectedCard.value) {
+    canPlayCard.value = (await CardChecker.canPlayCard(selectedCard.value)) ? CardState.allowed : CardState.disallowed;
+  }
 });
 
 const handleNextBefore = () => {
-  if (nextBefore.value) {
+  if (nextBefore.value && !isAnimatingFromRight.value) {
     deckState.selectCard(nextBefore.value.id);
+    isAnimatingFromRight.value = true;
+    setTimeout(() => {
+      isAnimatingFromRight.value = false;
+    }, ANIMATION_DURATION);
   }
 };
 
 const handleNextAfter = () => {
-  if (nextAfter.value) {
+  if (nextAfter.value && !isAnimatingFromLeft.value) {
     deckState.selectCard(nextAfter.value.id);
+    isAnimatingFromLeft.value = true;
+    setTimeout(() => {
+      isAnimatingFromLeft.value = false;
+    }, ANIMATION_DURATION);
   }
+};
+
+const handlePlayCard = () => {
+  if (!isPlayingCard.value) {
+    isPlayingCard.value = true;
+    setTimeout(() => {
+      isPlayingCard.value = false;
+    }, ANIMATION_DURATION);
+  }
+};
+
+const closeDetail = () => {
+  deckState.$patch({
+    selectedCard: undefined
+  });
 };
 </script>
 
@@ -74,5 +159,58 @@ const handleNextAfter = () => {
 .selected-card {
   max-height: 50vh;
   max-width: 40vw;
+}
+
+.animate-from-left-card {
+  transform: scale(0.6, 0.6) translate(-120%, 30%);
+  opacity: 0;
+}
+
+.animation-from-left {
+  animation: slideAndGrowFromLeft 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes slideAndGrowFromLeft {
+  from {
+    transform: scale(0.6, 0.6) translate(-120%, 30%) rotateZ(30deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1, 1) translate(0, 0) rotateZ(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-from-right-card {
+  transform: scale(0.6, 0.6) translate(120%, 30%);
+  opacity: 0;
+}
+
+.animation-from-right {
+  animation: slideAndGrowFromRight 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes slideAndGrowFromRight {
+  from {
+    transform: scale(0.6, 0.6) translate(120%, 30%) rotateZ(-30deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1, 1) translate(0, 0) rotateZ(0deg);
+    opacity: 1;
+  }
+}
+
+.play-card-animation {
+  animation: playCard 0.3s ease-in;
+}
+
+@keyframes playCard {
+  from {
+    transform: scale(1, 1) translate(0, 0);
+  }
+  to {
+    transform: scale(0.5, 0.5) translate(0, -170%);
+  }
 }
 </style>

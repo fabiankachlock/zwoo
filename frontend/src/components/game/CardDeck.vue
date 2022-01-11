@@ -12,17 +12,19 @@
         :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
         class="card-wrapper relative overflow-visible"
       >
-        <img class="card relative" :style="getComputedCardStyle" src="/img/dummy_card.svg" alt="" />
+        <div class="card relative" :style="getComputedCardStyle">
+          <img src="/img/dummy_card.svg" alt="" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Card } from '@/core/type/game';
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 const CARD_ASPECT_RATIO = 476 / 716;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
@@ -135,12 +137,20 @@ const selectCard = (id: string) => {
   height: calc(0.5rem + 6vh);
 }
 
+.card-wrapper .card img {
+  @apply transition-transform;
+}
+
 .card-wrapper {
   @apply transition-all;
 }
 
 .card-wrapper.active {
   transform: translateY(30%);
+}
+
+.card-wrapper.active .card:hover img {
+  transform: scale(1.3, 1.3);
 }
 
 .card-wrapper.idle {

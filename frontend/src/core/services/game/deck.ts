@@ -48,7 +48,7 @@ export class CardDeck {
     }
 
     const newIndex = index + indexChange;
-    if (newIndex > 0 && newIndex < cards.length - 1) {
+    if (newIndex >= 0 && newIndex <= cards.length - 1) {
       return cards[newIndex];
     }
     return undefined;

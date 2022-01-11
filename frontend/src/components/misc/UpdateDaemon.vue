@@ -1,5 +1,5 @@
 <template>
-  <div v-if="updateExists" class="w-full px-2 my-2">
+  <div v-if="updateExists" class="w-full px-2 my-2 mb-4">
     <div class="bg-dark hover:bg-darkest rounded-lg px-3 py-3">
       <div class="flex justify-between items-center">
         <p class="tc-main">{{ t('settings.update.available') }}</p>
@@ -28,10 +28,9 @@ onMounted(() => {
 
   // Prevent multiple refreshes
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    console.log('controller change');
-
-    if (refreshing.value) return;
-    window.location.reload();
+    if (refreshing.value) {
+      window.location.reload();
+    }
   });
 });
 

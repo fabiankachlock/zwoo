@@ -13,9 +13,9 @@
   <div class="relative z-50">
     <FloatingMenu />
   </div>
-  <div class="w-screen relative">
-    <div class="pt-10 h-full w-full">
-      <div class="relative w-full h-full">
+  <div class="w-screen h-screen overflow-y-scroll relative">
+    <div class="pt-10 w-full">
+      <div class="relative w-full">
         <router-view></router-view>
       </div>
     </div>
