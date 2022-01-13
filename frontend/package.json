@@ -6,11 +6,14 @@
     "serve": "vue-cli-service serve",
     "build": "VUE_APP_USE_BACKEND=true vue-cli-service build",
     "build:preview": "VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
+    "build:analyze": "ANALYZE=true vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
+    "lint:ci": "vue-cli-service lint --no-fix --max-warnings 50",
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|ts|vue)\" --locales \"./src/locales/**/*.json\"",
     "format": "prettier --write \"src/**/*.{ts,vue,html,css,d.ts}\"",
+    "format:ci": "prettier --check \"src/**/*.{ts,vue,html,css,d.ts}\"",
     "prepare": "cd .. && husky install frontend/.husky"
   },
   "dependencies": {

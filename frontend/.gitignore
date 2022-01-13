@@ -26,8 +26,7 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-.firebaserc
-firebase.json
+
 .firebase/
 .env.private
 coverage
