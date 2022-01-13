@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: FirebaseExtended/action-hosting-deploy@v0
+      - run: 'cd frontend && yarn && yarn build:preview'
         with:
           entrypoint: frontend
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
