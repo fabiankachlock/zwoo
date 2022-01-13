@@ -12,6 +12,7 @@ jobs:
       - run: 'cd frontend && yarn && yarn build:preview'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          entrypoint: /frontend
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ZWOO_UI }}'
           projectId: zwoo-ui
