@@ -42,7 +42,7 @@ module.exports = {
   },
 
   configureWebpack: {
-    plugins: [new BundleAnalyzerPlugin()],
+    plugins: process.env.ANALYZE === 'true' ? [new BundleAnalyzerPlugin()] : [],
     resolve: {
       alias: {
         'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js'

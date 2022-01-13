@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "VUE_APP_USE_BACKEND=true vue-cli-service build",
     "build:preview": "VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
+    "build:analyze": "ANALYZE=true vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
