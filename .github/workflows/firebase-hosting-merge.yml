@@ -18,8 +18,10 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: 'cd frontend && yarn && yarn build:preview'
       - uses: FirebaseExtended/action-hosting-deploy@v0
-      - run: 'cd frontend && yarn && yarn build:preview'
         with:
           entrypoint: frontend
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
