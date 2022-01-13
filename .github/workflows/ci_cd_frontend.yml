@@ -16,7 +16,7 @@ jobs:
         run: 'yarn lint:ci'
       - name: Format
         working-directory: ./frontend
-        run: 'yarn prettier:ci'
+        run: 'yarn format:ci'
       - name: Test
         working-directory: ./frontend
         run: 'yarn test:unit'
