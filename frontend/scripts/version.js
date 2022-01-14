@@ -23,3 +23,11 @@ env = env.replace(replaceHashRegex, createEnvVar(HASH, gitHash));
 
 write('.env', env)
 
+console.log('done!')
+console.log('adding to last commit...')
+
+exec('git add .env')
+exec('git commit --amend --no-edit')
+
+console.log('done!')
+
