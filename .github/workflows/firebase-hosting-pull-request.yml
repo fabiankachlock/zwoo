@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build
-        run: 'cd frontend && yarn && export VUA_APP_VERSION_OVERRIDE=$(git rev-parse HEAD) && yarn build:preview'      
+        run: 'cd frontend && yarn && export VUE_APP_VERSION_OVERRIDE=$(git rev-parse HEAD) && yarn build:preview'      
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entrypoint: frontend
