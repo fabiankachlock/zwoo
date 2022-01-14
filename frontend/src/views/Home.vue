@@ -1,7 +1,10 @@
 <template>
   <div class="relative w-full h-full grid place-content-center p-5">
+    <div class="w-full flex justify-center">
+      <img style="max-width: 10rem" src="/img/logo/zwoo_logo_none.svg" alt="" />
+    </div>
     <h1 class="text-6xl tc-primary text-center">zwoo</h1>
-    <p class="text-2xl italic tc-main text-center">-- tagline --</p>
+    <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative flex-1 w-full grid grid-cols-3">
         <div class="action main bg-dark hover:bg-darkest">
