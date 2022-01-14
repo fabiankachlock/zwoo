@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <div v-else>Feature is not supported</div>
+  <div v-else class="tc-main">Feature is not supported</div>
 </template>
 
 <script setup lang="ts">

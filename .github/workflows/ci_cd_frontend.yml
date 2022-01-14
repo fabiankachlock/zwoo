@@ -1,0 +1,25 @@
+
+name: Frontend Pipeline
+on:
+  workflow_call:
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        working-directory: ./frontend
+        run: 'yarn'
+      - name: Lint
+        working-directory: ./frontend
+        run: 'yarn lint:ci'
+      - name: Format
+        working-directory: ./frontend
+        run: 'yarn format:ci'
+      - name: Test
+        working-directory: ./frontend
+        run: 'yarn test:unit'
+      - name: Build
+        working-directory: ./frontend
+        run: 'yarn build:preview'
