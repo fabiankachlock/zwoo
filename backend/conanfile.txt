@@ -1,5 +1,17 @@
 [requires]
+
+oatpp-swagger/1.3.0
+oatpp-websocket/1.3.0
+oatpp-openssl/1.3.0
 oatpp-mongo/1.3.0@visual-rock/test
+mongo-cxx-driver/3.6.6
+
+mailio/0.20.0
+
+fmt/8.1.1
+
+boost/1.78.0
+openssl/1.1.1m
 
 [generators]
 cmake
