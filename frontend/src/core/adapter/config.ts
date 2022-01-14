@@ -8,6 +8,7 @@ const sortCardsKey = 'zwoo:sc';
 const showCardDetailKey = 'zwoo:cd';
 
 const versionInfo = {
+  override: process.env.VUE_APP_VERSION_OVERRIDE as string,
   version: process.env.VUE_APP_VERSION as string,
   hash: process.env.VUE_APP_VERSION_HASH as string
 };

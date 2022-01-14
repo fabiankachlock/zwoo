@@ -1,6 +1,10 @@
 <template>
   <div class="w-full my-2">
-    <p class="tc-main-secondary text-right text-sm italic"><span v-t="'version'"></span> {{ info.version }} ({{ info.hash }})</p>
+    <p class="tc-main-secondary text-right text-sm italic">
+      <span v-t="'version'"></span>{{ ': ' }}
+      <span v-if="!info.override"> {{ info.version }} ({{ info.hash }})</span>
+      <span v-else>{{ info.override }}</span>
+    </p>
   </div>
 </template>
 
@@ -8,4 +12,5 @@
 import { useConfig } from '@/core/adapter/config';
 
 const info = useConfig().versionInfo;
+console.log(process.env);
 </script>

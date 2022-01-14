@@ -13,14 +13,14 @@ name: Deploy to Firebase Hosting on merge
 
 jobs:
   check-frontend:
-    uses: fabiankachlock/zwoo/.github/workflows/ci_cd_frontend.yml@feat/ci-cd
+    uses: fabiankachlock/zwoo/.github/workflows/ci_cd_frontend.yml@main
 
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build
-        run: 'cd frontend && yarn && yarn build:preview'
+        run: 'cd frontend && yarn && yarn setup:version && yarn build:preview'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entrypoint: frontend
