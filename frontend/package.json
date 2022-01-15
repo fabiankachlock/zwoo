@@ -14,6 +14,7 @@
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|ts|vue)\" --locales \"./src/locales/**/*.json\"",
     "format": "prettier --write \"src/**/*.{ts,vue,html,css,d.ts}\"",
     "format:ci": "prettier --check \"src/**/*.{ts,vue,html,css,d.ts}\"",
+    "setup:version": "node ./scripts/version.js",
     "prepare": "cd .. && husky install frontend/.husky"
   },
   "dependencies": {
