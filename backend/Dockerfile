@@ -8,6 +8,7 @@ COPY . .
 RUN chmod +x build.sh
 RUN ./build.sh $conan_user $conan_password
 
+LABEL stage=build Name=zwoo_backend_build
 
 FROM ubuntu:latest AS runner
 WORKDIR /backend
