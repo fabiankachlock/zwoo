@@ -13,11 +13,9 @@
   <div class="relative z-50">
     <FloatingMenu />
   </div>
-  <div class="w-screen h-screen overflow-y-scroll relative">
-    <div class="pt-10 w-full">
-      <div class="relative w-full">
-        <router-view></router-view>
-      </div>
+  <div class="menu-main bg-main w-screen overflow-y-scroll relative">
+    <div class="pt-10 w-full relative">
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -26,3 +24,10 @@
 import NavBar from '@/components/menu/NavBar.vue';
 import FloatingMenu from '@/components/menu/FloatingMenu.vue';
 </script>
+
+<style>
+.menu-main {
+  height: 100vh;
+  max-height: calc(100vh - calc(100vh - 100%));
+}
+</style>

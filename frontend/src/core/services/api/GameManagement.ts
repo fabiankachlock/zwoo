@@ -56,7 +56,7 @@ export class GameManagementService {
     );
   };
 
-  static joinGame = async (gameId: string, password: string) => {
+  static joinGame = async (gameId: string, password: string): Promise<void> => {
     console.log('join game', gameId, password);
   };
 }

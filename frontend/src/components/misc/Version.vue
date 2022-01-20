@@ -12,5 +12,4 @@
 import { useConfig } from '@/core/adapter/config';
 
 const info = useConfig().versionInfo;
-console.log(process.env);
 </script>
