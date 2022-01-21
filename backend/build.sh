@@ -8,7 +8,7 @@ apt update && DEBIAN_FRONTEND="noninteractive" TZ="Germany/Berlin" apt-get insta
 apt install -y build-essential cmake python3 python3-pip
 pip install conan
 
-conan remote add conan-remote https://artifrog.igd20.de/artifactory/api/conan/conan-igd20
+conan remote add conan-remote $3
 conan user -p $2 -r conan-remote $1
 
 mkdir build && cd build

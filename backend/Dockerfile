@@ -2,11 +2,12 @@ FROM ubuntu:latest AS build
 
 ARG conan_user
 ARG conan_password
+ARG conan_remote
 
 WORKDIR /backend
 COPY . .
 RUN chmod +x build.sh
-RUN ./build.sh $conan_user $conan_password
+RUN ./build.sh $conan_user $conan_password $conan_remote
 
 LABEL stage=build Name=zwoo_backend_build
 
