@@ -11,10 +11,13 @@ void HttpServer::RunServer()
 {
     oatpp::base::Environment::init();
 
-    auto server_component = ServerComponent();
+    auto server_component = ServerComponent(logger);
 
     /* Get router component */
     OATPP_COMPONENT(std::shared_ptr<oatpp::web::server::HttpRouter>, router);
+
+
+    router->addController(AuthenticationController::createShared());
 
     /* Get connection handler component */
     OATPP_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, connectionHandler);

@@ -1,12 +1,6 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
-#include <string>
-#include <vector>
-#include <sstream>
-#include <chrono>
-#include <iomanip>
-
 #include <spdlog/spdlog.h>
 
 class Logger {

@@ -13,11 +13,16 @@
 #include "oatpp/core/base/CommandLineArguments.hpp"
 
 #include "Server/ErrorHandler.hpp"
+#include "Server/logger/logger.h"
 
 class ServerComponent {
+private:
+    std::shared_ptr<Logger> p_logger;
+
 public:
 
-    ServerComponent()
+    ServerComponent(std::shared_ptr<Logger> _logger)
+        : p_logger(_logger)
     {}
 
 public:
@@ -59,6 +64,11 @@ public:
         connectionHandler->setErrorHandler(std::make_shared<ErrorHandler>(objectMapper));
         return connectionHandler;
     }());
+
+    OATPP_CREATE_COMPONENT(std::shared_ptr<Logger>, logger)
+    ([this] {
+        return p_logger;
+     }());
 };
 
 #endif // _SERVER_COMPONENT_HPP_
