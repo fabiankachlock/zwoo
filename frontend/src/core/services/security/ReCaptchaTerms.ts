@@ -6,11 +6,11 @@ export class ReCaptchaTermsVisibilityManager {
 
   private badge: Element | null = null;
 
-  static init = () => {
+  static init = (): void => {
     ReCaptchaTermsVisibilityManager.instance.badge = document.querySelector('.grecaptcha-badge');
   };
 
-  static updateState = () => {
+  static updateState = (): void => {
     if (ReCaptchaTermsRouteInterceptor.matchesRoute(window.location.pathname)) {
       ReCaptchaTermsVisibilityManager.showBadge();
       return;
@@ -18,11 +18,11 @@ export class ReCaptchaTermsVisibilityManager {
     ReCaptchaTermsVisibilityManager.hideBadge();
   };
 
-  static showBadge = () => {
+  static showBadge = (): void => {
     ReCaptchaTermsVisibilityManager.instance.badge?.classList.remove('hidden');
   };
 
-  static hideBadge = () => {
+  static hideBadge = (): void => {
     ReCaptchaTermsVisibilityManager.instance.badge?.classList.add('hidden');
   };
 }
@@ -30,14 +30,14 @@ export class ReCaptchaTermsVisibilityManager {
 export class ReCaptchaTermsRouteInterceptor implements RouterInterceptor {
   static VisibleRouts = ['/login', '/create-account'];
 
-  static matchesRoute = (route: string) => {
+  static matchesRoute = (route: string): boolean => {
     for (const r of ReCaptchaTermsRouteInterceptor.VisibleRouts) {
       if (route.startsWith(r)) return true;
     }
     return false;
   };
 
-  afterEachAsync = async (_from: RouteLocationNormalized, current: RouteLocationNormalized) => {
+  afterEachAsync = async (_from: RouteLocationNormalized, current: RouteLocationNormalized): Promise<void> => {
     if (ReCaptchaTermsRouteInterceptor.matchesRoute(current.fullPath)) {
       ReCaptchaTermsVisibilityManager.showBadge();
     } else {

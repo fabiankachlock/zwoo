@@ -46,8 +46,8 @@ const join = async () => {
   try {
     await GameManagementService.joinGame(gameId, password.value);
     router.push('/game/wait');
-  } catch (e: any) {
-    error.value = Array.isArray(e) ? e : [e.toString()];
+  } catch (e: unknown) {
+    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
 };
 

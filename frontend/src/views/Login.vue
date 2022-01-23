@@ -58,8 +58,8 @@ const logIn = async () => {
     }
 
     router.push('/home');
-  } catch (e: any) {
-    error.value = Array.isArray(e) ? e : [e.toString()];
+  } catch (e: unknown) {
+    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
 };
 </script>
