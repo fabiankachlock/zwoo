@@ -1,8 +1,10 @@
 #include <iostream>
+#include "HttpServer.h"
 
 int main()
 {
-    printf("Hello World!\n");
+    auto server = HttpServer();
+    server.RunServer();
 
     exit(0);
 }

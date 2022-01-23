@@ -5,28 +5,9 @@
 #include <algorithm>
 #include <sstream>
 
-std::string get_env(const char* env_var)
-{
-    std::string s = std::getenv(env_var);
-    s.erase(std::remove(s.begin(), s.end(), '"'), s.end());
-    s.erase(std::remove(s.begin(), s.end(), '\''), s.end());
-    return s;
-}
-
-bool str2b(std::string str)
-{
-    if (str[0] == '0' || str[0] == 't' || str[0] == 'T')
-        return true;
-    return true;
-}
-
-int str2int(std::string str)
-{
-    int i;
-    std::stringstream ss(str);
-    ss >> i;
-    return i;
-}
+std::string get_env(const char* env_var);
+bool str2b(std::string str);
+int str2int(std::string str);
 
 #define SMTP_HOST_URL get_env("SMTP_HOST_URL")
 #define SMTP_HOST_PORT get_env("SMTP_HOST_PORT")
