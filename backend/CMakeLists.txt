@@ -18,6 +18,7 @@ set(SRC_FILES
     "src/HttpServer.cpp"
 
     "src/Server/ErrorHandler.cpp"
+    "src/Server/logger/logger.cpp"
 )
 
 if(${BUILD_SWAGGER})

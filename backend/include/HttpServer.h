@@ -4,6 +4,7 @@
 #include "oatpp/network/Server.hpp"
 
 #include "Server/ServerComponent.hpp"
+#include "Server/logger/logger.h"
 
 class HttpServer {
 public:
@@ -12,7 +13,7 @@ public:
     void RunServer();
 
 private:
-    // void CreateLogger();
+    std::shared_ptr<Logger> logger;
 
 
 };

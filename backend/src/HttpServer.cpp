@@ -1,6 +1,10 @@
 #include "HttpServer.h"
 
-HttpServer::HttpServer() {}
+HttpServer::HttpServer()
+{
+    logger = std::make_shared<Logger>();
+    logger->init();
+}
 
 
 void HttpServer::RunServer()
@@ -22,7 +26,7 @@ void HttpServer::RunServer()
     oatpp::network::Server server(connectionProvider,
                                   connectionHandler);
 
-    OATPP_LOGD("Server", "Running on port %s...", connectionProvider->getProperty("port").toString()->c_str());
+    logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
 
     server.run();
 
