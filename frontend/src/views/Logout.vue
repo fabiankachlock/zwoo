@@ -24,8 +24,8 @@ const logout = async () => {
   try {
     await auth.logout();
     router.push('/landing');
-  } catch (e: any) {
-    error.value = Array.isArray(e) ? e : [e.toString()];
+  } catch (e: unknown) {
+    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
 };
 logout();

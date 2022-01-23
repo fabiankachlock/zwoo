@@ -24,7 +24,7 @@ export const useSwipeGesture = (
   handler: (from: Point, to: Point) => void,
   direction: SWIPE_DIRECTION,
   threshold = 50
-) => {
+): void => {
   const startPosition = ref<Point | undefined>(undefined);
   const endPosition = ref<Point | undefined>(undefined);
 

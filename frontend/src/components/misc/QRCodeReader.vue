@@ -114,7 +114,8 @@ const closeCamera = async () => {
 
 const render = async () => {
   try {
-    const barCodes = await decoder?.detect(videoElement.value!);
+    if (!videoElement.value) return;
+    const barCodes = await decoder?.detect(videoElement.value);
     if (barCodes && barCodes.length > 0) {
       status.value = barCodes[0].rawValue;
       if (validateAndRedirect()) {

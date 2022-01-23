@@ -114,16 +114,6 @@ body.dark {
 	--shadow-light: rgba(181, 195, 224, 0.4);
 }
 
-body {
-	overflow: hidden;
-}
-
-#app {
-	height: 100vh;
-	max-height: calc(100vh - calc(100vh - 100%));
-	@apply bg-_bg-light dark:bg-_bg-dark;
-}
-
 html {
 	font-size: 16px;
 }
