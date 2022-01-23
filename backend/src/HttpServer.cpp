@@ -1,11 +1,19 @@
 #include "HttpServer.h"
 
+#include "oatpp/network/Server.hpp"
+
+#include "Server/ServerComponent.hpp"
+#include "Server/controller/Authentication/AuthenticationController.hpp"
+
+#ifdef BUILD_SWAGGER
+#include "oatpp-swagger/Controller.hpp"
+#endif // BUILD_SWAGGER
+
 HttpServer::HttpServer()
 {
     logger = std::make_shared<Logger>();
     logger->init();
 }
-
 
 void HttpServer::RunServer()
 {
@@ -16,6 +24,14 @@ void HttpServer::RunServer()
     /* Get router component */
     OATPP_COMPONENT(std::shared_ptr<oatpp::web::server::HttpRouter>, router);
 
+#ifdef BUILD_SWAGGER
+    oatpp::web::server::api::Endpoints docEndpoints;
+
+    docEndpoints.append(router->addController(AuthenticationController::createShared())->getEndpoints());
+    router->addController(oatpp::swagger::Controller::createShared(docEndpoints));
+
+    logger->log->info("Added Swagger Endpoint: http://localhost:8000/swagger/ui");
+#endif
 
     router->addController(AuthenticationController::createShared());
 

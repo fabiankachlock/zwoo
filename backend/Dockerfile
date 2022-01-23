@@ -1,4 +1,4 @@
-FROM debian:latest AS build
+FROM ubuntu:latest AS build
 
 ARG conan_user
 ARG conan_password
@@ -11,9 +11,10 @@ RUN ./build.sh $conan_user $conan_password $conan_remote
 
 LABEL stage=build Name=zwoo_backend_build
 
-FROM debian:latest AS runner
+FROM ubuntu:latest AS runner
 WORKDIR /backend
-COPY --from=build ./backend/build/ .
+COPY --from=build ./backend/build/main .
+COPY --from=build ./backend/build/res/ ./res
 ENTRYPOINT ["./main"]
 
 LABEL Name=zwoo_backend Version=0.0.1

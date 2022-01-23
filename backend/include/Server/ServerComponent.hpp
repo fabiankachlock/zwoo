@@ -15,6 +15,10 @@
 #include "Server/ErrorHandler.hpp"
 #include "Server/logger/logger.h"
 
+#ifdef BUILD_SWAGGER
+#include "Server/SwaggerComponent.hpp"
+#endif
+
 class ServerComponent {
 private:
     std::shared_ptr<Logger> p_logger;
@@ -26,6 +30,9 @@ public:
     {}
 
 public:
+#ifdef BUILD_SWAGGER
+    SwaggerComponent swaggerComponent;
+#endif
     /**
    * Create ObjectMapper component to serialize/deserialize DTOs in Contoller's API
    */
