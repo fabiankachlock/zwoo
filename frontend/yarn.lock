@@ -979,10 +979,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@iconify/vue@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@iconify/vue/-/vue-3.1.1.tgz#3516b320680756cc9c38b49438af5a315619dca9"
-  integrity sha512-lpRis4y8XHx0LQG1pbD71BuDlYKzCG3xKNsTs6svajQQe1DgkBbt1PEERnJTnmo9UzihTR0Bq7OwPQt7zR25RQ==
+"@iconify/vue@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@iconify/vue/-/vue-3.1.2.tgz#ac3a29e98e9ff65dbabc9e4f91970cbe7b208c29"
+  integrity sha512-c777kFKOaEpiJCwz5lOgETWZnq4lEermMQ0RBCzTyRaGC/lmvw2SLF7aJQGri1sGFt4Z5GuXpnlX4DNf3aN+qA==
   dependencies:
     cross-fetch "^3.1.4"
 
