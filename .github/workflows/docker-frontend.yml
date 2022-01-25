@@ -9,7 +9,6 @@ name: Frontend Docker Pipeline
     paths:
     - 'frontend/**'
     - '.github/workflows/**'
-  workflow_dispatch:
 
 jobs:
   frontend-docker:
