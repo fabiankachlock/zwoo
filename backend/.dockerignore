@@ -1,17 +1,5 @@
-.vscode/
-bin/
-CMakeFiles/
-db/
-Testing/
+build/
 
-cmake_install.cmake
-CMakeCache.txt
-CPackConfig.cmake
-CPackSourceConfig.cmake
-CTestTestfile.cmake
-DartConfiguration.tcl
-Makefile
-
-BuildRun.sh
-
-README.md
+.gitignore
+.clang-format
+docker-compose

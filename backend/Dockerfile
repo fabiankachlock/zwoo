@@ -1,19 +1,20 @@
-# GCC support can be specified at major, minor, or micro version
-# (e.g. 8, 8.2 or 8.2.0).
-# See https://hub.docker.com/r/library/gcc/ for all supported GCC
-# tags from Docker Hub.
-# See https://docs.docker.com/samples/library/gcc/ for more on how to use this image
-FROM ubuntu:latest
+FROM ubuntu:latest AS build
+
+ARG conan_user
+ARG conan_password
+ARG conan_remote
 
 WORKDIR /backend
+COPY . .
+RUN chmod +x build.sh
+RUN ./build.sh $conan_user $conan_password $conan_remote
 
-# These commands copy your files into the specified directory in the image
-# and set that as the working location
-COPY . /backend
+LABEL stage=build Name=zwoo_backend_build
 
-RUN ./setup.sh
+FROM ubuntu:latest AS runner
+WORKDIR /backend
+COPY --from=build ./backend/build/main .
+COPY --from=build ./backend/build/res/ ./res
+ENTRYPOINT ["./main"]
 
-# This command runs your application, comment out this line to compile only
-CMD ["./bin/main"]
-
-LABEL Name=backend Version=0.0.1
+LABEL Name=zwoo_backend Version=0.0.1

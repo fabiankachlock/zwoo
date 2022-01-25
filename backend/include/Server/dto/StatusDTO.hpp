@@ -1,4 +1,4 @@
-#ifndef _STATUSDTO_HPP_
+ #ifndef _STATUSDTO_HPP_
 #define _STATUSDTO_HPP_
 
 #include "oatpp/core/macro/codegen.hpp"

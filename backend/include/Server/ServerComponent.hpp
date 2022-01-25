@@ -3,10 +3,6 @@
 
 #include "zwoo.h"
 
-#include <sstream>
-
-#include "ErrorHandler.hpp"
-
 #include "oatpp/network/tcp/server/ConnectionProvider.hpp"
 #include "oatpp/web/server/HttpConnectionHandler.hpp"
 #include "oatpp/web/server/HttpRouter.hpp"
@@ -16,28 +12,27 @@
 #include "oatpp/core/macro/component.hpp"
 #include "oatpp/core/base/CommandLineArguments.hpp"
 
-#ifdef BUILD_SWAGGER
-#include "SwaggerComponent.hpp"
-#endif
+#include "Server/ErrorHandler.hpp"
+#include "Server/logger/logger.h"
 
-#include "Database/Database.h"
-#include "Authentication/SMTPClient.h"
+#ifdef BUILD_SWAGGER
+#include "Server/SwaggerComponent.hpp"
+#endif
 
 class ServerComponent {
 private:
-    oatpp::base::CommandLineArguments m_cmdArgs;
+    std::shared_ptr<Logger> p_logger;
 
 public:
 
-    ServerComponent(const oatpp::base::CommandLineArguments& cmdArgs)
-        : m_cmdArgs(cmdArgs)
+    ServerComponent(std::shared_ptr<Logger> _logger)
+        : p_logger(_logger)
     {}
 
 public:
 #ifdef BUILD_SWAGGER
     SwaggerComponent swaggerComponent;
 #endif
-
     /**
    * Create ObjectMapper component to serialize/deserialize DTOs in Contoller's API
    */
@@ -53,10 +48,7 @@ public:
    */
     OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)
     ([] {
-        v_uint16 port;
-        std::stringstream s(PORT);
-        s >> port;
-        return oatpp::network::tcp::server::ConnectionProvider::createShared({DOMAIN, port, oatpp::network::Address::IP_4});
+        return oatpp::network::tcp::server::ConnectionProvider::createShared({ZWOO_BACKEND_DOMAIN, ZWOO_BACKEND_PORT, oatpp::network::Address::IP_4});
     }());
 
     /**
@@ -80,20 +72,10 @@ public:
         return connectionHandler;
     }());
 
-    OATPP_CREATE_COMPONENT(std::shared_ptr<Backend::Database>, database)
+    OATPP_CREATE_COMPONENT(std::shared_ptr<Logger>, logger)
     ([this] {
-        printf("Initializing Database\n");
-        
-        const char* connectionString = std::getenv("MONGO_CONN_STR");
-        if (connectionString == "") {
-            connectionString = m_cmdArgs.getNamedArgumentValue("--conn-str", "mongodb://localhost/zwoo");
-        }
-
-        printf("Mongo Connection string: \"%s\"\n", connectionString);
-        
-        mongocxx::uri uri(connectionString);
-        return std::make_shared<Backend::Database>(uri, "zwoo", "users");
-    }());
+        return p_logger;
+     }());
 };
 
-#endif// _SERVER_COMPONENT_HPP_
+#endif // _SERVER_COMPONENT_HPP_

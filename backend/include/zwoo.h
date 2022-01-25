@@ -1,23 +1,29 @@
 #ifndef _ZWOO_H_
 #define _ZWOO_H_
 
-#define SMTP_HOST "smtp.gmail.com"
-#define SMTP_PORT 465
-
-#define ZWOO_USERNAME std::getenv("ZWOO_USERNAME")
-#define ZWOO_EMAIL std::getenv("ZWOO_EMAIL")
-#define ZWOO_PASSWORD std::getenv("ZWOO_PASSWORD")
-
-#define DOMAIN std::getenv("ZWOO_DOMAIN")
-#define PORT std::getenv("ZWOO_PORT")
-
-#define SITESECRET std::getenv("ZWOO_SITESECRET")
-
-#include <iostream>
-#include <stdio.h>
-#include <vector>
-#include <assert.h>
 #include <string>
-#include <chrono>
+#include <algorithm>
+#include <sstream>
+
+std::string get_env(const char* env_var);
+bool str2b(std::string str);
+int str2int(std::string str);
+
+#define SMTP_HOST_URL get_env("SMTP_HOST_URL")
+#define SMTP_HOST_PORT get_env("SMTP_HOST_PORT")
+#define SMTP_HOST_EMAIL get_env("SMTP_HOST_EMAIL")
+#define SMTP_USERNAME get_env("SMTP_USERNAME")
+#define SMTP_PASSWORD get_env("SMTP_PASSWORD")
+
+#define ZWOO_BACKEND_DOMAIN "0.0.0.0"
+#define ZWOO_BACKEND_PORT 8000
+
+#define ZWOO_DATABASE_CONNECTION_STRING get_env("ZWOO_DATABASE_CONNECTION_STRING")
+
+#define ZWOO_RECAPTCHA_SIDESECRET get_env("ZWOO_RECAPTCHA_SIDESECRET")
+
+#define USE_SSL str2b(get_env("USE_SSL"))
+#define SSL_PEM get_env("SSL_PEM")
+#define SSL_CERTIFICATE get_env("SSL_CERTIFICATE")
 
 #endif
