@@ -13,7 +13,7 @@ name: Deploy to Firebase Hosting on merge
 
 jobs:
   check-frontend:
-    uses: fabiankachlock/zwoo/.github/workflows/ci_cd_frontend.yml@main
+    uses: fabiankachlock/zwoo/.github/workflows/ci-cd-frontend.yml@main
 
   build_and_deploy:
     runs-on: ubuntu-latest
