@@ -5,7 +5,6 @@ name: Frontend Docker Pipeline
   push:
     branches:
       - main
-      - 'feat/docker-action'
     paths:
     - 'frontend/**'
     - '.github/workflows/**'
