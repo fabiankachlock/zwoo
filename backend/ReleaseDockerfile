@@ -6,15 +6,14 @@ ARG conan_remote
 
 WORKDIR /backend
 COPY . .
-RUN chmod +x build.sh
-RUN ./build.sh $conan_user $conan_password $conan_remote
+RUN chmod +x ./util/build.sh
+RUN ./util/build.sh $conan_user $conan_password $conan_remote OFF
 
 LABEL stage=build Name=zwoo_backend_build
 
 FROM ubuntu:latest AS runner
 WORKDIR /backend
 COPY --from=build ./backend/build/main .
-COPY --from=build ./backend/build/res/ ./res
 ENTRYPOINT ["./main"]
 
 LABEL Name=zwoo_backend Version=0.0.1

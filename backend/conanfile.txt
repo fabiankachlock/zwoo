@@ -9,6 +9,7 @@ mailio/0.20.0
 
 boost/1.78.0
 openssl/1.1.1m
+libcurl/7.80.0
 
 fmt/8.1.1
 spdlog/1.9.2

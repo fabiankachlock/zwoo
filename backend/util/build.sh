@@ -10,6 +10,14 @@ conan user -p $2 -r conan-remote $1
 
 mkdir build && cd build
 conan install .. -s compiler.libcxx=libstdc++11 --build
-cmake ..
+
+if [ $4 = "OFF" ];
+then
+    BUILDTYPE=Debug
+else
+    BUILDTYPE=Release
+fi
+
+cmake .. -DBUILD_SWAGGER=$4 -DCMAKE_BUILD_TYPE=$BUILDTYPE
 
 make -j$(nproc)
