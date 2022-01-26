@@ -8,6 +8,7 @@
 #include "oatpp/web/server/api/ApiController.hpp"
 
 #include "Server/logger/logger.h"
+#include "Server/controller/Authentication/ReCaptcha.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController)// <- Begin Codegen
 
@@ -34,6 +35,17 @@ public:
     }
     ENDPOINT_INFO(helloWorld) {
         info->summary = "Hello World Testendpoint.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+    ENDPOINT("POST", "auth/recaptcha", reCaptcha, BODY_STRING(String, token)) {
+        return createResponse(Status::CODE_200, verifyCaptcha(token));
+    }
+    ENDPOINT_INFO(reCaptcha) {
+        info->description = "verify the reCaptcha with this Endpoint.";
 
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");

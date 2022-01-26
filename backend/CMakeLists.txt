@@ -7,6 +7,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
 find_package(spdlog               REQUIRED)
 find_package(oatpp          1.3.0 REQUIRED)
+find_package(CURL                 REQUIRED)
 # find_package(oatpp-mongo    1.3.0 REQUIRED)
 # find_package(mongocxx             REQUIRED)
 
@@ -19,11 +20,13 @@ set(SRC_FILES
 
     "src/Server/ErrorHandler.cpp"
     "src/Server/logger/logger.cpp"
+    "src/Server/controller/Authentication/ReCaptcha.cpp"
 )
 
 set(LIBS
     spdlog::spdlog
     oatpp::oatpp
+    CURL::libcurl
 )
 
 add_executable(main ${SRC_FILES})
