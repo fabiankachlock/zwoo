@@ -8,6 +8,7 @@
 #include "oatpp/web/server/api/ApiController.hpp"
 
 #include "Server/logger/logger.h"
+#include "Server/DatabaseComponent.hpp"
 #include "Server/controller/Authentication/ReCaptcha.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController)// <- Begin Codegen
@@ -15,6 +16,7 @@
 class AuthenticationController : public oatpp::web::server::api::ApiController {
 private:
     OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger);
+    OATPP_COMPONENT(std::shared_ptr<Database>, m_database);
 
 public:
     AuthenticationController(const std::shared_ptr<ObjectMapper> &objectMapper)

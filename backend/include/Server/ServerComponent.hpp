@@ -15,9 +15,11 @@
 #include "Server/ErrorHandler.hpp"
 #include "Server/logger/logger.h"
 
+#include "Server/DatabaseComponent.hpp"
 #ifdef BUILD_SWAGGER
 #include "Server/SwaggerComponent.hpp"
 #endif
+
 
 class ServerComponent {
 private:
@@ -76,6 +78,11 @@ public:
     ([this] {
         return p_logger;
      }());
+
+    OATPP_CREATE_COMPONENT(std::shared_ptr<Database>, database)
+    ([this] {
+            return std::make_shared<Database>(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING), "zwoo", "users");
+    }());
 };
 
 #endif // _SERVER_COMPONENT_HPP_
