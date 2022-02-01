@@ -10,6 +10,7 @@
 #include "Server/logger/logger.h"
 #include "Server/DatabaseComponent.hpp"
 #include "Server/controller/Authentication/ReCaptcha.h"
+#include "Server/dto/AuthenticationDTO.hpp"
 
 #include OATPP_CODEGEN_BEGIN(ApiController)// <- Begin Codegen
 
@@ -52,6 +53,17 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+    ENDPOINT("POST", "auth/create", create, BODY_DTO(Object<CreateUserBodyDTO>, data)) {
+        if (m_database->entrieExists("username", data->username))
+            return createResponse(Status::CODE_400, "Username Already Exists!");
+        if (m_database->entrieExists("email", data->email))
+            return createResponse(Status::CODE_400, "Email Already Exists!");
+
+        m_database->createUser(data->username, data->email, data->password);
+
+        return createResponse(Status::CODE_501, "Not Implemented");
     }
 };
 

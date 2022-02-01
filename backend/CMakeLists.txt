@@ -17,11 +17,15 @@ set(SRC_FILES
     "src/main.cpp"
     "src/zwoo.cpp"
     "src/HttpServer.cpp"
+    "src/SHA512.cpp"
+    "src/Helper.cpp"
 
     "src/Server/ErrorHandler.cpp"
     "src/Server/DatabaseComponent.cpp"
     "src/Server/logger/logger.cpp"
+
     "src/Server/controller/Authentication/ReCaptcha.cpp"
+    "src/Server/controller/Authentication/AuthenticationValidators.cpp"
 )
 
 set(LIBS
