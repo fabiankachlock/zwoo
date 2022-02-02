@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-12 overflow-hidden">
-    <div class="overflow-x-scroll flex flex-row flex-nowrap items-center h-full pb-3">
+  <div class="w-full h-8 overflow-hidden">
+    <div class="overflow-x-scroll flex flex-row flex-nowrap items-center h-full">
       <Opponent name="teak" :card-amount="7" :is-active="true" />
       <Opponent name="teaklsdlhajdhaksdst" :card-amount="7" :is-active="true" />
       <Opponent name="iauzsdiuasgdlauhktest2" :card-amount="33" :is-active="false" />
