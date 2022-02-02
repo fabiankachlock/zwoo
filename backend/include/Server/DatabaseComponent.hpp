@@ -10,6 +10,11 @@
 
 #include "SHA512.h"
 
+struct r_CreateUser {
+    std::string puid;
+    std::string code;
+};
+
 class Database {
 public:
     Database() {}
@@ -24,7 +29,7 @@ public:
     Database(const mongocxx::uri &uri, const std::string &dbName, const std::string &collectionName)
         : m_pool(std::make_shared<mongocxx::pool>(uri)), m_databaseName(dbName), m_collectionName(collectionName) {}
 
-    void createUser(std::string user_name, std::string user_email, std::string password);
+    r_CreateUser createUser(std::string user_name, std::string user_email, std::string password);
     bool entrieExists(std::string field, std::string value);
 };
 

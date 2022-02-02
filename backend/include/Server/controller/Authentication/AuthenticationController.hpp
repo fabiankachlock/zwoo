@@ -11,6 +11,7 @@
 #include "Server/DatabaseComponent.hpp"
 #include "Server/controller/Authentication/ReCaptcha.h"
 #include "Server/dto/AuthenticationDTO.hpp"
+#include "Server/controller/Authentication/AuthenticationValidators.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController)// <- Begin Codegen
 
@@ -60,8 +61,14 @@ public:
             return createResponse(Status::CODE_400, "Username Already Exists!");
         if (m_database->entrieExists("email", data->email))
             return createResponse(Status::CODE_400, "Email Already Exists!");
+        if (!isValidEmail(data->email))
+            return createResponse(Status::CODE_400, "Email Invalid!");
+        if (!isValidUsername(data->username))
+            return createResponse(Status::CODE_400, "Username Invalid!");
+        if (!isValidPassword(data->password))
+            return createResponse(Status::CODE_400, "Password Invalid!");
 
-        m_database->createUser(data->username, data->email, data->password);
+        r_CreateUser data = m_database->createUser(data->username, data->email, data->password);
 
         return createResponse(Status::CODE_501, "Not Implemented");
     }

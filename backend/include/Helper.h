@@ -3,6 +3,7 @@
 
 #include <string>
 
+std::string generateUniqueHash();
 int randomNumberInRange(int min, int max);
 std::string randomString(const int len);
 std::string randomNDigitNumber(int n);

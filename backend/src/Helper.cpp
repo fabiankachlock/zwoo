@@ -7,6 +7,12 @@
 #include <chrono>
 #include <random>
 
+std::string generateUniqueHash()
+{
+
+    return "sliejfjsdhfoidsjf";
+}
+
 std::string randomString(const int len)
 {
     static const char alphanum[] =
