@@ -61,7 +61,7 @@ r_CreateUser Database::createUser ( std::string user_name, std::string user_emai
     auto usr = UserDTO::createShared();
 
     std::string salt = randomString(16);
-    std::string hash = password;
+    std::string hash = salt + password;
     for ( int i = 0; i < 10000; i++ )
         hash = sha512.hash(hash);
     hash.resize(24);
