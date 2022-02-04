@@ -57,20 +57,29 @@ public:
     }
 
     ENDPOINT("POST", "auth/create", create, BODY_DTO(Object<CreateUserBodyDTO>, data)) {
-        if (m_database->entrieExists("username", data->username))
+        m_logger->log->debug("/POST create");
+        if (m_database->entrieExists("username", data->username.getValue("")))
             return createResponse(Status::CODE_400, "Username Already Exists!");
-        if (m_database->entrieExists("email", data->email))
+        if (m_database->entrieExists("email", data->email.getValue("")))
             return createResponse(Status::CODE_400, "Email Already Exists!");
-        if (!isValidEmail(data->email))
+        if (!isValidEmail(data->email.getValue("")))
             return createResponse(Status::CODE_400, "Email Invalid!");
-        if (!isValidUsername(data->username))
+        if (!isValidUsername(data->username.getValue("")))
             return createResponse(Status::CODE_400, "Username Invalid!");
-        if (!isValidPassword(data->password))
+        if (!isValidPassword(data->password.getValue("")))
             return createResponse(Status::CODE_400, "Password Invalid!");
 
-        r_CreateUser data = m_database->createUser(data->username, data->email, data->password);
+        r_CreateUser ret = m_database->createUser(data->username.getValue(""), data->email.getValue(""), data->password.getValue(""));
 
-        return createResponse(Status::CODE_501, "Not Implemented");
+        return createResponse(Status::CODE_200, "Account Created");
+    }
+
+    ENDPOINT("GET", "auth/verify", verify, QUERY(String, code, "code"), QUERY(UInt64, puid, "id")) {
+        m_logger->log->debug("/GET verify");
+        if (m_database->verifyUser(puid, code))
+            return createResponse(Status::CODE_200, "Account Verified");
+        else
+            return createResponse(Status::CODE_400, "Account failed to verify");
     }
 };
 

@@ -7,6 +7,25 @@
 #include <chrono>
 #include <random>
 
+/*
+UIDGenerator::UIDGenerator() { isInitialized = false; }
+
+bool UIDGenerator::IsInitialized() { return isInitialized; }
+
+void UIDGenerator::Init(ulong start)
+{
+    isInitialized = true;
+    cid = start;
+}
+
+ulong UIDGenerator::GetID()
+{
+    if (!isInitialized)
+        Init(0);
+    return ++cid;
+}
+*/
+
 std::string generateUniqueHash()
 {
 
@@ -22,7 +41,7 @@ std::string randomString(const int len)
     std::string tmp_s;
     tmp_s.reserve(len);
 
-    std::mt19937 rng();
+    std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
 
     for (int i = 0; i < len; ++i) {
         tmp_s += alphanum[randomNumberInRange(0, 512) % (sizeof(alphanum) - 1)];
