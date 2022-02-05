@@ -113,6 +113,31 @@ r_LoginUser Database::loginUser(std::string email, std::string password)
 
 }
 
+bool Database::deleteUser(ulong puid, std::string sid, std::string password)
+{
+    auto usr = getUser(puid);
+    if (!usr)
+        return false;
+    std::string salt = usr->password.getValue("").substr(7, 16);
+    std::string hash = salt + password;
+    for ( int i = 0; i < 10000; i++ )
+        hash = sha512.hash(hash);
+    hash.resize(24);
+    std::string pw = "sha512:" + salt + ":" + hash;
+
+    if (pw == usr->password.getValue("") && usr->sid == sid)
+    {
+        auto conn = m_pool->acquire();
+        auto collection = (*conn)[m_databaseName][m_collectionName];
+
+        collection.delete_one(createMongoDocument(oatpp::Fields<oatpp::String>({{"email", usr->email}})));
+
+        return true;
+    }
+    else
+        return false;
+}
+
 bool Database::verifyUser(ulong puid, std::string code)
 {
     auto usr = getUser(puid);

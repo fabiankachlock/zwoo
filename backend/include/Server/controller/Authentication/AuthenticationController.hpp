@@ -122,6 +122,24 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
+
+    ENDPOINT("GET", "auth/delete", delte, BODY_DTO(Object<DeleteUserDTO>, data)) {
+        m_logger->log->debug("/GET delete");
+        if (m_database->deleteUser(data->puid, data->sid, data->password))
+            return createResponse(Status::CODE_200, "User Deleted!");
+        else
+            return createResponse(Status::CODE_200, "Could not Deleted!");
+        return createResponse(Status::CODE_501, "Not Implemented!");
+    }
+    ENDPOINT_INFO(delte) {
+        info->description = "Login Users with this Endpoint.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+
 };
 
 #include OATPP_CODEGEN_END(ApiController)// <- End Codegen

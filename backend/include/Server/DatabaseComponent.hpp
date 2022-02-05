@@ -44,6 +44,7 @@ public:
     r_CreateUser createUser(std::string user_name, std::string user_email, std::string password);
     bool verifyUser(ulong puid, std::string code);
     r_LoginUser loginUser(std::string email, std::string password);
+    bool deleteUser(ulong puid, std::string sid, std::string password);
     oatpp::Object<UserDTO> getUser(ulong puid);
     oatpp::Object<UserDTO> getUser(std::string field, std::string value);
     bool entrieExists(std::string field, std::string value);
