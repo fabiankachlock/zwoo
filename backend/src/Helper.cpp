@@ -7,31 +7,6 @@
 #include <chrono>
 #include <random>
 
-/*
-UIDGenerator::UIDGenerator() { isInitialized = false; }
-
-bool UIDGenerator::IsInitialized() { return isInitialized; }
-
-void UIDGenerator::Init(ulong start)
-{
-    isInitialized = true;
-    cid = start;
-}
-
-ulong UIDGenerator::GetID()
-{
-    if (!isInitialized)
-        Init(0);
-    return ++cid;
-}
-*/
-
-std::string generateUniqueHash()
-{
-
-    return "sliejfjsdhfoidsjf";
-}
-
 std::string randomString(const int len)
 {
     static const char alphanum[] =

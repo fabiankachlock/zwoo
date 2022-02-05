@@ -23,6 +23,7 @@ class UserDTO : public oatpp::DTO {
     DTO_INIT(UserDTO, DTO)
 
     DTO_FIELD(UInt32, _id);
+    DTO_FIELD(String, sid);
     DTO_FIELD(String, username);
     DTO_FIELD(String, email);
     DTO_FIELD(String, password);

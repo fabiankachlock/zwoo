@@ -2,11 +2,20 @@
 
 #include "oatpp/core/data/stream/BufferStream.hpp"
 
+#include <chrono>
+
 #include <mongocxx/client.hpp>
 #include <mongocxx/exception/operation_exception.hpp>
 #include <mongocxx/options/insert.hpp>
 #include <mongocxx/collection.hpp>
 #include <mongocxx/options/find.hpp>
+
+std::string Database::generateSID()
+{
+    std::string sid = sha512.hash(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
+    sid.resize(24);
+    return sid;
+}
 
 Database::Database(const mongocxx::uri& uri, const std::string& dbName, const std::string& collectionName): m_pool(std::make_shared<mongocxx::pool>(uri)), m_databaseName(dbName), m_collectionName(collectionName)
 {
@@ -68,6 +77,7 @@ r_CreateUser Database::createUser ( std::string user_name, std::string user_emai
     std::string pw = "sha512:" + salt + ":" + hash;
 
     usr->_id = puid;
+    usr->sid = "0";
     usr->username = user_name;
     usr->email = user_email;
     usr->password = pw;
@@ -80,6 +90,29 @@ r_CreateUser Database::createUser ( std::string user_name, std::string user_emai
     return { puid, code };
 }
 
+r_LoginUser Database::loginUser(std::string email, std::string password)
+{
+    auto usr = getUser("email", email);
+    if (!usr)
+        return { false, 0, "" };
+    std::string salt = usr->password.getValue("").substr(7, 16);
+    std::string hash = salt + password;
+    for ( int i = 0; i < 10000; i++ )
+        hash = sha512.hash(hash);
+    hash.resize(24);
+    std::string pw = "sha512:" + salt + ":" + hash;
+
+    if (pw == usr->password.getValue("") && usr->verified)
+    {
+        std::string sid = generateSID();
+        updateField("email", usr->email, "sid", sid);
+        return { true, usr->_id, sid };
+    }
+    else
+        return { false, 0, "" };
+
+}
+
 bool Database::verifyUser(ulong puid, std::string code)
 {
     auto usr = getUser(puid);
@@ -87,7 +120,7 @@ bool Database::verifyUser(ulong puid, std::string code)
     {
         if (usr->validation_code == code)
         {
-            updateField("username", usr->username, "verified", true);
+            updateField("email", usr->email, "verified", true);
             return true;
         }
         return false;
@@ -112,6 +145,27 @@ void Database::updateField( std::string filter_field, std::string filter_value, 
         {   // pair
             "$set", oatpp::Fields<oatpp::Boolean>({{field, value}})
         } // pair
+    }) // map906394
+    )
+    );
+}
+
+void Database::updateField( std::string filter_field, std::string filter_value, std::string field, std::string value)
+{
+    auto conn = m_pool->acquire();
+    auto collection = (*conn)[m_databaseName][m_collectionName];
+
+    collection.update_one(
+        createMongoDocument( // <-- Filter
+    oatpp::Fields<oatpp::String>({
+        { filter_field, filter_value }
+    })
+        ),
+    createMongoDocument( // <-- Set
+    oatpp::Fields<oatpp::Any>({ // map
+        {   // pair
+            "$set", oatpp::Fields<oatpp::String>({{field, value}})
+        } // pair
     }) // map
     )
     );
@@ -125,6 +179,25 @@ oatpp::Object<UserDTO> Database::getUser(ulong puid)
     auto result =
         collection.find_one(createMongoDocument(// <-- Filter
     oatpp::Fields<oatpp::UInt32>({{"_id", puid}})));
+
+    if (result) {
+        auto view = result->view();
+        auto bson = oatpp::String((const char *) view.data(), view.length());
+        auto user = m_objectMapper.readFromString<oatpp::Object<UserDTO>>(bson);
+        return user;
+    }
+
+    return nullptr;
+}
+
+oatpp::Object<UserDTO> Database::getUser(std::string field, std::string value)
+{
+    auto conn = m_pool->acquire();
+    auto collection = (*conn)[m_databaseName][m_collectionName];
+
+    auto result =
+        collection.find_one(createMongoDocument(// <-- Filter
+    oatpp::Fields<oatpp::String>({{field, value}})));
 
     if (result) {
         auto view = result->view();

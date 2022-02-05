@@ -27,6 +27,22 @@ class CreateUserBodyDTO : public oatpp::DTO {
 
 };
 
+class LoginUserDTO : public oatpp::DTO {
+
+    DTO_INIT(LoginUserDTO, DTO)
+
+    DTO_FIELD_INFO(email) {
+        info->description = "Users email";
+    }
+    DTO_FIELD(String, email);
+
+    DTO_FIELD_INFO(password) {
+        info->description = "Users Password";
+    }
+    DTO_FIELD(String, password);
+
+};
+
 class GetUserResponseDTO : public oatpp::DTO {
 
     DTO_INIT(GetUserResponseDTO, DTO)
@@ -46,6 +62,11 @@ class GetUserResponseDTO : public oatpp::DTO {
     }
     DTO_FIELD(Int32, wins);
 
+    DTO_FIELD_INFO(password) {
+        info->description = "Users Password";
+    }
+    DTO_FIELD(String, password);
+
 };
 
 class DeleteUserBodyDTO : public oatpp::DTO {
@@ -59,7 +80,7 @@ class DeleteUserBodyDTO : public oatpp::DTO {
     DTO_FIELD_INFO(puid) {
         info->description = "Players unique ID";
     }
-    DTO_FIELD(String, puid);
+    DTO_FIELD(UInt32, puid);
 };
 
 #include OATPP_CODEGEN_END(DTO)

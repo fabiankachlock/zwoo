@@ -58,20 +58,27 @@ public:
 
     ENDPOINT("POST", "auth/create", create, BODY_DTO(Object<CreateUserBodyDTO>, data)) {
         m_logger->log->debug("/POST create");
-        if (m_database->entrieExists("username", data->username.getValue("")))
-            return createResponse(Status::CODE_400, "Username Already Exists!");
-        if (m_database->entrieExists("email", data->email.getValue("")))
-            return createResponse(Status::CODE_400, "Email Already Exists!");
         if (!isValidEmail(data->email.getValue("")))
             return createResponse(Status::CODE_400, "Email Invalid!");
         if (!isValidUsername(data->username.getValue("")))
             return createResponse(Status::CODE_400, "Username Invalid!");
         if (!isValidPassword(data->password.getValue("")))
             return createResponse(Status::CODE_400, "Password Invalid!");
+        if (m_database->entrieExists("username", data->username.getValue("")))
+            return createResponse(Status::CODE_400, "Username Already Exists!");
+        if (m_database->entrieExists("email", data->email.getValue("")))
+            return createResponse(Status::CODE_400, "Email Already Exists!");
 
         r_CreateUser ret = m_database->createUser(data->username.getValue(""), data->email.getValue(""), data->password.getValue(""));
 
         return createResponse(Status::CODE_200, "Account Created");
+    }
+    ENDPOINT_INFO(create) {
+        info->description = "create a new User with this Endpoint.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
     ENDPOINT("GET", "auth/verify", verify, QUERY(String, code, "code"), QUERY(UInt64, puid, "id")) {
@@ -80,6 +87,40 @@ public:
             return createResponse(Status::CODE_200, "Account Verified");
         else
             return createResponse(Status::CODE_400, "Account failed to verify");
+    }
+    ENDPOINT_INFO(verify) {
+        info->description = "verifie Users with this Endpoint.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+    ENDPOINT("POST", "auth/login", login, BODY_DTO(Object<LoginUserDTO>, data)) {
+        m_logger->log->debug("/POST login");
+        if (!isValidEmail(data->email.getValue("")))
+            return createResponse(Status::CODE_400, "Email Invalid!");
+        if (!isValidPassword(data->password.getValue("")))
+            return createResponse(Status::CODE_400, "Password Invalid!");
+
+        auto login = m_database->loginUser(data->email, data->password);
+
+        if (login.successful)
+        {
+            std::string out = "{\"puid\": " + std::to_string(login.puid) + ", \"sid\": \"" + login.sid + "\"}";
+            return createResponse(Status::CODE_200, out);
+        }
+         else
+            return createResponse(Status::CODE_401, "failed to login");
+
+        return createResponse(Status::CODE_501, "Not Implemented!");
+    }
+    ENDPOINT_INFO(login) {
+        info->description = "Login Users with this Endpoint.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 };
 
