@@ -82,11 +82,8 @@ public:
             msg.from(mailio::mail_address("zwoo auth", SMTP_HOST_EMAIL));// set the correct sender name and address
             msg.add_recipient(mailio::mail_address("recipient", data->email));// set the correct recipent name and address
             msg.subject("Verify your ZWOO Account");
-
-            // TODO: Set Email Text
-            // TODO: Generate Link
-
-            msg.content("");
+            msg.content(generateVerificationEmailText(ret.puid, ret.code, data->username));
+            //msg.content("Hello World!");
             // connect to server
             mailio::smtps conn(SMTP_HOST_URL, SMTP_HOST_PORT);
             // modify username/password to use real credentials

@@ -36,5 +36,6 @@ std::string generateUniqueHash();
 int randomNumberInRange(int min, int max);
 std::string randomString(const int len);
 std::string randomNDigitNumber(int n);
+std::string generateVerificationEmailText(ulong puid, std::string code, std::string username);
 
 #endif // _HELPER_H_
