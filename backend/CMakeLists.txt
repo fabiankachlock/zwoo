@@ -10,6 +10,7 @@ find_package(oatpp          1.3.0 REQUIRED)
 find_package(oatpp-mongo    1.3.0 REQUIRED)
 find_package(CURL                 REQUIRED)
 find_package(mongocxx             REQUIRED)
+find_package(mailio               REQUIRED)
 
 option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
 
@@ -35,6 +36,7 @@ set(LIBS
     CURL::libcurl
     mongo::mongocxx_static
     mongo::bsoncxx_static
+    mailio::mailio
 )
 
 add_executable(main ${SRC_FILES})

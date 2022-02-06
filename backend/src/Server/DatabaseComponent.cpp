@@ -37,7 +37,6 @@ Database::Database(const mongocxx::uri& uri, const std::string& dbName, const st
     }
     else
         playerIDGenerator = UIDGenerator(0);
-
 }
 
 bsoncxx::document::value Database::createMongoDocument ( const oatpp::Void &polymorph )
@@ -105,7 +104,7 @@ r_LoginUser Database::loginUser(std::string email, std::string password)
     if (pw == usr->password.getValue("") && usr->verified)
     {
         std::string sid = generateSID();
-        updateField("email", usr->email, "sid", sid);
+        updateStringField("email", usr->email, "sid", sid);
         return { true, usr->_id, sid };
     }
     else
@@ -125,7 +124,7 @@ bool Database::deleteUser(ulong puid, std::string sid, std::string password)
     hash.resize(24);
     std::string pw = "sha512:" + salt + ":" + hash;
 
-    if (pw == usr->password.getValue("") && usr->sid == sid)
+    if (pw == usr->password.getValue("") && usr->sid == sid && usr->sid != "")
     {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
@@ -145,7 +144,7 @@ bool Database::verifyUser(ulong puid, std::string code)
     {
         if (usr->validation_code == code)
         {
-            updateField("email", usr->email, "verified", true);
+            updateBooleanField("email", usr->email, "verified", true);
             return true;
         }
         return false;
@@ -154,7 +153,7 @@ bool Database::verifyUser(ulong puid, std::string code)
         return false;
 }
 
-void Database::updateField( std::string filter_field, std::string filter_value, std::string field, bool value)
+void Database::updateBooleanField( std::string filter_field, std::string filter_value, std::string field, bool value)
 {
     auto conn = m_pool->acquire();
     auto collection = (*conn)[m_databaseName][m_collectionName];
@@ -175,7 +174,7 @@ void Database::updateField( std::string filter_field, std::string filter_value, 
     );
 }
 
-void Database::updateField( std::string filter_field, std::string filter_value, std::string field, std::string value)
+void Database::updateStringField( std::string filter_field, std::string filter_value, std::string field, std::string value)
 {
     auto conn = m_pool->acquire();
     auto collection = (*conn)[m_databaseName][m_collectionName];

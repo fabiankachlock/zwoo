@@ -7,6 +7,10 @@
 #include "oatpp/web/protocol/http/Http.hpp"
 #include "oatpp/web/server/api/ApiController.hpp"
 
+#include "mailio/message.hpp"
+#include "mailio/mime.hpp"
+#include "mailio/smtp.hpp"
+
 #include "Server/logger/logger.h"
 #include "Server/DatabaseComponent.hpp"
 #include "Server/controller/Authentication/ReCaptcha.h"
@@ -26,7 +30,7 @@ public:
     {}
 public:
     static std::shared_ptr<AuthenticationController> createShared(
-            OATPP_COMPONENT(std::shared_ptr<ObjectMapper>, objectMapper) // Inject objectMapper component here as default parameter
+        OATPP_COMPONENT(std::shared_ptr<ObjectMapper>, objectMapper) // Inject objectMapper component here as default parameter
     ) {
         return std::make_shared<AuthenticationController>(objectMapper);
     }
@@ -71,6 +75,32 @@ public:
 
         r_CreateUser ret = m_database->createUser(data->username.getValue(""), data->email.getValue(""), data->password.getValue(""));
 
+        try
+        {
+            // create mail message
+            mailio::message msg;
+            msg.from(mailio::mail_address("zwoo auth", SMTP_HOST_EMAIL));// set the correct sender name and address
+            msg.add_recipient(mailio::mail_address("recipient", data->email));// set the correct recipent name and address
+            msg.subject("Verify your ZWOO Account");
+
+            // TODO: Set Email Text
+            // TODO: Generate Link
+
+            msg.content("");
+            // connect to server
+            mailio::smtps conn(SMTP_HOST_URL, SMTP_HOST_PORT);
+            // modify username/password to use real credentials
+            conn.authenticate(SMTP_USERNAME, SMTP_PASSWORD, mailio::smtps::auth_method_t::START_TLS);
+            conn.submit(msg);
+        }
+        catch (mailio::smtp_error& exc)
+        {
+            m_logger->log->error("Email failed to send: {0}", exc.what());
+        }
+        catch (mailio::dialog_error& exc)
+        {
+            m_logger->log->error("Email failed to send: {0}", exc.what());
+        }
         return createResponse(Status::CODE_200, "Account Created");
     }
     ENDPOINT_INFO(create) {
@@ -110,13 +140,71 @@ public:
             std::string out = "{\"puid\": " + std::to_string(login.puid) + ", \"sid\": \"" + login.sid + "\"}";
             return createResponse(Status::CODE_200, out);
         }
-         else
+        else
             return createResponse(Status::CODE_401, "failed to login");
 
         return createResponse(Status::CODE_501, "Not Implemented!");
     }
     ENDPOINT_INFO(login) {
         info->description = "Login Users with this Endpoint.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+    ENDPOINT("GET", "auth/user", user, BODY_DTO(Object<GetUserDTO>, data)) {
+        m_logger->log->debug("/GET User");
+
+        auto usr = m_database->getUser(data->puid);
+
+        if (usr)
+        {
+            if (usr->sid == data->sid && usr->sid != "")
+            {
+                auto rusr = GetUserResponseDTO::createShared();
+                rusr->username = usr->username;
+                rusr->email = usr->email;
+                rusr->wins = usr->wins;
+                return createDtoResponse(Status::CODE_200, rusr);
+            }
+            else
+                return createResponse(Status::CODE_401, "session id not matching!");
+        }
+        else
+            return createResponse(Status::CODE_404, "User Not Found!");
+        return createResponse(Status::CODE_501, "Not Implemented!");
+    }
+    ENDPOINT_INFO(user) {
+        info->description = "Get User data with this Endpoint.";
+
+        info->addResponse<Object<GetUserResponseDTO>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
+    ENDPOINT("GET", "auth/logout", logout, BODY_DTO(Object<LogoutUserDTO>, data)) {
+        m_logger->log->debug("/GET Logout");
+
+        auto usr = m_database->getUser(data->puid);
+
+        if (usr)
+        {
+            if (usr->sid == data->sid && usr->sid != "")
+            {
+                m_database->updateStringField("email", usr->email, "sid", "");
+                return createResponse(Status::CODE_200, "user logged out");
+            }
+            else
+                return createResponse(Status::CODE_401, "session id not matching!");
+        }
+        else
+            return createResponse(Status::CODE_404, "User Not Found!");
+
+        return createResponse(Status::CODE_501, "Not Implemented!");
+    }
+    ENDPOINT_INFO(logout) {
+        info->description = "Get User data with this Endpoint.";
 
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
