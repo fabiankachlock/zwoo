@@ -32,7 +32,7 @@ const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
 const deckStore = useGameCardDeck();
 const stateStore = useGameState();
 
-const cardsActive = computed(() => stateStore.activePlayer);
+const cardsActive = computed(() => stateStore.isActivePlayer);
 const cards = computed(() => deckStore.cards);
 watch(cards, () => {
   resizeCards();

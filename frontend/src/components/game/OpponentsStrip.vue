@@ -1,18 +1,24 @@
 <template>
   <div class="w-full h-8 overflow-hidden">
     <div class="overflow-x-scroll flex flex-row flex-nowrap items-center h-full">
-      <Opponent name="teak" :card-amount="7" :is-active="true" />
-      <Opponent name="teaklsdlhajdhaksdst" :card-amount="7" :is-active="true" />
-      <Opponent name="iauzsdiuasgdlauhktest2" :card-amount="33" :is-active="false" />
-      <Opponent name="iauzsdiuasasdsa" :card-amount="3" :is-active="false" />
-      <Opponent name="kduat32k tgkadwakd" :card-amount="13" :is-active="false" />
-      <Opponent name="kduat32k " :card-amount="13" :is-active="false" />
-      <Opponent name="sadp89z3hiaösudas" :card-amount="13" :is-active="false" />
-      <Opponent name="uazdlaiudlsa8zahö" :card-amount="13" :is-active="false" />
+      <Opponent
+        v-for="player in players"
+        :key="player.name"
+        :name="player.name"
+        :card-amount="player.cards"
+        :is-active="player.name === activePlayer"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useGameState } from '@/core/adapter/play/gameState';
+import { computed } from 'vue';
 import Opponent from './Opponent.vue';
+
+const game = useGameState();
+
+const players = computed(() => game.players);
+const activePlayer = computed(() => game.activePlayer);
 </script>
