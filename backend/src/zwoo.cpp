@@ -2,10 +2,14 @@
 
 std::string get_env(const char* env_var)
 {
-    std::string s = std::getenv(env_var);
-    s.erase(std::remove(s.begin(), s.end(), '"'), s.end());
-    s.erase(std::remove(s.begin(), s.end(), '\''), s.end());
-    return s;
+    if (std::getenv(env_var) != nullptr)
+    {
+        std::string s = std::getenv(env_var);
+        s.erase(std::remove(s.begin(), s.end(), '"'), s.end());
+        s.erase(std::remove(s.begin(), s.end(), '\''), s.end());
+        return s;
+    }
+    return "";
 }
 
 bool str2b(std::string str)

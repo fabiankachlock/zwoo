@@ -7,8 +7,10 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
 find_package(spdlog               REQUIRED)
 find_package(oatpp          1.3.0 REQUIRED)
-# find_package(oatpp-mongo    1.3.0 REQUIRED)
-# find_package(mongocxx             REQUIRED)
+find_package(oatpp-mongo    1.3.0 REQUIRED)
+find_package(CURL                 REQUIRED)
+find_package(mongocxx             REQUIRED)
+find_package(mailio               REQUIRED)
 
 option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
 
@@ -16,14 +18,25 @@ set(SRC_FILES
     "src/main.cpp"
     "src/zwoo.cpp"
     "src/HttpServer.cpp"
+    "src/SHA512.cpp"
+    "src/Helper.cpp"
 
     "src/Server/ErrorHandler.cpp"
+    "src/Server/DatabaseComponent.cpp"
     "src/Server/logger/logger.cpp"
+
+    "src/Server/controller/Authentication/ReCaptcha.cpp"
+    "src/Server/controller/Authentication/AuthenticationValidators.cpp"
 )
 
 set(LIBS
     spdlog::spdlog
     oatpp::oatpp
+    oatpp::oatpp-mongo
+    CURL::libcurl
+    mongo::mongocxx_static
+    mongo::bsoncxx_static
+    mailio::mailio
 )
 
 add_executable(main ${SRC_FILES})

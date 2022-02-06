@@ -9,8 +9,10 @@ std::string get_env(const char* env_var);
 bool str2b(std::string str);
 int str2int(std::string str);
 
+#define ZWOO_DOMAIN get_env("ZWOO_DOMAIN")
+
 #define SMTP_HOST_URL get_env("SMTP_HOST_URL")
-#define SMTP_HOST_PORT get_env("SMTP_HOST_PORT")
+#define SMTP_HOST_PORT str2int(get_env("SMTP_HOST_PORT"))
 #define SMTP_HOST_EMAIL get_env("SMTP_HOST_EMAIL")
 #define SMTP_USERNAME get_env("SMTP_USERNAME")
 #define SMTP_PASSWORD get_env("SMTP_PASSWORD")
