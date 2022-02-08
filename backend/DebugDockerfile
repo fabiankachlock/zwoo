@@ -15,6 +15,7 @@ FROM ubuntu:latest AS runner
 WORKDIR /backend
 COPY --from=build ./backend/build/main .
 COPY --from=build ./backend/build/res/ ./res
+RUN apt update && apt install curl
 ENTRYPOINT ["./main"]
 
 LABEL Name=zwoo_backend Version=0.0.1

@@ -47,7 +47,7 @@ bsoncxx::document::value Database::createMongoDocument ( const oatpp::Void &poly
     return bsoncxx::document::value ( view );
 }
 
-bool Database::entrieExists ( std::string field, std::string value )
+bool Database::entryExists ( std::string field, std::string value )
 {
     auto conn = m_pool->acquire();
     auto collection = ( *conn ) [m_databaseName][m_collectionName];
@@ -76,7 +76,7 @@ r_CreateUser Database::createUser ( std::string user_name, std::string user_emai
     std::string pw = "sha512:" + salt + ":" + hash;
 
     usr->_id = puid;
-    usr->sid = "0";
+    usr->sid = "";
     usr->username = user_name;
     usr->email = user_email;
     usr->password = pw;

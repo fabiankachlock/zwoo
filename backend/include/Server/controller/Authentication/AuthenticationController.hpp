@@ -38,7 +38,7 @@ public:
     ADD_CORS(helloWorld, ZWOO_CORS)
     ENDPOINT("GET", "/hello-world", helloWorld)
     {
-        auto response = createResponse(Status::CODE_200, R"({"message": "Hello Wolrd!"})");
+        auto response = createResponse(Status::CODE_200, R"({"message": "Hello World!"})");
         m_logger->log->debug("/GET hello-world");
         return response;
     }
@@ -71,9 +71,9 @@ public:
             return createResponse(Status::CODE_400, "Username Invalid!");
         if (!isValidPassword(data->password.getValue("")))
             return createResponse(Status::CODE_400, "Password Invalid!");
-        if (m_database->entrieExists("username", data->username.getValue("")))
+        if (m_database->entryExists("username", data->username.getValue("")))
             return createResponse(Status::CODE_400, "Username Already Exists!");
-        if (m_database->entrieExists("email", data->email.getValue("")))
+        if (m_database->entryExists("email", data->email.getValue("")))
             return createResponse(Status::CODE_400, "Email Already Exists!");
 
         r_CreateUser ret = m_database->createUser(data->username.getValue(""), data->email.getValue(""), data->password.getValue(""));
