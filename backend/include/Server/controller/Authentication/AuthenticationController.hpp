@@ -215,8 +215,8 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
-    ADD_CORS(delete, ZWOO_CORS)
-    ENDPOINT("GET", "auth/delete", delte, BODY_DTO(Object<DeleteUserDTO>, data)) {
+    ADD_CORS(deleteUser, ZWOO_CORS)
+    ENDPOINT("GET", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data)) {
         m_logger->log->debug("/GET delete");
         if (m_database->deleteUser(data->puid, data->sid, data->password))
             return createResponse(Status::CODE_200, "User Deleted!");
@@ -224,7 +224,7 @@ public:
             return createResponse(Status::CODE_200, "Could not Deleted!");
         return createResponse(Status::CODE_501, "Not Implemented!");
     }
-    ENDPOINT_INFO(delte) {
+    ENDPOINT_INFO(deleteUser) {
         info->description = "Login Users with this Endpoint.";
 
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
