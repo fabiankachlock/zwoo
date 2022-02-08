@@ -40,7 +40,7 @@ export class ReCaptchaService {
 
   private verify = async (token: string): Promise<ReCaptchaResponse> => {
     if (process.env.VUE_APP_USE_BACKEND === 'true') {
-      return fetch('/auth/recaptcha', {
+      return fetch('http://localhost:8000/auth/recaptcha', {
         method: 'POST',
         body: token
       })
