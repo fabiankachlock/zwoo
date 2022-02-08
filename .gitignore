@@ -2,6 +2,7 @@
 *.log
 .vscode/
 .idea/
+.vs/
 
 login_data.h
 backend/test.db
