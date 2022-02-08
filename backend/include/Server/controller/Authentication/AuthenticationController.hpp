@@ -38,7 +38,7 @@ public:
     ADD_CORS(helloWorld, ZWOO_CORS)
     ENDPOINT("GET", "/hello-world", helloWorld)
     {
-        auto response = createResponse(Status::CODE_200, R"({"message": "Hello Wolrd!"})");
+        auto response = createResponse(Status::CODE_200, R"({"message": "Hello World!"})");
         m_logger->log->debug("/GET hello-world");
         return response;
     }
