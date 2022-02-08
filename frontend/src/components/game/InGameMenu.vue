@@ -54,7 +54,8 @@ const menuOpen = ref(false);
 
 const handleLeave = () => {
   // TODO: Just Temp
-  stateStore.setIsActive(!stateStore.activePlayer);
+  stateStore.setIsActive(!stateStore.isActivePlayer);
+  stateStore.update();
   deckState.addCard({
     id: deckState.cards.length.toString()
   });
