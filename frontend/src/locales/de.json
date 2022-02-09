@@ -49,7 +49,8 @@
     "username": "Benutzername",
     "password": "Passwort",
     "create": "Erstellen",
-    "passwordRepeat": "Passwort Wiederholen"
+    "passwordRepeat": "Passwort Wiederholen",
+    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
   },
   "createGame": {
     "title": "Spiel Erstellen",

@@ -49,7 +49,8 @@
     "username": "Username",
     "password": "Password",
     "create": "Create",
-    "passwordRepeat": "Repeat Password"
+    "passwordRepeat": "Repeat Password",
+    "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account."
   },
   "createGame": {
     "title": "Create Game",
