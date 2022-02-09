@@ -14,7 +14,7 @@ LABEL stage=build Name=zwoo_backend_build
 FROM ubuntu:latest AS runner
 WORKDIR /backend
 COPY --from=build ./backend/build/main .
-RUN apt update && apt install curl
+RUN apt update && apt install curl -y
 ENTRYPOINT ["./main"]
 
 LABEL Name=zwoo_backend Version=0.0.1
