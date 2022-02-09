@@ -1,36 +1,73 @@
+import { Backend, Endpoint } from './apiConfig';
+
 export type AuthenticationStatus = {
   username: string;
   isLoggedIn: boolean;
-  error?: string;
 };
 
 export class AuthenticationService {
   static performLogin = async (username: string, password: string): Promise<AuthenticationStatus> => {
-    // make api call
-    console.log('login:', { username, password });
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      console.log('login:', { username, password });
+      return {
+        username: 'test-user',
+        isLoggedIn: true
+      };
+    }
 
-    return {
-      username: 'test-user',
-      isLoggedIn: true
-    };
+    return fetch(Backend.getUrl(Endpoint.AccountLogin), {
+      method: 'POST',
+      body: JSON.stringify({
+        email: username,
+        password: password
+      })
+    })
+      .then(async res => {
+        if (res.status !== 200) {
+          throw await res.text();
+        }
+        return res.text();
+      })
+      .then(() => ({
+        username: username,
+        isLoggedIn: true
+      }));
   };
 
   static performLogout = async (): Promise<AuthenticationStatus> => {
-    // make api call
-
+    console.log('logout');
     return {
-      username: '',
-      isLoggedIn: false
+      username: 'test-user',
+      isLoggedIn: true
     };
   };
 
   static performCreateAccount = async (username: string, email: string, password: string): Promise<AuthenticationStatus> => {
-    // make api call
-    console.log('create Account:', { username, email, password });
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      console.log('create Account:', { username, email, password });
+      return {
+        username: 'test-user',
+        isLoggedIn: true
+      };
+    }
 
-    return {
-      username: 'test-user',
-      isLoggedIn: true
-    };
+    return fetch(Backend.getUrl(Endpoint.CreateAccount), {
+      method: 'POST',
+      body: JSON.stringify({
+        username: username,
+        email: email,
+        password: password
+      })
+    })
+      .then(async res => {
+        if (res.status !== 200) {
+          throw await res.text();
+        }
+        return res.text();
+      })
+      .then(() => ({
+        username: '',
+        isLoggedIn: false
+      }));
   };
 }
