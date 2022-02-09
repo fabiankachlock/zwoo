@@ -19,8 +19,8 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home',
         component: Home,
         meta: {
-          requiresAuth: true,
-          redirect: '/landing'
+          // requiresAuth: true,
+          // redirect: '/landing'
         }
       },
       {

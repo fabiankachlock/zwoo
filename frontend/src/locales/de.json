@@ -79,7 +79,8 @@
   "home": {
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
-    "stats": "Statistiken zeigen"
+    "stats": "Statistiken zeigen",
+    "greeting": "Hallo, {0}!"
   },
   "list": {
     "title": "Verfügbare Spiele",

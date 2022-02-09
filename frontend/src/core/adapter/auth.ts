@@ -24,16 +24,18 @@ export const useAuth = defineStore('auth', {
 
       const status = await AuthenticationService.performLogin(email, password);
 
-      this.$patch({
-        username: status.username,
-        isLoggedIn: status.isLoggedIn
-      });
+      if (status.isLoggedIn) {
+        this.$patch({
+          username: status.username,
+          isLoggedIn: status.isLoggedIn
+        });
+      }
     },
     async logout() {
       const status = await AuthenticationService.performLogout();
 
       this.$patch({
-        username: status.username,
+        username: '',
         isLoggedIn: status.isLoggedIn
       });
     },
@@ -55,10 +57,12 @@ export const useAuth = defineStore('auth', {
 
       const status = await AuthenticationService.performCreateAccount(username, email, password);
 
-      this.$patch({
-        username: status.username,
-        isLoggedIn: status.isLoggedIn
-      });
+      if (status.isLoggedIn) {
+        this.$patch({
+          username: status.username,
+          isLoggedIn: status.isLoggedIn
+        });
+      }
     },
     async askStatus() {
       // make initial api call (to read from session)

@@ -79,7 +79,8 @@
   "home": {
     "create": "Create Game",
     "join": "Join Game",
-    "stats": "Show Statistic"
+    "stats": "Show Statistic",
+    "greeting": "Hello, {0}!"
   },
   "list": {
     "title": "Available Games",
