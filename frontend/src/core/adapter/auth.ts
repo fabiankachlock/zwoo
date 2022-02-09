@@ -18,11 +18,11 @@ export const useAuth = defineStore('auth', {
     };
   },
   actions: {
-    async login(username: string, password: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async login(email: string, password: string, recaptchaResponse: ReCaptchaResponse | undefined) {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performLogin(username, password);
+      const status = await AuthenticationService.performLogin(email, password);
 
       this.$patch({
         username: status.username,

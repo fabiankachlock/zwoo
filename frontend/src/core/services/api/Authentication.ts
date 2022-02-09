@@ -6,9 +6,9 @@ export type AuthenticationStatus = {
 };
 
 export class AuthenticationService {
-  static performLogin = async (username: string, password: string): Promise<AuthenticationStatus> => {
+  static performLogin = async (email: string, password: string): Promise<AuthenticationStatus> => {
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
-      console.log('login:', { username, password });
+      console.log('login:', { email, password });
       return {
         username: 'test-user',
         isLoggedIn: true
@@ -18,7 +18,7 @@ export class AuthenticationService {
     return fetch(Backend.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
       body: JSON.stringify({
-        email: username,
+        email: email,
         password: password
       })
     })
@@ -29,7 +29,7 @@ export class AuthenticationService {
         return res.text();
       })
       .then(() => ({
-        username: username,
+        username: email,
         isLoggedIn: true
       }));
   };
