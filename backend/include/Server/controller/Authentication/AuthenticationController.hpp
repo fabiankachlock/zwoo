@@ -132,8 +132,6 @@ public:
         m_logger->log->debug("/POST login");
         if (!isValidEmail(data->email.getValue("")))
             return createResponse(Status::CODE_400, "Email Invalid!");
-        if (!isValidPassword(data->password.getValue("")))
-            return createResponse(Status::CODE_400, "Password Invalid!");
 
         auto login = m_database->loginUser(data->email, data->password);
 
@@ -156,7 +154,7 @@ public:
     }
 
     ADD_CORS(user, ZWOO_CORS)
-    ENDPOINT("GET", "auth/user", user, BODY_DTO(Object<GetUserDTO>, data)) {
+    ENDPOINT("POST", "auth/user", user, BODY_DTO(Object<GetUserDTO>, data)) {
         m_logger->log->debug("/GET User");
 
         auto usr = m_database->getUser(data->puid);
