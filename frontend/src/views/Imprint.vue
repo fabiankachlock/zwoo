@@ -4,11 +4,11 @@
 
     <p>Angaben gemäß § 5 TMG</p>
 
-    <p>Timo Stockhausen<br />Birkenstraße ????????<br />irgendwo Dresden</p>
+    <p>Timo Stockhausen<br />irgendwo Dresden</p>
 
-    <p>Vertreten durch:<br />Timo Stockhausen</p>
+    <p><span class="text-base">Vertreten durch:</span><br />Timo Stockhausen</p>
 
-    <p>Kontakt: E-Mail:<br />stockhausen.timo@igd20.de</p>
+    <p><span class="text-base">Kontakt: E-Mail:</span><br />stockhausen.timo@igd20.de</p>
 
     <h2 class="tc-main">Haftungsausschluss:</h2>
 
