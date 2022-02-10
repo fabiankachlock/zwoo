@@ -5,8 +5,8 @@
     <div class="divider bc-invert-main"></div>
   </div>
   <NavBarItem :title="t('nav.idea')" link="https://github.com/fabiankachlock/zwoo/discussions/categories/ideas" is-external />
-  <NavBarItem :title="t('nav.github')" link="https://github.com/fabiankachlock/zwoo" is-external />
   <div class="divider bc-invert-main"></div>
+  <NavBarItem :title="t('nav.imprint')" link="/imprint" />
   <NavBarItem :title="t('nav.settings')" link="/settings" />
   <div v-if="isLoggedIn" class="md:flex flex-row">
     <div class="divider bc-invert-main"></div>
