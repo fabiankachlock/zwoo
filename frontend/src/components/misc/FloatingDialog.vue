@@ -3,7 +3,7 @@
     <div class="relative grid place-items-center w-full h-full">
       <div class="absolute inset-0 backdrop-blur"></div>
       <div class="absolute inset-0 backdrop-color z-10"></div>
-      <div class="w-full sm:max-w-xs mx-auto z-20">
+      <div class="w-full sm:max-w-lg mx-auto z-20">
         <div class="bg-lightest shadow-md sm:rounded-xl p-5 m-3 relative" @click="handleDialogClick">
           <slot></slot>
         </div>
