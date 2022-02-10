@@ -47,7 +47,7 @@ public:
     bool deleteUser(ulong puid, std::string sid, std::string password);
     oatpp::Object<UserDTO> getUser(ulong puid);
     oatpp::Object<UserDTO> getUser(std::string field, std::string value);
-    bool entrieExists(std::string field, std::string value);
+    bool entryExists(std::string field, std::string value);
     void updateStringField( std::string filter_field, std::string filter_value, std::string field, std::string value);
     void updateBooleanField( std::string filter_field, std::string filter_value, std::string field, bool value);
 };

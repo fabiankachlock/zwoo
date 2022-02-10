@@ -35,9 +35,10 @@ public:
         return std::make_shared<AuthenticationController>(objectMapper);
     }
 
+    ADD_CORS(helloWorld, ZWOO_CORS)
     ENDPOINT("GET", "/hello-world", helloWorld)
     {
-        auto response = createResponse(Status::CODE_200, R"({"message": "Hello Wolrd!"})");
+        auto response = createResponse(Status::CODE_200, R"({"message": "Hello World!"})");
         m_logger->log->debug("/GET hello-world");
         return response;
     }
@@ -49,6 +50,7 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
+    ADD_CORS(reCaptcha, ZWOO_CORS)
     ENDPOINT("POST", "auth/recaptcha", reCaptcha, BODY_STRING(String, token)) {
         return createResponse(Status::CODE_200, verifyCaptcha(token));
     }
@@ -60,6 +62,7 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
+    ADD_CORS(create, ZWOO_CORS)
     ENDPOINT("POST", "auth/create", create, BODY_DTO(Object<CreateUserBodyDTO>, data)) {
         m_logger->log->debug("/POST create");
         if (!isValidEmail(data->email.getValue("")))
@@ -68,9 +71,9 @@ public:
             return createResponse(Status::CODE_400, "Username Invalid!");
         if (!isValidPassword(data->password.getValue("")))
             return createResponse(Status::CODE_400, "Password Invalid!");
-        if (m_database->entrieExists("username", data->username.getValue("")))
+        if (m_database->entryExists("username", data->username.getValue("")))
             return createResponse(Status::CODE_400, "Username Already Exists!");
-        if (m_database->entrieExists("email", data->email.getValue("")))
+        if (m_database->entryExists("email", data->email.getValue("")))
             return createResponse(Status::CODE_400, "Email Already Exists!");
 
         r_CreateUser ret = m_database->createUser(data->username.getValue(""), data->email.getValue(""), data->password.getValue(""));
@@ -108,6 +111,7 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
+    ADD_CORS(verify, ZWOO_CORS)
     ENDPOINT("GET", "auth/verify", verify, QUERY(String, code, "code"), QUERY(UInt64, puid, "id")) {
         m_logger->log->debug("/GET verify");
         if (m_database->verifyUser(puid, code))
@@ -123,6 +127,7 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
+    ADD_CORS(login, ZWOO_CORS)
     ENDPOINT("POST", "auth/login", login, BODY_DTO(Object<LoginUserDTO>, data)) {
         m_logger->log->debug("/POST login");
         if (!isValidEmail(data->email.getValue("")))
@@ -150,6 +155,7 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
+    ADD_CORS(user, ZWOO_CORS)
     ENDPOINT("GET", "auth/user", user, BODY_DTO(Object<GetUserDTO>, data)) {
         m_logger->log->debug("/GET User");
 
@@ -180,6 +186,7 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
+    ADD_CORS(logout, ZWOO_CORS)
     ENDPOINT("GET", "auth/logout", logout, BODY_DTO(Object<LogoutUserDTO>, data)) {
         m_logger->log->debug("/GET Logout");
 
@@ -208,7 +215,8 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
-    ENDPOINT("GET", "auth/delete", delte, BODY_DTO(Object<DeleteUserDTO>, data)) {
+    ADD_CORS(deleteUser, ZWOO_CORS)
+    ENDPOINT("GET", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data)) {
         m_logger->log->debug("/GET delete");
         if (m_database->deleteUser(data->puid, data->sid, data->password))
             return createResponse(Status::CODE_200, "User Deleted!");
@@ -216,7 +224,7 @@ public:
             return createResponse(Status::CODE_200, "Could not Deleted!");
         return createResponse(Status::CODE_501, "Not Implemented!");
     }
-    ENDPOINT_INFO(delte) {
+    ENDPOINT_INFO(deleteUser) {
         info->description = "Login Users with this Endpoint.";
 
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
