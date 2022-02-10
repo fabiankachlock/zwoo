@@ -10,6 +10,7 @@ bool str2b(std::string str);
 int str2int(std::string str);
 
 #define ZWOO_DOMAIN get_env("ZWOO_DOMAIN")
+#define ZWOO_CORS get_env("ZWOO_CORS")
 
 #define SMTP_HOST_URL get_env("SMTP_HOST_URL")
 #define SMTP_HOST_PORT str2int(get_env("SMTP_HOST_PORT"))
