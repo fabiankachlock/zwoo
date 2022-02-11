@@ -21,7 +21,8 @@
     "quickMenu": "Schnellmenü",
     "language": "Sprache",
     "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
-    "sortCards": "Karten im Deck sortieren"
+    "sortCards": "Karten im Deck sortieren",
+    "cookies": "Cookies"
   },
   "lng": {
     "de": "Deutsch",
@@ -147,6 +148,11 @@
     "active": "Aktiviert",
     "inactive": "Deaktiviert",
     "acceptAll": "Alle Akzeptieren",
-    "acceptSelection": "Auswahl Akzeptieren"
+    "acceptSelection": "Auswahl Akzeptieren",
+    "manage": "Cookies Verwalten",
+    "disallowed": {
+      "title": "Fehlende Cookies",
+      "info": "Die Login- und Accounterstellungfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
+    }
   }
 }

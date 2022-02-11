@@ -21,7 +21,8 @@
     "fullscreen": "Fullscreen",
     "quickMenu": "Quick Menu",
     "showCardDetail": "Show Card Detail before playing",
-    "sortCards": "Sort cards in deck"
+    "sortCards": "Sort cards in deck",
+    "cookies": "Cookies"
   },
   "lng": {
     "de": "German",
@@ -147,6 +148,11 @@
     "active": "Active",
     "inactive": "Inactive",
     "acceptAll": "Accept All",
-    "acceptSelection": "Accept Selection"
+    "acceptSelection": "Accept Selection",
+    "manage": "Manage Cookies",
+    "disallowed": {
+      "title": "Missing Cookies",
+      "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
+    }
   }
 }
