@@ -39,11 +39,13 @@
       <div class="grid grid-cols-2 gap-2 mt-4">
         <div
           class="flex justify-center items-center bg-light border-2 border-transparent px-4 py-1 rounded transition hover:bg-main cursor-pointer select-none"
+          @click="acceptSelection"
         >
           <p class="tc-main-secondary text-center">{{ t('cookies.acceptSelection') }}</p>
         </div>
         <div
           class="flex justify-center items-center bg-main border-2 border-primary px-4 py-1 rounded transition hover:bg-dark cursor-pointer select-none"
+          @click="acceptAll"
         >
           <p class="tc-primary text-center">{{ t('cookies.acceptAll') }}</p>
         </div>
@@ -57,10 +59,22 @@ import FloatingDialog from '../misc/FloatingDialog.vue';
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useCookies } from '@/core/adapter/cookies';
 
+const cookies = useCookies();
 const { t } = useI18n();
 
 const recaptchaActivated = ref(true);
+
+const acceptSelection = () => {
+  cookies.setReCaptchaCookie(true);
+  cookies.didShowDialog();
+};
+
+const acceptAll = () => {
+  cookies.acceptAll();
+  cookies.didShowDialog();
+};
 </script>
 
 <style>
