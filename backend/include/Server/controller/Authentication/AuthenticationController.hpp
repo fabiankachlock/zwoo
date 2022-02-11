@@ -1,6 +1,10 @@
 #ifndef _AUTHENTICATION_CONTROLLER_HPP_
 #define _AUTHENTICATION_CONTROLLER_HPP_
 
+#include <sstream>
+#include <iostream>
+
+#include <boost/beast/core/detail/base64.hpp>
 #include "oatpp/core/macro/codegen.hpp"
 #include "oatpp/core/macro/component.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
@@ -11,6 +15,8 @@
 #include "mailio/mime.hpp"
 #include "mailio/smtp.hpp"
 
+#include "fmt/format.h"
+
 #include "Server/logger/logger.h"
 #include "Server/DatabaseComponent.hpp"
 #include "Server/controller/Authentication/ReCaptcha.h"
@@ -18,6 +24,22 @@
 #include "Server/controller/Authentication/AuthenticationValidators.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController)// <- Begin Codegen
+
+struct r_cookieData {
+    ulong puid;
+    std::string sid;
+};
+
+r_cookieData getCookieAuthData(std::string cookie)
+{
+    auto pos = cookie.find(",");
+    std::string puid = cookie.substr(0, pos);
+    std::string sid = cookie.substr(pos + 1, 24);
+    ulong i;
+    std::stringstream ss(puid);
+    ss >> i;
+    return {i, sid};
+}
 
 class AuthenticationController : public oatpp::web::server::api::ApiController {
 private:
@@ -132,15 +154,18 @@ public:
         m_logger->log->debug("/POST login");
         if (!isValidEmail(data->email.getValue("")))
             return createResponse(Status::CODE_400, "Email Invalid!");
-        if (!isValidPassword(data->password.getValue("")))
-            return createResponse(Status::CODE_400, "Password Invalid!");
 
         auto login = m_database->loginUser(data->email, data->password);
 
         if (login.successful)
         {
-            std::string out = "{\"puid\": " + std::to_string(login.puid) + ", \"sid\": \"" + login.sid + "\"}";
-            return createResponse(Status::CODE_200, out);
+            std::string out = encrypt(std::to_string(login.puid) + "," + login.sid);
+            auto res = createResponse(Status::CODE_200, "logge in");
+            std::vector<uint8_t> vec(out.begin(), out.end());
+            out = encodeBase64(vec);
+            auto c = fmt::format("auth={0};Max-Age=604800;Domain={1};Path=/;HttpOnly{2}", out, ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
+            res->putHeader("Set-Cookie", c);
+            return res;
         }
         else
             return createResponse(Status::CODE_401, "failed to login");
@@ -156,14 +181,16 @@ public:
     }
 
     ADD_CORS(user, ZWOO_CORS)
-    ENDPOINT("GET", "auth/user", user, BODY_DTO(Object<GetUserDTO>, data)) {
+    ENDPOINT("POST", "auth/user", user, HEADER(String, cookie, "Cookie")) {
         m_logger->log->debug("/GET User");
 
-        auto usr = m_database->getUser(data->puid);
+        std::string cdata = cookie.getValue("").substr(5, cookie.getValue("").size() - 5);
+        auto usrc = getCookieAuthData(decrypt(decodeBase64(cdata)));
+        auto usr = m_database->getUser(usrc.puid);
 
         if (usr)
         {
-            if (usr->sid == data->sid && usr->sid != "")
+            if (usr->sid.getValue("") == usrc.sid && usr->sid != "")
             {
                 auto rusr = GetUserResponseDTO::createShared();
                 rusr->username = usr->username;
@@ -187,14 +214,16 @@ public:
     }
 
     ADD_CORS(logout, ZWOO_CORS)
-    ENDPOINT("GET", "auth/logout", logout, BODY_DTO(Object<LogoutUserDTO>, data)) {
+    ENDPOINT("GET", "auth/logout", logout, HEADER(String, cookie, "Cookie")) {
         m_logger->log->debug("/GET Logout");
 
-        auto usr = m_database->getUser(data->puid);
+        std::string cdata = cookie.getValue("").substr(5, cookie.getValue("").size() - 5);
+        auto usrc = getCookieAuthData(decrypt(decodeBase64(cdata)));
+        auto usr = m_database->getUser(usrc.puid);
 
         if (usr)
         {
-            if (usr->sid == data->sid && usr->sid != "")
+            if (usr->sid.getValue("") == usrc.sid&& usr->sid != "")
             {
                 m_database->updateStringField("email", usr->email, "sid", "");
                 return createResponse(Status::CODE_200, "user logged out");
@@ -216,9 +245,13 @@ public:
     }
 
     ADD_CORS(deleteUser, ZWOO_CORS)
-    ENDPOINT("GET", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data)) {
+    ENDPOINT("GET", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data), HEADER(String, cookie, "Cookie")) {
         m_logger->log->debug("/GET delete");
-        if (m_database->deleteUser(data->puid, data->sid, data->password))
+
+        std::string cdata = cookie.getValue("").substr(5, cookie.getValue("").size() - 5);
+        auto usrc = getCookieAuthData(decrypt(decodeBase64(cdata)));
+
+        if (m_database->deleteUser(usrc.puid, usrc.sid, data->password))
             return createResponse(Status::CODE_200, "User Deleted!");
         else
             return createResponse(Status::CODE_200, "Could not Deleted!");

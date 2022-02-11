@@ -46,14 +46,6 @@ public:
     }());
 
     /**
-    *  Create ConnectionProvider component which listens on the port
-    */
-    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)
-    ([] {
-        return oatpp::network::tcp::server::ConnectionProvider::createShared({ZWOO_BACKEND_DOMAIN, ZWOO_BACKEND_PORT, oatpp::network::Address::IP_4});
-    }());
-
-    /**
     *  Create Router component
     */
     OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::web::server::HttpRouter>, httpRouter)

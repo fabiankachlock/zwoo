@@ -2,6 +2,10 @@
 
 #include "oatpp/network/Server.hpp"
 
+#include "oatpp-openssl/server/ConnectionProvider.hpp"
+#include "oatpp-openssl/Config.hpp"
+
+
 #include "Server/ServerComponent.hpp"
 #include "Server/controller/Authentication/AuthenticationController.hpp"
 
@@ -38,16 +42,31 @@ void HttpServer::RunServer()
     /* Get connection handler component */
     OATPP_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, connectionHandler);
 
-    /* Get connection provider component */
-    OATPP_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, connectionProvider);
+    if (USE_SSL)
+    {
+        auto conf = oatpp::openssl::Config::createDefaultServerConfigShared(SSL_PEM, SSL_CERTIFICATE);
+        auto connectionProvider = oatpp::openssl::server::ConnectionProvider::createShared(conf, {ZWOO_BACKEND_DOMAIN, ZWOO_BACKEND_PORT, oatpp::network::Address::IP_4});
 
-    /* create server */
-    oatpp::network::Server server(connectionProvider,
-                                  connectionHandler);
+        /* create server */
+        oatpp::network::Server server(connectionProvider, connectionHandler);
 
-    logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
 
-    server.run();
+        logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
+
+        server.run();
+    }
+    else
+    {
+        auto connectionProvider = oatpp::network::tcp::server::ConnectionProvider::createShared({ZWOO_BACKEND_DOMAIN, ZWOO_BACKEND_PORT, oatpp::network::Address::IP_4});
+
+        /* create server */
+        oatpp::network::Server server(connectionProvider, connectionHandler);
+
+
+        logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
+
+        server.run();
+    }
 
     oatpp::base::Environment::destroy();
 }
