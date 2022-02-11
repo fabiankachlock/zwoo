@@ -21,7 +21,8 @@
     "quickMenu": "Schnellmenü",
     "language": "Sprache",
     "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
-    "sortCards": "Karten im Deck sortieren"
+    "sortCards": "Karten im Deck sortieren",
+    "deleteAccount": "Account löschen"
   },
   "lng": {
     "de": "Deutsch",

@@ -112,4 +112,8 @@ export class AuthenticationService {
       isLoggedIn: false // users can only log in, when the account is verified
     };
   };
+
+  static performDeleteAccount = async (password: string): Promise<void> => {
+    console.log('delete account', password);
+  };
 }

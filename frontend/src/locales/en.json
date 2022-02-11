@@ -21,7 +21,8 @@
     "fullscreen": "Fullscreen",
     "quickMenu": "Quick Menu",
     "showCardDetail": "Show Card Detail before playing",
-    "sortCards": "Sort cards in deck"
+    "sortCards": "Sort cards in deck",
+    "deleteAccount": "Delete Account"
   },
   "lng": {
     "de": "German",

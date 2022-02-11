@@ -12,6 +12,9 @@
     <SettingsRow :title="t('settings.language')">
       <LanguageSelection />
     </SettingsRow>
+    <SettingsRow title="">
+      <DeleteAccount />
+    </SettingsRow>
   </SettingsSection>
 </template>
 
@@ -25,6 +28,7 @@ import QuickMenuSwitch from '@/components/settings/QuickMenuSwitch.vue';
 import { useI18n } from 'vue-i18n';
 import { useConfig } from '@/core/adapter/config';
 import { computed } from 'vue';
+import DeleteAccount from '../DeleteAccount.vue';
 
 const { t } = useI18n();
 const config = useConfig();
