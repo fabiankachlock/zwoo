@@ -12,9 +12,10 @@ import { useCookies } from './core/adapter/cookies';
 useConfig().configure(); // load stored config from localStorage
 useAuth().configure(); // 'read' from may existing session
 const cookies = useCookies();
+cookies.setup();
 
 const asyncSetup = async () => {
-  if (cookies.recaptchaAllowed) {
+  if (cookies.recaptchaCookie) {
     const reCaptchaService = await import(/* webpackChunkName: "recaptcha" */ './core/services/api/reCAPTCHA');
     reCaptchaService.default.load();
   }

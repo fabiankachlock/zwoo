@@ -57,18 +57,22 @@
 <script setup lang="ts">
 import FloatingDialog from '../misc/FloatingDialog.vue';
 import { Icon } from '@iconify/vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCookies } from '@/core/adapter/cookies';
 
 const cookies = useCookies();
-cookies.setup();
 const { t } = useI18n();
 
 const recaptchaActivated = ref(true);
 
+onMounted(() => {
+  console.log('mount', cookies.recaptchaCookie, cookies.popupShowed);
+  recaptchaActivated.value = cookies.recaptchaCookie;
+});
+
 const acceptSelection = () => {
-  cookies.setReCaptchaCookie(true);
+  cookies.setReCaptchaCookie(recaptchaActivated.value);
   cookies.didShowDialog();
 };
 

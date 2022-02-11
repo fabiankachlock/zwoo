@@ -43,5 +43,9 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: 'missing-cookies',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/MissingCookies.vue')
   }
 ];

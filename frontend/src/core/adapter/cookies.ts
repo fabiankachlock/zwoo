@@ -36,6 +36,7 @@ const readCookies = (): CookiesConfig | undefined => {
 export const useCookies = defineStore('cookies', {
   state: () => ({
     popupShowed: false,
+    popupOpen: false,
     cookies: DefaultSelection
   }),
 
@@ -53,10 +54,13 @@ export const useCookies = defineStore('cookies', {
             ...DefaultSelection,
             ...selection
           };
+        } else {
+          this.popupOpen = true;
         }
       } catch (_e: unknown) {
         // invalid config
         this.popupShowed = false;
+        this.popupOpen = true;
         localStorage.removeItem(cookiesKey);
       }
     },
@@ -69,6 +73,8 @@ export const useCookies = defineStore('cookies', {
     didShowDialog() {
       saveCookies(this.cookies);
       this.popupShowed = true;
+      this.popupOpen = false;
+      console.log('close');
     }
   }
 });
