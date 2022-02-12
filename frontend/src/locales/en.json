@@ -32,9 +32,10 @@
     "login": "Login",
     "createAccount": "Create Account",
     "idea": "New Idea?",
-    "github": "Github",
+    "imprint": "Imprint",
     "logout": "Logout",
-    "settings": "Settings"
+    "settings": "Settings",
+    "home": "Home"
   },
   "login": {
     "title": "Login",
@@ -82,7 +83,7 @@
     "create": "Create Game",
     "join": "Join Game",
     "stats": "Show Statistic",
-    "greeting": "Hello, {0}!"
+    "greeting": "Hello, {name}!"
   },
   "list": {
     "title": "Available Games",
