@@ -167,6 +167,7 @@ public:
             out = encodeBase64(vec);
             auto c = fmt::format("auth={0};Max-Age=604800;Domain={1};Path=/;HttpOnly{2}", out, ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
             res->putHeader("Set-Cookie", c);
+            res->putHeader("Access-Control-Allow-Credentials", "true");
             return res;
         }
         else
