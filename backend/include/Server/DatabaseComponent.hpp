@@ -37,7 +37,6 @@ private:
     std::string generateSID();
 
     UIDGenerator playerIDGenerator;
-    SHA512 sha512 = SHA512();
 public:
     Database(const mongocxx::uri &uri, const std::string &dbName, const std::string &collectionName);
 

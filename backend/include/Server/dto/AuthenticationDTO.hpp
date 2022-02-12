@@ -43,36 +43,6 @@ class LoginUserDTO : public oatpp::DTO {
 
 };
 
-class LogoutUserDTO : public oatpp::DTO {
-
-    DTO_INIT(LogoutUserDTO, DTO)
-
-    DTO_FIELD_INFO(sid) {
-        info->description = "Players session ID";
-    }
-    DTO_FIELD(String, sid);
-
-    DTO_FIELD_INFO(puid) {
-        info->description = "Players unique ID";
-    }
-    DTO_FIELD(UInt32, puid);
-};
-
-class GetUserDTO : public oatpp::DTO {
-
-    DTO_INIT(GetUserDTO, DTO)
-
-    DTO_FIELD_INFO(sid) {
-        info->description = "Players session ID";
-    }
-    DTO_FIELD(String, sid);
-
-    DTO_FIELD_INFO(puid) {
-        info->description = "Players unique ID";
-    }
-    DTO_FIELD(UInt32, puid);
-};
-
 class GetUserResponseDTO : public oatpp::DTO {
 
     DTO_INIT(GetUserResponseDTO, DTO)
@@ -94,19 +64,8 @@ class GetUserResponseDTO : public oatpp::DTO {
 };
 
 
-
 class DeleteUserDTO : public oatpp::DTO {
     DTO_INIT(DeleteUserDTO, DTO)
-
-    DTO_FIELD_INFO(sid) {
-        info->description = "Players session ID";
-    }
-    DTO_FIELD(String, sid);
-
-    DTO_FIELD_INFO(puid) {
-        info->description = "Players unique ID";
-    }
-    DTO_FIELD(UInt32, puid);
 
     DTO_FIELD_INFO(password) {
         info->description = "Users Password";

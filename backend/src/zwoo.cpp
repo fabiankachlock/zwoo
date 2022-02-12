@@ -16,7 +16,7 @@ bool str2b(std::string str)
 {
     if (str[0] == '0' || str[0] == 't' || str[0] == 'T')
         return true;
-    return true;
+    return false;
 }
 
 int str2int(std::string str)

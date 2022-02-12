@@ -34,7 +34,8 @@
     "idea": "Neue Idee?",
     "github": "Github",
     "logout": "Abmelden",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "home": "Home"
   },
   "login": {
     "title": "Anmeldung",
@@ -82,7 +83,7 @@
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
     "stats": "Statistiken zeigen",
-    "greeting": "Hallo, {0}!"
+    "greeting": "Hallo, {name}!"
   },
   "list": {
     "title": "Verfügbare Spiele",
