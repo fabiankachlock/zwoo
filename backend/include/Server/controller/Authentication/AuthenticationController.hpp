@@ -258,7 +258,7 @@ public:
     }
 
     ADD_CORS(deleteUser, ZWOO_CORS)
-    ENDPOINT("GET", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data), HEADER(String, ocookie, "Cookie")) {
+    ENDPOINT("POST", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data), HEADER(String, ocookie, "Cookie")) {
         m_logger->log->debug("/GET delete");
 
         std::string cookie = ocookie.getValue("");
