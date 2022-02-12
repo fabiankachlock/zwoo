@@ -6,6 +6,10 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "menu" */ '../views/Settings.vue')
   },
   {
+    path: 'imprint',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/Imprint.vue')
+  },
+  {
     path: 'login',
     component: () => import(/* webpackChunkName: "menu" */ '../views/Login.vue')
   },
