@@ -46,7 +46,7 @@ import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { UsernameValidator } from '@/core/services/validator/username';
 import { useRoute } from 'vue-router';
@@ -55,10 +55,15 @@ import { useAuth } from '@/core/adapter/auth';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
+import { useCookies } from '@/core/adapter/cookies';
 
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
+
+onMounted(() => {
+  useCookies().loadRecaptcha();
+});
 
 const username = ref('');
 const email = ref('');

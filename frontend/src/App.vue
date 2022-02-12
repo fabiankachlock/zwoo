@@ -16,8 +16,7 @@ cookies.setup();
 
 const asyncSetup = async () => {
   if (cookies.recaptchaCookie) {
-    const reCaptchaService = await import(/* webpackChunkName: "recaptcha" */ './core/services/api/reCAPTCHA');
-    reCaptchaService.default.load();
+    cookies.loadRecaptcha();
   }
 };
 

@@ -70,6 +70,12 @@ export const useCookies = defineStore('cookies', {
     acceptAll() {
       this.cookies.recaptcha = true;
     },
+    async loadRecaptcha() {
+      if (this.cookies.recaptcha) {
+        const reCaptchaService = await import(/* webpackChunkName: "recaptcha" */ '../services/api/reCAPTCHA');
+        reCaptchaService.default.load();
+      }
+    },
     didShowDialog() {
       saveCookies(this.cookies);
       this.popupShowed = true;
