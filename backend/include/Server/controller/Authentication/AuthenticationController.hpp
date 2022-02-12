@@ -244,10 +244,10 @@ public:
                 return setupResponseWithCookieHeaders(res);
             }
             else
-                return createResponse(Status::CODE_401, "session id not matching!");
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
         }
         else
-            return createResponse(Status::CODE_404, "User Not Found!");
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
     }
     ENDPOINT_INFO(logout) {
         info->description = "Get User data with this Endpoint.";
