@@ -17,7 +17,6 @@ export class CookieGuard implements RouterInterceptor {
 
     if (needsCookie) {
       const cookies = useCookies();
-      console.log(cookies.cookies);
       if (!cookies.cookies.recaptcha) {
         next('/missing-cookies');
       }

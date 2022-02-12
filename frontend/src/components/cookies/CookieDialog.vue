@@ -67,7 +67,6 @@ const { t } = useI18n();
 const recaptchaActivated = ref(true);
 
 onMounted(() => {
-  console.log('mount', cookies.recaptchaCookie, cookies.popupShowed);
   recaptchaActivated.value = cookies.recaptchaCookie;
 });
 

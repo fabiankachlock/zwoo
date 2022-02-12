@@ -80,7 +80,6 @@ export const useCookies = defineStore('cookies', {
       saveCookies(this.cookies);
       this.popupShowed = true;
       this.popupOpen = false;
-      console.log('close');
     }
   }
 });
