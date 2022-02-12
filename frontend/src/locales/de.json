@@ -33,11 +33,12 @@
     "idea": "Neue Idee?",
     "github": "Github",
     "logout": "Abmelden",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "home": "Home"
   },
   "login": {
     "title": "Anmeldung",
-    "username": "Benutzername",
+    "email": "E-Mail",
     "password": "Passwort",
     "login": "Anmelden",
     "resetPassword": "Passwort zurücksetzten"
@@ -49,7 +50,8 @@
     "username": "Benutzername",
     "password": "Passwort",
     "create": "Erstellen",
-    "passwordRepeat": "Passwort Wiederholen"
+    "passwordRepeat": "Passwort Wiederholen",
+    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -79,7 +81,8 @@
   "home": {
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
-    "stats": "Statistiken zeigen"
+    "stats": "Statistiken zeigen",
+    "greeting": "Hallo, {name}!"
   },
   "list": {
     "title": "Verfügbare Spiele",

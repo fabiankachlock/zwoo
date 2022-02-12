@@ -6,6 +6,11 @@
     <h1 class="text-6xl tc-primary text-center">zwoo</h1>
     <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
     <div class="relative w-full flex flex-col my-3 px-5">
+      <div class="relative w-full">
+        <p class="tc-main text-center">
+          {{ greeting }}
+        </p>
+      </div>
       <div class="relative flex-1 w-full grid grid-cols-3">
         <div class="action main bg-dark hover:bg-darkest">
           <router-link class="link" to="/create-game">
@@ -37,10 +42,14 @@
 </template>
 
 <script setup lang="ts">
+import { useAuth } from '@/core/adapter/auth';
 import { Icon } from '@iconify/vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const auth = useAuth();
+const greeting = computed(() => t('home.greeting', { name: auth.username }));
 </script>
 
 <style scoped>

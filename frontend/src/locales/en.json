@@ -33,11 +33,12 @@
     "idea": "New Idea?",
     "github": "Github",
     "logout": "Logout",
-    "settings": "Settings"
+    "settings": "Settings",
+    "home": "Home"
   },
   "login": {
     "title": "Login",
-    "username": "Username",
+    "email": "E-Mail",
     "password": "Password",
     "login": "Login",
     "resetPassword": "Reset Password"
@@ -49,7 +50,8 @@
     "username": "Username",
     "password": "Password",
     "create": "Create",
-    "passwordRepeat": "Repeat Password"
+    "passwordRepeat": "Repeat Password",
+    "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account."
   },
   "createGame": {
     "title": "Create Game",
@@ -79,7 +81,8 @@
   "home": {
     "create": "Create Game",
     "join": "Join Game",
-    "stats": "Show Statistic"
+    "stats": "Show Statistic",
+    "greeting": "Hello, {name}!"
   },
   "list": {
     "title": "Available Games",

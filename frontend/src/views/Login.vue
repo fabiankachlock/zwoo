@@ -2,7 +2,7 @@
   <FlatDialog>
     <Form>
       <FormTitle> {{ t('login.title') }} </FormTitle>
-      <TextInput id="username" v-model="username" labelKey="login.username" :placeholder="t('login.username')" />
+      <TextInput id="email" v-model="email" labelKey="login.email" :placeholder="t('login.email')" />
       <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
       <FormError :error="error" />
@@ -40,7 +40,7 @@ const router = useRouter();
 
 const reCaptchaValidator = new RecaptchaValidator();
 
-const username = ref('');
+const email = ref('');
 const password = ref('');
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
@@ -49,7 +49,7 @@ const logIn = async () => {
   error.value = [];
 
   try {
-    await auth.login(username.value, password.value, reCaptchaResponse.value);
+    await auth.login(email.value, password.value, reCaptchaResponse.value);
     const redirect = route.query['redirect'] as string;
 
     if (redirect) {
