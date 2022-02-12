@@ -33,7 +33,8 @@
     "idea": "Neue Idee?",
     "github": "Github",
     "logout": "Abmelden",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "home": "Home"
   },
   "login": {
     "title": "Anmeldung",

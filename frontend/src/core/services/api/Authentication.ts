@@ -68,11 +68,30 @@ export class AuthenticationService {
   };
 
   static performLogout = async (): Promise<AuthenticationStatus> => {
-    console.log('logout');
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      console.log('logout:');
+      return {
+        isLoggedIn: false
+      };
+    }
+
+    const response = await fetch(Backend.getUrl(Endpoint.AccountLogout), {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    if (response.status === 404 || response.status === 401) {
+      return {
+        isLoggedIn: false
+      };
+    }
+
+    if (response.status !== 200) {
+      throw await response.text();
+    }
+
     return {
-      username: 'test-user',
-      email: 'test@test.com',
-      isLoggedIn: true
+      isLoggedIn: false
     };
   };
 

@@ -33,7 +33,8 @@
     "idea": "New Idea?",
     "github": "Github",
     "logout": "Logout",
-    "settings": "Settings"
+    "settings": "Settings",
+    "home": "Home"
   },
   "login": {
     "title": "Login",

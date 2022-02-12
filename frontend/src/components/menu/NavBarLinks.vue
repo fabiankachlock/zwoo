@@ -4,26 +4,29 @@
     <NavBarItem :title="t('nav.createAccount')" link="/create-account" />
     <div class="divider bc-invert-main"></div>
   </div>
+  <div v-if="isLoggedIn" class="md:flex flex-row">
+    <NavBarItem :title="t('nav.home')" link="/home" />
+    <div class="divider bc-invert-main"></div>
+  </div>
   <NavBarItem :title="t('nav.idea')" link="https://github.com/fabiankachlock/zwoo/discussions/categories/ideas" is-external />
   <NavBarItem :title="t('nav.github')" link="https://github.com/fabiankachlock/zwoo" is-external />
   <div class="divider bc-invert-main"></div>
   <NavBarItem :title="t('nav.settings')" link="/settings" />
   <div v-if="isLoggedIn" class="md:flex flex-row">
-    <div class="divider bc-invert-main"></div>
     <NavBarItem :title="t('nav.logout')" link="/logout" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { useAuth } from '@/core/adapter/auth';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import NavBarItem from './NavBarItem.vue';
 
 const { t } = useI18n();
 
-defineProps<{
-  isLoggedIn?: boolean;
-}>();
+const auth = useAuth();
+const isLoggedIn = computed(() => auth.isLoggedIn);
 </script>
 
 <style scoped>

@@ -10,23 +10,19 @@
       style="min-width: 10rem"
       @click="closeMenu"
     >
-      <NavBarLinks :is-logged-in="isLoggedIn" />
+      <NavBarLinks />
     </div>
     <div class="hidden md:flex flex-row list-none">
-      <NavBarLinks :is-logged-in="isLoggedIn" />
+      <NavBarLinks />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/core/adapter/auth';
 import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
 import NavBarLinks from './NavBarLinks.vue';
 
-const auth = useAuth();
-
-const isLoggedIn = computed(() => auth.isLoggedIn);
 const isMenuOpen = ref(false);
 const icon = computed(() => (isMenuOpen.value ? 'gg:close' : 'gg:menu-grid-o'));
 
