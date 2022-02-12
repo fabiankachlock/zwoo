@@ -292,7 +292,7 @@ private:
     std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWithCookieHeaders(std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> res)
     {
         res->putHeader("Access-Control-Allow-Origin", ZWOO_CORS);
-        res->putHeader("Access-Control-Allow-Methods", "POST, GET");
+        res->putHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         res->putHeader("Access-Control-Allow-Credentials", "true");
 
         return res;
