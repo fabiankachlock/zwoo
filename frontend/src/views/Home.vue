@@ -8,7 +8,7 @@
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative w-full">
         <p class="tc-main text-center">
-          {{ t('home.greeting', auth.username) }}
+          {{ greeting }}
         </p>
       </div>
       <div class="relative flex-1 w-full grid grid-cols-3">
@@ -44,10 +44,12 @@
 <script setup lang="ts">
 import { useAuth } from '@/core/adapter/auth';
 import { Icon } from '@iconify/vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const auth = useAuth();
+const greeting = computed(() => t('home.greeting', { name: auth.username }));
 </script>
 
 <style scoped>

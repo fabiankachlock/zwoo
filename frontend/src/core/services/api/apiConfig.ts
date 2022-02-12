@@ -3,7 +3,7 @@ export enum Endpoint {
   Recaptcha = 'auth/recaptcha',
   AccountVerify = 'auth/verify',
   AccountLogin = 'auth/login',
-  AccountLogout = 'auth/login',
+  AccountLogout = 'auth/logout',
   UserInfo = 'auth/user',
   DeleteAccount = 'auth/delete'
 }
