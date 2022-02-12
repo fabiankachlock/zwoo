@@ -11,7 +11,6 @@ int str2int(std::string str);
 
 #define ZWOO_DOMAIN get_env("ZWOO_DOMAIN")                 // used for links zwoo.com
 #define ZWOO_CORS get_env("ZWOO_CORS")                     // CORS Domain
-#define ZWOO_ALLOW_ORIGIN get_env("ZWOO_ALLOW_ORIGIN")
 #define ZWOO_ENCRYPTION_KEY std::getenv("ZWOO_ENCRYPTION_KEY") // recommended minimum 64 Chars
 
 #define SMTP_HOST_URL get_env("SMTP_HOST_URL")
