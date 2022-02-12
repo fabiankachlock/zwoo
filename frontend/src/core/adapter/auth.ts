@@ -65,7 +65,14 @@ export const useAuth = defineStore('auth', {
       }
     },
     async askStatus() {
-      // make initial api call (to read from session)
+      const response = await AuthenticationService.getUserInfo();
+
+      if (response.isLoggedIn) {
+        this.$patch({
+          username: response.username,
+          isLoggedIn: response.isLoggedIn
+        });
+      }
     },
     async configure() {
       this.askStatus();

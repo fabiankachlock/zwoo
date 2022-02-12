@@ -81,7 +81,7 @@
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
     "stats": "Statistiken zeigen",
-    "greeting": "Hallo, {0}!"
+    "greeting": "Hallo, {name}!"
   },
   "list": {
     "title": "Verfügbare Spiele",

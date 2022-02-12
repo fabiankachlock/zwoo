@@ -81,7 +81,7 @@
     "create": "Create Game",
     "join": "Join Game",
     "stats": "Show Statistic",
-    "greeting": "Hello, {0}!"
+    "greeting": "Hello, {name}!"
   },
   "list": {
     "title": "Available Games",

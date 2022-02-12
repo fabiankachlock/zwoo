@@ -16,14 +16,11 @@ export type AuthenticationStatus =
     };
 
 export class AuthenticationService {
-  static getUserInfo = async (puid: string, sid: string): Promise<AuthenticationStatus> => {
+  static getUserInfo = async (): Promise<AuthenticationStatus> => {
     console.log('getting user info');
     const response = await fetch(Backend.getUrl(Endpoint.UserInfo), {
       method: 'GET',
-      body: JSON.stringify({
-        puid,
-        sid
-      })
+      credentials: 'include'
     });
 
     if (response.status === 404 || response.status === 401) {
@@ -56,6 +53,7 @@ export class AuthenticationService {
 
     const response = await fetch(Backend.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify({
         email: email,
         password: password
@@ -66,14 +64,7 @@ export class AuthenticationService {
       throw await response.text();
     }
 
-    const ids = (await response.json()) as {
-      puid: string;
-      sid: string;
-    };
-
-    console.log(ids);
-
-    return await AuthenticationService.getUserInfo(ids.puid, ids.sid);
+    return await AuthenticationService.getUserInfo();
   };
 
   static performLogout = async (): Promise<AuthenticationStatus> => {
