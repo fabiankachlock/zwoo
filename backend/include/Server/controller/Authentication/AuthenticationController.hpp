@@ -238,10 +238,10 @@ public:
             if (usr->sid.getValue("") == usrc.sid&& usr->sid != "")
             {
                 m_database->updateStringField("email", usr->email, "sid", "");
-                auto res = setupResponseWithCookieHeaders(createResponse(Status::CODE_200, "user logged out"));
+                auto res = createResponse(Status::CODE_200, "user logged out");
                 auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
                 res->putHeader("Set-Cookie", c);
-                return res;
+                return setupResponseWithCookieHeaders(res);
             }
             else
                 return createResponse(Status::CODE_401, "session id not matching!");
@@ -291,7 +291,7 @@ public:
 private:
     std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWithCookieHeaders(std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> res)
     {
-        res->putHeader("Access-Control-Allow-Origin", "*");
+        res->putHeader("Access-Control-Allow-Origin", ZWOO_ALLOW_ORIGIN);
         res->putHeader("Access-Control-Allow-Methods", "POST, GET");
         res->putHeader("Access-Control-Allow-Credentials", "true");
 
