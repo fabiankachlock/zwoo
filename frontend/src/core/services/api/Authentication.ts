@@ -17,7 +17,13 @@ export type AuthenticationStatus =
 
 export class AuthenticationService {
   static getUserInfo = async (): Promise<AuthenticationStatus> => {
-    console.log('getting user info');
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      console.log('getting user info');
+      return {
+        isLoggedIn: false
+      };
+    }
+
     const response = await fetch(Backend.getUrl(Endpoint.UserInfo), {
       method: 'GET',
       credentials: 'include'
