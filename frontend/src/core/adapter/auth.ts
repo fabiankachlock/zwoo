@@ -66,7 +66,6 @@ export const useAuth = defineStore('auth', {
     },
     async askStatus() {
       const response = await AuthenticationService.getUserInfo();
-
       if (response.isLoggedIn) {
         this.$patch({
           username: response.username,
