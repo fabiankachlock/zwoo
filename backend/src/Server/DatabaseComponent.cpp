@@ -12,6 +12,7 @@
 
 std::string Database::generateSID()
 {
+    SHA512 sha512 = SHA512();
     std::string sid = sha512.hash(std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
     sid.resize(24);
     return sid;
@@ -68,6 +69,8 @@ r_CreateUser Database::createUser ( std::string user_name, std::string user_emai
 
     auto usr = UserDTO::createShared();
 
+    SHA512 sha512 = SHA512();
+
     std::string salt = randomString(16);
     std::string hash = salt + password;
     for ( int i = 0; i < 10000; i++ )
@@ -94,6 +97,9 @@ r_LoginUser Database::loginUser(std::string email, std::string password)
     auto usr = getUser("email", email);
     if (!usr)
         return { false, 0, "" };
+
+    SHA512 sha512 = SHA512();
+
     std::string salt = usr->password.getValue("").substr(7, 16);
     std::string hash = salt + password;
     for ( int i = 0; i < 10000; i++ )
@@ -117,6 +123,9 @@ bool Database::deleteUser(ulong puid, std::string sid, std::string password)
     auto usr = getUser(puid);
     if (!usr)
         return false;
+
+    SHA512 sha512 = SHA512();
+
     std::string salt = usr->password.getValue("").substr(7, 16);
     std::string hash = salt + password;
     for ( int i = 0; i < 10000; i++ )
