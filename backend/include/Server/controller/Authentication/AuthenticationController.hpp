@@ -155,25 +155,22 @@ public:
     ENDPOINT("POST", "auth/login", login, BODY_DTO(Object<LoginUserDTO>, data)) {
         m_logger->log->debug("/POST login");
         if (!isValidEmail(data->email.getValue("")))
-            return createResponse(Status::CODE_400, "Email Invalid!");
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_400, "Email Invalid!"));
 
         auto login = m_database->loginUser(data->email, data->password);
 
         if (login.successful)
         {
             std::string out = encrypt(std::to_string(login.puid) + "," + login.sid);
-            auto res = createResponse(Status::CODE_200, "logged in");
             std::vector<uint8_t> vec(out.begin(), out.end());
             out = encodeBase64(vec);
             auto c = fmt::format("auth={0};Max-Age=604800;Domain={1};Path=/;HttpOnly{2}", out, ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
+            auto res = createResponse(Status::CODE_200, "Logged In");
             res->putHeader("Set-Cookie", c);
-            res->putHeader("Access-Control-Allow-Credentials", "true");
-            return res;
+            return setupResponseWithCookieHeaders(res);
         }
         else
-            return createResponse(Status::CODE_401, "failed to login");
-
-        return createResponse(Status::CODE_501, "Not Implemented!");
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "failed to login"));
     }
     ENDPOINT_INFO(login) {
         info->description = "Login Users with this Endpoint.";
@@ -188,9 +185,13 @@ public:
         m_logger->log->debug("/GET User");
 
         std::string cookie = ocookie.getValue("");
+        if (cookie.length() == 0)
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
         auto spos = cookie.find("auth=");
-        std::string cdata = cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5);
-        auto usrc = getCookieAuthData(decrypt(decodeBase64(cdata)));
+        if (spos < 0 || spos > cookie.length())
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+
+        auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
         auto usr = m_database->getUser(usrc.puid);
 
         if (usr)
@@ -201,16 +202,14 @@ public:
                 rusr->username = usr->username;
                 rusr->email = usr->email;
                 rusr->wins = usr->wins;
-                auto res = createDtoResponse(Status::CODE_200, rusr);
-                res->putHeader("Access-Control-Allow-Credentials", "true");
+                auto res = setupResponseWithCookieHeaders(createDtoResponse(Status::CODE_200, rusr));
                 return res;
             }
             else
-                return createResponse(Status::CODE_401, "session id not matching!");
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
         }
         else
-            return createResponse(Status::CODE_404, "User Not Found!");
-        return createResponse(Status::CODE_501, "Not Implemented!");
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
     }
     ENDPOINT_INFO(user) {
         info->description = "Get User data with this Endpoint.";
@@ -225,9 +224,13 @@ public:
         m_logger->log->debug("/GET Logout");
 
         std::string cookie = ocookie.getValue("");
+        if (cookie.length() == 0)
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
         auto spos = cookie.find("auth=");
-        std::string cdata = cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5);
-        auto usrc = getCookieAuthData(decrypt(decodeBase64(cdata)));
+        if (spos < 0 || spos > cookie.length())
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+
+        auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
         auto usr = m_database->getUser(usrc.puid);
 
         if (usr)
@@ -236,16 +239,15 @@ public:
             {
                 m_database->updateStringField("email", usr->email, "sid", "");
                 auto res = createResponse(Status::CODE_200, "user logged out");
-                res->putHeader("Access-Control-Allow-Credentials", "true");
-                return res;
+                auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
+                res->putHeader("Set-Cookie", c);
+                return setupResponseWithCookieHeaders(res);
             }
             else
-                return createResponse(Status::CODE_401, "session id not matching!");
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
         }
         else
-            return createResponse(Status::CODE_404, "User Not Found!");
-
-        return createResponse(Status::CODE_501, "Not Implemented!");
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
     }
     ENDPOINT_INFO(logout) {
         info->description = "Get User data with this Endpoint.";
@@ -260,19 +262,23 @@ public:
         m_logger->log->debug("/GET delete");
 
         std::string cookie = ocookie.getValue("");
+        if (cookie.length() == 0)
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
         auto spos = cookie.find("auth=");
-        std::string cdata = cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5);
-        auto usrc = getCookieAuthData(decrypt(decodeBase64(cdata)));
+        if (spos < 0 || spos > cookie.length())
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+
+        auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
 
         if (m_database->deleteUser(usrc.puid, usrc.sid, data->password))
         {
-            auto res = createResponse(Status::CODE_200, "User Deleted!");
-            res->putHeader("Access-Control-Allow-Credentials", "true");
+            auto res = setupResponseWithCookieHeaders(createResponse(Status::CODE_200, "User Deleted!"));
+            auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
+            res->putHeader("Set-Cookie", c);
             return res;
         }
         else
-            return createResponse(Status::CODE_200, "Could not Deleted!");
-        return createResponse(Status::CODE_501, "Not Implemented!");
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_200, "Could not Deleted!"));
     }
     ENDPOINT_INFO(deleteUser) {
         info->description = "Login Users with this Endpoint.";
@@ -282,7 +288,15 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
 
+private:
+    std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWithCookieHeaders(std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> res)
+    {
+        res->putHeader("Access-Control-Allow-Origin", ZWOO_CORS);
+        res->putHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        res->putHeader("Access-Control-Allow-Credentials", "true");
 
+        return res;
+    }
 };
 
 #include OATPP_CODEGEN_END(ApiController)// <- End Codegen
