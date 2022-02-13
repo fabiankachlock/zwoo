@@ -21,7 +21,8 @@
     "quickMenu": "Schnellmenü",
     "language": "Sprache",
     "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
-    "sortCards": "Karten im Deck sortieren"
+    "sortCards": "Karten im Deck sortieren",
+    "cookies": "Cookies"
   },
   "lng": {
     "de": "Deutsch",
@@ -130,6 +131,29 @@
       "success": "Alles gut",
       "fail": "Check fehlgeschlagen! - Versuche es später nochmal.",
       "half": "Ergebnis: Cyborg, aber das ist ok, versuche dich weniger wie ein Roboter in der Zukunft zu verhalten."
+    }
+  },
+  "cookies": {
+    "title": "Cookie Zustimmungen",
+    "functional": {
+      "title": "Funktionale Cookies",
+      "auth": {
+        "name": "Authetifizierungs Cookies",
+        "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
+      },
+      "recaptcha": {
+        "name": "Google reCAPTCHA Cookies",
+        "description": "Wir nutzen Google reCAPTCHA um SPAM zu vermeiden. Damit Google reCAPTCHA funktioniert, müssen Cookies gespeichert werden, damit deine Interaktionen mit der Webseite analysiert werden können."
+      }
+    },
+    "active": "Aktiviert",
+    "inactive": "Deaktiviert",
+    "acceptAll": "Alle Akzeptieren",
+    "acceptSelection": "Auswahl Akzeptieren",
+    "manage": "Cookies Verwalten",
+    "disallowed": {
+      "title": "Fehlende Cookies",
+      "info": "Die Login- und Accounterstellungfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
     }
   }
 }
