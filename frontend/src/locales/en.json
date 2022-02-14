@@ -3,7 +3,8 @@
     "title": "Settings",
     "sections": {
       "general": "General",
-      "game": "Game"
+      "game": "Game",
+      "danger": "Danger"
     },
     "update": {
       "available": "An update is available",
@@ -16,6 +17,7 @@
         "off": "deactivated"
       }
     },
+    "": "",
     "darkmode": "Dark Mode",
     "language": "Language",
     "fullscreen": "Fullscreen",

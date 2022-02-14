@@ -3,7 +3,8 @@
     "title": "Einstellungen",
     "sections": {
       "general": "Allgemein",
-      "game": "Spiel"
+      "game": "Spiel",
+      "danger": "Gefahrenzone"
     },
     "update": {
       "available": "Ein Update ist verfügbar",
@@ -16,6 +17,7 @@
         "off": "deaktiviert"
       }
     },
+    "": "",
     "darkmode": "Dunkler Modus",
     "fullscreen": "Vollbildschirm",
     "quickMenu": "Schnellmenü",
