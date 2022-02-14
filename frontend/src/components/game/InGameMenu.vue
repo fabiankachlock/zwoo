@@ -7,7 +7,7 @@
         <Icon v-else icon="akar-icons:chevron-down"></Icon>
       </div>
       <div
-        :class="{ 'h-28': menuOpen, 'h-0': !menuOpen }"
+        :class="{ 'h-64': menuOpen, 'h-0': !menuOpen }"
         class="fixed left-0 right-0 w-screen transition-all overflow-hidden px-6 flex flex-nowrap justify-end"
       >
         <div class="bg-darkest w-full max-w-sm menu-rounded-edges">
@@ -28,10 +28,8 @@
                   <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">#Leave#</button>
                 </div>
               </div>
-              <!--
-                      <hr class="bc-lightest" />
-                    <div>chat</div>
-                    -->
+              <hr class="bc-invert-lightest opacity-40 my-1" />
+              <GameChat />
             </div>
           </div>
         </div>
@@ -47,6 +45,7 @@ import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
+import GameChat from './chat/GameChat.vue';
 
 const stateStore = useGameState();
 const deckState = useGameCardDeck();
