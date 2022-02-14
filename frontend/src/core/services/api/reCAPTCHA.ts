@@ -13,6 +13,8 @@ export class ReCaptchaService {
 
   private isReady = false;
 
+  private loaded = false;
+
   private whenLoaded = () => {
     ReCaptchaTermsVisibilityManager.init();
     ReCaptchaTermsVisibilityManager.updateState();
@@ -20,6 +22,8 @@ export class ReCaptchaService {
   };
 
   private loadScript = () => {
+    if (this.loaded) return;
+    this.loaded = true;
     const scriptTag = document.createElement('script');
     scriptTag.setAttribute('src', 'https://www.google.com/recaptcha/api.js?render=' + ReCaptchaService.SITE_KEY);
     document.body.appendChild(scriptTag);
