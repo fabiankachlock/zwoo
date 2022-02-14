@@ -5,13 +5,14 @@ set(CMAKE_CXX_STANDARD 11)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
-find_package(spdlog               REQUIRED)
-find_package(oatpp          1.3.0 REQUIRED)
-find_package(oatpp-mongo    1.3.0 REQUIRED)
-find_package(oatpp-openssl  1.3.0 REQUIRED)
-find_package(CURL                 REQUIRED)
-find_package(mongocxx             REQUIRED)
-find_package(mailio               REQUIRED)
+find_package(spdlog                REQUIRED)
+find_package(oatpp           1.3.0 REQUIRED)
+find_package(oatpp-mongo     1.3.0 REQUIRED)
+find_package(oatpp-websocket       REQUIRED)
+find_package(oatpp-openssl   1.3.0 REQUIRED)
+find_package(CURL                  REQUIRED)
+find_package(mongocxx              REQUIRED)
+find_package(mailio                REQUIRED)
 
 option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
 
@@ -34,6 +35,7 @@ set(LIBS
     spdlog::spdlog
     oatpp::oatpp
     oatpp::oatpp-mongo
+    oatpp::oatpp-websocket
     CURL::libcurl
     mongo::mongocxx_static
     mongo::bsoncxx_static
