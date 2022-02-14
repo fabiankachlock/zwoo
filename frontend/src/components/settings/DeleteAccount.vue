@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoggedIn">
+  <div>
     <button
       class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
       @click="openDialog"
@@ -26,9 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/core/adapter/auth';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useAuth } from '@/core/adapter/auth';
 import FloatingDialog from '../misc/FloatingDialog.vue';
 import Form from '../forms/Form.vue';
 import FormTitle from '../forms/FormTitle.vue';
@@ -40,7 +40,6 @@ import FormSubmit from '../forms/FormSubmit.vue';
 const auth = useAuth();
 const { t } = useI18n();
 
-const isLoggedIn = computed(() => auth.isLoggedIn);
 const showDialog = ref(false);
 const password = ref('');
 const error = ref<string[]>([]);
