@@ -134,5 +134,10 @@
       "fail": "Check fehlgeschlagen! - Versuche es später nochmal.",
       "half": "Ergebnis: Cyborg, aber das ist ok, versuche dich weniger wie ein Roboter in der Zukunft zu verhalten."
     }
+  },
+  "deleteAccount": {
+    "title": "Account Löschen",
+    "password": "Passwort",
+    "delete": "Jetzt Löschen!"
   }
 }

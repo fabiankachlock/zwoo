@@ -134,5 +134,10 @@
       "fail": "Failed Bot Check! - Please retry later.",
       "half": "Result: Cyborg, but that's ok try acting less like a bot in the future."
     }
+  },
+  "deleteAccount": {
+    "title": "Delete Account",
+    "password": "Password",
+    "delete": "Delete Now!"
   }
 }
