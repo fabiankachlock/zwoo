@@ -129,7 +129,26 @@ export class AuthenticationService {
     };
   };
 
-  static performDeleteAccount = async (password: string): Promise<void> => {
-    console.log('delete account', password);
+  static performDeleteAccount = async (password: string): Promise<AuthenticationStatus> => {
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      console.log('delete account');
+      return {
+        isLoggedIn: false
+      };
+    }
+
+    const response = await fetch(Backend.getUrl(Endpoint.DeleteAccount), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        password: password
+      })
+    });
+
+    await response.text();
+
+    return {
+      isLoggedIn: false
+    };
   };
 }
