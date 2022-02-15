@@ -128,4 +128,27 @@ export class AuthenticationService {
       isLoggedIn: false // users can only log in, when the account is verified
     };
   };
+
+  static performDeleteAccount = async (password: string): Promise<AuthenticationStatus> => {
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      console.log('delete account');
+      return {
+        isLoggedIn: false
+      };
+    }
+
+    const response = await fetch(Backend.getUrl(Endpoint.DeleteAccount), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        password: password
+      })
+    });
+
+    await response.text();
+
+    return {
+      isLoggedIn: false
+    };
+  };
 }

@@ -3,7 +3,8 @@
     "title": "Settings",
     "sections": {
       "general": "General",
-      "game": "Game"
+      "game": "Game",
+      "danger": "Danger"
     },
     "update": {
       "available": "An update is available",
@@ -16,13 +17,15 @@
         "off": "deactivated"
       }
     },
+    "": "",
     "darkmode": "Dark Mode",
     "language": "Language",
     "fullscreen": "Fullscreen",
     "quickMenu": "Quick Menu",
     "showCardDetail": "Show Card Detail before playing",
     "sortCards": "Sort cards in deck",
-    "cookies": "Cookies"
+    "cookies": "Cookies",
+    "deleteAccount": "Delete Account"
   },
   "lng": {
     "de": "German",
@@ -132,6 +135,11 @@
       "fail": "Failed Bot Check! - Please retry later.",
       "half": "Result: Cyborg, but that's ok try acting less like a bot in the future."
     }
+  },
+  "deleteAccount": {
+    "title": "Delete Account",
+    "password": "Password",
+    "delete": "Delete Now!"
   },
   "cookies": {
     "title": "Cookie Consent",
