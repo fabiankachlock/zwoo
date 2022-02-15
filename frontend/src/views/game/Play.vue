@@ -9,11 +9,11 @@
           <div class="relative flex flex-col flex-nowrap py-4">
             <Opponents />
           </div>
-          <CardDetail v-if="showCardDetail" />
         </div>
         <div class="relative z-0 min-w-0">
           <CardDeck />
         </div>
+        <CardDetail v-if="showCardDetail" />
       </div>
     </div>
   </div>
