@@ -19,12 +19,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Icon } from '@iconify/vue';
+import { useChat } from '@/core/adapter/play/chat';
 
 const message = ref('');
+const chat = useChat();
 
 const sendMessage = () => {
   if (message.value.length === 0) return;
   console.log(message.value);
+  chat.pushMessage(message.value, 'me');
   message.value = '';
 };
 </script>
