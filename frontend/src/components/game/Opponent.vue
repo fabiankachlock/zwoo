@@ -7,21 +7,35 @@
     <div class="flex flex-row flex-nowrap w-full h-full items-center tc-main cursor-default overflow-hidden whitespace-nowrap">
       <span class="mr-3 opponent-name">{{ name }}</span>
       <span class="whitespace-nowrap">{{ cardAmount }}</span>
+      <span class="ml-1 flex items-center">
+        <button @click="toggleMute" class="transition-transform transform hover:scale-125">
+          <Icon v-if="isMuted" icon="bi:mic-mute-fill" />
+          <Icon v-else icon="bi:mic-fill" />
+        </button>
+      </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { toRefs, defineProps, watch, ref } from 'vue';
+import { Icon } from '@iconify/vue';
+import { useChat } from '@/core/adapter/play/chat';
 
+const chat = useChat();
 const props = defineProps<{
   isActive: boolean;
   name: string;
   cardAmount: number;
+  isMuted?: boolean;
 }>();
 
-const { name, cardAmount, isActive } = toRefs(props);
+const { name, cardAmount, isActive, isMuted } = toRefs(props);
 const elmRef = ref<HTMLDivElement | null>(null);
+
+const toggleMute = () => {
+  chat.mutePlayer(name.value, !isMuted?.value);
+};
 
 watch(isActive, newValue => {
   if (newValue) {
@@ -32,7 +46,7 @@ watch(isActive, newValue => {
 
 <style>
 .opponent-wrapper {
-  max-width: 20vw;
+  max-width: max(10rem, 20vw);
 }
 
 .opponent-name {
