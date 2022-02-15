@@ -10,26 +10,28 @@
         :class="{ 'h-64': menuOpen, 'h-0': !menuOpen }"
         class="fixed left-0 right-0 w-screen transition-all overflow-hidden px-6 flex flex-nowrap justify-end"
       >
-        <div class="bg-darkest w-full max-w-sm menu-rounded-edges">
+        <div class="relative bg-darkest w-full max-w-sm h-full menu-rounded-edges overflow-hidden" style="max-height: 70vh">
           <div class="h-1.5"></div>
           <div class="menu-rounded-edges menu-content border bc-invert-main border-t-0 py-1">
-            <div class="flex flex-col flex-nowrap">
-              <div class="menu-section">
-                <p class="tc-main text-lg">#Options#</p>
-                <div class="menu-options-container flex flex-row justify-end">
-                  <DarkModeSwitch />
-                  <FullScreenSwitch />
+            <div class="scroll-container overflow-y-scroll h-full max-h-full">
+              <div class="flex flex-col flex-nowrap">
+                <div class="menu-section">
+                  <p class="tc-main text-lg">#Options#</p>
+                  <div class="menu-options-container flex flex-row justify-end">
+                    <DarkModeSwitch />
+                    <FullScreenSwitch />
+                  </div>
                 </div>
-              </div>
-              <hr class="bc-invert-lightest opacity-40 my-1" />
-              <div class="menu-section">
-                <p class="tc-main text-lg">#Actions#</p>
-                <div>
-                  <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">#Leave#</button>
+                <hr class="bc-invert-lightest opacity-40 my-1" />
+                <div class="menu-section">
+                  <p class="tc-main text-lg">#Actions#</p>
+                  <div>
+                    <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">#Leave#</button>
+                  </div>
                 </div>
+                <hr class="bc-invert-lightest opacity-40 my-1" />
+                <GameChat />
               </div>
-              <hr class="bc-invert-lightest opacity-40 my-1" />
-              <GameChat />
             </div>
           </div>
         </div>

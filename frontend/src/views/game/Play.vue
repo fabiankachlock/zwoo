@@ -5,13 +5,13 @@
         <div class="z-10 min-w-0">
           <InGameMenu />
         </div>
-        <div class="h-full min-w-0">
+        <div class="z-0 h-full min-w-0">
           <div class="relative flex flex-col flex-nowrap py-4">
             <Opponents />
           </div>
           <CardDetail v-if="showCardDetail" />
         </div>
-        <div class="relative min-w-0">
+        <div class="relative z-0 min-w-0">
           <CardDeck />
         </div>
       </div>
