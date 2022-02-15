@@ -1,5 +1,5 @@
 <template>
-  <div class="h-32 mt-0.5 py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto" style="max-height: 60vh">
+  <div class="h-32 py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto" style="max-height: 60vh">
     <ChatMessage message="Test0" />
     <ChatMessage message="Test1" />
     <ChatMessage message="Test2" is-own />

@@ -7,7 +7,7 @@
         <Icon v-else icon="akar-icons:chevron-down"></Icon>
       </div>
       <div
-        :class="{ 'h-64': menuOpen, 'h-0': !menuOpen }"
+        :class="{ 'open-menu': menuOpen, 'h-0': !menuOpen }"
         class="fixed left-0 right-0 w-screen transition-all overflow-hidden px-6 flex flex-nowrap justify-end"
       >
         <div class="relative bg-darkest w-full max-w-sm h-full menu-rounded-edges overflow-hidden" style="max-height: 70vh">
@@ -31,6 +31,8 @@
                 </div>
                 <hr class="bc-invert-lightest opacity-40 my-1" />
                 <GameChat />
+                <hr class="bc-invert-lightest opacity-40 my-1" />
+                <ChatInput />
               </div>
             </div>
           </div>
@@ -48,6 +50,7 @@ import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import GameChat from './chat/GameChat.vue';
+import ChatInput from './chat/ChatInput.vue';
 
 const stateStore = useGameState();
 const deckState = useGameCardDeck();
@@ -64,6 +67,10 @@ const handleLeave = () => {
 </script>
 
 <style>
+.open-menu {
+  height: 19rem;
+}
+
 .menu-rounded-edges {
   border-radius: 0 0 1rem 1rem;
 }
