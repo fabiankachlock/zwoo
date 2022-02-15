@@ -7,7 +7,7 @@
     <div class="flex flex-row flex-nowrap w-full h-full items-center tc-main cursor-default overflow-hidden whitespace-nowrap">
       <span class="mr-3 opponent-name">{{ name }}</span>
       <span class="whitespace-nowrap">{{ cardAmount }}</span>
-      <span class="ml-1 flex items-center">
+      <span class="ml-2 flex items-center">
         <button @click="toggleMute" class="transition-transform transform hover:scale-125">
           <Icon v-if="isMuted" icon="bi:mic-mute-fill" />
           <Icon v-else icon="bi:mic-fill" />
