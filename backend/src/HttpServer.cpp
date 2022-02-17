@@ -8,6 +8,7 @@
 
 #include "Server/ServerComponent.hpp"
 #include "Server/controller/Authentication/AuthenticationController.hpp"
+#include "Server/controller/GameManager/GameManagerController.hpp"
 
 #ifdef BUILD_SWAGGER
 #include "oatpp-swagger/Controller.hpp"
@@ -32,15 +33,17 @@ void HttpServer::RunServer()
     oatpp::web::server::api::Endpoints docEndpoints;
 
     docEndpoints.append(router->addController(AuthenticationController::createShared())->getEndpoints());
+    docEndpoints.append(router->addController(GameManagerController::createShared())->getEndpoints());
     router->addController(oatpp::swagger::Controller::createShared(docEndpoints));
 
     logger->log->info("Added Swagger Endpoint: http://localhost:8000/swagger/ui");
 #endif
 
     router->addController(AuthenticationController::createShared());
+    router->addController(GameManagerController::createShared());
 
     /* Get connection handler component */
-    OATPP_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, connectionHandler);
+    OATPP_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, connectionHandler, "http");
 
     if (USE_SSL)
     {

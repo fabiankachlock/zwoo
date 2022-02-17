@@ -29,6 +29,7 @@ set(SRC_FILES
 
     "src/Server/controller/Authentication/ReCaptcha.cpp"
     "src/Server/controller/Authentication/AuthenticationValidators.cpp"
+    "src/Server/controller/GameManager/websocket/WSListener.cpp"
 )
 
 set(LIBS

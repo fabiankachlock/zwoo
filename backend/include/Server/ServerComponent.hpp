@@ -3,12 +3,15 @@
 
 #include "zwoo.h"
 
+#include "controller/GameManager/websocket/WSListener.hpp"
+
 #include "oatpp/network/tcp/server/ConnectionProvider.hpp"
 #include "oatpp/web/server/HttpConnectionHandler.hpp"
 #include "oatpp/web/server/HttpRouter.hpp"
+#include "oatpp-websocket/ConnectionHandler.hpp"
+#include "oatpp/network/tcp/server/ConnectionProvider.hpp"
 
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
-
 #include "oatpp/core/macro/component.hpp"
 #include "oatpp/core/base/CommandLineArguments.hpp"
 
@@ -56,14 +59,13 @@ public:
     /**
     *  Create ConnectionHandler component which uses Router component to route requests
     */
-    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, serverConnectionHandler)
-    ([] {
+    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, httpConnectionHandler)("http" /* qualifier */, [] {
         OATPP_COMPONENT(std::shared_ptr<oatpp::web::server::HttpRouter>, router);          // get Router component
         OATPP_COMPONENT(std::shared_ptr<oatpp::data::mapping::ObjectMapper>, objectMapper);// get ObjectMapper component
 
-        auto connectionHandler = oatpp::web::server::HttpConnectionHandler::createShared(router);
-        connectionHandler->setErrorHandler(std::make_shared<ErrorHandler>(objectMapper));
-        return connectionHandler;
+        auto httpconnectionHandler = oatpp::web::server::HttpConnectionHandler::createShared(router);
+        httpconnectionHandler->setErrorHandler(std::make_shared<ErrorHandler>(objectMapper));
+        return httpconnectionHandler;
     }());
 
     OATPP_CREATE_COMPONENT(std::shared_ptr<Logger>, logger)
@@ -75,6 +77,15 @@ public:
     ([this] {
         p_logger->log->info("Mongodb: {0}", ZWOO_DATABASE_CONNECTION_STRING);
         return std::make_shared<Database>(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING), "zwoo", "users");
+    }());
+
+    /**
+    *  Create websocket connection handler
+    */
+    OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, websocketConnectionHandler)("websocket" /* qualifier */, [] {
+        auto connectionHandler = oatpp::websocket::ConnectionHandler::createShared();
+        connectionHandler->setSocketInstanceListener(std::make_shared<WSInstanceListener>());
+        return connectionHandler;
     }());
 };
 
