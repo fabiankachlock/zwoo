@@ -161,7 +161,7 @@
     "manage": "Cookies Verwalten",
     "disallowed": {
       "title": "Fehlende Cookies",
-      "info": "Die Login- und Accounterstellungfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
+      "info": "Die Login- und Accounterstellungsfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
     }
   }
 }

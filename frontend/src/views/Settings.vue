@@ -1,13 +1,15 @@
 <template>
-  <h1 class="tc-main text-4xl mx-6 my-5">{{ t('settings.title') }}</h1>
-  <div class="mx-6 my-5">
-    <SettingsSectionGeneral />
-    <SettingsSectionGame />
-    <SettingsSectionDanger />
-    <Version />
-    <UpdateDaemon />
+  <div class="max-w-4xl mx-auto">
+    <h1 class="tc-main text-4xl mx-6 my-5">{{ t('settings.title') }}</h1>
+    <div class="mx-6 my-5">
+      <SettingsSectionGeneral />
+      <SettingsSectionGame />
+      <SettingsSectionDanger />
+      <Version />
+      <UpdateDaemon />
+    </div>
+    <div class="h-12"></div>
   </div>
-  <div class="h-12"></div>
 </template>
 
 <script setup lang="ts">

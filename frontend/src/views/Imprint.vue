@@ -1,5 +1,5 @@
 <template>
-  <div class="imprint m-8 mb-20 tc-main-secondary">
+  <div class="imprint m-8 mb-20 tc-main-secondary max-w-4xl mx-auto">
     <h1 class="tc-main">Impressum</h1>
 
     <p>Angaben gemäß § 5 TMG</p>
