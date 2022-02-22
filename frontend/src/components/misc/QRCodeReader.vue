@@ -1,6 +1,6 @@
 <template>
   <div v-if="isSupported" class="w-full h-full flex flex-col flex-nowrap p-3">
-    <div v-if="cameraOn" class="rounded-sm">
+    <div v-if="cameraOn" class="rounded-sm mx-auto">
       <video :srcObject="mediaStream" :ref="r => (videoElement = r as HTMLVideoElement)" autoplay="true"></video>
     </div>
     <div>
@@ -10,7 +10,7 @@
     </div>
     <div>
       <div class="flex justify-center items-center my-2">
-        <button class="bg-darkest tc-main px-6 py-2 rounded hover:bg-dark transform transition-transform hover:scale-95" @click="handleButtonClick">
+        <button class="bg-dark tc-main px-6 py-2 rounded hover:bg-darkest transform transition-transform hover:scale-95" @click="handleButtonClick">
           {{ t(cameraOn ? 'join.closeCam' : 'join.scanCode') }}
         </button>
       </div>
