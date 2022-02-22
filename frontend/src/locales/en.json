@@ -3,7 +3,8 @@
     "title": "Settings",
     "sections": {
       "general": "General",
-      "game": "Game"
+      "game": "Game",
+      "danger": "Danger"
     },
     "update": {
       "available": "An update is available",
@@ -16,12 +17,15 @@
         "off": "deactivated"
       }
     },
+    "": "",
     "darkmode": "Dark Mode",
     "language": "Language",
     "fullscreen": "Fullscreen",
     "quickMenu": "Quick Menu",
     "showCardDetail": "Show Card Detail before playing",
-    "sortCards": "Sort cards in deck"
+    "sortCards": "Sort cards in deck",
+    "cookies": "Cookies",
+    "deleteAccount": "Delete Account"
   },
   "lng": {
     "de": "German",
@@ -31,7 +35,7 @@
     "login": "Login",
     "createAccount": "Create Account",
     "idea": "New Idea?",
-    "github": "Github",
+    "imprint": "Imprint",
     "logout": "Logout",
     "settings": "Settings",
     "home": "Home"
@@ -130,6 +134,34 @@
       "success": "All good",
       "fail": "Failed Bot Check! - Please retry later.",
       "half": "Result: Cyborg, but that's ok try acting less like a bot in the future."
+    }
+  },
+  "deleteAccount": {
+    "title": "Delete Account",
+    "password": "Password",
+    "delete": "Delete Now!"
+  },
+  "cookies": {
+    "title": "Cookie Consent",
+    "functional": {
+      "title": "Functional Cookies",
+      "auth": {
+        "name": "Authentication Cookies",
+        "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
+      },
+      "recaptcha": {
+        "name": "Google reCAPTCHA Cookies",
+        "description": "We use Google reCAPTCHA in order to prevent spam. Google reCAPTCHA needs cookies in order to analyze your interactions with the website."
+      }
+    },
+    "active": "Active",
+    "inactive": "Inactive",
+    "acceptAll": "Accept All",
+    "acceptSelection": "Accept Selection",
+    "manage": "Manage Cookies",
+    "disallowed": {
+      "title": "Missing Cookies",
+      "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
     }
   }
 }

@@ -3,6 +3,7 @@
   <div class="mx-6 my-5">
     <SettingsSectionGeneral />
     <SettingsSectionGame />
+    <SettingsSectionDanger />
     <Version />
     <UpdateDaemon />
   </div>
@@ -15,6 +16,7 @@ import { useI18n } from 'vue-i18n';
 import Version from '@/components/misc/Version.vue';
 import SettingsSectionGame from '@/components/settings/sections/SettingsSectionGame.vue';
 import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
+import SettingsSectionDanger from '@/components/settings/sections/SettingsSectionDanger.vue';
 
 const { t } = useI18n();
 </script>

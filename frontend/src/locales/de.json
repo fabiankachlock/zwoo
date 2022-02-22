@@ -3,7 +3,8 @@
     "title": "Einstellungen",
     "sections": {
       "general": "Allgemein",
-      "game": "Spiel"
+      "game": "Spiel",
+      "danger": "Gefahrenzone"
     },
     "update": {
       "available": "Ein Update ist verfügbar",
@@ -16,12 +17,15 @@
         "off": "deaktiviert"
       }
     },
+    "": "",
     "darkmode": "Dunkler Modus",
     "fullscreen": "Vollbildschirm",
     "quickMenu": "Schnellmenü",
     "language": "Sprache",
     "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
-    "sortCards": "Karten im Deck sortieren"
+    "sortCards": "Karten im Deck sortieren",
+    "cookies": "Cookies",
+    "deleteAccount": "Account löschen"
   },
   "lng": {
     "de": "Deutsch",
@@ -31,7 +35,7 @@
     "login": "Anmelden",
     "createAccount": "Account erstellen",
     "idea": "Neue Idee?",
-    "github": "Github",
+    "imprint": "Impressum",
     "logout": "Abmelden",
     "settings": "Einstellungen",
     "home": "Home"
@@ -130,6 +134,34 @@
       "success": "Alles gut",
       "fail": "Check fehlgeschlagen! - Versuche es später nochmal.",
       "half": "Ergebnis: Cyborg, aber das ist ok, versuche dich weniger wie ein Roboter in der Zukunft zu verhalten."
+    }
+  },
+  "deleteAccount": {
+    "title": "Account Löschen",
+    "password": "Passwort",
+    "delete": "Jetzt Löschen!"
+  },
+  "cookies": {
+    "title": "Cookie Zustimmungen",
+    "functional": {
+      "title": "Funktionale Cookies",
+      "auth": {
+        "name": "Authetifizierungs Cookies",
+        "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
+      },
+      "recaptcha": {
+        "name": "Google reCAPTCHA Cookies",
+        "description": "Wir nutzen Google reCAPTCHA um SPAM zu vermeiden. Damit Google reCAPTCHA funktioniert, müssen Cookies gespeichert werden, damit deine Interaktionen mit der Webseite analysiert werden können."
+      }
+    },
+    "active": "Aktiviert",
+    "inactive": "Deaktiviert",
+    "acceptAll": "Alle Akzeptieren",
+    "acceptSelection": "Auswahl Akzeptieren",
+    "manage": "Cookies Verwalten",
+    "disallowed": {
+      "title": "Fehlende Cookies",
+      "info": "Die Login- und Accounterstellungfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
     }
   }
 }

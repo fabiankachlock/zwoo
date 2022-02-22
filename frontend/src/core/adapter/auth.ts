@@ -64,6 +64,14 @@ export const useAuth = defineStore('auth', {
         });
       }
     },
+    async deleteAccount(password: string) {
+      await AuthenticationService.performDeleteAccount(password);
+
+      this.$patch({
+        username: '',
+        isLoggedIn: false
+      });
+    },
     async askStatus() {
       const response = await AuthenticationService.getUserInfo();
       if (response.isLoggedIn) {
