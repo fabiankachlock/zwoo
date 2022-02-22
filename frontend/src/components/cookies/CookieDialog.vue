@@ -22,7 +22,7 @@
               <h4 class="text tc-main">{{ t('cookies.functional.recaptcha.name') }}</h4>
               <p class="text-xs tc-main-secondary ml-2 mb-1">{{ t('cookies.functional.recaptcha.description') }}</p>
             </div>
-            <div
+            <button
               class="bg-main border-2 border-transparent px-4 py-1 ml-4 rounded transition hover:bg-dark cursor-pointer select-none"
               :class="{ 'tc-primary': recaptchaActivated, 'tc-main-secondary': !recaptchaActivated }"
               @click="recaptchaActivated = !recaptchaActivated"
@@ -32,23 +32,23 @@
                 <Icon v-if="recaptchaActivated" icon="akar-icons:check" class="ml-2" />
                 <Icon v-else icon="akar-icons:cross" class="ml-2" />
               </p>
-            </div>
+            </button>
           </li>
         </ul>
       </div>
       <div class="grid grid-cols-2 gap-2 mt-4">
-        <div
+        <button
           class="flex justify-center items-center bg-light border-2 border-transparent px-4 py-1 rounded transition hover:bg-main cursor-pointer select-none"
           @click="acceptSelection"
         >
           <p class="tc-main-secondary text-center">{{ t('cookies.acceptSelection') }}</p>
-        </div>
-        <div
+        </button>
+        <button
           class="flex justify-center items-center bg-main border-2 border-primary px-4 py-1 rounded transition hover:bg-dark cursor-pointer select-none"
           @click="acceptAll"
         >
           <p class="tc-primary text-center">{{ t('cookies.acceptAll') }}</p>
-        </div>
+        </button>
       </div>
     </div>
   </FloatingDialog>

@@ -4,16 +4,16 @@
       <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-10">
         <h2 class="tc-main text-4xl mb-2 py-3">{{ t('list.title') }}</h2>
         <div class="flex flex-nowrap">
-          <div class="scan-code btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="scanCode">
+          <button class="scan-code btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="scanCode">
             <div class="icon-wrapper">
               <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
             </div>
-          </div>
-          <div class="refresh btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="refresh">
+          </button>
+          <button class="refresh btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="refresh">
             <div class="icon-wrapper">
               <Icon icon="iconoir:refresh" class="icon text-2xl" :class="{ 'animate-spin': refreshing }"></Icon>
             </div>
-          </div>
+          </button>
         </div>
       </div>
       <div v-if="scanDialogOpen">

@@ -3,10 +3,10 @@
     <label class="tc-main-secondary text-sm font-bold my-2 relative">
       <slot></slot>
     </label>
-    <div :class="styles" class="hover:bc-primary border border-transparent rounded" @click="toggle">
+    <button :class="styles" class="hover:bc-primary border border-transparent rounded" @click.prevent="toggle">
       <Icon v-show="!checked" icon="akar-icons:box" />
       <Icon v-show="checked" icon="akar-icons:check" />
-    </div>
+    </button>
   </div>
 </template>
 
