@@ -17,7 +17,7 @@
     </header>
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
-        <div class="bg-lightest md:row-span-2">
+        <div class="bg-light md:row-span-2">
           <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
           <div class="w-full flex flex-col">
             <div
@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="bg-lightest">
+        <div class="bg-light">
           <p class="text-xl tc-main my-2">{{ t('wait.rules') }}</p>
           <div class="w-full flex flex-col">
             <div
@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <div class="bg-lightest">
+        <div class="bg-light">
           <p class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</p>
           <p class="my-1 text-sm italic tc-main-secondary">
             {{ t('wait.qrcodeInfo') }}

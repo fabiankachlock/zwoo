@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
+  <div class="menu fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
     <header class="h-full">
       <div class="h-full mx-4 my-0 relative flex justify-between items-center flex-row">
         <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">
@@ -14,7 +14,7 @@
     <FloatingMenu />
   </div>
   <div class="menu-main bg-main w-screen overflow-y-scroll relative">
-    <div class="pt-10 w-full relative">
+    <div class="device-padding padding-menu w-full relative">
       <router-view></router-view>
     </div>
   </div>
@@ -25,9 +25,12 @@ import NavBar from '@/components/menu/NavBar.vue';
 import FloatingMenu from '@/components/menu/FloatingMenu.vue';
 </script>
 
-<style>
+<style scoped>
 .menu-main {
   height: 100vh;
-  max-height: calc(100vh - calc(100vh - 100%));
+  max-height: calc(100vh - calc(100vh - 100% - 2.5rem));
+}
+.menu {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
 }
 </style>
