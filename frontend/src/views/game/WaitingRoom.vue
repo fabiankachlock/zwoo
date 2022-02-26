@@ -34,24 +34,9 @@
         <div class="bg-lightest">
           <p class="text-xl tc-main my-2">{{ t('wait.rules') }}</p>
           <div class="w-full flex flex-col">
-            <!-- <div
-              v-for="rule of rules"
-              :key="rule"
-              @click="selectRule(rule)"
-              v-tooltip="t(openRule === rule ? 'wait.collapse' : 'wait.expand')"
-              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest cursor-pointer"
-            >
-              <p class="text-lg tc-main-dark">{{ t(`rules.${rule}.title`) }}</p>
-              <div v-if="openRule === rule">
-                <div class="divider w-full my-2 bc-invert-darkest border-b"></div>
-                <div class="content">
-                  <p class="text-sm italic tc-main-secondary">
-                    {{ t(`rules.${rule}.info`) }}
-                  </p>
-                </div>
-              </div>
-            </div> -->
-            <GameRule v-for="rule of rules" :key="rule" :title="`rules.${rule}.title`" :description="`rules.${rule}.info`" />
+            <GameRule v-for="rule of rules" :key="rule" :title="`rules.${rule}.title`" :description="`rules.${rule}.info`">
+              <RuleSwitch />
+            </GameRule>
           </div>
         </div>
         <div class="bg-lightest">
@@ -74,6 +59,7 @@ import { computed } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
 import GameRule from '@/components/waiting/GameRule.vue';
+import RuleSwitch from '@/components/waiting/RuleSwitch.vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
