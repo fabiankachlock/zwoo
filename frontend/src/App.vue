@@ -1,5 +1,8 @@
 <template>
-  <router-view />
+  <div class="max-height-ios relative">
+    <router-view />
+  </div>
+
   <ConsentManager />
 </template>
 

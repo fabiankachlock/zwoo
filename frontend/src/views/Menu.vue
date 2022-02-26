@@ -10,12 +10,13 @@
       </div>
     </header>
   </div>
-  <div class="relative z-50">
+  <div class="relative z-40">
     <FloatingMenu />
   </div>
-  <div class="menu-main bg-main w-screen overflow-y-scroll relative">
-    <div class="device-padding padding-menu w-full relative">
+  <div class="menu-main fixed top-10 left-0 right-0 w-screen overflow-y-scroll">
+    <div class="device-padding w-full relative">
       <router-view></router-view>
+      <div class="h-16"></div>
     </div>
   </div>
 </template>
