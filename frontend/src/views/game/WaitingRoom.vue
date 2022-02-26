@@ -34,7 +34,7 @@
         <div class="bg-lightest">
           <p class="text-xl tc-main my-2">{{ t('wait.rules') }}</p>
           <div class="w-full flex flex-col">
-            <div
+            <!-- <div
               v-for="rule of rules"
               :key="rule"
               @click="selectRule(rule)"
@@ -50,7 +50,8 @@
                   </p>
                 </div>
               </div>
-            </div>
+            </div> -->
+            <GameRule v-for="rule of rules" :key="rule" :title="`rules.${rule}.title`" :description="`rules.${rule}.info`" />
           </div>
         </div>
         <div class="bg-lightest">
@@ -69,9 +70,10 @@
 
 <script setup lang="ts">
 import { useGameConfig } from '@/core/adapter/game';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
+import GameRule from '@/components/waiting/GameRule.vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
@@ -89,10 +91,10 @@ const players = [
 ];
 const rules = ['test-1', 'key-2'];
 
-const openRule = ref<string | undefined>(undefined);
-const selectRule = (ruleKey: string) => {
-  openRule.value = openRule.value === ruleKey ? undefined : ruleKey;
-};
+// const openRule = ref<string | undefined>(undefined);
+// const selectRule = (ruleKey: string) => {
+//   openRule.value = openRule.value === ruleKey ? undefined : ruleKey;
+// };
 </script>
 
 <style>
