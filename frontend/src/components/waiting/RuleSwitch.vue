@@ -3,28 +3,24 @@
     <div
       class="px-4 relative rounded bg-main hover:bg-dark transition border-2 switch-body"
       :class="{
-        'on tc-main bc-primary': isEnabled,
-        'off tc-main-light bc-lightest': !isEnabled
+        'on tc-main bc-primary': modelValue,
+        'off tc-main-light bc-lightest': !modelValue
       }"
     >
       <div class="thumb"></div>
       <p class="text-md z-10">
-        {{ isEnabled ? 'On' : 'Off' }}
+        {{ modelValue ? 'On' : 'Off' }}
       </p>
     </div>
   </button>
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, ref, toRefs } from 'vue';
+import { defineEmits, defineProps } from 'vue';
 
-const isEnabled = ref(false);
 const props = defineProps<{
-  modelValue?: boolean;
+  modelValue: boolean;
 }>();
-
-const { modelValue } = toRefs(props);
-isEnabled.value = modelValue?.value ?? false;
 
 const emit = defineEmits<{
   (event: 'toggle', enabled: boolean): void;
@@ -32,9 +28,8 @@ const emit = defineEmits<{
 }>();
 
 const toggle = () => {
-  isEnabled.value = !isEnabled.value;
-  emit('update:modelValue', isEnabled.value);
-  emit('toggle', isEnabled.value);
+  emit('update:modelValue', !props.modelValue);
+  emit('toggle', !props.modelValue);
 };
 </script>
 

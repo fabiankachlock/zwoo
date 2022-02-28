@@ -32,12 +32,7 @@
           </div>
         </div>
         <div class="bg-lightest">
-          <p class="text-xl tc-main my-2">{{ t('wait.rules') }}</p>
-          <div class="w-full flex flex-col">
-            <GameRule v-for="rule of rules" :key="rule" :title="`rules.${rule}.title`" :description="`rules.${rule}.info`">
-              <RuleSwitch />
-            </GameRule>
-          </div>
+          <Rules />
         </div>
         <div class="bg-lightest">
           <p class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</p>
@@ -58,8 +53,7 @@ import { useGameConfig } from '@/core/adapter/game';
 import { computed } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
-import GameRule from '@/components/waiting/GameRule.vue';
-import RuleSwitch from '@/components/waiting/RuleSwitch.vue';
+import Rules from '@/components/waiting/Rules.vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
@@ -75,12 +69,6 @@ const players = [
     id: '234'
   }
 ];
-const rules = ['test-1', 'key-2'];
-
-// const openRule = ref<string | undefined>(undefined);
-// const selectRule = (ruleKey: string) => {
-//   openRule.value = openRule.value === ruleKey ? undefined : ruleKey;
-// };
 </script>
 
 <style>
