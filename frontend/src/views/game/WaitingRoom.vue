@@ -18,7 +18,37 @@
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
         <div class="bg-lightest md:row-span-2">
-          <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
+          <div class="flex flex-nowrap flex-row justify-between items-center">
+            <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
+            <div class="flex flex-row">
+              <button class="scan-code rounded m-1 bg-main hover:bg-dark tc-main-light">
+                <div class="transform transition-transform hover:scale-125 p-1">
+                  <Icon icon="iconoir:share-ios" class="icon text-2xl"></Icon>
+                </div>
+              </button>
+              <button @click="qrCodeOpen = true" class="refresh rounded m-1 bg-main hover:bg-dark tc-main-light">
+                <div class="transform transition-transform hover:scale-125 p-1">
+                  <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
+                </div>
+              </button>
+            </div>
+            <div v-if="qrCodeOpen" class="share-qr-dialog">
+              <FloatingDialog>
+                <div class="absolute top-4 right-4">
+                  <button @click="qrCodeOpen = false" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
+                    <Icon icon="akar-icons:cross" clas="text-2xl" />
+                  </button>
+                </div>
+                <p class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</p>
+                <p class="my-1 text-sm italic tc-main-secondary">
+                  {{ t('wait.qrcodeInfo') }}
+                </p>
+                <div class="qrcode-wrapper mx-auto max-w-xs">
+                  <QRCode :data="'https://zwoo-ui.web.app/join/' + gameId" :width="256" :height="256" />
+                </div>
+              </FloatingDialog>
+            </div>
+          </div>
           <div class="w-full flex flex-col">
             <div
               v-for="player of players"
@@ -34,15 +64,7 @@
         <div class="bg-lightest">
           <Rules />
         </div>
-        <div class="bg-lightest">
-          <p class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</p>
-          <p class="my-1 text-sm italic tc-main-secondary">
-            {{ t('wait.qrcodeInfo') }}
-          </p>
-          <div class="qrcode-wrapper mx-auto max-w-xs">
-            <QRCode :data="'https://zwoo-ui.web.app/join/' + gameId" :width="256" :height="256" />
-          </div>
-        </div>
+        <div class="bg-lightest">Host section...</div>
       </div>
     </main>
   </div>
@@ -50,15 +72,18 @@
 
 <script setup lang="ts">
 import { useGameConfig } from '@/core/adapter/game';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
 import Rules from '@/components/waiting/Rules.vue';
+import { Icon } from '@iconify/vue';
+import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host);
 const gameId = computed(() => gameConfig.gameId);
+const qrCodeOpen = ref(false);
 const players = [
   {
     name: 'player 1',
