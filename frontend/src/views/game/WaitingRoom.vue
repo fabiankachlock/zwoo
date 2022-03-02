@@ -23,7 +23,7 @@
             <div class="flex flex-row">
               <button @click="shareSheetOpen = true" class="scan-code rounded m-1 bg-main hover:bg-dark tc-main-light">
                 <div class="transform transition-transform hover:scale-125 p-1">
-                  <Icon icon="iconoir:share-ios" class="icon text-2xl"></Icon>
+                  <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
                 </div>
               </button>
               <button @click="qrCodeOpen = true" class="refresh rounded m-1 bg-main hover:bg-dark tc-main-light">
