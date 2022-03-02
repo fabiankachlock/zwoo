@@ -13,6 +13,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2020,
+    parser: '@typescript-eslint/parser'
   },
   rules: {
     "no-unused-vars": "off",
@@ -20,7 +21,8 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-control-regex": "off",
-    "sort-imports": ["off"]
+    "sort-imports": ["off"],
+    'vue/multi-word-component-names': 'warn'
 
   },
   overrides: [
