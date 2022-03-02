@@ -8,8 +8,8 @@
       }"
     >
       <div class="thumb"></div>
-      <p class="text-md z-10">
-        {{ modelValue ? 'On' : 'Off' }}
+      <p class="text-md z-10 w-6">
+        {{ t(`controls.toggle.${modelValue ? 'on' : 'off'}`) }}
       </p>
     </div>
   </button>
@@ -17,6 +17,9 @@
 
 <script setup lang="ts">
 import { defineEmits, defineProps } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   modelValue: boolean;

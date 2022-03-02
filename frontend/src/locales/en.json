@@ -178,5 +178,11 @@
       "title": "Join {0}!",
       "text": "You got invited into a zwoo game, use the link to join now!"
     }
+  },
+  "controls": {
+    "toggle": {
+      "on": "On",
+      "off": "Off"
+    }
   }
 }
