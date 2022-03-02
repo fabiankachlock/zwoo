@@ -2,7 +2,7 @@
   <div class="w-full h-full relative flex flex-col flex-nowrap overflow-y-scroll py-2">
     <header class="mx-2 sticky top-0 left-0 right-0 z-10">
       <div class="w-full rounded-lg bg-darkest flex flex-row px-2 py-1 justify-center flex-wrap items-center">
-        <p class="text-3xl tc-main font-bold m-2 text-center">#GameName#</p>
+        <p class="text-3xl tc-main font-bold m-2 text-center">{{ gameConfig.name }}</p>
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost">
@@ -65,18 +65,23 @@
             <div
               v-for="player of players"
               :key="player.id"
-              class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest"
+              class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest"
             >
-              <span class="text-lg tc-main-dark">
+              <p class="text-lg tc-main-dark">
                 {{ player.name }}
-              </span>
+              </p>
+              <div class="flex items-center h-full justify-end">
+                <button v-if="isHost" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+                  <Icon icon="iconoir:delete-circled-outline" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="bg-lightest">
+        <div class="bg-lightest" :class="{ 'md:row-span-2': !isHost }">
           <Rules />
         </div>
-        <div class="bg-lightest">Host section...</div>
+        <div v-if="isHost" class="bg-lightest">Host section...</div>
       </div>
     </main>
   </div>
