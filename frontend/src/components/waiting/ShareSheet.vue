@@ -1,7 +1,7 @@
 <template>
-  <h3 class="text-xl tc-main my-2">{{ t('sharesheet.title') }}</h3>
+  <h3 class="text-xl tc-main my-2">{{ t('wait.sharesheet.title') }}</h3>
   <p class="my-1 text-sm italic tc-main-secondary">
-    {{ t('sharesheet.info') }}
+    {{ t('wait.sharesheet.info') }}
   </p>
   <div v-if="!canShare" class="">
     <div>
@@ -144,8 +144,8 @@ const text = ref('');
 const error = ref<string | undefined>(undefined);
 
 onMounted(() => {
-  title.value = `join ${game.name}!`;
-  text.value = `You got invited into a zwoo game, use the link to join now!`;
+  title.value = t('share.join.title', [game.name]);
+  text.value = t('share.join.text');
   url.value = `http://localhost:8080/join/${game.gameId}`;
   if (canShare.value) {
     try {
