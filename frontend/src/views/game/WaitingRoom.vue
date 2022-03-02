@@ -21,7 +21,7 @@
           <div class="flex flex-nowrap flex-row justify-between items-center">
             <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
             <div class="flex flex-row">
-              <button class="scan-code rounded m-1 bg-main hover:bg-dark tc-main-light">
+              <button @click="shareSheetOpen = true" class="scan-code rounded m-1 bg-main hover:bg-dark tc-main-light">
                 <div class="transform transition-transform hover:scale-125 p-1">
                   <Icon icon="iconoir:share-ios" class="icon text-2xl"></Icon>
                 </div>
@@ -32,14 +32,26 @@
                 </div>
               </button>
             </div>
-            <div v-if="qrCodeOpen" class="share-qr-dialog">
+            <div v-if="shareSheetOpen">
               <FloatingDialog>
-                <div class="absolute top-4 right-4">
-                  <button @click="qrCodeOpen = false" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
-                    <Icon icon="akar-icons:cross" clas="text-2xl" />
+                <div class="absolute top-4 right-4 z-10">
+                  <button @click="shareSheetOpen = false" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
+                    <Icon icon="akar-icons:cross" class="text-2xl" />
                   </button>
                 </div>
-                <p class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</p>
+                <div class="relative">
+                  <ShareSheet @should-close="shareSheetOpen = false" />
+                </div>
+              </FloatingDialog>
+            </div>
+            <div v-if="qrCodeOpen" class="share-qr-dialog">
+              <FloatingDialog>
+                <div class="absolute top-4 right-4 z-10">
+                  <button @click="qrCodeOpen = false" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
+                    <Icon icon="akar-icons:cross" class="text-2xl" />
+                  </button>
+                </div>
+                <h3 class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</h3>
                 <p class="my-1 text-sm italic tc-main-secondary">
                   {{ t('wait.qrcodeInfo') }}
                 </p>
@@ -78,12 +90,14 @@ import { useI18n } from 'vue-i18n';
 import Rules from '@/components/waiting/Rules.vue';
 import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
+import ShareSheet from '@/components/waiting/ShareSheet.vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host);
 const gameId = computed(() => gameConfig.gameId);
 const qrCodeOpen = ref(false);
+const shareSheetOpen = ref(false);
 const players = [
   {
     name: 'player 1',

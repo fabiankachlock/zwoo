@@ -5,6 +5,7 @@ import { GameNameValidator } from '../services/validator/gameName';
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
     gameId: '',
+    name: '',
     host: false,
     inActiveGame: false
   }),
@@ -18,7 +19,8 @@ export const useGameConfig = defineStore('game-config', {
       this.$patch({
         inActiveGame: true,
         host: true,
-        gameId: status.id
+        gameId: status.id,
+        name: name
       });
     }
   }
