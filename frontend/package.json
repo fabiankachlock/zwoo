@@ -27,7 +27,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "vue": "^3.2.31",
     "vue-i18n": "^9.1.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.13"
   },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [
