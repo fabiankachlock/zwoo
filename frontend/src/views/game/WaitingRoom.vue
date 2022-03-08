@@ -71,12 +71,24 @@
                 {{ player.name }}
               </p>
               <div class="flex items-center h-full justify-end">
-                <button v-if="isHost" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
-                  <Icon icon="iconoir:question-mark" />
+                <button v-if="isHost" @click="promotePlayer(player.id)" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+                  <Icon icon="akar-icons:crown" />
                 </button>
-                <button v-if="isHost" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+                <button v-if="isHost" @click="kickPlayer(player.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
                   <Icon icon="iconoir:delete-circled-outline" />
                 </button>
+                <ReassureDialog
+                  @close="playerPromoteDialogOpen = false"
+                  :title="t('dialogs.promotePlayer.title', [player.name])"
+                  :body="t('dialogs.promotePlayer.body', [player.name])"
+                  :is-open="playerPromoteDialogOpen"
+                />
+                <ReassureDialog
+                  @close="playerKickDialogOpen = false"
+                  :title="t('dialogs.kickPlayer.title', [player.name])"
+                  :body="t('dialogs.kickPlayer.body', [player.name])"
+                  :is-open="playerKickDialogOpen"
+                />
               </div>
             </div>
           </div>
@@ -99,13 +111,28 @@ import Rules from '@/components/waiting/Rules.vue';
 import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';
+import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
 const qrCodeOpen = ref(false);
+const playerPromoteDialogOpen = ref(false);
+const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
+
+const promotePlayer = (id: string) => {
+  console.log('promoting', id);
+
+  playerPromoteDialogOpen.value = true;
+};
+
+const kickPlayer = (id: string) => {
+  console.log('kick', id);
+  playerKickDialogOpen.value = true;
+};
+
 const players = [
   {
     name: 'player 1',

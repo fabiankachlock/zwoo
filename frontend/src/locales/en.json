@@ -184,5 +184,19 @@
       "on": "On",
       "off": "Off"
     }
+  },
+  "dialogs": {
+    "promotePlayer": {
+      "title": "Promote {0} to a host?",
+      "body": "Are you sure that you want to promote {0}? You will lose your host status."
+    },
+    "kickPlayer": {
+      "title": "Kick {0}?",
+      "body": "Are you sure, that you want to kick {0}?"
+    }
+  },
+  "reassureDialog": {
+    "accept": "Ok!",
+    "decline": "Cancel!"
   }
 }

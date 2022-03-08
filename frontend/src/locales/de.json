@@ -184,5 +184,19 @@
       "on": "An",
       "off": "Aus"
     }
+  },
+  "dialogs": {
+    "promotePlayer": {
+      "title": "{0} zum Host befördern?",
+      "body": "Bist du sicher, dass du {0} zum Host befördern willst? Du verlierst deinen Host Status dadurch. "
+    },
+    "kickPlayer": {
+      "title": "{0} rauswerfen?",
+      "body": "Bist du sicher, dass du {0} aus dem Spiel rauswerfen möchtest?"
+    }
+  },
+  "reassureDialog": {
+    "accept": "Ok!",
+    "decline": "Abbrechen!"
   }
 }
