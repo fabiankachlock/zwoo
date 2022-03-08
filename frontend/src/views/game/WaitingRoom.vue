@@ -71,6 +71,9 @@
                 {{ player.name }}
               </p>
               <div class="flex items-center h-full justify-end">
+                <button v-if="isHost" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+                  <Icon icon="iconoir:question-mark" />
+                </button>
                 <button v-if="isHost" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
                   <Icon icon="iconoir:delete-circled-outline" />
                 </button>
@@ -99,7 +102,7 @@ import ShareSheet from '@/components/waiting/ShareSheet.vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
-const isHost = computed(() => gameConfig.host);
+const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
 const qrCodeOpen = ref(false);
 const shareSheetOpen = ref(false);
