@@ -71,20 +71,20 @@
                 {{ player.name }}
               </p>
               <div class="flex items-center h-full justify-end">
-                <button v-if="isHost" @click="promotePlayer(player.id)" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+                <button v-if="isHost" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
                   <Icon icon="akar-icons:crown" />
                 </button>
-                <button v-if="isHost" @click="kickPlayer(player.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+                <button v-if="isHost" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
                   <Icon icon="iconoir:delete-circled-outline" />
                 </button>
                 <ReassureDialog
-                  @close="playerPromoteDialogOpen = false"
+                  @close="allowed => promotePlayer(player.id, allowed)"
                   :title="t('dialogs.promotePlayer.title', [player.name])"
                   :body="t('dialogs.promotePlayer.body', [player.name])"
                   :is-open="playerPromoteDialogOpen"
                 />
                 <ReassureDialog
-                  @close="playerKickDialogOpen = false"
+                  @close="allowed => kickPlayer(player.id, allowed)"
                   :title="t('dialogs.kickPlayer.title', [player.name])"
                   :body="t('dialogs.kickPlayer.body', [player.name])"
                   :is-open="playerKickDialogOpen"
@@ -122,14 +122,25 @@ const playerPromoteDialogOpen = ref(false);
 const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
 
-const promotePlayer = (id: string) => {
-  console.log('promoting', id);
+const promotePlayer = (id: string, allowed: boolean) => {
+  if (allowed) {
+    console.log('promoting', id);
+  }
+  playerPromoteDialogOpen.value = false;
+};
 
+const askPromotePlayer = () => {
   playerPromoteDialogOpen.value = true;
 };
 
-const kickPlayer = (id: string) => {
-  console.log('kick', id);
+const kickPlayer = (id: string, allowed: boolean) => {
+  if (allowed) {
+    console.log('kick', id);
+  }
+  playerKickDialogOpen.value = false;
+};
+
+const askKickPlayer = () => {
   playerKickDialogOpen.value = true;
 };
 
