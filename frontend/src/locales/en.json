@@ -118,7 +118,11 @@
     "qrcode": "QRCode",
     "qrcodeInfo": "Other Player an join the game directly with the QRCode.",
     "expand": "Expand",
-    "collapse": "Collapse"
+    "collapse": "Collapse",
+    "sharesheet": {
+      "title": "Share your game!",
+      "info": "Share a link to join your game with your friends."
+    }
   },
   "rules": {
     "test-1": {
@@ -162,5 +166,37 @@
       "title": "Missing Cookies",
       "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
     }
+  },
+  "share": {
+    "facebook": "Share on Facebook",
+    "twitter": "Share on Twitter",
+    "email": "Share by Email",
+    "reddit": "Share on Reddit",
+    "whatsapp": "Share on Whatsapp",
+    "telegram": "Share on Telegram",
+    "join": {
+      "title": "Join {0}!",
+      "text": "You got invited into a zwoo game, use the link to join now!"
+    }
+  },
+  "controls": {
+    "toggle": {
+      "on": "On",
+      "off": "Off"
+    }
+  },
+  "dialogs": {
+    "promotePlayer": {
+      "title": "Promote {0} to a host?",
+      "body": "Are you sure that you want to promote {0}? You will lose your host status."
+    },
+    "kickPlayer": {
+      "title": "Kick {0}?",
+      "body": "Are you sure, that you want to kick {0}?"
+    }
+  },
+  "reassureDialog": {
+    "accept": "Ok!",
+    "decline": "Cancel!"
   }
 }
