@@ -1,6 +1,6 @@
 import { ZRPMessage, ZRPOPCode } from './zrpTypes';
 
-export class ZRPDecoder {
+export class ZRPCoder {
   static decode(msg: string): ZRPMessage {
     try {
       const content = JSON.parse(msg) as ZRPMessage;
@@ -15,5 +15,9 @@ export class ZRPDecoder {
         }
       };
     }
+  }
+
+  static encode(msg: ZRPMessage): string {
+    return JSON.stringify(msg);
   }
 }

@@ -49,7 +49,9 @@ export enum ZRPOPCode {
   _ConnectionError = 10_000,
   _ConnectionClosed = 10_101,
   _ClientError = 10_200,
-  _DecodingError = 10_201
+  _DecodingError = 10_201,
+  // internal messages
+  _Connected = 11_000
 }
 
 export type ZRPPayloadMap = {
@@ -93,6 +95,8 @@ export type ZRPPayloadMap = {
   [ZRPOPCode._ConnectionClosed]: ZRPInternalErrorPayload;
   [ZRPOPCode._ClientError]: ZRPInternalErrorPayload;
   [ZRPOPCode._DecodingError]: ZRPInternalErrorPayload;
+  // internal messages
+  [ZRPOPCode._Connected]: {};
 };
 
 export type ZRPJoinedGamePayload = {
