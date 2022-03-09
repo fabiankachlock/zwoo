@@ -15,13 +15,13 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
-    "no-unused-vars": "off",
+    "no-unused-vars": "warn",
     "@typescript-eslint/no-unused-vars": ["error"],
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-control-regex": "off",
-    "sort-imports": ["off"]
-
+    "sort-imports": "off",
+    "@typescript-eslint/ban-types": "warn",
   },
   overrides: [
     {
