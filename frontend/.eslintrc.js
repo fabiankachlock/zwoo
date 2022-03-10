@@ -15,7 +15,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
