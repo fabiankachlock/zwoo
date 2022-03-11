@@ -26,9 +26,79 @@ readline.on('line', (input) => {
 })
 
 const exampleMessages = {
-    [001]: {
-        test: 'testxxx'
-    }
+    [100]: {
+        name: 'test-player',
+        wins: 3
+    },
+    [101]: {
+        name: 'test-player',
+        wins: 3
+    },
+    [102]: {
+        name: 'test-player',
+        wins: 3
+    },
+    [103]: {
+        name: 'test-player',
+        wins: 3
+    },
+    [104]: {
+        message: 'test-message'
+    },
+    [105]: {
+        message: 'test-message',
+        name: 'test-player',
+        role: 'my-role'
+    },
+    [110]: {},
+    [111]: {},
+    [112]: {},
+    [113]: {},
+    [114]: {},
+    [115]: {},
+    [200]: {
+        setting: 'my-setting',
+        value: true
+    },
+    [201]: {
+        setting: 'my-setting',
+        value: true
+    },
+    [202]: {},
+    [300]: {},
+    [301]: {},
+    [302]: {},
+    [303]: {},
+    [304]: {
+        type: 'x',
+        symbol: 'y'
+    },
+    [305]: {},
+    [306]: {
+        type: 'x',
+        symbol: 'y'
+    },
+    [307]: {
+        type: 'x',
+        symbol: 'y'
+    },
+    [308]: {
+        type: 'x',
+        symbol: 'y'
+    },
+    [399]: {
+        name: 'test-player',
+        wins: 3
+    },
+    [400]: {
+        message: 'some-error'
+    },
+    [433]: {
+        message: 'some-error'
+    },
+    [434]: {
+        message: 'some-error'
+    },
 }
 
 function createExampleMessage(code, ...args) {
@@ -37,5 +107,8 @@ function createExampleMessage(code, ...args) {
         const [key, value] = arg.split(':');
         exampleMessage[key] = value;
     }
-    return JSON.stringify(exampleMessage);
+    return JSON.stringify({
+        code,
+        data: exampleMessage
+    });
 }
