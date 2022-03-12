@@ -4,8 +4,8 @@ import { ZRPMessage, ZRPOPCode } from '../zrp/zrpTypes';
 export class GameWebsocket {
   private connection: WebSocket;
 
-  constructor(public readonly gameId: string) {
-    this.connection = new WebSocket('...'); // TODO: insert ws url
+  constructor(public readonly url: string) {
+    this.connection = new WebSocket(url); // TODO: insert ws url
     this.connection.onmessage = this.handleMessage;
     this.connection.onerror = this.handleError;
     this.connection.onopen = this.handleOpen;
@@ -20,7 +20,7 @@ export class GameWebsocket {
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._Connected,
-        payload: {}
+        data: {}
       } as ZRPMessage<ZRPOPCode._Connected>)
     );
   };
@@ -29,7 +29,7 @@ export class GameWebsocket {
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._ConnectionError,
-        payload: {
+        data: {
           timestamp: performance.now(),
           thrownError: evt,
           rawReceivedContent: ''
@@ -42,7 +42,7 @@ export class GameWebsocket {
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._ConnectionClosed,
-        payload: {
+        data: {
           timestamp: performance.now(),
           thrownError: evt,
           rawReceivedContent: ''

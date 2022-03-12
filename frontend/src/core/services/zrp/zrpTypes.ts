@@ -1,11 +1,11 @@
 export type ZRPMessage<T extends {} | ZRPOPCode = {}> = T extends ZRPOPCode
   ? {
       code: T;
-      payload: ZRPPayloadMap[T];
+      data: ZRPPayloadMap[T];
     }
   : {
       code: ZRPOPCode;
-      payload: T;
+      data: T;
     };
 
 export enum ZRPOPCode {

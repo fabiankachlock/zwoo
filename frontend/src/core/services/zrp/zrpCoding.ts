@@ -8,7 +8,7 @@ export class ZRPCoder {
     } catch (e: unknown) {
       return {
         code: ZRPOPCode._DecodingError,
-        payload: {
+        data: {
           thrownError: e,
           timestamp: performance.now(),
           rawReceivedContent: msg
