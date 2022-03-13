@@ -157,7 +157,6 @@ const players = ref([
     id: '234'
   }
 ]);
-const rules = ['test-1', 'key-2'];
 
 watch(
   () => gameEvents.lastEvent,
@@ -171,11 +170,6 @@ watch(
     }
   }
 );
-
-const openRule = ref<string | undefined>(undefined);
-const selectRule = (ruleKey: string) => {
-  openRule.value = openRule.value === ruleKey ? undefined : ruleKey;
-};
 </script>
 
 <style>

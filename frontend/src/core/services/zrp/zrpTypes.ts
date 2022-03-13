@@ -1,4 +1,4 @@
-export type ZRPMessage<T extends {} | ZRPOPCode = {}> = T extends ZRPOPCode
+export type ZRPMessage<T extends Record<string, unknown> | ZRPOPCode = Record<string, never>> = T extends ZRPOPCode
   ? {
       code: T;
       data: ZRPPayloadMap[T];
@@ -66,23 +66,23 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.SendMessage]: ZRPSendChatMessagePayload;
   [ZRPOPCode.ReceiveMessage]: ZRPChatMessagePayload;
   // Roles
-  [ZRPOPCode.SpectatorWantsToPlay]: {};
-  [ZRPOPCode.PlayerWantsToSpectate]: {};
-  [ZRPOPCode.PromotePlayerToHost]: {};
-  [ZRPOPCode.PromoteToHost]: {};
-  [ZRPOPCode.NewHost]: {};
-  [ZRPOPCode.KickPlayer]: {};
+  [ZRPOPCode.SpectatorWantsToPlay]: Record<string, never>;
+  [ZRPOPCode.PlayerWantsToSpectate]: Record<string, never>;
+  [ZRPOPCode.PromotePlayerToHost]: Record<string, never>;
+  [ZRPOPCode.PromoteToHost]: Record<string, never>;
+  [ZRPOPCode.NewHost]: Record<string, never>;
+  [ZRPOPCode.KickPlayer]: Record<string, never>;
   // Lobby
   [ZRPOPCode.ChangeSettings]: ZRPSettingsChangePayload;
   [ZRPOPCode.SettingsUpdated]: ZRPSettingsChangePayload;
-  [ZRPOPCode.StartGame]: {};
+  [ZRPOPCode.StartGame]: Record<string, never>;
   // Game
-  [ZRPOPCode.GameStarted]: {};
-  [ZRPOPCode.StartTurn]: {};
-  [ZRPOPCode.EndTurn]: {};
-  [ZRPOPCode.RequestEndTurn]: {};
+  [ZRPOPCode.GameStarted]: Record<string, never>;
+  [ZRPOPCode.StartTurn]: Record<string, never>;
+  [ZRPOPCode.EndTurn]: Record<string, never>;
+  [ZRPOPCode.RequestEndTurn]: Record<string, never>;
   [ZRPOPCode.PlaceCard]: ZRPCardPayload;
-  [ZRPOPCode.DrawCard]: {};
+  [ZRPOPCode.DrawCard]: Record<string, never>;
   [ZRPOPCode.GetCard]: ZRPCardPayload;
   [ZRPOPCode.RemoveCard]: ZRPCardPayload;
   [ZRPOPCode.NewCardOnPile]: ZRPCardPayload;
@@ -98,7 +98,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode._ClientError]: ZRPInternalErrorPayload;
   [ZRPOPCode._DecodingError]: ZRPInternalErrorPayload;
   // internal messages
-  [ZRPOPCode._Connected]: {};
+  [ZRPOPCode._Connected]: Record<string, never>;
 };
 
 export type ZRPJoinedGamePayload = {

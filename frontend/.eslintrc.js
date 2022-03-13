@@ -23,6 +23,7 @@ module.exports = {
     "no-control-regex": "off",
     "sort-imports": "off",
     "@typescript-eslint/ban-types": "warn",
+    "vue/multi-word-component-names": "off"
   },
   overrides: [
     {
