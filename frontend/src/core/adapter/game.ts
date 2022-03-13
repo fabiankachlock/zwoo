@@ -9,6 +9,7 @@ import { useGameEvents } from './play/events';
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
     gameId: '',
+    name: '',
     host: false,
     inActiveGame: false,
     _connection: undefined as ZRPWebsocketAdapter | undefined
@@ -23,7 +24,8 @@ export const useGameConfig = defineStore('game-config', {
       this.$patch({
         inActiveGame: true,
         host: true,
-        gameId: status.id
+        gameId: status.id,
+        name: name
       });
       this.connect();
     },
