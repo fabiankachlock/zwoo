@@ -1,4 +1,4 @@
-export type ZRPMessage<T extends Record<string, unknown> | ZRPOPCode = Record<string, never>> = T extends ZRPOPCode
+export type ZRPMessage<T extends {} | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
   ? {
       code: T;
       data: ZRPPayloadMap[T];
