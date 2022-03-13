@@ -20,7 +20,7 @@ readline.on('line', (input) => {
     const args = input.split(' ');
     if (args.length < 2) return
     if (args[0] === 'send') {
-        const msg = createExampleMessage(args[1], ...args.slice(2));
+        const msg = createExampleMessage(parseInt(args[1], 10) ?? 0, ...args.slice(2));
         console.log('sending: %s', msg);
         senderFunc(msg)
     }
