@@ -69,15 +69,18 @@
 
 <script setup lang="ts">
 import { useGameConfig } from '@/core/adapter/game';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
+import { useGameEvents } from '@/core/adapter/play/events';
+import { ZRPMessage, ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 
 const { t } = useI18n();
+const gameEvents = useGameEvents();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host);
 const gameId = computed(() => gameConfig.gameId);
-const players = [
+const players = ref([
   {
     name: 'player 1',
     id: '123'
@@ -86,8 +89,21 @@ const players = [
     name: 'player 2',
     id: '234'
   }
-];
+]);
 const rules = ['test-1', 'key-2'];
+
+watch(
+  () => gameEvents.lastEvent,
+  zrpMessage => {
+    if (zrpMessage && zrpMessage.code === ZRPOPCode.PlayerJoined) {
+      const msg = zrpMessage as ZRPMessage<ZRPOPCode.PlayerJoined>;
+      players.value.push({
+        name: msg.data.name,
+        id: msg.data.name
+      });
+    }
+  }
+);
 
 const openRule = ref<string | undefined>(undefined);
 const selectRule = (ruleKey: string) => {
