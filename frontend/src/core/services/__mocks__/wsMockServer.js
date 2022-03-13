@@ -9,6 +9,7 @@ const wss = new WebSocketServer({ port: 9072 });
 let senderFunc = () => { }
 
 wss.on('connection', function connection(ws) {
+    console.log('connected')
     senderFunc = (str) => ws.send(str);
     ws.on('message', function message(data) {
         ws.send(data.toString())

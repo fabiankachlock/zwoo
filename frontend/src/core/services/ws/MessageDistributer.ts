@@ -6,8 +6,8 @@ import { GameWebsocket } from './Websocket';
 export class ZRPWebsocketAdapter implements BidirectionalMessageSource<ZRPMessage> {
   private ws: GameWebsocket;
 
-  constructor(public readonly gameId: string) {
-    this.ws = new GameWebsocket(`ws(s)://xxx/${gameId}`);
+  constructor(public readonly url: string, public readonly gameId: string) {
+    this.ws = new GameWebsocket(url);
   }
 
   public readMessages(handler: (message: ZRPMessage) => void): void {

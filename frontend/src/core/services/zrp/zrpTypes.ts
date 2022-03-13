@@ -8,6 +8,8 @@ export type ZRPMessage<T extends {} | ZRPOPCode = {}> = T extends ZRPOPCode
       data: T;
     };
 
+export type ZRPPayload<T extends ZRPOPCode> = ZRPPayloadMap[T];
+
 export enum ZRPOPCode {
   // General
   // - players
