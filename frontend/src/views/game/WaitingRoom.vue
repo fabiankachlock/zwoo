@@ -104,19 +104,19 @@
 
 <script setup lang="ts">
 import { useGameConfig } from '@/core/adapter/game';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
-import { useGameEvents } from '@/core/adapter/play/events';
-import { ZRPMessage, ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import Rules from '@/components/waiting/Rules.vue';
 import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
+import { useWatchGameEvents } from '@/core/adapter/play/util/gameEventWatcher';
+import { createZRPOPCodeMatcher } from '@/core/adapter/play/util/zrpMatcher';
 
 const { t } = useI18n();
-const gameEvents = useGameEvents();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
@@ -158,18 +158,16 @@ const players = ref([
   }
 ]);
 
-watch(
-  () => gameEvents.lastEvent,
-  zrpMessage => {
-    if (zrpMessage && zrpMessage.code === ZRPOPCode.PlayerJoined) {
-      const msg = zrpMessage as ZRPMessage<ZRPOPCode.PlayerJoined>;
-      players.value.push({
-        name: msg.data.name,
-        id: msg.data.name
-      });
-    }
+useWatchGameEvents<ZRPOPCode.PlayerJoined | ZRPOPCode.PlayerLeft>(createZRPOPCodeMatcher(ZRPOPCode.PlayerJoined, ZRPOPCode.PlayerLeft), msg => {
+  if (msg.code === ZRPOPCode.PlayerJoined) {
+    players.value.push({
+      name: msg.data.name,
+      id: msg.data.name
+    });
+  } else if (msg.code === ZRPOPCode.PlayerLeft) {
+    players.value = players.value.filter(p => p.id !== msg.data.name);
   }
-);
+});
 </script>
 
 <style>
