@@ -13,14 +13,14 @@ export enum SnackBarPosition {
 }
 
 export const SnackBarPositionClasses: Record<SnackBarPosition, string> = {
-  [SnackBarPosition.Top]: 'top-5 right-5 left-5 flex justify-center',
-  [SnackBarPosition.TopLeft]: 'top-5 left-5',
-  [SnackBarPosition.TopRight]: 'top-5 right-5',
-  [SnackBarPosition.Left]: 'left-5 top-5 bottom-5 flex items-center',
-  [SnackBarPosition.Right]: 'right-5 top-5 bottom-5 flex items-center',
-  [SnackBarPosition.Bottom]: 'bottom-5 right-5 left-5 flex justify-center',
-  [SnackBarPosition.BottomLeft]: 'bottom-5 left-5',
-  [SnackBarPosition.BottomRight]: 'bottom-5 right-5'
+  [SnackBarPosition.Top]: 'top-5 right-5 left-5 flex justify-center text-center',
+  [SnackBarPosition.TopLeft]: 'top-5 left-5 text-left',
+  [SnackBarPosition.TopRight]: 'top-5 right-5 text-right',
+  [SnackBarPosition.Left]: 'left-5 top-5 bottom-5 flex items-center text-left',
+  [SnackBarPosition.Right]: 'right-5 top-5 bottom-5 flex items-center text-right',
+  [SnackBarPosition.Bottom]: 'bottom-5 right-5 left-5 flex justify-center text-center',
+  [SnackBarPosition.BottomLeft]: 'bottom-5 left-5 text-left',
+  [SnackBarPosition.BottomRight]: 'bottom-5 right-5 text-right'
 };
 
 export type SnackbarItem = {
@@ -29,6 +29,8 @@ export type SnackbarItem = {
   duration?: number;
   force?: boolean;
   position: SnackBarPosition;
+  showClose?: boolean;
+  color?: 'primary' | 'secondary';
 };
 
 const DEFAULT_DURATION = 1000;
