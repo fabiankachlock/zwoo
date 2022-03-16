@@ -21,9 +21,9 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-control-regex": "off",
-    "sort-imports": ["off"],
-    'vue/multi-word-component-names': 'warn'
-
+    "sort-imports": "off",
+    "@typescript-eslint/ban-types": "warn",
+    "vue/multi-word-component-names": "off"
   },
   overrides: [
     {
