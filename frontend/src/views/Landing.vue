@@ -4,7 +4,7 @@
       <img style="max-width: 10rem" src="/img/logo/zwoo_logo_none.svg" alt="" />
     </div>
     <h1 class="text-6xl tc-primary text-center">zwoo</h1>
-    <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
+    <p @click="ss()" class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="action bg-dark hover:bg-darkest">
         <router-link class="link" to="/login">
@@ -29,10 +29,19 @@
 </template>
 
 <script setup lang="ts">
+import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const s = useSnackbar();
+const poitions = Object.keys(SnackBarPosition);
+const ss = () => {
+  s.pushMessage({
+    message: `Random Number: ${Math.random().toString()}`,
+    position: (poitions.shift() as SnackBarPosition) ?? SnackBarPosition.Top
+  });
+};
 </script>
 
 <style scoped>

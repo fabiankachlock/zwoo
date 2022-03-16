@@ -1,11 +1,34 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+export enum SnackBarPosition {
+  Top,
+  TopLeft,
+  TopRight,
+  Left,
+  Right,
+  Bottom,
+  BottomLeft,
+  BottomRight
+}
+
+export const SnackBarPositionClasses: Record<SnackBarPosition, string> = {
+  [SnackBarPosition.Top]: 'top-5 right-5 left-5 flex justify-center',
+  [SnackBarPosition.TopLeft]: 'top-5 left-5',
+  [SnackBarPosition.TopRight]: 'top-5 right-5',
+  [SnackBarPosition.Left]: 'left-5 top-5 bottom-5 flex items-center',
+  [SnackBarPosition.Right]: 'right-5 top-5 bottom-5 flex items-center',
+  [SnackBarPosition.Bottom]: 'bottom-5 right-5 left-5 flex justify-center',
+  [SnackBarPosition.BottomLeft]: 'bottom-5 left-5',
+  [SnackBarPosition.BottomRight]: 'bottom-5 right-5'
+};
+
 export type SnackbarItem = {
   message: string;
   needsTranslation?: boolean;
   duration?: number;
   force?: boolean;
+  position: SnackBarPosition;
 };
 
 const DEFAULT_DURATION = 1000;
