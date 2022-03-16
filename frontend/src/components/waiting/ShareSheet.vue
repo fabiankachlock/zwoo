@@ -183,15 +183,15 @@ onMounted(() => {
 .rsb {
   border-radius: 5px;
   transition: 25ms ease-out;
-  padding: 0.5em 0.75em;
+  padding: 0.25em 0.5em;
   display: flex;
   align-items: center;
 }
 
 .rsb__icon svg {
-  width: 1em;
-  height: 1em;
-  margin-right: 0.4em;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.3em;
   vertical-align: top;
 }
 
