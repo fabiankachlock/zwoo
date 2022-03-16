@@ -22,21 +22,21 @@
             <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
             <div class="flex flex-row">
               <button @click="shareSheetOpen = true" class="scan-code rounded m-1 bg-main hover:bg-dark tc-main-light">
-                <div class="transform transition-transform hover:scale-125 p-1">
+                <div class="transform transition-transform hover:scale-110 p-1">
                   <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
                 </div>
               </button>
               <button @click="qrCodeOpen = true" class="refresh rounded m-1 bg-main hover:bg-dark tc-main-light">
-                <div class="transform transition-transform hover:scale-125 p-1">
+                <div class="transform transition-transform hover:scale-110 p-1">
                   <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
                 </div>
               </button>
             </div>
             <div v-if="shareSheetOpen">
               <FloatingDialog>
-                <div class="absolute top-4 right-4 z-10">
-                  <button @click="shareSheetOpen = false" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
-                    <Icon icon="akar-icons:cross" class="text-2xl" />
+                <div class="absolute top-2 right-2 z-10">
+                  <button @click="shareSheetOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
+                    <Icon icon="akar-icons:cross" class="text-xl" />
                   </button>
                 </div>
                 <div class="relative">
@@ -46,9 +46,9 @@
             </div>
             <div v-if="qrCodeOpen" class="share-qr-dialog">
               <FloatingDialog>
-                <div class="absolute top-4 right-4 z-10">
-                  <button @click="qrCodeOpen = false" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
-                    <Icon icon="akar-icons:cross" class="text-2xl" />
+                <div class="absolute top-2 right-2 z-10">
+                  <button @click="qrCodeOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
+                    <Icon icon="akar-icons:cross" class="text-xl" />
                   </button>
                 </div>
                 <h3 class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</h3>

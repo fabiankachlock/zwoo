@@ -168,12 +168,12 @@
     }
   },
   "share": {
-    "facebook": "Teile auf Facebook",
-    "twitter": "Teile auf Twitter",
-    "email": "Teile via Email",
-    "reddit": "Teile auf Reddit",
-    "whatsapp": "Teile auf Whatsapp",
-    "telegram": "Teile auf Telegram",
+    "facebook": "Auf Facebook teilen",
+    "twitter": "Auf Twitter teilen",
+    "email": "Via Email teilen",
+    "reddit": "Auf Reddit teilen",
+    "whatsapp": "Auf Whatsapp teilen",
+    "telegram": "Auf Telegram teilen",
     "join": {
       "title": "Trete {0} bei!",
       "text": "Du wurdest zu einem zwoo Spiel eingeladen, nutze den Link um beizutreten"

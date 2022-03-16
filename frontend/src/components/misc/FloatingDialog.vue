@@ -3,7 +3,7 @@
     <div class="relative grid place-items-center w-full h-full">
       <div class="absolute inset-0 backdrop-blur"></div>
       <div class="absolute inset-0 backdrop-color z-10"></div>
-      <div class="w-full sm:max-w-3xl mx-auto z-20">
+      <div class="w-full mx-auto z-20" :class="contentClass ?? 'sm:max-w-3xl'">
         <div class="bg-lightest shadow-md sm:rounded-xl p-5 m-3 relative" @click="handleDialogClick">
           <slot></slot>
         </div>
@@ -13,7 +13,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from 'vue';
+import { defineEmits, defineProps } from 'vue';
+
+defineProps<{
+  contentClass?: string;
+}>();
 
 const emit = defineEmits<{
   (event: 'clickOutside'): void;
