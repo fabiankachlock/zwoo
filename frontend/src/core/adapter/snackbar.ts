@@ -51,21 +51,25 @@ export const useSnackbar = defineStore('snackbar', () => {
       if (activeTimeout.value) {
         clearTimeout(activeTimeout.value);
       }
-      showMessage(msg);
+
+      activeMessage.value = undefined;
+      setTimeout(() => {
+        // wait until the next event loop, so that the animation can be reset before
+        showMessage(msg);
+      }, 0);
       return;
     }
     messageStack.value.push(msg);
   };
 
   const showMessage = (msg: SnackbarItem) => {
-    console.log('show', msg.message, msg.duration ?? DEFAULT_DURATION);
+    msg.duration = msg.duration ?? DEFAULT_DURATION;
     activeMessage.value = msg;
     activeTimeout.value = setTimeout(() => {
-      console.log('done');
       activeMessage.value = undefined;
       activeTimeout.value = undefined;
       evaluateNext();
-    }, msg.duration ?? DEFAULT_DURATION);
+    }, msg.duration);
   };
 
   const evaluateNext = () => {

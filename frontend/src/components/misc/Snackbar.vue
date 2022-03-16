@@ -10,7 +10,12 @@
         </button>
       </div>
       <div class="snackbar-progress absolute bottom-0 left-0 right-0 h-2 rounded-b overflow-hidden">
-        <div class="h-full" :class="msg.color ? `bg-${msg.color}` : 'bg-_bg-dark-lightest dark:bg-_bg-light-darkest'" style="width: 50%"></div>
+        <div
+          class="h-full"
+          :class="msg.color ? `bg-${msg.color}` : 'bg-_bg-dark-lightest dark:bg-_bg-light-darkest'"
+          :style="constructAnimationString()"
+          style="animation-timing-function: linear"
+        ></div>
       </div>
     </div>
   </div>
@@ -24,9 +29,27 @@ import { useI18n } from 'vue-i18n';
 
 const snackbar = useSnackbar();
 const msg = computed(() => snackbar.activeMessage);
+
 const { t } = useI18n();
 
 const close = () => {
   snackbar.close();
 };
+
+const constructAnimationString = () => {
+  // defined message: set animation
+  // undefined message: reset animation
+  return msg.value ? `animation: transition-progress; animation-duration: ${msg.value?.duration ?? 0}ms` : 'animation: none';
+};
 </script>
+
+<style scopes>
+@keyframes transition-progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+</style>

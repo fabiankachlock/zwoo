@@ -41,7 +41,8 @@ const ss = () => {
     message: `Random Number: ${Math.random().toString()}`,
     position: (poitions.shift() as unknown as SnackBarPosition) ?? SnackBarPosition.Top,
     showClose: true,
-    duration: 4_000
+    duration: 5_000,
+    force: true
   });
 };
 </script>
