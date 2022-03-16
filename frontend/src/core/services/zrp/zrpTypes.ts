@@ -27,6 +27,7 @@ export enum ZRPOPCode {
   PromoteToHost = 113, // receiver,
   NewHost = 114, // receiver
   KickPlayer = 115, // sender (host)
+  PlayerChangedRole = 116, // receiver
   // Lobby
   ChangeSettings = 200, // sender (host)
   SettingsUpdated = 201, // receiver
@@ -72,6 +73,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.PromoteToHost]: Record<string, never>;
   [ZRPOPCode.NewHost]: Record<string, never>;
   [ZRPOPCode.KickPlayer]: Record<string, never>;
+  [ZRPOPCode.PlayerChangedRole]: ZRPPlayerChangedRolePayload;
   // Lobby
   [ZRPOPCode.ChangeSettings]: ZRPSettingsChangePayload;
   [ZRPOPCode.SettingsUpdated]: ZRPSettingsChangePayload;
@@ -110,6 +112,12 @@ export type ZRPLeftGamePayload = {
   name: string;
 };
 
+export type ZRPPlayerChangedRolePayload = {
+  name: string;
+  wins: number;
+  role: string;
+};
+
 export type ZRPSendChatMessagePayload = {
   message: string;
 };
@@ -124,10 +132,9 @@ export type ZRPSettingsChangePayload = {
   value: boolean | number;
 };
 
-// TODO: set type of cards
 export type ZRPCardPayload = {
-  type: unknown;
-  symbol: unknown;
+  type: number;
+  symbol: number;
 };
 
 export type ZRPGameWinnerPayload = {
