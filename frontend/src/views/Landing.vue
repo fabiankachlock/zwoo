@@ -39,7 +39,9 @@ const poitions = Object.keys(SnackBarPosition);
 const ss = () => {
   s.pushMessage({
     message: `Random Number: ${Math.random().toString()}`,
-    position: (poitions.shift() as SnackBarPosition) ?? SnackBarPosition.Top
+    position: (poitions.shift() as unknown as SnackBarPosition) ?? SnackBarPosition.Top,
+    showClose: true,
+    duration: 4_000
   });
 };
 </script>
