@@ -1,14 +1,14 @@
 <template>
   <div v-if="isOpen">
-    <FloatingDialog>
+    <FloatingDialog content-class="sm:max-w-lg">
       <div v-if="showCloseButton" class="absolute top-4 right-4 z-10">
         <button @click="close(false)" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
           <Icon icon="akar-icons:cross" class="text-2xl" />
         </button>
       </div>
       <div class="relative">
-        <h2>{{ t(title) }}</h2>
-        <p class="mb-2">{{ t(body) }}</p>
+        <h2 class="tc-main text-2xl mb-4">{{ t(title) }}</h2>
+        <p class="mb-2 tc-main-secondary">{{ t(body) }}</p>
         <div class="grid grid-cols-2 gap-2 mt-4">
           <button
             class="flex justify-center items-center bg-main border-2 border-secondary px-4 py-1 rounded transition hover:bg-dark cursor-pointer select-none"
