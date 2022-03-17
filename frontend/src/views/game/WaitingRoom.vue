@@ -78,13 +78,13 @@
                   <Icon icon="iconoir:delete-circled-outline" />
                 </button>
                 <ReassureDialog
-                  @close="allowed => promotePlayer(player.id, allowed)"
+                  @close="allowed => handlePromotePlayer(player.id, allowed)"
                   :title="t('dialogs.promotePlayer.title', [player.name])"
                   :body="t('dialogs.promotePlayer.body', [player.name])"
                   :is-open="playerPromoteDialogOpen"
                 />
                 <ReassureDialog
-                  @close="allowed => kickPlayer(player.id, allowed)"
+                  @close="allowed => handleKickPlayer(player.id, allowed)"
                   :title="t('dialogs.kickPlayer.title', [player.name])"
                   :body="t('dialogs.kickPlayer.body', [player.name])"
                   :is-open="playerKickDialogOpen"
@@ -115,6 +115,7 @@ import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useLobbyPlayers } from '@/composables/lobbyPlayers';
 
 const { t } = useI18n();
+const { players, kickPlayer, promotePlayer } = useLobbyPlayers();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
@@ -123,9 +124,9 @@ const playerPromoteDialogOpen = ref(false);
 const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
 
-const promotePlayer = (id: string, allowed: boolean) => {
+const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    console.log('promoting', id);
+    promotePlayer(id);
   }
   playerPromoteDialogOpen.value = false;
 };
@@ -134,9 +135,9 @@ const askPromotePlayer = () => {
   playerPromoteDialogOpen.value = true;
 };
 
-const kickPlayer = (id: string, allowed: boolean) => {
+const handleKickPlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    console.log('kick', id);
+    kickPlayer(id);
   }
   playerKickDialogOpen.value = false;
 };
@@ -144,8 +145,6 @@ const kickPlayer = (id: string, allowed: boolean) => {
 const askKickPlayer = () => {
   playerKickDialogOpen.value = true;
 };
-
-const { players } = useLobbyPlayers();
 </script>
 
 <style>
