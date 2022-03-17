@@ -78,13 +78,13 @@
                   <Icon icon="iconoir:delete-circled-outline" />
                 </button>
                 <ReassureDialog
-                  @close="allowed => promotePlayer(player.id, allowed)"
+                  @close="allowed => handlePromotePlayer(player.id, allowed)"
                   :title="t('dialogs.promotePlayer.title', [player.name])"
                   :body="t('dialogs.promotePlayer.body', [player.name])"
                   :is-open="playerPromoteDialogOpen"
                 />
                 <ReassureDialog
-                  @close="allowed => kickPlayer(player.id, allowed)"
+                  @close="allowed => handleKickPlayer(player.id, allowed)"
                   :title="t('dialogs.kickPlayer.title', [player.name])"
                   :body="t('dialogs.kickPlayer.body', [player.name])"
                   :is-open="playerKickDialogOpen"
@@ -107,16 +107,15 @@ import { useGameConfig } from '@/core/adapter/game';
 import { computed, ref } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import Rules from '@/components/waiting/Rules.vue';
 import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
-import { useWatchGameEvents } from '@/core/adapter/play/util/gameEventWatcher';
-import { createZRPOPCodeMatcher } from '@/core/adapter/play/util/zrpMatcher';
+import { useLobbyPlayers } from '@/composables/lobbyPlayers';
 
 const { t } = useI18n();
+const { players, kickPlayer, promotePlayer } = useLobbyPlayers();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
@@ -125,9 +124,9 @@ const playerPromoteDialogOpen = ref(false);
 const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
 
-const promotePlayer = (id: string, allowed: boolean) => {
+const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    console.log('promoting', id);
+    promotePlayer(id);
   }
   playerPromoteDialogOpen.value = false;
 };
@@ -136,9 +135,9 @@ const askPromotePlayer = () => {
   playerPromoteDialogOpen.value = true;
 };
 
-const kickPlayer = (id: string, allowed: boolean) => {
+const handleKickPlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    console.log('kick', id);
+    kickPlayer(id);
   }
   playerKickDialogOpen.value = false;
 };
@@ -146,28 +145,6 @@ const kickPlayer = (id: string, allowed: boolean) => {
 const askKickPlayer = () => {
   playerKickDialogOpen.value = true;
 };
-
-const players = ref([
-  {
-    name: 'player 1',
-    id: '123'
-  },
-  {
-    name: 'player 2',
-    id: '234'
-  }
-]);
-
-useWatchGameEvents<ZRPOPCode.PlayerJoined | ZRPOPCode.PlayerLeft>(createZRPOPCodeMatcher(ZRPOPCode.PlayerJoined, ZRPOPCode.PlayerLeft), msg => {
-  if (msg.code === ZRPOPCode.PlayerJoined) {
-    players.value.push({
-      name: msg.data.name,
-      id: msg.data.name
-    });
-  } else if (msg.code === ZRPOPCode.PlayerLeft) {
-    players.value = players.value.filter(p => p.id !== msg.data.name);
-  }
-});
 </script>
 
 <style>

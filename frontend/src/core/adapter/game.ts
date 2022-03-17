@@ -3,6 +3,7 @@ import { Backend, Endpoint } from '../services/api/apiConfig';
 import { GameManagementService } from '../services/api/GameManagement';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
+import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
 import { ZRPOPCode, ZRPPayload } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
@@ -39,10 +40,7 @@ export const useGameConfig = defineStore('game-config', {
     },
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
       if (this._connection) {
-        this._connection.writeMessage({
-          code: code,
-          data: payload
-        });
+        this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
       }
     }
   }
