@@ -107,14 +107,12 @@ import { useGameConfig } from '@/core/adapter/game';
 import { computed, ref } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import Rules from '@/components/waiting/Rules.vue';
 import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
-import { useWatchGameEvents } from '@/core/adapter/play/util/gameEventWatcher';
-import { createZRPOPCodeMatcher } from '@/core/adapter/play/util/zrpMatcher';
+import { useLobbyPlayers } from '@/composables/lobbyPlayers';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
@@ -147,27 +145,7 @@ const askKickPlayer = () => {
   playerKickDialogOpen.value = true;
 };
 
-const players = ref([
-  {
-    name: 'player 1',
-    id: '123'
-  },
-  {
-    name: 'player 2',
-    id: '234'
-  }
-]);
-
-useWatchGameEvents<ZRPOPCode.PlayerJoined | ZRPOPCode.PlayerLeft>(createZRPOPCodeMatcher(ZRPOPCode.PlayerJoined, ZRPOPCode.PlayerLeft), msg => {
-  if (msg.code === ZRPOPCode.PlayerJoined) {
-    players.value.push({
-      name: msg.data.name,
-      id: msg.data.name
-    });
-  } else if (msg.code === ZRPOPCode.PlayerLeft) {
-    players.value = players.value.filter(p => p.id !== msg.data.name);
-  }
-});
+const { players } = useLobbyPlayers();
 </script>
 
 <style>
