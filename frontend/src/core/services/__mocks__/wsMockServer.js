@@ -11,9 +11,6 @@ let senderFunc = () => { }
 wss.on('connection', function connection(ws) {
     console.log('connected')
     senderFunc = (str) => ws.send(str);
-    ws.on('message', function message(data) {
-        ws.send(data.toString())
-    });
 });
 
 readline.on('line', (input) => {
@@ -108,8 +105,5 @@ function createExampleMessage(code, ...args) {
         const [key, value] = arg.split(':');
         exampleMessage[key] = value;
     }
-    return JSON.stringify({
-        code,
-        data: exampleMessage
-    });
+    return code.toString().padStart(3, '0') + ',' + JSON.stringify(exampleMessage);
 }
