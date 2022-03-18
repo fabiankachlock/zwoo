@@ -16,6 +16,7 @@ find_package(mailio                REQUIRED)
 
 option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
 
+
 set(SRC_FILES
     "src/main.cpp"
     "src/zwoo.cpp"
@@ -29,7 +30,10 @@ set(SRC_FILES
 
     "src/Server/controller/Authentication/ReCaptcha.cpp"
     "src/Server/controller/Authentication/AuthenticationValidators.cpp"
-    "src/Server/controller/GameManager/websocket/WSListener.cpp"
+
+    "src/Server/controller/GameManager/websocket/ZRPConnector.cpp"
+    "src/Server/controller/GameManager/websocket/ZwooInstanceListener.cpp"
+    "src/Server/controller/GameManager/websocket/ZwooListener.cpp"
 )
 
 set(LIBS

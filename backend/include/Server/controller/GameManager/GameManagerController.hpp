@@ -10,12 +10,14 @@
 #include "oatpp/web/server/api/ApiController.hpp"
 
 #include "Server/controller/Authentication/AuthenticationController.hpp"
+#include "Server/dto/GameManagerDTO.hpp"
 
 #include OATPP_CODEGEN_BEGIN(ApiController) // <- Begin Codegen
 
 class GameManagerController : public oatpp::web::server::api::ApiController {
 private:
-    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger);
+    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger_backend, "Backend");
+    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger_websocket, "Websocket");
     OATPP_COMPONENT(std::shared_ptr<Database>, m_database);
     OATPP_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, websocketConnectionHandler, "websocket");
 
@@ -27,7 +29,8 @@ public:
 public:
     static std::shared_ptr<GameManagerController> createShared(
         OATPP_COMPONENT(std::shared_ptr<ObjectMapper>, objectMapper) // Inject objectMapper component here as default parameter
-    ) {
+    )
+    {
         return std::make_shared<GameManagerController>(objectMapper);
     }
 
@@ -45,10 +48,14 @@ public:
         auto usr = m_database->getUser(usrc.puid);
 
         if (usr)
+        {
             if (usr->sid.getValue("") == usrc.sid && usr->sid != "")
+            {
                 return oatpp::websocket::Handshaker::serversideHandshake(request->getHeaders(), websocketConnectionHandler);
+            }
             else
                 return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
+        }
         else
             return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
 

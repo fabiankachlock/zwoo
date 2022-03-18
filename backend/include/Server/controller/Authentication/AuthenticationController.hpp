@@ -52,7 +52,7 @@ std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWit
 
 class AuthenticationController : public oatpp::web::server::api::ApiController {
 private:
-    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger);
+    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger, "Backend");
     OATPP_COMPONENT(std::shared_ptr<Database>, m_database);
 
 public:
