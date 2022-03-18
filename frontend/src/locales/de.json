@@ -114,6 +114,7 @@
     "stop": "Stop",
     "leave": "Verlassen",
     "players": "Spieler",
+    "spectators": "Zuschauer",
     "rules": "Regeln",
     "qrcode": "QR-Code",
     "qrcodeInfo": "Andere Spieler können über den QR-Code direkt dem Spiel beitreten.",
@@ -198,5 +199,13 @@
   "reassureDialog": {
     "accept": "Ok!",
     "decline": "Abbrechen!"
+  },
+  "snackbar": {
+    "lobby": {
+      "playerJoined": "Spieler {0} ist beigetreten",
+      "spectatorJoined": "Zuschauer {0} ist beigetreten",
+      "playerLeft": "{0} hat das Spiel verlassen",
+      "spectatorLeft": "{0} hat das Spiel verlassen"
+    }
   }
 }

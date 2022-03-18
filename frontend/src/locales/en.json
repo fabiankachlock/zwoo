@@ -114,6 +114,7 @@
     "stop": "Stop",
     "leave": "Leave",
     "players": "Players",
+    "spectators": "Spectators",
     "rules": "Rules",
     "qrcode": "QRCode",
     "qrcodeInfo": "Other Player an join the game directly with the QRCode.",
@@ -198,5 +199,13 @@
   "reassureDialog": {
     "accept": "Ok!",
     "decline": "Cancel!"
+  },
+  "snackbar": {
+    "lobby": {
+      "playerJoined": "Player {0} joined aksuzdgzasd iauzduskazd hb jasdhkgkjh d ois dlas",
+      "spectatorJoined": "Spectator {0} joined",
+      "playerLeft": "{0} left",
+      "spectatorLeft": "{0} left"
+    }
   }
 }

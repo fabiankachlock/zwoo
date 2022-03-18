@@ -98,11 +98,11 @@
         </div>
         <div class="bg-lightest md:col-start-1 md:row-start-2" style="height: fit-content">
           <div class="flex flex-nowrap flex-row justify-between items-center">
-            <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
+            <p class="text-xl tc-main my-2">{{ t('wait.spectators') }}</p>
           </div>
           <div class="w-full flex flex-col">
             <div
-              v-for="player of players"
+              v-for="player of spectators"
               :key="player.id"
               class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition hover:bc-primary rounded-lg hover:bg-dark"
             >
@@ -131,7 +131,7 @@ import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useLobbyPlayers } from '@/composables/lobbyPlayers';
 
 const { t } = useI18n();
-const { players, kickPlayer, promotePlayer } = useLobbyPlayers();
+const { players, kickPlayer, promotePlayer, spectators } = useLobbyPlayers();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
