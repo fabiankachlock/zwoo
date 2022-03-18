@@ -40,7 +40,13 @@ export class ReCaptchaService {
       });
       return this.verify(token);
     }
-    return Promise.resolve(undefined);
+    if (process.env.VUE_APP_USE_BACKEND === 'true') {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      success: true,
+      score: 1
+    });
   };
 
   private verify = async (token: string): Promise<ReCaptchaResponse> => {
