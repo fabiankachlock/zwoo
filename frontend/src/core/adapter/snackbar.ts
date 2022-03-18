@@ -33,7 +33,7 @@ export type SnackbarItem = {
   color?: 'primary' | 'secondary';
 };
 
-const DEFAULT_DURATION = 1000;
+const DEFAULT_DURATION = 2500;
 
 export const useSnackbar = defineStore('snackbar', () => {
   const activeMessage = ref<SnackbarItem | undefined>(undefined);
@@ -73,10 +73,15 @@ export const useSnackbar = defineStore('snackbar', () => {
   };
 
   const evaluateNext = () => {
-    const msg = messageStack.value.shift();
-    if (msg) {
-      showMessage(msg);
-    }
+    // wait until the next event loop, so that the animation can be reset before
+    setTimeout(() => {
+      if (!activeMessage.value) {
+        const msg = messageStack.value.shift();
+        if (msg) {
+          showMessage(msg);
+        }
+      }
+    }, 0);
   };
 
   const close = () => {
