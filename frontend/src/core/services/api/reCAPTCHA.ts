@@ -56,8 +56,8 @@ export class ReCaptchaService {
         }));
     }
     return Promise.resolve({
-      success: Math.random() > 0.5,
-      score: Math.random()
+      success: true,
+      score: 1
     });
   };
 

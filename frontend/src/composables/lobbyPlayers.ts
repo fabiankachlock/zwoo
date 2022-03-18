@@ -11,7 +11,13 @@ export type LobbyPlayer = {
 };
 
 export const useLobbyPlayers = () => {
-  const players = ref<LobbyPlayer[]>([]);
+  const players = ref<LobbyPlayer[]>([
+    {
+      name: 'test',
+      id: 'xxx',
+      role: 'host'
+    }
+  ]);
   const spectators = ref<LobbyPlayer[]>([]);
   const dispatchEvent = useGameEventDispatch();
 

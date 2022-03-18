@@ -17,7 +17,7 @@
     </header>
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
-        <div class="bg-lightest md:row-span-2">
+        <div class="bg-lightest md:col-start-1 md:row-start-1">
           <div class="flex flex-nowrap flex-row justify-between items-center">
             <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
             <div class="flex flex-row">
@@ -93,10 +93,26 @@
             </div>
           </div>
         </div>
-        <div class="bg-lightest" :class="{ 'md:row-span-2': !isHost }">
+        <div class="bg-lightest md:col-start-2 md:row-start-1" :class="{ 'md:row-span-2': !isHost }">
           <Rules />
         </div>
-        <div v-if="isHost" class="bg-lightest">Host section...</div>
+        <div class="bg-lightest md:col-start-1 md:row-start-2" style="height: fit-content">
+          <div class="flex flex-nowrap flex-row justify-between items-center">
+            <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
+          </div>
+          <div class="w-full flex flex-col">
+            <div
+              v-for="player of players"
+              :key="player.id"
+              class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition hover:bc-primary rounded-lg hover:bg-dark"
+            >
+              <p class="text-lg tc-main-secondary">
+                {{ player.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div v-if="isHost" class="bg-lightest md:col-start-2 md:row-start-2" style="height: fit-content">Host section...</div>
       </div>
     </main>
   </div>
