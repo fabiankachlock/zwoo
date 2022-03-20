@@ -6,20 +6,28 @@
 
 std::atomic<v_int32> ZwooInstanceListener::SOCKETS(0);
 
-void ZwooInstanceListener::setLogger(std::shared_ptr<Logger> _logger) { logger = _logger; }
-void ZwooInstanceListener::setConnector(std::shared_ptr<ZRPConnector> _connector) { connector = _connector; }
-
 void ZwooInstanceListener::onAfterCreate(const oatpp::websocket::WebSocket& socket, const std::shared_ptr<const ParameterMap>& params)
 {
     SOCKETS++;
-    logger->log->info("On After Create");
-    auto l = std::make_shared<ZwooListener>(logger, connector);
 
+    auto guid = (uint32_t)stoi(params->find("guid")->second.getValue(""));
+    auto puid = (uint32_t)stoi(params->find("puid")->second.getValue(""));
+    auto role = (uint8_t)stoi(params->find("role")->second.getValue(""));
+    auto username = params->find("username")->second.getValue("");
+
+    ListenerData data = { guid, puid, role, username };
+
+    logger->log->info("name: {3}, guid: {0}, puid: {1}, role: {2} Connected!", guid, puid, role, username);
+
+    auto l = std::make_shared<ZwooListener>(logger, connector, data, socket);
     socket.setListener(l);
+
+    connector->addWebSocket(guid, puid, l);
 }
 
 void ZwooInstanceListener::onBeforeDestroy(const oatpp::websocket::WebSocket& socket)
 {
     SOCKETS--;
-    logger->log->info("On Before Destroye");
+    auto listener = std::static_pointer_cast<ZwooListener>(socket.getListener());
+    connector->removeWebSocket(listener->m_data.guid, listener->m_data.puid);
 }

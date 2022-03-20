@@ -1,0 +1,13 @@
+#ifndef _ZRPCODES_H_
+#define _ZRPCODES_H_
+
+enum e_ZRPOpCodes {
+    PLAYER_JOINED = 100,
+    SPECTATOR_JOINED = 101,
+    PLAYER_LEFT = 102,
+    SPECTATOR_LEFT = 103,
+    SEND_MESSAGE = 104,
+    RECEIVE_MESSAGE = 105
+};
+
+#endif

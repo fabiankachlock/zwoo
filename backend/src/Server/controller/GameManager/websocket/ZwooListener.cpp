@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "Server/controller/GameManager/websocket/ZRPCodes.h"
+#include "Server/controller/GameManager/websocket/ZRPConnector.hpp"
+
 void ZwooListener::onPing(const WebSocket& socket, const oatpp::String& message)
 {
   socket.sendPong(message);
@@ -28,6 +31,7 @@ void ZwooListener::readMessage(const WebSocket& socket, v_uint8 opcode, p_char8 
         {
           case e_ZRPOpCodes::SEND_MESSAGE:
               logger->log->debug("Send Message!");
+              connector->sendMessage(m_data.guid, m_data.puid, wholeMessage);
               break;
           default:
               logger->log->debug("Unknown Code {0}!", code);

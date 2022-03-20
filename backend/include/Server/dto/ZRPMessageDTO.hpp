@@ -6,13 +6,21 @@
 
 #include OATPP_CODEGEN_BEGIN(DTO) ///< Begin DTO codegen section
 
-class User : public oatpp::DTO {
+class SendMessage : public oatpp::DTO {
 
-  DTO_INIT(User, DTO /* extends */)
+  DTO_INIT(SendMessage, DTO /* extends */)
 
+  DTO_FIELD(String, message);
+
+};
+
+class ReceiveMessage : public oatpp::DTO {
+
+  DTO_INIT(ReceiveMessage, DTO /* extends */)
+
+  DTO_FIELD(String, message);
   DTO_FIELD(String, name);
-  DTO_FIELD(Int32, age);
-
+  DTO_FIELD(UInt8, role);
 };
 
 #include OATPP_CODEGEN_END(DTO) ///< End DTO codegen section

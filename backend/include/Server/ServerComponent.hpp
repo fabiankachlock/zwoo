@@ -93,7 +93,8 @@ public:
     OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ConnectionHandler>, websocketConnectionHandler)("websocket", [] {
         OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger_websocket, "Websocket");
         auto connectionHandler = oatpp::websocket::ConnectionHandler::createShared();
-        auto zil = std::make_shared<ZwooInstanceListener>(m_logger_websocket);
+        auto zrpc = std::make_shared<ZRPConnector>();
+        auto zil = std::make_shared<ZwooInstanceListener>(m_logger_websocket, zrpc);
 
         connectionHandler->setSocketInstanceListener(zil);
 

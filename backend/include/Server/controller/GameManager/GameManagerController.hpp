@@ -12,7 +12,14 @@
 #include "Server/controller/Authentication/AuthenticationController.hpp"
 #include "Server/dto/GameManagerDTO.hpp"
 
+#include <string>
+
 #include OATPP_CODEGEN_BEGIN(ApiController) // <- Begin Codegen
+
+uint32_t createGame()
+{
+    return 0;
+}
 
 class GameManagerController : public oatpp::web::server::api::ApiController {
 private:
@@ -51,7 +58,16 @@ public:
         {
             if (usr->sid.getValue("") == usrc.sid && usr->sid != "")
             {
-                return oatpp::websocket::Handshaker::serversideHandshake(request->getHeaders(), websocketConnectionHandler);
+                uint32_t guid = createGame(); // Create Game | TODO: use GameManager when finished (with player data)
+
+                auto res = oatpp::websocket::Handshaker::serversideHandshake(request->getHeaders(), websocketConnectionHandler);
+                auto parameters = std::make_shared<oatpp::network::ConnectionHandler::ParameterMap>();
+                (*parameters)["puid"] = std::to_string(usr->_id);
+                (*parameters)["username"] = usr->username;
+                (*parameters)["guid"] = std::to_string(guid);
+                (*parameters)["role"] = "0";
+                res->setConnectionUpgradeParameters(parameters);
+                return res;
             }
             else
                 return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
