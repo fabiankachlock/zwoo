@@ -65,7 +65,7 @@
     "create": "Erstellen"
   },
   "join": {
-    "join": "{0} Beitreten",
+    "join": "{0} beitreten",
     "enterPassword": "Password eingeben",
     "password": "Passwort",
     "enter": "Spiel Beitreten",
@@ -74,7 +74,10 @@
     "nothingFound": "Nix gefunden",
     "found": "{0} gefunden",
     "notValid": "Falsches Format: {0}",
-    "enableCam": "Bitte Kamera aktivieren."
+    "enableCam": "Bitte Kamera aktivieren.",
+    "goBack": "Zurück",
+    "asPlayer": "als Spieler",
+    "asSpectator": "als Zuschauer"
   },
   "landing": {
     "tagline": "The Second Challenge",
@@ -93,7 +96,9 @@
     "players": "keine Spieler | 1 Spieler | {count} Spieler",
     "private": "Privat",
     "reload": "Aktualisieren",
-    "nothingFound": "Es konnte kein Spiel gefunden werden."
+    "nothingFound": "Es konnte kein Spiel gefunden werden.",
+    "spectate": "Zuschauen",
+    "play": "Spielen"
   },
   "errors": {
     "error": "Error",

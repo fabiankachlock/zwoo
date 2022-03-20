@@ -21,7 +21,7 @@
           <QRCodeReader @close="onScanClose" />
         </FloatingDialog>
       </div>
-      <div class="relative overflow-y-scroll h-1/4 max-h-full">
+      <div class="relative overflow-y-scroll pt-6 max-h-full">
         <div class="relative flex flex-col flex-nowrap">
           <div
             v-for="game of games"
@@ -40,7 +40,7 @@
                   <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', game.playerCount) }})</p>
                 </div>
                 <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
-                  <div class="mr-3">
+                  <div class="mr-3" v-tooltip="t('list.spectate')">
                     <router-link
                       :to="'/join/' + game.id + '?spectate'"
                       class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2"
@@ -53,7 +53,7 @@
                       :to="'/join/' + game.id + '?play'"
                       class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2"
                     >
-                      <span>Play</span> <Icon icon="iconoir:play-outline" class="text-lg" />
+                      <span>{{ t('list.play') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
                     </router-link>
                   </div>
                 </div>
