@@ -49,7 +49,7 @@ export class GameManagementService {
     return new Promise(res =>
       setTimeout(() => {
         res({
-          needsValidation: false,
+          needsValidation: true,
           name: `Some-Game (${gameId})`
         });
       }, 10000)

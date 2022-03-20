@@ -8,21 +8,23 @@
         <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
         <p class="text-xl tc-main">Loading...</p>
       </div>
-      <div v-else class="flex flex-row items-center justify-center tc-main">
-        <button class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest m-2 rounded">
+      <div v-else class="flex flex-row flex-wrap items-center justify-center tc-main">
+        <button class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded">
           <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-2 tc-secondary transform transition-transform" />Back
         </button>
         <button
           @click="joinAsPlayer()"
-          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest m-2 rounded"
+          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
         >
-          <Icon icon="iconoir:play-outline" class="icon text-xl mr-2 tc-secondary transform transition-transform" /> Join as Player
+          <Icon icon="iconoir:play-outline" class="icon text-xl mr-2 tc-secondary transform transition-transform" />
+          <span class="whitespace-nowrap"> Join as Player </span>
         </button>
         <button
           @click="joinAsSpectator()"
-          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest m-2 rounded"
+          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
         >
-          <Icon icon="iconoir:eye-alt" class="icon text-xl mr-2 tc-secondary transform transition-transform" /> Join as Spectator
+          <Icon icon="iconoir:eye-alt" class="icon text-xl mr-2 tc-secondary transform transition-transform" />
+          <span class="whitespace-nowrap">Join as Spectator</span>
         </button>
       </div>
     </div>
