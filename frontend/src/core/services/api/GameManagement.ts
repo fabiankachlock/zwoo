@@ -52,7 +52,7 @@ export class GameManagementService {
           needsValidation: true,
           name: `Some-Game (${gameId})`
         });
-      }, 10000)
+      }, 3000)
     );
   };
 

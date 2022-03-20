@@ -9,7 +9,10 @@
         <p class="text-xl tc-main">Loading...</p>
       </div>
       <div v-else class="flex flex-row flex-wrap items-center justify-center tc-main">
-        <button class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded">
+        <button
+          @click="goBack()"
+          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+        >
           <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-2 tc-secondary transform transition-transform" />Back
         </button>
         <button
@@ -59,14 +62,16 @@ const route = useRoute();
 const router = useRouter();
 const isLoading = ref(true);
 const gameId = route.params['id'] as string;
-let asSpectator = route.params['spectate'] !== undefined;
-let asPlayer = route.params['play'] !== undefined;
+let asSpectator = route.query['spectate'] !== undefined;
+let asPlayer = route.query['play'] !== undefined;
 
 const gameName = ref(gameId);
 const password = ref('');
 const showDialog = ref(false);
 let needsValidation = true;
 const error = ref<string[]>([]);
+
+const goBack = () => router.push('/available-games');
 
 const performJoinRequest = async () => {
   error.value = [];
@@ -96,7 +101,7 @@ const joinAsSpectator = () => {
 };
 
 const tryJoin = () => {
-  console.log({ asPlayer, asSpectator, s: route.params['spectate'], p: route.params['play'] });
+  console.log({ asPlayer, asSpectator, s: route.query['spectate'], p: route.query['play'] });
   if (!asSpectator && !asPlayer) {
     // no decision made
   } else if (!needsValidation) {
