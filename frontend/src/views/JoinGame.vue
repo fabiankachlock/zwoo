@@ -4,9 +4,30 @@
       <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-10">
         <h2 class="tc-main text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
       </div>
+      <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center tc-main">
+        <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
+        <p class="text-xl tc-main">Loading...</p>
+      </div>
+      <div v-else class="flex flex-row items-center justify-center tc-main">
+        <button class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest m-2 rounded">
+          <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-2 tc-secondary transform transition-transform" />Back
+        </button>
+        <button
+          @click="joinAsPlayer()"
+          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest m-2 rounded"
+        >
+          <Icon icon="iconoir:play-outline" class="icon text-xl mr-2 tc-secondary transform transition-transform" /> Join as Player
+        </button>
+        <button
+          @click="joinAsSpectator()"
+          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest m-2 rounded"
+        >
+          <Icon icon="iconoir:eye-alt" class="icon text-xl mr-2 tc-secondary transform transition-transform" /> Join as Spectator
+        </button>
+      </div>
     </div>
   </div>
-  <FloatingDialog v-if="needsValidation">
+  <FloatingDialog v-if="showDialog" content-class="max-w-md">
     <Form>
       <FormTitle>
         {{ t('join.enterPassword') }}
@@ -14,7 +35,7 @@
       <TextInput id="password" v-model="password" labelKey="join.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="join">
+        <FormSubmit @click="performJoinRequest">
           {{ t('join.enter') }}
         </FormSubmit>
       </FormActions>
@@ -25,6 +46,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import { onMounted, ref } from 'vue';
@@ -33,32 +55,69 @@ import { GameManagementService } from '@/core/services/api/GameManagement';
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const isLoading = ref(true);
 const gameId = route.params['id'] as string;
+let asSpectator = route.params['spectate'] !== undefined;
+let asPlayer = route.params['play'] !== undefined;
 
 const gameName = ref(gameId);
 const password = ref('');
-const needsValidation = ref(false);
+const showDialog = ref(false);
+let needsValidation = true;
 const error = ref<string[]>([]);
 
-const join = async () => {
+const performJoinRequest = async () => {
   error.value = [];
+  isLoading.value = true;
+  showDialog.value = false;
 
   try {
     await GameManagementService.joinGame(gameId, password.value);
+    // TODO: connect to game
     router.push('/game/wait');
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    isLoading.value = false;
+  }
+};
+
+const joinAsPlayer = () => {
+  asPlayer = true;
+  asSpectator = false;
+  tryJoin();
+};
+
+const joinAsSpectator = () => {
+  asPlayer = false;
+  asSpectator = true;
+  tryJoin();
+};
+
+const tryJoin = () => {
+  console.log({ asPlayer, asSpectator, s: route.params['spectate'], p: route.params['play'] });
+  if (!asSpectator && !asPlayer) {
+    // no decision made
+  } else if (!needsValidation) {
+    // needs no password -> join direct
+    performJoinRequest();
+  } else {
+    // ask for password
+    showDialog.value = true;
   }
 };
 
 onMounted(async () => {
   const gameData = await GameManagementService.getJoinMeta(gameId);
+  isLoading.value = false;
 
   gameName.value = gameData.name;
-  needsValidation.value = gameData.needsValidation;
-
-  if (!gameData.needsValidation) {
-    router.replace('/game/wait');
-  }
+  needsValidation = gameData.needsValidation;
+  tryJoin();
 });
 </script>
+
+<style scoped>
+.action:hover .icon {
+  @apply scale-110;
+}
+</style>

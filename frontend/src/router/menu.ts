@@ -36,7 +36,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     path: 'join/:id',
     component: () => import(/* webpackChunkName: "menu" */ '../views/JoinGame.vue'),
     meta: {
-      requiresAuth: true,
+      requiresAuth: false,
       redirect: true
     }
   },
