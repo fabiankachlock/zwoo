@@ -4,7 +4,7 @@ const readline = require('readline').createInterface({
     output: process.stdout
 });
 
-const wss = new WebSocketServer({ port: 9072 });
+const wss = new WebSocketServer({ port: 9071 });
 
 let senderFunc = () => { }
 

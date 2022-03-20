@@ -17,7 +17,7 @@
     </header>
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
-        <div class="bg-lightest md:row-span-2">
+        <div class="bg-light md:col-start-1 md:row-start-1">
           <div class="flex flex-nowrap flex-row justify-between items-center">
             <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
             <div class="flex flex-row">
@@ -71,10 +71,20 @@
                 {{ player.name }}
               </p>
               <div class="flex items-center h-full justify-end">
-                <button v-if="isHost" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+                <button
+                  v-if="isHost"
+                  v-tooltip="t('wait.promote')"
+                  @click="askPromotePlayer()"
+                  class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+                >
                   <Icon icon="akar-icons:crown" />
                 </button>
-                <button v-if="isHost" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+                <button
+                  v-if="isHost"
+                  v-tooltip="t('wait.kick')"
+                  @click="askKickPlayer()"
+                  class="tc-secondary h-full bg-light hover:bg-main rounded p-1"
+                >
                   <Icon icon="iconoir:delete-circled-outline" />
                 </button>
                 <ReassureDialog
@@ -93,10 +103,26 @@
             </div>
           </div>
         </div>
-        <div class="bg-lightest" :class="{ 'md:row-span-2': !isHost }">
+        <div class="bg-light md:col-start-2 md:row-start-1" :class="{ 'md:row-span-2': !isHost }">
           <Rules />
         </div>
-        <div v-if="isHost" class="bg-lightest">Host section...</div>
+        <div class="bg-light md:col-start-1 md:row-start-2" style="height: fit-content">
+          <div class="flex flex-nowrap flex-row justify-between items-center">
+            <p class="text-xl tc-main my-2">{{ t('wait.spectators') }}</p>
+          </div>
+          <div class="w-full flex flex-col">
+            <div
+              v-for="player of spectators"
+              :key="player.id"
+              class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition hover:bc-primary rounded-lg hover:bg-dark"
+            >
+              <p class="text-lg tc-main-secondary">
+                {{ player.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div v-if="isHost" class="bg-light md:col-start-2 md:row-start-2" style="height: fit-content">Host section...</div>
       </div>
     </main>
   </div>
@@ -115,7 +141,7 @@ import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useLobbyPlayers } from '@/composables/lobbyPlayers';
 
 const { t } = useI18n();
-const { players, kickPlayer, promotePlayer } = useLobbyPlayers();
+const { players, kickPlayer, promotePlayer, spectators } = useLobbyPlayers();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);

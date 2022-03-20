@@ -60,6 +60,9 @@ module.exports = {
                 sans: "'sans', apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
                 mono: "'IBM Plex Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
             },
+            animation: {
+                'spin-slow': 'spin 3s linear infinite',
+            }
         },
     },
     variants: {
