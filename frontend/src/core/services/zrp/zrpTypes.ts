@@ -20,6 +20,9 @@ export enum ZRPOPCode {
   // - chat
   SendMessage = 104, // sender
   ReceiveMessage = 105, // receiver
+  // - all players
+  GetAllPlayers = 108, // sender
+  ListAllPlayers = 109, // receiver
   // - player role
   SpectatorWantsToPlay = 110, // sender (spectator)
   PlayerWantsToSpectate = 111, // sender (player)
@@ -48,13 +51,19 @@ export enum ZRPOPCode {
   EndTurnError = 433, // receiver
   PlaceCardError = 434, // receiver
   // internal Errors
-  _UnknownError = 10_000,
-  _ConnectionError = 10_000,
-  _ConnectionClosed = 10_101,
-  _ClientError = 10_200,
-  _DecodingError = 10_201,
+  _UnknownError = 900,
+  _ConnectionError = 900,
+  _ConnectionClosed = 911,
+  _ClientError = 920,
+  _DecodingError = 921,
   // internal messages
-  _Connected = 11_000
+  _Connected = 930
+}
+
+export enum ZRPRole {
+  Host = 1,
+  Player = 2,
+  Spectator = 3
 }
 
 export type ZRPPayloadMap = {
@@ -66,6 +75,9 @@ export type ZRPPayloadMap = {
   // Chat
   [ZRPOPCode.SendMessage]: ZRPSendChatMessagePayload;
   [ZRPOPCode.ReceiveMessage]: ZRPChatMessagePayload;
+  // all players
+  [ZRPOPCode.GetAllPlayers]: Record<string, never>;
+  [ZRPOPCode.ListAllPlayers]: ZRPAllLobbyPlayersPayload;
   // Roles
   [ZRPOPCode.SpectatorWantsToPlay]: Record<string, never>;
   [ZRPOPCode.PlayerWantsToSpectate]: Record<string, never>;
@@ -73,7 +85,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.PromoteToHost]: Record<string, never>;
   [ZRPOPCode.NewHost]: Record<string, never>;
   [ZRPOPCode.KickPlayer]: Record<string, never>;
-  [ZRPOPCode.PlayerChangedRole]: ZRPPlayerChangedRolePayload;
+  [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
   // Lobby
   [ZRPOPCode.ChangeSettings]: ZRPSettingsChangePayload;
   [ZRPOPCode.SettingsUpdated]: ZRPSettingsChangePayload;
@@ -112,10 +124,10 @@ export type ZRPLeftGamePayload = {
   name: string;
 };
 
-export type ZRPPlayerChangedRolePayload = {
+export type ZRPPlayerWithRolePayload = {
   name: string;
   wins: number;
-  role: string;
+  role: ZRPRole;
 };
 
 export type ZRPSendChatMessagePayload = {
@@ -124,7 +136,11 @@ export type ZRPSendChatMessagePayload = {
 
 export type ZRPChatMessagePayload = ZRPSendChatMessagePayload & {
   name: string;
-  role: string;
+  role: ZRPRole;
+};
+
+export type ZRPAllLobbyPlayersPayload = {
+  players: ZRPPlayerWithRolePayload[];
 };
 
 export type ZRPSettingsChangePayload = {
