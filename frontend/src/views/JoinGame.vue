@@ -33,7 +33,7 @@
     </div>
   </div>
   <FloatingDialog v-if="showDialog" content-class="max-w-md">
-    <Form>
+    <Form show-close-button @close="showDialog = false">
       <FormTitle>
         {{ t('join.enterPassword') }}
       </FormTitle>
