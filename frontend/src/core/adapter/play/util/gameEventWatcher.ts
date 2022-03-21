@@ -8,6 +8,7 @@ export const useWatchGameEvents = <T>(matcher: ZRPMatcher<T>, handler: (msg: ZRP
   return watch(
     () => gameEvents.lastEvent,
     msg => {
+      console.log('all', msg?.code);
       if (matcher.matches(msg as ZRPMessage<T>)) {
         console.log('received:', msg);
         handler(msg as ZRPMessage<T>);

@@ -19,10 +19,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Icon } from '@iconify/vue';
-import { useGameChat } from '@/composables/gameChat';
+import { useChatStore } from '@/core/adapter/play/chat';
 
 const message = ref('');
-const gameChat = useGameChat();
+const gameChat = useChatStore();
 
 const sendMessage = () => {
   if (message.value.length === 0) return;

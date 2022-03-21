@@ -5,10 +5,12 @@
 </template>
 
 <script setup lang="ts">
-import { useGameChat } from '@/composables/gameChat';
 import { useAuth } from '@/core/adapter/auth';
+import { useChatStore } from '@/core/adapter/play/chat';
+import { computed } from 'vue';
 import ChatMessage from './ChatMessage.vue';
 
-const { messages } = useGameChat();
+const chat = useChatStore();
+const messages = computed(() => chat.allMessages);
 const auth = useAuth();
 </script>
