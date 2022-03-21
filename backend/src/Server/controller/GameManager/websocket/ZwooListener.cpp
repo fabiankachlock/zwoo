@@ -33,7 +33,7 @@ void ZwooListener::readMessage(const WebSocket& socket, v_uint8 opcode, p_char8 
               logger->log->debug("Send Message!");
               connector->sendMessage(m_data.guid, m_data.puid, wholeMessage);
               break;
-          case e_ZRPOpCodes::GETALLPLAYERSINLOBBY:
+          case e_ZRPOpCodes::GET_ALL_PLAYERS_IN_LOBBY:
               logger->log->debug("Get All Players!");
               connector->getAllPlayersInLobby(m_data.guid, m_data.puid);
               break;

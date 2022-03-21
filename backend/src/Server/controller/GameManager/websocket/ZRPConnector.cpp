@@ -116,7 +116,7 @@ void ZRPConnector::getAllPlayersInLobby(uint32_t guid, uint32_t puid)
             }
         }
 
-        auto out = createMessage((int)e_ZRPOpCodes::ALLPLAYERSINLOBBY, json_mapper->writeToString(players));
+        auto out = createMessage((int)e_ZRPOpCodes::ALL_PLAYERS_IN_LOBBY, json_mapper->writeToString(players));
         sender->websocket.sendOneFrameText(out);
     }
 }
