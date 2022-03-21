@@ -15,7 +15,7 @@ void Logger::init(std::string name)
     std::stringstream string_stream;
     auto timer = std::time(NULL);
     auto tm = *std::localtime(&timer);
-    string_stream << std::put_time(&tm, fmt::format("%d-%m-%Y_%H:%M:%S-{0}-log.txt", name).c_str());
+    string_stream << std::put_time(&tm, fmt::format("%d-%m-%Y_%H:%M:%S-log.txt").c_str());
 
     std::vector<spdlog::sink_ptr> log_sinks;
     log_sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());

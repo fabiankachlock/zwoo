@@ -17,7 +17,7 @@
 HttpServer::HttpServer()
 {
     logger = std::make_shared<Logger>();
-    logger->init("BACKEND");
+    logger->init("BED");
 }
 
 void HttpServer::RunServer()

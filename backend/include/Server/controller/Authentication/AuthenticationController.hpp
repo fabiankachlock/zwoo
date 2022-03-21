@@ -52,7 +52,7 @@ std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWit
 
 class AuthenticationController : public oatpp::web::server::api::ApiController {
 private:
-    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger);
+    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger, "Backend");
     OATPP_COMPONENT(std::shared_ptr<Database>, m_database);
 
 public:
@@ -111,6 +111,7 @@ public:
 
         try
         {
+            m_logger->log->info("puid: {}, code: {}", ret.puid, ret.code);
             // create mail message
             mailio::message msg;
             msg.from(mailio::mail_address("zwoo auth", SMTP_HOST_EMAIL));// set the correct sender name and address
