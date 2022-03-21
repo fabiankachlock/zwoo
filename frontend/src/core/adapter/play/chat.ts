@@ -1,12 +1,16 @@
+import { ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 
 export type ChatMessage = {
   id: number;
   message: string;
-  sender: string;
+  sender: {
+    id: string;
+    role: ZRPRole;
+  };
 };
 
-export const useChat = defineStore('chat', {
+export const useChatStore = defineStore('chat', {
   state: () => ({
     messages: [] as ChatMessage[],
     muted: {} as Record<string, boolean>
@@ -14,12 +18,12 @@ export const useChat = defineStore('chat', {
 
   getters: {
     allMessages(state) {
-      return state.messages.filter(msg => !state.muted[msg.sender]);
+      return state.messages.filter(msg => !state.muted[msg.sender.id]);
     }
   },
 
   actions: {
-    pushMessage(msg: string, from: string) {
+    pushMessage(msg: string, from: ChatMessage['sender']) {
       this.messages.push({
         id: performance.now(),
         message: msg,

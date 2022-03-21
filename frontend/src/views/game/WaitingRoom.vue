@@ -6,7 +6,12 @@
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost">
-            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">{{ t('wait.start') }}</button>
+            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">
+              <router-link to="/game/play">
+                <!-- TODO: just temp -->
+                {{ t('wait.start') }}
+              </router-link>
+            </button>
             <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
           </template>
           <template v-if="!isHost">

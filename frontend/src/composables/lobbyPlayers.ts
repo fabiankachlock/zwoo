@@ -4,7 +4,7 @@ import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useGameEventDispatch } from './eventDisptach';
+import { useGameEventDispatch } from './eventDispatch';
 
 export type LobbyPlayer = {
   id: string;

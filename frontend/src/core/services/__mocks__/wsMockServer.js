@@ -4,7 +4,7 @@ const readline = require('readline').createInterface({
     output: process.stdout
 });
 
-const wss = new WebSocketServer({ port: 9071 });
+const wss = new WebSocketServer({ port: 9072 });
 
 let senderFunc = () => { }
 
@@ -46,8 +46,10 @@ const exampleMessages = {
     [105]: {
         message: 'test-message',
         name: 'test-player',
-        role: 'my-role'
+        role: 3
     },
+    [108]: {},
+    [109]: [],
     [110]: {},
     [111]: {},
     [112]: {},
