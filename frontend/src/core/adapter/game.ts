@@ -34,7 +34,7 @@ export const useGameConfig = defineStore('game-config', {
       console.log('join', gameId);
     },
     async connect() {
-      this._connection = new ZRPWebsocketAdapter(Backend.getUrl(Endpoint.Websocket), this.gameId);
+      this._connection = new ZRPWebsocketAdapter(Backend.getUrl(Endpoint.Websocket) + `${this.gameId}`, this.gameId);
       const events = useGameEvents();
       this._connection.readMessages(events.handleIncomingEvent);
     },

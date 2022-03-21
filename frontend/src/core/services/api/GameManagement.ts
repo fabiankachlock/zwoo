@@ -1,3 +1,5 @@
+import { Backend, Endpoint } from './apiConfig';
+
 export type GameStatusResponse = {
   id: string;
 };
@@ -20,9 +22,20 @@ export class GameManagementService {
   static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameStatusResponse> => {
     // make api call
     console.log('create game:', { name, isPublic, password });
-
+    const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        name: name,
+        password: password,
+        use_password: !isPublic,
+        opcode: 1 // join as host / create game
+      })
+    });
+    const result = await req.json();
+    console.log(result);
     return {
-      id: 'some-test-id'
+      id: result.guid
     };
   };
 
