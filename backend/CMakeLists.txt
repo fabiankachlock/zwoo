@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(zwoo_backend)
 
+
 set(CMAKE_CXX_STANDARD 17)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -8,7 +9,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 find_package(spdlog                REQUIRED)
 find_package(oatpp           1.3.0 REQUIRED)
 find_package(oatpp-mongo     1.3.0 REQUIRED)
-find_package(oatpp-websocket       REQUIRED)
+find_package(oatpp-websocket 1.3.0 REQUIRED)
 find_package(oatpp-openssl   1.3.0 REQUIRED)
 find_package(CURL                  REQUIRED)
 find_package(mongocxx              REQUIRED)

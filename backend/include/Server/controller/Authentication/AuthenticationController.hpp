@@ -111,6 +111,7 @@ public:
 
         try
         {
+            m_logger->log->info("puid: {}, code: {}", ret.puid, ret.code);
             // create mail message
             mailio::message msg;
             msg.from(mailio::mail_address("zwoo auth", SMTP_HOST_EMAIL));// set the correct sender name and address

@@ -77,7 +77,7 @@ public:
     OATPP_CREATE_COMPONENT(std::shared_ptr<Logger>, ws_logger)
     ("Websocket", [this] {
         auto ws_logger = std::make_shared<Logger>();
-        ws_logger->init("WebSocket");
+        ws_logger->init("WBS");
         return ws_logger;
     }());
 

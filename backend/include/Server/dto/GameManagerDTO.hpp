@@ -6,12 +6,14 @@
 
 #include OATPP_CODEGEN_BEGIN(DTO)
 
-class CreateGameDTO : public oatpp::DTO
+class JoinGameDTO : public oatpp::DTO
 {
-    DTO_INIT(CreateGameDTO, DTO)
+    DTO_INIT(JoinGameDTO, DTO)
 
-    DTO_FIELD(String, game_name);
+    DTO_FIELD(String, name);
     DTO_FIELD(String, password);
+    DTO_FIELD(UInt8, opcode);
+    DTO_FIELD(UInt32, guid);
     DTO_FIELD(Boolean, use_password);
 };
 

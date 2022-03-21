@@ -6,12 +6,27 @@
 
 #include OATPP_CODEGEN_BEGIN(DTO) ///< Begin DTO codegen section
 
+class ZwooUser : public oatpp::DTO {
+    DTO_INIT(ZwooUser, DTO)
+
+    DTO_FIELD(String, username);
+    DTO_FIELD(UInt32, wins);
+    DTO_FIELD(UInt8, role);
+};
+
+class UserJoined : public oatpp::DTO {
+    DTO_INIT(UserJoined, DTO)
+
+    DTO_FIELD(String, name);
+    DTO_FIELD(UInt32, wins);
+    DTO_FIELD(UInt8, role);
+};
+
 class SendMessage : public oatpp::DTO {
 
-  DTO_INIT(SendMessage, DTO /* extends */)
+    DTO_INIT(SendMessage, DTO)
 
-  DTO_FIELD(String, message);
-
+    DTO_FIELD(String, message);
 };
 
 class ReceiveMessage : public oatpp::DTO {
@@ -21,6 +36,13 @@ class ReceiveMessage : public oatpp::DTO {
   DTO_FIELD(String, message);
   DTO_FIELD(String, name);
   DTO_FIELD(UInt8, role);
+};
+
+class PlayersInLobby : public oatpp::DTO {
+
+  DTO_INIT(PlayersInLobby, DTO /* extends */)
+
+  DTO_FIELD(List<oatpp::Object<ZwooUser>>, players);
 };
 
 #include OATPP_CODEGEN_END(DTO) ///< End DTO codegen section

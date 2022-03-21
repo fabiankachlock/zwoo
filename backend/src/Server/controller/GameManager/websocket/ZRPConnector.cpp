@@ -1,31 +1,47 @@
 #include "Server/controller/GameManager/websocket/ZRPConnector.hpp"
 
 #include "Server/dto/ZRPMessageDTO.hpp"
+#include "Server/controller/GameManager/websocket/ZRPCodes.h"
 
 ZRPConnector::ZRPConnector()
 {
     logger = std::make_shared<Logger>();
-    logger->init("ZRPConnector");
+    logger->init("ZRP");
 
     json_mapper = oatpp::parser::json::mapping::ObjectMapper::createShared();
 }
 
 void ZRPConnector::addWebSocket(uint32_t guid, uint32_t puid, std::shared_ptr<ZwooListener> listener)
 {
-    // TODO Player/Spectator Joined (100, 101)
     auto game = game_websockets.find(guid);
     if (game != game_websockets.end())
         game->second[puid] = listener;
     else
         game_websockets[guid] = { { puid, listener } };
+
     printWebsockets();
+
+    game = game_websockets.find(guid);
+
+    {
+        auto ps_joined = UserJoined::createShared();
+        ps_joined->name = listener->m_data.username;
+        ps_joined->wins = listener->m_data.wins;
+        ps_joined->role = listener->m_data.role;
+
+        auto out = createMessage((listener->m_data.role == (int)e_Roles::SPECTATOR) ? (int)e_ZRPOpCodes::SPECTATOR_JOINED : (int)e_ZRPOpCodes::PLAYER_JOINED, json_mapper->writeToString(ps_joined));
+
+        for (const auto&[k, v] : game->second)
+            if (v != listener)
+                v->websocket.sendOneFrameText(out);
+    }
 }
 
 void ZRPConnector::removeWebSocket(uint32_t guid, uint32_t puid)
 {
-    // TODO Player/Spectator Joined (102, 103)
     auto game = game_websockets.find(guid);
-    if (game != game_websockets.end())
+    auto sender = getSocket(guid, puid);
+    if (game != game_websockets.end() && sender != nullptr)
     {
         auto peer = game->second.find(puid);
         if (peer != game->second.end())
@@ -33,6 +49,21 @@ void ZRPConnector::removeWebSocket(uint32_t guid, uint32_t puid)
             game->second.erase(peer);
             if (game->second.size() == 0)
                 game_websockets.erase(game);
+            else
+            {
+                {
+                    auto ps_joined = UserJoined::createShared();
+                    ps_joined->name = sender->m_data.username;
+                    ps_joined->wins = sender->m_data.wins;
+                    ps_joined->role = sender->m_data.role;
+
+                    auto out = createMessage((sender->m_data.role == (int)e_Roles::SPECTATOR) ? (int)e_ZRPOpCodes::SPECTATOR_LEFT : (int)e_ZRPOpCodes::PLAYER_LEFT, json_mapper->writeToString(ps_joined));
+
+                    for (const auto&[k, v] : game->second)
+                        if (v != sender)
+                            v->websocket.sendOneFrameText(out);
+                }
+            }
             printWebsockets();
         }
         else
@@ -56,14 +87,38 @@ void ZRPConnector::sendMessage(uint32_t guid, uint32_t puid, std::string data)
         message->name = sender->m_data.username;
         message->role = sender->m_data.role;
 
-        auto out = createMessage(105, json_mapper->writeToString(message));
-
+        auto out = createMessage((int)e_ZRPOpCodes::RECEIVE_MESSAGE, json_mapper->writeToString(message));
         for (const auto&[k, v] : game->second)
             v->websocket.sendOneFrameText(out);
     }
     else
         logger->log->error("No Player with ID: {} or game with ID: {} found!", puid, guid);
-    logger->log->info("guid: {0}, puid: {1}, message: {2}", guid, puid, send_message->message->c_str());
+}
+
+void ZRPConnector::getAllPlayersInLobby(uint32_t guid, uint32_t puid)
+{
+    auto sender = getSocket(guid, puid);
+    auto game = game_websockets.find(guid);
+
+    if (sender != nullptr && game != game_websockets.end())
+    {
+        auto players = PlayersInLobby::createShared();
+        players->players = {};
+        for (const auto&[k, v] : game->second)
+        {
+            if (v != nullptr)
+            {
+                auto p = ZwooUser::createShared();
+                p->username = v->m_data.username;
+                p->wins = v->m_data.wins;
+                p->role = v->m_data.role;
+                players->players->push_back(p);
+            }
+        }
+
+        auto out = createMessage((int)e_ZRPOpCodes::ALLPLAYERSINLOBBY, json_mapper->writeToString(players));
+        sender->websocket.sendOneFrameText(out);
+    }
 }
 
 void ZRPConnector::printWebsockets()

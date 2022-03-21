@@ -17,6 +17,7 @@ struct ListenerData {
     uint32_t puid;
     uint8_t  role;
     oatpp::String username;
+    uint32_t wins;
 };
 
 class ZwooListener : public oatpp::websocket::WebSocket::Listener {
