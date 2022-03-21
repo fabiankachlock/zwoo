@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+typedef unsigned long ulong;
+
 class UIDGenerator
 {
 private:
