@@ -4,7 +4,7 @@ import { RouterInterceptor } from '@/router/types';
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export class InGameGuard implements RouterInterceptor {
-  static InGameRoutes: string[] = GameRoute.children?.map(child => child?.path ?? '') ?? [];
+  static InGameRoutes: string[] = GameRoute.children?.map(child => `${GameRoute.path ?? ''}/${child?.path ?? ''}`) ?? [];
 
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
     if (InGameGuard.InGameRoutes.includes(to.path)) {
@@ -15,7 +15,7 @@ export class InGameGuard implements RouterInterceptor {
         if (redirect === true) {
           next('/login?redirect=' + to.fullPath);
         } else {
-          next(redirect || '/');
+          next(redirect || '/list');
         }
 
         return true;
