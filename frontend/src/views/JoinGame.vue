@@ -16,19 +16,24 @@
           <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-1 tc-secondary transform transition-transform" />{{ t('join.goBack') }}
         </button>
         <button
-          @click="joinAsPlayer()"
-          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
-        >
-          <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 tc-secondary transform transition-transform" />
-          <span class="whitespace-nowrap">{{ t('join.asPlayer') }}</span>
-        </button>
-        <button
           @click="joinAsSpectator()"
           class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
         >
           <Icon icon="iconoir:eye-alt" class="icon text-xl mr-1 tc-secondary transform transition-transform" />
           <span class="whitespace-nowrap">{{ t('join.asSpectator') }}</span>
         </button>
+        <button
+          @click="joinAsPlayer()"
+          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+        >
+          <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 tc-secondary transform transition-transform" />
+          <span class="whitespace-nowrap">{{ t('join.asPlayer') }}</span>
+        </button>
+      </div>
+      <div>
+        <Form>
+          <FormError :error="error" />
+        </Form>
       </div>
     </div>
   </div>
