@@ -44,6 +44,13 @@ const _DummyGames: GamesList = [
 export class GameManagementService {
   static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameStatusResponse> => {
     console.log('create game:', { name, isPublic, password });
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      return {
+        id: 1,
+        name: name
+      };
+    }
+
     const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
       credentials: 'include',
@@ -55,7 +62,7 @@ export class GameManagementService {
       })
     });
     const result = await req.json();
-    console.log(result);
+
     return {
       id: result.guid,
       name: name
@@ -86,6 +93,12 @@ export class GameManagementService {
 
   static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameStatusResponse> => {
     console.log('join game', { gameId, password, role });
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      return {
+        id: gameId,
+        name: _DummyGames.find(g => g.id === gameId)?.name ?? 'no-game-name'
+      };
+    }
 
     const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
@@ -98,7 +111,7 @@ export class GameManagementService {
     });
 
     const result = await req.json();
-    console.log(result);
+
     return {
       id: result.guid,
       name: _DummyGames.find(g => g.id === gameId)?.name ?? 'no-game-name'
