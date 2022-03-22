@@ -9,7 +9,7 @@ import { useGameEvents } from './play/events';
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
-    gameId: '',
+    gameId: -1,
     name: '',
     host: false, // TODO: store role
     inActiveGame: false,
@@ -46,7 +46,7 @@ export const useGameConfig = defineStore('game-config', {
       this.connect();
     },
     async connect() {
-      this._connection = new ZRPWebsocketAdapter(Backend.getUrl(Endpoint.Websocket) + `${this.gameId}`, this.gameId);
+      this._connection = new ZRPWebsocketAdapter(Backend.getDynamicUrl(Endpoint.Websocket, { id: this.gameId.toString() }), this.gameId.toString());
       const events = useGameEvents();
       this._connection.readMessages(events.handleIncomingEvent);
     },

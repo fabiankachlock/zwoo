@@ -2,7 +2,7 @@ import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './apiConfig';
 
 export type GameStatusResponse = {
-  id: string;
+  id: number;
 };
 
 export type GameMeta = {
