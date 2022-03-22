@@ -3,7 +3,8 @@
     "title": "Einstellungen",
     "sections": {
       "general": "Allgemein",
-      "game": "Spiel"
+      "game": "Spiel",
+      "danger": "Gefahrenzone"
     },
     "update": {
       "available": "Ein Update ist verfügbar",
@@ -16,12 +17,15 @@
         "off": "deaktiviert"
       }
     },
+    "": "",
     "darkmode": "Dunkler Modus",
     "fullscreen": "Vollbildschirm",
     "quickMenu": "Schnellmenü",
     "language": "Sprache",
     "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
-    "sortCards": "Karten im Deck sortieren"
+    "sortCards": "Karten im Deck sortieren",
+    "cookies": "Cookies",
+    "deleteAccount": "Account löschen"
   },
   "lng": {
     "de": "Deutsch",
@@ -31,13 +35,14 @@
     "login": "Anmelden",
     "createAccount": "Account erstellen",
     "idea": "Neue Idee?",
-    "github": "Github",
+    "imprint": "Impressum",
     "logout": "Abmelden",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "home": "Home"
   },
   "login": {
     "title": "Anmeldung",
-    "username": "Benutzername",
+    "email": "E-Mail",
     "password": "Passwort",
     "login": "Anmelden",
     "resetPassword": "Passwort zurücksetzten"
@@ -49,7 +54,8 @@
     "username": "Benutzername",
     "password": "Passwort",
     "create": "Erstellen",
-    "passwordRepeat": "Passwort Wiederholen"
+    "passwordRepeat": "Passwort Wiederholen",
+    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -79,7 +85,8 @@
   "home": {
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
-    "stats": "Statistiken zeigen"
+    "stats": "Statistiken zeigen",
+    "greeting": "Hallo, {name}!"
   },
   "list": {
     "title": "Verfügbare Spiele",
@@ -111,7 +118,11 @@
     "qrcode": "QR-Code",
     "qrcodeInfo": "Andere Spieler können über den QR-Code direkt dem Spiel beitreten.",
     "expand": "Mehr Anzeigen",
-    "collapse": "Weniger"
+    "collapse": "Weniger",
+    "sharesheet": {
+      "title": "Teile dein Spiel!",
+      "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."
+    }
   },
   "rules": {
     "test-1": {
@@ -125,8 +136,67 @@
     "error": "Ein fehler ist bei checken aufgetreten. - Versuche es später nochmal.",
     "result": {
       "success": "Alles gut",
-      "fail": "Check fehlgeschlagen! - Versuche es später nochmal.",
-      "half": "Ergebnis: Cyborg, aber das ist ok, versuche dich weniger wie ein Roboter in der Zukunft zu verhalten."
+      "fail": "Check fehlgeschlagen! - Versuche es später nochmal."
     }
+  },
+  "deleteAccount": {
+    "title": "Account Löschen",
+    "password": "Passwort",
+    "delete": "Jetzt Löschen!"
+  },
+  "cookies": {
+    "title": "Cookie Zustimmungen",
+    "functional": {
+      "title": "Funktionale Cookies",
+      "auth": {
+        "name": "Authetifizierungs Cookies",
+        "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
+      },
+      "recaptcha": {
+        "name": "Google reCAPTCHA Cookies",
+        "description": "Wir nutzen Google reCAPTCHA um SPAM zu vermeiden. Damit Google reCAPTCHA funktioniert, müssen Cookies gespeichert werden, damit deine Interaktionen mit der Webseite analysiert werden können."
+      }
+    },
+    "active": "Aktiviert",
+    "inactive": "Deaktiviert",
+    "acceptAll": "Alle Akzeptieren",
+    "acceptSelection": "Auswahl Akzeptieren",
+    "manage": "Cookies Verwalten",
+    "disallowed": {
+      "title": "Fehlende Cookies",
+      "info": "Die Login- und Accounterstellungsfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
+    }
+  },
+  "share": {
+    "facebook": "Auf Facebook teilen",
+    "twitter": "Auf Twitter teilen",
+    "email": "Via Email teilen",
+    "reddit": "Auf Reddit teilen",
+    "whatsapp": "Auf Whatsapp teilen",
+    "telegram": "Auf Telegram teilen",
+    "join": {
+      "title": "Trete {0} bei!",
+      "text": "Du wurdest zu einem zwoo Spiel eingeladen, nutze den Link um beizutreten"
+    }
+  },
+  "controls": {
+    "toggle": {
+      "on": "An",
+      "off": "Aus"
+    }
+  },
+  "dialogs": {
+    "promotePlayer": {
+      "title": "{0} zum Host befördern?",
+      "body": "Bist du sicher, dass du {0} zum Host befördern willst? Du verlierst deinen Host Status dadurch. "
+    },
+    "kickPlayer": {
+      "title": "{0} rauswerfen?",
+      "body": "Bist du sicher, dass du {0} aus dem Spiel rauswerfen möchtest?"
+    }
+  },
+  "reassureDialog": {
+    "accept": "Ok!",
+    "decline": "Abbrechen!"
   }
 }

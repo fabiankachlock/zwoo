@@ -1,7 +1,7 @@
 <template>
-  <div class="block align-baseline italic text-sm tc-main-secondary my-1 tc-main-dark hover:opacity-70 transition relative" @click="emit('click')">
+  <button class="block align-baseline italic text-sm tc-main-secondary my-1 tc-main-dark hover:opacity-70 transition relative" @click="emit('click')">
     <slot></slot>
-  </div>
+  </button>
 </template>
 
 <script setup lang="ts">

@@ -16,7 +16,7 @@ export const GameRoute: RouteRecordRaw = {
       path: 'wait',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/WaitingRoom.vue'),
       meta: {
-        requiresAuth: true
+        requiresAuth: false
       }
     },
     {

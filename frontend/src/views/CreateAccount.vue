@@ -31,30 +31,39 @@
           <router-link :to="'/login?' + joinQuery(route.query)">{{ t('nav.login') }}</router-link>
         </FormAlternativeAction>
       </FormActions>
+      <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
+        <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
+        <p class="tc-main-secondary">{{ t('createAccount.info') }}</p>
+      </div>
     </Form>
   </FlatDialog>
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { UsernameValidator } from '@/core/services/validator/username';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
 import { useAuth } from '@/core/adapter/auth';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
+import { useCookies } from '@/core/adapter/cookies';
 
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
-const router = useRouter();
+
+onMounted(() => {
+  useCookies().loadRecaptcha();
+});
 
 const username = ref('');
 const email = ref('');
@@ -63,6 +72,7 @@ const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
+const showInfo = ref(false);
 
 const emailValidator = new EmailValidator();
 const usernameValidator = new UsernameValidator();
@@ -85,14 +95,7 @@ const create = async () => {
 
   try {
     await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, reCaptchaResponse.value);
-    const redirect = route.query['redirect'] as string;
-
-    if (redirect) {
-      router.replace(redirect);
-      return;
-    }
-
-    router.push('/home');
+    showInfo.value = true;
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }

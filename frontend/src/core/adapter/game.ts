@@ -1,12 +1,19 @@
 import { defineStore } from 'pinia';
+import { Backend, Endpoint } from '../services/api/apiConfig';
 import { GameManagementService } from '../services/api/GameManagement';
 import { GameNameValidator } from '../services/validator/gameName';
+import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
+import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
+import { ZRPOPCode, ZRPPayload } from '../services/zrp/zrpTypes';
+import { useGameEvents } from './play/events';
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
     gameId: '',
+    name: '',
     host: false,
-    inActiveGame: false
+    inActiveGame: false,
+    _connection: undefined as ZRPWebsocketAdapter | undefined
   }),
   actions: {
     async create(name: string, isPublic: boolean, password: string) {
@@ -18,8 +25,23 @@ export const useGameConfig = defineStore('game-config', {
       this.$patch({
         inActiveGame: true,
         host: true,
-        gameId: status.id
+        gameId: status.id,
+        name: name
       });
+      this.connect();
+    },
+    async join(gameId: string) {
+      console.log('join', gameId);
+    },
+    async connect() {
+      this._connection = new ZRPWebsocketAdapter(Backend.getUrl(Endpoint.Websocket), this.gameId);
+      const events = useGameEvents();
+      this._connection.readMessages(events.handleIncomingEvent);
+    },
+    async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
+      if (this._connection) {
+        this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
+      }
     }
   }
 });

@@ -1,7 +1,7 @@
 <template>
-  <div @click="goBack" class="tc-main-secondary absolute left-3 top-3 text-xl transform transition-transform hover:-translate-x-1">
+  <button @click="goBack" class="tc-main-secondary absolute left-3 top-3 text-xl transform transition-transform hover:-translate-x-1">
     <Icon icon="mdi:chevron-left" />
-  </div>
+  </button>
   <form class="w-full h-full relative">
     <slot></slot>
   </form>

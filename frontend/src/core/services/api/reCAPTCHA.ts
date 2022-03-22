@@ -1,4 +1,5 @@
 import { ReCaptchaTermsVisibilityManager } from '../security/ReCaptchaTerms';
+import { Backend, Endpoint } from './apiConfig';
 
 export type ReCaptchaResponse = {
   success: boolean;
@@ -12,6 +13,8 @@ export class ReCaptchaService {
 
   private isReady = false;
 
+  private loaded = false;
+
   private whenLoaded = () => {
     ReCaptchaTermsVisibilityManager.init();
     ReCaptchaTermsVisibilityManager.updateState();
@@ -19,6 +22,8 @@ export class ReCaptchaService {
   };
 
   private loadScript = () => {
+    if (this.loaded) return;
+    this.loaded = true;
     const scriptTag = document.createElement('script');
     scriptTag.setAttribute('src', 'https://www.google.com/recaptcha/api.js?render=' + ReCaptchaService.SITE_KEY);
     document.body.appendChild(scriptTag);
@@ -40,12 +45,15 @@ export class ReCaptchaService {
 
   private verify = async (token: string): Promise<ReCaptchaResponse> => {
     if (process.env.VUE_APP_USE_BACKEND === 'true') {
-      return fetch('/auth/recaptcha', {
+      return fetch(Backend.getUrl(Endpoint.Recaptcha), {
         method: 'POST',
         body: token
       })
         .then(res => res.json() as Promise<ReCaptchaResponse>)
-        .then(res => res); // TODO: optional data casting;
+        .then(res => ({
+          success: res.success,
+          score: res.score
+        }));
     }
     return Promise.resolve({
       success: Math.random() > 0.5,

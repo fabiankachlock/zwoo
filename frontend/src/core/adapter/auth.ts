@@ -18,22 +18,24 @@ export const useAuth = defineStore('auth', {
     };
   },
   actions: {
-    async login(username: string, password: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async login(email: string, password: string, recaptchaResponse: ReCaptchaResponse | undefined) {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performLogin(username, password);
+      const status = await AuthenticationService.performLogin(email, password);
 
-      this.$patch({
-        username: status.username,
-        isLoggedIn: status.isLoggedIn
-      });
+      if (status.isLoggedIn) {
+        this.$patch({
+          username: status.username,
+          isLoggedIn: status.isLoggedIn
+        });
+      }
     },
     async logout() {
       const status = await AuthenticationService.performLogout();
 
       this.$patch({
-        username: status.username,
+        username: '',
         isLoggedIn: status.isLoggedIn
       });
     },
@@ -55,13 +57,29 @@ export const useAuth = defineStore('auth', {
 
       const status = await AuthenticationService.performCreateAccount(username, email, password);
 
+      if (status.isLoggedIn) {
+        this.$patch({
+          username: status.username,
+          isLoggedIn: status.isLoggedIn
+        });
+      }
+    },
+    async deleteAccount(password: string) {
+      await AuthenticationService.performDeleteAccount(password);
+
       this.$patch({
-        username: status.username,
-        isLoggedIn: status.isLoggedIn
+        username: '',
+        isLoggedIn: false
       });
     },
     async askStatus() {
-      // make initial api call (to read from session)
+      const response = await AuthenticationService.getUserInfo();
+      if (response.isLoggedIn) {
+        this.$patch({
+          username: response.username,
+          isLoggedIn: response.isLoggedIn
+        });
+      }
     },
     async configure() {
       this.askStatus();

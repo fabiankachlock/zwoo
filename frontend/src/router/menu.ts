@@ -6,6 +6,10 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "menu" */ '../views/Settings.vue')
   },
   {
+    path: 'imprint',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/Imprint.vue')
+  },
+  {
     path: 'login',
     component: () => import(/* webpackChunkName: "menu" */ '../views/Login.vue')
   },
@@ -43,5 +47,9 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: 'missing-cookies',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/MissingCookies.vue')
   }
 ];

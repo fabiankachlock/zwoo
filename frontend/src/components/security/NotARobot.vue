@@ -1,12 +1,18 @@
 <template>
   <div class="box my-2 bg-none rounded-lg relative mx-1 border-2">
     <button @click="handleClick" class="block w-full h-full tc-main-dark py-2 px-1" :class="enableButtonPointerEvents">
-      <p v-if="verifyState === 'none'">{{ t('recaptcha.title') }}</p>
+      <div v-if="verifyState === 'none'">
+        <p>
+          <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA Logo" class="h-8 mr-2 inline-block align-middle" />
+          <span class="align-middle">
+            {{ t('recaptcha.title') }}
+          </span>
+        </p>
+      </div>
       <div v-else-if="verifyState === 'verifying'">{{ t('recaptcha.loading') }}</div>
       <div v-else-if="verifyState === 'error'">{{ t('recaptcha.error') }}</div>
       <div v-else-if="verifyState === 'done'">
-        <p v-if="!success">{{ t('recaptcha.result.fail') }}</p>
-        <p v-else-if="success && humanRate < 0.6">{{ t('recaptcha.result.half') }}</p>
+        <p v-if="!success || humanRate < MIN_RECAPTCHA_SCORE">{{ t('recaptcha.result.fail') }}</p>
         <p v-else>{{ t('recaptcha.result.success') }}</p>
       </div>
     </button>
@@ -15,6 +21,7 @@
 
 <script setup lang="ts">
 import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/reCAPTCHA';
+import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
 import { computed, defineEmits, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 

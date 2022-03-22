@@ -3,7 +3,8 @@
     "title": "Settings",
     "sections": {
       "general": "General",
-      "game": "Game"
+      "game": "Game",
+      "danger": "Danger"
     },
     "update": {
       "available": "An update is available",
@@ -16,12 +17,15 @@
         "off": "deactivated"
       }
     },
+    "": "",
     "darkmode": "Dark Mode",
     "language": "Language",
     "fullscreen": "Fullscreen",
     "quickMenu": "Quick Menu",
     "showCardDetail": "Show Card Detail before playing",
-    "sortCards": "Sort cards in deck"
+    "sortCards": "Sort cards in deck",
+    "cookies": "Cookies",
+    "deleteAccount": "Delete Account"
   },
   "lng": {
     "de": "German",
@@ -31,13 +35,14 @@
     "login": "Login",
     "createAccount": "Create Account",
     "idea": "New Idea?",
-    "github": "Github",
+    "imprint": "Imprint",
     "logout": "Logout",
-    "settings": "Settings"
+    "settings": "Settings",
+    "home": "Home"
   },
   "login": {
     "title": "Login",
-    "username": "Username",
+    "email": "E-Mail",
     "password": "Password",
     "login": "Login",
     "resetPassword": "Reset Password"
@@ -49,7 +54,8 @@
     "username": "Username",
     "password": "Password",
     "create": "Create",
-    "passwordRepeat": "Repeat Password"
+    "passwordRepeat": "Repeat Password",
+    "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account."
   },
   "createGame": {
     "title": "Create Game",
@@ -79,7 +85,8 @@
   "home": {
     "create": "Create Game",
     "join": "Join Game",
-    "stats": "Show Statistic"
+    "stats": "Show Statistic",
+    "greeting": "Hello, {name}!"
   },
   "list": {
     "title": "Available Games",
@@ -111,7 +118,11 @@
     "qrcode": "QRCode",
     "qrcodeInfo": "Other Player an join the game directly with the QRCode.",
     "expand": "Expand",
-    "collapse": "Collapse"
+    "collapse": "Collapse",
+    "sharesheet": {
+      "title": "Share your game!",
+      "info": "Share a link to join your game with your friends."
+    }
   },
   "rules": {
     "test-1": {
@@ -125,8 +136,67 @@
     "error": "Some error occurred in the checking process. - Please retry later.",
     "result": {
       "success": "All good",
-      "fail": "Failed Bot Check! - Please retry later.",
-      "half": "Result: Cyborg, but that's ok try acting less like a bot in the future."
+      "fail": "Failed Bot Check! - Please retry later."
     }
+  },
+  "deleteAccount": {
+    "title": "Delete Account",
+    "password": "Password",
+    "delete": "Delete Now!"
+  },
+  "cookies": {
+    "title": "Cookie Consent",
+    "functional": {
+      "title": "Functional Cookies",
+      "auth": {
+        "name": "Authentication Cookies",
+        "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
+      },
+      "recaptcha": {
+        "name": "Google reCAPTCHA Cookies",
+        "description": "We use Google reCAPTCHA in order to prevent spam. Google reCAPTCHA needs cookies in order to analyze your interactions with the website."
+      }
+    },
+    "active": "Active",
+    "inactive": "Inactive",
+    "acceptAll": "Accept All",
+    "acceptSelection": "Accept Selection",
+    "manage": "Manage Cookies",
+    "disallowed": {
+      "title": "Missing Cookies",
+      "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
+    }
+  },
+  "share": {
+    "facebook": "Share on Facebook",
+    "twitter": "Share on Twitter",
+    "email": "Share by Email",
+    "reddit": "Share on Reddit",
+    "whatsapp": "Share on Whatsapp",
+    "telegram": "Share on Telegram",
+    "join": {
+      "title": "Join {0}!",
+      "text": "You got invited into a zwoo game, use the link to join now!"
+    }
+  },
+  "controls": {
+    "toggle": {
+      "on": "On",
+      "off": "Off"
+    }
+  },
+  "dialogs": {
+    "promotePlayer": {
+      "title": "Promote {0} to a host?",
+      "body": "Are you sure that you want to promote {0}? You will lose your host status."
+    },
+    "kickPlayer": {
+      "title": "Kick {0}?",
+      "body": "Are you sure, that you want to kick {0}?"
+    }
+  },
+  "reassureDialog": {
+    "accept": "Ok!",
+    "decline": "Cancel!"
   }
 }
