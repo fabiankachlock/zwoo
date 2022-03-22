@@ -49,7 +49,7 @@ export const useChatStore = defineStore('game-chat', () => {
 
   chatWatcher.onClose(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    useChatStore().$reset();
+    messages.value = [];
   });
 
   /*

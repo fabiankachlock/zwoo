@@ -3,6 +3,7 @@ import { Backend, Endpoint } from './apiConfig';
 
 export type GameStatusResponse = {
   id: number;
+  name: string;
 };
 
 export type GameMeta = {
@@ -56,7 +57,8 @@ export class GameManagementService {
     const result = await req.json();
     console.log(result);
     return {
-      id: result.guid
+      id: result.guid,
+      name: name
     };
   };
 
@@ -76,7 +78,7 @@ export class GameManagementService {
             name: game.name
           });
         } else {
-          rej({ message: 'nor-found' });
+          rej({ message: 'not-found' });
         }
       }, 3000)
     );
@@ -98,7 +100,8 @@ export class GameManagementService {
     const result = await req.json();
     console.log(result);
     return {
-      id: result.guid
+      id: result.guid,
+      name: _DummyGames.find(g => g.id === gameId)?.name ?? 'no-game-name'
     };
   };
 }
