@@ -4,14 +4,14 @@ import { GameManagementService } from '../services/api/GameManagement';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
 import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
-import { ZRPOPCode, ZRPPayload } from '../services/zrp/zrpTypes';
+import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
     gameId: '',
     name: '',
-    host: false,
+    host: false, // TODO: store role
     inActiveGame: false,
     _connection: undefined as ZRPWebsocketAdapter | undefined
   }),
@@ -30,8 +30,20 @@ export const useGameConfig = defineStore('game-config', {
       });
       this.connect();
     },
-    async join(gameId: string) {
-      console.log('join', gameId);
+    async join(id: number, password: string, asPlayer: boolean, asSpectator: boolean) {
+      if (asPlayer && asSpectator) {
+        throw new Error('cant join as player & spectator');
+      }
+
+      const status = await GameManagementService.joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
+
+      this.$patch({
+        inActiveGame: true,
+        host: false,
+        gameId: status.id,
+        name: 'unknown yet?' // TODO: fill in name
+      });
+      this.connect();
     },
     async connect() {
       this._connection = new ZRPWebsocketAdapter(Backend.getUrl(Endpoint.Websocket) + `${this.gameId}`, this.gameId);

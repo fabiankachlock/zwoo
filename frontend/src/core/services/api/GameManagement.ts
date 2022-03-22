@@ -1,3 +1,4 @@
+import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './apiConfig';
 
 export type GameStatusResponse = {
@@ -5,7 +6,7 @@ export type GameStatusResponse = {
 };
 
 export type GameMeta = {
-  id: string;
+  id: number;
   name: string;
   isPublic: boolean;
   playerCount: number;
@@ -18,9 +19,29 @@ export type GameJoinMeta = {
 
 export type GamesList = GameMeta[];
 
+const _DummyGames: GamesList = [
+  {
+    name: 'Dev-Game',
+    isPublic: true,
+    id: 1,
+    playerCount: 999
+  },
+  {
+    name: 'Test-Public',
+    isPublic: true,
+    id: 2,
+    playerCount: 1
+  },
+  {
+    name: 'Test-Private',
+    isPublic: false,
+    id: 2,
+    playerCount: 5
+  }
+];
+
 export class GameManagementService {
   static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameStatusResponse> => {
-    // make api call
     console.log('create game:', { name, isPublic, password });
     const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
@@ -42,34 +63,42 @@ export class GameManagementService {
   static listAll = async (): Promise<GamesList> => {
     // make api call
     console.log('load games');
-    return [
-      {
-        name: 'Test-Public',
-        isPublic: true,
-        id: 'g-pub',
-        playerCount: 1
-      },
-      {
-        name: 'Test-Private',
-        isPublic: false,
-        id: 'g-prv',
-        playerCount: 5
-      }
-    ];
+    return _DummyGames;
   };
 
-  static getJoinMeta = async (gameId: string): Promise<GameJoinMeta> => {
-    return new Promise(res =>
+  static getJoinMeta = async (gameId: number): Promise<GameJoinMeta> => {
+    return new Promise((res, rej) =>
       setTimeout(() => {
-        res({
-          needsValidation: true,
-          name: `Some-Game (${gameId})`
-        });
+        const game = _DummyGames.find(g => g.id === gameId);
+        if (game) {
+          res({
+            needsValidation: !game.isPublic,
+            name: game.name
+          });
+        } else {
+          rej({ message: 'nor-found' });
+        }
       }, 3000)
     );
   };
 
-  static joinGame = async (gameId: string, password: string): Promise<void> => {
-    console.log('join game', gameId, password);
+  static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameStatusResponse> => {
+    console.log('join game', { gameId, password, role });
+
+    const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        guid: gameId,
+        password: password,
+        opcode: role // join as host / create game
+      })
+    });
+
+    const result = await req.json();
+    console.log(result);
+    return {
+      id: result.guid
+    };
   };
 }

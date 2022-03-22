@@ -56,16 +56,18 @@ import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import { onMounted, ref } from 'vue';
 import { GameManagementService } from '@/core/services/api/GameManagement';
+import { useGameConfig } from '@/core/adapter/game';
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const isLoading = ref(true);
-const gameId = route.params['id'] as string;
+const gameConfig = useGameConfig();
+const gameId = parseInt(route.params['id'] as string) ?? -1;
 let asSpectator = route.query['spectate'] !== undefined;
 let asPlayer = route.query['play'] !== undefined;
 
-const gameName = ref(gameId);
+const gameName = ref('' + gameId);
 const password = ref('');
 const showDialog = ref(false);
 let needsValidation = true;
@@ -79,7 +81,7 @@ const performJoinRequest = async () => {
   showDialog.value = false;
 
   try {
-    await GameManagementService.joinGame(gameId, password.value);
+    await gameConfig.join(gameId, password.value, asPlayer, asSpectator);
     // TODO: connect to game
     router.push('/game/wait');
   } catch (e: unknown) {

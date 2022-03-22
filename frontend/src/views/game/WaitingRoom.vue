@@ -15,7 +15,9 @@
             <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
           </template>
           <template v-if="!isHost">
-            <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+            <router-link to="/game/play">
+              <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+            </router-link>
           </template>
         </div>
       </div>
