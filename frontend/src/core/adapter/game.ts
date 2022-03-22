@@ -11,10 +11,13 @@ export const useGameConfig = defineStore('game-config', {
   state: () => ({
     gameId: -1,
     name: '',
-    host: false, // TODO: store role
+    role: undefined as ZRPRole | undefined,
     inActiveGame: false,
     _connection: undefined as ZRPWebsocketAdapter | undefined
   }),
+  getters: {
+    host: state => state.role === ZRPRole.Host
+  },
   actions: {
     async create(name: string, isPublic: boolean, password: string) {
       const nameValid = new GameNameValidator().validate(name);
@@ -24,9 +27,9 @@ export const useGameConfig = defineStore('game-config', {
 
       this.$patch({
         inActiveGame: true,
-        host: true,
+        role: ZRPRole.Host,
         gameId: status.id,
-        name: name
+        name: status.name
       });
       this.connect();
     },
@@ -39,9 +42,9 @@ export const useGameConfig = defineStore('game-config', {
 
       this.$patch({
         inActiveGame: true,
-        host: false,
+        role: asPlayer ? ZRPRole.Player : ZRPRole.Spectator,
         gameId: status.id,
-        name: 'unknown yet?' // TODO: fill in name
+        name: status.name
       });
       this.connect();
     },
