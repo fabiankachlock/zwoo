@@ -75,7 +75,7 @@ public:
         }
         else if (data->opcode == 2 || data->opcode == 3)
         {
-             if (data->guid == 0)
+            if (data->guid == 0)
                 return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Gameid 0 is not valid!"));
         }
         else
