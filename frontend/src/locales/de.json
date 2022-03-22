@@ -125,6 +125,8 @@
     "qrcodeInfo": "Andere Spieler können über den QR-Code direkt dem Spiel beitreten.",
     "expand": "Mehr Anzeigen",
     "collapse": "Weniger",
+    "promote": "Befördern",
+    "kick": "Rauswerfen",
     "sharesheet": {
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."

@@ -125,6 +125,8 @@
     "qrcodeInfo": "Other Player an join the game directly with the QRCode.",
     "expand": "Expand",
     "collapse": "Collapse",
+    "promote": "Promote",
+    "kick": "Kick",
     "sharesheet": {
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."
