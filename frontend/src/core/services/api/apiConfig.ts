@@ -1,3 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-types */
+type ExtractRouteParams<str extends string> = str extends ''
+  ? {}
+  : str extends `/${infer rest}`
+  ? ExtractRouteParams<rest>
+  : str extends `:${infer front}:${infer rest}`
+  ? { [K in front]: string } & ExtractRouteParams<rest>
+  : str extends `${string}/${infer rest}`
+  ? ExtractRouteParams<rest>
+  : {};
+
 export enum Endpoint {
   CreateAccount = 'auth/create',
   Recaptcha = 'auth/recaptcha',
@@ -6,15 +17,32 @@ export enum Endpoint {
   AccountLogout = 'auth/logout',
   UserInfo = 'auth/user',
   DeleteAccount = 'auth/delete',
-  Websocket = 'ws' // TODO: insert real url
+  JoinGame = 'game/join',
+  Websocket = 'game/join/:id:'
 }
 
 export class Backend {
   public static readonly URL = process.env.VUE_APP_BACKEND_URL as string;
-  public static getUrl = (endpoint: Endpoint): string => {
+
+  public static getUrl(endpoint: Endpoint): string {
     if (endpoint === Endpoint.Websocket) {
-      return process.env.VUE_APP_WS_OVERRIDE ?? `${Backend.URL}${endpoint}`;
+      return process.env.VUE_APP_WS_OVERRIDE ? `${process.env.VUE_APP_WS_OVERRIDE}${endpoint}` : `${Backend.URL}${endpoint}`;
     }
     return `${Backend.URL}${endpoint}`;
-  };
+  }
+
+  public static getDynamicUrl<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>): string {
+    let url = '';
+    if (endpoint === Endpoint.Websocket) {
+      url = process.env.VUE_APP_WS_OVERRIDE ? `${process.env.VUE_APP_WS_OVERRIDE}${endpoint}` : `${Backend.URL}${endpoint}`;
+    } else {
+      url = `${Backend.URL}${endpoint}`;
+    }
+
+    for (const key in params) {
+      url = url.replaceAll(`:${key}:`, params[key] as unknown as string);
+    }
+
+    return url;
+  }
 }

@@ -9,6 +9,7 @@ import { RouterInterceptor } from './types';
 import { AuthGuard } from '@/core/services/security/AuthGuard';
 import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptchaTerms';
 import { CookieGuard } from '@/core/services/security/CookieGuard';
+import { InGameGuard } from '@/core/services/security/GameGuard';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -43,7 +44,11 @@ const router = createRouter({
   routes
 });
 
-const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [new AuthGuard().beforeEach, new CookieGuard().beforeEach];
+const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
+  new AuthGuard().beforeEach,
+  new CookieGuard().beforeEach,
+  new InGameGuard().beforeEach
+];
 const BeforeEachAsyncGuards: RouterInterceptor['beforeEachAsync'][] = [];
 
 router.beforeEach(async (to, from, next) => {

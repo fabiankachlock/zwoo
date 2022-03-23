@@ -65,7 +65,7 @@
     "create": "Erstellen"
   },
   "join": {
-    "join": "{0} Beitreten",
+    "join": "{0} beitreten",
     "enterPassword": "Password eingeben",
     "password": "Passwort",
     "enter": "Spiel Beitreten",
@@ -74,7 +74,10 @@
     "nothingFound": "Nix gefunden",
     "found": "{0} gefunden",
     "notValid": "Falsches Format: {0}",
-    "enableCam": "Bitte Kamera aktivieren."
+    "enableCam": "Bitte Kamera aktivieren.",
+    "goBack": "Zurück",
+    "asPlayer": "als Spieler",
+    "asSpectator": "als Zuschauer"
   },
   "landing": {
     "tagline": "The Second Challenge",
@@ -93,7 +96,9 @@
     "players": "keine Spieler | 1 Spieler | {count} Spieler",
     "private": "Privat",
     "reload": "Aktualisieren",
-    "nothingFound": "Es konnte kein Spiel gefunden werden."
+    "nothingFound": "Es konnte kein Spiel gefunden werden.",
+    "spectate": "Zuschauen",
+    "play": "Spielen"
   },
   "errors": {
     "error": "Error",
@@ -114,11 +119,14 @@
     "stop": "Stop",
     "leave": "Verlassen",
     "players": "Spieler",
+    "spectators": "Zuschauer",
     "rules": "Regeln",
     "qrcode": "QR-Code",
     "qrcodeInfo": "Andere Spieler können über den QR-Code direkt dem Spiel beitreten.",
     "expand": "Mehr Anzeigen",
     "collapse": "Weniger",
+    "promote": "Befördern",
+    "kick": "Rauswerfen",
     "sharesheet": {
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."
@@ -198,5 +206,13 @@
   "reassureDialog": {
     "accept": "Ok!",
     "decline": "Abbrechen!"
+  },
+  "snackbar": {
+    "lobby": {
+      "playerJoined": "Spieler {0} ist beigetreten",
+      "spectatorJoined": "Zuschauer {0} ist beigetreten",
+      "playerLeft": "{0} hat das Spiel verlassen",
+      "spectatorLeft": "{0} hat das Spiel verlassen"
+    }
   }
 }

@@ -20,9 +20,9 @@
 <script setup lang="ts">
 import { toRefs, defineProps, watch, ref } from 'vue';
 import { Icon } from '@iconify/vue';
-import { useChat } from '@/core/adapter/play/chat';
+import { useChatStore } from '@/core/adapter/play/chat';
 
-const chat = useChat();
+const chat = useChatStore();
 const props = defineProps<{
   isActive: boolean;
   name: string;

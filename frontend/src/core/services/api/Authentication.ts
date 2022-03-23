@@ -29,7 +29,7 @@ export class AuthenticationService {
       credentials: 'include'
     });
 
-    if (response.status === 404 || response.status === 401) {
+    if (response.status === 404 || response.status === 401 || response.status === 400) {
       return {
         isLoggedIn: false
       };

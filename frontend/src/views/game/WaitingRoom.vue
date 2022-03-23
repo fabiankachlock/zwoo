@@ -6,18 +6,25 @@
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost">
-            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">{{ t('wait.start') }}</button>
+            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">
+              <router-link to="/game/play">
+                <!-- TODO: just temp -->
+                {{ t('wait.start') }}
+              </router-link>
+            </button>
             <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
           </template>
           <template v-if="!isHost">
-            <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+            <router-link to="/game/play">
+              <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+            </router-link>
           </template>
         </div>
       </div>
     </header>
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
-        <div class="bg-lightest md:row-span-2">
+        <div class="bg-light md:col-start-1 md:row-start-1">
           <div class="flex flex-nowrap flex-row justify-between items-center">
             <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
             <div class="flex flex-row">
@@ -71,10 +78,20 @@
                 {{ player.name }}
               </p>
               <div class="flex items-center h-full justify-end">
-                <button v-if="isHost" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+                <button
+                  v-if="isHost"
+                  v-tooltip="t('wait.promote')"
+                  @click="askPromotePlayer()"
+                  class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+                >
                   <Icon icon="akar-icons:crown" />
                 </button>
-                <button v-if="isHost" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+                <button
+                  v-if="isHost"
+                  v-tooltip="t('wait.kick')"
+                  @click="askKickPlayer()"
+                  class="tc-secondary h-full bg-light hover:bg-main rounded p-1"
+                >
                   <Icon icon="iconoir:delete-circled-outline" />
                 </button>
                 <ReassureDialog
@@ -93,10 +110,26 @@
             </div>
           </div>
         </div>
-        <div class="bg-lightest" :class="{ 'md:row-span-2': !isHost }">
+        <div class="bg-light md:col-start-2 md:row-start-1" :class="{ 'md:row-span-2': !isHost }">
           <Rules />
         </div>
-        <div v-if="isHost" class="bg-lightest">Host section...</div>
+        <div class="bg-light md:col-start-1 md:row-start-2" style="height: fit-content">
+          <div class="flex flex-nowrap flex-row justify-between items-center">
+            <p class="text-xl tc-main my-2">{{ t('wait.spectators') }}</p>
+          </div>
+          <div class="w-full flex flex-col">
+            <div
+              v-for="player of spectators"
+              :key="player.id"
+              class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition hover:bc-primary rounded-lg hover:bg-dark"
+            >
+              <p class="text-lg tc-main-secondary">
+                {{ player.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div v-if="isHost" class="bg-light md:col-start-2 md:row-start-2" style="height: fit-content">Host section...</div>
       </div>
     </main>
   </div>
@@ -104,7 +137,7 @@
 
 <script setup lang="ts">
 import { useGameConfig } from '@/core/adapter/game';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
 import Rules from '@/components/waiting/Rules.vue';
@@ -112,10 +145,10 @@ import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
-import { useLobbyPlayers } from '@/composables/lobbyPlayers';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
 
 const { t } = useI18n();
-const { players, kickPlayer, promotePlayer } = useLobbyPlayers();
+const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
@@ -123,10 +156,16 @@ const qrCodeOpen = ref(false);
 const playerPromoteDialogOpen = ref(false);
 const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
+const players = computed(() => lobby.players);
+const spectators = computed(() => lobby.spectators);
+
+onMounted(() => {
+  lobby.setup();
+});
 
 const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    promotePlayer(id);
+    lobby.promotePlayer(id);
   }
   playerPromoteDialogOpen.value = false;
 };
@@ -137,7 +176,7 @@ const askPromotePlayer = () => {
 
 const handleKickPlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    kickPlayer(id);
+    lobby.kickPlayer(id);
   }
   playerKickDialogOpen.value = false;
 };

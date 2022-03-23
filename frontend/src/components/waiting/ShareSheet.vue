@@ -146,7 +146,7 @@ const error = ref<string | undefined>(undefined);
 onMounted(() => {
   title.value = t('share.join.title', [game.name]);
   text.value = t('share.join.text');
-  url.value = `http://localhost:8080/join/${game.gameId}`;
+  url.value = `http://localhost:8080/join/${game.gameId}`; // TODO: change url
   if (canShare.value) {
     try {
       share({

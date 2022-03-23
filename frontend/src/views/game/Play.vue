@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="relative z-0 min-w-0">
-          <CardDeck />
+          <CardDeck v-if="!isSpectator" />
         </div>
         <CardDetail v-if="showCardDetail" />
       </div>
@@ -26,9 +26,11 @@ import CardDetail from '@/components/game/CardDetail.vue';
 import { useConfig } from '@/core/adapter/config';
 import { computed } from 'vue';
 import Opponents from '@/components/game/OpponentsStrip.vue';
+import { useIsSpectator } from '@/composables/userRoles';
 
 const config = useConfig();
 const showCardDetail = computed(() => config.showCardDetail);
+const { isSpectator } = useIsSpectator();
 </script>
 
 <style>
