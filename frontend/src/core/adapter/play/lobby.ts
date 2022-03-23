@@ -1,10 +1,11 @@
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
-import { ZRPJoinedGamePayload, ZRPLeftGamePayload, ZRPOPCode, ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { ZRPAllLobbyPlayersPayload, ZRPJoinedGamePayload, ZRPLeftGamePayload, ZRPOPCode, ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { arrayDiff } from '@/core/services/utils';
 
 export type LobbyPlayer = {
   id: string;
@@ -12,7 +13,13 @@ export type LobbyPlayer = {
   role: ZRPRole;
 };
 
-const lobbyWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerJoined, ZRPOPCode.PlayerLeft, ZRPOPCode.SpectatorJoined, ZRPOPCode.SpectatorLeft);
+const lobbyWatcher = new MonolithicEventWatcher(
+  ZRPOPCode.PlayerJoined,
+  ZRPOPCode.PlayerLeft,
+  ZRPOPCode.SpectatorJoined,
+  ZRPOPCode.SpectatorLeft,
+  ZRPOPCode.ListAllPlayers
+);
 
 export const useLobbyStore = defineStore('game-lobby', () => {
   const players = ref<LobbyPlayer[]>([
@@ -36,6 +43,33 @@ export const useLobbyStore = defineStore('game-lobby', () => {
       joinPlayer(msg.data, ZRPRole.Spectator);
     } else if (msg.code === ZRPOPCode.SpectatorLeft) {
       leavePlayer(msg.data, ZRPRole.Spectator);
+    } else if (msg.code === ZRPOPCode.ListAllPlayers) {
+      updatePlayers(msg.data);
+    }
+  };
+
+  const updatePlayers = (data: ZRPAllLobbyPlayersPayload) => {
+    const newPlayers = data.players
+      .filter(p => p.role === ZRPRole.Player || p.role === ZRPRole.Host)
+      .map(p => ({
+        ...p,
+        id: p.name
+      }));
+    const newSpectators = data.players
+      .filter(p => p.role === ZRPRole.Spectator)
+      .map(p => ({
+        ...p,
+        id: p.name
+      }));
+
+    const playerDiff = arrayDiff(players.value, newPlayers, (a, b) => a.id === b.id);
+    const spectatorDiff = arrayDiff(spectators.value, newSpectators, (a, b) => a.id === b.id);
+
+    for (const deletion of [...playerDiff.removed, ...spectatorDiff.removed]) {
+      leavePlayer(deletion as unknown as ZRPJoinedGamePayload, deletion.role);
+    }
+    for (const addition of [...playerDiff.added, ...spectatorDiff.added]) {
+      joinPlayer(addition as unknown as ZRPJoinedGamePayload, addition.role);
     }
   };
 
@@ -73,6 +107,10 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     });
   };
 
+  const setup = () => {
+    dispatchEvent(ZRPOPCode.GetAllPlayers, {});
+  };
+
   const reset = () => {
     players.value = [];
   };
@@ -94,6 +132,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     players: players,
     spectators: spectators,
     kickPlayer,
-    promotePlayer
+    promotePlayer,
+    setup
   };
 });

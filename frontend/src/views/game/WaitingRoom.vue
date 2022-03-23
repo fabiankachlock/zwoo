@@ -137,7 +137,7 @@
 
 <script setup lang="ts">
 import { useGameConfig } from '@/core/adapter/game';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
 import Rules from '@/components/waiting/Rules.vue';
@@ -158,6 +158,10 @@ const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
 const players = computed(() => lobby.players);
 const spectators = computed(() => lobby.spectators);
+
+onMounted(() => {
+  lobby.setup();
+});
 
 const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {

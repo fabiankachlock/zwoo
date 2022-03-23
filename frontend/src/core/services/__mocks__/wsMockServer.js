@@ -49,7 +49,20 @@ const exampleMessages = {
         role: 3
     },
     [108]: {},
-    [109]: [],
+    [109]: {
+        players: [
+            {
+                name: 'test-batch-p',
+                wins: 0,
+                role: 2
+            },
+            {
+                name: 'test-batch-s',
+                wins: 0,
+                role: 3
+            }
+        ]
+    },
     [110]: {},
     [111]: {},
     [112]: {},
