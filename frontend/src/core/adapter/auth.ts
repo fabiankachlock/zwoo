@@ -77,7 +77,13 @@ export const useAuth = defineStore('auth', {
       if (response.isLoggedIn) {
         this.$patch({
           username: response.username,
-          isLoggedIn: response.isLoggedIn
+          isLoggedIn: response.isLoggedIn,
+          isInitialized: true
+        });
+      } else {
+        this.$patch({
+          isLoggedIn: response.isLoggedIn,
+          isInitialized: true
         });
       }
     },
