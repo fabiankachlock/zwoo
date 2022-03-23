@@ -6,7 +6,7 @@
       </div>
       <div class="widget-actions mx-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
         <slot name="actions"></slot>
-        <button @click="toggleOpenState" class="toggle text-2xl tc-main relative p-4 rounded w-6 h-6" :class="buttonClass">
+        <button @click="toggleOpenState" class="toggle text-2xl tc-main relative p-4 rounded w-6 h-6 overflow-hidden" :class="buttonClass">
           <Icon
             icon="iconoir:nav-arrow-down"
             class="icon absolute left-1/2 top-1/2 transform -translate-x-1/2 transition duration-300"

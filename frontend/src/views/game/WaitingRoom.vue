@@ -25,9 +25,7 @@
     <main class="m-2 relative">
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
         <PlayersWidget />
-        <div class="bg-light md:col-start-2 md:row-start-1" :class="{ 'md:row-span-2': !isHost }">
-          <Rules />
-        </div>
+        <RulesWidget />
         <div class="bg-light md:col-start-1 md:row-start-2" style="height: fit-content">
           <div class="flex flex-nowrap flex-row justify-between items-center">
             <p class="text-xl tc-main my-2">{{ t('wait.spectators') }}</p>
@@ -54,9 +52,9 @@
 import { useGameConfig } from '@/core/adapter/game';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import Rules from '@/components/waiting/Rules.vue';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
 import PlayersWidget from '@/components/waiting/widgets/PlayersWidget.vue';
+import RulesWidget from '@/components/waiting/widgets/RulesWidget.vue';
 
 const { t } = useI18n();
 const lobby = useLobbyStore();
