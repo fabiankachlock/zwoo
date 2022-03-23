@@ -1,26 +1,27 @@
 <template>
-  <div class="bg-darkest rounded-lg" :class="widgetClass">
+  <div class="rounded-lg" :class="widgetClass">
     <div class="widget-header flex flex-row flex-nowrap justify-between items-center m-1">
       <div class="widget-title mx-1">
-        <p class="text-lg tc-main-dark">{{ t(title) }}</p>
+        <p class="text-xl tc-main my-2">{{ t(title) }}</p>
       </div>
       <div class="widget-actions mx-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
-        <button @click="toggleOpenState" class="text-xl tc-main relative bg-light py-2 px-4 rounded w-6 h-6" :class="buttonClass">
+        <slot name="actions"></slot>
+        <button @click="toggleOpenState" class="toggle text-2xl tc-main relative p-4 rounded w-6 h-6" :class="buttonClass">
           <Icon
             icon="iconoir:nav-arrow-down"
-            class="absolute left-1/2 top-1/2 transform -translate-x-1/2 transition duration-300"
+            class="icon absolute left-1/2 top-1/2 transform -translate-x-1/2 transition duration-300"
             :class="{ 'opacity-0 translate-y-2': isOpen, '-translate-y-1/2': !isOpen }"
           />
           <Icon
             icon="iconoir:nav-arrow-up"
-            class="absolute left-1/2 top-1/2 transform -translate-x-1/2 transition duration-300"
+            class="icon absolute left-1/2 top-1/2 transform -translate-x-1/2 transition duration-300"
             :class="{ 'opacity-0 translate-y-2': !isOpen, '-translate-y-1/2': isOpen }"
           />
         </button>
       </div>
     </div>
     <div class="widget-body overflow-hidden transition duration-300" :class="{ open: isOpen }">
-      <div class="divider w-full mb-2 mt-1 bc-invert-darkest border-b"></div>
+      <!-- <div class="divider w-full mb-2 mt-1 bc-invert-darkest border-b"></div> -->
       <div class="content p-2 pt-0">
         <div class="relative">
           <slot></slot>
@@ -58,5 +59,9 @@ const toggleOpenState = () => {
 .widget-body.open {
   transition-property: max-height;
   max-height: 5000px;
+}
+
+.toggle:hover .icon {
+  @apply scale-110;
 }
 </style>
