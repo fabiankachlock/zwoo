@@ -21,19 +21,43 @@
           <QRCodeReader @close="onScanClose" />
         </FloatingDialog>
       </div>
-      <div class="relative overflow-y-scroll h-1/4 max-h-full">
+      <div class="relative overflow-y-scroll pt-6 max-h-full">
         <div class="relative flex flex-col flex-nowrap">
           <div
             v-for="game of games"
             :key="game.id"
-            class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-pointer"
+            class="item my-1 rounded-xl border bc-darkest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-pointer"
           >
             <router-link :to="'/join/' + game.id">
-              <p class="text tc-main-light">
-                {{ game.name }}
-                <span v-if="!game.isPublic" class="tc-main-secondary text-sm italic mx-3">{{ t('list.private') }}</span>
-                <span class="tc-main-secondary text-sm italic mx-3 whitespace-nowrap">({{ t('list.players', game.playerCount) }})</span>
-              </p>
+              <div class="flex flex-row justify-between flex-wrap items-center">
+                <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">
+                  <p class="text-md mr-2">
+                    {{ game.name }}
+                  </p>
+                  <p v-if="!game.isPublic" class="inline-flex align-baseline flex-row flex-nowrap items-center tc-main-secondary text-sm italic mx-1">
+                    <Icon icon="iconoir:lock-key" class="text-sm tc-secondary mx-0.5" /><span>{{ t('list.private') }}</span>
+                  </p>
+                  <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', game.playerCount) }})</p>
+                </div>
+                <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
+                  <div class="mr-3" v-tooltip="t('list.spectate')">
+                    <router-link
+                      :to="'/join/' + game.id + '?spectate'"
+                      class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2"
+                    >
+                      <Icon icon="iconoir:eye-alt" class="text-xl tc-main" />
+                    </router-link>
+                  </div>
+                  <div class="tc-primary">
+                    <router-link
+                      :to="'/join/' + game.id + '?play'"
+                      class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2"
+                    >
+                      <span>{{ t('list.play') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
+                    </router-link>
+                  </div>
+                </div>
+              </div>
             </router-link>
           </div>
           <div

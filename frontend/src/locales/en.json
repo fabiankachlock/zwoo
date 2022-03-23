@@ -65,7 +65,7 @@
     "create": "Create"
   },
   "join": {
-    "join": "Join {0}",
+    "join": "join {0}",
     "enterPassword": "Enter Password",
     "password": "Password",
     "enter": "Join Game",
@@ -74,7 +74,10 @@
     "nothingFound": "Nothing found",
     "found": "Found {0}",
     "notValid": "Wrong Format: {0}",
-    "enableCam": "Please enable your camera."
+    "enableCam": "Please enable your camera.",
+    "goBack": "Back",
+    "asPlayer": "as Player",
+    "asSpectator": "as Spectator"
   },
   "landing": {
     "tagline": "The Second Challenge",
@@ -93,7 +96,9 @@
     "players": "no Players | 1 Player | {count} Players",
     "private": "Private",
     "reload": "Update",
-    "nothingFound": "No game could be found."
+    "nothingFound": "No game could be found.",
+    "spectate": "Spectate",
+    "play": "Play"
   },
   "errors": {
     "error": "Error",
@@ -114,11 +119,14 @@
     "stop": "Stop",
     "leave": "Leave",
     "players": "Players",
+    "spectators": "Spectators",
     "rules": "Rules",
     "qrcode": "QRCode",
     "qrcodeInfo": "Other Player an join the game directly with the QRCode.",
     "expand": "Expand",
     "collapse": "Collapse",
+    "promote": "Promote",
+    "kick": "Kick",
     "sharesheet": {
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."
@@ -198,5 +206,13 @@
   "reassureDialog": {
     "accept": "Ok!",
     "decline": "Cancel!"
+  },
+  "snackbar": {
+    "lobby": {
+      "playerJoined": "Player {0} joined aksuzdgzasd iauzduskazd hb jasdhkgkjh d ois dlas",
+      "spectatorJoined": "Spectator {0} joined",
+      "playerLeft": "{0} left",
+      "spectatorLeft": "{0} left"
+    }
   }
 }

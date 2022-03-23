@@ -1,33 +1,60 @@
+import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { ZRPMessage, ZRPOPCode, ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
+import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
+import { computed, ref } from 'vue';
 
 export type ChatMessage = {
   id: number;
   message: string;
-  sender: string;
+  sender: {
+    id: string;
+    role: ZRPRole;
+  };
 };
 
-export const useChat = defineStore('chat', {
-  state: () => ({
-    messages: [] as ChatMessage[],
-    muted: {} as Record<string, boolean>
-  }),
+const chatWatcher = new MonolithicEventWatcher(ZRPOPCode.ReceiveMessage);
 
-  getters: {
-    allMessages(state) {
-      return state.messages.filter(msg => !state.muted[msg.sender]);
-    }
-  },
+export const useChatStore = defineStore('game-chat', () => {
+  const messages = ref<ChatMessage[]>([]);
+  const muted = ref<Record<string, boolean>>({});
+  const sendEvent = useGameEventDispatch();
 
-  actions: {
-    pushMessage(msg: string, from: string) {
-      this.messages.push({
-        id: performance.now(),
-        message: msg,
-        sender: from
+  const sendChatMessage = (msg: string) => {
+    sendEvent(ZRPOPCode.SendMessage, { message: msg });
+  };
+
+  const pushMessage = (msg: string, from: ChatMessage['sender']) => {
+    messages.value.push({
+      id: performance.now(),
+      message: msg,
+      sender: from
+    });
+  };
+
+  const mutePlayer = (id: string, isMuted: boolean) => {
+    muted.value[id] = isMuted;
+  };
+
+  const _receiveMessage = (msg: ZRPMessage<ZRPOPCode.ReceiveMessage>) => {
+    if (msg.code === ZRPOPCode.ReceiveMessage) {
+      pushMessage(msg.data.message, {
+        id: msg.data.name,
+        role: msg.data.role
       });
-    },
-    mutePlayer(id: string, isMuted: boolean) {
-      this.muted[id] = isMuted;
     }
-  }
+  };
+
+  chatWatcher.onMessage(_receiveMessage);
+
+  chatWatcher.onClose(() => {
+    messages.value = [];
+  });
+
+  return {
+    allMessages: computed(() => messages.value.filter(msg => !muted.value[msg.sender.id])),
+    sendChatMessage,
+    mutePlayer,
+    muted
+  };
 });
