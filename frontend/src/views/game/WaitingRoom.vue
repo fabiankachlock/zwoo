@@ -145,10 +145,10 @@ import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
-import { useLobbyPlayers } from '@/composables/lobbyPlayers';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
 
 const { t } = useI18n();
-const { players, kickPlayer, promotePlayer, spectators } = useLobbyPlayers();
+const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
 const gameId = computed(() => gameConfig.gameId);
@@ -156,10 +156,12 @@ const qrCodeOpen = ref(false);
 const playerPromoteDialogOpen = ref(false);
 const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
+const players = computed(() => lobby.players);
+const spectators = computed(() => lobby.spectators);
 
 const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    promotePlayer(id);
+    lobby.promotePlayer(id);
   }
   playerPromoteDialogOpen.value = false;
 };
@@ -170,7 +172,7 @@ const askPromotePlayer = () => {
 
 const handleKickPlayer = (id: string, allowed: boolean) => {
   if (allowed) {
-    kickPlayer(id);
+    lobby.kickPlayer(id);
   }
   playerKickDialogOpen.value = false;
 };

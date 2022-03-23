@@ -48,49 +48,8 @@ export const useChatStore = defineStore('game-chat', () => {
   chatWatcher.onMessage(_receiveMessage);
 
   chatWatcher.onClose(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     messages.value = [];
   });
-
-  /*
-  state: () => {
-    return {
-      messages: [] as ChatMessage[],
-      muted: {} as Record<string, boolean>
-    };
-  },
-
-  getters: {
-    allMessages(state) {
-      return state.messages.filter(msg => !state.muted[msg.sender.id]);
-    }
-  },
-
-  actions: {
-    _receiveMessage(msg: ZRPMessage<ZRPOPCode.ReceiveMessage>) {
-      if (msg.code === ZRPOPCode.ReceiveMessage) {
-        this.pushMessage(msg.data.message, {
-          id: msg.data.name,
-          role: msg.data.role
-        });
-      }
-    },
-    sendChatMessage(msg: string) {
-      useGameEventDispatch()(ZRPOPCode.SendMessage, { message: msg });
-    },
-    pushMessage(msg: string, from: ChatMessage['sender']) {
-      this.messages.push({
-        id: performance.now(),
-        message: msg,
-        sender: from
-      });
-    },
-    mutePlayer(id: string, isMuted: boolean) {
-      this.muted[id] = isMuted;
-    }
-  }
-
-*/
 
   return {
     allMessages: computed(() => messages.value.filter(msg => !muted.value[msg.sender.id])),
