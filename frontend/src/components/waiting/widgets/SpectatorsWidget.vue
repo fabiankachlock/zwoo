@@ -1,5 +1,5 @@
 <template>
-  <Widget title="wait.spectators" widget-class="bg-light md:col-start-1 md:row-start-2" button-class="bg-main hover:bg-dark">
+  <Widget title="wait.spectators" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <div class="w-full flex flex-col">
       <div
         v-for="player of spectators"

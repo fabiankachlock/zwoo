@@ -23,11 +23,21 @@
       </div>
     </header>
     <main class="m-2 relative">
-      <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
+      <div class="main-content md:hidden grid grid-cols-1 gap-2 mx-auto max-w-5xl">
         <PlayersWidget />
-        <RulesWidget />
         <SpectatorsWidget />
-        <div v-if="isHost" class="bg-light md:col-start-2 md:row-start-2" style="height: fit-content">Host section...</div>
+        <RulesWidget />
+        <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
+      </div>
+      <div class="main-content hidden md:grid grid-cols-2 gap-2 mx-auto max-w-5xl">
+        <div class="grid grid-cols-1 gap-2" style="height: fit-content">
+          <PlayersWidget />
+          <SpectatorsWidget />
+        </div>
+        <div class="grid grid-cols-1 gap-2" style="height: fit-content">
+          <RulesWidget />
+          <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
+        </div>
       </div>
     </main>
   </div>
