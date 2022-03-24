@@ -4,6 +4,7 @@
 #include <string>
 
 #include "oatpp-mongo/bson/mapping/ObjectMapper.hpp"
+#include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 
 #include <mongocxx/pool.hpp>
 #include <bsoncxx/document/value.hpp>
@@ -32,6 +33,7 @@ private:
     std::string m_databaseName;
     std::string m_collectionName;
     oatpp::mongo::bson::mapping::ObjectMapper m_objectMapper;
+    std::shared_ptr<oatpp::parser::json::mapping::ObjectMapper> json_mapper;
 
     bsoncxx::document::value createMongoDocument(const oatpp::Void &polymorph);
     std::string generateSID();
@@ -49,6 +51,8 @@ public:
     bool entryExists(std::string field, std::string value);
     void updateStringField( std::string filter_field, std::string filter_value, std::string field, std::string value);
     void updateBooleanField( std::string filter_field, std::string filter_value, std::string field, bool value);
+
+    oatpp::Object<LeaderBoardDTO> getLeaderBoard();
 };
 
 #endif // _DATABASE_COMPONENT_H_

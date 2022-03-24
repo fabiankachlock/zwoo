@@ -9,33 +9,33 @@
 class ZwooUser : public oatpp::DTO {
     DTO_INIT(ZwooUser, DTO)
 
-    DTO_FIELD(String, username);
-    DTO_FIELD(UInt32, wins);
-    DTO_FIELD(UInt8, role);
+    DTO_FIELD(String, username) = "";
+    DTO_FIELD(UInt32, wins) = (v_uint32)0;
+    DTO_FIELD(UInt8, role) = (v_uint8)0;
 };
 
 class UserJoined : public oatpp::DTO {
     DTO_INIT(UserJoined, DTO)
 
-    DTO_FIELD(String, name);
-    DTO_FIELD(UInt32, wins);
-    DTO_FIELD(UInt8, role);
+    DTO_FIELD(String, name) = "";
+    DTO_FIELD(UInt32, wins) = (v_uint32)0;
+    DTO_FIELD(UInt8, role) = (v_uint8)0;
 };
 
 class SendMessage : public oatpp::DTO {
 
     DTO_INIT(SendMessage, DTO)
 
-    DTO_FIELD(String, message);
+    DTO_FIELD(String, message) = "";
 };
 
 class ReceiveMessage : public oatpp::DTO {
 
   DTO_INIT(ReceiveMessage, DTO /* extends */)
 
-  DTO_FIELD(String, message);
-  DTO_FIELD(String, name);
-  DTO_FIELD(UInt8, role);
+  DTO_FIELD(String, message) = "";
+  DTO_FIELD(String, name) = "";
+  DTO_FIELD(UInt8, role) = (v_uint8)0;
 };
 
 class PlayersInLobby : public oatpp::DTO {

@@ -75,7 +75,7 @@ public:
         }
         else if (data->opcode == 2 || data->opcode == 3)
         {
-             if (data->guid == 0)
+            if (data->guid == 0)
                 return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Gameid 0 is not valid!"));
         }
         else
@@ -193,12 +193,26 @@ public:
 
     }
     ENDPOINT_INFO(join) {
-        info->summary = "An Endpoint to join a game.";
+        info->summary = "An Endpoint to establish a Websocket connection.";
 
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
     }
+
+    ADD_CORS(leaderboard, ZWOO_CORS)
+    ENDPOINT("GET", "game/leaderboard", leaderboard)
+    {
+        return setupResponseWithCookieHeaders(createDtoResponse(Status::CODE_200, m_database->getLeaderBoard()));
+    }
+    ENDPOINT_INFO(leaderboard) {
+        info->summary = "An Endpoint to get the top 100.";
+
+        info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
+        info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+    }
+
 };
 
 #include OATPP_CODEGEN_END(ApiController)// <- End Codegen
