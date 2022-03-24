@@ -264,10 +264,13 @@ oatpp::Object<LeaderBoardDTO> Database::getLeaderBoard()
         {
             oatpp::String bson = bsoncxx::to_json(doc);
             auto user = json_mapper->readFromString<oatpp::Object<UserDTO>>(bson->c_str());
-            auto player = LeaderBoardUserDTO::createShared();
-            player->username = user->username;
-            player->wins = user->wins;
-            leaderboard->top_players->push_back(player);
+            if (user->verified)
+            {
+                auto player = LeaderBoardUserDTO::createShared();
+                player->username = user->username;
+                player->wins = user->wins;
+                leaderboard->top_players->push_back(player);
+            }
         }
         return leaderboard;
     }
