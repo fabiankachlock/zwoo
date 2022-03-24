@@ -4,8 +4,9 @@
       :class="{
         'rounded-bl-none border-transparent mb-3': !isOwn,
         'rounded-br-none bc-primary': isOwn,
-        'bg-main tc-main-secondary': isSpectator,
-        'bg-dark tc-main-light': !isSpectator
+        'bc-secondary': isHost,
+        'bg-dark tc-main-secondary': isSpectator,
+        'bg-main tc-main-light': !isSpectator
       }"
       class="px-2 py-0.5 rounded-2xl border break-all"
     >
@@ -22,6 +23,7 @@ const props = defineProps<{
   message: string;
   isOwn?: boolean;
   isSpectator?: boolean;
+  isHost?: boolean;
   name: string;
 }>();
 
