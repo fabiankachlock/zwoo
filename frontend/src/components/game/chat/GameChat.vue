@@ -10,6 +10,7 @@
       :key="message.id"
       :is-own="message.sender.id === auth.username"
       :is-spectator="message.sender.role === ZRPRole.Spectator"
+      :is-host="message.sender.role === ZRPRole.Host"
       :name="message.sender.id"
     />
   </div>

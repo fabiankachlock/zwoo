@@ -19,7 +19,7 @@ export const useChatStore = defineStore('game-chat', () => {
   const messages = ref<ChatMessage[]>([
     {
       id: 1,
-      message: 'test',
+      message: 'test-host',
       sender: {
         id: 'test',
         role: ZRPRole.Host
@@ -27,7 +27,7 @@ export const useChatStore = defineStore('game-chat', () => {
     },
     {
       id: 2,
-      message: 'test1',
+      message: 'test-spectator',
       sender: {
         id: 'test1',
         role: ZRPRole.Spectator
@@ -35,7 +35,31 @@ export const useChatStore = defineStore('game-chat', () => {
     },
     {
       id: 3,
-      message: 'test2',
+      message: 'test-player',
+      sender: {
+        id: 'test2',
+        role: ZRPRole.Player
+      }
+    },
+    {
+      id: 1,
+      message: 'test-host-own',
+      sender: {
+        id: 'test-user',
+        role: ZRPRole.Host
+      }
+    },
+    {
+      id: 2,
+      message: 'test-spectator-own',
+      sender: {
+        id: 'test-user',
+        role: ZRPRole.Spectator
+      }
+    },
+    {
+      id: 3,
+      message: 'test-player-own',
       sender: {
         id: 'test-user',
         role: ZRPRole.Player
