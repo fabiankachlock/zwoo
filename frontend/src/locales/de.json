@@ -127,6 +127,9 @@
     "collapse": "Weniger",
     "promote": "Befördern",
     "kick": "Rauswerfen",
+    "chat": "Chat",
+    "noPlayers": "keine Spieler vorhanden...",
+    "noSpectators": "keine Zuschauer vorhanden...",
     "sharesheet": {
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."

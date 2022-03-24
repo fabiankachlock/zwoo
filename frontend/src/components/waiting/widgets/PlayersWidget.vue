@@ -44,6 +44,9 @@
     </template>
     <template #default>
       <div class="w-full flex flex-col">
+        <div v-if="players.length === 0">
+          <p class="tc-main-dark italic">{{ t('wait.noPlayers') }}</p>
+        </div>
         <div
           v-for="player of players"
           :key="player.id"
