@@ -26,22 +26,7 @@
       <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
         <PlayersWidget />
         <RulesWidget />
-        <div class="bg-light md:col-start-1 md:row-start-2" style="height: fit-content">
-          <div class="flex flex-nowrap flex-row justify-between items-center">
-            <p class="text-xl tc-main my-2">{{ t('wait.spectators') }}</p>
-          </div>
-          <div class="w-full flex flex-col">
-            <div
-              v-for="player of spectators"
-              :key="player.id"
-              class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition hover:bc-primary rounded-lg hover:bg-dark"
-            >
-              <p class="text-lg tc-main-secondary">
-                {{ player.name }}
-              </p>
-            </div>
-          </div>
-        </div>
+        <SpectatorsWidget />
         <div v-if="isHost" class="bg-light md:col-start-2 md:row-start-2" style="height: fit-content">Host section...</div>
       </div>
     </main>
@@ -55,12 +40,12 @@ import { useI18n } from 'vue-i18n';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
 import PlayersWidget from '@/components/waiting/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/waiting/widgets/RulesWidget.vue';
+import SpectatorsWidget from '@/components/waiting/widgets/SpectatorsWidget.vue';
 
 const { t } = useI18n();
 const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
 const isHost = computed(() => gameConfig.host || true);
-const spectators = computed(() => lobby.spectators);
 
 onMounted(() => {
   lobby.setup();
