@@ -24,6 +24,7 @@
     </header>
     <main class="m-2 relative">
       <div class="main-content md:hidden grid grid-cols-1 gap-2 mx-auto max-w-5xl">
+        <ChatWidget />
         <PlayersWidget />
         <SpectatorsWidget />
         <RulesWidget />
@@ -35,6 +36,7 @@
           <SpectatorsWidget />
         </div>
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
+          <ChatWidget />
           <RulesWidget />
           <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
         </div>
@@ -51,6 +53,7 @@ import { useLobbyStore } from '@/core/adapter/play/lobby';
 import PlayersWidget from '@/components/waiting/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/waiting/widgets/RulesWidget.vue';
 import SpectatorsWidget from '@/components/waiting/widgets/SpectatorsWidget.vue';
+import ChatWidget from '@/components/waiting/widgets/ChatWidget.vue';
 
 const { t } = useI18n();
 const lobby = useLobbyStore();

@@ -1,6 +1,6 @@
 <template>
   <div
-    :ref="r => container = r as HTMLDivElement"
+    :ref="r => container = (r as HTMLDivElement)"
     class="h-32 py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto"
     style="max-height: 60vh"
   >
@@ -29,8 +29,8 @@ const container = ref<HTMLDivElement | undefined>(undefined);
 
 watch(messages, () => {
   setTimeout(() => {
+    // 'wait for' DOM update before scroll to bottom
     scrollToBottom();
-    console.log('try scroll');
   }, 0);
 });
 
