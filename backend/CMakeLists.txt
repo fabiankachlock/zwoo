@@ -25,6 +25,8 @@ set(SRC_FILES
     "src/SHA512.cpp"
     "src/Helper.cpp"
 
+    "src/utils/thread.cpp"
+
     "src/Server/ErrorHandler.cpp"
     "src/Server/DatabaseComponent.cpp"
     "src/Server/logger/logger.cpp"
