@@ -32,6 +32,21 @@ class UserDTO : public oatpp::DTO {
     DTO_FIELD(Boolean, verified) = false;
 };
 
+class LeaderBoardUserDTO : public oatpp::DTO {
+
+    DTO_INIT(LeaderBoardUserDTO, DTO)
+
+    DTO_FIELD(String, username) = "";
+    DTO_FIELD(Int32, wins) = (v_int32)0;
+};
+
+class LeaderBoardDTO : public oatpp::DTO {
+
+    DTO_INIT(LeaderBoardDTO, DTO)
+
+    DTO_FIELD(List<oatpp::Object<LeaderBoardUserDTO>>, top_players, "leaderboard");
+};
+
 #include OATPP_CODEGEN_END(DTO)
 
 #endif

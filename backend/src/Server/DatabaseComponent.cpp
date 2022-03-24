@@ -10,6 +10,8 @@
 #include <mongocxx/collection.hpp>
 #include <mongocxx/options/find.hpp>
 
+#include <bsoncxx/json.hpp>
+
 std::string Database::generateSID()
 {
     SHA512 sha512 = SHA512();
@@ -24,7 +26,7 @@ Database::Database(const mongocxx::uri& uri, const std::string& dbName, const st
     auto collection = ( *conn ) [m_databaseName][m_collectionName];
 
     mongocxx::options::find opts;
-    opts.sort(createMongoDocument(oatpp::Fields<oatpp::Int8>({{"_id", -1}})));
+    opts.sort(createMongoDocument(oatpp::Fields<oatpp::Int32>({{"_id", -1}})));
     opts.limit(1);
     auto res = collection.find({}, opts);
 
@@ -38,6 +40,7 @@ Database::Database(const mongocxx::uri& uri, const std::string& dbName, const st
     }
     else
         playerIDGenerator = UIDGenerator(0);
+    json_mapper = oatpp::parser::json::mapping::ObjectMapper::createShared();
 }
 
 bsoncxx::document::value Database::createMongoDocument ( const oatpp::Void &polymorph )
@@ -240,4 +243,34 @@ oatpp::Object<UserDTO> Database::getUser(std::string field, std::string value)
     }
 
     return nullptr;
+}
+
+oatpp::Object<LeaderBoardDTO> Database::getLeaderBoard()
+{
+    auto conn = m_pool->acquire();
+    auto collection = ( *conn ) [m_databaseName][m_collectionName];
+
+    mongocxx::options::find opts;
+    opts.sort(createMongoDocument(oatpp::Fields<oatpp::Int32>({{"wins", -1}})));
+    opts.limit(100);
+    auto res = collection.find({}, opts);
+
+    if (res.begin() != res.end())
+    {
+        auto leaderboard = LeaderBoardDTO::createShared();
+        leaderboard->top_players = {};
+
+        for (bsoncxx::document::view doc : res)
+        {
+            oatpp::String bson = bsoncxx::to_json(doc);
+            auto user = json_mapper->readFromString<oatpp::Object<UserDTO>>(bson->c_str());
+            auto player = LeaderBoardUserDTO::createShared();
+            player->username = user->username;
+            player->wins = user->wins;
+            leaderboard->top_players->push_back(player);
+        }
+        return leaderboard;
+    }
+    else
+        return LeaderBoardDTO::createShared();
 }

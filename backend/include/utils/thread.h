@@ -19,7 +19,7 @@ void periodicFunction(std::function<void(void)> func, unsigned int interval)
     }).detach();
 }
 
-void TimedFunction(std::function<void(void)> func, uint8_t hour, uint8_t minute)
+void timedFunction(std::function<void(void)> func, uint8_t hour, uint8_t minute)
 {
     int t = (minute + (hour * 60)) * 60;
     std::thread([func, t]()
