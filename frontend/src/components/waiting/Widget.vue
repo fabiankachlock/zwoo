@@ -33,15 +33,16 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { defineProps, ref } from 'vue';
+import { defineProps, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
-defineProps<{
+const props = defineProps<{
   title: string;
   widgetClass?: string;
   buttonClass?: string;
+  defaultOpen?: boolean;
 }>();
 
 const isOpen = ref(false);
@@ -49,6 +50,10 @@ const isOpen = ref(false);
 const toggleOpenState = () => {
   isOpen.value = !isOpen.value;
 };
+
+onMounted(() => {
+  isOpen.value = props.defaultOpen ?? false;
+});
 </script>
 
 <style scoped>

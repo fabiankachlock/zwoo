@@ -1,5 +1,5 @@
 <template>
-  <Widget title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark">
+  <Widget title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark" default-open>
     <template #actions>
       <div class="flex flex-row">
         <button @click="shareSheetOpen = true" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
