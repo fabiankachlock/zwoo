@@ -20,8 +20,7 @@
         </button>
       </div>
     </div>
-    <div class="widget-body overflow-hidden transition duration-300" :class="{ open: isOpen }">
-      <!-- <div class="divider w-full mb-2 mt-1 bc-invert-darkest border-b"></div> -->
+    <div class="widget-body transition duration-300" :class="{ open: isOpen, 'overflow-hidden': !isOpen }">
       <div class="content p-2 pt-0">
         <div class="relative">
           <slot></slot>
