@@ -87,7 +87,6 @@ const performJoinRequest = async () => {
 
   try {
     await gameConfig.join(gameId, password.value, asPlayer, asSpectator);
-    // TODO: connect to game
     router.replace('/game/wait');
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
