@@ -83,7 +83,8 @@
     "tagline": "The Second Challenge",
     "login": "Log In To An Existing Account",
     "create": "Create A New Account",
-    "tutorial": "Play The Tutorial"
+    "tutorial": "Play The Tutorial",
+    "leaderboard": "Leaderboard"
   },
   "home": {
     "create": "Create Game",
@@ -99,6 +100,11 @@
     "nothingFound": "No game could be found.",
     "spectate": "Spectate",
     "play": "Play"
+  },
+  "leaderboard": {
+    "leaderboard": "Leaderboard",
+    "wins": "no wins | 1 Win | {count} Wins",
+    "failure": "something went wrong..."
   },
   "errors": {
     "error": "Error",

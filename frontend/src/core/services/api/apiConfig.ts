@@ -18,7 +18,8 @@ export enum Endpoint {
   UserInfo = 'auth/user',
   DeleteAccount = 'auth/delete',
   JoinGame = 'game/join',
-  Websocket = 'game/join/:id:'
+  Websocket = 'game/join/:id:',
+  LeaderBoard = 'game/leaderboard'
 }
 
 export class Backend {

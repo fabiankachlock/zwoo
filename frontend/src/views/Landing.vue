@@ -19,6 +19,12 @@
         </router-link>
       </div>
       <div class="action bg-dark hover:bg-darkest">
+        <router-link class="link" to="/leaderboard">
+          <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
+          <p class="tc-main-light">{{ t('landing.leaderboard') }}</p>
+        </router-link>
+      </div>
+      <div class="action bg-dark hover:bg-darkest">
         <router-link class="link" to="/tutorial">
           <Icon class="icon tc-secondary" icon="mdi:arrow-right-bold-box-outline" />
           <p class="tc-main-light">{{ t('landing.tutorial') }}</p>

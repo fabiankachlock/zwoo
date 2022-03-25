@@ -83,7 +83,8 @@
     "tagline": "The Second Challenge",
     "login": "In Einen Bestehenden Account Einloggen",
     "create": "Einen Neuen Account Erstellen",
-    "tutorial": "Das Tutorial Spielen"
+    "tutorial": "Das Tutorial Spielen",
+    "leaderboard": "Bestenliste"
   },
   "home": {
     "create": "Spiel Erstellen",
@@ -99,6 +100,11 @@
     "nothingFound": "Es konnte kein Spiel gefunden werden.",
     "spectate": "Zuschauen",
     "play": "Spielen"
+  },
+  "leaderboard": {
+    "leaderboard": "Bestenliste",
+    "wins": "kein Spiel gewonnen | 1 Sieg | {count} Siege",
+    "failure": "Etwas ist schief gelaufen..."
   },
   "errors": {
     "error": "Error",

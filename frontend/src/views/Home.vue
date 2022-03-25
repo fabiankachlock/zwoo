@@ -32,6 +32,12 @@
         </div>
       </div>
       <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
+        <router-link class="flex flex-row items-center" to="/leaderboard">
+          <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
+          <p class="tc-main-light inline-block mx-1">{{ t('landing.leaderboard') }}</p>
+        </router-link>
+      </div>
+      <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
         <router-link class="flex flex-row items-center" to="/tutorial">
           <Icon class="icon tc-secondary" icon="mdi:arrow-right-bold-box-outline" />
           <p class="tc-main-light inline-block mx-1">{{ t('landing.tutorial') }}</p>
