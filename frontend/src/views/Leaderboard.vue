@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { LeaderBoardResponse, LeaderBoardService } from '@/core/services/stats/LeaderBoard';
+import { LeaderBoardResponse, LeaderBoardService } from '@/core/services/api/LeaderBoard';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
