@@ -2,9 +2,7 @@
   <div class="bg-darkest rounded-lg p-1 flex flex-row justify-between items-center">
     <p class="tc-main text-xl">#GameName#</p>
     <div class="flex flex-row flex-nowrap justify-end items-center">
-      <button class="end-turn-btn bg-main hover:bg-light border-2 bc-primary rounded px-3 py-1 mr-5">
-        <p class="text-lg tc-main">End Turn</p>
-      </button>
+      <EndTurnButton />
       <div class="relative">
         <div @click="menuOpen = !menuOpen" class="bg-main hover:bg-light p-2 rounded tc-main text-2xl text-right cursor-pointer">
           <Icon v-if="menuOpen" icon="akar-icons:cross"></Icon>
@@ -56,6 +54,7 @@ import { useGameState } from '@/core/adapter/play/gameState';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import GameChat from './chat/GameChat.vue';
 import ChatInput from './chat/ChatInput.vue';
+import EndTurnButton from './EndTurnButton.vue';
 
 const stateStore = useGameState();
 const deckState = useGameCardDeck();
