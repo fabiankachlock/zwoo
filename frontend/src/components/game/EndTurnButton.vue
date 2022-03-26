@@ -7,13 +7,14 @@
       'bc-secondary x-animate-pulse': state === 'pulse'
     }"
   >
-    <p class="text-lg tc-main">End Turn</p>
+    <p class="text-lg tc-main">{{ t('ingame.endTurn') }}</p>
   </button>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 const state = ref<'hidden' | 'active' | 'pulse'>('active');
 </script>
 

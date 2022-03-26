@@ -147,6 +147,9 @@
       "info": "Test Regel Erklärung - optional extrem langer text..."
     }
   },
+  "ingame": {
+    "endTurn": "Zug beenden"
+  },
   "recaptcha": {
     "title": "Ich bin kein Roboter",
     "loading": "laden...",
