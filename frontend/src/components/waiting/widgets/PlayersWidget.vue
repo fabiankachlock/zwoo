@@ -37,7 +37,7 @@
             {{ t('wait.qrcodeInfo') }}
           </p>
           <div class="qrcode-wrapper mx-auto max-w-xs">
-            <QRCode :data="'https://zwoo-ui.web.app/join/' + gameId" :width="256" :height="256" />
+            <QRCode :data="`${Frontend.url}/join/${gameId}`" :width="256" :height="256" />
           </div>
         </FloatingDialog>
       </div>
@@ -92,7 +92,7 @@ import { Icon } from '@iconify/vue';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
 import { useGameConfig } from '@/core/adapter/game';
 import { useI18n } from 'vue-i18n';
-
+import { Frontend } from '@/core/services/api/apiConfig';
 import Widget from '../Widget.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';

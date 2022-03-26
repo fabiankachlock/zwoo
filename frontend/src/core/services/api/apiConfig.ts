@@ -47,3 +47,8 @@ export class Backend {
     return url;
   }
 }
+
+export class Frontend {
+  public static domain = process.env.VUE_APP_DOMAIN ?? '';
+  public static url = `https://${Frontend.domain}`;
+}

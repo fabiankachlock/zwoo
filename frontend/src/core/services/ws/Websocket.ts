@@ -5,7 +5,7 @@ export class GameWebsocket {
   private connection: WebSocket;
 
   constructor(public readonly url: string) {
-    this.connection = new WebSocket(url); // TODO: insert ws url
+    this.connection = new WebSocket(url);
     this.connection.onmessage = this.handleMessage;
     this.connection.onerror = this.handleError;
     this.connection.onopen = this.handleOpen;
