@@ -2,13 +2,21 @@
   <div class="pile absolute transform top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg">
     <div class="relative h-full pile-card-wrapper">
       <div class="pile-card absolute top-1/2 right-2 transform -translate-y-1/2 h-full transition-all x-delay-0" style="max-height: 95%">
-        <img :src="cardUrl" alt="card" class="transform rotate-0 max-h-full" style="max-width: unset" />
+        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
       </div>
       <div class="pile-card absolute top-1/2 right-3 transform -translate-y-1/2 h-full transition-all x-delay-30" style="max-height: 95%">
-        <img :src="cardUrl" alt="card" class="transform rotate-0 max-h-full" style="max-width: unset; --ty-scale-x: 0.97; --tw-scale-y: 0.97" />
+        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
       </div>
       <div class="pile-card absolute top-1/2 right-4 transform -translate-y-1/2 h-full transition-all x-delay-60" style="max-height: 95%">
-        <img :src="cardUrl" alt="card" class="transform rotate-0 max-h-full" style="max-width: unset; --ty-scale-x: 0.94; --tw-scale-y: 0.94" />
+        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
+      </div>
+      <div
+        @click="drawCard()"
+        class="pile-card draw-card absolute top-1/2 right-4 h-full transition-all transform -translate-y-1/2 x-delay-60"
+        :class="{ animating: isAnimating }"
+        style="max-height: 95%"
+      >
+        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
       </div>
     </div>
   </div>
@@ -17,10 +25,20 @@
 <script setup lang="ts">
 import { useColorTheme } from '@/composables/colorTheme';
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';
-import { computed } from '@vue/reactivity';
+import { computed, ref } from '@vue/reactivity';
 
 const colorTheme = useColorTheme();
 const cardUrl = computed(() => CardThemeManager.getCardBackUrl('__default__', colorTheme.value, true));
+const isAnimating = ref(false);
+
+const drawCard = () => {
+  if (!isAnimating.value) {
+    isAnimating.value = true;
+    setTimeout(() => {
+      isAnimating.value = false;
+    }, 700);
+  }
+};
 </script>
 
 <style scoped>
@@ -57,5 +75,36 @@ const cardUrl = computed(() => CardThemeManager.getCardBackUrl('__default__', co
 }
 .pile-card-wrapper:hover .pile-card.x-delay-60 {
   --tw-translate-x: 24%;
+}
+
+.draw-card.animating {
+  animation: DrawCard 0.7s linear 0s;
+}
+
+@keyframes DrawCard {
+  0% {
+    transform: translateY(-50%) translateX(24%) rotate(0deg) scale(1, 1);
+    opacity: 1;
+  }
+  33% {
+    transform: translateY(-50%) translateX(54%) rotate(0deg) scale(1, 1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50%) translateX(69%) rotate(-45deg) scale(1, 1);
+    opacity: 1;
+  }
+  66% {
+    transform: translateY(0%) translateX(69%) rotate(-90deg) scale(0.9, 0.9);
+    opacity: 1;
+  }
+  99% {
+    transform: translateY(150%) translateX(69%) rotate(-90deg) scale(0.6, 0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(150%) translateX(69%) rotate(-90deg) scale(0.6, 0.6);
+    opacity: 0;
+  }
 }
 </style>
