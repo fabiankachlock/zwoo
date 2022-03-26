@@ -3,5 +3,6 @@ export class CardThemeManager {
 
   public static getThemeDirectory = (themeName: string) => `${CardThemeManager.baseUrl}/${themeName}`;
 
-  public static getCardBackUrl = (themeName: string, colorTheme: string) => `${CardThemeManager.getThemeDirectory(themeName)}/back/${colorTheme}.png`;
+  public static getCardBackUrl = (themeName: string, colorTheme: string, isTurned = false) =>
+    `${CardThemeManager.getThemeDirectory(themeName)}/back/${colorTheme}_${isTurned ? 'sideways' : 'upright'}.png`;
 }
