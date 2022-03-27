@@ -14,11 +14,11 @@
     <div class="relative z-40">
       <FloatingMenu />
     </div>
-    <div class="menu-main w-screen pt-12">
+    <div class="menu-main w-screen pt-10">
       <div class="device-padding w-full h-full relative">
         <div class="absolute inset-0 overflow-y-scroll">
           <router-view></router-view>
-          <div class="h-16"></div>
+          <div class="h-10"></div>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@ import FloatingMenu from '@/components/menu/FloatingMenu.vue';
 }
 .menu-main {
   height: 100vh;
-  max-height: calc(100vh - calc(100vh - 100% - 3rem));
+  max-height: calc(100vh - calc(100vh - 100% - 2.5rem));
 }
 .menu {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
