@@ -22,6 +22,7 @@
 #include "Server/controller/Authentication/ReCaptcha.h"
 #include "Server/dto/AuthenticationDTO.hpp"
 #include "Server/controller/Authentication/AuthenticationValidators.h"
+#include "Server/controller/error.h"
 
 #include OATPP_CODEGEN_BEGIN(ApiController) // <- Begin Codegen
 
@@ -97,15 +98,15 @@ public:
     ENDPOINT("POST", "auth/create", create, BODY_DTO(Object<CreateUserBodyDTO>, data)) {
         m_logger->log->debug("/POST create");
         if (!isValidEmail(data->email.getValue("")))
-            return createResponse(Status::CODE_400, "Email Invalid!");
+            return createResponse(Status::CODE_400, constructErrorMessage("Email Invalid!", e_Errors::INVALID_EMAIL));
         if (!isValidUsername(data->username.getValue("")))
-            return createResponse(Status::CODE_400, "Username Invalid!");
+            return createResponse(Status::CODE_400, constructErrorMessage("Username Invalid!", e_Errors::INVALID_USERNAME));
         if (!isValidPassword(data->password.getValue("")))
-            return createResponse(Status::CODE_400, "Password Invalid!");
+            return createResponse(Status::CODE_400, constructErrorMessage("Password Invalid!", e_Errors::INVALID_PASSWORD));
         if (m_database->entryExists("username", data->username.getValue("")))
-            return createResponse(Status::CODE_400, "Username Already Exists!");
+            return createResponse(Status::CODE_400, constructErrorMessage("Username Already Exists!", e_Errors::USERNAME_ALREADY_TAKEN));
         if (m_database->entryExists("email", data->email.getValue("")))
-            return createResponse(Status::CODE_400, "Email Already Exists!");
+            return createResponse(Status::CODE_400, constructErrorMessage("Email Already Exists!", e_Errors::EMAIL_ALREADY_TAKEN));
 
         r_CreateUser ret = m_database->createUser(data->username.getValue(""), data->email.getValue(""), data->password.getValue(""));
 
@@ -149,7 +150,7 @@ public:
         if (m_database->verifyUser(puid, code))
             return createResponse(Status::CODE_200, "Account Verified");
         else
-            return createResponse(Status::CODE_400, "Account failed to verify");
+            return createResponse(Status::CODE_400, constructErrorMessage("Account failed to verify", e_Errors::ACCOUNT_FAILED_TO_VERIFIED));
     }
     ENDPOINT_INFO(verify) {
         info->description = "verify Users with this Endpoint.";
@@ -163,7 +164,7 @@ public:
     ENDPOINT("POST", "auth/login", login, BODY_DTO(Object<LoginUserDTO>, data)) {
         m_logger->log->debug("/POST login");
         if (!isValidEmail(data->email.getValue("")))
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_400, "Email Invalid!"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_400, constructErrorMessage("Email Invalid!", e_Errors::INVALID_EMAIL)));
 
         auto login = m_database->loginUser(data->email, data->password);
 
@@ -178,7 +179,7 @@ public:
             return setupResponseWithCookieHeaders(res);
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "failed to login"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("failed to login", (e_Errors)login.error_code)));
     }
     ENDPOINT_INFO(login) {
         info->description = "Login Users with this Endpoint.";
@@ -194,10 +195,10 @@ public:
 
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
         auto usr = m_database->getUser(usrc.puid);
@@ -214,10 +215,10 @@ public:
                 return res;
             }
             else
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
     }
     ENDPOINT_INFO(user) {
         info->description = "Get User data with this Endpoint.";
@@ -233,10 +234,10 @@ public:
 
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
         auto usr = m_database->getUser(usrc.puid);
@@ -252,10 +253,10 @@ public:
                 return setupResponseWithCookieHeaders(res);
             }
             else
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
     }
     ENDPOINT_INFO(logout) {
         info->description = "Get User data with this Endpoint.";
@@ -271,10 +272,10 @@ public:
 
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
 
@@ -286,7 +287,7 @@ public:
             return res;
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_200, "Could not Deleted!"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_200, constructErrorMessage("Could not Deleted!", e_Errors::DELETING_USER_FAILED)));
     }
     ENDPOINT_INFO(deleteUser) {
         info->description = "Login Users with this Endpoint.";
