@@ -56,7 +56,7 @@ std::string randomNDigitNumber(int n)
     return out;
 }
 
-std::string generateVerificationEmailText(uint32_t puid, std::string code, std::string username)
+std::string generateVerificationEmailText(ulong puid, std::string code, std::string username)
 {
     std::string link = (USE_SSL ? "https://" : "http://") + ZWOO_DOMAIN + "/auth/verify?id=" + std::to_string(puid) + "&code=" + code;
 

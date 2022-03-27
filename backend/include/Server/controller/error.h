@@ -29,6 +29,9 @@ enum e_Errors {
     ALREADY_INGAME = 146
 };
 
-std::string constructZwooErrorMessage(std::string message, e_Errors code);
+std::string constructErrorMessage(std::string message, e_Errors code)
+{
+    return "{\"message\": " + message + ", \"code\": " + std::to_string((int)code) + "}";
+}
 
 #endif
