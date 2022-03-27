@@ -43,10 +43,23 @@ const drawCard = () => {
 
 <style scoped>
 .pile {
-  max-height: min(15rem, 35vh);
-  max-width: min(15rem, 20vw);
+  max-height: min(12rem, 25vh);
+  max-width: min(12rem, 14vw);
   width: 100%;
-  aspect-ratio: 1/2;
+  aspect-ratio: 1/3;
+}
+
+@media only screen and (min-width: 620px) {
+  .pile {
+    aspect-ratio: 1/2;
+  }
+}
+
+@media only screen and (min-width: 1080px) and (min-height: 720px) {
+  .pile {
+    max-height: min(12rem, 35vh);
+    aspect-ratio: 1/2;
+  }
 }
 
 .x-delay-30 {
@@ -57,24 +70,26 @@ const drawCard = () => {
   transition-delay: 60ms;
 }
 
-.pile-card-wrapper:hover .pile-card {
-  @apply scale-100;
-}
-.pile-card-wrapper:hover .pile-card.x-delay-0 {
-  --tw-translate-x: 14%;
-}
-.pile-card-wrapper .pile-card.x-delay-30 {
-  --tw-translate-x: -2%;
-}
-.pile-card-wrapper:hover .pile-card.x-delay-30 {
-  --tw-translate-x: 19%;
-}
+@media (hover: hover) {
+  .pile-card-wrapper:hover .pile-card {
+    @apply scale-100;
+  }
+  .pile-card-wrapper:hover .pile-card.x-delay-0 {
+    --tw-translate-x: 14%;
+  }
+  .pile-card-wrapper .pile-card.x-delay-30 {
+    --tw-translate-x: -2%;
+  }
+  .pile-card-wrapper:hover .pile-card.x-delay-30 {
+    --tw-translate-x: 19%;
+  }
 
-.pile-card-wrapper .pile-card.x-delay-60 {
-  --tw-translate-x: -4%;
-}
-.pile-card-wrapper:hover .pile-card.x-delay-60 {
-  --tw-translate-x: 24%;
+  .pile-card-wrapper .pile-card.x-delay-60 {
+    --tw-translate-x: -4%;
+  }
+  .pile-card-wrapper:hover .pile-card.x-delay-60 {
+    --tw-translate-x: 24%;
+  }
 }
 
 .draw-card.animating {
@@ -103,7 +118,7 @@ const drawCard = () => {
     opacity: 0.8;
   }
   100% {
-    transform: translateY(150%) translateX(69%) rotate(-90deg) scale(0.6, 0.6);
+    transform: translateY(150%) translateX(69%) rotate(-90deg) scale(0.4, 0.4);
     opacity: 0;
   }
 }
