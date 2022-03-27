@@ -1,5 +1,6 @@
 <template>
-  <div class="max-height-ios relative">
+  <!-- reset stacking context -->
+  <div class="relative">
     <router-view />
   </div>
 

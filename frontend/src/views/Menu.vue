@@ -1,22 +1,24 @@
 <template>
-  <div class="menu fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
-    <header class="h-full">
-      <div class="h-full mx-4 my-0 relative flex justify-between items-center flex-row">
-        <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">
-          <img src="/img/logo/zwoo_logo_simple_none.svg" class="max-h-8 mr-4" />
-          <h1 class="tc-primary text-4xl">zwoo</h1>
-        </router-link>
-        <NavBar />
+  <div class="__menu bg-main">
+    <div class="menu fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
+      <header class="h-full">
+        <div class="h-full mx-4 my-0 relative flex justify-between items-center flex-row">
+          <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">
+            <img src="/img/logo/zwoo_logo_simple_none.svg" class="max-h-8 mr-4" />
+            <h1 class="tc-primary text-4xl">zwoo</h1>
+          </router-link>
+          <NavBar />
+        </div>
+      </header>
+    </div>
+    <div class="relative z-40">
+      <FloatingMenu />
+    </div>
+    <div class="menu-main w-screen overflow-y-scroll pt-12">
+      <div class="device-padding w-full relative overflow-y-scroll">
+        <router-view></router-view>
+        <div class="h-16"></div>
       </div>
-    </header>
-  </div>
-  <div class="relative z-40">
-    <FloatingMenu />
-  </div>
-  <div class="menu-main fixed top-10 left-0 right-0 w-screen overflow-y-scroll">
-    <div class="device-padding w-full relative">
-      <router-view></router-view>
-      <div class="h-16"></div>
     </div>
   </div>
 </template>
@@ -27,9 +29,14 @@ import FloatingMenu from '@/components/menu/FloatingMenu.vue';
 </script>
 
 <style scoped>
+.__menu {
+  @apply fixed top-0 left-0 right-0 bottom-0 overflow-hidden;
+  height: 100vh;
+  max-height: calc(100vh - calc(100vh - 100%));
+}
 .menu-main {
   height: 100vh;
-  max-height: calc(100vh - calc(100vh - 100% - 2.5rem));
+  max-height: calc(100vh - calc(100vh - 100% - 3rem));
 }
 .menu {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
