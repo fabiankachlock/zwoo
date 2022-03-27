@@ -1,5 +1,5 @@
 <template>
-  <div class="pile absolute transform top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg">
+  <div class="pile absolute transform top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10">
     <div class="relative h-full pile-card-wrapper">
       <div class="pile-card absolute top-1/2 right-2 transform -translate-y-1/2 h-full transition-all x-delay-0" style="max-height: 95%">
         <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
