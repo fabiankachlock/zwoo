@@ -7,7 +7,7 @@
       'bc-secondary x-animate-pulse': state === 'pulse'
     }"
   >
-    <p class="text-lg tc-main">{{ t('ingame.endTurn') }}</p>
+    <p class="text-lg tc-main whitespace-nowrap">{{ t('ingame.endTurn') }}</p>
   </button>
 </template>
 

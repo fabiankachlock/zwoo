@@ -1,7 +1,7 @@
 <template>
   <div class="bg-darkest rounded-lg p-1 flex flex-row justify-between items-center">
-    <p class="tc-main text-xl">#GameName#</p>
-    <div class="flex flex-row flex-nowrap justify-end items-center">
+    <p class="tc-main text-xl" style="text-overflow: ellipsis; overflow: hidden">#GameName#</p>
+    <div class="flex-1 flex flex-row flex-nowrap justify-end items-center">
       <EndTurnButton />
       <div class="relative">
         <div @click="menuOpen = !menuOpen" class="bg-main hover:bg-light p-2 rounded tc-main text-2xl text-right cursor-pointer">
