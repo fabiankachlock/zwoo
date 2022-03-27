@@ -70,7 +70,7 @@ r_CreateUser Database::createUser ( std::string user_name, std::string user_emai
     auto conn = m_pool->acquire();
     auto collection = ( *conn ) [m_databaseName][m_collectionName];
     std::string code = randomNDigitNumber ( 6 );
-    ulong puid = playerIDGenerator.GetID();
+    uint32_t puid = playerIDGenerator.GetID();
 
     auto usr = UserDTO::createShared();
 
@@ -123,7 +123,7 @@ r_LoginUser Database::loginUser(std::string email, std::string password)
 
 }
 
-bool Database::deleteUser(ulong puid, std::string sid, std::string password)
+bool Database::deleteUser(uint32_t puid, std::string sid, std::string password)
 {
     auto usr = getUser(puid);
     if (!usr)
@@ -151,7 +151,7 @@ bool Database::deleteUser(ulong puid, std::string sid, std::string password)
         return false;
 }
 
-bool Database::verifyUser(ulong puid, std::string code)
+bool Database::verifyUser(uint32_t puid, std::string code)
 {
     auto usr = getUser(puid);
     if (usr != nullptr)
@@ -209,7 +209,7 @@ void Database::updateStringField( std::string filter_field, std::string filter_v
     );
 }
 
-oatpp::Object<UserDTO> Database::getUser(ulong puid)
+oatpp::Object<UserDTO> Database::getUser(uint32_t puid)
 {
     auto conn = m_pool->acquire();
     auto collection = (*conn)[m_databaseName][m_collectionName];

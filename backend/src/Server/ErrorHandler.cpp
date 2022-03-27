@@ -15,7 +15,7 @@ ErrorHandler::handleError(const Status& status, const oatpp::String& message, co
     auto error = StatusDto::createShared();
     error->status = "ERROR";
     error->code = status.code;
-    error->message = constructErrorMessage("Backend Error", e_Errors::BACKEND_ERROR);
+    error->message = constructZwooErrorMessage("Backend Error", e_Errors::BACKEND_ERROR);
 
     auto response = ResponseFactory::createResponse(status, error, m_objectMapper);
 

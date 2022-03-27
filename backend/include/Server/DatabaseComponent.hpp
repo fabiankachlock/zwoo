@@ -15,13 +15,13 @@
 #include "Helper.h"
 
 struct r_CreateUser {
-    ulong puid;
+    uint32_t puid;
     std::string code;
 };
 
 struct r_LoginUser {
     bool successful;
-    ulong puid;
+    uint32_t puid;
     std::string sid;
     int error_code;
 };
@@ -44,10 +44,10 @@ public:
     Database(const mongocxx::uri &uri, const std::string &dbName, const std::string &collectionName);
 
     r_CreateUser createUser(std::string user_name, std::string user_email, std::string password);
-    bool verifyUser(ulong puid, std::string code);
+    bool verifyUser(uint32_t puid, std::string code);
     r_LoginUser loginUser(std::string email, std::string password);
-    bool deleteUser(ulong puid, std::string sid, std::string password);
-    oatpp::Object<UserDTO> getUser(ulong puid);
+    bool deleteUser(uint32_t puid, std::string sid, std::string password);
+    oatpp::Object<UserDTO> getUser(uint32_t puid);
     oatpp::Object<UserDTO> getUser(std::string field, std::string value);
     bool entryExists(std::string field, std::string value);
     void updateStringField( std::string filter_field, std::string filter_value, std::string field, std::string value);

@@ -27,7 +27,7 @@
 #include OATPP_CODEGEN_BEGIN(ApiController) // <- Begin Codegen
 
 struct r_cookieData {
-    ulong puid;
+    uint32_t puid;
     std::string sid;
 };
 
@@ -36,7 +36,7 @@ r_cookieData getCookieAuthData(std::string cookie)
     auto pos = cookie.find(",");
     std::string puid = cookie.substr(0, pos);
     std::string sid = cookie.substr(pos + 1, 24);
-    ulong i;
+    uint32_t i;
     std::stringstream ss(puid);
     ss >> i;
     return {i, sid};
@@ -98,15 +98,15 @@ public:
     ENDPOINT("POST", "auth/create", create, BODY_DTO(Object<CreateUserBodyDTO>, data)) {
         m_logger->log->debug("/POST create");
         if (!isValidEmail(data->email.getValue("")))
-            return createResponse(Status::CODE_400, constructErrorMessage("Email Invalid!", e_Errors::INVALID_EMAIL));
+            return createResponse(Status::CODE_400, constructZwooErrorMessage("Email Invalid!", e_Errors::INVALID_EMAIL));
         if (!isValidUsername(data->username.getValue("")))
-            return createResponse(Status::CODE_400, constructErrorMessage("Username Invalid!", e_Errors::INVALID_USERNAME));
+            return createResponse(Status::CODE_400, constructZwooErrorMessage("Username Invalid!", e_Errors::INVALID_USERNAME));
         if (!isValidPassword(data->password.getValue("")))
-            return createResponse(Status::CODE_400, constructErrorMessage("Password Invalid!", e_Errors::INVALID_PASSWORD));
+            return createResponse(Status::CODE_400, constructZwooErrorMessage("Password Invalid!", e_Errors::INVALID_PASSWORD));
         if (m_database->entryExists("username", data->username.getValue("")))
-            return createResponse(Status::CODE_400, constructErrorMessage("Username Already Exists!", e_Errors::USERNAME_ALREADY_TAKEN));
+            return createResponse(Status::CODE_400, constructZwooErrorMessage("Username Already Exists!", e_Errors::USERNAME_ALREADY_TAKEN));
         if (m_database->entryExists("email", data->email.getValue("")))
-            return createResponse(Status::CODE_400, constructErrorMessage("Email Already Exists!", e_Errors::EMAIL_ALREADY_TAKEN));
+            return createResponse(Status::CODE_400, constructZwooErrorMessage("Email Already Exists!", e_Errors::EMAIL_ALREADY_TAKEN));
 
         r_CreateUser ret = m_database->createUser(data->username.getValue(""), data->email.getValue(""), data->password.getValue(""));
 
@@ -150,7 +150,7 @@ public:
         if (m_database->verifyUser(puid, code))
             return createResponse(Status::CODE_200, "Account Verified");
         else
-            return createResponse(Status::CODE_400, constructErrorMessage("Account failed to verify", e_Errors::ACCOUNT_FAILED_TO_VERIFIED));
+            return createResponse(Status::CODE_400, constructZwooErrorMessage("Account failed to verify", e_Errors::ACCOUNT_FAILED_TO_VERIFIED));
     }
     ENDPOINT_INFO(verify) {
         info->description = "verify Users with this Endpoint.";
@@ -164,7 +164,7 @@ public:
     ENDPOINT("POST", "auth/login", login, BODY_DTO(Object<LoginUserDTO>, data)) {
         m_logger->log->debug("/POST login");
         if (!isValidEmail(data->email.getValue("")))
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_400, constructErrorMessage("Email Invalid!", e_Errors::INVALID_EMAIL)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_400, constructZwooErrorMessage("Email Invalid!", e_Errors::INVALID_EMAIL)));
 
         auto login = m_database->loginUser(data->email, data->password);
 
@@ -179,7 +179,7 @@ public:
             return setupResponseWithCookieHeaders(res);
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("failed to login", (e_Errors)login.error_code)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("failed to login", (e_Errors)login.error_code)));
     }
     ENDPOINT_INFO(login) {
         info->description = "Login Users with this Endpoint.";
@@ -195,10 +195,10 @@ public:
 
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
         auto usr = m_database->getUser(usrc.puid);
@@ -215,10 +215,10 @@ public:
                 return res;
             }
             else
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructZwooErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
     }
     ENDPOINT_INFO(user) {
         info->description = "Get User data with this Endpoint.";
@@ -234,10 +234,10 @@ public:
 
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
         auto usr = m_database->getUser(usrc.puid);
@@ -253,10 +253,10 @@ public:
                 return setupResponseWithCookieHeaders(res);
             }
             else
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructZwooErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
     }
     ENDPOINT_INFO(logout) {
         info->description = "Get User data with this Endpoint.";
@@ -272,10 +272,10 @@ public:
 
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructZwooErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
 
@@ -287,7 +287,7 @@ public:
             return res;
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_200, constructErrorMessage("Could not Deleted!", e_Errors::DELETING_USER_FAILED)));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_200, constructZwooErrorMessage("Could not Deleted!", e_Errors::DELETING_USER_FAILED)));
     }
     ENDPOINT_INFO(deleteUser) {
         info->description = "Login Users with this Endpoint.";
