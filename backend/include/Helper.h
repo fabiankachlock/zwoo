@@ -7,24 +7,24 @@
 class UIDGenerator
 {
 private:
-    ulong cid;
+    uint32_t cid;
     bool isInitialized;
 public:
     UIDGenerator() {
         isInitialized = false;
     }
-    UIDGenerator(ulong start) : cid(start), isInitialized(true) {}
+    UIDGenerator(uint32_t start) : cid(start), isInitialized(true) {}
 
     bool IsInitialized() {
         return isInitialized;
     }
 
-    void Init(ulong start)
+    void Init(uint32_t start)
     {
         isInitialized = true;
         cid = start;
     }
-    ulong GetID()
+    uint32_t GetID()
     {
         if (!isInitialized)
             Init(0);

@@ -6,154 +6,69 @@
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost">
-            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">{{ t('wait.start') }}</button>
+            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">
+              <router-link to="/game/play">
+                <!-- TODO: just temp -->
+                {{ t('wait.start') }}
+              </router-link>
+            </button>
             <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
           </template>
           <template v-if="!isHost">
-            <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+            <router-link to="/game/play">
+              <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+            </router-link>
           </template>
         </div>
       </div>
     </header>
     <main class="m-2 relative">
-      <div class="main-content grid gap-2 grid-cols-1 md:grid-cols-2 mx-auto max-w-5xl">
-        <div class="bg-light md:row-span-2">
-          <div class="flex flex-nowrap flex-row justify-between items-center">
-            <p class="text-xl tc-main my-2">{{ t('wait.players') }}</p>
-            <div class="flex flex-row">
-              <button @click="shareSheetOpen = true" class="scan-code rounded m-1 bg-main hover:bg-dark tc-main-light">
-                <div class="transform transition-transform hover:scale-110 p-1">
-                  <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
-                </div>
-              </button>
-              <button @click="qrCodeOpen = true" class="refresh rounded m-1 bg-main hover:bg-dark tc-main-light">
-                <div class="transform transition-transform hover:scale-110 p-1">
-                  <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
-                </div>
-              </button>
-            </div>
-            <div v-if="shareSheetOpen">
-              <FloatingDialog>
-                <div class="absolute top-2 right-2 z-10">
-                  <button @click="shareSheetOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
-                    <Icon icon="akar-icons:cross" class="text-xl" />
-                  </button>
-                </div>
-                <div class="relative">
-                  <ShareSheet @should-close="shareSheetOpen = false" />
-                </div>
-              </FloatingDialog>
-            </div>
-            <div v-if="qrCodeOpen" class="share-qr-dialog">
-              <FloatingDialog>
-                <div class="absolute top-2 right-2 z-10">
-                  <button @click="qrCodeOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
-                    <Icon icon="akar-icons:cross" class="text-xl" />
-                  </button>
-                </div>
-                <h3 class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</h3>
-                <p class="my-1 text-sm italic tc-main-secondary">
-                  {{ t('wait.qrcodeInfo') }}
-                </p>
-                <div class="qrcode-wrapper mx-auto max-w-xs">
-                  <QRCode :data="'https://zwoo-ui.web.app/join/' + gameId" :width="256" :height="256" />
-                </div>
-              </FloatingDialog>
-            </div>
-          </div>
-          <div class="w-full flex flex-col">
-            <div
-              v-for="player of players"
-              :key="player.id"
-              class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest"
-            >
-              <p class="text-lg tc-main-dark">
-                {{ player.name }}
-              </p>
-              <div class="flex items-center h-full justify-end">
-                <button v-if="isHost" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
-                  <Icon icon="akar-icons:crown" />
-                </button>
-                <button v-if="isHost" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
-                  <Icon icon="iconoir:delete-circled-outline" />
-                </button>
-                <ReassureDialog
-                  @close="allowed => handlePromotePlayer(player.id, allowed)"
-                  :title="t('dialogs.promotePlayer.title', [player.name])"
-                  :body="t('dialogs.promotePlayer.body', [player.name])"
-                  :is-open="playerPromoteDialogOpen"
-                />
-                <ReassureDialog
-                  @close="allowed => handleKickPlayer(player.id, allowed)"
-                  :title="t('dialogs.kickPlayer.title', [player.name])"
-                  :body="t('dialogs.kickPlayer.body', [player.name])"
-                  :is-open="playerKickDialogOpen"
-                />
-              </div>
-            </div>
-          </div>
+      <div class="main-content md:hidden grid grid-cols-1 gap-2 mx-auto max-w-5xl">
+        <ChatWidget />
+        <PlayersWidget />
+        <SpectatorsWidget />
+        <RulesWidget />
+        <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
+      </div>
+      <div class="main-content hidden md:grid grid-cols-2 gap-2 mx-auto max-w-5xl">
+        <div class="grid grid-cols-1 gap-2" style="height: fit-content">
+          <PlayersWidget />
+          <SpectatorsWidget />
         </div>
-        <div class="bg-light" :class="{ 'md:row-span-2': !isHost }">
-          <Rules />
+        <div class="grid grid-cols-1 gap-2" style="height: fit-content">
+          <ChatWidget />
+          <RulesWidget />
+          <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
         </div>
-        <div v-if="isHost" class="bg-light">Host section...</div>
       </div>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useGameConfig } from '@/core/adapter/game';
-import { computed, ref } from 'vue';
-import QRCode from '@/components/misc/QRCode.vue';
 import { useI18n } from 'vue-i18n';
-import Rules from '@/components/waiting/Rules.vue';
-import { Icon } from '@iconify/vue';
-import FloatingDialog from '@/components/misc/FloatingDialog.vue';
-import ShareSheet from '@/components/waiting/ShareSheet.vue';
-import ReassureDialog from '@/components/misc/ReassureDialog.vue';
-import { useLobbyPlayers } from '@/composables/lobbyPlayers';
+import { onMounted } from 'vue';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
+import PlayersWidget from '@/components/waiting/widgets/PlayersWidget.vue';
+import RulesWidget from '@/components/waiting/widgets/RulesWidget.vue';
+import SpectatorsWidget from '@/components/waiting/widgets/SpectatorsWidget.vue';
+import ChatWidget from '@/components/waiting/widgets/ChatWidget.vue';
+import { useIsHost } from '@/composables/userRoles';
+import { useGameConfig } from '@/core/adapter/game';
 
 const { t } = useI18n();
-const { players, kickPlayer, promotePlayer } = useLobbyPlayers();
+const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
-const isHost = computed(() => gameConfig.host || true);
-const gameId = computed(() => gameConfig.gameId);
-const qrCodeOpen = ref(false);
-const playerPromoteDialogOpen = ref(false);
-const playerKickDialogOpen = ref(false);
-const shareSheetOpen = ref(false);
+const { isHost } = useIsHost();
 
-const handlePromotePlayer = (id: string, allowed: boolean) => {
-  if (allowed) {
-    promotePlayer(id);
-  }
-  playerPromoteDialogOpen.value = false;
-};
-
-const askPromotePlayer = () => {
-  playerPromoteDialogOpen.value = true;
-};
-
-const handleKickPlayer = (id: string, allowed: boolean) => {
-  if (allowed) {
-    kickPlayer(id);
-  }
-  playerKickDialogOpen.value = false;
-};
-
-const askKickPlayer = () => {
-  playerKickDialogOpen.value = true;
-};
+onMounted(() => {
+  lobby.setup();
+});
 </script>
 
 <style>
 .actions button {
   @apply mx-1 px-2 py-1 rounded;
-}
-
-.main-content > div {
-  @apply rounded-md p-3;
 }
 
 .qrcode-wrapper img {

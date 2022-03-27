@@ -4,17 +4,20 @@ import { GameManagementService } from '../services/api/GameManagement';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
 import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
-import { ZRPOPCode, ZRPPayload } from '../services/zrp/zrpTypes';
+import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
-    gameId: '',
+    gameId: -1,
     name: '',
-    host: false,
+    role: undefined as ZRPRole | undefined,
     inActiveGame: false,
     _connection: undefined as ZRPWebsocketAdapter | undefined
   }),
+  getters: {
+    host: state => state.role === ZRPRole.Host
+  },
   actions: {
     async create(name: string, isPublic: boolean, password: string) {
       const nameValid = new GameNameValidator().validate(name);
@@ -24,17 +27,29 @@ export const useGameConfig = defineStore('game-config', {
 
       this.$patch({
         inActiveGame: true,
-        host: true,
+        role: ZRPRole.Host,
         gameId: status.id,
-        name: name
+        name: status.name
       });
       this.connect();
     },
-    async join(gameId: string) {
-      console.log('join', gameId);
+    async join(id: number, password: string, asPlayer: boolean, asSpectator: boolean) {
+      if (asPlayer && asSpectator) {
+        throw new Error('cant join as player & spectator');
+      }
+
+      const status = await GameManagementService.joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
+
+      this.$patch({
+        inActiveGame: true,
+        role: asPlayer ? ZRPRole.Player : ZRPRole.Spectator,
+        gameId: status.id,
+        name: status.name
+      });
+      this.connect();
     },
     async connect() {
-      this._connection = new ZRPWebsocketAdapter(Backend.getUrl(Endpoint.Websocket), this.gameId);
+      this._connection = new ZRPWebsocketAdapter(Backend.getDynamicUrl(Endpoint.Websocket, { id: this.gameId.toString() }), this.gameId.toString());
       const events = useGameEvents();
       this._connection.readMessages(events.handleIncomingEvent);
     },

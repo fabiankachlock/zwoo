@@ -1,6 +1,6 @@
 <template>
   <FlatDialog>
-    <Form>
+    <Form show-back-button>
       <FormTitle> {{ t('login.title') }} </FormTitle>
       <TextInput id="email" v-model="email" labelKey="login.email" :placeholder="t('login.email')" />
       <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />

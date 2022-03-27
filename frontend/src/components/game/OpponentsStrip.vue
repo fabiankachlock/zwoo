@@ -14,13 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import { useChat } from '@/core/adapter/play/chat';
+import { useChatStore } from '@/core/adapter/play/chat';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { computed } from 'vue';
 import Opponent from './Opponent.vue';
 
 const game = useGameState();
-const chat = useChat();
+const chat = useChatStore();
 
 const players = computed(() => game.players);
 const activePlayer = computed(() => game.activePlayer);

@@ -127,6 +127,7 @@
 <script setup lang="ts">
 import { useShare } from '@/composables/Share';
 import { useGameConfig } from '@/core/adapter/game';
+import { Frontend } from '@/core/services/api/apiConfig';
 import { onMounted, ref, defineEmits } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Error from '../misc/Error.vue';
@@ -146,7 +147,7 @@ const error = ref<string | undefined>(undefined);
 onMounted(() => {
   title.value = t('share.join.title', [game.name]);
   text.value = t('share.join.text');
-  url.value = `http://localhost:8080/join/${game.gameId}`;
+  url.value = `${Frontend.url}/join/${game.gameId}`;
   if (canShare.value) {
     try {
       share({

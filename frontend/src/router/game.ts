@@ -8,15 +8,14 @@ export const GameRoute: RouteRecordRaw = {
       path: 'play',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Play.vue'),
       meta: {
-        requiresAuth: false,
-        redirect: true
+        requiresAuth: true
       }
     },
     {
       path: 'wait',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/WaitingRoom.vue'),
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {

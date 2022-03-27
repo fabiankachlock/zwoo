@@ -1,6 +1,6 @@
 <template>
   <FlatDialog>
-    <Form>
+    <Form show-back-button>
       <FormTitle>
         {{ t('createGame.title') }}
       </FormTitle>

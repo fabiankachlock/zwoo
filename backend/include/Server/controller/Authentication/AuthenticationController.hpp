@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef _AUTHENTICATION_CONTROLLER_HPP_
 #define _AUTHENTICATION_CONTROLLER_HPP_
 
@@ -25,7 +23,7 @@
 #include "Server/dto/AuthenticationDTO.hpp"
 #include "Server/controller/Authentication/AuthenticationValidators.h"
 
-#include OATPP_CODEGEN_BEGIN(ApiController)// <- Begin Codegen
+#include OATPP_CODEGEN_BEGIN(ApiController) // <- Begin Codegen
 
 struct r_cookieData {
     ulong puid;
@@ -43,9 +41,18 @@ r_cookieData getCookieAuthData(std::string cookie)
     return {i, sid};
 }
 
+std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWithCookieHeaders(std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> res)
+    {
+        res->putHeader("Access-Control-Allow-Origin", ZWOO_CORS);
+        res->putHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        res->putHeader("Access-Control-Allow-Credentials", "true");
+
+        return res;
+    }
+
 class AuthenticationController : public oatpp::web::server::api::ApiController {
 private:
-    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger);
+    OATPP_COMPONENT(std::shared_ptr<Logger>, m_logger, "Backend");
     OATPP_COMPONENT(std::shared_ptr<Database>, m_database);
 
 public:
@@ -104,6 +111,7 @@ public:
 
         try
         {
+            m_logger->log->info("puid: {}, code: {}", ret.puid, ret.code);
             // create mail message
             mailio::message msg;
             msg.from(mailio::mail_address("zwoo auth", SMTP_HOST_EMAIL));// set the correct sender name and address
@@ -258,7 +266,7 @@ public:
     }
 
     ADD_CORS(deleteUser, ZWOO_CORS)
-    ENDPOINT("GET", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data), HEADER(String, ocookie, "Cookie")) {
+    ENDPOINT("POST", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data), HEADER(String, ocookie, "Cookie")) {
         m_logger->log->debug("/GET delete");
 
         std::string cookie = ocookie.getValue("");
@@ -286,16 +294,6 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
-    }
-
-private:
-    std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWithCookieHeaders(std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> res)
-    {
-        res->putHeader("Access-Control-Allow-Origin", ZWOO_CORS);
-        res->putHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-        res->putHeader("Access-Control-Allow-Credentials", "true");
-
-        return res;
     }
 };
 
