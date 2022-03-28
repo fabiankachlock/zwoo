@@ -2,6 +2,8 @@
 
 #include "oatpp/core/data/stream/BufferStream.hpp"
 
+#include "Server/controller/error.h"
+
 #include <chrono>
 
 #include <mongocxx/client.hpp>
@@ -99,7 +101,7 @@ r_LoginUser Database::loginUser(std::string email, std::string password)
 {
     auto usr = getUser("email", email);
     if (!usr)
-        return { false, 0, "" };
+        return { false, 0, "", e_Errors::USER_NOT_FOUND };
 
     SHA512 sha512 = SHA512();
 
@@ -117,7 +119,7 @@ r_LoginUser Database::loginUser(std::string email, std::string password)
         return { true, usr->_id, sid };
     }
     else
-        return { false, 0, "" };
+        return { false, 0, "", e_Errors::PASSWORD_NOT_MATCHING  };
 
 }
 

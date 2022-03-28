@@ -31,6 +31,8 @@ set(SRC_FILES
     "src/Server/DatabaseComponent.cpp"
     "src/Server/logger/logger.cpp"
 
+    "src/Server/controller/error.cpp"
+
     "src/Server/controller/Authentication/ReCaptcha.cpp"
     "src/Server/controller/Authentication/AuthenticationValidators.cpp"
 
