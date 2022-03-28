@@ -109,7 +109,7 @@ void ZRPConnector::getAllPlayersInLobby(uint32_t guid, uint32_t puid)
             if (v != nullptr)
             {
                 auto p = ZwooUser::createShared();
-                p->username = v->m_data.username;
+                p->name = v->m_data.username;
                 p->wins = v->m_data.wins;
                 p->role = v->m_data.role;
                 players->players->push_back(p);
