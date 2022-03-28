@@ -1,4 +1,5 @@
 import { Backend, Endpoint } from './apiConfig';
+import { BackendErrorAble, parseBackendError } from './errors';
 
 export type LeaderBoardResponse = {
   leaderboard: {
@@ -8,7 +9,7 @@ export type LeaderBoardResponse = {
 };
 
 export class LeaderBoardService {
-  static async fetchLeaderBoards(): Promise<LeaderBoardResponse | undefined> {
+  static async fetchLeaderBoards(): Promise<BackendErrorAble<LeaderBoardResponse>> {
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       return Promise.resolve({
         leaderboard: new Array(50).fill(null).map((_, index) => ({
@@ -20,8 +21,10 @@ export class LeaderBoardService {
 
     const req = await fetch(Backend.getUrl(Endpoint.LeaderBoard));
 
-    if (req.status > 300) {
-      return undefined;
+    if (req.status != 200) {
+      return {
+        error: parseBackendError(await req.text())
+      };
     }
 
     const response = (await req.json()) as LeaderBoardResponse;

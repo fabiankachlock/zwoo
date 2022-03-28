@@ -1,4 +1,5 @@
 import { Backend, Endpoint } from './apiConfig';
+import { WithBackendError, parseBackendError } from './errors';
 
 type UserInfo = {
   username: string;
@@ -11,9 +12,9 @@ export type AuthenticationStatus =
       email: string;
       isLoggedIn: true;
     }
-  | {
-      isLoggedIn: false;
-    };
+  | WithBackendError<{
+      isLoggedIn?: false;
+    }>;
 
 export class AuthenticationService {
   static getUserInfo = async (): Promise<AuthenticationStatus> => {
@@ -29,14 +30,11 @@ export class AuthenticationService {
       credentials: 'include'
     });
 
-    if (response.status === 404 || response.status === 401 || response.status === 400) {
-      return {
-        isLoggedIn: false
-      };
-    }
-
     if (response.status !== 200) {
-      throw await response.text();
+      return {
+        isLoggedIn: false,
+        error: parseBackendError(await response.text())
+      };
     }
 
     const data = (await response.json()) as UserInfo;
@@ -67,7 +65,10 @@ export class AuthenticationService {
     });
 
     if (response.status !== 200) {
-      throw await response.text();
+      return {
+        isLoggedIn: false,
+        error: parseBackendError(await response.text())
+      };
     }
 
     return await AuthenticationService.getUserInfo();
@@ -76,9 +77,7 @@ export class AuthenticationService {
   static performLogout = async (): Promise<AuthenticationStatus> => {
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       console.log('logout:');
-      return {
-        isLoggedIn: false
-      };
+      throw '';
     }
 
     const response = await fetch(Backend.getUrl(Endpoint.AccountLogout), {
@@ -86,14 +85,11 @@ export class AuthenticationService {
       credentials: 'include'
     });
 
-    if (response.status === 404 || response.status === 401) {
-      return {
-        isLoggedIn: false
-      };
-    }
-
     if (response.status !== 200) {
-      throw await response.text();
+      return {
+        isLoggedIn: false,
+        error: parseBackendError(await response.text())
+      };
     }
 
     return {
@@ -121,7 +117,10 @@ export class AuthenticationService {
     });
 
     if (response.status !== 200) {
-      throw await response.text();
+      return {
+        isLoggedIn: false,
+        error: parseBackendError(await response.text())
+      };
     }
 
     return {
@@ -145,7 +144,12 @@ export class AuthenticationService {
       })
     });
 
-    await response.text();
+    if (response.status !== 200) {
+      return {
+        isLoggedIn: false,
+        error: parseBackendError(await response.text())
+      };
+    }
 
     return {
       isLoggedIn: false
