@@ -43,7 +43,7 @@ export enum BackendError {
 export const parseBackendError = (text: string): BackendErrorType => {
   try {
     const content = JSON.parse(text);
-    if ('code' in BackendError) {
+    if ('code' in content) {
       return content as BackendErrorType;
     }
     throw content;
@@ -60,7 +60,14 @@ export const createEmptyBackendError = (): BackendErrorType => ({
   message: ''
 });
 
-export const unwrapBackendError = <T>(value: BackendErrorAble<T> | WithBackendError<T>): [T | undefined, BackendErrorType | undefined] => {
+export const unwrapBackendError = <T>(value: BackendErrorAble<T> | WithBackendError<T>): [T, undefined] | [undefined, BackendErrorType] => {
   const hasError = 'error' in value;
-  return [hasError ? undefined : (value as T), hasError ? value.error : undefined];
+  if (hasError) {
+    return [undefined, value.error as BackendErrorType];
+  }
+  return [value as T, undefined];
+};
+
+export const getBackendErrorTranslation = (err: BackendErrorType): string => {
+  return `errors.backend.${err.code}`;
 };
