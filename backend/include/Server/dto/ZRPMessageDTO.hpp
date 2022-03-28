@@ -9,7 +9,7 @@
 class ZwooUser : public oatpp::DTO {
     DTO_INIT(ZwooUser, DTO)
 
-    DTO_FIELD(String, username) = "";
+    DTO_FIELD(String, name) = "";
     DTO_FIELD(UInt32, wins) = (v_uint32)0;
     DTO_FIELD(UInt8, role) = (v_uint8)0;
 };
