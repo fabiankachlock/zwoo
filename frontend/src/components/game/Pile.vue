@@ -1,14 +1,23 @@
 <template>
   <div class="pile absolute transform top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10">
     <div class="relative h-full pile-card-wrapper">
-      <div class="pile-card absolute top-1/2 right-2 transform -translate-y-1/2 h-full transition-all x-delay-0" style="max-height: 95%">
-        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
+      <div
+        class="pile-card absolute top-1/2 right-2 transform -translate-y-1/2 h-full transition-all x-delay-0"
+        style="max-height: 95%; max-width: fit-content"
+      >
+        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
       </div>
-      <div class="pile-card absolute top-1/2 right-3 transform -translate-y-1/2 h-full transition-all x-delay-30" style="max-height: 95%">
-        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
+      <div
+        class="pile-card absolute top-1/2 right-3 transform -translate-y-1/2 h-full transition-all x-delay-30"
+        style="max-height: 95%; max-width: fit-content"
+      >
+        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
       </div>
-      <div class="pile-card absolute top-1/2 right-4 transform -translate-y-1/2 h-full transition-all x-delay-60" style="max-height: 95%">
-        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
+      <div
+        class="pile-card absolute top-1/2 right-4 transform -translate-y-1/2 h-full transition-all x-delay-60"
+        style="max-height: 95%; max-width: fit-content"
+      >
+        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
       </div>
       <div
         @click="drawCard()"
@@ -16,7 +25,7 @@
         :class="{ animating: isAnimating }"
         style="max-height: 95%"
       >
-        <img :src="cardUrl" alt="card" class="max-h-full" style="max-width: unset" />
+        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
       </div>
     </div>
   </div>
@@ -45,7 +54,8 @@ const drawCard = () => {
 .pile {
   max-height: min(12rem, 25vh);
   max-width: min(12rem, 14vw);
-  width: 100%;
+  height: 100%;
+  width: auto;
   aspect-ratio: 1/3;
 }
 
