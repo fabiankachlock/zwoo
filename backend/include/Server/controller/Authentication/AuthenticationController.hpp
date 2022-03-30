@@ -31,6 +31,7 @@ struct r_cookieData {
     std::string sid;
 };
 
+// TODO: Move to Custom oatpp::web::server::handler::AuthorizationHandler -> Results in easier to read files and easier to patch Cookie Problems
 r_cookieData getCookieAuthData(std::string cookie)
 {
     auto pos = cookie.find(",");
@@ -42,6 +43,7 @@ r_cookieData getCookieAuthData(std::string cookie)
     return {i, sid};
 }
 
+// TODO: Rename to something with CORS && Maybe move to a section wher all requests go through
 std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> setupResponseWithCookieHeaders(std::shared_ptr<oatpp::web::protocol::http::outgoing::Response> res)
     {
         res->putHeader("Access-Control-Allow-Origin", ZWOO_CORS);
@@ -134,7 +136,8 @@ public:
         {
             m_logger->log->error("Email failed to send: {0}", exc.what());
         }
-        return createResponse(Status::CODE_200, "Account Created");
+        m_logger->log->info("User successfully created!");
+        return createResponse(Status::CODE_200, R"({"message": "Account Created"})");
     }
     ENDPOINT_INFO(create) {
         info->description = "create a new User with this Endpoint.";
@@ -148,7 +151,7 @@ public:
     ENDPOINT("GET", "auth/verify", verify, QUERY(String, code, "code"), QUERY(UInt64, puid, "id")) {
         m_logger->log->debug("/GET verify");
         if (m_database->verifyUser(puid, code))
-            return createResponse(Status::CODE_200, "Account Verified");
+            return createResponse(Status::CODE_200, R"({"message": "Account Verified"})");
         else
             return createResponse(Status::CODE_400, constructErrorMessage("Account failed to verify", e_Errors::ACCOUNT_FAILED_TO_VERIFIED));
     }
@@ -170,16 +173,20 @@ public:
 
         if (login.successful)
         {
+            m_logger->log->info("User {} successfully logged in!", login.puid)
             std::string out = encrypt(std::to_string(login.puid) + "," + login.sid);
             std::vector<uint8_t> vec(out.begin(), out.end());
             out = encodeBase64(vec);
             auto c = fmt::format("auth={0};Max-Age=604800;Domain={1};Path=/;HttpOnly{2}", out, ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
-            auto res = createResponse(Status::CODE_200, "Logged In");
+            auto res = createResponse(Status::CODE_200, R"({"message": "Logged In"})");
             res->putHeader("Set-Cookie", c);
             return setupResponseWithCookieHeaders(res);
         }
         else
+        {
+            m_logger->log->info("failed login attempt! User with ID {} failed to login. Login error: {}", login.puid, login.error_code);
             return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("failed to login", (e_Errors)login.error_code)));
+        }
     }
     ENDPOINT_INFO(login) {
         info->description = "Login Users with this Endpoint.";
@@ -244,10 +251,10 @@ public:
 
         if (usr)
         {
-            if (usr->sid.getValue("") == usrc.sid&& usr->sid != "")
+            if (usr->sid.getValue("") == usrc.sid && usr->sid != "")
             {
                 m_database->updateStringField("email", usr->email, "sid", "");
-                auto res = createResponse(Status::CODE_200, "user logged out");
+                auto res = createResponse(Status::CODE_200, R"({"message": "user logged out"})");
                 auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
                 res->putHeader("Set-Cookie", c);
                 return setupResponseWithCookieHeaders(res);
@@ -281,6 +288,7 @@ public:
 
         if (m_database->deleteUser(usrc.puid, usrc.sid, data->password))
         {
+            m_logger->log->info("User {} successfully deleted", usrc.puid)
             auto res = setupResponseWithCookieHeaders(createResponse(Status::CODE_200, "User Deleted!"));
             auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
             res->putHeader("Set-Cookie", c);

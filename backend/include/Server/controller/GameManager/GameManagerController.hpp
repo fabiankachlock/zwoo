@@ -67,6 +67,7 @@ public:
     ADD_CORS(join_game, ZWOO_CORS)
     ENDPOINT("POST", "game/join", join_game, HEADER(String, ocookie, "Cookie"), BODY_DTO(Object<JoinGameDTO>, data))
     {
+        m_logger_backend->log->info("/POST join");
         if (data->opcode == 0)
             return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Opcode Missing", e_Errors::OPCODE_MISSING)));
         else if (data->opcode == 1)
@@ -101,6 +102,7 @@ public:
                 if (data->opcode == 1)
                 {
                     guid = createGame(); // Create Game | TODO: use GameManager when finished (with player data)
+                    m_logger_backend->log->info("New Game Created!");
                     s_Game g = { { { usr->_id, 1 } }, data->password.getValue(""), data->use_password };
                     games.insert({ guid, g });
                     printGames();
@@ -143,6 +145,7 @@ public:
     ADD_CORS(join, ZWOO_CORS)
     ENDPOINT("GET", "game/join/{guid}", join, HEADER(String, ocookie, "Cookie"), REQUEST(std::shared_ptr<IncomingRequest>, request), PATH(UInt32, guid, "guid"))
     {
+        m_logger_backend->log->info("/GET join");
         printGames();
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
@@ -175,6 +178,7 @@ public:
         {
             if (usr->sid.getValue("") == usrc.sid && usr->sid != "")
             {
+                m_logger_backend->log->info("Player joined game");
                 uint32_t guid = createGame(); // Create Game | TODO: use GameManager when finished (with player data)
                 auto res = oatpp::websocket::Handshaker::serversideHandshake(request->getHeaders(), websocketConnectionHandler);
                 auto parameters = std::make_shared<oatpp::network::ConnectionHandler::ParameterMap>();
@@ -204,6 +208,7 @@ public:
     ADD_CORS(leaderboard, ZWOO_CORS)
     ENDPOINT("GET", "game/leaderboard", leaderboard)
     {
+        m_logger_backend->log->info("/GET leaderboard");
         return setupResponseWithCookieHeaders(createDtoResponse(Status::CODE_200, m_database->getLeaderBoard()));
     }
     ENDPOINT_INFO(leaderboard) {
