@@ -5,7 +5,6 @@
 #include "oatpp-openssl/server/ConnectionProvider.hpp"
 #include "oatpp-openssl/Config.hpp"
 
-
 #include "Server/ServerComponent.hpp"
 #include "Server/controller/Authentication/AuthenticationController.hpp"
 #include "Server/controller/GameManager/GameManagerController.hpp"
@@ -13,6 +12,21 @@
 #ifdef BUILD_SWAGGER
 #include "oatpp-swagger/Controller.hpp"
 #endif // BUILD_SWAGGER
+
+void databaseCleanup()
+{
+    auto m_objectMapper = oatpp::mongo::bson::mapping::ObjectMapper::createShared();
+    // Connect to DB
+    mongocxx::pool = mongocxx::pool(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING));
+    auto conn = m_pool.acquire();
+    auto collection = ( *conn ) [m_databaseName][m_collectionName];
+    // Delete unverified users
+    oatpp::data::stream::BufferOutputStream stream;
+    m_objectMapper.write ( &stream, oatpp::Fields<oatpp::Bool>({{"verified", false}}) );
+    bsoncxx::document::view view ( stream.getData(), stream.getCurrentPosition() );
+    
+    collection.delete(bsoncxx::document::value ( view ));
+}
 
 HttpServer::HttpServer()
 {
