@@ -1,3 +1,4 @@
+import { Logger } from '../logging/logImport';
 import { Backend, Endpoint } from './apiConfig';
 import { WithBackendError, parseBackendError } from './errors';
 
@@ -16,8 +17,11 @@ export type AuthenticationStatus =
       isLoggedIn?: false;
     }>;
 
+const logger = Logger.createOne('api');
+
 export class AuthenticationService {
   static getUserInfo = async (): Promise<AuthenticationStatus> => {
+    logger.log('fetching user auth status');
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       console.log('getting user info');
       return {
@@ -46,6 +50,7 @@ export class AuthenticationService {
   };
 
   static performLogin = async (email: string, password: string): Promise<AuthenticationStatus> => {
+    logger.log('logging in');
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       console.log('login:', { email, password });
       return {
@@ -77,7 +82,9 @@ export class AuthenticationService {
   static performLogout = async (): Promise<AuthenticationStatus> => {
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       console.log('logout:');
-      throw '';
+      return {
+        isLoggedIn: false
+      };
     }
 
     const response = await fetch(Backend.getUrl(Endpoint.AccountLogout), {
