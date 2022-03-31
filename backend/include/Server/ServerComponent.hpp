@@ -101,6 +101,14 @@ public:
 
         return connectionHandler;
     }());
+
+    OATPP_CREATE_COMPONENT(std::shared_ptr<ZwooAuthorizationHandler>, authHandler)
+    ([] {
+
+        OATPP_COMPONENT(std::shared_ptr<Database>, database);
+        auto _authHandler = std::make_shared<ZwooAuthorizationHandler>(database);
+        return _authHandler;
+    }());
 };
 
 #endif // _SERVER_COMPONENT_HPP_

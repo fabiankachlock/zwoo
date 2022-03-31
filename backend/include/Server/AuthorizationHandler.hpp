@@ -5,6 +5,8 @@
 
 #include "Server/DatabaseComponent.hpp"
 
+#include <spdlog/spdlog.h>
+
 class UserAuthorizationObject : public oatpp::web::server::handler::AuthorizationObject {
 public:
 
@@ -19,12 +21,18 @@ public:
 };
 
 class ZwooAuthorizationHandler : public oatpp::web::server::handler::AuthorizationHandler {
+
+  typedef oatpp::web::protocol::http::HttpError HttpError;
+  typedef oatpp::web::protocol::http::Status Status;
+
 public:
     ZwooAuthorizationHandler(std::shared_ptr<Database> db);
 
-    // TODO: implement auth method
+    std::shared_ptr<AuthorizationObject> handleAuthorization(const oatpp::String &header) override;
 
 private:
     std::shared_ptr<Database> db;
+
+    Headers getHeader();
 };
 #endif // _AUTHORIZATIONHANDLER_HPP_

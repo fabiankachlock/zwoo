@@ -2,6 +2,9 @@
 
 #include "oatpp-mongo/bson/mapping/ObjectMapper.hpp"
 
+#include <mongocxx/client.hpp>
+#include <mongocxx/collection.hpp>
+#include <bsoncxx/json.hpp>
 #include <mongocxx/pool.hpp>
 #include <bsoncxx/document/value.hpp>
 
@@ -35,7 +38,7 @@ void databaseCleanup()
     m_objectMapper->write ( &stream, oatpp::Fields<oatpp::Boolean>({{"verified", false}}) );
     bsoncxx::document::view view ( stream.getData(), stream.getCurrentPosition() );
     
-    collection.delete(bsoncxx::document::value ( view ));
+    collection.delete_many(bsoncxx::document::value ( view ));
 
     logger->info("Database cleanup finished!");
 }
@@ -58,7 +61,7 @@ void HttpServer::RunServer()
 #ifdef BUILD_SWAGGER
     oatpp::web::server::api::Endpoints docEndpoints;
 
-    docEndpoints.append(router->addController(AuthenticationController::createShared())->getEndpoints());
+    // docEndpoints.append(router->addController(AuthenticationController::createShared())->getEndpoints());
     docEndpoints.append(router->addController(GameManagerController::createShared())->getEndpoints());
     router->addController(oatpp::swagger::Controller::createShared(docEndpoints));
 

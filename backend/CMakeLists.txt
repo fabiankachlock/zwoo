@@ -15,7 +15,7 @@ find_package(CURL                  REQUIRED)
 find_package(mongocxx              REQUIRED)
 find_package(mailio                REQUIRED)
 
-option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
+option(BUILD_SWAGGER "Activate the build of Swagger Components" OFF)
 
 
 set(SRC_FILES
