@@ -1,5 +1,10 @@
 #include "HttpServer.h"
 
+#include "oatpp-mongo/bson/mapping/ObjectMapper.hpp"
+
+#include <mongocxx/pool.hpp>
+#include <bsoncxx/document/value.hpp>
+
 #include "oatpp/network/Server.hpp"
 
 #include "oatpp-openssl/server/ConnectionProvider.hpp"
@@ -22,12 +27,12 @@ void databaseCleanup()
 
     auto m_objectMapper = oatpp::mongo::bson::mapping::ObjectMapper::createShared();
     // Connect to DB
-    mongocxx::pool = mongocxx::pool(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING));
-    auto conn = m_pool.acquire();
+    auto m_pool = std::make_shared<mongocxx::pool>(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING));
+    auto conn = m_pool->acquire();
     auto collection = ( *conn ) ["zwoo"]["users"];
     // Delete unverified users
     oatpp::data::stream::BufferOutputStream stream;
-    m_objectMapper.write ( &stream, oatpp::Fields<oatpp::Bool>({{"verified", false}}) );
+    m_objectMapper->write ( &stream, oatpp::Fields<oatpp::Boolean>({{"verified", false}}) );
     bsoncxx::document::view view ( stream.getData(), stream.getCurrentPosition() );
     
     collection.delete(bsoncxx::document::value ( view ));

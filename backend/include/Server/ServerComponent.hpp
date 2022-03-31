@@ -20,6 +20,7 @@
 #include "Server/logger/logger.h"
 
 #include "Server/DatabaseComponent.hpp"
+#include "Server/AuthorizationHandler.hpp"
 #ifdef BUILD_SWAGGER
 #include "Server/SwaggerComponent.hpp"
 #endif
