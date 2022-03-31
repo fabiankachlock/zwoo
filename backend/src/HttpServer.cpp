@@ -9,6 +9,8 @@
 #include "Server/controller/Authentication/AuthenticationController.hpp"
 #include "Server/controller/GameManager/GameManagerController.hpp"
 
+#include "utils/thread.h"
+
 #ifdef BUILD_SWAGGER
 #include "oatpp-swagger/Controller.hpp"
 #endif // BUILD_SWAGGER
@@ -19,7 +21,7 @@ void databaseCleanup()
     // Connect to DB
     mongocxx::pool = mongocxx::pool(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING));
     auto conn = m_pool.acquire();
-    auto collection = ( *conn ) [m_databaseName][m_collectionName];
+    auto collection = ( *conn ) ["zwoo"]["users"];
     // Delete unverified users
     oatpp::data::stream::BufferOutputStream stream;
     m_objectMapper.write ( &stream, oatpp::Fields<oatpp::Bool>({{"verified", false}}) );
@@ -70,6 +72,8 @@ void HttpServer::RunServer()
 
         logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
 
+        timedFunction(databaseCleanup, 0, 1);
+
         server.run();
     }
     else
@@ -79,8 +83,9 @@ void HttpServer::RunServer()
         /* create server */
         oatpp::network::Server server(connectionProvider, connectionHandler);
 
-
         logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
+
+        timedFunction(databaseCleanup, 0, 1);
 
         server.run();
     }
