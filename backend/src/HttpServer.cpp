@@ -17,6 +17,9 @@
 
 void databaseCleanup()
 {
+    auto logger = spdlog::get("BED");
+    logger->info("Database cleanup started...");
+
     auto m_objectMapper = oatpp::mongo::bson::mapping::ObjectMapper::createShared();
     // Connect to DB
     mongocxx::pool = mongocxx::pool(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING));
@@ -28,6 +31,8 @@ void databaseCleanup()
     bsoncxx::document::view view ( stream.getData(), stream.getCurrentPosition() );
     
     collection.delete(bsoncxx::document::value ( view ));
+
+    logger->info("Database cleanup finished!");
 }
 
 HttpServer::HttpServer()
