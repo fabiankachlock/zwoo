@@ -9,6 +9,7 @@
 #include "oatpp/network/tcp/server/ConnectionProvider.hpp"
 #include "oatpp/web/server/HttpConnectionHandler.hpp"
 #include "oatpp/web/server/HttpRouter.hpp"
+#include "oatpp/web/server/interceptor/AllowCorsGlobal.hpp"
 #include "oatpp-websocket/ConnectionHandler.hpp"
 #include "oatpp/network/tcp/server/ConnectionProvider.hpp"
 
@@ -67,6 +68,11 @@ public:
 
         auto httpconnectionHandler = oatpp::web::server::HttpConnectionHandler::createShared(router);
         httpconnectionHandler->setErrorHandler(std::make_shared<ErrorHandler>(objectMapper));
+
+        /* Add CORS-enabling interceptors */
+        connectionHandler->addRequestInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowOptionsGlobal>());
+        connectionHandler->addResponseInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowCorsGlobal>());
+
         return httpconnectionHandler;
     }());
 

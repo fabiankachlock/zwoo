@@ -32,9 +32,5 @@ ErrorHandler::handleError(const Status& status, const oatpp::String& message, co
     for(const auto& pair : headers.getAll()) 
         response->putHeader(pair.first.toString(), pair.second.toString());
 
-    response->putHeader("Access-Control-Allow-Origin", ZWOO_CORS);
-    response->putHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-    response->putHeader("Access-Control-Allow-Credentials", "true");
-
     return response;
 }
