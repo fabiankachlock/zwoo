@@ -32,7 +32,5 @@ public:
 
 private:
     std::shared_ptr<Database> db;
-
-    Headers getHeader();
 };
 #endif // _AUTHORIZATIONHANDLER_HPP_

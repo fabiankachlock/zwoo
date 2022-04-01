@@ -13,7 +13,7 @@
 #include "zwoo.h"
 
 ZwooAuthorizationHandler::ZwooAuthorizationHandler(std::shared_ptr<Database> db)
-    : AuthorizationHandler("Cookie", "Cookie"), db(db)
+    : AuthorizationHandler("Auth", "Zwoo"), db(db)
 {}
 
 std::shared_ptr<oatpp::web::server::handler::AuthorizationObject> ZwooAuthorizationHandler::handleAuthorization(const oatpp::String &header)
@@ -26,10 +26,10 @@ std::shared_ptr<oatpp::web::server::handler::AuthorizationObject> ZwooAuthorizat
 
     std::string cookie = header.getValue("");
     if (cookie.length() == 0)
-        throw HttpError(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING), getHeader());
+        throw HttpError(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING));
     auto spos = cookie.find("auth=");
     if (spos < 0 || spos > cookie.length())
-        throw HttpError(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING), getHeader());
+        throw HttpError(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING));
 
     cookie = decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5)));
     auto pos = cookie.find(",");
@@ -51,28 +51,7 @@ std::shared_ptr<oatpp::web::server::handler::AuthorizationObject> ZwooAuthorizat
             throw HttpError(Status::CODE_401, constructErrorMessage("Session ID not Matching", e_Errors::SESSION_ID_NOT_MATCHING), getHeader());
     }
     else
-        throw HttpError(Status::CODE_401, constructErrorMessage("User not Found", e_Errors::USER_NOT_FOUND), getHeader());
+        throw HttpError(Status::CODE_404, constructErrorMessage("User not Found", e_Errors::USER_NOT_FOUND), getHeader());
 
     return nullptr;
 }
-
-ZwooAuthorizationHandler::Headers ZwooAuthorizationHandler::getHeader()
-{
-    Headers headers;
-    headers.put("Access-Control-Allow-Origin", std::make_shared<std::string>(ZWOO_CORS));
-    headers.put("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-    headers.put("Access-Control-Allow-Credentials", "true");
-    return headers;
-}
-
-
-
-
-
-
-
-
-
-
-
-
