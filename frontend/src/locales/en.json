@@ -202,6 +202,17 @@
       "off": "Off"
     }
   },
+  "summary": {
+    "winner": "Winner!",
+    "spectateAgain": "Continue Spectating",
+    "startSpectating": "Spectate",
+    "leave": "Leave",
+    "startPlaying": "Join Playing",
+    "playAgain": "Play Again"
+  },
+  "util": {
+    "loading": "Wird geladen..."
+  },
   "dialogs": {
     "promotePlayer": {
       "title": "Promote {0} to a host?",

@@ -32,7 +32,7 @@
       <button class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="iconoir:eye-alt" />
         <p class="text tc-main text-md">
-          {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectatingAgainXXXVeryLong') }}
+          {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
         </p>
       </button>
       <button class="action bg-dark hover:bg-darkest">

@@ -11,7 +11,7 @@ export const useGameConfig = defineStore('game-config', {
   state: () => ({
     gameId: -1,
     name: '',
-    role: undefined as ZRPRole | undefined,
+    role: 1 as ZRPRole | undefined,
     inActiveGame: false,
     _connection: undefined as ZRPWebsocketAdapter | undefined
   }),
