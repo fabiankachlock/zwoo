@@ -29,19 +29,19 @@
   </div>
   <div class="actions">
     <div class="actions-grid w-full grid gap-2">
-      <button class="action bg-dark hover:bg-darkest">
+      <button :click="handleLeaveClick()" class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
         <p class="text tc-main text-md">
           {{ t('summary.leave') }}
         </p>
       </button>
-      <button class="action bg-dark hover:bg-darkest">
+      <button :click="handleSpectatorClick()" class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="iconoir:eye-alt" />
         <p class="text tc-main text-md">
           {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
         </p>
       </button>
-      <button class="action bg-dark hover:bg-darkest">
+      <button :click="handlePlayClick()" class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="iconoir:play-outline" />
         <p class="text tc-main text-md">
           {{ t(isSpectator ? 'summary.startPlaying' : 'summary.playAgain') }}
@@ -69,6 +69,18 @@ const { isSpectator } = useIsSpectator();
 onMounted(async () => {
   players.value = await summary.requestGameSummary();
 });
+
+const handlePlayClick = () => {
+  summary.joinAgainAsPlayer();
+};
+
+const handleSpectatorClick = () => {
+  summary.joinAgainAsSpectator();
+};
+
+const handleLeaveClick = () => {
+  summary.leave();
+};
 </script>
 
 <style scoped>

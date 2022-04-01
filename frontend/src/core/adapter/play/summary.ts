@@ -20,6 +20,15 @@ export const useGameSummary = defineStore('game-summary', {
       this.positions['test-second'] = 2;
       this.positions['test-third'] = 3;
       this.positions['test-third-2'] = 3;
+    },
+    joinAgainAsPlayer() {
+      console.log('joining as player');
+    },
+    joinAgainAsSpectator() {
+      console.log('joining again as spectator');
+    },
+    leave() {
+      console.log('leaving game');
     }
   }
 });
