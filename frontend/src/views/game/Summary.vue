@@ -6,7 +6,7 @@
       >
         <div class="h-full flex flex-nowrap items-center justify-start">
           <img src="/img/logo/zwoo_logo_simple_none.png" alt="" class="max-h-full mr-3" />
-          <p class="tc-main text-xl">{{ winner.name }} - Winner!</p>
+          <p class="tc-main text-xl">{{ winner.name }} - {{ t('summary.winner') }}</p>
         </div>
         <p class="tc-main text-xl italic">{{ winner.score }}</p>
       </div>
@@ -15,12 +15,39 @@
         :key="player.name"
         class="player flex justify-between items-center flex-nowrap m-1 bg-lightest hover:bg-light rounded px-3 py-2 border bc-dark"
       >
-        <p class="tc-main-dark">{{ player.position }}. {{ player.name }}</p>
+        <p class="tc-main-dark">
+          <span class="mr-2">{{ player.position }}.</span> {{ player.name }}
+        </p>
         <p class="tc-main-dark italic">{{ player.score }}</p>
       </div>
       <div class="bottom-spacer h-8"></div>
     </template>
-    <template v-else> fetching results </template>
+    <div v-else class="flex flex-row justify-start flex-nowrap items-center tc-main">
+      <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
+      <p class="text-xl tc-main">{{ t('util.loading') }}</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="w-full grid grid-cols-3 grid-rows-1 gap-2">
+      <button class="action bg-dark hover:bg-darkest">
+        <Icon class="icon tc-secondary" icon="iconoir:eye-alt" />
+        <p class="text tc-main text-md">
+          {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectatingAgainXXXVeryLong') }}
+        </p>
+      </button>
+      <button class="action bg-dark hover:bg-darkest">
+        <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
+        <p class="text tc-main text-md">
+          {{ t('summary.leave') }}
+        </p>
+      </button>
+      <button class="action bg-dark hover:bg-darkest">
+        <Icon class="icon tc-secondary" icon="iconoir:play-outline" />
+        <p class="text tc-main text-md">
+          {{ t(isSpectator ? 'summary.startPlaying' : 'summary.playAgain') }}
+        </p>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -28,11 +55,16 @@
 import { useGameSummary } from '@/core/adapter/play/summary';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
+import { Icon } from '@iconify/vue';
+import { useIsSpectator } from '@/composables/userRoles';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const summary = useGameSummary();
 const players = ref<{ name: string; position: number; score: number }[]>([]);
 const winner = computed(() => (players.value.length > 0 ? players.value[0] : undefined));
 const notWinners = computed(() => [...players.value].slice(1) ?? []);
+const { isSpectator } = useIsSpectator();
 
 onMounted(async () => {
   players.value = await summary.requestGameSummary();
@@ -46,6 +78,30 @@ onMounted(async () => {
   left: 3rem;
   right: 3rem;
   bottom: 0;
+}
+
+.actions {
+  position: absolute;
+  bottom: 5%;
+  left: 10%;
+  right: 10%;
+}
+
+.action {
+  @apply block rounded py-1 flex flex-nowrap justify-center items-center w-full max-w-full;
+}
+
+.icon {
+  @apply text-xl transform ml-2 flex-shrink-0 transition;
+}
+
+.text {
+  @apply flex-shrink mx-2 flex-1 min-w-0 overflow-hidden;
+  text-overflow: ellipsis;
+}
+
+.action:hover .icon {
+  @apply scale-110;
 }
 
 .player {

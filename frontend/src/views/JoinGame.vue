@@ -6,7 +6,7 @@
       </div>
       <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center tc-main">
         <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
-        <p class="text-xl tc-main">Loading...</p>
+        <p class="text-xl tc-main">{{ t('util.loading') }}</p>
       </div>
       <div v-else class="flex flex-row flex-wrap items-center justify-center tc-main">
         <button
