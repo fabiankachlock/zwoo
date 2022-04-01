@@ -12,7 +12,7 @@ ErrorHandler::ErrorHandler(const std::shared_ptr<oatpp::data::mapping::ObjectMap
 std::shared_ptr<ErrorHandler::OutgoingResponse>
 ErrorHandler::handleError(const Status& status, const oatpp::String& message, const Headers& headers) {
     
-    OutgoingResponse response;
+    std::shared_ptr<OutgoingResponse> response;
 
     if ( status.code < 500 )
         response = ResponseFactory::createResponse(status, message, m_objectMapper);

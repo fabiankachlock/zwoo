@@ -48,10 +48,10 @@ std::shared_ptr<oatpp::web::server::handler::AuthorizationObject> ZwooAuthorizat
             return std::make_shared<UserAuthorizationObject>(puid, usr->username, usr->email, usr->wins);
         }
         else
-            throw HttpError(Status::CODE_401, constructErrorMessage("Session ID not Matching", e_Errors::SESSION_ID_NOT_MATCHING), getHeader());
+            throw HttpError(Status::CODE_401, constructErrorMessage("Session ID not Matching", e_Errors::SESSION_ID_NOT_MATCHING));
     }
     else
-        throw HttpError(Status::CODE_404, constructErrorMessage("User not Found", e_Errors::USER_NOT_FOUND), getHeader());
+        throw HttpError(Status::CODE_404, constructErrorMessage("User not Found", e_Errors::USER_NOT_FOUND));
 
     return nullptr;
 }
