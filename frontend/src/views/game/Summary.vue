@@ -28,17 +28,17 @@
     </div>
   </div>
   <div class="actions">
-    <div class="w-full grid grid-cols-3 grid-rows-1 gap-2">
-      <button class="action bg-dark hover:bg-darkest">
-        <Icon class="icon tc-secondary" icon="iconoir:eye-alt" />
-        <p class="text tc-main text-md">
-          {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
-        </p>
-      </button>
+    <div class="actions-grid w-full grid gap-2">
       <button class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
         <p class="text tc-main text-md">
           {{ t('summary.leave') }}
+        </p>
+      </button>
+      <button class="action bg-dark hover:bg-darkest">
+        <Icon class="icon tc-secondary" icon="iconoir:eye-alt" />
+        <p class="text tc-main text-md">
+          {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
         </p>
       </button>
       <button class="action bg-dark hover:bg-darkest">
@@ -85,6 +85,16 @@ onMounted(async () => {
   bottom: 5%;
   left: 10%;
   right: 10%;
+}
+
+.actions-grid {
+  @apply grid-cols-1 grid-rows-3;
+}
+
+@media only screen and (min-width: 640px) {
+  .actions-grid {
+    @apply grid-cols-3 grid-rows-1;
+  }
 }
 
 .action {
