@@ -5,12 +5,13 @@ export const useGameSummary = defineStore('game-summary', {
     positions: {} as Record<string, number>
   }),
   actions: {
-    async requestGameSummary(): Promise<{ name: string; position: number }[]> {
+    async requestGameSummary(): Promise<{ name: string; position: number; score: number }[]> {
       this._computePositions();
       return Object.entries(this.positions)
         .map(([name, position]) => ({
           name,
-          position
+          position,
+          score: Math.floor(Math.random() * 20)
         }))
         .sort((a, b) => a.position - b.position);
     },
