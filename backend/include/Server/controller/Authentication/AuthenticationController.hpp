@@ -146,10 +146,7 @@ public:
             m_logger->log->info("User {} successfully logged in!", login.puid);
             std::string out = encrypt(std::to_string(login.puid) + "," + login.sid);
             std::vector<uint8_t> vec(out.begin(), out.end());
-            out = encodeBase64(vec);
-            auto c = fmt::format("auth={0};Max-Age=604800;Domain={1};Path=/;HttpOnly{2}", out, ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
-            auto res = createResponse(Status::CODE_200, R"({"message": "Logged In"})");
-            res->putHeader("Set-Cookie", c);
+            auto res = createResponse(Status::CODE_200, "{\"token\": \"" + encodeBase64(vec) + "\"}");
             return res;
         }
         else
@@ -193,10 +190,7 @@ public:
         if (usr)
         {
             m_database->updateStringField("email", usr->email, "sid", "");
-            auto res = createResponse(Status::CODE_200, R"({"message": "user logged out"})");
-            auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
-            res->putHeader("Set-Cookie", c);
-            return res;
+            return createResponse(Status::CODE_200, R"({"message": "user logged out"})");;
         }
         else
             return createResponse(Status::CODE_501, R"({"code": 100})");
@@ -217,10 +211,7 @@ public:
             if (m_database->deleteUser(usr->puid, data->password))
             {
                 m_logger->log->info("User {} successfully deleted", usr->puid);
-                auto res = createResponse(Status::CODE_200, R"({ "message": "User Deleted!" })");
-                auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
-                res->putHeader("Set-Cookie", c);
-                return res;
+                return createResponse(Status::CODE_200, R"({ "message": "User Deleted!" })");
             }
         }
 

@@ -20,7 +20,7 @@ public:
     uint32_t wins;
 };
 
-class ZwooAuthorizationHandler : public oatpp::web::server::handler::AuthorizationHandler {
+class ZwooAuthorizationHandler : public oatpp::web::server::handler::BearerAuthorizationHandler {
 
   typedef oatpp::web::protocol::http::HttpError HttpError;
   typedef oatpp::web::protocol::http::Status Status;
@@ -28,7 +28,7 @@ class ZwooAuthorizationHandler : public oatpp::web::server::handler::Authorizati
 public:
     ZwooAuthorizationHandler(std::shared_ptr<Database> db);
 
-    std::shared_ptr<AuthorizationObject> handleAuthorization(const oatpp::String &header) override;
+    std::shared_ptr<AuthorizationObject> authorize(const oatpp::String& token) override;
 
 private:
     std::shared_ptr<Database> db;
