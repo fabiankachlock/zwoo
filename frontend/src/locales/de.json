@@ -224,6 +224,17 @@
       "off": "Aus"
     }
   },
+  "summary": {
+    "winner": "Gewinner!",
+    "spectateAgain": "Weiter Zuschauen",
+    "startSpectating": "Zuschauen",
+    "leave": "Verlassen",
+    "startPlaying": "Mitspielen",
+    "playAgain": "Weiterspielen"
+  },
+  "util": {
+    "loading": "Wird geladen..."
+  },
   "dialogs": {
     "promotePlayer": {
       "title": "{0} zum Host befördern?",
