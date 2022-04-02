@@ -62,6 +62,7 @@ import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '
 import { onMounted, ref } from 'vue';
 import { GameManagementService } from '@/core/services/api/GameManagement';
 import { useGameConfig } from '@/core/adapter/game';
+import { unwrapBackendError } from '@/core/services/api/errors';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -121,11 +122,14 @@ const tryJoin = () => {
 
 onMounted(async () => {
   const gameData = await GameManagementService.getJoinMeta(gameId);
-  isLoading.value = false;
+  const [game] = unwrapBackendError(gameData);
+  if (game) {
+    isLoading.value = false;
 
-  gameName.value = gameData.name;
-  needsValidation = gameData.needsValidation;
-  tryJoin();
+    gameName.value = game.name;
+    needsValidation = game.needsValidation;
+    tryJoin();
+  }
 });
 </script>
 

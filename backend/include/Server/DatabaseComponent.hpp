@@ -23,6 +23,7 @@ struct r_LoginUser {
     bool successful;
     ulong puid;
     std::string sid;
+    int error_code;
 };
 
 class Database {

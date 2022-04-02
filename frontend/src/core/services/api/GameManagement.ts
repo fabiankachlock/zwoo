@@ -1,10 +1,11 @@
 import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './apiConfig';
+import { BackendErrorAble, parseBackendError } from './errors';
 
-export type GameStatusResponse = {
+export type GameStatusResponse = BackendErrorAble<{
   id: number;
   name: string;
-};
+}>;
 
 export type GameMeta = {
   id: number;
@@ -13,10 +14,12 @@ export type GameMeta = {
   playerCount: number;
 };
 
-export type GameJoinMeta = {
+export type GameMetaResponse = BackendErrorAble<GameMeta>;
+
+export type GameJoinMeta = BackendErrorAble<{
   name: string;
   needsValidation: boolean;
-};
+}>;
 
 export type GamesList = GameMeta[];
 
@@ -61,7 +64,14 @@ export class GameManagementService {
         opcode: 1 // join as host / create game
       })
     });
-    const result = await req.json();
+
+    if (req.status !== 200) {
+      return {
+        error: parseBackendError(await req.text())
+      };
+    }
+
+    const result = (await req.json()) as { guid: number };
 
     return {
       id: result.guid,
@@ -110,8 +120,13 @@ export class GameManagementService {
       })
     });
 
-    const result = await req.json();
+    if (req.status !== 200) {
+      return {
+        error: parseBackendError(await req.text())
+      };
+    }
 
+    const result = (await req.json()) as { guid: number };
     return {
       id: result.guid,
       name: _DummyGames.find(g => g.id === gameId)?.name ?? 'no-game-name'

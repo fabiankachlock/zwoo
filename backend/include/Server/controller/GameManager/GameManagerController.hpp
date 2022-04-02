@@ -11,6 +11,7 @@
 
 #include "Server/controller/Authentication/AuthenticationController.hpp"
 #include "Server/dto/GameManagerDTO.hpp"
+#include "Server/controller/error.h"
 
 #include <string>
 #include <unordered_map>
@@ -67,26 +68,26 @@ public:
     ENDPOINT("POST", "game/join", join_game, HEADER(String, ocookie, "Cookie"), BODY_DTO(Object<JoinGameDTO>, data))
     {
         if (data->opcode == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Opcode Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Opcode Missing", e_Errors::OPCODE_MISSING)));
         else if (data->opcode == 1)
         {
             if (data->name.getValue("") == "")
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Game Name Missing"));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Game Name Missing", e_Errors::GAME_NAME_MISSING)));
         }
         else if (data->opcode == 2 || data->opcode == 3)
         {
             if (data->guid == 0)
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Gameid 0 is not valid!"));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Gameid 0 is not valid!", e_Errors::INVALID_GAMEID)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Wrong Opcode"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Invalid Opcode", e_Errors::INVALID_OPCODE)));
 
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
         auto usr = m_database->getUser(usrc.puid);
@@ -112,13 +113,13 @@ public:
                     {
                         if (game->second.is_private)
                             if (game->second.password != data->password.getValue(""))
-                                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Password not matching!"));
+                                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Password not matching!", e_Errors::PASSWORD_NOT_MATCHING)));
 
                         auto p = game->second.player.find(usr->_id);
                         if (p == game->second.player.end())
                             game->second.player.insert({ usr->_id, data->opcode });
                         else
-                            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Already in this Game!"));
+                            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Already in this Game!",e_Errors::ALREADY_INGAME)));
                         printGames();
                     }
                 }
@@ -126,10 +127,10 @@ public:
                 return setupResponseWithCookieHeaders(createResponse(Status::CODE_200, "{\"guid\":\"" + std::to_string(guid) + "\"}"));
             }
             else
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
     }
     ENDPOINT_INFO(join_game) {
         info->summary = "An Endpoint to join a game.";
@@ -145,10 +146,10 @@ public:
         printGames();
         std::string cookie = ocookie.getValue("");
         if (cookie.length() == 0)
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
         auto spos = cookie.find("auth=");
         if (spos < 0 || spos > cookie.length())
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Cookie Missing"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Cookie Missing", e_Errors::COOKIE_MISSING)));
 
         auto usrc = getCookieAuthData(decrypt(decodeBase64(cookie.substr(spos + 5, cookie.find(';', spos) - spos - 5))));
 
@@ -163,10 +164,10 @@ public:
                 game->second.player.erase(p);
             }
             else
-                 return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "Can't join game!"));
+                 return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("Can't join game!", e_Errors::JOIN_FAILED)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "Game Not Found!"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructErrorMessage("Game Not Found!", e_Errors::GAME_NOT_FOUND)));
 
         auto usr = m_database->getUser(usrc.puid);
 
@@ -186,10 +187,10 @@ public:
                 return res;
             }
             else
-                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, "session id not matching!"));
+                return setupResponseWithCookieHeaders(createResponse(Status::CODE_401, constructErrorMessage("session id not matching!", e_Errors::SESSION_ID_NOT_MATCHING)));
         }
         else
-            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, "User Not Found!"));
+            return setupResponseWithCookieHeaders(createResponse(Status::CODE_404, constructErrorMessage("User Not Found!", e_Errors::USER_NOT_FOUND)));
 
     }
     ENDPOINT_INFO(join) {

@@ -8,7 +8,6 @@
       <Version />
       <UpdateDaemon />
     </div>
-    <div class="h-12"></div>
   </div>
 </template>
 

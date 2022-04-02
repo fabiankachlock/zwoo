@@ -11,3 +11,6 @@ updates:
       interval: "monthly"
     assignees:
       - "fabiankachlock"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]
