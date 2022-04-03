@@ -20,6 +20,9 @@
 #include "Server/logger/logger.h"
 
 #include "Server/DatabaseComponent.hpp"
+#include "Server/AuthorizationHandler.hpp"
+#include "Server/ZwooRequestInterceptor.hpp"
+#include "Server/ZwooResponseInterceptor.hpp"
 #ifdef BUILD_SWAGGER
 #include "Server/SwaggerComponent.hpp"
 #endif
@@ -66,6 +69,11 @@ public:
 
         auto httpconnectionHandler = oatpp::web::server::HttpConnectionHandler::createShared(router);
         httpconnectionHandler->setErrorHandler(std::make_shared<ErrorHandler>(objectMapper));
+
+        /* Add CORS-enabling interceptors */
+        httpconnectionHandler->addRequestInterceptor(std::make_shared<ZwooRequestInterceptor>());
+        httpconnectionHandler->addResponseInterceptor(std::make_shared<ZwooResponseInterceptor>());
+
         return httpconnectionHandler;
     }());
 
@@ -99,6 +107,14 @@ public:
         connectionHandler->setSocketInstanceListener(zil);
 
         return connectionHandler;
+    }());
+
+    OATPP_CREATE_COMPONENT(std::shared_ptr<ZwooAuthorizationHandler>, authHandler)
+    ([] {
+
+        OATPP_COMPONENT(std::shared_ptr<Database>, database);
+        auto _authHandler = std::make_shared<ZwooAuthorizationHandler>(database);
+        return _authHandler;
     }());
 };
 

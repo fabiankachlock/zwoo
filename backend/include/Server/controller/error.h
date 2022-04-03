@@ -29,5 +29,6 @@ enum e_Errors {
     ALREADY_INGAME = 146
 };
 
+// Return Response Maybe?
 std::string constructErrorMessage(std::string message, e_Errors code);
 #endif

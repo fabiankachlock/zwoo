@@ -15,7 +15,7 @@ find_package(CURL                  REQUIRED)
 find_package(mongocxx              REQUIRED)
 find_package(mailio                REQUIRED)
 
-option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
+option(BUILD_SWAGGER "Activate the build of Swagger Components" OFF)
 
 
 set(SRC_FILES
@@ -29,6 +29,9 @@ set(SRC_FILES
 
     "src/Server/ErrorHandler.cpp"
     "src/Server/DatabaseComponent.cpp"
+    "src/Server/AuthorizationHandler.cpp"
+    "src/Server/ZwooRequestInterceptor.cpp"
+    "src/Server/ZwooResponseInterceptor.cpp"
     "src/Server/logger/logger.cpp"
 
     "src/Server/controller/error.cpp"

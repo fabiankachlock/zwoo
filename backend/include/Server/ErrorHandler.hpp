@@ -19,7 +19,6 @@ public:
 
     std::shared_ptr<OutgoingResponse>
     handleError(const Status& status, const oatpp::String& message, const Headers& headers) override;
-
 };
 
 

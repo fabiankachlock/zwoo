@@ -1,18 +1,47 @@
 #include "HttpServer.h"
 
+#include "oatpp-mongo/bson/mapping/ObjectMapper.hpp"
+
+#include <mongocxx/client.hpp>
+#include <mongocxx/collection.hpp>
+#include <bsoncxx/json.hpp>
+#include <mongocxx/pool.hpp>
+#include <bsoncxx/document/value.hpp>
+
 #include "oatpp/network/Server.hpp"
 
 #include "oatpp-openssl/server/ConnectionProvider.hpp"
 #include "oatpp-openssl/Config.hpp"
 
-
 #include "Server/ServerComponent.hpp"
 #include "Server/controller/Authentication/AuthenticationController.hpp"
 #include "Server/controller/GameManager/GameManagerController.hpp"
 
+#include "utils/thread.h"
+
 #ifdef BUILD_SWAGGER
 #include "oatpp-swagger/Controller.hpp"
 #endif // BUILD_SWAGGER
+
+void databaseCleanup()
+{
+    auto logger = spdlog::get("BED");
+    logger->info("Database cleanup started...");
+
+    auto m_objectMapper = oatpp::mongo::bson::mapping::ObjectMapper::createShared();
+    // Connect to DB
+    auto m_pool = std::make_shared<mongocxx::pool>(mongocxx::uri(ZWOO_DATABASE_CONNECTION_STRING));
+    auto conn = m_pool->acquire();
+    auto collection = ( *conn ) ["zwoo"]["users"];
+    // Delete unverified users
+    oatpp::data::stream::BufferOutputStream stream;
+    m_objectMapper->write ( &stream, oatpp::Fields<oatpp::Boolean>({{"verified", false}}) );
+    bsoncxx::document::view view ( stream.getData(), stream.getCurrentPosition() );
+    
+    collection.delete_many(bsoncxx::document::value ( view ));
+
+    logger->info("Database cleanup finished!");
+}
 
 HttpServer::HttpServer()
 {
@@ -56,6 +85,8 @@ void HttpServer::RunServer()
 
         logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
 
+        timedFunction(databaseCleanup, 0, 1);
+
         server.run();
     }
     else
@@ -65,8 +96,9 @@ void HttpServer::RunServer()
         /* create server */
         oatpp::network::Server server(connectionProvider, connectionHandler);
 
-
         logger->log->info("Running on port {0}...", connectionProvider->getProperty("port").toString()->c_str());
+
+        timedFunction(databaseCleanup, 0, 1);
 
         server.run();
     }

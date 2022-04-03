@@ -123,7 +123,7 @@ r_LoginUser Database::loginUser(std::string email, std::string password)
 
 }
 
-bool Database::deleteUser(ulong puid, std::string sid, std::string password)
+bool Database::deleteUser(ulong puid, std::string password)
 {
     auto usr = getUser(puid);
     if (!usr)
@@ -138,7 +138,7 @@ bool Database::deleteUser(ulong puid, std::string sid, std::string password)
     hash.resize(24);
     std::string pw = "sha512:" + salt + ":" + hash;
 
-    if (pw == usr->password.getValue("") && usr->sid == sid && usr->sid != "")
+    if (pw == usr->password.getValue("") && usr->sid != "")
     {
         auto conn = m_pool->acquire();
         auto collection = (*conn)[m_databaseName][m_collectionName];
