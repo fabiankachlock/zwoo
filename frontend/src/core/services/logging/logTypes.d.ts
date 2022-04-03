@@ -1,5 +1,5 @@
 export type { DexieConstructor } from 'dexie';
-export type LogEntry = { date: number; log: string };
+export type LogEntry = { date: number; log: string; id: number };
 
 export interface LogStore {
 	isReady: boolean;

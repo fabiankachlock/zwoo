@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { BaseLogger, ExtendedLogger, LoggerInterface, ZwooLogger } from './logTypes';
+import { BaseLogger, ExtendedLogger, LogEntry, LoggerInterface, ZwooLogger } from './logTypes';
 
 let _Logger: ExtendedLogger = {
   name: 'global',
@@ -37,7 +37,8 @@ let LoggerBase: BaseLogger & { initialized: boolean } = {
 };
 
 let StoreRef = {
-  resetStore: () => {}
+  resetStore: () => {},
+  getAll: () => Promise.resolve([] as LogEntry[])
 };
 
 const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
@@ -48,6 +49,7 @@ const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
 
     const store = await storeModule.GetLogStore();
     StoreRef.resetStore = store.clear;
+    StoreRef.getAll = store.readAll;
     store.onReady(() => {
       _Logger.debug('log store ready');
       _Logger.debug('logger started');
@@ -100,7 +102,8 @@ export const Logger: ZwooLogger = {
 };
 
 export const LogStore = {
-  reset: () => StoreRef.resetStore()
+  reset: () => StoreRef.resetStore(),
+  getAll: () => StoreRef.getAll()
 };
 
 export default Logger;
