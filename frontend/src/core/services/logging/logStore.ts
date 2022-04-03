@@ -15,6 +15,7 @@ export async function GetLogStore(): Promise<LogStore> {
       });
       db.on('ready', () => {
         this.isReady = true;
+        this._readyHandler();
       });
     },
     async readAll(): Promise<LogEntry[]> {
@@ -25,6 +26,11 @@ export async function GetLogStore(): Promise<LogStore> {
     },
     async clear() {
       return db.table(TableName).clear();
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    _readyHandler: () => {},
+    onReady(handler: () => void) {
+      this._readyHandler = handler;
     }
   };
 

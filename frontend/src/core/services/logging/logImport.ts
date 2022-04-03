@@ -1,10 +1,10 @@
 /* eslint-disable */
-import { BaseLogger, LoggerInterface } from './logTypes';
+import { BaseLogger, ExtendedLogger, LoggerInterface, ZwooLogger } from './logTypes';
 
-export const Logger: LoggerInterface & { name: string } = {
-  name: '',
+export const Logger: ZwooLogger = {
+  name: 'global',
   createOne(_name): LoggerInterface & { name: string } {
-    return { ...Logger, name: _name ?? 'Global' };
+    return { ...Logger, name: _name ?? this.name };
   },
   info(msg) {
     LoggerBase.info(`[${this.name}] ${msg}`);
@@ -23,10 +23,14 @@ export const Logger: LoggerInterface & { name: string } = {
   },
   trace(error, msg) {
     LoggerBase.trace(error, `[${this.name}] ${msg}`);
-  }
+  },
+  Websocket: (this as unknown as LoggerInterface).createOne('ws'),
+  Api: (this as unknown as LoggerInterface).createOne('api'),
+  Zrp: (this as unknown as LoggerInterface).createOne('zrp')
 };
 
-let LoggerBase: BaseLogger = {
+let LoggerBase: BaseLogger & { initialized: boolean } = {
+  initialized: false,
   info() {},
   log() {},
   debug() {},
@@ -39,7 +43,23 @@ import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule =>
   const loggerModule = await import(/* webpackChunkName: "logging" */ './logger');
 
   const store = await storeModule.GetLogStore();
+  store.onReady(() => {
+    if (LoggerBase.initialized) {
+      LoggerBase.debug('log store ready');
+    } else {
+      store.addLogs([
+        {
+          date: Date.now(),
+          log: 'log stored ready'
+        }
+      ]);
+    }
+  });
   const loggerFactory = await loggerModule.GetLogger(store);
 
-  LoggerBase = loggerFactory();
+  LoggerBase = {
+    ...loggerFactory(),
+    initialized: true
+  };
+  LoggerBase.debug('logger started');
 });

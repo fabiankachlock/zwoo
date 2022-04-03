@@ -6,6 +6,7 @@ export interface LogStore {
 	readAll(): Promise<LogEntry[]>;
 	addLogs(logs: LogEntry[]): Promise<void>;
 	clear(): Promise<void>;
+	onReady(handler: () => void): void;
 }
 
 export interface BaseLogger {
@@ -18,5 +19,15 @@ export interface BaseLogger {
 }
 
 export interface LoggerInterface extends BaseLogger {
-	createOne(name?: string): BaseLogger;
+	createOne(name?: string): ExtendedLogger;
 }
+
+export interface ExtendedLogger extends LoggerInterface {
+	name: string;
+}
+
+export type ZwooLogger = ExtendedLogger & {
+	Websocket: ExtendedLogger;
+	Api: ExtendedLogger;
+	Zrp: ExtendedLogger;
+};

@@ -8,7 +8,7 @@ export async function GetLogger(store: LogStore): Promise<() => BaseLogger> {
       buffer: [] as LogEntry[],
       _pushBuffer(msg: string) {
         this.buffer.push({
-          date: new Date().getTime(),
+          date: Date.now(),
           log: msg
         });
         if (this.buffer.length >= MAX_BUFFER_SIZE) {
