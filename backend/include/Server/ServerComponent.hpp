@@ -9,7 +9,6 @@
 #include "oatpp/network/tcp/server/ConnectionProvider.hpp"
 #include "oatpp/web/server/HttpConnectionHandler.hpp"
 #include "oatpp/web/server/HttpRouter.hpp"
-#include "oatpp/web/server/interceptor/AllowCorsGlobal.hpp"
 #include "oatpp-websocket/ConnectionHandler.hpp"
 #include "oatpp/network/tcp/server/ConnectionProvider.hpp"
 
@@ -22,6 +21,8 @@
 
 #include "Server/DatabaseComponent.hpp"
 #include "Server/AuthorizationHandler.hpp"
+#include "Server/ZwooRequestInterceptor.hpp"
+#include "Server/ZwooResponseInterceptor.hpp"
 #ifdef BUILD_SWAGGER
 #include "Server/SwaggerComponent.hpp"
 #endif
@@ -70,8 +71,8 @@ public:
         httpconnectionHandler->setErrorHandler(std::make_shared<ErrorHandler>(objectMapper));
 
         /* Add CORS-enabling interceptors */
-        httpconnectionHandler->addRequestInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowOptionsGlobal>());
-        httpconnectionHandler->addResponseInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowCorsGlobal>());
+        httpconnectionHandler->addRequestInterceptor(std::make_shared<ZwooRequestInterceptor>());
+        httpconnectionHandler->addResponseInterceptor(std::make_shared<ZwooResponseInterceptor>());
 
         return httpconnectionHandler;
     }());

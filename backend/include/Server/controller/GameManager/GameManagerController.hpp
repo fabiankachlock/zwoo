@@ -125,6 +125,8 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+
+        info->addSecurityRequirement("Cookie");
     }
 
     ENDPOINT("GET", "game/join/{guid}", join, AUTHORIZATION(std::shared_ptr<UserAuthorizationObject>, usr), REQUEST(std::shared_ptr<IncomingRequest>, request), PATH(UInt32, guid, "guid"))
@@ -170,6 +172,8 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+
+        info->addSecurityRequirement("Cookie");
     }
 
     ENDPOINT("GET", "game/leaderboard", leaderboard)

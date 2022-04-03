@@ -30,6 +30,8 @@ set(SRC_FILES
     "src/Server/ErrorHandler.cpp"
     "src/Server/DatabaseComponent.cpp"
     "src/Server/AuthorizationHandler.cpp"
+    "src/Server/ZwooRequestInterceptor.cpp"
+    "src/Server/ZwooResponseInterceptor.cpp"
     "src/Server/logger/logger.cpp"
 
     "src/Server/controller/error.cpp"

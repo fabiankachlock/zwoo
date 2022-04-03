@@ -29,7 +29,6 @@ public:
     ZwooAuthorizationHandler(std::shared_ptr<Database> db);
 
     std::shared_ptr<AuthorizationObject> authorize(const oatpp::String& token) override;
-
 private:
     std::shared_ptr<Database> db;
 };

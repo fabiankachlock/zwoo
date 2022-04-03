@@ -45,7 +45,7 @@ public:
         return std::make_shared<AuthenticationController>(objectMapper);
     }
 
-    ENDPOINT("GET", "/hello-world", helloWorld)
+    ENDPOINT("GET", "/", helloWorld)
     {
         m_logger->log->debug("/GET hello-world");
         return createResponse(Status::CODE_200, R"({"message": "Hello World!"})");
@@ -146,7 +146,10 @@ public:
             m_logger->log->info("User {} successfully logged in!", login.puid);
             std::string out = encrypt(std::to_string(login.puid) + "," + login.sid);
             std::vector<uint8_t> vec(out.begin(), out.end());
-            auto res = createResponse(Status::CODE_200, "{\"token\": \"" + encodeBase64(vec) + "\"}");
+            out = encodeBase64(vec);
+            auto c = fmt::format("auth={0};Max-Age=604800;Domain={1};Path=/;HttpOnly{2}", out, ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
+            auto res = createResponse(Status::CODE_200, R"({"message": "Logged In"})");
+            res->putHeader("Set-Cookie", c);
             return res;
         }
         else
@@ -182,6 +185,8 @@ public:
         info->addResponse<Object<GetUserResponseDTO>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+
+        info->addSecurityRequirement("Cookie");
     }
 
     ENDPOINT("GET", "auth/logout", logout, AUTHORIZATION(std::shared_ptr<UserAuthorizationObject>, usr)) {
@@ -190,7 +195,10 @@ public:
         if (usr)
         {
             m_database->updateStringField("email", usr->email, "sid", "");
-            return createResponse(Status::CODE_200, R"({"message": "user logged out"})");;
+            auto res = createResponse(Status::CODE_200, R"({"message": "user logged out"})");
+            auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
+            res->putHeader("Set-Cookie", c);
+            return res;
         }
         else
             return createResponse(Status::CODE_501, R"({"code": 100})");
@@ -201,6 +209,8 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+
+        info->addSecurityRequirement("Cookie");
     }
 
     ENDPOINT("POST", "auth/delete", deleteUser, BODY_DTO(Object<DeleteUserDTO>, data), AUTHORIZATION(std::shared_ptr<UserAuthorizationObject>, usr)) {
@@ -211,7 +221,10 @@ public:
             if (m_database->deleteUser(usr->puid, data->password))
             {
                 m_logger->log->info("User {} successfully deleted", usr->puid);
-                return createResponse(Status::CODE_200, R"({ "message": "User Deleted!" })");
+                auto res = createResponse(Status::CODE_200, R"({ "message": "User Deleted!" })");
+                auto c = fmt::format("auth=;Max-Age=0;Domain={0};Path=/;HttpOnly{1}", ZWOO_DOMAIN, USE_SSL ? ";Secure" : "");
+                res->putHeader("Set-Cookie", c);
+                return res;
             }
         }
 
@@ -223,6 +236,8 @@ public:
         info->addResponse<Object<StatusDto>>(Status::CODE_200, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_404, "application/json");
         info->addResponse<Object<StatusDto>>(Status::CODE_500, "application/json");
+
+        info->addSecurityRequirement("Cookie");
     }
 };
 

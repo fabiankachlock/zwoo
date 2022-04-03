@@ -18,8 +18,6 @@ ZwooAuthorizationHandler::ZwooAuthorizationHandler(std::shared_ptr<Database> db)
 
  std::shared_ptr<oatpp::web::server::handler::AuthorizationObject> ZwooAuthorizationHandler::authorize(const oatpp::String &token)
 {
-    auto logger = spdlog::get("BED");
-
     auto data = decrypt(decodeBase64(token.getValue("")));
     auto pos = data.find(",");
     std::string p = data.substr(0, pos);

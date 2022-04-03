@@ -61,8 +61,8 @@ void HttpServer::RunServer()
 #ifdef BUILD_SWAGGER
     oatpp::web::server::api::Endpoints docEndpoints;
 
-    // docEndpoints.append(router->addController(AuthenticationController::createShared())->getEndpoints());
-    // docEndpoints.append(router->addController(GameManagerController::createShared())->getEndpoints());
+    docEndpoints.append(router->addController(AuthenticationController::createShared())->getEndpoints());
+    docEndpoints.append(router->addController(GameManagerController::createShared())->getEndpoints());
     router->addController(oatpp::swagger::Controller::createShared(docEndpoints));
 
     logger->log->info("Added Swagger Endpoint: http://localhost:8000/swagger/ui");
