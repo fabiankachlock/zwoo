@@ -11,7 +11,7 @@ export async function GetLogStore(): Promise<LogStore> {
     isReady: false,
     construct() {
       db.version(1).stores({
-        [TableName]: 'date, log'
+        [TableName]: '++id, date, log'
       });
       db.on('ready', () => {
         this.isReady = true;
