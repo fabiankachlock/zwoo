@@ -6,14 +6,17 @@ export async function GetLogger(store: LogStore): Promise<() => BaseLogger> {
   function LoggerFactory() {
     const _Logger = {
       buffer: [] as LogEntry[],
+      _saveBuffer() {
+        store.addLogs(this.buffer);
+        this.buffer = [];
+      },
       _pushBuffer(msg: string) {
         this.buffer.push({
           date: Date.now(),
           log: msg
         } as LogEntry);
         if (this.buffer.length >= MAX_BUFFER_SIZE) {
-          store.addLogs(this.buffer);
-          this.buffer = [];
+          this._saveBuffer();
         }
       },
       log(msg: string) {
@@ -34,6 +37,9 @@ export async function GetLogger(store: LogStore): Promise<() => BaseLogger> {
       trace(error: Error, msg: string) {
         this._pushBuffer(`[trace] ${msg} ${error.stack}`);
       }
+    };
+    window.onbeforeunload = () => {
+      _Logger._saveBuffer();
     };
     return _Logger;
   }
