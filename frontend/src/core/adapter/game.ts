@@ -8,6 +8,8 @@ import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
 import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
+let initializedGameModules = false;
+
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
     gameId: -1,
@@ -57,10 +59,21 @@ export const useGameConfig = defineStore('game-config', {
         this.connect();
       }
     },
+    async _initGameModules(): Promise<void> {
+      if (!initializedGameModules) {
+        // TODO: revisit this when working on code splitting
+        const _LobbyModule = await import('./play/lobby');
+        _LobbyModule.useLobbyStore().__init__();
+        initializedGameModules = true;
+      }
+    },
     async connect() {
-      this._connection = new ZRPWebsocketAdapter(Backend.getDynamicUrl(Endpoint.Websocket, { id: this.gameId.toString() }), this.gameId.toString());
-      const events = useGameEvents();
-      this._connection.readMessages(events.handleIncomingEvent);
+      await this._initGameModules();
+      setTimeout(() => {
+        this._connection = new ZRPWebsocketAdapter(Backend.getDynamicUrl(Endpoint.Websocket, { id: this.gameId.toString() }), this.gameId.toString());
+        const events = useGameEvents();
+        this._connection.readMessages(events.handleIncomingEvent);
+      }, 0);
     },
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
       if (this._connection) {

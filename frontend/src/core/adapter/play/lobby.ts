@@ -3,9 +3,9 @@ import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { ZRPAllLobbyPlayersPayload, ZRPJoinedGamePayload, ZRPLeftGamePayload, ZRPOPCode, ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { arrayDiff } from '@/core/services/utils';
+import { I18nInstance } from '@/i18n';
 
 export type LobbyPlayer = {
   id: string;
@@ -32,7 +32,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const spectators = ref<LobbyPlayer[]>([]);
   const dispatchEvent = useGameEventDispatch();
   const snackbar = useSnackbar();
-  const translations = useI18n();
+  const translations = I18nInstance;
 
   const _receiveMessage: typeof lobbyWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerJoined) {
@@ -127,12 +127,14 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   lobbyWatcher.onMessage(_receiveMessage);
   lobbyWatcher.onClose(reset);
+  lobbyWatcher.onOpen(setup);
 
   return {
     players: players,
     spectators: spectators,
     kickPlayer,
     promotePlayer,
-    setup
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   };
 });
