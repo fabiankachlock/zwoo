@@ -43,15 +43,21 @@
         </p>
       </div>
     </div>
+    <div class="absolute top-2 right-2">
+      <router-link to="/settings">
+        <Icon icon="gg:close" class="tc-main text-2xl" />
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import RuleSwitch from '@/components/waiting/RuleSwitch.vue';
 import { onMounted, ref, watch } from 'vue';
 import { LogStore } from '@/core/services/logging/logImport';
 import { LogEntry } from '@/core/services/logging/logTypes';
+import RuleSwitch from '@/components/waiting/RuleSwitch.vue';
+import { Icon } from '@iconify/vue';
 
 const { t } = useI18n();
 let storedLogs = ref<LogEntry[]>([]);
