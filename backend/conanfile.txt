@@ -8,7 +8,7 @@ mongo-cxx-driver/3.6.6
 mailio/0.20.0
 
 boost/1.78.0
-openssl/1.1.1m
+openssl/1.1.1n
 libcurl/7.80.0
 
 fmt/8.1.1
