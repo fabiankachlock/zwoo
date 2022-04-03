@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { BaseLogger, ExtendedLogger, LoggerInterface, ZwooLogger } from './logTypes';
 
-export const Logger: ZwooLogger = {
+let _Logger: ExtendedLogger = {
   name: 'global',
   createOne(_name): LoggerInterface & { name: string } {
-    return { ...Logger, name: _name ?? this.name };
+    return { ..._Logger, name: _name ?? this.name };
   },
   info(msg) {
     LoggerBase.info(`[${this.name}] ${msg}`);
@@ -23,10 +23,7 @@ export const Logger: ZwooLogger = {
   },
   trace(error, msg) {
     LoggerBase.trace(error, `[${this.name}] ${msg}`);
-  },
-  Websocket: (this as unknown as LoggerInterface).createOne('ws'),
-  Api: (this as unknown as LoggerInterface).createOne('api'),
-  Zrp: (this as unknown as LoggerInterface).createOne('zrp')
+  }
 };
 
 let LoggerBase: BaseLogger & { initialized: boolean } = {
@@ -45,7 +42,18 @@ import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule =>
   const store = await storeModule.GetLogStore();
   store.onReady(() => {
     if (LoggerBase.initialized) {
-      LoggerBase.debug('log store ready');
+      _Logger.debug('log store ready');
+      _Logger.debug('logger started');
+      _Logger.debug('--start-config--');
+      _Logger.debug('VERSION: ' + process.env.VUE_APP_VERSION);
+      _Logger.debug('VERSION_HASH: ' + process.env.VUE_APP_VERSION_HASH);
+      _Logger.debug('DOMAIN: ' + process.env.VUE_APP_DOMAIN);
+      _Logger.debug('USE_BACKEND: ' + process.env.VUE_APP_USE_BACKEND);
+      _Logger.debug('BACKEND_URL: ' + process.env.VUE_APP_BACKEND_URL);
+      _Logger.debug('WS_OVERRIDE: ' + process.env.VUE_APP_WS_OVERRIDE);
+      _Logger.debug('I18N_LOCALE: ' + process.env.VUE_APP_I18N_LOCALE);
+      _Logger.debug('I18N_FALLBACK_LOCALE: ' + process.env.VUE_APP_I18N_FALLBACK_LOCALE);
+      _Logger.debug('--end-config--');
     } else {
       store.addLogs([
         {
@@ -61,5 +69,14 @@ import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule =>
     ...loggerFactory(),
     initialized: true
   };
-  LoggerBase.debug('logger started');
+  _Logger.debug('logger loaded');
 });
+
+export const Logger: ZwooLogger = {
+  ..._Logger,
+  Websocket: _Logger.createOne('ws'),
+  Api: _Logger.createOne('api'),
+  Zrp: _Logger.createOne('zrp')
+};
+
+export default Logger;

@@ -15,8 +15,10 @@ export async function GetLogStore(): Promise<LogStore> {
       });
       db.on('ready', () => {
         this.isReady = true;
+        console.info('log store ready');
         this._readyHandler();
       });
+      db.open();
     },
     async readAll(): Promise<LogEntry[]> {
       return db.table(TableName).toArray();

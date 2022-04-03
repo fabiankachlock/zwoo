@@ -1,7 +1,7 @@
 import { LogEntry, BaseLogger, LogStore } from './logTypes';
 
 export async function GetLogger(store: LogStore): Promise<() => BaseLogger> {
-  const MAX_BUFFER_SIZE = 30;
+  const MAX_BUFFER_SIZE = 10;
 
   function LoggerFactory() {
     const _Logger = {
