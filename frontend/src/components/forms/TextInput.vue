@@ -13,7 +13,7 @@
         :type="isPassword ? 'password' : 'text'"
         :id="id"
         :placeholder="placeholder"
-        @keyup="updateInput"
+        @input="updateInput"
       />
       <div class="my-2">
         <Error v-show="!isValid" :errors="error" />
