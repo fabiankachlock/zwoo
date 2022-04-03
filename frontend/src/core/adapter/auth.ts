@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { AuthenticationService } from '../services/api/Authentication';
+import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
 import { ReCaptchaResponse } from '../services/api/reCAPTCHA';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
@@ -29,10 +30,22 @@ export const useAuth = defineStore('auth', {
           username: status.username,
           isLoggedIn: status.isLoggedIn
         });
+      } else {
+        this.isLoggedIn = false;
+        const [, error] = unwrapBackendError(status);
+        if (error) {
+          throw getBackendErrorTranslation(error);
+        }
       }
     },
     async logout() {
       const status = await AuthenticationService.performLogout();
+      if (!status.isLoggedIn) {
+        const [, error] = unwrapBackendError(status);
+        if (error) {
+          throw getBackendErrorTranslation(error);
+        }
+      }
 
       this.$patch({
         username: '',
@@ -62,10 +75,22 @@ export const useAuth = defineStore('auth', {
           username: status.username,
           isLoggedIn: status.isLoggedIn
         });
+      } else {
+        this.isLoggedIn = false;
+        const [, error] = unwrapBackendError(status);
+        if (error) {
+          throw getBackendErrorTranslation(error);
+        }
       }
     },
     async deleteAccount(password: string) {
-      await AuthenticationService.performDeleteAccount(password);
+      const result = await AuthenticationService.performDeleteAccount(password);
+      if (!result.isLoggedIn) {
+        const [, error] = unwrapBackendError(result);
+        if (error) {
+          throw getBackendErrorTranslation(error);
+        }
+      }
 
       this.$patch({
         username: '',

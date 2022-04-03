@@ -18,7 +18,8 @@ export enum Endpoint {
   UserInfo = 'auth/user',
   DeleteAccount = 'auth/delete',
   JoinGame = 'game/join',
-  Websocket = 'game/join/:id:'
+  Websocket = 'game/join/:id:',
+  LeaderBoard = 'game/leaderboard'
 }
 
 export class Backend {
@@ -45,4 +46,9 @@ export class Backend {
 
     return url;
   }
+}
+
+export class Frontend {
+  public static domain = process.env.VUE_APP_DOMAIN ?? '';
+  public static url = `https://${Frontend.domain}`;
 }

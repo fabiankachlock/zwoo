@@ -83,7 +83,8 @@
     "tagline": "The Second Challenge",
     "login": "In Einen Bestehenden Account Einloggen",
     "create": "Einen Neuen Account Erstellen",
-    "tutorial": "Das Tutorial Spielen"
+    "tutorial": "Das Tutorial Spielen",
+    "leaderboard": "Bestenliste"
   },
   "home": {
     "create": "Spiel Erstellen",
@@ -100,6 +101,11 @@
     "spectate": "Zuschauen",
     "play": "Spielen"
   },
+  "leaderboard": {
+    "leaderboard": "Bestenliste",
+    "wins": "kein Spiel gewonnen | 1 Sieg | {count} Siege",
+    "failure": "Etwas ist schief gelaufen..."
+  },
   "errors": {
     "error": "Error",
     "invalidEmail": "Die Email ist ungültig",
@@ -111,7 +117,29 @@
     "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
     "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein.",
     "recaptcha": "Die Bot-Challenge muss bestanden sein.",
-    "inputTooLong": "Die Eingabe ist zu lang."
+    "inputTooLong": "Die Eingabe ist zu lang.",
+    "backend": {
+      "-1": "Unbekannter Fehler",
+      "100": "Fehler im Backend.",
+      "111": "Der Cookie fehlt.",
+      "112": "Der Nutzer konnte nicht gefunden werden.",
+      "113": "Die Passwörter stimmen nicht überein.",
+      "114": "Die SessionID stimmt nicht.",
+      "115": "Die Email ist ungültig.",
+      "116": "Der Benutzername ist ungültig.",
+      "117": "Das Passwort ist ungültig.",
+      "120": "Die Email wird bereits genutzt.",
+      "121": "Der Benutzername wird bereits genutzt.",
+      "122": "Der Account konnte nicht verifiziert werden.",
+      "135": "Der Benutzer konnte nicht gelöscht werden.",
+      "140": "Das Spiel konnt nicht gefunden werden.",
+      "141": "Der Name des Spiels fehlt.",
+      "142": "Dem Spiel konnt nicht begetreten werden.",
+      "143": "Der OPCode fehlt (dies ist ein interner fehler).",
+      "144": "Der OPCode is ungültig (dies ist ein interner fehler).",
+      "145": "Die Spiele ID ist ungültig.",
+      "146": "Du bist bereits in einem Spiel."
+    }
   },
   "version": "Version",
   "wait": {
@@ -195,6 +223,17 @@
       "on": "An",
       "off": "Aus"
     }
+  },
+  "summary": {
+    "winner": "Gewinner!",
+    "spectateAgain": "Weiter Zuschauen",
+    "startSpectating": "Zuschauen",
+    "leave": "Verlassen",
+    "startPlaying": "Mitspielen",
+    "playAgain": "Weiterspielen"
+  },
+  "util": {
+    "loading": "Wird geladen..."
   },
   "dialogs": {
     "promotePlayer": {

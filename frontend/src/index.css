@@ -128,3 +128,19 @@ html {
 	visibility: hidden;
 	display: none;
 }
+
+.max-height-ios {
+	height: 100vh;
+	max-height: calc(100vh - 100%);
+}
+
+.device-padding {
+	padding-top: env(safe-area-inset-top);
+	padding-right: env(safe-area-inset-right);
+	padding-bottom: env(safe-area-inset-bottom);
+	padding-left: env(safe-area-inset-left);
+}
+
+.padding-menu {
+	padding-top: 2.5rem;
+}

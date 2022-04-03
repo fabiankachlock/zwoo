@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full grid place-content-center p-5">
+  <div class="relative w-full p-5 py-10 max-w-lg mx-auto">
     <div class="w-full flex justify-center">
       <img style="max-width: 10rem" src="/img/logo/zwoo_logo_none.svg" alt="" />
     </div>
@@ -16,6 +16,12 @@
         <router-link class="link" to="/create-account">
           <Icon class="icon tc-secondary" icon="ic:outline-add-box" />
           <p class="tc-main-light">{{ t('landing.create') }}</p>
+        </router-link>
+      </div>
+      <div class="action bg-dark hover:bg-darkest">
+        <router-link class="link" to="/leaderboard">
+          <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
+          <p class="tc-main-light">{{ t('landing.leaderboard') }}</p>
         </router-link>
       </div>
       <div class="action bg-dark hover:bg-darkest">

@@ -1,7 +1,7 @@
 <template>
-  <div class="max-w-lg sm:w-full mx-auto h-full">
-    <div class="mx-4 sm:mx-0 pb-2">
-      <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-10">
+  <div class="max-w-lg sm:w-full mx-auto">
+    <div class="mx-4 sm:mx-0 pb-2 relative">
+      <div class="w-full flex flex-row justify-between items-center sticky -top-1 z-10 bg-main">
         <h2 class="tc-main text-4xl mb-2 py-3">{{ t('list.title') }}</h2>
         <div class="flex flex-nowrap">
           <button class="scan-code btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="scanCode">
@@ -21,7 +21,7 @@
           <QRCodeReader @close="onScanClose" />
         </FloatingDialog>
       </div>
-      <div class="relative overflow-y-scroll pt-6 max-h-full">
+      <div class="relative pt-6">
         <div class="relative flex flex-col flex-nowrap">
           <div
             v-for="game of games"

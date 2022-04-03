@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full grid place-content-center p-5">
+  <div class="relative w-full p-5 py-10 max-w-lg mx-auto">
     <div class="w-full flex justify-center">
       <img style="max-width: 10rem" src="/img/logo/zwoo_logo_none.svg" alt="" />
     </div>
@@ -30,6 +30,12 @@
             <p class="tc-main-light">{{ t('home.stats') }}</p>
           </router-link>
         </div>
+      </div>
+      <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
+        <router-link class="flex flex-row items-center" to="/leaderboard">
+          <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
+          <p class="tc-main-light inline-block mx-1">{{ t('landing.leaderboard') }}</p>
+        </router-link>
       </div>
       <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
         <router-link class="flex flex-row items-center" to="/tutorial">
