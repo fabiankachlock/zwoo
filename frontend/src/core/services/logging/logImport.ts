@@ -36,41 +36,47 @@ let LoggerBase: BaseLogger & { initialized: boolean } = {
   trace() {}
 };
 
-import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule => {
-  const loggerModule = await import(/* webpackChunkName: "logging" */ './logger');
+const setupLogger = () => {
+  import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule => {
+    const loggerModule = await import(/* webpackChunkName: "logging" */ './logger');
 
-  const store = await storeModule.GetLogStore();
-  store.onReady(() => {
-    if (LoggerBase.initialized) {
-      _Logger.debug('log store ready');
-      _Logger.debug('logger started');
-      _Logger.debug('--start-config--');
-      _Logger.debug('VERSION: ' + process.env.VUE_APP_VERSION);
-      _Logger.debug('VERSION_HASH: ' + process.env.VUE_APP_VERSION_HASH);
-      _Logger.debug('DOMAIN: ' + process.env.VUE_APP_DOMAIN);
-      _Logger.debug('USE_BACKEND: ' + process.env.VUE_APP_USE_BACKEND);
-      _Logger.debug('BACKEND_URL: ' + process.env.VUE_APP_BACKEND_URL);
-      _Logger.debug('WS_OVERRIDE: ' + process.env.VUE_APP_WS_OVERRIDE);
-      _Logger.debug('I18N_LOCALE: ' + process.env.VUE_APP_I18N_LOCALE);
-      _Logger.debug('I18N_FALLBACK_LOCALE: ' + process.env.VUE_APP_I18N_FALLBACK_LOCALE);
-      _Logger.debug('--end-config--');
-    } else {
-      store.addLogs([
-        {
-          date: Date.now(),
-          log: 'log stored ready'
-        }
-      ]);
-    }
+    const store = await storeModule.GetLogStore();
+    store.onReady(() => {
+      if (LoggerBase.initialized) {
+        _Logger.debug('log store ready');
+        _Logger.debug('logger started');
+        _Logger.debug('--start-config--');
+        _Logger.debug('VERSION: ' + process.env.VUE_APP_VERSION);
+        _Logger.debug('VERSION_HASH: ' + process.env.VUE_APP_VERSION_HASH);
+        _Logger.debug('DOMAIN: ' + process.env.VUE_APP_DOMAIN);
+        _Logger.debug('USE_BACKEND: ' + process.env.VUE_APP_USE_BACKEND);
+        _Logger.debug('BACKEND_URL: ' + process.env.VUE_APP_BACKEND_URL);
+        _Logger.debug('WS_OVERRIDE: ' + process.env.VUE_APP_WS_OVERRIDE);
+        _Logger.debug('I18N_LOCALE: ' + process.env.VUE_APP_I18N_LOCALE);
+        _Logger.debug('I18N_FALLBACK_LOCALE: ' + process.env.VUE_APP_I18N_FALLBACK_LOCALE);
+        _Logger.debug('--end-config--');
+      } else {
+        store.addLogs([
+          {
+            date: Date.now(),
+            log: 'log stored ready'
+          }
+        ]);
+      }
+    });
+    const loggerFactory = await loggerModule.GetLogger(store);
+
+    LoggerBase = {
+      ...loggerFactory(),
+      initialized: true
+    };
+    _Logger.debug('logger loaded');
   });
-  const loggerFactory = await loggerModule.GetLogger(store);
+};
 
-  LoggerBase = {
-    ...loggerFactory(),
-    initialized: true
-  };
-  _Logger.debug('logger loaded');
-});
+if (localStorage.getItem('zwoo:logging') === 'true') {
+  setupLogger();
+}
 
 export const Logger: ZwooLogger = {
   ..._Logger,
