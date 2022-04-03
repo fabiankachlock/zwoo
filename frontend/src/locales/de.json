@@ -259,5 +259,14 @@
       "playerLeft": "{0} hat das Spiel verlassen",
       "spectatorLeft": "{0} hat das Spiel verlassen"
     }
+  },
+  "logging": {
+    "title": "Logs",
+    "console": "Konsole",
+    "store": "Speicher (IndexedDB)",
+    "storedCount": "keine Logs gespeichert | ein Eintrag | {count} Einträge",
+    "clearStore": "Speicher leeren",
+    "reloadLogs": "Logs neu laden",
+    "storedLogs": "Gespeicherte Logs"
   }
 }

@@ -259,5 +259,14 @@
       "playerLeft": "{0} left",
       "spectatorLeft": "{0} left"
     }
+  },
+  "logging": {
+    "title": "Logs",
+    "console": "Console",
+    "store": "Store (IndexedDB)",
+    "storedCount": "no logs stored | 1 entry | {count} entries",
+    "clearStore": "Clear Store",
+    "reloadLogs": "Reload Logs",
+    "storedLogs": "Stored Logs"
   }
 }

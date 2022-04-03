@@ -32,7 +32,7 @@
       <h2 class="text-xl tc-main mb-4">{{ t('logging.storedLogs') }}</h2>
       <div class="relative border bc-invert-darkest m-2 rounded overflow-scroll h-[60vh] whitespace-nowrap">
         <p v-for="log of storedLogs" :key="log.id" class="tc-main-secondary font-mono text-sm" style="letter-spacing: -0.5px">
-          <span class="w-10">
+          <span class="mr-1 italic text-xs">
             {{
               new Date(log.date).toLocaleDateString('de', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })
             }}
