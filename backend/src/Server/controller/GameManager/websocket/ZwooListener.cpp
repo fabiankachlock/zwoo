@@ -37,6 +37,9 @@ void ZwooListener::readMessage(const WebSocket& socket, v_uint8 opcode, p_char8 
               logger->log->debug("Get All Players!");
               connector->getAllPlayersInLobby(m_data.guid, m_data.puid);
               break;
+          case e_ZRPOpCodes::PLAYER_LEAVE:
+              logger->log->debug("Player Leave!");
+              connector->leaveGame(m_data.guid, m_data.puid);
           default:
               logger->log->debug("Unknown Code {0}!", code);
               break;

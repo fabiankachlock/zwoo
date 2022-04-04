@@ -15,7 +15,11 @@ void ZRPConnector::addWebSocket(uint32_t guid, uint32_t puid, std::shared_ptr<Zw
 {
     auto game = game_websockets.find(guid);
     if (game != game_websockets.end())
+    {
+        if (game->second[puid] != nullptr)
+            game->second[puid]->websocket.sendClose(1005, "");
         game->second[puid] = listener;
+    }
     else
         game_websockets[guid] = { { puid, listener } };
 
@@ -73,7 +77,6 @@ void ZRPConnector::removeWebSocket(uint32_t guid, uint32_t puid)
         logger->log->critical("No game with GameID {0} found can not remove WebSocket!", guid);
 }
 
-
 void ZRPConnector::sendMessage(uint32_t guid, uint32_t puid, std::string data)
 {
     auto send_message = json_mapper->readFromString<oatpp::Object<SendMessage>>(removeZRPCode(data));
@@ -119,6 +122,18 @@ void ZRPConnector::getAllPlayersInLobby(uint32_t guid, uint32_t puid)
         auto out = createMessage((int)e_ZRPOpCodes::ALL_PLAYERS_IN_LOBBY, json_mapper->writeToString(players));
         sender->websocket.sendOneFrameText(out);
     }
+}
+
+void ZRPConnector::leaveGame(uint32_t guid, uint32_t puid)
+{
+    auto game = game_websockets.find(guid);
+    auto sender = getSocket(guid, puid);
+    if (game != game_websockets.end() && sender != nullptr)
+    {
+        sender->websocket.sendClose(1000, "");
+    }
+    else
+        logger->log->critical("No peer with ID {0} found can not remove WebSocket!", puid);
 }
 
 void ZRPConnector::printWebsockets()
