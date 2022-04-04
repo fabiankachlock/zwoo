@@ -26,8 +26,8 @@ class ZwooAuthorizationHandler
     : public oatpp::web::server::handler::BearerAuthorizationHandler
 {
 
-    typedef oatpp::web::protocol::http::HttpError HttpError;
-    typedef oatpp::web::protocol::http::Status Status;
+    using HttpError = oatpp::web::protocol::http::HttpError;
+    using Status = oatpp::web::protocol::http::Status;
 
   public:
     ZwooAuthorizationHandler( std::shared_ptr<Database> db );

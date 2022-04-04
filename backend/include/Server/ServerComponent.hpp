@@ -29,7 +29,6 @@ class ServerComponent
   public:
     ServerComponent( std::shared_ptr<Logger> _logger ) : p_logger( _logger ) {}
 
-  public:
 #ifdef BUILD_SWAGGER
     SwaggerComponent swaggerComponent;
 #endif

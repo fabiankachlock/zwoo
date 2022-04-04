@@ -5,11 +5,11 @@
 #include <boost/archive/iterators/binary_from_base64.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
 #include <chrono>
+#include <cstdlib>
 #include <ctime>
 #include <fmt/format.h>
 #include <iostream>
 #include <random>
-#include <stdlib.h>
 #include <unistd.h>
 #include <zwoo.h>
 

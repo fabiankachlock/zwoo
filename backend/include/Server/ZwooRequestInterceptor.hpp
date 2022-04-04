@@ -7,8 +7,8 @@ class ZwooRequestInterceptor
     : public oatpp::web::server::interceptor::RequestInterceptor
 {
   public:
-    typedef oatpp::web::protocol::http::incoming::Request IncomingRequest;
-    typedef oatpp::web::protocol::http::outgoing::Response OutgoingResponse;
+    using IncomingRequest = oatpp::web::protocol::http::incoming::Request;
+    using OutgoingResponse = oatpp::web::protocol::http::outgoing::Response;
 
     std::shared_ptr<OutgoingResponse>
     intercept( const std::shared_ptr<IncomingRequest> &request ) override;

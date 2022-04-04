@@ -59,7 +59,6 @@ class GameManagerController : public oatpp::web::server::api::ApiController
         setDefaultAuthorizationHandler( authHandler );
     }
 
-  public:
     static std::shared_ptr<GameManagerController> createShared(
         OATPP_COMPONENT( std::shared_ptr<ObjectMapper>,
                          objectMapper ) // Inject objectMapper component here as

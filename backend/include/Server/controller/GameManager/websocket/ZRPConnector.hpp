@@ -19,7 +19,6 @@ class ZRPConnector
                        std::shared_ptr<ZwooListener> listener );
     void removeWebSocket( uint32_t guid, uint32_t puid );
 
-  public:
     void sendMessage( uint32_t guid, uint32_t puid, std::string data );
 
     void getAllPlayersInLobby( uint32_t guid, uint32_t puid );

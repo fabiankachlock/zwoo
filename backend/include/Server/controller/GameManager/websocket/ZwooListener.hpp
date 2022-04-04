@@ -41,7 +41,6 @@ class ZwooListener : public oatpp::websocket::WebSocket::Listener
     ListenerData m_data;
     const WebSocket &websocket;
 
-  public:
     /**
      * Called on "ping" frame.
      */
