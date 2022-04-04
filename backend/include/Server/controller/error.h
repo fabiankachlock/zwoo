@@ -3,7 +3,8 @@
 
 #include <string>
 
-enum e_Errors {
+enum e_Errors
+{
     BACKEND_ERROR = 100,
 
     COOKIE_MISSING = 111,
@@ -30,5 +31,5 @@ enum e_Errors {
 };
 
 // Return Response Maybe?
-std::string constructErrorMessage(std::string message, e_Errors code);
+std::string constructErrorMessage( std::string message, e_Errors code );
 #endif

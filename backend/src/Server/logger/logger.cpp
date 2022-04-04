@@ -1,23 +1,27 @@
 #include "Server/logger/logger.h"
 
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <chrono>
-#include <iomanip>
-#include <vector>
-
-#include <spdlog/sinks/stdout_color_sinks.h>
 #include "spdlog/sinks/daily_file_sink.h"
 
-void Logger::init(std::string name)
+#include <chrono>
+#include <iomanip>
+#include <iostream>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <sstream>
+#include <string>
+#include <vector>
+
+void Logger::init( std::string name )
 {
     std::vector<spdlog::sink_ptr> log_sinks;
-    log_sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-    log_sinks.emplace_back(std::make_shared<spdlog::sinks::daily_file_format_sink_mt>("logs/%d-%m-%Y_%H:%M:%S-log.txt", 23, 59, false, 3));
+    log_sinks.emplace_back(
+        std::make_shared<spdlog::sinks::stdout_color_sink_mt>( ) );
+    log_sinks.emplace_back(
+        std::make_shared<spdlog::sinks::daily_file_format_sink_mt>(
+            "logs/%d-%m-%Y_%H:%M:%S-log.txt", 23, 59, false, 3 ) );
 
-    log = std::make_shared<spdlog::logger>(name, begin(log_sinks), end(log_sinks));
-    spdlog::register_logger(log);
-    log->set_level(spdlog::level::debug);
-    log->flush_on(spdlog::level::debug);
+    log = std::make_shared<spdlog::logger>( name, begin( log_sinks ),
+                                            end( log_sinks ) );
+    spdlog::register_logger( log );
+    log->set_level( spdlog::level::debug );
+    log->flush_on( spdlog::level::debug );
 }

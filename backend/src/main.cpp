@@ -1,9 +1,9 @@
 #include "HttpServer.h"
 
-int main()
+int main( )
 {
-    auto server = HttpServer();
-    server.RunServer();
+    auto server = HttpServer( );
+    server.RunServer( );
 
-    exit(0);
+    exit( 0 );
 }

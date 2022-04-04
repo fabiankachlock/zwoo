@@ -1,13 +1,15 @@
 #ifndef _ZRPCODES_H_
 #define _ZRPCODES_H_
 
-enum e_Roles {
+enum e_Roles
+{
     HOST = 1,
     PLAYER = 2,
     SPECTATOR = 3
 };
 
-enum e_ZRPOpCodes {
+enum e_ZRPOpCodes
+{
     // General
     PLAYER_JOINED = 100,
     SPECTATOR_JOINED = 101,

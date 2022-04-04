@@ -3,13 +3,15 @@
 
 #include "oatpp/web/server/interceptor/RequestInterceptor.hpp"
 
-class ZwooRequestInterceptor : public oatpp::web::server::interceptor::RequestInterceptor {
-public:
+class ZwooRequestInterceptor
+    : public oatpp::web::server::interceptor::RequestInterceptor
+{
+  public:
+    using IncomingRequest = oatpp::web::protocol::http::incoming::Request;
+    using OutgoingResponse = oatpp::web::protocol::http::outgoing::Response;
 
-    typedef oatpp::web::protocol::http::incoming::Request IncomingRequest;
-    typedef oatpp::web::protocol::http::outgoing::Response OutgoingResponse;
-
-    std::shared_ptr<OutgoingResponse> intercept(const std::shared_ptr<IncomingRequest>& request) override;
+    std::shared_ptr<OutgoingResponse>
+    intercept( const std::shared_ptr<IncomingRequest> &request ) override;
 };
 
 #endif // _ZWOO_REQUEST_INTERCEPTOR_HPP
