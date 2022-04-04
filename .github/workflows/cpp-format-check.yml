@@ -19,6 +19,7 @@ jobs:
           style: file
           extensions: 'cpp,hpp,h'
           tidy-checks: '-*'
+          thread-comments: false
 
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
