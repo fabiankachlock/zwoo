@@ -18,6 +18,7 @@ jobs:
         with:
           style: file
           extensions: 'cpp,hpp,h'
+          tidy-checks: '-*'
 
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
