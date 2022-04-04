@@ -29,17 +29,26 @@ void ZwooListener::readMessage(const WebSocket& socket, v_uint8 opcode, p_char8 
 
         switch(code)
         {
-          case e_ZRPOpCodes::SEND_MESSAGE:
-              logger->log->debug("Send Message!");
-              connector->sendMessage(m_data.guid, m_data.puid, wholeMessage);
-              break;
-          case e_ZRPOpCodes::GET_ALL_PLAYERS_IN_LOBBY:
-              logger->log->debug("Get All Players!");
-              connector->getAllPlayersInLobby(m_data.guid, m_data.puid);
-              break;
-          default:
-              logger->log->debug("Unknown Code {0}!", code);
-              break;
+            case e_ZRPOpCodes::SEND_MESSAGE:
+                connector->sendMessage(m_data.guid, m_data.puid, wholeMessage);
+                break;
+            case e_ZRPOpCodes::GET_ALL_PLAYERS_IN_LOBBY:
+                connector->getAllPlayersInLobby(m_data.guid, m_data.puid);
+                break;
+            case e_ZRPOpCodes::PLAYER_LEAVE:
+                connector->leaveGame(m_data.guid, m_data.puid);
+                break;
+            case e_ZRPOpCodes::SPECTATOR_TO_PLAYER:
+                break;
+            case e_ZRPOpCodes::PLAYER_TO_SPECTATOR:
+                break;
+            case e_ZRPOpCodes::PLAYER_TO_HOST: // Maybe username in body
+                break;
+            case e_ZRPOpCodes::KICK_PLAYER:
+                break;
+            default:
+                logger->log->debug("Unknown Code {0}!", code);
+                break;
         }
 
     }
