@@ -61,6 +61,16 @@ void ZRPConnector::removeWebSocket(uint32_t guid, uint32_t puid)
                     ps_joined->wins = sender->m_data.wins;
                     ps_joined->role = sender->m_data.role;
 
+                    if (sender->m_data.role == e_Roles::HOST)
+                    {
+                        auto new_host = game->second.begin()->second;
+
+                        for (const auto&[k, v] : game->second)
+                            if (v != sender && v != new_host)
+                                v->websocket.sendOneFrameText(createMessage(e_ZRPOpCodes::NEW_HOST, "{\"username\": \"" + new_host->m_data.username + "\"}"));
+                        new_host->websocket.sendOneFrameText(createMessage(e_ZRPOpCodes::YOU_ARE_HOST_NOW, "{}"));
+                    }
+
                     auto out = createMessage((sender->m_data.role == (int)e_Roles::SPECTATOR) ? (int)e_ZRPOpCodes::SPECTATOR_LEFT : (int)e_ZRPOpCodes::PLAYER_LEFT, json_mapper->writeToString(ps_joined));
 
                     for (const auto&[k, v] : game->second)
@@ -135,6 +145,8 @@ void ZRPConnector::leaveGame(uint32_t guid, uint32_t puid)
     else
         logger->log->critical("No peer with ID {0} found can not remove WebSocket!", puid);
 }
+
+
 
 void ZRPConnector::printWebsockets()
 {
