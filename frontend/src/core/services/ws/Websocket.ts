@@ -29,7 +29,7 @@ export class GameWebsocket {
   };
 
   private handleError = (evt: Event) => {
-    Logger.Websocket.warn(`error event: ${evt}`);
+    Logger.Websocket.warn(`error event: ${JSON.stringify(evt)}`);
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._ConnectionError,
@@ -43,7 +43,7 @@ export class GameWebsocket {
   };
 
   private handleClose = (evt: CloseEvent) => {
-    Logger.Websocket.debug(`close event: ${evt}`);
+    Logger.Websocket.debug(`close event: ${JSON.stringify(evt)}`);
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._ConnectionClosed,
