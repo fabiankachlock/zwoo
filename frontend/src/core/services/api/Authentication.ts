@@ -17,13 +17,11 @@ export type AuthenticationStatus =
       isLoggedIn?: false;
     }>;
 
-const logger = Logger.createOne('api');
-
 export class AuthenticationService {
   static getUserInfo = async (): Promise<AuthenticationStatus> => {
-    logger.log('fetching user auth status');
+    Logger.Api.log('fetching user auth status');
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
-      console.log('getting user info');
+      Logger.Api.debug('mocking auth status response');
       return {
         isLoggedIn: false
       };
@@ -35,6 +33,7 @@ export class AuthenticationService {
     });
 
     if (response.status !== 200) {
+      Logger.Api.warn('received erroneous response while fetching user auth status');
       return {
         isLoggedIn: false,
         error: parseBackendError(await response.text())
@@ -50,9 +49,9 @@ export class AuthenticationService {
   };
 
   static performLogin = async (email: string, password: string): Promise<AuthenticationStatus> => {
-    logger.log('logging in');
+    Logger.Api.log(`logging in as ${email}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
-      console.log('login:', { email, password });
+      Logger.Api.debug('mocking login response');
       return {
         username: 'test-user',
         email: 'test@test.com',
@@ -70,6 +69,7 @@ export class AuthenticationService {
     });
 
     if (response.status !== 200) {
+      Logger.Api.warn('received erroneous response while logging in');
       return {
         isLoggedIn: false,
         error: parseBackendError(await response.text())
@@ -80,8 +80,9 @@ export class AuthenticationService {
   };
 
   static performLogout = async (): Promise<AuthenticationStatus> => {
+    Logger.Api.log('performing logout action');
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
-      console.log('logout:');
+      Logger.Api.debug('mocking logout response');
       return {
         isLoggedIn: false
       };
@@ -93,6 +94,7 @@ export class AuthenticationService {
     });
 
     if (response.status !== 200) {
+      Logger.Api.warn('received erroneous response while logging out');
       return {
         isLoggedIn: false,
         error: parseBackendError(await response.text())
@@ -105,8 +107,9 @@ export class AuthenticationService {
   };
 
   static performCreateAccount = async (username: string, email: string, password: string): Promise<AuthenticationStatus> => {
+    Logger.Api.log(`performing create account action of ${username} with ${email}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
-      console.log('create Account:', { username, email, password });
+      Logger.Api.debug('mocking create account response');
       return {
         username: 'test-user',
         email: 'test@test.com',
@@ -124,6 +127,7 @@ export class AuthenticationService {
     });
 
     if (response.status !== 200) {
+      Logger.Api.warn('received erroneous response while creating an account');
       return {
         isLoggedIn: false,
         error: parseBackendError(await response.text())
@@ -136,8 +140,9 @@ export class AuthenticationService {
   };
 
   static performDeleteAccount = async (password: string): Promise<AuthenticationStatus> => {
+    Logger.Api.log('performing delete account action');
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
-      console.log('delete account');
+      Logger.Api.debug('mocking delete account response');
       return {
         isLoggedIn: false
       };
@@ -152,6 +157,7 @@ export class AuthenticationService {
     });
 
     if (response.status !== 200) {
+      Logger.Api.warn('received erroneous response while deleting account');
       return {
         isLoggedIn: false,
         error: parseBackendError(await response.text())
