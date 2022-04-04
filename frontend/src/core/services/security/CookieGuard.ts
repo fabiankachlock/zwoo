@@ -1,8 +1,10 @@
 import { RouterInterceptor } from '@/router/types';
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { useCookies } from '@/core/adapter/cookies';
+import Logger from '../logging/logImport';
 
 export class CookieGuard implements RouterInterceptor {
+  private static Logger = Logger.RouterGuard.createOne('cookies');
   static RecaptchaCookieRoutes = ['/login', '/create-account'];
 
   static matchesRoute = (route: string): boolean => {
@@ -16,10 +18,13 @@ export class CookieGuard implements RouterInterceptor {
     const needsCookie = CookieGuard.matchesRoute(to.fullPath);
 
     if (needsCookie) {
+      CookieGuard.Logger.debug('needs cookie approval');
       const cookies = useCookies();
       if (!cookies.cookies.recaptcha) {
+        CookieGuard.Logger.log('insufficient cookie settings');
         next('/missing-cookies');
       }
+      CookieGuard.Logger.debug('all fine!');
     }
     return false;
   };

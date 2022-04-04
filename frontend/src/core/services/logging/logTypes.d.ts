@@ -30,4 +30,5 @@ export type ZwooLogger = ExtendedLogger & {
 	Websocket: ExtendedLogger;
 	Api: ExtendedLogger;
 	Zrp: ExtendedLogger;
+	RouterGuard: ExtendedLogger;
 };
