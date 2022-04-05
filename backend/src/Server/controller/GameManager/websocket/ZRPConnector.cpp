@@ -166,6 +166,23 @@ void ZRPConnector::leaveGame( uint32_t guid, uint32_t puid )
             "No peer with ID {0} found can not remove WebSocket!", puid );
 }
 
+void ZRPConnector::kickPlayer( uint32_t guid, uint32_t puid, std::string data )
+{
+    auto player = json_mapper->readFromString<oatpp::Object<KickPlayer>>(
+        removeZRPCode( data ) );
+    auto sender = getSocket( guid, puid );
+
+    if ( sender == nullptr )
+        return; // TODO: Send Error
+    if ( sender->m_data.role != e_Roles::HOST )
+        return; // TODO: Send Error
+
+    auto player_socket = getSocket( guid, player->name );
+    if ( player_socket == nullptr )
+        return; // TODO: Send Error
+    leaveGame( guid, player_socket->m_data.puid );
+}
+
 void ZRPConnector::printWebsockets( )
 {
     for ( const auto &[ k1, v1 ] : game_websockets )
@@ -185,6 +202,19 @@ std::string ZRPConnector::removeZRPCode( std::string data )
 std::string ZRPConnector::createMessage( int code, std::string data )
 {
     return std::to_string( code ) + "," + data;
+}
+
+std::shared_ptr<ZwooListener> ZRPConnector::getSocket( uint32_t guid,
+                                                       std::string name )
+{
+    auto game = game_websockets.find( guid );
+    if ( game != game_websockets.end( ) )
+    {
+        for ( const auto &[ k1, v1 ] : game->second )
+            if ( v1->m_data.username == name )
+                return v1;
+    }
+    return nullptr;
 }
 
 std::shared_ptr<ZwooListener> ZRPConnector::getSocket( uint32_t guid,
