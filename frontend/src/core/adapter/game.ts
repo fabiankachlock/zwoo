@@ -78,7 +78,7 @@ export const useGameConfig = defineStore('game-config', {
     },
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
       if (this._connection) {
-        Logger.Zrp.log(`[outgoing] ${code} ${payload}`);
+        Logger.Zrp.log(`[outgoing] ${code} ${JSON.stringify(payload)}`);
         this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
       }
     }
