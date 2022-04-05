@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import Logger from '../services/logging/logImport';
 
 export enum SnackBarPosition {
   Top,
@@ -39,15 +40,17 @@ export const useSnackbar = defineStore('snackbar', () => {
   const activeMessage = ref<SnackbarItem | undefined>(undefined);
   const activeTimeout = ref<number | undefined>(undefined);
   const messageStack = ref<SnackbarItem[]>([]);
+  const logger = Logger.createOne('snackbar');
 
   const pushMessage = (msg: SnackbarItem) => {
-    console.log('push');
+    logger.log('push one');
     if (activeMessage.value === undefined) {
       showMessage(msg);
       return;
     }
     // queue item
     if (msg.force === true) {
+      logger.log('forcing message');
       if (activeTimeout.value) {
         clearTimeout(activeTimeout.value);
       }

@@ -4,7 +4,8 @@
     "sections": {
       "general": "General",
       "game": "Game",
-      "danger": "Danger"
+      "danger": "Danger",
+      "developers": "Developer"
     },
     "update": {
       "available": "An update is available",
@@ -25,7 +26,9 @@
     "showCardDetail": "Show Card Detail before playing",
     "sortCards": "Sort cards in deck",
     "cookies": "Cookies",
-    "deleteAccount": "Delete Account"
+    "deleteAccount": "Delete Account",
+    "logging": "Logging",
+    "goToLogging": "Go to Settings"
   },
   "lng": {
     "de": "German",
@@ -256,5 +259,14 @@
       "playerLeft": "{0} left",
       "spectatorLeft": "{0} left"
     }
+  },
+  "logging": {
+    "title": "Logs",
+    "console": "Console",
+    "store": "Store (IndexedDB)",
+    "storedCount": "no logs stored | 1 entry | {count} entries",
+    "clearStore": "Clear Store",
+    "reloadLogs": "Reload Logs",
+    "storedLogs": "Stored Logs"
   }
 }

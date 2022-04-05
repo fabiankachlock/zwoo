@@ -10,6 +10,7 @@ import { AuthGuard } from '@/core/services/security/AuthGuard';
 import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptchaTerms';
 import { CookieGuard } from '@/core/services/security/CookieGuard';
 import { InGameGuard } from '@/core/services/security/GameGuard';
+import { DeveloperRoute } from './developer';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,6 +34,7 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   GameRoute,
+  DeveloperRoute,
   {
     path: '/:pathMatch(.*)*',
     component: CatchAll

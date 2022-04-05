@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.4.1",
+  "version": "0.5.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -21,6 +21,7 @@
   "dependencies": {
     "autoprefixer": "^10",
     "core-js": "^3.21.1",
+    "dexie": "^3.2.1",
     "pinia": "^2.0.11",
     "postcss": "^8",
     "register-service-worker": "^1.7.1",

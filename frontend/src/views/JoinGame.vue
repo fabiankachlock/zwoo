@@ -108,7 +108,6 @@ const joinAsSpectator = () => {
 };
 
 const tryJoin = () => {
-  console.log({ asPlayer, asSpectator, s: route.query['spectate'], p: route.query['play'] });
   if (!asSpectator && !asPlayer) {
     // no decision made
   } else if (!needsValidation) {

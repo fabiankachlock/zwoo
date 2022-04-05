@@ -1,3 +1,4 @@
+import Logger from '../logging/logImport';
 import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './apiConfig';
 import { BackendErrorAble, parseBackendError } from './errors';
@@ -46,8 +47,9 @@ const _DummyGames: GamesList = [
 
 export class GameManagementService {
   static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameStatusResponse> => {
-    console.log('create game:', { name, isPublic, password });
+    Logger.Api.log(`creating ${isPublic ? 'public' : 'non-public'} game ${name}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking create game response');
       return {
         id: 1,
         name: name
@@ -66,6 +68,7 @@ export class GameManagementService {
     });
 
     if (req.status !== 200) {
+      Logger.Api.warn('received erroneous response while creating game');
       return {
         error: parseBackendError(await req.text())
       };
@@ -81,11 +84,12 @@ export class GameManagementService {
 
   static listAll = async (): Promise<GamesList> => {
     // make api call
-    console.log('load games');
+    Logger.Api.log('fetching all games');
     return _DummyGames;
   };
 
   static getJoinMeta = async (gameId: number): Promise<GameJoinMeta> => {
+    Logger.Api.log(`fetching game ${gameId} meta`);
     return new Promise((res, rej) =>
       setTimeout(() => {
         const game = _DummyGames.find(g => g.id === gameId);
@@ -102,8 +106,9 @@ export class GameManagementService {
   };
 
   static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameStatusResponse> => {
-    console.log('join game', { gameId, password, role });
+    Logger.Api.log(`send join game ${gameId} request as ${role}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking join game response');
       return {
         id: gameId,
         name: _DummyGames.find(g => g.id === gameId)?.name ?? 'no-game-name'
@@ -121,6 +126,7 @@ export class GameManagementService {
     });
 
     if (req.status !== 200) {
+      Logger.Api.warn('received erroneous response while joining game');
       return {
         error: parseBackendError(await req.text())
       };
