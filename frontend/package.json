@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -16,6 +16,7 @@
     "format": "prettier --write \"src/**/*.{ts,vue,html,css,d.ts}\"",
     "format:ci": "prettier --check \"src/**/*.{ts,vue,html,css,d.ts}\"",
     "prepare": "cd .. && husky install frontend/.husky",
+    "postversion": "yarn setup:version && git add .env",
     "setup:version": "node ./scripts/version.js"
   },
   "dependencies": {
