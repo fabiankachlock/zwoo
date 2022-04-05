@@ -33,7 +33,7 @@ export class LeaderBoardService {
 
     const response = (await req.json()) as LeaderBoardResponse;
     // sort player to make sure
-    response.leaderboard = response.leaderboard.sort((a, b) => a.wins - b.wins);
+    response.leaderboard = response.leaderboard.sort((a, b) => b.wins - a.wins);
     return response;
   }
 }
