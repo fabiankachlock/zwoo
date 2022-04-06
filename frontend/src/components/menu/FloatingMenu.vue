@@ -23,15 +23,16 @@
 </template>
 
 <script setup lang="ts">
+import { useUserDefaults } from '@/composables/userDefaults';
 import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import DarkModeSwitch from '../settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '../settings/FullScreenSwitch.vue';
 import HomeButton from '../settings/HomeButton.vue';
 
 const config = useConfig();
-const isOpen = ref(false);
+const isOpen = useUserDefaults('floatingMenu:open', false);
 const toggleOpen = () => (isOpen.value = !isOpen.value);
 const visible = computed(() => config.showQuickMenu);
 </script>
