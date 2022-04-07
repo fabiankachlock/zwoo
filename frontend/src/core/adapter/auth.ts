@@ -52,7 +52,14 @@ export const useAuth = defineStore('auth', {
         isLoggedIn: status.isLoggedIn
       });
     },
-    async createAccount(username: string, email: string, password: string, repeatPassword: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async createAccount(
+      username: string,
+      email: string,
+      password: string,
+      repeatPassword: string,
+      recaptchaResponse: ReCaptchaResponse | undefined,
+      beta: string
+    ) {
       const usernameValid = new UsernameValidator().validate(username);
       if (!usernameValid.isValid) throw usernameValid.getErrors();
 
@@ -68,7 +75,7 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performCreateAccount(username, email, password);
+      const status = await AuthenticationService.performCreateAccount(username, email, password, beta);
 
       if (status.isLoggedIn) {
         this.$patch({
