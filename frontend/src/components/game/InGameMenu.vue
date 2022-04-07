@@ -1,38 +1,41 @@
 <template>
-  <div class="bg-darkest rounded-lg py-1 px-3 flex flex-row justify-between items-center">
-    <p class="tc-main text-xl">#GameName#</p>
-    <div class="relative">
-      <div @click="menuOpen = !menuOpen" class="tc-main text-2xl text-right cursor-pointer">
-        <Icon v-if="menuOpen" icon="akar-icons:cross"></Icon>
-        <Icon v-else icon="akar-icons:chevron-down"></Icon>
-      </div>
-      <div
-        :class="{ 'open-menu': menuOpen, 'h-0': !menuOpen }"
-        class="fixed left-0 right-0 w-screen transition-all overflow-hidden px-6 flex flex-nowrap justify-end"
-      >
-        <div class="relative bg-darkest w-full max-w-sm h-full menu-rounded-edges overflow-hidden" style="max-height: 70vh">
-          <div class="h-1.5"></div>
-          <div class="menu-rounded-edges menu-content border bc-invert-main border-t-0 py-1">
-            <div class="scroll-container overflow-y-scroll h-full max-h-full">
-              <div class="flex flex-col flex-nowrap">
-                <div class="menu-section">
-                  <p class="tc-main text-lg">#Options#</p>
-                  <div class="menu-options-container flex flex-row justify-end">
-                    <DarkModeSwitch />
-                    <FullScreenSwitch />
+  <div class="bg-darkest rounded-lg p-1 flex flex-row justify-between items-center">
+    <p class="tc-main text-xl" style="text-overflow: ellipsis; overflow: hidden">#GameName#</p>
+    <div class="flex-1 flex flex-row flex-nowrap justify-end items-center">
+      <EndTurnButton />
+      <div class="relative">
+        <div @click="menuOpen = !menuOpen" class="bg-main hover:bg-light p-2 rounded tc-main text-2xl text-right cursor-pointer">
+          <Icon v-if="menuOpen" icon="akar-icons:cross"></Icon>
+          <Icon v-else icon="akar-icons:chevron-down"></Icon>
+        </div>
+        <div
+          :class="{ 'open-menu': menuOpen, 'h-0': !menuOpen }"
+          class="fixed left-0 right-0 w-screen transition-all overflow-hidden px-6 flex flex-nowrap justify-end"
+        >
+          <div class="relative bg-darkest w-full max-w-sm h-full menu-rounded-edges overflow-hidden" style="max-height: 70vh">
+            <div class="h-1.5"></div>
+            <div class="menu-rounded-edges menu-content border bc-invert-main border-t-0 py-1">
+              <div class="scroll-container overflow-y-scroll h-full max-h-full">
+                <div class="flex flex-col flex-nowrap">
+                  <div class="menu-section">
+                    <p class="tc-main text-lg">#Options#</p>
+                    <div class="menu-options-container flex flex-row justify-end">
+                      <DarkModeSwitch />
+                      <FullScreenSwitch />
+                    </div>
                   </div>
-                </div>
-                <hr class="bc-invert-lightest opacity-40 my-1" />
-                <div class="menu-section">
-                  <p class="tc-main text-lg">#Actions#</p>
-                  <div>
-                    <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">#Leave#</button>
+                  <hr class="bc-invert-lightest opacity-40 my-1" />
+                  <div class="menu-section">
+                    <p class="tc-main text-lg">#Actions#</p>
+                    <div>
+                      <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">#Leave#</button>
+                    </div>
                   </div>
+                  <hr class="bc-invert-lightest opacity-40 my-1" />
+                  <GameChat />
+                  <hr class="bc-invert-lightest opacity-40 my-1" />
+                  <ChatInput />
                 </div>
-                <hr class="bc-invert-lightest opacity-40 my-1" />
-                <GameChat />
-                <hr class="bc-invert-lightest opacity-40 my-1" />
-                <ChatInput />
               </div>
             </div>
           </div>
@@ -51,6 +54,7 @@ import { useGameState } from '@/core/adapter/play/gameState';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import GameChat from './chat/GameChat.vue';
 import ChatInput from './chat/ChatInput.vue';
+import EndTurnButton from './EndTurnButton.vue';
 
 const stateStore = useGameState();
 const deckState = useGameCardDeck();

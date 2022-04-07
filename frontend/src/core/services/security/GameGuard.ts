@@ -5,8 +5,7 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import Logger from '../logging/logImport';
 
 export class InGameGuard implements RouterInterceptor {
-  static InGameRoutes: string[] = []; //GameRoute.children?.map(child => `${GameRoute.path ?? ''}/${child?.path ?? ''}`) ?? [];
-
+  static InGameRoutes: string[] = []; // GameRoute.children?.map(child => `${GameRoute.path ?? ''}/${child?.path ?? ''}`) ?? [];
   private Logger = Logger.RouterGuard.createOne('game');
 
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {

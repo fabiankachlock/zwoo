@@ -172,6 +172,9 @@
       "info": "Test rule description - optional extrem long text..."
     }
   },
+  "ingame": {
+    "endTurn": "End turn"
+  },
   "recaptcha": {
     "title": "I'm not a robot",
     "loading": "loading...",
