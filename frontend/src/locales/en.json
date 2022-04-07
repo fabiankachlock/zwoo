@@ -142,6 +142,14 @@
       "144": "The opcode is invalid (this is an internal error).",
       "145": "The game ID is invalid.",
       "146": "You are already in a game."
+    },
+    "zrp": {
+      "900": "Error occurred",
+      "901": "Connection error",
+      "911": "Disconnected",
+      "920": "Error occurred on client",
+      "921": "Received invalid data",
+      "930": "Connected!"
     }
   },
   "version": "Version",

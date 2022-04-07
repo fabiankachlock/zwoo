@@ -142,6 +142,14 @@
       "144": "Der OPCode is ungültig (dies ist ein interner fehler).",
       "145": "Die Spiele ID ist ungültig.",
       "146": "Du bist bereits in einem Spiel."
+    },
+    "zrp": {
+      "900": "Fehler aufgetreten",
+      "901": "Verbindungsfehler",
+      "911": "Verbindung getrennt",
+      "920": "Clientfehler aufgetreten",
+      "921": "Fehlerhafte Daten erhalten",
+      "930": "Verbunden!"
     }
   },
   "version": "Version",
