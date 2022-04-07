@@ -1,12 +1,12 @@
 <template>
   <div class="max-w-lg sm:w-full mx-auto h-full">
     <div class="mx-4 sm:mx-0 pb-2">
-      <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-10">
+      <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-0">
         <h2 class="tc-main text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
       </div>
       <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center tc-main">
         <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
-        <p class="text-xl tc-main">Loading...</p>
+        <p class="text-xl tc-main">{{ t('util.loading') }}</p>
       </div>
       <div v-else class="flex flex-row flex-wrap items-center justify-center tc-main">
         <button
@@ -62,6 +62,7 @@ import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '
 import { onMounted, ref } from 'vue';
 import { GameManagementService } from '@/core/services/api/GameManagement';
 import { useGameConfig } from '@/core/adapter/game';
+import { unwrapBackendError } from '@/core/services/api/errors';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -107,7 +108,6 @@ const joinAsSpectator = () => {
 };
 
 const tryJoin = () => {
-  console.log({ asPlayer, asSpectator, s: route.query['spectate'], p: route.query['play'] });
   if (!asSpectator && !asPlayer) {
     // no decision made
   } else if (!needsValidation) {
@@ -121,11 +121,14 @@ const tryJoin = () => {
 
 onMounted(async () => {
   const gameData = await GameManagementService.getJoinMeta(gameId);
-  isLoading.value = false;
+  const [game] = unwrapBackendError(gameData);
+  if (game) {
+    isLoading.value = false;
 
-  gameName.value = gameData.name;
-  needsValidation = gameData.needsValidation;
-  tryJoin();
+    gameName.value = game.name;
+    needsValidation = game.needsValidation;
+    tryJoin();
+  }
 });
 </script>
 

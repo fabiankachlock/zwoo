@@ -52,7 +52,7 @@ export enum ZRPOPCode {
   PlaceCardError = 434, // receiver
   // internal Errors
   _UnknownError = 900,
-  _ConnectionError = 900,
+  _ConnectionError = 901,
   _ConnectionClosed = 911,
   _ClientError = 920,
   _DecodingError = 921,

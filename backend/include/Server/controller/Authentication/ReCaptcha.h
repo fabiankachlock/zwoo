@@ -3,6 +3,6 @@
 
 #include <string>
 
-std::string verifyCaptcha(std::string token);
+std::string verifyCaptcha( std::string token );
 
 #endif

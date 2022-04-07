@@ -11,7 +11,7 @@ conan user -p $2 -r conan-remote $1
 mkdir build && cd build
 conan install .. -s compiler.libcxx=libstdc++11 --build
 
-if [ $4 = "OFF" ];
+if [ $4 = "ON" ];
 then
     BUILDTYPE=Debug
 else

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full grid place-content-center p-5">
+  <div class="relative w-full p-5 py-10 max-w-lg mx-auto">
     <div class="w-full flex justify-center">
       <img style="max-width: 10rem" src="/img/logo/zwoo_logo_none.svg" alt="" />
     </div>

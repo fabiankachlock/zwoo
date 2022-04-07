@@ -1,5 +1,9 @@
 <template>
-  <router-view />
+  <!-- reset stacking context -->
+  <div class="relative">
+    <router-view />
+  </div>
+
   <ConsentManager />
   <Snackbar />
 </template>

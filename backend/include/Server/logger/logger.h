@@ -4,12 +4,12 @@
 #include <spdlog/spdlog.h>
 #include <string>
 
+class Logger
+{
+  public:
+    Logger( ){ };
 
-class Logger {
-public:
-    Logger() {};
-
-    void init(std::string name);
+    void init( std::string name );
 
     std::shared_ptr<spdlog::logger> log;
 };

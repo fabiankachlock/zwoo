@@ -12,7 +12,7 @@
     >
       {{ message }}
     </p>
-    <p v-if="!isOwn" class="text-xs absolute -bottom-0.5 italic tc-main-secondary">{{ name }}</p>
+    <p v-if="!isOwn" class="text-xs absolute bottom-[-0.2rem] italic tc-main-secondary">{{ name }}</p>
   </div>
 </template>
 

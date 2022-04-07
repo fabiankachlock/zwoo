@@ -3,8 +3,8 @@
 
 #include <string>
 
-bool isValidEmail(std::string email);
-bool isValidPassword(std::string password);
-bool isValidUsername(std::string username);
+bool isValidEmail( std::string email );
+bool isValidPassword( std::string password );
+bool isValidUsername( std::string username );
 
 #endif // _AUTHENTICATION_VALIDATORS_H_

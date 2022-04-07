@@ -1,5 +1,6 @@
 import { ReCaptchaTermsVisibilityManager } from '../security/ReCaptchaTerms';
 import { Backend, Endpoint } from './apiConfig';
+import { BackendErrorAble, parseBackendError, unwrapBackendError } from './errors';
 
 export type ReCaptchaResponse = {
   success: boolean;
@@ -38,7 +39,8 @@ export class ReCaptchaService {
       const token = await grecaptcha.execute(ReCaptchaService.SITE_KEY, {
         action: 'login'
       });
-      return this.verify(token);
+      const [result] = unwrapBackendError(await this.verify(token));
+      return result;
     }
     if (process.env.VUE_APP_USE_BACKEND === 'true') {
       return Promise.resolve(undefined);
@@ -49,17 +51,24 @@ export class ReCaptchaService {
     });
   };
 
-  private verify = async (token: string): Promise<ReCaptchaResponse> => {
+  private verify = async (token: string): Promise<BackendErrorAble<ReCaptchaResponse>> => {
     if (process.env.VUE_APP_USE_BACKEND === 'true') {
-      return fetch(Backend.getUrl(Endpoint.Recaptcha), {
+      const req = await fetch(Backend.getUrl(Endpoint.Recaptcha), {
         method: 'POST',
         body: token
-      })
-        .then(res => res.json() as Promise<ReCaptchaResponse>)
-        .then(res => ({
-          success: res.success,
-          score: res.score
-        }));
+      });
+
+      if (req.status !== 200) {
+        return {
+          error: parseBackendError(await req.text())
+        };
+      }
+
+      const response = (await req.json()) as ReCaptchaResponse;
+      return {
+        success: response.success,
+        score: response.score
+      };
     }
     return Promise.resolve({
       success: true,

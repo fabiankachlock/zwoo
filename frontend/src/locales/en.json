@@ -4,7 +4,8 @@
     "sections": {
       "general": "General",
       "game": "Game",
-      "danger": "Danger"
+      "danger": "Danger",
+      "developers": "Developer"
     },
     "update": {
       "available": "An update is available",
@@ -25,7 +26,9 @@
     "showCardDetail": "Show Card Detail before playing",
     "sortCards": "Sort cards in deck",
     "cookies": "Cookies",
-    "deleteAccount": "Delete Account"
+    "deleteAccount": "Delete Account",
+    "logging": "Logging",
+    "goToLogging": "Go to Settings"
   },
   "lng": {
     "de": "German",
@@ -117,7 +120,29 @@
     "shouldContainSpecialChar": "Password should contain at least one special character.",
     "gameNameToShort": "Name should be at least 3 Characters long.",
     "recaptcha": "The Bot-Challenge must be passed.",
-    "inputTooLong": "Your input is too long."
+    "inputTooLong": "Your input is too long.",
+    "backend": {
+      "-1": "Unknown Error",
+      "100": "An error occurred in the backend.",
+      "111": "The cookie is missing.",
+      "112": "The user could not be found.",
+      "113": "The passwords don't match.",
+      "114": "The session ID is invalid.",
+      "115": "The email is invalid.",
+      "116": "The username is invalid.",
+      "117": "The password is invalid.",
+      "120": "The email is already used.",
+      "121": "The username is already used.",
+      "122": "The account could not be verified.",
+      "135": "The user could not be deleted.",
+      "140": "The game could not be found.",
+      "141": "The name of the game is missing.",
+      "142": "You could not join the game.",
+      "143": "The opcode is missing (this is an internal error).",
+      "144": "The opcode is invalid (this is an internal error).",
+      "145": "The game ID is invalid.",
+      "146": "You are already in a game."
+    }
   },
   "version": "Version",
   "wait": {
@@ -205,6 +230,17 @@
       "off": "Off"
     }
   },
+  "summary": {
+    "winner": "Winner!",
+    "spectateAgain": "Continue Spectating",
+    "startSpectating": "Spectate",
+    "leave": "Leave",
+    "startPlaying": "Join Playing",
+    "playAgain": "Play Again"
+  },
+  "util": {
+    "loading": "Wird geladen..."
+  },
   "dialogs": {
     "promotePlayer": {
       "title": "Promote {0} to a host?",
@@ -221,10 +257,19 @@
   },
   "snackbar": {
     "lobby": {
-      "playerJoined": "Player {0} joined aksuzdgzasd iauzduskazd hb jasdhkgkjh d ois dlas",
+      "playerJoined": "Player {0} joined",
       "spectatorJoined": "Spectator {0} joined",
       "playerLeft": "{0} left",
       "spectatorLeft": "{0} left"
     }
+  },
+  "logging": {
+    "title": "Logs",
+    "console": "Console",
+    "store": "Store (IndexedDB)",
+    "storedCount": "no logs stored | 1 entry | {count} entries",
+    "clearStore": "Clear Store",
+    "reloadLogs": "Reload Logs",
+    "storedLogs": "Stored Logs"
   }
 }
