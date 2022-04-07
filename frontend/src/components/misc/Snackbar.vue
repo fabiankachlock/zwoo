@@ -5,7 +5,11 @@
         <p class="text-sm tc-main">
           {{ msg.needsTranslation ? t(msg.message) : msg.message }}
         </p>
-        <button v-if="msg.showClose" @click="close()" class="ml-2 p-1 pr-0 tc-main-dark bg-main hover:bg-dark rounded">
+        <button
+          v-if="msg.showClose !== undefined ? msg.showClose : true"
+          @click="close()"
+          class="ml-2 p-1 tc-main-dark bg-main hover:bg-dark rounded"
+        >
           <Icon icon="akar-icons:cross" class="text-xs" />
         </button>
       </div>
