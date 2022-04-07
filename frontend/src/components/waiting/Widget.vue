@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { defineProps, onMounted, ref } from 'vue';
+import { defineProps, defineEmits, onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -41,17 +41,36 @@ const props = defineProps<{
   title: string;
   widgetClass?: string;
   buttonClass?: string;
-  defaultOpen?: boolean;
+  modelValue?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', isOpen: boolean): void;
+  (event: 'toggle', isOpen: boolean): void;
 }>();
 
 const isOpen = ref(false);
+const { modelValue } = toRefs(props);
+if (modelValue) {
+  watch(modelValue, value => {
+    if (value === undefined) return;
+    if (value !== isOpen.value) {
+      emit('toggle', value);
+    }
+    isOpen.value = value;
+  });
+}
 
 const toggleOpenState = () => {
   isOpen.value = !isOpen.value;
+  emit('toggle', isOpen.value);
+  emit('update:modelValue', isOpen.value);
 };
 
 onMounted(() => {
-  isOpen.value = props.defaultOpen ?? false;
+  if (isOpen.value !== props.modelValue ?? false) {
+    toggleOpenState();
+  }
 });
 </script>
 
