@@ -3,12 +3,14 @@
 
 #include "Server/logger/logger.h"
 
-class HttpServer {
-public:
-    HttpServer();
+class HttpServer
+{
+  public:
+    HttpServer( );
 
-    void RunServer();
-private:
+    void RunServer( );
+
+  private:
     std::shared_ptr<Logger> logger;
 };
 

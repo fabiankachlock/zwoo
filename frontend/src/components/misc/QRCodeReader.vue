@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import Logger from '@/core/services/logging/logImport';
 import { defineEmits, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
@@ -123,7 +124,7 @@ const render = async () => {
       }
     }
   } catch (e: unknown) {
-    console.log(e);
+    Logger.error(`${JSON.stringify(e)}`);
     status.value = t('join.nothingFound');
   }
 };

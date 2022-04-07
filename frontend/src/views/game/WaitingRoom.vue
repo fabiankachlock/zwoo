@@ -47,8 +47,6 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { onMounted } from 'vue';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
 import PlayersWidget from '@/components/waiting/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/waiting/widgets/RulesWidget.vue';
 import SpectatorsWidget from '@/components/waiting/widgets/SpectatorsWidget.vue';
@@ -57,13 +55,8 @@ import { useIsHost } from '@/composables/userRoles';
 import { useGameConfig } from '@/core/adapter/game';
 
 const { t } = useI18n();
-const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
 const { isHost } = useIsHost();
-
-onMounted(() => {
-  lobby.setup();
-});
 </script>
 
 <style>

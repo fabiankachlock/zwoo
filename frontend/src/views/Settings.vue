@@ -5,10 +5,10 @@
       <SettingsSectionGeneral />
       <SettingsSectionGame />
       <SettingsSectionDanger />
-      <Version />
+      <SettingsSectionDevelopers v-if="showDevSettings" />
+      <Version @click="clickVersion()" />
       <UpdateDaemon />
     </div>
-    <div class="h-12"></div>
   </div>
 </template>
 
@@ -19,6 +19,18 @@ import Version from '@/components/misc/Version.vue';
 import SettingsSectionGame from '@/components/settings/sections/SettingsSectionGame.vue';
 import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
 import SettingsSectionDanger from '@/components/settings/sections/SettingsSectionDanger.vue';
+import SettingsSectionDevelopers from '@/components/settings/sections/SettingsSectionDevelopers.vue';
+import { ref } from 'vue';
 
 const { t } = useI18n();
+const showDevSettings = ref(localStorage.getItem('zwoo:dev-settings') === 'true');
+
+let clicks = 0;
+const clickVersion = () => {
+  clicks++;
+  if (clicks === 10) {
+    localStorage.setItem('zwoo:dev-settings', 'true');
+    showDevSettings.value = true;
+  }
+};
 </script>

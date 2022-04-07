@@ -1,21 +1,36 @@
 #ifndef _ZRPCODES_H_
 #define _ZRPCODES_H_
 
-enum e_Roles {
+enum e_Roles
+{
     HOST = 1,
     PLAYER = 2,
     SPECTATOR = 3
 };
 
-enum e_ZRPOpCodes {
+enum e_ZRPOpCodes
+{
+    // General
     PLAYER_JOINED = 100,
     SPECTATOR_JOINED = 101,
     PLAYER_LEFT = 102,
     SPECTATOR_LEFT = 103,
     SEND_MESSAGE = 104,
     RECEIVE_MESSAGE = 105,
+    PLAYER_LEAVE = 106,
     GET_ALL_PLAYERS_IN_LOBBY = 108,
-    ALL_PLAYERS_IN_LOBBY = 109
+    ALL_PLAYERS_IN_LOBBY = 109,
+    SPECTATOR_TO_PLAYER = 110,
+    PLAYER_TO_SPECTATOR = 111,
+    PLAYER_TO_HOST = 112,
+    YOU_ARE_HOST_NOW = 113,
+    NEW_HOST = 114,
+    KICK_PLAYER = 115,
+    PLAYER_CHANGED_ROLE = 116
+
+    // Lobby
+
+    // Game
 };
 
 #endif

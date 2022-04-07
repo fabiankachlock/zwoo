@@ -5,10 +5,12 @@ import { createZRPOPCodeMatcher, ZRPMatcher } from './zrpMatcher';
 
 export class MonolithicEventWatcher<EventType extends ZRPOPCode[]> {
   private _matcher: ZRPMatcher<EventType[number]>;
+  private events: EventType;
 
   private stopWatcher: WatchStopHandle | undefined;
 
   constructor(...events: EventType) {
+    this.events = events;
     this._matcher = createZRPOPCodeMatcher(ZRPOPCode._Connected, ZRPOPCode._ConnectionClosed, ...events);
     this.stopWatcher = undefined;
     this.restart();

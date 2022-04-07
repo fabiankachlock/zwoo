@@ -1,0 +1,23 @@
+ 
+name: Backend Docker Pipeline
+
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
+
+jobs:
+  backend-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Backend Image with Swagger
+        working-directory: ./backend
+        run: 'docker build . -f ./DebugDockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:swagger --build-arg conan_user=${{ secrets.CONAN_USER }} --build-arg conan_password=${{ secrets.CONAN_PASSWORD }} --build-arg conan_remote=${{ secrets.CONAN_REMOTE }}'
+      - name: Log into JFrog
+        run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
+      - name: Push Image
+        run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:swagger'
