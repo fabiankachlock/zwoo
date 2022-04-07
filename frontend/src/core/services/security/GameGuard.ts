@@ -8,7 +8,6 @@ export class InGameGuard implements RouterInterceptor {
   static InGameRoutes: string[] = []; // GameRoute.children?.map(child => `${GameRoute.path ?? ''}/${child?.path ?? ''}`) ?? [];
   private Logger = Logger.RouterGuard.createOne('game');
 
-
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
     if (InGameGuard.InGameRoutes.includes(to.path)) {
       this.Logger.debug(`${to.fullPath} needs active game`);
