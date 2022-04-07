@@ -33,8 +33,14 @@ export class MonolithicEventWatcher<EventType extends ZRPOPCode[]> {
   private eventHandler = (msg: ZRPMessage<EventType[number] | ZRPOPCode._ConnectionClosed | ZRPOPCode._Connected>) => {
     if (msg.code === ZRPOPCode._Connected) {
       this._openHandler();
+      if (this.events.includes(ZRPOPCode._Connected)) {
+        this._msgHandler(msg as ZRPMessage<EventType[number]>);
+      }
     } else if (msg.code === ZRPOPCode._ConnectionClosed) {
       this._closeHandler();
+      if (this.events.includes(ZRPOPCode._ConnectionClosed)) {
+        this._msgHandler(msg as ZRPMessage<EventType[number]>);
+      }
     } else {
       this._msgHandler(msg);
     }

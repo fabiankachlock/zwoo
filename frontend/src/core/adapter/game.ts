@@ -63,8 +63,8 @@ export const useGameConfig = defineStore('game-config', {
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {
         // TODO: revisit this when working on code splitting
-        const _LobbyModule = await import('./play/lobby');
-        _LobbyModule.useLobbyStore().__init__();
+        (await import('./play/lobby')).useLobbyStore().__init__();
+        (await import('./play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
         initializedGameModules = true;
       }
     },
