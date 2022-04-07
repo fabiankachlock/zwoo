@@ -1,5 +1,7 @@
 #include "Server/controller/GameManager/websocket/ZRPConnector.hpp"
 
+#include <algorithm>
+
 #include "Server/controller/GameManager/websocket/ZRPCodes.h"
 #include "Server/dto/ZRPMessageDTO.hpp"
 
@@ -39,10 +41,8 @@ void ZRPConnector::addWebSocket( uint32_t guid, uint32_t puid,
                                ? (int)e_ZRPOpCodes::SPECTATOR_JOINED
                                : (int)e_ZRPOpCodes::PLAYER_JOINED,
                            json_mapper->writeToString( ps_joined ) );
-
-        for ( const auto &[ k, v ] : game->second )
-            if ( v != listener )
-                v->websocket.sendOneFrameText( out );
+        
+        std::for_each(game->second.begin(), game->second.end(), [out, listener](auto i){ if (i != listener) i->websocket.sendOneFrameText(out); });
     }
 }
 
@@ -192,6 +192,11 @@ void ZRPConnector::printWebsockets( )
             logger->log->info( "  {0}: {1},", k2,
                                v2->m_data.username.getValue( "" ) );
     }
+}
+
+void ZRPConnector::sendZRPMessageToGame(uint32_t guid uint32_t puid_exclude, std::string message)
+{
+    std::for_each(game->second.begin(), game->second.end(), [out, listener](auto i){ if (i != listener) i->websocket.sendOneFrameText(out); });
 }
 
 std::string ZRPConnector::removeZRPCode( std::string data )
