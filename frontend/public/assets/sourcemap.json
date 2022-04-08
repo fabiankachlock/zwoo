@@ -1,0 +1,69 @@
+{
+  "__default__": {
+    "dark": {
+      "back": [
+        "back_dark.svg"
+      ],
+      "front": [
+        "front_dark_1_1.svg",
+        "front_dark_1_2.svg",
+        "front_dark_1_3.svg",
+        "front_dark_1_4.svg",
+        "front_dark_1_5.svg",
+        "front_dark_1_6.svg",
+        "front_dark_1_7.svg",
+        "front_dark_1_8.svg",
+        "front_dark_1_9.svg",
+        "front_dark_1_a.svg",
+        "front_dark_1_b.svg",
+        "front_dark_1_c.svg",
+        "front_dark_1_d.svg",
+        "front_dark_2_1.svg",
+        "front_dark_2_2.svg",
+        "front_dark_2_3.svg",
+        "front_dark_2_4.svg",
+        "front_dark_2_5.svg",
+        "front_dark_2_6.svg",
+        "front_dark_2_7.svg",
+        "front_dark_2_8.svg",
+        "front_dark_2_9.svg",
+        "front_dark_2_a.svg",
+        "front_dark_2_b.svg",
+        "front_dark_2_c.svg",
+        "front_dark_2_d.svg",
+        "front_dark_3_1.svg",
+        "front_dark_3_2.svg",
+        "front_dark_3_3.svg",
+        "front_dark_3_4.svg",
+        "front_dark_3_5.svg",
+        "front_dark_3_6.svg",
+        "front_dark_3_7.svg",
+        "front_dark_3_8.svg",
+        "front_dark_3_9.svg",
+        "front_dark_3_a.svg",
+        "front_dark_3_b.svg",
+        "front_dark_3_c.svg",
+        "front_dark_3_d.svg",
+        "front_dark_4_1.svg",
+        "front_dark_4_2.svg",
+        "front_dark_4_3.svg",
+        "front_dark_4_4.svg",
+        "front_dark_4_5.svg",
+        "front_dark_4_6.svg",
+        "front_dark_4_7.svg",
+        "front_dark_4_8.svg",
+        "front_dark_4_9.svg",
+        "front_dark_4_a.svg",
+        "front_dark_4_b.svg",
+        "front_dark_4_c.svg",
+        "front_dark_4_d.svg",
+        "front_dark_5_e.svg",
+        "front_dark_5_f.svg"
+      ]
+    },
+    "light": {
+      "back": [],
+      "front": []
+    }
+  }
+}

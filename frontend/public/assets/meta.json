@@ -1,0 +1,11 @@
+{
+  "themes": [
+    "__default__"
+  ],
+  "files": {
+    "__default__": {
+      "dark": "__default__.dark.json",
+      "light": "__default__.light.json"
+    }
+  }
+}
