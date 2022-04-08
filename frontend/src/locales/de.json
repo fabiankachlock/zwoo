@@ -58,6 +58,7 @@
     "password": "Passwort",
     "create": "Erstellen",
     "passwordRepeat": "Passwort Wiederholen",
+    "beta": "BETA Code",
     "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
   },
   "createGame": {

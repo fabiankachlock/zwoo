@@ -106,7 +106,7 @@ export class AuthenticationService {
     };
   };
 
-  static performCreateAccount = async (username: string, email: string, password: string): Promise<AuthenticationStatus> => {
+  static performCreateAccount = async (username: string, email: string, password: string, beta?: string): Promise<AuthenticationStatus> => {
     Logger.Api.log(`performing create account action of ${username} with ${email}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking create account response');
@@ -122,7 +122,8 @@ export class AuthenticationService {
       body: JSON.stringify({
         username: username,
         email: email,
-        password: password
+        password: password,
+        code: beta
       })
     });
 

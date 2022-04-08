@@ -10,9 +10,11 @@
       "
         autocomplete=""
         class="bg-dark shadow appearance-none border bc-main rounded w-full py-2 px-3 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
+        :name="id"
         :type="isPassword ? 'password' : 'text'"
         :id="id"
         :placeholder="placeholder"
+        :value="modelValue"
         @input="updateInput"
       />
       <div class="my-2">
