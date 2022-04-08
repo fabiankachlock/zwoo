@@ -41,8 +41,6 @@ void ZRPConnector::addWebSocket( uint32_t guid, uint32_t puid,
                                ? (int)e_ZRPOpCodes::SPECTATOR_JOINED
                                : (int)e_ZRPOpCodes::PLAYER_JOINED,
                            json_mapper->writeToString( ps_joined ) );
-        
-        std::for_each(game->second.begin(), game->second.end(), [out, listener](auto i){ if (i != listener) i->websocket.sendOneFrameText(out); });
     }
 }
 
@@ -68,14 +66,22 @@ void ZRPConnector::removeWebSocket( uint32_t guid, uint32_t puid )
 
                     if ( sender->m_data.role == e_Roles::HOST )
                     {
-                        auto new_host = game->second.begin( )->second;
-
+                        std::shared_ptr<ZwooListener> new_host;
                         for ( const auto &[ k, v ] : game->second )
-                            if ( v != sender && v != new_host )
-                                v->websocket.sendOneFrameText( createMessage(
-                                    e_ZRPOpCodes::NEW_HOST,
-                                    "{\"username\": \"" +
-                                        new_host->m_data.username + "\"}" ) );
+                            if ( v != sender &&
+                                 v->m_data.role == e_Roles::PLAYER )
+                            {
+                                new_host = v;
+                                break;
+                            }
+
+                        sendZRPMessageToGame(
+                            guid, new_host->m_data.puid,
+                            createMessage( e_ZRPOpCodes::NEW_HOST,
+                                           "{\"username\": \"" +
+                                               new_host->m_data.username +
+                                               "\"}" ) );
+
                         new_host->websocket.sendOneFrameText( createMessage(
                             e_ZRPOpCodes::YOU_ARE_HOST_NOW, "{}" ) );
                     }
@@ -86,9 +92,7 @@ void ZRPConnector::removeWebSocket( uint32_t guid, uint32_t puid )
                             : (int)e_ZRPOpCodes::PLAYER_LEFT,
                         json_mapper->writeToString( ps_joined ) );
 
-                    for ( const auto &[ k, v ] : game->second )
-                        if ( v != sender )
-                            v->websocket.sendOneFrameText( out );
+                    sendZRPMessageToGame( guid, 0, out );
                 }
             }
             printWebsockets( );
@@ -118,8 +122,7 @@ void ZRPConnector::sendMessage( uint32_t guid, uint32_t puid, std::string data )
 
         auto out = createMessage( (int)e_ZRPOpCodes::RECEIVE_MESSAGE,
                                   json_mapper->writeToString( message ) );
-        for ( const auto &[ k, v ] : game->second )
-            v->websocket.sendOneFrameText( out );
+        sendZRPMessageToGame( guid, 0, out );
     }
     else
         logger->log->error( "No Player with ID: {} or game with ID: {} found!",
@@ -172,15 +175,93 @@ void ZRPConnector::kickPlayer( uint32_t guid, uint32_t puid, std::string data )
         removeZRPCode( data ) );
     auto sender = getSocket( guid, puid );
 
-    if ( sender == nullptr )
-        return; // TODO: Send Error
     if ( sender->m_data.role != e_Roles::HOST )
+        return; // TODO: Send Error
+    if ( sender == nullptr )
         return; // TODO: Send Error
 
     auto player_socket = getSocket( guid, player->name );
     if ( player_socket == nullptr )
         return; // TODO: Send Error
     leaveGame( guid, player_socket->m_data.puid );
+}
+
+void ZRPConnector::spectatorToPlayer( uint32_t guid, uint32_t puid )
+{
+    auto sender = getSocket( guid, puid );
+    if ( sender != nullptr )
+        if ( sender->m_data.role == e_Roles::SPECTATOR )
+            sender->m_data.role_next_round = e_Roles::PLAYER;
+}
+
+void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid )
+{
+    auto sender = getSocket( guid, puid );
+    if ( sender != nullptr )
+    {
+        if ( sender->m_data.role == e_Roles::PLAYER )
+        {
+            sender->m_data.role_next_round = e_Roles::SPECTATOR;
+        }
+        else if ( sender->m_data.role == e_Roles::HOST )
+        {
+            sender->m_data.role_next_round = e_Roles::SPECTATOR;
+            std::shared_ptr<ZwooListener> new_host;
+            auto game = game_websockets.find( guid );
+            if ( game != game_websockets.end( ) )
+            {
+                for ( const auto &[ k, v ] : game->second )
+                    if ( v != sender && v->m_data.role == e_Roles::PLAYER )
+                    {
+                        new_host = v;
+                        break;
+                    }
+
+                for ( const auto &[ k, v ] : game->second )
+                    if ( v != sender && v != new_host )
+                        v->websocket.sendOneFrameText( createMessage(
+                            e_ZRPOpCodes::NEW_HOST,
+                            "{\"username\": \"" + new_host->m_data.username +
+                                "\"}" ) );
+                new_host->websocket.sendOneFrameText(
+                    createMessage( e_ZRPOpCodes::YOU_ARE_HOST_NOW, "{}" ) );
+            }
+        }
+    }
+}
+
+void ZRPConnector::playerToHost( uint32_t guid, uint32_t puid,
+                                 std::string data )
+{
+    auto player = json_mapper->readFromString<oatpp::Object<PlayerToHost>>(
+        removeZRPCode( data ) );
+    auto sender = getSocket( guid, puid );
+
+    if ( sender->m_data.role != e_Roles::HOST )
+        return; // TODO: Send Error
+    if ( sender == nullptr )
+        return; // TODO: Send Error
+
+    auto player_socket = getSocket( guid, player->name );
+    if ( player_socket == nullptr )
+        return; // TODO: Send Error
+
+    if ( player_socket->m_data.role == e_Roles::PLAYER )
+    {
+        player_socket->m_data.role = e_Roles::HOST;
+        sender->m_data.role = e_Roles::PLAYER;
+        auto game = game_websockets.find( guid );
+        if ( game != game_websockets.end( ) )
+        {
+            auto msg = createMessage(
+                e_ZRPOpCodes::NEW_HOST,
+                "{\"username\": \"" + player_socket->m_data.username + "\"}" );
+            sendZRPMessageToGame( guid, player_socket->m_data.puid, msg );
+
+            player_socket->websocket.sendOneFrameText(
+                createMessage( e_ZRPOpCodes::YOU_ARE_HOST_NOW, "{}" ) );
+        }
+    }
 }
 
 void ZRPConnector::printWebsockets( )
@@ -194,9 +275,19 @@ void ZRPConnector::printWebsockets( )
     }
 }
 
-void ZRPConnector::sendZRPMessageToGame(uint32_t guid uint32_t puid_exclude, std::string message)
+void ZRPConnector::sendZRPMessageToGame( uint32_t guid, uint32_t puid_exclude,
+                                         std::string message )
 {
-    std::for_each(game->second.begin(), game->second.end(), [out, listener](auto i){ if (i != listener) i->websocket.sendOneFrameText(out); });
+    auto exclude = getSocket(
+        guid, puid_exclude ); // nullptr when message to all -> puid = 0
+    auto game = getGame( guid );
+    if ( !game.empty( ) )
+        std::for_each( game.begin( ), game.end( ),
+                       [ message, exclude ]( auto i )
+                       {
+                           if ( i.second != exclude )
+                               i.second->websocket.sendOneFrameText( message );
+                       } );
 }
 
 std::string ZRPConnector::removeZRPCode( std::string data )
@@ -233,4 +324,13 @@ std::shared_ptr<ZwooListener> ZRPConnector::getSocket( uint32_t guid,
             return socket->second;
     }
     return nullptr;
+}
+
+std::unordered_map<uint32_t, std::shared_ptr<ZwooListener>>
+ZRPConnector::getGame( uint32_t guid )
+{
+    auto game = game_websockets.find( guid );
+    if ( game != game_websockets.end( ) )
+        return game->second;
+    return std::unordered_map<uint32_t, std::shared_ptr<ZwooListener>>( );
 }

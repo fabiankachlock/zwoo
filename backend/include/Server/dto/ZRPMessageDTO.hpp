@@ -57,6 +57,13 @@ class KickPlayer : public oatpp::DTO
     DTO_FIELD( String, name ) = "";
 };
 
+class PlayerToHost : public oatpp::DTO
+{
+    DTO_INIT( PlayerToHost, DTO )
+
+    DTO_FIELD( String, name ) = "";
+};
+
 #include OATPP_CODEGEN_END( DTO ) ///< End DTO codegen section
 
 #endif // _ZRPMESSAGEDTO_HPP_

@@ -46,12 +46,15 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
             connector->leaveGame( m_data.guid, m_data.puid );
             break;
         case e_ZRPOpCodes::SPECTATOR_TO_PLAYER:
+            connector->spectatorToPlayer( m_data.guid, m_data.puid );
             break;
         case e_ZRPOpCodes::PLAYER_TO_SPECTATOR:
+            connector->playerToSpectator( m_data.guid, m_data.puid );
             break;
         case e_ZRPOpCodes::PLAYER_TO_HOST: // Maybe username in body
             break;
         case e_ZRPOpCodes::KICK_PLAYER:
+            connector->kickPlayer( m_data.guid, m_data.puid, wholeMessage );
             break;
         default:
             logger->log->debug( "Unknown Code {0}!", code );
