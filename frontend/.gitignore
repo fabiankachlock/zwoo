@@ -32,3 +32,5 @@ pnpm-debug.log*
 coverage
 
 /dist-preview
+/assets/cards/raw
+/assets/cards/dist
