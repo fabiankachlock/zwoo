@@ -2,10 +2,18 @@
   "themes": [
     "__default__"
   ],
+  "variants": {
+    "__default__": [
+      "dark",
+      "light",
+      "xxx"
+    ]
+  },
   "files": {
     "__default__": {
       "dark": "__default__.dark.json",
-      "light": "__default__.light.json"
+      "light": "__default__.light.json",
+      "xxx": "__default__.xxx.json"
     }
   }
 }

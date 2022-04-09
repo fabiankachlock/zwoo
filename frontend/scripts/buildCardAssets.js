@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const DATA_PREFIX = 'data:image/svg+xml';
+const DATA_PREFIX = 'data:image/svg+xml ';
 const ASSETS_DIR = path.join(__dirname, '..', 'assets');
 const CARDS_DIR = path.join(ASSETS_DIR, 'cards');
 const CARDS_SOURCES = path.join(CARDS_DIR, 'raw');
@@ -18,44 +18,38 @@ async function writeJSONFile(path, data) {
 }
 
 async function scanCardFiles() {
-  const themes = await fs.readdir(CARDS_SOURCES);
+  const allThemes = await fs.readdir(CARDS_SOURCES);
   const sources = {};
 
-  for (const dir of themes) {
-    const configKind = {
-      back: path.join(CARDS_SOURCES, dir, 'back'),
-      front: path.join(CARDS_SOURCES, dir, 'front')
+  for (const themeDir of allThemes) {
+    const themeCards = {};
+    const cardKinds = {
+      back: path.join(CARDS_SOURCES, themeDir, 'back'),
+      front: path.join(CARDS_SOURCES, themeDir, 'front')
     };
-    const cards = {
-      dark: {
-        back: [],
-        front: []
-      },
-      light: {
-        back: [],
-        front: []
-      }
-    };
-    for (const [kind, dir] of Object.entries(configKind)) {
-      const configTheme = {
-        dark: path.join(dir, 'dark'),
-        light: path.join(dir, 'light')
-      };
-      for (const [theme, dir] of Object.entries(configTheme)) {
-        const sprites = await fs.readdir(dir);
-        cards[theme][kind] = sprites.filter(
-          sprite => !sprite.startsWith('.') && sprite.endsWith('svg')
-        );
+    for (const [kind, kindDirectory] of Object.entries(cardKinds)) {
+      const variants = await fs.readdir(kindDirectory);
+      for (const variant of variants) {
+        if (!themeCards[variant]) {
+          themeCards[variant] = {};
+        }
+        const sprites = await fs.readdir(path.join(kindDirectory, variant));
+        themeCards[variant][kind] = sprites.filter(sprite => !sprite.startsWith('.') && sprite.endsWith('svg'));
       }
     }
-    sources[dir] = cards;
+    sources[themeDir] = themeCards;
   }
 
   const data = {
-    themes,
-    files: themes
+    themes: allThemes,
+    variants: allThemes
       .map(theme => ({
-        [theme]: { dark: theme + '.dark.json', light: theme + '.light.json' }
+        [theme]: Object.keys(sources[theme])
+      }))
+      .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
+    files: allThemes
+      .map(theme => ({
+        [theme]: Object.keys(sources[theme]).reduce((acc, curr) => ({ ...acc, [curr]: theme + '.' + curr + '.json' }), {})
       }))
       .reduce((acc, curr) => ({ ...acc, ...curr }), {})
   };
@@ -90,32 +84,38 @@ async function buildCards() {
   await fs.mkdir(OUT_DIR);
 
   console.log('scanning directories for build files');
+  const scanStart = process.hrtime();
   const [meta, sources] = await scanCardFiles();
-  console.log('found', meta.themes.length, 'themes');
+  const scanEnd = process.hrtime(scanStart);
+  console.log('found %d themes (took %dms)', meta.themes.length, scanEnd[1] / 1000000);
+  let outFiles = 0;
   for (const theme of Object.keys(meta.files)) {
-    console.log('found', Object.keys(meta.files[theme]).length, 'variants of', theme);
+    console.log(' found', Object.keys(meta.files[theme]).length, 'variants of', theme, '(' + Object.keys(meta.files[theme]).join(', ') + ')');
     for (const variant of Object.keys(meta.files[theme])) {
       const fileName = meta.files[theme][variant];
-      console.log(
-        'building ' + theme + ':' + variant + ' -> ' + fileName
-      );
+      console.log('   building ' + theme + '[' + variant + '] into ' + fileName);
+      const buildStart = process.hrtime();
       const basePath = path.join(ASSETS_DIR, 'cards', 'raw', theme);
       const files = [
-        ...sources[theme][variant]['back'].map(fileName =>
-          path.join(basePath, 'back', variant, fileName)
-        ),
-        ...sources[theme][variant]['front'].map(fileName =>
-          path.join(basePath, 'front', variant, fileName)
-        )
+        ...sources[theme][variant]['back'].map(fileName => path.join(basePath, 'back', variant, fileName)),
+        ...sources[theme][variant]['front'].map(fileName => path.join(basePath, 'front', variant, fileName))
       ];
-      console.log('found', files.length, 'file(s)');
+      console.log('     found', files.length, 'file(s)');
+      console.log('     building...');
       const sheetData = await createCardSpriteSheet(files);
       writeJSONFile(path.join(OUT_DIR, fileName), sheetData);
+      outFiles += 1;
+      const buildEnd = process.hrtime(buildStart);
+      console.log('     ' + theme + '[' + variant + '] successfully build (' + fileName + ') - %dms', buildEnd[1] / 1000000);
     }
   }
+  console.log('done');
+  console.log('build', outFiles, 'sprite maps');
 }
 
 (async () => {
+  const allStart = process.hrtime();
+  console.log('build card assets');
   await buildCards();
 
   console.log('cleaning target folder');
@@ -125,4 +125,6 @@ async function buildCards() {
   }
   console.log('copying build output');
   await fs.copy(OUT_DIR, targetDirectory);
+  const allEnd = process.hrtime(allStart);
+  console.log('done - %dms', allEnd[1] / 1000000);
 })();
