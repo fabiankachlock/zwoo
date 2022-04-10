@@ -3,6 +3,7 @@ import Menu from '../views/Menu.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
 import CatchAll from '../views/404.vue';
+import Beta from '../views/Beta.vue';
 import { GameRoute } from './game';
 import { MenuRoutes } from './menu';
 import { RouterInterceptor } from './types';
@@ -35,6 +36,15 @@ const routes: Array<RouteRecordRaw> = [
   },
   GameRoute,
   DeveloperRoute,
+  process.env.VUE_APP_BETA === 'true'
+    ? {
+        path: '/beta/:code',
+        component: Beta
+      }
+    : {
+        path: '/beta/:code',
+        redirect: '/'
+      },
   {
     path: '/:pathMatch(.*)*',
     component: CatchAll
