@@ -5,12 +5,11 @@
 </template>
 
 <script setup lang="ts">
-import { useColorTheme } from '@/composables/colorTheme';
-import { CardThemeManager } from '@/core/services/cards/ThemeManager';
+import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { computed } from 'vue';
 
-const colorTheme = useColorTheme();
-const cardUrl = computed(() => CardThemeManager.getCardBackUrl('__default__', colorTheme.value, false));
+const cardTheme = useCardTheme();
+const cardUrl = computed(() => cardTheme.theme.value.getCard({ type: 1, color: 1, id: '' }));
 </script>
 
 <style scoped>

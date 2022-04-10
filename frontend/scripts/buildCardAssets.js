@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const DATA_PREFIX = 'data:image/svg+xml ';
+const DATA_PREFIX = 'data:image/svg+xml;base64, ';
 const ASSETS_DIR = path.join(__dirname, '..', 'assets');
 const CARDS_DIR = path.join(ASSETS_DIR, 'cards');
 const CARDS_SOURCES = path.join(CARDS_DIR, 'raw');
@@ -83,7 +83,9 @@ async function createCardSpriteSheet(files) {
     const paths = filePath.split('/');
     const spriteName = paths[paths.length - 1];
     const buffer = await fs.readFile(file);
-    spriteData[spriteName] = DATA_PREFIX + buffer.toString();
+    const content = buffer.toString('base64');
+    // const replacedContent = content.replace(/"/g, "'");
+    spriteData[spriteName] = DATA_PREFIX + content;
   }
   return spriteData;
 }

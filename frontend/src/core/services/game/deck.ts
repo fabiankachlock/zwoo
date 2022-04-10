@@ -1,4 +1,4 @@
-import { Card } from '@/core/type/game';
+import { Card } from './card';
 
 export class CardDeck {
   private content: Card[];
