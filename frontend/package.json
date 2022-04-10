@@ -5,9 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "serve:prod": "VUE_APP_USE_BACKEND=true vue-cli-service serve",
-    "build": "VUE_APP_USE_BACKEND=true vue-cli-service build && yarn build:assets",
-    "build:preview": "VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview && yarn build:assets",
-    "build:analyze": "ANALYZE=true vue-cli-service build && yarn build:assets",
+    "build": "yarn build:assets && VUE_APP_USE_BACKEND=true vue-cli-service build",
+    "build:preview": "yarn build:assets && VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
+    "build:analyze": "yarn build:assets && ANALYZE=true vue-cli-service build",
     "build:assets": "node ./scripts/buildCardAssets.js",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
