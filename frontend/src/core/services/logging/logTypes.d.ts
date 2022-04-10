@@ -31,4 +31,5 @@ export type ZwooLogger = ExtendedLogger & {
 	Api: ExtendedLogger;
 	Zrp: ExtendedLogger;
 	RouterGuard: ExtendedLogger;
+	Theme: ExtendedLogger;
 };
