@@ -6,7 +6,8 @@
     "__default__": [
       "dark",
       "light",
-      "xxx"
+      "xxx",
+      "@auto"
     ]
   },
   "files": {

@@ -7,6 +7,17 @@ const CARDS_SOURCES = path.join(CARDS_DIR, 'raw');
 const OUT_DIR = path.join(CARDS_DIR, 'dist');
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 
+const VARIANT_DARK = 'dark';
+const VARIANT_LIGHT = 'light';
+const VARIANT_AUTO = '@auto';
+
+function computeThemeVariants(variants) {
+  if (variants.includes(VARIANT_DARK) && variants.includes(VARIANT_LIGHT)) {
+    return [...variants, VARIANT_AUTO];
+  }
+  return variants;
+}
+
 async function writeJSONFile(path, data) {
   if (!fs.existsSync(path)) {
     await fs.createFile(path);
@@ -44,7 +55,7 @@ async function scanCardFiles() {
     themes: allThemes,
     variants: allThemes
       .map(theme => ({
-        [theme]: Object.keys(sources[theme])
+        [theme]: computeThemeVariants(Object.keys(sources[theme]))
       }))
       .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
     files: allThemes
