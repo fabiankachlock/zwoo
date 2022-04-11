@@ -27,8 +27,8 @@ export enum ZRPOPCode {
   SpectatorWantsToPlay = 110, // sender (spectator)
   PlayerWantsToSpectate = 111, // sender (player)
   PromotePlayerToHost = 112, // sender (host)
-  PromoteToHost = 113, // receiver,
-  NewHost = 114, // receiver
+  PromoteToHost = 113, // receiver(host)
+  NewHost = 114, // receiver(player/spectator)
   KickPlayer = 115, // sender (host)
   PlayerChangedRole = 116, // receiver
   // Lobby
@@ -83,7 +83,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.PlayerWantsToSpectate]: Record<string, never>;
   [ZRPOPCode.PromotePlayerToHost]: ZRPUsernamePayload;
   [ZRPOPCode.PromoteToHost]: Record<string, never>;
-  [ZRPOPCode.NewHost]: Record<string, never>;
+  [ZRPOPCode.NewHost]: ZRPUsernamePayload;
   [ZRPOPCode.KickPlayer]: ZRPUsernamePayload;
   [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
   // Lobby
