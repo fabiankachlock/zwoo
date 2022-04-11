@@ -4,7 +4,7 @@
     <div class="flex-1 flex flex-row flex-nowrap justify-end items-center">
       <EndTurnButton />
       <div class="relative">
-        <div @click="menuOpen = !menuOpen" class="bg-main hover:bg-light p-2 rounded tc-main text-2xl text-right cursor-pointer">
+        <div @click="toggleMenu()" class="bg-main hover:bg-light p-2 rounded tc-main text-2xl text-right cursor-pointer">
           <Icon v-if="menuOpen" icon="akar-icons:cross"></Icon>
           <Icon v-else icon="akar-icons:chevron-down"></Icon>
         </div>
@@ -60,12 +60,18 @@ const stateStore = useGameState();
 const deckState = useGameCardDeck();
 const menuOpen = ref(false);
 
+const toggleMenu = () => {
+  menuOpen.value = !menuOpen.value;
+};
+
 const handleLeave = () => {
   // TODO: Just Temp
   stateStore.setIsActive(!stateStore.isActivePlayer);
   stateStore.update();
   deckState.addCard({
-    id: deckState.cards.length.toString()
+    id: deckState.cards.length.toString(),
+    type: 0,
+    color: 0
   });
 };
 </script>

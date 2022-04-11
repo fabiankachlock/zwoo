@@ -1,6 +1,6 @@
+import { Card } from '@/core/services/game/card';
 import { defineStore } from 'pinia';
 import { CardDeck } from '../../services/game/deck';
-import { Card } from '../../type/game';
 import { useConfig } from '../config';
 
 export const useGameCardDeck = defineStore('game-cards', {

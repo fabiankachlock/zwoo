@@ -32,12 +32,12 @@
 </template>
 
 <script setup lang="ts">
-import { useColorTheme } from '@/composables/colorTheme';
-import { CardThemeManager } from '@/core/services/cards/ThemeManager';
+import { useCardTheme } from '@/core/adapter/play/cardTheme';
+import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { computed, ref } from '@vue/reactivity';
 
-const colorTheme = useColorTheme();
-const cardUrl = computed(() => CardThemeManager.getCardBackUrl('__default__', colorTheme.value, true));
+const { theme } = useCardTheme();
+const cardUrl = computed(() => theme.value.getCard(CardDescriptor.BackSideways));
 const isAnimating = ref(false);
 
 const drawCard = () => {
