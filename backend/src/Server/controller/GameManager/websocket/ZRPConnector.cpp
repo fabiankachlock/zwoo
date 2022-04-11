@@ -41,6 +41,7 @@ void ZRPConnector::addWebSocket( uint32_t guid, uint32_t puid,
                                ? (int)e_ZRPOpCodes::SPECTATOR_JOINED
                                : (int)e_ZRPOpCodes::PLAYER_JOINED,
                            json_mapper->writeToString( ps_joined ) );
+        sendZRPMessageToGame(guid, 0, out);
     }
 }
 
