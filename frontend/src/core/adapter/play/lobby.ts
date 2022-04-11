@@ -35,7 +35,13 @@ const lobbyWatcher = new MonolithicEventWatcher(
 );
 
 export const useLobbyStore = defineStore('game-lobby', () => {
-  const players = ref<LobbyPlayer[]>([]);
+  const players = ref<LobbyPlayer[]>([
+    {
+      id: '',
+      name: 'a',
+      role: ZRPRole.Host
+    }
+  ]);
   const spectators = ref<LobbyPlayer[]>([]);
   const gameHost = ref('');
   const dispatchEvent = useGameEventDispatch();
@@ -164,16 +170,14 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const reset = () => {
-    players.value = [];
+    //players.value = [];
   };
 
   const kickPlayer = (id: string) => {
-    console.log('kick', id);
     dispatchEvent(ZRPOPCode.KickPlayer, { username: id });
   };
 
   const promotePlayer = (id: string) => {
-    console.log('kick', id);
     dispatchEvent(ZRPOPCode.PromotePlayerToHost, { username: id });
   };
 
@@ -184,6 +188,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   return {
     players: players,
     spectators: spectators,
+    host: gameHost,
     kickPlayer,
     promotePlayer,
     // eslint-disable-next-line @typescript-eslint/no-empty-function

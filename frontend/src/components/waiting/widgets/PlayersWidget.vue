@@ -54,17 +54,15 @@
         >
           <p class="text-lg tc-main-dark">
             {{ player.name }}
+            <span v-if="gameHost === player.name || true" class="tc-primary text-lg">
+              <Icon icon="akar-icons:crown" class="inline ml-1" />
+            </span>
           </p>
-          <div class="flex items-center h-full justify-end">
-            <button
-              v-if="isHost"
-              v-tooltip="t('wait.promote')"
-              @click="askPromotePlayer()"
-              class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
-            >
+          <div v-if="isHost && username !== player.name" class="flex items-center h-full justify-end">
+            <button v-tooltip="t('wait.promote')" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
               <Icon icon="akar-icons:crown" />
             </button>
-            <button v-if="isHost" v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+            <button v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
               <Icon icon="iconoir:delete-circled-outline" />
             </button>
             <ReassureDialog
@@ -99,18 +97,23 @@ import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
+import { useIsHost } from '@/composables/userRoles';
+import { useAuth } from '@/core/adapter/auth';
 
 const { t } = useI18n();
 const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);
 const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
+const auth = useAuth();
 const gameId = computed(() => gameConfig.gameId);
+const { isHost } = useIsHost();
+const username = computed(() => auth.username);
+const gameHost = computed(() => lobby.host);
 const playerPromoteDialogOpen = ref(false);
 const playerKickDialogOpen = ref(false);
 const shareSheetOpen = ref(false);
 const qrCodeOpen = ref(false);
 const players = computed(() => lobby.players);
-const isHost = computed(() => gameConfig.host || true);
 
 const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
