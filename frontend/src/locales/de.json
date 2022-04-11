@@ -4,7 +4,8 @@
     "sections": {
       "general": "Allgemein",
       "game": "Spiel",
-      "danger": "Gefahrenzone"
+      "danger": "Gefahrenzone",
+      "developers": "Entwickler"
     },
     "update": {
       "available": "Ein Update ist verfügbar",
@@ -25,7 +26,9 @@
     "showCardDetail": "Karte detailliert vor Spielzug anzeigen",
     "sortCards": "Karten im Deck sortieren",
     "cookies": "Cookies",
-    "deleteAccount": "Account löschen"
+    "deleteAccount": "Account löschen",
+    "logging": "Loggen",
+    "goToLogging": "Zu den Einstellungen"
   },
   "lng": {
     "de": "Deutsch",
@@ -55,6 +58,7 @@
     "password": "Passwort",
     "create": "Erstellen",
     "passwordRepeat": "Passwort Wiederholen",
+    "beta": "BETA Code",
     "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
   },
   "createGame": {
@@ -139,6 +143,14 @@
       "144": "Der OPCode is ungültig (dies ist ein interner fehler).",
       "145": "Die Spiele ID ist ungültig.",
       "146": "Du bist bereits in einem Spiel."
+    },
+    "zrp": {
+      "900": "Fehler aufgetreten",
+      "901": "Verbindungsfehler",
+      "911": "Verbindung getrennt",
+      "920": "Clientfehler aufgetreten",
+      "921": "Fehlerhafte Daten erhalten",
+      "930": "Verbunden!"
     }
   },
   "version": "Version",
@@ -168,6 +180,9 @@
       "title": "Test Regel",
       "info": "Test Regel Erklärung - optional extrem langer text..."
     }
+  },
+  "ingame": {
+    "endTurn": "Zug beenden"
   },
   "recaptcha": {
     "title": "Ich bin kein Roboter",
@@ -256,5 +271,14 @@
       "playerLeft": "{0} hat das Spiel verlassen",
       "spectatorLeft": "{0} hat das Spiel verlassen"
     }
+  },
+  "logging": {
+    "title": "Logs",
+    "console": "Konsole",
+    "store": "Speicher (IndexedDB)",
+    "storedCount": "keine Logs gespeichert | ein Eintrag | {count} Einträge",
+    "clearStore": "Speicher leeren",
+    "reloadLogs": "Logs neu laden",
+    "storedLogs": "Gespeicherte Logs"
   }
 }

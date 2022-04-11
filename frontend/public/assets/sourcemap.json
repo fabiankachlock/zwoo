@@ -1,0 +1,74 @@
+{
+  "__default__": {
+    "dark": {
+      "back": [
+        "back_s.svg",
+        "back_u.svg"
+      ],
+      "front": [
+        "front_1_1.svg",
+        "front_1_2.svg",
+        "front_1_3.svg",
+        "front_1_4.svg",
+        "front_1_5.svg",
+        "front_1_6.svg",
+        "front_1_7.svg",
+        "front_1_8.svg",
+        "front_1_9.svg",
+        "front_1_a.svg",
+        "front_1_b.svg",
+        "front_1_c.svg",
+        "front_1_d.svg",
+        "front_2_1.svg",
+        "front_2_2.svg",
+        "front_2_3.svg",
+        "front_2_4.svg",
+        "front_2_5.svg",
+        "front_2_6.svg",
+        "front_2_7.svg",
+        "front_2_8.svg",
+        "front_2_9.svg",
+        "front_2_a.svg",
+        "front_2_b.svg",
+        "front_2_c.svg",
+        "front_2_d.svg",
+        "front_3_1.svg",
+        "front_3_2.svg",
+        "front_3_3.svg",
+        "front_3_4.svg",
+        "front_3_5.svg",
+        "front_3_6.svg",
+        "front_3_7.svg",
+        "front_3_8.svg",
+        "front_3_9.svg",
+        "front_3_a.svg",
+        "front_3_b.svg",
+        "front_3_c.svg",
+        "front_3_d.svg",
+        "front_4_1.svg",
+        "front_4_2.svg",
+        "front_4_3.svg",
+        "front_4_4.svg",
+        "front_4_5.svg",
+        "front_4_6.svg",
+        "front_4_7.svg",
+        "front_4_8.svg",
+        "front_4_9.svg",
+        "front_4_a.svg",
+        "front_4_b.svg",
+        "front_4_c.svg",
+        "front_4_d.svg",
+        "front_5_e.svg",
+        "front_5_f.svg"
+      ]
+    },
+    "light": {
+      "back": [],
+      "front": []
+    },
+    "xxx": {
+      "back": [],
+      "front": []
+    }
+  }
+}

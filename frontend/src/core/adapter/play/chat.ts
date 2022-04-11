@@ -16,56 +16,7 @@ export type ChatMessage = {
 const chatWatcher = new MonolithicEventWatcher(ZRPOPCode.ReceiveMessage);
 
 export const useChatStore = defineStore('game-chat', () => {
-  const messages = ref<ChatMessage[]>([
-    {
-      id: 1,
-      message: 'test-host',
-      sender: {
-        id: 'test',
-        role: ZRPRole.Host
-      }
-    },
-    {
-      id: 2,
-      message: 'test-spectator',
-      sender: {
-        id: 'test1',
-        role: ZRPRole.Spectator
-      }
-    },
-    {
-      id: 3,
-      message: 'test-player',
-      sender: {
-        id: 'test2',
-        role: ZRPRole.Player
-      }
-    },
-    {
-      id: 1,
-      message: 'test-host-own',
-      sender: {
-        id: 'test-user',
-        role: ZRPRole.Host
-      }
-    },
-    {
-      id: 2,
-      message: 'test-spectator-own',
-      sender: {
-        id: 'test-user',
-        role: ZRPRole.Spectator
-      }
-    },
-    {
-      id: 3,
-      message: 'test-player-own',
-      sender: {
-        id: 'test-user',
-        role: ZRPRole.Player
-      }
-    }
-  ]);
+  const messages = ref<ChatMessage[]>([]);
   const muted = ref<Record<string, boolean>>({});
   const sendEvent = useGameEventDispatch();
 

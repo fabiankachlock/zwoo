@@ -1,3 +1,4 @@
+import Logger from '../logging/logImport';
 import { ZRPCoder } from '../zrp/zrpCoding';
 import { ZRPMessage, ZRPOPCode } from '../zrp/zrpTypes';
 
@@ -13,10 +14,12 @@ export class GameWebsocket {
   }
 
   private handleMessage = (evt: MessageEvent) => {
+    Logger.Websocket.debug(`received: ${evt.data}`);
     this.messageHandler(evt.data);
   };
 
   private handleOpen = () => {
+    Logger.Websocket.log('connection opened');
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._Connected,
@@ -26,6 +29,7 @@ export class GameWebsocket {
   };
 
   private handleError = (evt: Event) => {
+    Logger.Websocket.warn(`error event: ${JSON.stringify(evt)}`);
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._ConnectionError,
@@ -39,6 +43,7 @@ export class GameWebsocket {
   };
 
   private handleClose = (evt: CloseEvent) => {
+    Logger.Websocket.debug(`close event: ${JSON.stringify(evt)}`);
     this.messageHandler(
       ZRPCoder.encode({
         code: ZRPOPCode._ConnectionClosed,
@@ -58,10 +63,12 @@ export class GameWebsocket {
   }
 
   public sendMessage(msg: string) {
+    Logger.Websocket.log(`sending: ${msg}`);
     this.connection.send(msg);
   }
 
   public close() {
+    Logger.Websocket.log('closing websocket from client');
     this.connection.close(1000 /* normal closure */);
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <Widget title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark" default-open>
+  <Widget v-model="isOpen" title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <template #actions>
       <div class="flex flex-row">
         <button @click="shareSheetOpen = true" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
@@ -98,8 +98,10 @@ import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import QRCode from '@/components/misc/QRCode.vue';
+import { useUserDefaults } from '@/composables/userDefaults';
 
 const { t } = useI18n();
+const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);
 const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
 const gameId = computed(() => gameConfig.gameId);

@@ -128,6 +128,7 @@
 import { useShare } from '@/composables/Share';
 import { useGameConfig } from '@/core/adapter/game';
 import { Frontend } from '@/core/services/api/apiConfig';
+import Logger from '@/core/services/logging/logImport';
 import { onMounted, ref, defineEmits } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Error from '../misc/Error.vue';
@@ -156,7 +157,7 @@ onMounted(() => {
         url: url.value
       })
         .catch((err: string) => {
-          console.log(err);
+          Logger.error(`sharing error: ${err}`);
           error.value = err;
         })
         .then(() => {

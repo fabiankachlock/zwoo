@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { Backend, Endpoint } from '../services/api/apiConfig';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
 import { GameManagementService } from '../services/api/GameManagement';
+import Logger from '../services/logging/logImport';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
 import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
@@ -12,6 +13,8 @@ let initializedGameModules = false;
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
+    cardTheme: '__default__',
+    cardThemeVariant: '@auto',
     gameId: -1,
     name: '',
     role: undefined as ZRPRole | undefined,
@@ -62,8 +65,8 @@ export const useGameConfig = defineStore('game-config', {
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {
         // TODO: revisit this when working on code splitting
-        const _LobbyModule = await import('./play/lobby');
-        _LobbyModule.useLobbyStore().__init__();
+        (await import('./play/lobby')).useLobbyStore().__init__();
+        (await import('./play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
         initializedGameModules = true;
       }
     },
@@ -77,6 +80,7 @@ export const useGameConfig = defineStore('game-config', {
     },
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
       if (this._connection) {
+        Logger.Zrp.log(`[outgoing] ${code} ${JSON.stringify(payload)}`);
         this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
       }
     }
