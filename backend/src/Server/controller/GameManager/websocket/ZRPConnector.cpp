@@ -190,8 +190,17 @@ void ZRPConnector::spectatorToPlayer( uint32_t guid, uint32_t puid )
 {
     auto sender = getSocket( guid, puid );
     if ( sender != nullptr )
-        if ( sender->m_data.role == e_Roles::SPECTATOR )
+    {
+        if ( sender->m_data.role == e_Roles::SPECTATOR && false /* In-Game */)
+        {
             sender->m_data.role_next_round = e_Roles::PLAYER;
+
+        }
+        else if (sender->m_data.role == e_Roles::SPECTATOR && true/* not In-Game */)
+        {
+            sendZRPMessageToGame(guid, puid, createMessage(e_ZRPOpCodes::PLAYER_CHANGED_ROLE, "{\"username\": \"" + sender->m_data.username + "\", \"role\": " + std::to_string((int)e_Roles::PLAYER) + "}"));
+        }
+    }
 }
 
 void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid )
@@ -199,33 +208,27 @@ void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid )
     auto sender = getSocket( guid, puid );
     if ( sender != nullptr )
     {
-        if ( sender->m_data.role == e_Roles::PLAYER )
+        if ( (sender->m_data.role == e_Roles::PLAYER || sender->m_data.role == e_Roles::HOST) || true /* not in Game */)
         {
-            sender->m_data.role_next_round = e_Roles::SPECTATOR;
-        }
-        else if ( sender->m_data.role == e_Roles::HOST )
-        {
-            sender->m_data.role_next_round = e_Roles::SPECTATOR;
-            std::shared_ptr<ZwooListener> new_host;
-            auto game = game_websockets.find( guid );
-            if ( game != game_websockets.end( ) )
+            if (sender->m_data.role == e_Roles::HOST)
             {
-                for ( const auto &[ k, v ] : game->second )
+                auto game = getGame(guid);
+                std::shared_ptr<ZwooListener> new_host;
+                for ( const auto &[ k, v ] : game )
                     if ( v != sender && v->m_data.role == e_Roles::PLAYER )
                     {
                         new_host = v;
                         break;
                     }
-
-                for ( const auto &[ k, v ] : game->second )
-                    if ( v != sender && v != new_host )
-                        v->websocket.sendOneFrameText( createMessage(
-                            e_ZRPOpCodes::NEW_HOST,
-                            "{\"username\": \"" + new_host->m_data.username +
-                                "\"}" ) );
-                new_host->websocket.sendOneFrameText(
-                    createMessage( e_ZRPOpCodes::YOU_ARE_HOST_NOW, "{}" ) );
+                playerToHost(puid, guid, new_host->m_data.username);
             }
+            sender->m_data.role = e_Roles::SPECTATOR;
+
+            sendZRPMessageToGame(guid, puid, createMessage(e_ZRPOpCodes::PLAYER_CHANGED_ROLE, "{\"username\": \"" + sender->m_data.username + "\", \"role\": " + std::to_string((int)e_Roles::SPECTATOR) + "}"));
+        }
+        else if ( false /* In-Game */ )
+        {
+            sender->m_data.role_next_round = e_Roles::SPECTATOR;
         }
     }
 }
@@ -242,7 +245,7 @@ void ZRPConnector::playerToHost( uint32_t guid, uint32_t puid,
     if ( sender == nullptr )
         return; // TODO: Send Error
 
-    auto player_socket = getSocket( guid, player->name );
+    auto player_socket = getSocket( guid, player->username );
     if ( player_socket == nullptr )
         return; // TODO: Send Error
 

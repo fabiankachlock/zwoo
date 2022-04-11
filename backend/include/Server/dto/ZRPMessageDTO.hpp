@@ -61,7 +61,7 @@ class PlayerToHost : public oatpp::DTO
 {
     DTO_INIT( PlayerToHost, DTO )
 
-    DTO_FIELD( String, name ) = "";
+    DTO_FIELD( String, username ) = "";
 };
 
 #include OATPP_CODEGEN_END( DTO ) ///< End DTO codegen section
