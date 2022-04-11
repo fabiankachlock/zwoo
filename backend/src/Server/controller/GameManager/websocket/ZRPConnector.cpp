@@ -180,7 +180,7 @@ void ZRPConnector::kickPlayer( uint32_t guid, uint32_t puid, std::string data )
     if ( sender == nullptr )
         return; // TODO: Send Error
 
-    auto player_socket = getSocket( guid, player->name );
+    auto player_socket = getSocket( guid, player->username );
     if ( player_socket == nullptr )
         return; // TODO: Send Error
     leaveGame( guid, player_socket->m_data.puid );

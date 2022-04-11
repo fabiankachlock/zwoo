@@ -54,7 +54,7 @@ class KickPlayer : public oatpp::DTO
 {
     DTO_INIT( KickPlayer, DTO )
 
-    DTO_FIELD( String, name ) = "";
+    DTO_FIELD( String, username ) = "";
 };
 
 class PlayerToHost : public oatpp::DTO
