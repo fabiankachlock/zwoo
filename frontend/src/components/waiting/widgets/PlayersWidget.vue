@@ -54,7 +54,7 @@
         >
           <p class="text-lg tc-main-dark">
             {{ player.name }}
-            <span v-if="gameHost === player.name || true" class="tc-primary text-lg">
+            <span v-if="gameHost === player.name" class="tc-primary text-lg">
               <Icon icon="akar-icons:crown" class="inline ml-1" />
             </span>
           </p>
