@@ -25,13 +25,27 @@ class ZRPConnector
 
     void leaveGame( uint32_t guid, uint32_t puid );
 
+    void kickPlayer( uint32_t guid, uint32_t puid, std::string data );
+    void spectatorToPlayer( uint32_t guid, uint32_t puid );
+    void playerToSpectator( uint32_t guid, uint32_t puid );
+    void playerToHost( uint32_t guid, uint32_t puid, std::string data );
+
   private:
     void printWebsockets( );
+    void sendZRPMessageToGame( uint32_t guid, uint32_t puid_exclude,
+                               std::string message );
 
     std::string removeZRPCode( std::string data );
     std::string createMessage( int code, std::string data );
 
+    //  std::unordered_map<uint32_t, std::shared_ptr<ZwooListener>>
+    //  getGame(guid);
+
     std::shared_ptr<ZwooListener> getSocket( uint32_t guid, uint32_t puid );
+    std::shared_ptr<ZwooListener> getSocket( uint32_t guid, std::string name );
+
+    std::unordered_map<uint32_t, std::shared_ptr<ZwooListener>>
+    getGame( uint32_t guid );
 
     //                   guid  ,                      puid  ,           player
     //                   Listener

@@ -20,7 +20,7 @@ services:
       - SMTP_USERNAME=""
       - SMTP_PASSWORD=""
       # Database Settings
-      - ZWOO_DATABASE_CONNECTION_STRING="mongodb://127.0.0.1:27019"
+      - ZWOO_DATABASE_CONNECTION_STRING="mongodb://127.0.0.1:27017"
       # Backend Config
       - ZWOO_RECAPTCHA_SIDESECRET=""
       # SSL Settings

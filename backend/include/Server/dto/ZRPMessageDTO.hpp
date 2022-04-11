@@ -50,6 +50,20 @@ class PlayersInLobby : public oatpp::DTO
     DTO_FIELD( List<oatpp::Object<ZwooUser>>, players );
 };
 
+class KickPlayer : public oatpp::DTO
+{
+    DTO_INIT( KickPlayer, DTO )
+
+    DTO_FIELD( String, username ) = "";
+};
+
+class PlayerToHost : public oatpp::DTO
+{
+    DTO_INIT( PlayerToHost, DTO )
+
+    DTO_FIELD( String, username ) = "";
+};
+
 #include OATPP_CODEGEN_END( DTO ) ///< End DTO codegen section
 
 #endif // _ZRPMESSAGEDTO_HPP_

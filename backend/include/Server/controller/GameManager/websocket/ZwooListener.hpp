@@ -18,6 +18,7 @@ struct ListenerData
     uint8_t role;
     oatpp::String username;
     uint32_t wins;
+    uint8_t role_next_round = role;
 };
 
 class ZwooListener : public oatpp::websocket::WebSocket::Listener
