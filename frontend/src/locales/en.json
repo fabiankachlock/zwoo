@@ -269,7 +269,9 @@
       "playerJoined": "Player {0} joined",
       "spectatorJoined": "Spectator {0} joined",
       "playerLeft": "{0} left",
-      "spectatorLeft": "{0} left"
+      "spectatorLeft": "{0} left",
+      "playerChangedRole": "{0} is now Spectator",
+      "spectatorChangedRole": "{0} is now Player"
     }
   },
   "logging": {
