@@ -25,6 +25,9 @@ export const useGameConfig = defineStore('game-config', {
     host: state => state.role === ZRPRole.Host
   },
   actions: {
+    changeRole(newRole: ZRPRole | undefined) {
+      this.role = newRole;
+    },
     async create(name: string, isPublic: boolean, password: string) {
       const nameValid = new GameNameValidator().validate(name);
       if (!nameValid.isValid) throw nameValid.getErrors();
