@@ -111,12 +111,12 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const kickPlayer = (id: string) => {
     console.log('kick', id);
-    dispatchEvent(ZRPOPCode.KickPlayer, {}); // TODO: fix payload
+    dispatchEvent(ZRPOPCode.KickPlayer, { username: id });
   };
 
   const promotePlayer = (id: string) => {
     console.log('kick', id);
-    dispatchEvent(ZRPOPCode.PromotePlayerToHost, {}); // TODO: fix payload
+    dispatchEvent(ZRPOPCode.PromotePlayerToHost, { username: id });
   };
 
   lobbyWatcher.onMessage(_receiveMessage);

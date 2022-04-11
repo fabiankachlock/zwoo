@@ -81,10 +81,10 @@ export type ZRPPayloadMap = {
   // Roles
   [ZRPOPCode.SpectatorWantsToPlay]: Record<string, never>;
   [ZRPOPCode.PlayerWantsToSpectate]: Record<string, never>;
-  [ZRPOPCode.PromotePlayerToHost]: Record<string, never>;
+  [ZRPOPCode.PromotePlayerToHost]: ZRPUsernamePayload;
   [ZRPOPCode.PromoteToHost]: Record<string, never>;
   [ZRPOPCode.NewHost]: Record<string, never>;
-  [ZRPOPCode.KickPlayer]: Record<string, never>;
+  [ZRPOPCode.KickPlayer]: ZRPUsernamePayload;
   [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
   // Lobby
   [ZRPOPCode.ChangeSettings]: ZRPSettingsChangePayload;
@@ -113,6 +113,10 @@ export type ZRPPayloadMap = {
   [ZRPOPCode._DecodingError]: ZRPInternalErrorPayload;
   // internal messages
   [ZRPOPCode._Connected]: Record<string, never>;
+};
+
+export type ZRPUsernamePayload = {
+  username: string;
 };
 
 export type ZRPJoinedGamePayload = {
