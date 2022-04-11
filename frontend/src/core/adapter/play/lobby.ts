@@ -154,7 +154,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     }
 
     snackbar.pushMessage({
-      message: translations.t(`snackbar.lobby.${data.role === ZRPRole.Player ? 'player' : 'spectator'}ChangedRole`, [data.name]),
+      message: translations.t(`snackbar.lobby.${data.role === ZRPRole.Player ? 'spectator' : 'player'}ChangedRole`, [data.name]),
       position: SnackBarPosition.TopRight
     });
   };
