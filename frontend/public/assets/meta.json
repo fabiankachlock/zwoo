@@ -6,15 +6,13 @@
     "__default__": [
       "dark",
       "light",
-      "xxx",
       "@auto"
     ]
   },
   "files": {
     "__default__": {
       "dark": "__default__.dark.json",
-      "light": "__default__.light.json",
-      "xxx": "__default__.xxx.json"
+      "light": "__default__.light.json"
     }
   }
 }

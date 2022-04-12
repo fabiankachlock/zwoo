@@ -18,16 +18,18 @@ const BaseThemeConfig = {
   author: 'the theme author', // optional
   isMultiLayer: true, // optional,
   variants: ['a', 'list', 'of', 'variants'], // required
-  imageType: 'svg', // optional
+  imageType: 'svg+xml', // optional
   overrides: {
     // optional
     cardFront: 'front',
     cardBack: 'back',
     layerPlaceholder: '$',
+    encoding: 'base64',
     imageDataPrefix: DATA_PREFIX
   },
   // internal
-  _dir: '', // the theme directory
+  _dir: '', // the theme directory,
+  _files: {}, // output file names
   _sources: {
     // all theme card paths
     '[variant]': {
@@ -113,7 +115,8 @@ async function searchThemeSources(themeConfig) {
   }
   return {
     ...themeConfig,
-    _sources: themeSources
+    _sources: themeSources,
+    _files: themeConfig.variants.reduce((acc, curr) => ({ ...acc, [curr]: themeConfig.name + '.' + curr + '.json' }), {})
   };
 }
 
@@ -143,21 +146,60 @@ async function createMetaFiles(themes) {
  *  front: []
  * }
  */
-async function createCardSpriteSheet(files) {
+async function createCardSpriteSheet(files, encoding, dataPrefix) {
   const spriteData = {};
   for (const file of files) {
-    const filePath = file.split('.')[0];
-    const paths = filePath.split('/');
-    const spriteName = paths[paths.length - 1];
+    const paths = file.split('/');
+    const spriteName = paths[paths.length - 1].split('.')[0];
     const buffer = await fs.readFile(file);
-    const content = buffer.toString('base64');
-    // const replacedContent = content.replace(/"/g, "'");
-    spriteData[spriteName] = DATA_PREFIX + content;
+    const content = buffer.toString(encoding);
+    spriteData[spriteName] = dataPrefix + content;
   }
   return spriteData;
 }
 
-async function buildCards() {
+let outFiles = 0;
+async function buildTheme(theme) {
+  console.log('building ' + theme.name);
+  console.log(' found', theme.variants.length, 'variants (' + theme.variants.join(', ') + ')');
+  const themeEncoding = theme.overrides?.encoding ?? BaseThemeConfig.overrides.encoding;
+  const themDataPrefix = theme.overrides?.imageDataPrefix ?? `data:image/${theme.imageType ?? BaseThemeConfig.imageType};${themeEncoding},`;
+
+  for (const variant of theme.variants) {
+    const fileName = theme._files[variant];
+    console.log('   building ' + theme.name + '[' + variant + '] into ' + fileName);
+    const buildStart = process.hrtime();
+    const basePath = join(CARDS_SOURCES, theme.name);
+    const files = [
+      ...theme._sources[variant]['back'].map(fileName =>
+        join(basePath, theme.overrides?.cardBack ?? BaseThemeConfig.overrides.cardBack, variant, fileName)
+      ),
+      ...theme._sources[variant]['front'].map(fileName =>
+        join(basePath, theme.overrides?.cardFront ?? BaseThemeConfig.overrides.cardFront, variant, fileName)
+      )
+    ];
+    console.log('     found', files.length, 'file(s)');
+    console.log('     building...');
+    const sheetData = await createCardSpriteSheet(files, themeEncoding, themDataPrefix);
+    writeJSONFile(join(OUT_DIR, fileName), sheetData);
+    outFiles += 1;
+    const buildEnd = process.hrtime(buildStart);
+    console.log('     ' + theme.name + '[' + variant + '] successfully build (' + fileName + ') - %dms', buildEnd[1] / 1000000);
+  }
+}
+
+async function buildCards(themes) {
+  for (const theme of themes) {
+    await buildTheme(theme);
+    console.log('  done');
+  }
+  console.log('done');
+  console.log('build', outFiles, 'sprite maps');
+}
+
+(async () => {
+  const allStart = process.hrtime();
+  console.log('build card assets');
   if (fs.existsSync(OUT_DIR)) {
     await fs.rm(OUT_DIR, { recursive: true });
   }
@@ -165,53 +207,26 @@ async function buildCards() {
 
   console.log('scanning directories for build files');
   const scanStart = process.hrtime();
-  const [meta, sources] = await scanCardFiles();
-  const scanEnd = process.hrtime(scanStart);
-  console.log('found %d themes (took %dms)', meta.themes.length, scanEnd[1] / 1000000);
-  let outFiles = 0;
-  for (const theme of Object.keys(meta.files)) {
-    console.log(' found', Object.keys(meta.files[theme]).length, 'variants of', theme, '(' + Object.keys(meta.files[theme]).join(', ') + ')');
-    for (const variant of Object.keys(meta.files[theme])) {
-      const fileName = meta.files[theme][variant];
-      console.log('   building ' + theme + '[' + variant + '] into ' + fileName);
-      const buildStart = process.hrtime();
-      const basePath = join(ASSETS_DIR, 'cards', 'raw', theme);
-      const files = [
-        ...sources[theme][variant]['back'].map(fileName => join(basePath, 'back', variant, fileName)),
-        ...sources[theme][variant]['front'].map(fileName => join(basePath, 'front', variant, fileName))
-      ];
-      console.log('     found', files.length, 'file(s)');
-      console.log('     building...');
-      const sheetData = await createCardSpriteSheet(files);
-      writeJSONFile(join(OUT_DIR, fileName), sheetData);
-      outFiles += 1;
-      const buildEnd = process.hrtime(buildStart);
-      console.log('     ' + theme + '[' + variant + '] successfully build (' + fileName + ') - %dms', buildEnd[1] / 1000000);
-    }
-  }
-  console.log('done');
-  console.log('build', outFiles, 'sprite maps');
-}
 
-(async () => {
   const themes = await findThemes();
   const themesWithSources = [];
   for (const theme of themes) {
     themesWithSources.push(await searchThemeSources(theme));
   }
+  const scanEnd = process.hrtime(scanStart);
+  console.log('found %d themes (took %dms)', themes.length, scanEnd[1] / 1000000);
+  console.log('start build process');
+
   await createMetaFiles(themesWithSources);
+  await buildCards(themesWithSources);
 
-  // const allStart = process.hrtime();
-  // console.log('build card assets');
-  // await buildCards();
-
-  // console.log('cleaning target folder');
-  // const targetDirectory = join(PUBLIC_DIR, 'assets');
-  // if (fs.existsSync(targetDirectory)) {
-  //   await fs.rm(targetDirectory, { recursive: true });
-  // }
-  // console.log('copying build output');
-  // await fs.copy(OUT_DIR, targetDirectory);
-  // const allEnd = process.hrtime(allStart);
-  // console.log('done - %dms', allEnd[1] / 1000000);
+  console.log('cleaning target folder');
+  const targetDirectory = join(PUBLIC_DIR, 'assets');
+  if (fs.existsSync(targetDirectory)) {
+    await fs.rm(targetDirectory, { recursive: true });
+  }
+  console.log('copying build output');
+  await fs.copy(OUT_DIR, targetDirectory);
+  const allEnd = process.hrtime(allStart);
+  console.log('done - %dms', allEnd[1] / 1000000);
 })();
