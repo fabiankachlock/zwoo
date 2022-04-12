@@ -1,0 +1,5 @@
+{
+  "name": "__default__",
+  "isMultiLayer": false,
+  "variants": ["dark", "light"]
+}
