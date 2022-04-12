@@ -2,6 +2,19 @@
   "themes": [
     "__default__"
   ],
+  "configs": {
+    "__default__": {
+      "name": "__default__",
+      "description": "",
+      "author": "",
+      "isMultiLayer": false,
+      "variants": [
+        "dark",
+        "light",
+        "@auto"
+      ]
+    }
+  },
   "variants": {
     "__default__": [
       "dark",

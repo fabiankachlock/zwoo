@@ -124,9 +124,20 @@ async function createMetaFiles(themes) {
   const sources = themes.map(t => ({ [t.name]: t._sources })).reduce((acc, curr) => ({ ...acc, ...curr }), {});
   const data = {
     themes: themes.map(t => t.name),
+    configs: themes
+      .map(theme => ({
+        [theme.name]: {
+          name: theme.name ?? '',
+          description: theme.description ?? '',
+          author: theme.author ?? '',
+          isMultiLayer: theme.isMultiLayer,
+          variants: computeThemeVariants(theme.variants)
+        }
+      }))
+      .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
     variants: themes
       .map(theme => ({
-        [theme.name]: computeThemeVariants(Object.keys(sources[theme.name]))
+        [theme.name]: computeThemeVariants(theme.variants)
       }))
       .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
     files: themes
