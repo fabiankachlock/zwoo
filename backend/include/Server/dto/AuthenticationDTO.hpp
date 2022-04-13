@@ -19,6 +19,9 @@ class CreateUserBodyDTO : public oatpp::DTO
 
     DTO_FIELD_INFO( password ) { info->description = "Users Password"; }
     DTO_FIELD( String, password ) = "";
+
+    DTO_FIELD_INFO( code ) { info->description = "Beta Code for Zwoo"; }
+    DTO_FIELD( String, code ) = "";
 };
 
 class LoginUserDTO : public oatpp::DTO

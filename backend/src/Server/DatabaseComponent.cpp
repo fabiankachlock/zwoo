@@ -198,6 +198,25 @@ void Database::updateBooleanField( std::string filter_field,
             ) );
 }
 
+bool Database::verifieAndUseBetaCode( std::string beta_code )
+{
+    auto conn = m_pool->acquire( );
+    auto collection = ( *conn )[ m_databaseName ][ "betacodes" ];
+
+    auto result = collection.find_one( createMongoDocument( // <-- Filter
+        oatpp::Fields<oatpp::String>( { { "code", beta_code } } ) ) );
+
+    if ( result )
+    {
+        collection.delete_one( createMongoDocument(
+            oatpp::Fields<oatpp::String>( { { "code", beta_code } } ) ) );
+
+        return true;
+    }
+
+    return false;
+}
+
 void Database::updateStringField( std::string filter_field,
                                   std::string filter_value, std::string field,
                                   std::string value )

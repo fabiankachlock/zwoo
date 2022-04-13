@@ -58,6 +58,7 @@ class Database
                             std::string field, std::string value );
     void updateBooleanField( std::string filter_field, std::string filter_value,
                              std::string field, bool value );
+    bool verifieAndUseBetaCode( std::string beta_code );
 
     oatpp::Object<LeaderBoardDTO> getLeaderBoard( );
 };
