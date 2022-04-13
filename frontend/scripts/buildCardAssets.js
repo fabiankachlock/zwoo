@@ -27,7 +27,7 @@ const BaseThemeConfig = {
     // optional
     cardFront: 'front',
     cardBack: 'back',
-    layerPlaceholder: '$',
+    layerWildcard: '$',
     encoding: 'base64',
     imageDataPrefix: DATA_PREFIX
   },
@@ -234,7 +234,7 @@ async function createMultiLayerCardSpriteSheet(files, encoding, dataPrefix, cust
   const spriteData = {};
   for (const file of files) {
     const spriteName = fileNameWithoutExtension(file);
-    const validSpriteName = spriteName.replaceAll(customWildcardCharacter, BaseThemeConfig.overrides.layerPlaceholder);
+    const validSpriteName = spriteName.replaceAll(customWildcardCharacter, BaseThemeConfig.overrides.layerWildcard);
     const buffer = await fs.readFile(file);
     const content = buffer.toString(encoding);
     spriteData[validSpriteName] = dataPrefix + content;
@@ -270,7 +270,7 @@ async function buildTheme(theme) {
 
     if (theme.isMultiLayer) {
       for (const file of frontFiles) {
-        if (!fileNameWithoutExtension(file).includes(theme.overrides?.layerPlaceholder ?? BaseThemeConfig.overrides.layerPlaceholder)) {
+        if (!fileNameWithoutExtension(file).includes(theme.overrides?.layerWildcard ?? BaseThemeConfig.overrides.layerWildcard)) {
           console.error(file + ' should be part of a multi layer theme, but has no wildcard');
           throw new Error('Multi-Layer sprite file without wildcard');
         }
@@ -282,7 +282,7 @@ async function buildTheme(theme) {
     console.log('     building...');
 
     const sheetData = theme.isMultiLayer
-      ? await createMultiLayerCardSpriteSheet(files, themeEncoding, themDataPrefix, theme.overrides?.layerPlaceholder ?? '')
+      ? await createMultiLayerCardSpriteSheet(files, themeEncoding, themDataPrefix, theme.overrides?.layerWildcard ?? '')
       : await createSingleLayerCardSpriteSheet(files, themeEncoding, themDataPrefix);
 
     writeJSONFile(join(OUT_DIR, fileName), sheetData);
