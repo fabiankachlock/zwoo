@@ -1,4 +1,4 @@
-const { join } = require('path');
+const { join, basename } = require('path');
 const fs = require('fs-extra');
 const DATA_PREFIX = 'data:image/svg+xml;base64, ';
 const ASSETS_DIR = join(__dirname, '..', 'assets');
@@ -185,20 +185,59 @@ async function createMetaFiles(themes) {
 }
 
 /**
- * Create a json sprite sheet single layer for a theme
- * @param {*} files an object with all the themes source files
+ * extract the filename of a file path
+ * @param {string} path the file path
+ * @returns {string} fileName
+ */
+function filePathToFilaName(path) {
+  return basename(path);
+}
+
+/**
+ * get the file name without the file extension
+ * @param {string} path the file path
+ * @returns {string} filename
+ */
+function fileNameWithoutExtension(path) {
+  const parts = filePathToFilaName(path).split('.');
+  parts.pop();
+  return parts.join('.');
+}
+
+/**
+ * Create a json sprite sheet single layer a theme
+ * @param {string[]} files an array with all the themes source file paths
  * @param {string} encoding teh target data encoding
- * @param {string} dataPrefix the html image data: prefix
+ * @param {string} dataPrefix the html image 'data:' prefix
  * @returns
  */
 async function createSingleLayerCardSpriteSheet(files, encoding, dataPrefix) {
   const spriteData = {};
   for (const file of files) {
-    const paths = file.split('/');
-    const spriteName = paths[paths.length - 1].split('.')[0];
+    const spriteName = fileNameWithoutExtension(file);
     const buffer = await fs.readFile(file);
     const content = buffer.toString(encoding);
     spriteData[spriteName] = dataPrefix + content;
+  }
+  return spriteData;
+}
+
+/**
+ * Create a json sprite sheet multi layer a theme
+ * @param {string[]} files an array with all the themes source file paths
+ * @param {string} encoding teh target data encoding
+ * @param {string} dataPrefix the html image 'data:' prefix
+ * @param {string} customWildcardCharacter the file name card wildcard char
+ * @returns
+ */
+async function createMultiLayerCardSpriteSheet(files, encoding, dataPrefix, customWildcardCharacter) {
+  const spriteData = {};
+  for (const file of files) {
+    const spriteName = fileNameWithoutExtension(file);
+    const validSpriteName = spriteName.replaceAll(customWildcardCharacter, BaseThemeConfig.overrides.layerPlaceholder);
+    const buffer = await fs.readFile(file);
+    const content = buffer.toString(encoding);
+    spriteData[validSpriteName] = dataPrefix + content;
   }
   return spriteData;
 }
@@ -219,17 +258,33 @@ async function buildTheme(theme) {
     console.log('   building ' + theme.name + '[' + variant + '] into ' + fileName);
     const buildStart = process.hrtime();
     const basePath = join(CARDS_SOURCES, theme.name);
-    const files = [
+    let files = [
       ...theme._sources[variant]['back'].map(fileName =>
         join(basePath, theme.overrides?.cardBack ?? BaseThemeConfig.overrides.cardBack, variant, fileName)
-      ),
-      ...theme._sources[variant]['front'].map(fileName =>
-        join(basePath, theme.overrides?.cardFront ?? BaseThemeConfig.overrides.cardFront, variant, fileName)
       )
     ];
+
+    const frontFiles = theme._sources[variant]['front'].map(fileName =>
+      join(basePath, theme.overrides?.cardFront ?? BaseThemeConfig.overrides.cardFront, variant, fileName)
+    );
+
+    if (theme.isMultiLayer) {
+      for (const file of frontFiles) {
+        if (!fileNameWithoutExtension(file).includes(theme.overrides?.layerPlaceholder ?? BaseThemeConfig.overrides.layerPlaceholder)) {
+          console.error(file + ' should be part of a multi layer theme, but has no wildcard');
+          throw new Error('Multi-Layer sprite file without wildcard');
+        }
+      }
+    }
+
+    files = files.concat(frontFiles);
     console.log('     found', files.length, 'file(s)');
     console.log('     building...');
-    const sheetData = await createSingleLayerCardSpriteSheet(files, themeEncoding, themDataPrefix);
+
+    const sheetData = theme.isMultiLayer
+      ? await createMultiLayerCardSpriteSheet(files, themeEncoding, themDataPrefix, theme.overrides?.layerPlaceholder ?? '')
+      : await createSingleLayerCardSpriteSheet(files, themeEncoding, themDataPrefix);
+
     writeJSONFile(join(OUT_DIR, fileName), sheetData);
     outFiles += 1;
     const buildEnd = process.hrtime(buildStart);
