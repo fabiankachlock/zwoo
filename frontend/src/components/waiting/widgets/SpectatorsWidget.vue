@@ -1,5 +1,5 @@
 <template>
-  <Widget title="wait.spectators" widget-class="bg-light" button-class="bg-main hover:bg-dark" default-open>
+  <Widget v-model="isOpen" title="wait.spectators" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <div class="w-full flex flex-col">
       <div v-if="spectators.length === 0">
         <p class="tc-main-dark italic">{{ t('wait.noSpectators') }}</p>
@@ -22,8 +22,10 @@ import { computed } from 'vue';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
 import Widget from '../Widget.vue';
 import { useI18n } from 'vue-i18n';
+import { useUserDefaults } from '@/composables/userDefaults';
 
 const { t } = useI18n();
+const isOpen = useUserDefaults('lobby:widgetSpectatorsOpen', true);
 const lobby = useLobbyStore();
 const spectators = computed(() => lobby.spectators);
 </script>

@@ -4,7 +4,8 @@
     "sections": {
       "general": "General",
       "game": "Game",
-      "danger": "Danger"
+      "danger": "Danger",
+      "developers": "Developer"
     },
     "update": {
       "available": "An update is available",
@@ -25,7 +26,9 @@
     "showCardDetail": "Show Card Detail before playing",
     "sortCards": "Sort cards in deck",
     "cookies": "Cookies",
-    "deleteAccount": "Delete Account"
+    "deleteAccount": "Delete Account",
+    "logging": "Logging",
+    "goToLogging": "Go to Settings"
   },
   "lng": {
     "de": "German",
@@ -55,6 +58,7 @@
     "password": "Password",
     "create": "Create",
     "passwordRepeat": "Repeat Password",
+    "beta": "BETA Code",
     "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account."
   },
   "createGame": {
@@ -139,6 +143,14 @@
       "144": "The opcode is invalid (this is an internal error).",
       "145": "The game ID is invalid.",
       "146": "You are already in a game."
+    },
+    "zrp": {
+      "900": "Error occurred",
+      "901": "Connection error",
+      "911": "Disconnected",
+      "920": "Error occurred on client",
+      "921": "Received invalid data",
+      "930": "Connected!"
     }
   },
   "version": "Version",
@@ -168,6 +180,9 @@
       "title": "Test Rule",
       "info": "Test rule description - optional extrem long text..."
     }
+  },
+  "ingame": {
+    "endTurn": "End turn"
   },
   "recaptcha": {
     "title": "I'm not a robot",
@@ -254,7 +269,18 @@
       "playerJoined": "Player {0} joined",
       "spectatorJoined": "Spectator {0} joined",
       "playerLeft": "{0} left",
-      "spectatorLeft": "{0} left"
+      "spectatorLeft": "{0} left",
+      "playerChangedRole": "{0} is now Spectator",
+      "spectatorChangedRole": "{0} is now Player"
     }
+  },
+  "logging": {
+    "title": "Logs",
+    "console": "Console",
+    "store": "Store (IndexedDB)",
+    "storedCount": "no logs stored | 1 entry | {count} entries",
+    "clearStore": "Clear Store",
+    "reloadLogs": "Reload Logs",
+    "storedLogs": "Stored Logs"
   }
 }

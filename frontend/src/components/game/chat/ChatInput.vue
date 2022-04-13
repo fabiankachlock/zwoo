@@ -26,7 +26,6 @@ const gameChat = useChatStore();
 
 const sendMessage = () => {
   if (message.value.length === 0) return;
-  console.log(message.value);
   gameChat.sendChatMessage(message.value);
   message.value = '';
 };

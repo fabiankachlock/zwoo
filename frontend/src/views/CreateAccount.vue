@@ -21,6 +21,9 @@
       <TextInput id="password" v-model="password" labelKey="createAccount.password" is-password placeholder="******" :validator="passwordValidator" />
       <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
+      <template v-if="isBeta">
+        <TextInput id="beta-code" v-model="betaCode" labelKey="createAccount.beta" placeholder="xxx-xxx" />
+      </template>
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
       <FormError :error="error" />
       <FormActions>
@@ -60,15 +63,22 @@ import { useCookies } from '@/core/adapter/cookies';
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
+const isBeta = process.env.VUE_APP_BETA === 'true';
 
 onMounted(() => {
   useCookies().loadRecaptcha();
+  const code = route.query['b'];
+  console.log(route.query, code);
+  if (code) {
+    betaCode.value = code as string;
+  }
 });
 
 const username = ref('');
 const email = ref('');
 const password = ref('');
 const passwordRepeat = ref('');
+const betaCode = ref('');
 const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
