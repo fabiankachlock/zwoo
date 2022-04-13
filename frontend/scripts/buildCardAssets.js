@@ -12,6 +12,10 @@ const VARIANT_DARK = 'dark';
 const VARIANT_LIGHT = 'light';
 const VARIANT_AUTO = '@auto';
 
+/**
+ * An example theme configuration.
+ * - contains all default values, used as fallback
+ */
 const BaseThemeConfig = {
   name: 'the theme name', // required
   description: 'a theme description', // optional
@@ -39,6 +43,12 @@ const BaseThemeConfig = {
   }
 };
 
+/**
+ * do some computation on a theme variants
+ * optionally add some auto supported themes (as @auto)
+ * @param {string[]} variants the themes variants
+ * @returns {string[]} the computed variants
+ */
 function computeThemeVariants(variants) {
   if (variants.includes(VARIANT_DARK) && variants.includes(VARIANT_LIGHT)) {
     return [...variants, VARIANT_AUTO];
@@ -46,6 +56,11 @@ function computeThemeVariants(variants) {
   return variants;
 }
 
+/**
+ * utility function for writing json files synchronously
+ * @param {string} path the files path
+ * @param {Record<string, any>} data the data to be converted to json
+ */
 async function writeJSONFile(path, data) {
   if (!fs.existsSync(path)) {
     await fs.createFile(path);
@@ -56,10 +71,19 @@ async function writeJSONFile(path, data) {
   await fs.writeFile(path, JSON.stringify(data, null, 2));
 }
 
+/**
+ * Validate a provided theme configuration
+ * @param {Record<string, any>} config the themes config
+ * @returns {boolean} whether it is valid
+ */
 function validateThemeConfig(config) {
   return 'name' in config && 'variants' in config;
 }
 
+/**
+ * search for all themes in the /assets/cards/raw folder
+ * @returns {typeof BaseThemeConfig} an list of all themes
+ */
 async function findThemes() {
   const allThemes = await fs.readdir(CARDS_SOURCES);
   const themes = [];
@@ -94,6 +118,11 @@ async function findThemes() {
   return themes;
 }
 
+/**
+ * Get all sources files for a theme
+ * @param {typeof BaseThemeConfig} themeConfig the provided theme
+ * @returns {typeof BaseThemeConfig} themeConfig extended with source information
+ */
 async function searchThemeSources(themeConfig) {
   const themeSources = {};
   const cardKinds = {
@@ -120,6 +149,10 @@ async function searchThemeSources(themeConfig) {
   };
 }
 
+/**
+ * Create the meta.json and sourcemap.json files
+ * @param {(typeof BaseThemeConfig)[]} themes list of all themes
+ */
 async function createMetaFiles(themes) {
   const sources = themes.map(t => ({ [t.name]: t._sources })).reduce((acc, curr) => ({ ...acc, ...curr }), {});
   const data = {
@@ -152,12 +185,13 @@ async function createMetaFiles(themes) {
 }
 
 /**
- * files: {
- *  back: [],
- *  front: []
- * }
+ * Create a json sprite sheet single layer for a theme
+ * @param {*} files an object with all the themes source files
+ * @param {string} encoding teh target data encoding
+ * @param {string} dataPrefix the html image data: prefix
+ * @returns
  */
-async function createCardSpriteSheet(files, encoding, dataPrefix) {
+async function createSingleLayerCardSpriteSheet(files, encoding, dataPrefix) {
   const spriteData = {};
   for (const file of files) {
     const paths = file.split('/');
@@ -170,6 +204,10 @@ async function createCardSpriteSheet(files, encoding, dataPrefix) {
 }
 
 let outFiles = 0;
+/**
+ * Create all sprite sheets for a theme
+ * @param {typeof BaseThemeConfig} theme the target theme
+ */
 async function buildTheme(theme) {
   console.log('building ' + theme.name);
   console.log(' found', theme.variants.length, 'variants (' + theme.variants.join(', ') + ')');
@@ -191,7 +229,7 @@ async function buildTheme(theme) {
     ];
     console.log('     found', files.length, 'file(s)');
     console.log('     building...');
-    const sheetData = await createCardSpriteSheet(files, themeEncoding, themDataPrefix);
+    const sheetData = await createSingleLayerCardSpriteSheet(files, themeEncoding, themDataPrefix);
     writeJSONFile(join(OUT_DIR, fileName), sheetData);
     outFiles += 1;
     const buildEnd = process.hrtime(buildStart);
@@ -199,6 +237,10 @@ async function buildTheme(theme) {
   }
 }
 
+/**
+ * Create sprite sheets for all themes
+ * @param {(typeof BaseThemeConfig)[]} themes a list of themes
+ */
 async function buildCards(themes) {
   for (const theme of themes) {
     await buildTheme(theme);
@@ -211,16 +253,18 @@ async function buildCards(themes) {
 (async () => {
   const allStart = process.hrtime();
   console.log('build card assets');
+  // clean build output directory
   if (fs.existsSync(OUT_DIR)) {
     await fs.rm(OUT_DIR, { recursive: true });
   }
   await fs.mkdir(OUT_DIR);
 
   console.log('scanning directories for build files');
-  const scanStart = process.hrtime();
 
+  // search all themes and source files
+  const scanStart = process.hrtime();
   const themes = await findThemes();
-  const themesWithSources = [];
+  const themesWithSources /*: (typeof BaseThemeConfig)[] */ = [];
   for (const theme of themes) {
     themesWithSources.push(await searchThemeSources(theme));
   }
@@ -228,9 +272,12 @@ async function buildCards(themes) {
   console.log('found %d themes (took %dms)', themes.length, scanEnd[1] / 1000000);
   console.log('start build process');
 
+  // write meta information files
   await createMetaFiles(themesWithSources);
+  // build theme assets
   await buildCards(themesWithSources);
 
+  // copy files to public dir
   console.log('cleaning target folder');
   const targetDirectory = join(PUBLIC_DIR, 'assets');
   if (fs.existsSync(targetDirectory)) {
