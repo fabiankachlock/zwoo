@@ -30,5 +30,6 @@ export enum CardDescriptor {
   BackSideways = 'back_s'
 }
 
+export const MAX_THEME_PREVIEWS = 6;
 // TODO: ?
 export const DefaultCardPreviews = [CardDescriptor.BackUpright, 'front_1_1', 'front_2_a', 'front_3_b', 'front_4_d', 'front_5_e'] as const;

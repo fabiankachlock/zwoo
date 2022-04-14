@@ -38,7 +38,7 @@ export class CardThemeManager {
     await this.waitForThemes();
     const uri = this.meta.files[theme.name][theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
-    return new CardTheme(theme.name, theme.variant, config);
+    return new CardTheme(theme.name, theme.variant, config, this.meta.configs[theme.name]);
   }
 
   private waitForThemes(): Promise<void> {
