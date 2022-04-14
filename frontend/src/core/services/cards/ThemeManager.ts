@@ -14,7 +14,8 @@ export class CardThemeManager {
     this.meta = {
       themes: [],
       variants: {},
-      files: {}
+      files: {},
+      configs: {}
     };
     const themeAwaiter = new Awaiter<void>();
     this.themesLoader = themeAwaiter.promise;

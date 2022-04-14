@@ -12,7 +12,8 @@
         "dark",
         "light",
         "@auto"
-      ]
+      ],
+      "previews": []
     }
   },
   "variants": {

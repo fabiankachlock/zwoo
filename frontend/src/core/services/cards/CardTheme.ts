@@ -1,8 +1,8 @@
 import { Card } from '../game/card';
-import { CardDescriptor, CardThemeConfig } from './CardThemeConfig';
+import { CardDescriptor, CardThemeData } from './CardThemeConfig';
 
 export class CardTheme {
-  constructor(public readonly name: string, public readonly variant: string, private readonly data: CardThemeConfig) {}
+  constructor(public readonly name: string, public readonly variant: string, private readonly data: CardThemeData) {}
 
   public getCard(card: Card | CardDescriptor): string {
     if (typeof card === 'string') {

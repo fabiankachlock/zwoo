@@ -22,7 +22,8 @@ const BaseThemeConfig = {
   author: 'the theme author', // optional
   isMultiLayer: true, // optional,
   variants: ['a', 'list', 'of', 'variants'], // required
-  imageType: 'svg+xml', // optional
+  imageType: 'svg+xml', // optional,
+  previews: [], // optional
   overrides: {
     // optional
     cardFront: 'front',
@@ -164,7 +165,8 @@ async function createMetaFiles(themes) {
           description: theme.description ?? '',
           author: theme.author ?? '',
           isMultiLayer: theme.isMultiLayer,
-          variants: computeThemeVariants(theme.variants)
+          variants: computeThemeVariants(theme.variants),
+          previews: theme?.previews ?? []
         }
       }))
       .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
