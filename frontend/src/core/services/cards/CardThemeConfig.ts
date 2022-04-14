@@ -14,6 +14,11 @@ export type CardThemeInformation = {
   previews: string[];
 };
 
+export type CardThemeIdentifier = {
+  name: string;
+  variant: string;
+};
+
 export type CardThemeData = Record<string, string>;
 
 export const CARD_THEME_VARIANT_AUTO = '@auto';

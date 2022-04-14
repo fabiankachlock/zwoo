@@ -1,7 +1,7 @@
 import { Awaiter } from '../helper/Awaiter';
 import Logger from '../logging/logImport';
 import { CardTheme } from './CardTheme';
-import { CardThemesMeta } from './CardThemeConfig';
+import { CardThemeInformation, CardThemesMeta, CardThemeIdentifier } from './CardThemeConfig';
 
 export class CardThemeManager {
   static global = new CardThemeManager();
@@ -33,12 +33,12 @@ export class CardThemeManager {
     return fetch('/assets/meta.json').then(res => res.json());
   }
 
-  public async loadTheme(theme: string, variant: string): Promise<CardTheme> {
-    Logger.Theme.log(`loading theme ${theme}.${variant}`);
+  public async loadTheme(theme: CardThemeIdentifier): Promise<CardTheme> {
+    Logger.Theme.log(`loading theme ${theme.name}.${theme.variant}`);
     await this.waitForThemes();
-    const uri = this.meta.files[theme][variant];
+    const uri = this.meta.files[theme.name][theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
-    return new CardTheme(theme, variant, config);
+    return new CardTheme(theme.name, theme.variant, config);
   }
 
   private waitForThemes(): Promise<void> {
@@ -47,5 +47,22 @@ export class CardThemeManager {
       return this.themesLoader;
     }
     return Promise.resolve();
+  }
+
+  public async getSelectableThemes(): Promise<CardThemeIdentifier[]> {
+    await this.waitForThemes();
+    return this.meta.themes
+      .map(theme =>
+        this.meta.variants[theme].map(variant => ({
+          name: theme,
+          variant
+        }))
+      )
+      .flat();
+  }
+
+  public async getThemeInformation(theme: string): Promise<CardThemeInformation | undefined> {
+    await this.waitForThemes();
+    return this.meta.configs[theme];
   }
 }
