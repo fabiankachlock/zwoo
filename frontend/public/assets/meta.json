@@ -24,9 +24,11 @@
     ]
   },
   "files": {
-    "__default__": {
-      "dark": "__default__.dark.json",
-      "light": "__default__.light.json"
-    }
+    "previews": {
+      "dark": "__default__.dark.preview.json",
+      "light": "__default__.light.preview.json"
+    },
+    "dark": "__default__.dark.json",
+    "light": "__default__.light.json"
   }
 }

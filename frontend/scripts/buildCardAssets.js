@@ -12,6 +12,9 @@ const VARIANT_DARK = 'dark';
 const VARIANT_LIGHT = 'light';
 const VARIANT_AUTO = '@auto';
 
+const MAX_THEME_PREVIEWS = 6;
+const DEFAULT_CARD_PREVIEWS = ['back_u', 'front_1_1', 'front_2_a', 'front_3_b', 'front_4_d', 'front_5_e'];
+
 /**
  * An example theme configuration.
  * - contains all default values, used as fallback
@@ -34,7 +37,11 @@ const BaseThemeConfig = {
   },
   // internal
   _dir: '', // the theme directory,
-  _files: {}, // output file names
+  _files: {
+    // output file names
+    previews: [],
+    '[variant]': ''
+  },
   _sources: {
     // all theme card paths
     '[variant]': {
@@ -120,6 +127,17 @@ async function findThemes() {
 }
 
 /**
+ * generate an output filename for a sprite sheet
+ * @param {string} theme the themes name
+ * @param {string} variant the variant
+ * @param {boolean} isPreview whether it is a preview file
+ * @returns {string} the filename
+ */
+function createFileName(theme, variant, isPreview) {
+  return theme + '.' + variant + (isPreview ? '.preview' : '') + '.json';
+}
+
+/**
  * Get all sources files for a theme
  * @param {typeof BaseThemeConfig} themeConfig the provided theme
  * @returns {typeof BaseThemeConfig} themeConfig extended with source information
@@ -143,11 +161,51 @@ async function searchThemeSources(themeConfig) {
       themeSources[variant][kind] = sprites.filter(sprite => !sprite.startsWith('.'));
     }
   }
+
+  const generateFileName = isPreview => (name, variant) => createFileName(name, variant, isPreview);
   return {
     ...themeConfig,
     _sources: themeSources,
-    _files: themeConfig.variants.reduce((acc, curr) => ({ ...acc, [curr]: themeConfig.name + '.' + curr + '.json' }), {})
+    _files: {
+      previews: toThemesObjectWithVariants([themeConfig], generateFileName(true))[themeConfig.name],
+      ...toThemesObjectWithVariants([themeConfig], generateFileName(false))[themeConfig.name]
+    }
   };
+}
+
+/**
+ *  combine an array of object into a single object
+ * @param {Object[]} objects
+ * @returns {Object} the combined object
+ */
+function combineToObject(objects) {
+  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+}
+
+/**
+ * Create a object with theme themes name as keys and der variants as sub keys
+ * @param {(typeof BaseThemeConfig)[]} themes the list of themes
+ * @param {(name: string, variant: string) => any} transformer
+ * @returns
+ */
+function toThemesObjectWithVariants(themes, transformer) {
+  return combineToObject(
+    themes.map(theme => ({
+      [theme.name]: theme.variants.reduce((acc, variant) => ({ ...acc, [variant]: transformer(theme.name, variant) }), {})
+    }))
+  );
+}
+
+/**
+ * delete a key from an object
+ * @param {Object} obj the target object
+ * @param {string} key the key to be deleted
+ * @returns {Object} the object without the key
+ */
+function objectWithoutKey(obj, key) {
+  const newObject = { ...obj };
+  delete newObject[key];
+  return newObject;
 }
 
 /**
@@ -155,11 +213,10 @@ async function searchThemeSources(themeConfig) {
  * @param {(typeof BaseThemeConfig)[]} themes list of all themes
  */
 async function createMetaFiles(themes) {
-  const sources = themes.map(t => ({ [t.name]: t._sources })).reduce((acc, curr) => ({ ...acc, ...curr }), {});
   const data = {
     themes: themes.map(t => t.name),
-    configs: themes
-      .map(theme => ({
+    configs: combineToObject(
+      themes.map(theme => ({
         [theme.name]: {
           name: theme.name ?? '',
           description: theme.description ?? '',
@@ -169,21 +226,22 @@ async function createMetaFiles(themes) {
           previews: theme?.previews ?? []
         }
       }))
-      .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
-    variants: themes
-      .map(theme => ({
+    ),
+    variants: combineToObject(
+      themes.map(theme => ({
         [theme.name]: computeThemeVariants(theme.variants)
       }))
-      .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
-    files: themes
-      .map(theme => ({
-        [theme.name]: Object.keys(sources[theme.name]).reduce((acc, curr) => ({ ...acc, [curr]: theme.name + '.' + curr + '.json' }), {})
-      }))
-      .reduce((acc, curr) => ({ ...acc, ...curr }), {})
+    ),
+    files: {
+      previews: {
+        ...combineToObject(themes.map(theme => theme._files.previews))
+      },
+      ...combineToObject(themes.map(theme => objectWithoutKey(theme._files, 'previews')))
+    }
   };
 
   writeJSONFile(join(OUT_DIR, 'meta.json'), data);
-  writeJSONFile(join(OUT_DIR, 'sourcemap.json'), sources);
+  writeJSONFile(join(OUT_DIR, 'sourcemap.json'), combineToObject(themes.map(t => ({ [t.name]: t._sources }))));
 }
 
 /**
@@ -257,19 +315,22 @@ async function buildTheme(theme) {
 
   for (const variant of theme.variants) {
     const fileName = theme._files[variant];
+    const previewFileName = theme._files.previews[variant];
     console.log('   building ' + theme.name + '[' + variant + '] into ' + fileName);
     const buildStart = process.hrtime();
     const basePath = join(CARDS_SOURCES, theme.name);
+
+    // collect all theme files
     let files = [
       ...theme._sources[variant]['back'].map(fileName =>
         join(basePath, theme.overrides?.cardBack ?? BaseThemeConfig.overrides.cardBack, variant, fileName)
       )
     ];
-
     const frontFiles = theme._sources[variant]['front'].map(fileName =>
       join(basePath, theme.overrides?.cardFront ?? BaseThemeConfig.overrides.cardFront, variant, fileName)
     );
 
+    // check multi layer files
     if (theme.isMultiLayer) {
       for (const file of frontFiles) {
         if (!fileNameWithoutExtension(file).includes(theme.overrides?.layerWildcard ?? BaseThemeConfig.overrides.layerWildcard)) {
@@ -283,14 +344,28 @@ async function buildTheme(theme) {
     console.log('     found', files.length, 'file(s)');
     console.log('     building...');
 
+    // create theme
     const sheetData = theme.isMultiLayer
       ? await createMultiLayerCardSpriteSheet(files, themeEncoding, themDataPrefix, theme.overrides?.layerWildcard ?? '')
       : await createSingleLayerCardSpriteSheet(files, themeEncoding, themDataPrefix);
 
     writeJSONFile(join(OUT_DIR, fileName), sheetData);
     outFiles += 1;
+
     const buildEnd = process.hrtime(buildStart);
     console.log('     ' + theme.name + '[' + variant + '] successfully build (' + fileName + ') - %dms', buildEnd[1] / 1000000);
+
+    // create preview
+    const previewStart = process.hrtime();
+    console.log('     building preview...');
+    const previews = (theme.previews ?? []).length === 0 ? DEFAULT_CARD_PREVIEWS.slice() : theme.previews.slice(0, MAX_THEME_PREVIEWS - 1);
+    console.log('     selected previews cards: ' + previews.join(', '));
+
+    const previewData = combineToObject(previews.map(card => ({ [card]: sheetData[card] })));
+    writeJSONFile(join(OUT_DIR, previewFileName), previewData);
+    outFiles += 1;
+    const previewEnd = process.hrtime(previewStart);
+    console.log('     ' + theme.name + '[' + variant + '] successfully build preview (' + previewFileName + ') - %dms', previewEnd[1] / 1000000);
   }
 }
 
@@ -325,6 +400,7 @@ async function buildCards(themes) {
   for (const theme of themes) {
     themesWithSources.push(await searchThemeSources(theme));
   }
+  console.log(themesWithSources);
   const scanEnd = process.hrtime(scanStart);
   console.log('found %d themes (took %dms)', themes.length, scanEnd[1] / 1000000);
   console.log('start build process');
