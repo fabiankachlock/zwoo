@@ -1,5 +1,7 @@
 const { join, basename } = require('path');
 const fs = require('fs-extra');
+
+// --- CONSTANTS ---
 const DATA_PREFIX = 'data:image/svg+xml;base64, ';
 const ASSETS_DIR = join(__dirname, '..', 'assets');
 const CARDS_DIR = join(ASSETS_DIR, 'cards');
@@ -15,6 +17,7 @@ const VARIANT_AUTO = '@auto';
 const MAX_THEME_PREVIEWS = 6;
 const DEFAULT_CARD_PREVIEWS = ['back_u', 'front_1_1', 'front_2_a', 'front_3_b', 'front_4_d', 'front_5_e'];
 
+// --- DATA_MODEL ---
 /**
  * An example theme configuration.
  * - contains all default values, used as fallback
@@ -51,17 +54,25 @@ const BaseThemeConfig = {
   }
 };
 
+// --- UTILITIES ---
 /**
- * do some computation on a theme variants
- * optionally add some auto supported themes (as @auto)
- * @param {string[]} variants the themes variants
- * @returns {string[]} the computed variants
+ * extract the filename of a file path
+ * @param {string} path the file path
+ * @returns {string} fileName
  */
-function computeThemeVariants(variants) {
-  if (variants.includes(VARIANT_DARK) && variants.includes(VARIANT_LIGHT)) {
-    return [...variants, VARIANT_AUTO];
-  }
-  return variants;
+function filePathToFilaName(path) {
+  return basename(path);
+}
+
+/**
+ * get the file name without the file extension
+ * @param {string} path the file path
+ * @returns {string} filename
+ */
+function fileNameWithoutExtension(path) {
+  const parts = filePathToFilaName(path).split('.');
+  parts.pop();
+  return parts.join('.');
 }
 
 /**
@@ -80,12 +91,58 @@ async function writeJSONFile(path, data) {
 }
 
 /**
+ *  combine an array of object into a single object
+ * @param {Object[]} objects
+ * @returns {Object} the combined object
+ */
+function combineToObject(objects) {
+  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+}
+
+/**
+ * delete a key from an object
+ * @param {Object} obj the target object
+ * @param {string} key the key to be deleted
+ * @returns {Object} the object without the key
+ */
+function objectWithoutKey(obj, key) {
+  const newObject = { ...obj };
+  delete newObject[key];
+  return newObject;
+}
+
+// --- CARD_THEME_UTILITIES ---
+/**
+ * generate an output filename for a sprite sheet
+ * @param {string} theme the themes name
+ * @param {string} variant the variant
+ * @param {boolean} isPreview whether it is a preview file
+ * @returns {string} the filename
+ */
+function createThemeFileName(theme, variant, isPreview) {
+  return theme + '.' + variant + (isPreview ? '.preview' : '') + '.json';
+}
+
+/**
  * Validate a provided theme configuration
  * @param {Record<string, any>} config the themes config
  * @returns {boolean} whether it is valid
  */
 function validateThemeConfig(config) {
   return 'name' in config && 'variants' in config;
+}
+
+/**
+ * do some computation on a theme variants
+ * optionally add some auto supported themes (as @auto)
+ * @param {string[]} variants the themes variants
+ * @returns {string[]} the computed variants
+ */
+function computeThemeVariants(variants) {
+  if (variants.includes(VARIANT_DARK) && variants.includes(VARIANT_LIGHT)) {
+    return [...variants, VARIANT_AUTO];
+  }
+  return variants;
 }
 
 /**
@@ -127,17 +184,6 @@ async function findThemes() {
 }
 
 /**
- * generate an output filename for a sprite sheet
- * @param {string} theme the themes name
- * @param {string} variant the variant
- * @param {boolean} isPreview whether it is a preview file
- * @returns {string} the filename
- */
-function createFileName(theme, variant, isPreview) {
-  return theme + '.' + variant + (isPreview ? '.preview' : '') + '.json';
-}
-
-/**
  * Get all sources files for a theme
  * @param {typeof BaseThemeConfig} themeConfig the provided theme
  * @returns {typeof BaseThemeConfig} themeConfig extended with source information
@@ -162,7 +208,7 @@ async function searchThemeSources(themeConfig) {
     }
   }
 
-  const generateFileName = isPreview => (name, variant) => createFileName(name, variant, isPreview);
+  const generateFileName = isPreview => (name, variant) => createThemeFileName(name, variant, isPreview);
   return {
     ...themeConfig,
     _sources: themeSources,
@@ -171,15 +217,6 @@ async function searchThemeSources(themeConfig) {
       ...toThemesObjectWithVariants([themeConfig], generateFileName(false))[themeConfig.name]
     }
   };
-}
-
-/**
- *  combine an array of object into a single object
- * @param {Object[]} objects
- * @returns {Object} the combined object
- */
-function combineToObject(objects) {
-  return objects.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 }
 
 /**
@@ -194,18 +231,6 @@ function toThemesObjectWithVariants(themes, transformer) {
       [theme.name]: theme.variants.reduce((acc, variant) => ({ ...acc, [variant]: transformer(theme.name, variant) }), {})
     }))
   );
-}
-
-/**
- * delete a key from an object
- * @param {Object} obj the target object
- * @param {string} key the key to be deleted
- * @returns {Object} the object without the key
- */
-function objectWithoutKey(obj, key) {
-  const newObject = { ...obj };
-  delete newObject[key];
-  return newObject;
 }
 
 /**
@@ -242,26 +267,6 @@ async function createMetaFiles(themes) {
 
   writeJSONFile(join(OUT_DIR, 'meta.json'), data);
   writeJSONFile(join(OUT_DIR, 'sourcemap.json'), combineToObject(themes.map(t => ({ [t.name]: t._sources }))));
-}
-
-/**
- * extract the filename of a file path
- * @param {string} path the file path
- * @returns {string} fileName
- */
-function filePathToFilaName(path) {
-  return basename(path);
-}
-
-/**
- * get the file name without the file extension
- * @param {string} path the file path
- * @returns {string} filename
- */
-function fileNameWithoutExtension(path) {
-  const parts = filePathToFilaName(path).split('.');
-  parts.pop();
-  return parts.join('.');
 }
 
 /**
