@@ -14,6 +14,7 @@ const VARIANT_DARK = 'dark';
 const VARIANT_LIGHT = 'light';
 const VARIANT_AUTO = '@auto';
 
+const CARD_LAYER_SEPARATOR = '_';
 const MAX_THEME_PREVIEWS = 6;
 const DEFAULT_CARD_PREVIEWS = ['back_u', 'front_1_1', 'front_2_a', 'front_3_b', 'front_4_d', 'front_5_e'];
 
@@ -127,6 +128,15 @@ function formatFileSize(size) {
   } else if (size < 1_024 * 1_024 * 1_024) {
     return (size / (1_024 * 1_024)).toFixed(2).toString() + 'MB';
   }
+}
+
+/**
+ * get all unique items of an array
+ * @param {any[]} arr the array
+ * @returns {any[]} array
+ */
+function unique(arr) {
+  return Array.from(new Set(arr));
 }
 
 // --- CARD_THEME_UTILITIES ---
@@ -325,6 +335,21 @@ async function createMultiLayerCardSpriteSheet(files, encoding, dataPrefix, cust
   return spriteData;
 }
 
+/**
+ * get the needed layers for a card
+ * @param {string} card the card descriptor
+ * @param {string} layerWildCard the wildcard to replace for layers
+ * @returns {string[]} the needed layers
+ */
+function resolveLayersForCard(card, layerWildCard) {
+  const firstLayer = card.replace(
+    new RegExp(CARD_LAYER_SEPARATOR + '.' + CARD_LAYER_SEPARATOR),
+    CARD_LAYER_SEPARATOR + layerWildCard + CARD_LAYER_SEPARATOR
+  );
+  const secondLayer = card.replace(new RegExp(CARD_LAYER_SEPARATOR + '.$'), CARD_LAYER_SEPARATOR + layerWildCard);
+  return [firstLayer, secondLayer];
+}
+
 let outFiles = 0;
 let sumSize = 0;
 /**
@@ -369,8 +394,9 @@ async function buildTheme(theme) {
     console.log('     building...');
 
     // create theme
+    const layerWildcard = theme.overrides?.layerWildcard ?? BaseThemeConfig.overrides.layerWildcard;
     const sheetData = theme.isMultiLayer
-      ? await createMultiLayerCardSpriteSheet(files, themeEncoding, themDataPrefix, theme.overrides?.layerWildcard ?? '')
+      ? await createMultiLayerCardSpriteSheet(files, themeEncoding, themDataPrefix, layerWildcard)
       : await createSingleLayerCardSpriteSheet(files, themeEncoding, themDataPrefix);
 
     const fileSize = await writeJSONFile(join(OUT_DIR, fileName), sheetData);
@@ -386,7 +412,9 @@ async function buildTheme(theme) {
     const previews = (theme.previews ?? []).length === 0 ? DEFAULT_CARD_PREVIEWS.slice() : theme.previews.slice(0, MAX_THEME_PREVIEWS - 1);
     console.log('     selected previews cards: ' + previews.join(', '));
 
-    const previewData = combineToObject(previews.map(card => ({ [card]: sheetData[card] })));
+    const previewImages = theme.isMultiLayer ? unique(previews.map(card => resolveLayersForCard(card)).flat()) : previews;
+
+    const previewData = combineToObject(previewImages.map(card => ({ [card]: sheetData[card] })));
     const previewFileSize = await writeJSONFile(join(OUT_DIR, previewFileName), previewData);
     outFiles += 1;
     sumSize += previewFileSize;
@@ -434,7 +462,6 @@ async function buildCards(themes) {
   for (const theme of themes) {
     themesWithSources.push(await searchThemeSources(theme));
   }
-  console.log(themesWithSources);
   const scanEnd = process.hrtime(scanStart);
   console.log('found %d themes (took %dms)', themes.length, scanEnd[1] / 1000000);
   console.log('start build process');
