@@ -79,6 +79,7 @@ function fileNameWithoutExtension(path) {
  * utility function for writing json files synchronously
  * @param {string} path the files path
  * @param {Record<string, any>} data the data to be converted to json
+ * @returns {Promise<number>} size of the files in byte
  */
 async function writeJSONFile(path, data) {
   if (!fs.existsSync(path)) {
@@ -87,7 +88,9 @@ async function writeJSONFile(path, data) {
     await fs.remove(path);
     await fs.createFile(path);
   }
-  await fs.writeFile(path, JSON.stringify(data, null, 2));
+  const dataContent = JSON.stringify(data, null, 2);
+  await fs.writeFile(path, dataContent);
+  return dataContent.length;
 }
 
 /**
@@ -109,6 +112,21 @@ function objectWithoutKey(obj, key) {
   const newObject = { ...obj };
   delete newObject[key];
   return newObject;
+}
+
+/**
+ * format a file size in bytes
+ * @param {number} size the file size in bytes
+ * @returns {string} the formatted size
+ */
+function formatFileSize(size) {
+  if (size < 1_024) {
+    return size.toString() + 'B';
+  } else if (size < 1_024 * 1_024) {
+    return (size / 1_024).toFixed(2).toString() + 'KB';
+  } else if (size < 1_024 * 1_024 * 1_024) {
+    return (size / (1_024 * 1_024)).toFixed(2).toString() + 'MB';
+  }
 }
 
 // --- CARD_THEME_UTILITIES ---
@@ -308,6 +326,7 @@ async function createMultiLayerCardSpriteSheet(files, encoding, dataPrefix, cust
 }
 
 let outFiles = 0;
+let sumSize = 0;
 /**
  * Create all sprite sheets for a theme
  * @param {typeof BaseThemeConfig} theme the target theme
@@ -354,11 +373,12 @@ async function buildTheme(theme) {
       ? await createMultiLayerCardSpriteSheet(files, themeEncoding, themDataPrefix, theme.overrides?.layerWildcard ?? '')
       : await createSingleLayerCardSpriteSheet(files, themeEncoding, themDataPrefix);
 
-    writeJSONFile(join(OUT_DIR, fileName), sheetData);
+    const fileSize = await writeJSONFile(join(OUT_DIR, fileName), sheetData);
     outFiles += 1;
+    sumSize += fileSize;
 
     const buildEnd = process.hrtime(buildStart);
-    console.log('     ' + theme.name + '[' + variant + '] successfully build (' + fileName + ') - %dms', buildEnd[1] / 1000000);
+    console.log('     %s[%s] successfully build (%s) - %s - %dms', theme.name, variant, fileName, formatFileSize(fileSize), buildEnd[1] / 1000000);
 
     // create preview
     const previewStart = process.hrtime();
@@ -367,10 +387,19 @@ async function buildTheme(theme) {
     console.log('     selected previews cards: ' + previews.join(', '));
 
     const previewData = combineToObject(previews.map(card => ({ [card]: sheetData[card] })));
-    writeJSONFile(join(OUT_DIR, previewFileName), previewData);
+    const previewFileSize = await writeJSONFile(join(OUT_DIR, previewFileName), previewData);
     outFiles += 1;
+    sumSize += previewFileSize;
+
     const previewEnd = process.hrtime(previewStart);
-    console.log('     ' + theme.name + '[' + variant + '] successfully build preview (' + previewFileName + ') - %dms', previewEnd[1] / 1000000);
+    console.log(
+      '     %s[%s] successfully build (%s) - %s - %dms',
+      theme.name,
+      variant,
+      previewFileName,
+      formatFileSize(previewFileSize),
+      previewEnd[1] / 1000000
+    );
   }
 }
 
@@ -424,5 +453,5 @@ async function buildCards(themes) {
   console.log('copying build output');
   await fs.copy(OUT_DIR, targetDirectory);
   const allEnd = process.hrtime(allStart);
-  console.log('done - %dms', allEnd[1] / 1000000);
+  console.log('done - %s - %dms', formatFileSize(sumSize), allEnd[1] / 1000000);
 })();
