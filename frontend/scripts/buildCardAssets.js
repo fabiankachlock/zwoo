@@ -174,6 +174,36 @@ function computeThemeVariants(variants) {
 }
 
 /**
+ * Create a object with theme themes name as keys and der variants as sub keys
+ * @param {(typeof BaseThemeConfig)[]} themes the list of themes
+ * @param {(name: string, variant: string) => any} transformer
+ * @returns
+ */
+function toThemesObjectWithVariants(themes, transformer) {
+  return combineToObject(
+    themes.map(theme => ({
+      [theme.name]: theme.variants.reduce((acc, variant) => ({ ...acc, [variant]: transformer(theme.name, variant) }), {})
+    }))
+  );
+}
+
+/**
+ * get the needed layers for a card
+ * @param {string} card the card descriptor
+ * @param {string} layerWildCard the wildcard to replace for layers
+ * @returns {string[]} the needed layers
+ */
+function resolveLayersForCard(card, layerWildCard) {
+  const firstLayer = card.replace(
+    new RegExp(CARD_LAYER_SEPARATOR + '.' + CARD_LAYER_SEPARATOR),
+    CARD_LAYER_SEPARATOR + layerWildCard + CARD_LAYER_SEPARATOR
+  );
+  const secondLayer = card.replace(new RegExp(CARD_LAYER_SEPARATOR + '.$'), CARD_LAYER_SEPARATOR + layerWildCard);
+  return [firstLayer, secondLayer];
+}
+
+// --- THEME_RESOLVING ---
+/**
  * search for all themes in the /assets/cards/raw folder
  * @returns {typeof BaseThemeConfig} an list of all themes
  */
@@ -247,20 +277,7 @@ async function searchThemeSources(themeConfig) {
   };
 }
 
-/**
- * Create a object with theme themes name as keys and der variants as sub keys
- * @param {(typeof BaseThemeConfig)[]} themes the list of themes
- * @param {(name: string, variant: string) => any} transformer
- * @returns
- */
-function toThemesObjectWithVariants(themes, transformer) {
-  return combineToObject(
-    themes.map(theme => ({
-      [theme.name]: theme.variants.reduce((acc, variant) => ({ ...acc, [variant]: transformer(theme.name, variant) }), {})
-    }))
-  );
-}
-
+// --- META_FILES ---
 /**
  * Create the meta.json and sourcemap.json files
  * @param {(typeof BaseThemeConfig)[]} themes list of all themes
@@ -297,6 +314,7 @@ async function createMetaFiles(themes) {
   writeJSONFile(join(OUT_DIR, 'sourcemap.json'), combineToObject(themes.map(t => ({ [t.name]: t._sources }))));
 }
 
+// --- GENERATE_SPRITE_SHEETS ---
 /**
  * Create a json sprite sheet single layer a theme
  * @param {string[]} files an array with all the themes source file paths
@@ -335,21 +353,7 @@ async function createMultiLayerCardSpriteSheet(files, encoding, dataPrefix, cust
   return spriteData;
 }
 
-/**
- * get the needed layers for a card
- * @param {string} card the card descriptor
- * @param {string} layerWildCard the wildcard to replace for layers
- * @returns {string[]} the needed layers
- */
-function resolveLayersForCard(card, layerWildCard) {
-  const firstLayer = card.replace(
-    new RegExp(CARD_LAYER_SEPARATOR + '.' + CARD_LAYER_SEPARATOR),
-    CARD_LAYER_SEPARATOR + layerWildCard + CARD_LAYER_SEPARATOR
-  );
-  const secondLayer = card.replace(new RegExp(CARD_LAYER_SEPARATOR + '.$'), CARD_LAYER_SEPARATOR + layerWildCard);
-  return [firstLayer, secondLayer];
-}
-
+// --- BUILDING ---
 let outFiles = 0;
 let sumSize = 0;
 /**
@@ -431,6 +435,7 @@ async function buildTheme(theme) {
   }
 }
 
+// --- MAIN ---
 /**
  * Create sprite sheets for all themes
  * @param {(typeof BaseThemeConfig)[]} themes a list of themes
