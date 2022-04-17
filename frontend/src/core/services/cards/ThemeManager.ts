@@ -65,4 +65,9 @@ export class CardThemeManager {
     await this.waitForThemes();
     return this.meta.configs[theme];
   }
+
+  public async getAllThemesInformation(): Promise<CardThemeInformation[]> {
+    await this.waitForThemes();
+    return this.meta.themes.map(theme => this.meta.configs[theme]);
+  }
 }

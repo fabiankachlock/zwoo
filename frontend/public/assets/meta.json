@@ -1,27 +1,17 @@
 {
-  "themes": [
-    "__default__"
-  ],
+  "themes": ["__default__"],
   "configs": {
     "__default__": {
       "name": "__default__",
-      "description": "",
-      "author": "",
+      "description": "my test description abc",
+      "author": "some cool dude",
       "isMultiLayer": false,
-      "variants": [
-        "dark",
-        "light",
-        "@auto"
-      ],
+      "variants": ["dark", "light", "@auto"],
       "previews": []
     }
   },
   "variants": {
-    "__default__": [
-      "dark",
-      "light",
-      "@auto"
-    ]
+    "__default__": ["dark", "light", "@auto"]
   },
   "files": {
     "previews": {
