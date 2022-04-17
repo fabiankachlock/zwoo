@@ -1,5 +1,5 @@
 <template>
-  <div class="main-card-wrapper absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-full" style="max-height: 70%">
+  <div class="main-card-wrapper absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full" style="max-height: 70%">
     <img :src="cardUrl" class="main-card" alt="card" />
   </div>
 </template>

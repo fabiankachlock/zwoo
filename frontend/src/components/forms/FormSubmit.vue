@@ -1,6 +1,6 @@
 <template>
   <button
-    class="bg-dark tc-primary py-2 px-6 w-full rounded focus:outline-none focus:shadow-outline transform transition hover:bg-darkest border-2 border-transparent hover:border-primary relative"
+    class="bg-dark tc-primary py-2 px-6 w-full rounded focus:outline-none focus:shadow-outline transition hover:bg-darkest border-2 border-transparent hover:border-primary relative"
     type="button"
     @click="emit('click')"
   >

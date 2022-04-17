@@ -9,12 +9,12 @@
         <button @click="toggleOpenState" class="toggle text-2xl tc-main relative p-4 rounded w-6 h-6 overflow-hidden" :class="buttonClass">
           <Icon
             icon="iconoir:nav-arrow-down"
-            class="icon absolute left-1/2 top-1/2 transform -translate-x-1/2 transition duration-300"
+            class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
             :class="{ 'opacity-0 translate-y-2': isOpen, '-translate-y-1/2': !isOpen }"
           />
           <Icon
             icon="iconoir:nav-arrow-up"
-            class="icon absolute left-1/2 top-1/2 transform -translate-x-1/2 transition duration-300"
+            class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
             :class="{ 'opacity-0 translate-y-2': !isOpen, '-translate-y-1/2': isOpen }"
           />
         </button>
