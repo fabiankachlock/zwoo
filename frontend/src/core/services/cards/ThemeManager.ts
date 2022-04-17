@@ -1,10 +1,13 @@
 import { Awaiter } from '../helper/Awaiter';
+import { QueuedCache } from '../helper/QueuedCache';
 import Logger from '../logging/logImport';
 import { CardTheme } from './CardTheme';
 import { CardThemeInformation, CardThemesMeta, CardThemeIdentifier } from './CardThemeConfig';
 
 export class CardThemeManager {
   static global = new CardThemeManager();
+
+  private themeCache = new QueuedCache<CardTheme>(3);
 
   private meta: CardThemesMeta;
 
@@ -29,16 +32,30 @@ export class CardThemeManager {
     })();
   }
 
+  private createCacheKey(theme: CardThemeIdentifier): string {
+    return `${theme.name}_${theme.variant}`;
+  }
+
   private async loadThemes(): Promise<CardThemesMeta> {
     return fetch('/assets/meta.json').then(res => res.json());
   }
 
   public async loadTheme(theme: CardThemeIdentifier): Promise<CardTheme> {
     Logger.Theme.log(`loading theme ${theme.name}.${theme.variant}`);
+
+    const cachedTheme = this.themeCache.get(this.createCacheKey(theme));
+    if (cachedTheme) {
+      // already loaded
+      Logger.Theme.debug('new theme already cached');
+      return cachedTheme;
+    }
+
     await this.waitForThemes();
     const uri = this.meta.files[theme.name][theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
-    return new CardTheme(theme.name, theme.variant, config, this.meta.configs[theme.name]);
+    const loadedTheme = new CardTheme(theme.name, theme.variant, config, this.meta.configs[theme.name]);
+    this.themeCache.set(this.createCacheKey(theme), loadedTheme);
+    return loadedTheme;
   }
 
   private waitForThemes(): Promise<void> {
