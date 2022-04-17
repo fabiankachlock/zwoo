@@ -30,6 +30,8 @@
         <span
           v-for="variant in props.theme.variants"
           :key="variant"
+          @click="previewVariant = variant"
+          :class="{ 'bc-primary hover:bc-primary': previewVariant === variant }"
           class="tc-main inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer"
         >
           {{ variant }}
@@ -37,14 +39,18 @@
       </p>
     </div>
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
-    <div class="mx-4">previews...</div>
+    <div class="mx-4">previews..., showing {{ previewVariant }}</div>
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
-    <div class="mx-4">actions...</div>
+    <div class="mx-4">
+      <div class="flex flex-row flex-nowrap justify-end items-center mt-2">
+        <button class="py-2 px-3 rounded ml-2 bg-light hover:bg-main text-lg tc-primary" @click="selectAsTheme()">Select As Theme</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
 
@@ -52,6 +58,12 @@ const props = defineProps<{
   theme: CardThemeInformation;
   isSelected: boolean;
 }>();
+
+const previewVariant = ref(props.theme.variants[0] ?? '');
+
+const selectAsTheme = () => {
+  console.log('selecting', props.theme.name, previewVariant.value, 'as theme');
+};
 </script>
 
 <style>
