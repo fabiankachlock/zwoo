@@ -45,7 +45,7 @@
   },
   "login": {
     "title": "Anmeldung",
-    "email": "E-Mail",
+    "username": "Benutzername",
     "password": "Passwort",
     "login": "Anmelden",
     "resetPassword": "Passwort zurücksetzten"

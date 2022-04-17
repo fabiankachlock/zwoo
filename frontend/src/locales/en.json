@@ -45,7 +45,7 @@
   },
   "login": {
     "title": "Login",
-    "email": "E-Mail",
+    "username": "Username",
     "password": "Password",
     "login": "Login",
     "resetPassword": "Reset Password"
