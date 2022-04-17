@@ -12,6 +12,7 @@ import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptc
 import { CookieGuard } from '@/core/services/security/CookieGuard';
 import { InGameGuard } from '@/core/services/security/GameGuard';
 import { DeveloperRoute } from './developer';
+import { ThemesRoute } from './themes';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,6 +36,7 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   GameRoute,
+  ThemesRoute,
   DeveloperRoute,
   process.env.VUE_APP_BETA === 'true'
     ? {
