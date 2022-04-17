@@ -79,6 +79,13 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         id: p.name
       }));
 
+    for (const player of data.players) {
+      if (player.role === ZRPRole.Host) {
+        gameHost.value = player.name;
+        break;
+      }
+    }
+
     const playerDiff = arrayDiff(players.value, newPlayers, (a, b) => a.id === b.id);
     const spectatorDiff = arrayDiff(spectators.value, newSpectators, (a, b) => a.id === b.id);
 
