@@ -1,7 +1,7 @@
 export interface CardThemesMeta {
   themes: string[];
   variants: Record<string, string[]>;
-  files: Record<string, Record<string, string>>;
+  files: Record<string, Record<string, string>> & { previews: Record<string, Record<string, string>> };
   configs: Record<string, CardThemeInformation>;
 }
 
