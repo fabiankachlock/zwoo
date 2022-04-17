@@ -1,24 +1,38 @@
 {
-  "themes": ["__default__"],
+  "themes": [
+    "__default__"
+  ],
   "configs": {
     "__default__": {
       "name": "__default__",
-      "description": "my test description abc",
-      "author": "some cool dude",
+      "description": "",
+      "author": "",
       "isMultiLayer": false,
-      "variants": ["dark", "light", "@auto"],
+      "variants": [
+        "dark",
+        "light",
+        "@auto"
+      ],
       "previews": []
     }
   },
   "variants": {
-    "__default__": ["dark", "light", "@auto"]
+    "__default__": [
+      "dark",
+      "light",
+      "@auto"
+    ]
   },
   "files": {
     "previews": {
-      "dark": "__default__.dark.preview.json",
-      "light": "__default__.light.preview.json"
+      "__default__": {
+        "dark": "__default__.dark.preview.json",
+        "light": "__default__.light.preview.json"
+      }
     },
-    "dark": "__default__.dark.json",
-    "light": "__default__.light.json"
+    "__default__": {
+      "dark": "__default__.dark.json",
+      "light": "__default__.light.json"
+    }
   }
 }

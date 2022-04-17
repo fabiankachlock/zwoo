@@ -304,9 +304,9 @@ async function createMetaFiles(themes) {
     ),
     files: {
       previews: {
-        ...combineToObject(themes.map(theme => theme._files.previews))
+        ...combineToObject(themes.map(theme => ({ [theme.name]: theme._files.previews })))
       },
-      ...combineToObject(themes.map(theme => objectWithoutKey(theme._files, 'previews')))
+      ...combineToObject(themes.map(theme => ({ [theme.name]: objectWithoutKey(theme._files, 'previews') })))
     }
   };
 
