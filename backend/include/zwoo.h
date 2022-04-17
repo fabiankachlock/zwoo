@@ -13,6 +13,8 @@ int str2int( std::string str );
 #define ZWOO_CORS get_env( "ZWOO_CORS" )     // CORS Domain
 #define ZWOO_ENCRYPTION_KEY                                                    \
     std::getenv( "ZWOO_ENCRYPTION_KEY" ) // recommended minimum 64 Chars
+#define ZWOO_BETA str2b( get_env( "ZWOO_BETA" ) )
+#define ZWOO_LOGS get_env( "ZWOO_LOGS" ) // Folder for Logs
 
 #define SMTP_HOST_URL get_env( "SMTP_HOST_URL" )
 #define SMTP_HOST_PORT str2int( get_env( "SMTP_HOST_PORT" ) )

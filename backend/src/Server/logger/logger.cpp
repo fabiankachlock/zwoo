@@ -2,6 +2,8 @@
 
 #include "spdlog/sinks/daily_file_sink.h"
 
+#include "zwoo.h"
+
 #include <chrono>
 #include <iomanip>
 #include <iostream>
@@ -17,7 +19,7 @@ void Logger::init( std::string name )
         std::make_shared<spdlog::sinks::stdout_color_sink_mt>( ) );
     log_sinks.emplace_back(
         std::make_shared<spdlog::sinks::daily_file_format_sink_mt>(
-            "logs/%d-%m-%Y_%H:%M:%S-log.txt", 23, 59, false, 3 ) );
+            ZWOO_LOGS + "%d-%m-%Y_%H:%M:%S-log.txt", 23, 59, false, 3 ) );
 
     log = std::make_shared<spdlog::logger>( name, begin( log_sinks ),
                                             end( log_sinks ) );
