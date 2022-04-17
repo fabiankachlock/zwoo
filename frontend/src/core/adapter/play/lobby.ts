@@ -35,7 +35,13 @@ const lobbyWatcher = new MonolithicEventWatcher(
 );
 
 export const useLobbyStore = defineStore('game-lobby', () => {
-  const players = ref<LobbyPlayer[]>([]);
+  const players = ref<LobbyPlayer[]>([
+    {
+      name: 'test',
+      id: 'test',
+      role: ZRPRole.Host
+    }
+  ]);
   const spectators = ref<LobbyPlayer[]>([]);
   const gameHost = ref('');
   const dispatchEvent = useGameEventDispatch();
@@ -182,6 +188,15 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     dispatchEvent(ZRPOPCode.PromotePlayerToHost, { username: id });
   };
 
+  const changeToSpectator = (id?: string) => {
+    if (id) {
+      // TODO: which message to send when a host changes to role of a player
+      dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, {});
+    } else {
+      dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, {});
+    }
+  };
+
   lobbyWatcher.onMessage(_receiveMessage);
   lobbyWatcher.onClose(reset);
   lobbyWatcher.onOpen(setup);
@@ -192,6 +207,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     host: gameHost,
     kickPlayer,
     promotePlayer,
+    changeToSpectator: (id: string) => changeToSpectator(id),
+    changeSelfToSpectator: () => changeToSpectator(),
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };

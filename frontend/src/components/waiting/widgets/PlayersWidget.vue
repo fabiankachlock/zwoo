@@ -58,25 +58,32 @@
               <Icon icon="akar-icons:crown" class="inline ml-1" />
             </span>
           </p>
-          <div v-if="isHost && username !== player.name" class="flex items-center h-full justify-end">
-            <button v-tooltip="t('wait.promote')" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
-              <Icon icon="akar-icons:crown" />
-            </button>
-            <button v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
-              <Icon icon="iconoir:delete-circled-outline" />
-            </button>
-            <ReassureDialog
-              @close="allowed => handlePromotePlayer(player.id, allowed)"
-              :title="t('dialogs.promotePlayer.title', [player.name])"
-              :body="t('dialogs.promotePlayer.body', [player.name])"
-              :is-open="playerPromoteDialogOpen"
-            />
-            <ReassureDialog
-              @close="allowed => handleKickPlayer(player.id, allowed)"
-              :title="t('dialogs.kickPlayer.title', [player.name])"
-              :body="t('dialogs.kickPlayer.body', [player.name])"
-              :is-open="playerKickDialogOpen"
-            />
+          <div class="flex items-center h-full justify-end">
+            <template v-if="!isHost && username === player.name">
+              <button v-tooltip="t('wait.spectate')" @click="handleChangeToSpectator()" class="tc-primary h-full bg-light hover:bg-main rounded p-1">
+                <Icon icon="iconoir:eye-alt" />
+              </button>
+            </template>
+            <template v-if="isHost && username !== player.name">
+              <button v-tooltip="t('wait.promote')" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+                <Icon icon="akar-icons:crown" />
+              </button>
+              <ReassureDialog
+                @close="allowed => handlePromotePlayer(player.id, allowed)"
+                :title="t('dialogs.promotePlayer.title', [player.name])"
+                :body="t('dialogs.promotePlayer.body', [player.name])"
+                :is-open="playerPromoteDialogOpen"
+              />
+              <button v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+                <Icon icon="iconoir:delete-circled-outline" />
+              </button>
+              <ReassureDialog
+                @close="allowed => handleKickPlayer(player.id, allowed)"
+                :title="t('dialogs.kickPlayer.title', [player.name])"
+                :body="t('dialogs.kickPlayer.body', [player.name])"
+                :is-open="playerKickDialogOpen"
+              />
+            </template>
           </div>
         </div>
       </div>
@@ -135,5 +142,9 @@ const handleKickPlayer = (id: string, allowed: boolean) => {
 
 const askKickPlayer = () => {
   playerKickDialogOpen.value = true;
+};
+
+const handleChangeToSpectator = () => {
+  lobby.changeSelfToSpectator();
 };
 </script>
