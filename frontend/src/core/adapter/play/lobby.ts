@@ -7,7 +7,7 @@ import {
   ZRPOPCode,
   ZRPPlayerWithRolePayload,
   ZRPRole,
-  ZRPUsernamePayload
+  ZRPNamePayload
 } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
@@ -137,8 +137,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     });
   };
 
-  const newHost = (data: ZRPUsernamePayload) => {
-    gameHost.value = data.username;
+  const newHost = (data: ZRPNamePayload) => {
+    gameHost.value = data.name;
   };
 
   const changePlayerRole = (data: ZRPPlayerWithRolePayload) => {
@@ -181,20 +181,15 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const kickPlayer = (id: string) => {
-    dispatchEvent(ZRPOPCode.KickPlayer, { username: id });
+    dispatchEvent(ZRPOPCode.KickPlayer, { name: id });
   };
 
   const promotePlayer = (id: string) => {
-    dispatchEvent(ZRPOPCode.PromotePlayerToHost, { username: id });
+    dispatchEvent(ZRPOPCode.PromotePlayerToHost, { name: id });
   };
 
-  const changeToSpectator = (id?: string) => {
-    if (id) {
-      // TODO: which message to send when a host changes to role of a player
-      dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, {});
-    } else {
-      dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, {});
-    }
+  const changeToSpectator = (id: string) => {
+    dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, { name: id });
   };
 
   lobbyWatcher.onMessage(_receiveMessage);
@@ -207,8 +202,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     host: gameHost,
     kickPlayer,
     promotePlayer,
-    changeToSpectator: (id: string) => changeToSpectator(id),
-    changeSelfToSpectator: () => changeToSpectator(),
+    changeToSpectator,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };

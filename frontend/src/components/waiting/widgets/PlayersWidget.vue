@@ -65,6 +65,13 @@
               </button>
             </template>
             <template v-if="isHost && username !== player.name">
+              <button
+                v-tooltip="t('wait.spectate')"
+                @click="handlePlayerToSpectator(player.id)"
+                class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+              >
+                <Icon icon="iconoir:eye-alt" />
+              </button>
               <button v-tooltip="t('wait.promote')" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
                 <Icon icon="akar-icons:crown" />
               </button>
@@ -145,6 +152,10 @@ const askKickPlayer = () => {
 };
 
 const handleChangeToSpectator = () => {
-  lobby.changeSelfToSpectator();
+  lobby.changeToSpectator(username.value);
+};
+
+const handlePlayerToSpectator = (id: string) => {
+  lobby.changeToSpectator(id);
 };
 </script>
