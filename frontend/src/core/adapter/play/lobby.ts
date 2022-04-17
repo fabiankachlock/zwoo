@@ -198,6 +198,10 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, { name: id });
   };
 
+  const changeToPlayer = () => {
+    dispatchEvent(ZRPOPCode.SpectatorWantsToPlay, {});
+  };
+
   lobbyWatcher.onMessage(_receiveMessage);
   lobbyWatcher.onClose(reset);
   lobbyWatcher.onOpen(setup);
@@ -209,6 +213,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     kickPlayer,
     promotePlayer,
     changeToSpectator,
+    changeToPlayer,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };

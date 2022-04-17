@@ -13,6 +13,15 @@
           {{ player.name }}
         </p>
         <div class="flex items-center h-full justify-end">
+          <template v-if="username === player.name">
+            <button
+              v-tooltip="t('wait.play')"
+              @click="startPlaying()"
+              class="tc-primary h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-light hover:bg-main rounded"
+            >
+              <Icon icon="iconoir:play-outline" />
+            </button>
+          </template>
           <template v-if="isHost && username !== player.name">
             <button v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
               <Icon icon="iconoir:delete-circled-outline" />
@@ -59,5 +68,9 @@ const handleKickPlayer = (id: string, allowed: boolean) => {
 
 const askKickPlayer = () => {
   playerKickDialogOpen.value = true;
+};
+
+const startPlaying = () => {
+  lobby.changeToPlayer();
 };
 </script>
