@@ -1,5 +1,5 @@
 <template>
-  <li class="px-2 py-1">
+  <li>
     <router-link v-if="!isExternal" :to="link" class="link tc-main-dark">
       {{ title }}
     </router-link>
@@ -22,6 +22,6 @@ defineProps<{
 
 <style scoped>
 .link {
-  @apply flex flex-row justify-start cursor-pointer items-center transform ease-linear transition-transform md:text-sm md:hover:-translate-y-1 md:hover:translate-x-0 hover:translate-x-1;
+  @apply flex flex-row justify-start cursor-pointer items-center px-3 sm:px-0 ease-linear transition-transform sm:text-sm sm:hover:-translate-y-1 sm:hover:translate-x-0 hover:translate-x-1;
 }
 </style>

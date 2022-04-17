@@ -45,7 +45,7 @@
   },
   "login": {
     "title": "Login",
-    "email": "E-Mail",
+    "username": "Username",
     "password": "Password",
     "login": "Login",
     "resetPassword": "Reset Password"
@@ -166,6 +166,8 @@
     "expand": "Expand",
     "collapse": "Collapse",
     "promote": "Promote",
+    "spectate": "Spectator",
+    "play": "Play",
     "kick": "Kick",
     "chat": "Chat",
     "noPlayers": "no players available...",

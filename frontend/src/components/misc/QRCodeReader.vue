@@ -10,7 +10,7 @@
     </div>
     <div>
       <div class="flex justify-center items-center my-2">
-        <button class="bg-dark tc-main px-6 py-2 rounded hover:bg-darkest transform transition-transform hover:scale-95" @click="handleButtonClick">
+        <button class="bg-dark tc-main px-6 py-2 rounded hover:bg-darkest transition-transform hover:scale-95" @click="handleButtonClick">
           {{ t(cameraOn ? 'join.closeCam' : 'join.scanCode') }}
         </button>
       </div>

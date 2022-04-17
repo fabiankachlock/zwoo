@@ -1,5 +1,5 @@
 <template>
-  <button @click="toggleShouldShowDetail" class="tc-main text-xl transform ease-linear transition-transform hover:scale-110">
+  <button @click="toggleShouldShowDetail" class="tc-main text-xl ease-linear transition-transform hover:scale-110">
     <Icon icon="carbon:magnify" v-show="!shouldShowDetail" />
     <Icon icon="teenyicons:file-x-outline" v-show="shouldShowDetail" />
   </button>

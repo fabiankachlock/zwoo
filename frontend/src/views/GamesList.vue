@@ -74,7 +74,7 @@
                 </button>
                 <button
                   @click="refresh()"
-                  class="nothing-found-btn bg-main hover:bg-light transform transition-transform"
+                  class="nothing-found-btn bg-main hover:bg-light transition-transform"
                   :class="{ 'scale-95 opacity-50 pointer-events-none cursor-default': refreshing }"
                   :disabled="refreshing"
                 >
