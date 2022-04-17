@@ -64,6 +64,13 @@ class PlayerToHost : public oatpp::DTO
     DTO_FIELD( String, username ) = "";
 };
 
+class PlayerToSpectator : public oatpp::DTO
+{
+    DTO_INIT( PlayerToSpectator, DTO )
+
+    DTO_FIELD( String, username ) = "";
+};
+
 #include OATPP_CODEGEN_END( DTO ) ///< End DTO codegen section
 
 #endif // _ZRPMESSAGEDTO_HPP_
