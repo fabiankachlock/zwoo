@@ -1,12 +1,12 @@
 import { useColorTheme } from '@/composables/colorTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
-import { CARD_THEME_VARIANT_AUTO } from '@/core/services/cards/CardThemeConfig';
+import { CardThemeInformation, CARD_THEME_VARIANT_AUTO } from '@/core/services/cards/CardThemeConfig';
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';
 import { CreateUseHook } from '@/core/services/helper/CreateUseHook';
 import { QueuedCache } from '@/core/services/helper/QueuedCache';
 import Logger from '@/core/services/logging/logImport';
 import { ref, watch } from 'vue';
-import { useGameConfig } from '../game';
+import { useConfig } from '../config';
 
 const DEBOUNCE_TIME = 1000;
 const ThemeManager = CardThemeManager.global;
@@ -15,8 +15,8 @@ const createCacheKey = (theme: string, variant: string) => `${theme}_${variant}`
 
 export const useCardTheme = CreateUseHook(() => {
   const colorMode = useColorTheme();
-  const { cardTheme, cardThemeVariant } = useGameConfig();
-  const theme = ref<CardTheme>(new CardTheme('', '', {}));
+  const { cardTheme, cardThemeVariant } = useConfig();
+  const theme = ref<CardTheme>(new CardTheme('', '', {}, {} as CardThemeInformation));
   let debounceTimeout: number | undefined = undefined;
 
   watch([colorMode, () => cardTheme, () => cardThemeVariant], ([colorMode, cardTheme, themeVariant]) => {
@@ -44,7 +44,7 @@ export const useCardTheme = CreateUseHook(() => {
   const loadTheme = async (name: string, variant: string) => {
     debounceTimeout = undefined;
     Logger.Theme.debug('loading new theme');
-    const loadedTheme = await ThemeManager.loadTheme(name, variant);
+    const loadedTheme = await ThemeManager.loadTheme({ name, variant });
     ThemeCache.set(createCacheKey(name, variant), loadedTheme);
     theme.value = loadedTheme;
   };

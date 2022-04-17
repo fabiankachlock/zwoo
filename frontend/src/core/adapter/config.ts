@@ -43,7 +43,9 @@ export const useConfig = defineStore('config', {
       useFullScreen: false,
       showQuickMenu: false,
       sortCards: false,
-      showCardDetail: false
+      showCardDetail: false,
+      cardTheme: '__default__',
+      cardThemeVariant: '@auto'
     };
   },
 
