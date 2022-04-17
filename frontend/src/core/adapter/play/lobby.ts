@@ -37,12 +37,18 @@ const lobbyWatcher = new MonolithicEventWatcher(
 export const useLobbyStore = defineStore('game-lobby', () => {
   const players = ref<LobbyPlayer[]>([
     {
-      name: 'test',
-      id: 'test',
+      name: 'p',
+      id: 'p',
       role: ZRPRole.Host
     }
   ]);
-  const spectators = ref<LobbyPlayer[]>([]);
+  const spectators = ref<LobbyPlayer[]>([
+    {
+      name: 's',
+      id: 's',
+      role: ZRPRole.Spectator
+    }
+  ]);
   const gameHost = ref('');
   const dispatchEvent = useGameEventDispatch();
   const snackbar = useSnackbar();
