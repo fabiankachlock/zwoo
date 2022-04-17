@@ -166,6 +166,8 @@
     "expand": "Expand",
     "collapse": "Collapse",
     "promote": "Promote",
+    "spectate": "Spectator",
+    "play": "Play",
     "kick": "Kick",
     "chat": "Chat",
     "noPlayers": "no players available...",
