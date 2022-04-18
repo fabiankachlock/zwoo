@@ -25,7 +25,7 @@ export const useInGameErrorWatcher = defineStore('game-error-to-snackbar', () =>
     snackbar.pushMessage({
       message: `errors.zrp.${msg.code}`,
       position: SnackBarPosition.Top,
-      color: 'secondary',
+      color: 'primary',
       force: true,
       needsTranslation: true
     });
