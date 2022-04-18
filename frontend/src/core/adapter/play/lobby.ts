@@ -43,6 +43,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const translations = I18nInstance;
   const auth = useAuth();
   const gameConfig = useGameConfig();
+  let isInitialFetch = false;
 
   const _receiveMessage: typeof lobbyWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerJoined) {
@@ -95,6 +96,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     for (const addition of [...playerDiff.added, ...spectatorDiff.added]) {
       joinPlayer(addition as unknown as ZRPJoinedGamePayload, addition.role);
     }
+    isInitialFetch = false;
   };
 
   const joinPlayer = (data: ZRPJoinedGamePayload, role: ZRPRole) => {
@@ -111,10 +113,12 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         role: role
       });
     }
-    snackbar.pushMessage({
-      message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Joined`, [data.username]),
-      position: SnackBarPosition.TopRight
-    });
+    if (!isInitialFetch) {
+      snackbar.pushMessage({
+        message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Joined`, [data.username]),
+        position: SnackBarPosition.TopRight
+      });
+    }
   };
 
   const leavePlayer = (data: ZRPLeftGamePayload, role: ZRPRole) => {
@@ -125,10 +129,12 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     } else {
       players.value = players.value.filter(p => p.id !== data.username);
     }
-    snackbar.pushMessage({
-      message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Left`, [data.username]),
-      position: SnackBarPosition.TopRight
-    });
+    if (!isInitialFetch) {
+      snackbar.pushMessage({
+        message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Left`, [data.username]),
+        position: SnackBarPosition.TopRight
+      });
+    }
   };
 
   const newHost = (data: ZRPNamePayload) => {
