@@ -10,9 +10,9 @@ import {
   ZRPNamePayload
 } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { arrayDiff } from '@/core/services/utils';
+import { arrayDiff, uniqueBy } from '@/core/services/utils';
 import { I18nInstance } from '@/i18n';
 import { useAuth } from '../auth';
 import { useGameConfig } from '../game';
@@ -44,6 +44,14 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const auth = useAuth();
   const gameConfig = useGameConfig();
   let isInitialFetch = false;
+
+  const addPlayer = (list: Ref<LobbyPlayer[]>, player: LobbyPlayer) => {
+    list.value = uniqueBy([...players.value, player], p => p.id);
+  };
+
+  const removePlayer = (list: Ref<LobbyPlayer[]>, id: string) => {
+    list.value = list.value.filter(p => p.id !== id);
+  };
 
   const _receiveMessage: typeof lobbyWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerJoined) {
@@ -101,13 +109,13 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const joinPlayer = (data: ZRPJoinedGamePayload, role: ZRPRole) => {
     if (role === ZRPRole.Spectator) {
-      spectators.value.push({
+      addPlayer(spectators, {
         username: data.username,
         id: data.username,
         role: role
       });
     } else {
-      players.value.push({
+      addPlayer(players, {
         username: data.username,
         id: data.username,
         role: role
@@ -123,11 +131,9 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const leavePlayer = (data: ZRPLeftGamePayload, role: ZRPRole) => {
     if (role === ZRPRole.Spectator) {
-      console.log(data, role, [...spectators.value]);
-      spectators.value = spectators.value.filter(s => s.id !== data.username);
-      console.log('after', [...spectators.value]);
+      removePlayer(spectators, data.username);
     } else {
-      players.value = players.value.filter(p => p.id !== data.username);
+      removePlayer(players, data.username);
     }
     if (!isInitialFetch) {
       snackbar.pushMessage({
@@ -148,17 +154,17 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
     if (!user) return; // no user existing
     if (data.role === ZRPRole.Player) {
-      spectators.value = spectators.value.filter(player => player.id === data.username);
-      players.value.push({
-        id: data.username,
+      removePlayer(spectators, data.username);
+      addPlayer(players, {
         username: data.username,
+        id: data.username,
         role: data.role
       });
     } else if (data.role === ZRPRole.Spectator) {
-      players.value = players.value.filter(player => player.id === data.username);
-      spectators.value.push({
-        id: data.username,
+      removePlayer(players, data.username);
+      addPlayer(spectators, {
         username: data.username,
+        id: data.username,
         role: data.role
       });
     }

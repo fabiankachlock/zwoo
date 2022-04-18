@@ -46,3 +46,19 @@ export const arrayDiff = <T>(before: T[], after: T[], equals?: (a: T, b: T) => b
     removed
   };
 };
+
+export const uniqueBy = <T>(array: T[], keyBuilder: (value: T) => string): T[] => {
+  const arrayElementMap: Record<string, boolean> = {};
+  const newArray: T[] = [];
+
+  for (const item of array) {
+    const stringKey = keyBuilder(item);
+    if (arrayElementMap[stringKey] === true) {
+      continue;
+    }
+    arrayElementMap[stringKey] = true;
+    newArray.push(item);
+  }
+
+  return newArray;
+};
