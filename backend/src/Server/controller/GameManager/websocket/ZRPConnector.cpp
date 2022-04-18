@@ -217,10 +217,12 @@ void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid, std::string 
         removeZRPCode( data ) );
 
     if (ptos->username.getValue("") != "")
-        if (sender->m_data.role == e_Roles::HOST)
+    {
+        if (sender->m_data.role == e_Roles::HOST || sender->m_data.username == ptos->username)
             sender = getSocket(guid, ptos->username.getValue("") );
         else
             return; // or send error
+    }
 
     if ( sender != nullptr )
     {
@@ -243,7 +245,7 @@ void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid, std::string 
             sender->m_data.role = e_Roles::SPECTATOR;
 
             sendZRPMessageToGame(
-                guid, puid,
+                guid, 0,
                 createMessage( e_ZRPOpCodes::PLAYER_CHANGED_ROLE,
                                "{\"username\": \"" + sender->m_data.username +
                                    "\", \"role\": " +
