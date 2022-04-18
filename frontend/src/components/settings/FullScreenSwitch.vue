@@ -1,5 +1,5 @@
 <template>
-  <button @click="toggleFullScreen" class="tc-main text-xl transform ease-linear transition-transform hover:scale-110">
+  <button @click="toggleFullScreen" class="tc-main text-xl ease-linear transition-transform hover:scale-110">
     <Icon icon="mdi:fullscreen" v-show="!useFullScreen" />
     <Icon icon="mdi:fullscreen-exit" v-show="useFullScreen" />
   </button>

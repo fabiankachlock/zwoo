@@ -1,5 +1,5 @@
 <template>
-  <button @click="toggleSortCards" class="tc-main text-xl transform ease-linear transition-transform hover:scale-110">
+  <button @click="toggleSortCards" class="tc-main text-xl ease-linear transition-transform hover:scale-110">
     <Icon icon="icon-park-outline:sort-amount-down" v-show="!shouldSortCards" />
     <Icon icon="uis:bars" v-show="shouldSortCards" />
   </button>

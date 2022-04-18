@@ -1,5 +1,5 @@
 <template>
-  <button @click="toggleDarkMode" class="tc-main text-xl transform ease-linear transition-transform hover:scale-110">
+  <button @click="toggleDarkMode" class="tc-main text-xl ease-linear transition-transform hover:scale-110">
     <Icon icon="ri:moon-fill" v-show="!isDarkMode" />
     <Icon icon="ri:sun-fill" v-show="isDarkMode" />
   </button>

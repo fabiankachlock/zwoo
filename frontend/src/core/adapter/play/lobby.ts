@@ -7,7 +7,7 @@ import {
   ZRPOPCode,
   ZRPPlayerWithRolePayload,
   ZRPRole,
-  ZRPUsernamePayload
+  ZRPNamePayload
 } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
@@ -79,6 +79,13 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         id: p.name
       }));
 
+    for (const player of data.players) {
+      if (player.role === ZRPRole.Host) {
+        gameHost.value = player.name;
+        break;
+      }
+    }
+
     const playerDiff = arrayDiff(players.value, newPlayers, (a, b) => a.id === b.id);
     const spectatorDiff = arrayDiff(spectators.value, newSpectators, (a, b) => a.id === b.id);
 
@@ -124,8 +131,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     });
   };
 
-  const newHost = (data: ZRPUsernamePayload) => {
-    gameHost.value = data.username;
+  const newHost = (data: ZRPNamePayload) => {
+    gameHost.value = data.name;
   };
 
   const changePlayerRole = (data: ZRPPlayerWithRolePayload) => {
@@ -168,11 +175,19 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const kickPlayer = (id: string) => {
-    dispatchEvent(ZRPOPCode.KickPlayer, { username: id });
+    dispatchEvent(ZRPOPCode.KickPlayer, { name: id });
   };
 
   const promotePlayer = (id: string) => {
-    dispatchEvent(ZRPOPCode.PromotePlayerToHost, { username: id });
+    dispatchEvent(ZRPOPCode.PromotePlayerToHost, { name: id });
+  };
+
+  const changeToSpectator = (id: string) => {
+    dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, { name: id });
+  };
+
+  const changeToPlayer = () => {
+    dispatchEvent(ZRPOPCode.SpectatorWantsToPlay, {});
   };
 
   lobbyWatcher.onMessage(_receiveMessage);
@@ -185,6 +200,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     host: gameHost,
     kickPlayer,
     promotePlayer,
+    changeToSpectator,
+    changeToPlayer,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };
