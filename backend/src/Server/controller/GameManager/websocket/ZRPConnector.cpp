@@ -210,9 +210,18 @@ void ZRPConnector::spectatorToPlayer( uint32_t guid, uint32_t puid )
     }
 }
 
-void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid )
+void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid, std::string data )
 {
     auto sender = getSocket( guid, puid );
+    auto ptos = json_mapper->readFromString<oatpp::Object<PlayerToSpectator>>(
+        removeZRPCode( data ) );
+
+    if (ptos->username.getValue("") != "")
+        if (sender->m_data.role == e_Roles::HOST)
+            sender = getSocket(guid, ptos->username.getValue("") );
+        else
+            return; // or send error
+
     if ( sender != nullptr )
     {
         if ( ( sender->m_data.role == e_Roles::PLAYER ||
@@ -229,7 +238,7 @@ void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid )
                         new_host = v;
                         break;
                     }
-                playerToHost( puid, guid, new_host->m_data.username );
+                playerToHost( puid, guid, R"({"username": ")" + new_host->m_data.username + R"("})");
             }
             sender->m_data.role = e_Roles::SPECTATOR;
 
