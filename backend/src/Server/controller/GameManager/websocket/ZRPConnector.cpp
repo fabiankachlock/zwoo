@@ -32,7 +32,7 @@ void ZRPConnector::addWebSocket( uint32_t guid, uint32_t puid,
 
     {
         auto ps_joined = UserJoined::createShared( );
-        ps_joined->name = listener->m_data.username;
+        ps_joined->username = listener->m_data.username;
         ps_joined->wins = listener->m_data.wins;
         ps_joined->role = listener->m_data.role;
 
@@ -61,7 +61,7 @@ void ZRPConnector::removeWebSocket( uint32_t guid, uint32_t puid )
             {
                 {
                     auto ps_joined = UserJoined::createShared( );
-                    ps_joined->name = sender->m_data.username;
+                    ps_joined->username = sender->m_data.username;
                     ps_joined->wins = sender->m_data.wins;
                     ps_joined->role = sender->m_data.role;
 
@@ -118,7 +118,7 @@ void ZRPConnector::sendMessage( uint32_t guid, uint32_t puid, std::string data )
     {
         auto message = ReceiveMessage::createShared( );
         message->message = send_message->message;
-        message->name = sender->m_data.username;
+        message->username = sender->m_data.username;
         message->role = sender->m_data.role;
 
         auto out = createMessage( (int)e_ZRPOpCodes::RECEIVE_MESSAGE,
@@ -144,7 +144,7 @@ void ZRPConnector::getAllPlayersInLobby( uint32_t guid, uint32_t puid )
             if ( v != nullptr )
             {
                 auto p = ZwooUser::createShared( );
-                p->name = v->m_data.username;
+                p->username = v->m_data.username;
                 p->wins = v->m_data.wins;
                 p->role = v->m_data.role;
                 players->players->push_back( p );
