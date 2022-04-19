@@ -8,8 +8,8 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
     paths:
-    - 'frontend/**'
-    - '.github/workflows/**'
+      - 'frontend/**'
+      - '.github/workflows/**'
 
 jobs:
   check-frontend:

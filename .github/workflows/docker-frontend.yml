@@ -6,8 +6,8 @@ name: Frontend Docker Pipeline
     branches:
       - main
     paths:
-    - 'frontend/**'
-    - '.github/workflows/**'
+      - 'frontend/**'
+      - '.github/workflows/**'
 
 jobs:
   frontend-docker:
