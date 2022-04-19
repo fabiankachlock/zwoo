@@ -116,7 +116,7 @@ export type ZRPPayloadMap = {
 };
 
 export type ZRPNamePayload = {
-  name: string;
+  username: string;
 };
 
 export type ZRPJoinedGamePayload = ZRPNamePayload & {
@@ -135,7 +135,7 @@ export type ZRPSendChatMessagePayload = {
 };
 
 export type ZRPChatMessagePayload = ZRPSendChatMessagePayload & {
-  name: string;
+  username: string;
   role: ZRPRole;
 };
 
@@ -154,7 +154,7 @@ export type ZRPCardPayload = {
 };
 
 export type ZRPGameWinnerPayload = {
-  name: string;
+  username: string;
   wins: number;
 };
 

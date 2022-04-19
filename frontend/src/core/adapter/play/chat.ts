@@ -39,7 +39,7 @@ export const useChatStore = defineStore('game-chat', () => {
   const _receiveMessage = (msg: ZRPMessage<ZRPOPCode.ReceiveMessage>) => {
     if (msg.code === ZRPOPCode.ReceiveMessage) {
       pushMessage(msg.data.message, {
-        id: msg.data.name,
+        id: msg.data.username,
         role: msg.data.role
       });
     }
