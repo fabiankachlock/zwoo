@@ -49,7 +49,8 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
             connector->spectatorToPlayer( m_data.guid, m_data.puid );
             break;
         case e_ZRPOpCodes::PLAYER_TO_SPECTATOR:
-            connector->playerToSpectator( m_data.guid, m_data.puid );
+            connector->playerToSpectator( m_data.guid, m_data.puid,
+                                          wholeMessage );
             break;
         case e_ZRPOpCodes::PLAYER_TO_HOST: // Maybe username in body
             connector->playerToHost( m_data.guid, m_data.puid, wholeMessage );
