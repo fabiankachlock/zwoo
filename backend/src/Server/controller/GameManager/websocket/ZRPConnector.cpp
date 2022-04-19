@@ -199,8 +199,9 @@ void ZRPConnector::spectatorToPlayer( uint32_t guid, uint32_t puid )
         else if ( sender->m_data.role == e_Roles::SPECTATOR &&
                   true /* not In-Game */ )
         {
+            sender->m_data.role = e_Roles::PLAYER;
             sendZRPMessageToGame(
-                guid, puid,
+                guid, 0,
                 createMessage( e_ZRPOpCodes::PLAYER_CHANGED_ROLE,
                                "{\"username\": \"" + sender->m_data.username +
                                    "\", \"role\": " +
