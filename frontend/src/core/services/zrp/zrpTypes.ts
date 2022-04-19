@@ -80,11 +80,11 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.ListAllPlayers]: ZRPAllLobbyPlayersPayload;
   // Roles
   [ZRPOPCode.SpectatorWantsToPlay]: Record<string, never>;
-  [ZRPOPCode.PlayerWantsToSpectate]: Record<string, never>;
-  [ZRPOPCode.PromotePlayerToHost]: ZRPUsernamePayload;
+  [ZRPOPCode.PlayerWantsToSpectate]: ZRPNamePayload;
+  [ZRPOPCode.PromotePlayerToHost]: ZRPNamePayload;
   [ZRPOPCode.PromoteToHost]: Record<string, never>;
-  [ZRPOPCode.NewHost]: ZRPUsernamePayload;
-  [ZRPOPCode.KickPlayer]: ZRPUsernamePayload;
+  [ZRPOPCode.NewHost]: ZRPNamePayload;
+  [ZRPOPCode.KickPlayer]: ZRPNamePayload;
   [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
   // Lobby
   [ZRPOPCode.ChangeSettings]: ZRPSettingsChangePayload;
@@ -115,21 +115,17 @@ export type ZRPPayloadMap = {
   [ZRPOPCode._Connected]: Record<string, never>;
 };
 
-export type ZRPUsernamePayload = {
+export type ZRPNamePayload = {
   username: string;
 };
 
-export type ZRPJoinedGamePayload = {
-  name: string;
+export type ZRPJoinedGamePayload = ZRPNamePayload & {
   wins: number;
 };
 
-export type ZRPLeftGamePayload = {
-  name: string;
-};
+export type ZRPLeftGamePayload = ZRPNamePayload;
 
-export type ZRPPlayerWithRolePayload = {
-  name: string;
+export type ZRPPlayerWithRolePayload = ZRPNamePayload & {
   wins: number;
   role: ZRPRole;
 };
@@ -139,7 +135,7 @@ export type ZRPSendChatMessagePayload = {
 };
 
 export type ZRPChatMessagePayload = ZRPSendChatMessagePayload & {
-  name: string;
+  username: string;
   role: ZRPRole;
 };
 
@@ -158,7 +154,7 @@ export type ZRPCardPayload = {
 };
 
 export type ZRPGameWinnerPayload = {
-  name: string;
+  username: string;
   wins: number;
 };
 

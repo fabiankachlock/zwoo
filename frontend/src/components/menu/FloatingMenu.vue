@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" class="fixed bottom-3 left-3 rounded-full bg-dark flex flex-row items-center">
     <div
-      class="h-full bg-darkest p-2 rounded-full transform transition-transform duration-300 ease-out hover:scale-90 cursor-pointer"
+      class="h-full bg-darkest p-2 rounded-full transition-transform duration-300 ease-out hover:scale-90 cursor-pointer"
       :class="{ 'rotate-90': isOpen }"
       @click="toggleOpen"
     >

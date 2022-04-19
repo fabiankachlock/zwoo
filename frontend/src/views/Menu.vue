@@ -2,9 +2,9 @@
   <div class="__menu bg-main">
     <div class="menu fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
       <header class="h-full">
-        <div class="h-full mx-4 my-0 relative flex justify-between items-center flex-row">
+        <div class="h-full mx-3 my-0 relative flex justify-between items-center flex-row">
           <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">
-            <img src="/img/logo/zwoo_logo_simple_none.svg" class="max-h-8 mr-4" />
+            <img src="/img/logo/zwoo_logo_simple_none.svg" class="h-8 mr-2" />
             <h1 class="tc-primary text-4xl">zwoo</h1>
           </router-link>
           <NavBar />

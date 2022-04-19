@@ -1,18 +1,18 @@
 <template>
   <div class="h-full flex items-center relative">
-    <div @click="toggleMenu" class="md:hidden text-3xl tc-main-secondary cursor-pointer">
+    <div @click="toggleMenu" class="sm:hidden text-3xl tc-main-secondary cursor-pointer">
       <Icon :icon="icon" class="tc-main-secondary" />
     </div>
     <div :class="{ hidden: !isMenuOpen, block: isMenuOpen }" class="fixed inset-0" @click="closeMenu"></div>
     <div
       :class="{ hidden: !isMenuOpen, block: isMenuOpen }"
-      class="bg-darkest bc-invert-lightest fixed text-base z-10 py-2 list-none text-left rounded mt-1 right-4 top-7 border-1 shadow-sm md:hidden"
+      class="bg-darkest bc-invert-lightest fixed text-base z-10 py-2 list-none text-left rounded mt-1 right-4 top-7 border-1 shadow-sm sm:hidden"
       style="min-width: 10rem"
       @click="closeMenu"
     >
       <NavBarLinks />
     </div>
-    <div class="hidden md:flex flex-row list-none">
+    <div class="hidden sm:flex flex-row list-none">
       <NavBarLinks />
     </div>
   </div>

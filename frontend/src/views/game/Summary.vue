@@ -114,11 +114,11 @@ const handleLeaveClick = () => {
 }
 
 .icon {
-  @apply text-xl transform ml-2 flex-shrink-0 transition;
+  @apply text-xl transform ml-2 shrink-0 transition;
 }
 
 .text {
-  @apply flex-shrink mx-2 flex-1 min-w-0 overflow-hidden;
+  @apply shrink mx-2 flex-1 min-w-0 overflow-hidden;
   text-overflow: ellipsis;
 }
 

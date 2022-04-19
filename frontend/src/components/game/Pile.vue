@@ -1,27 +1,27 @@
 <template>
-  <div class="pile absolute transform top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10">
+  <div class="pile absolute top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10">
     <div class="relative h-full pile-card-wrapper">
       <div
-        class="pile-card absolute top-1/2 right-2 transform -translate-y-1/2 h-full transition-all x-delay-0"
+        class="pile-card absolute top-1/2 right-2 -translate-y-1/2 h-full transition-all x-delay-0"
         style="max-height: 95%; max-width: fit-content"
       >
         <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
       </div>
       <div
-        class="pile-card absolute top-1/2 right-3 transform -translate-y-1/2 h-full transition-all x-delay-30"
+        class="pile-card absolute top-1/2 right-3 -translate-y-1/2 h-full transition-all x-delay-30"
         style="max-height: 95%; max-width: fit-content"
       >
         <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
       </div>
       <div
-        class="pile-card absolute top-1/2 right-4 transform -translate-y-1/2 h-full transition-all x-delay-60"
+        class="pile-card absolute top-1/2 right-4 -translate-y-1/2 h-full transition-all x-delay-60"
         style="max-height: 95%; max-width: fit-content"
       >
         <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
       </div>
       <div
         @click="drawCard()"
-        class="pile-card draw-card absolute top-1/2 right-4 h-full transition-all transform -translate-y-1/2 x-delay-60"
+        class="pile-card draw-card absolute top-1/2 right-4 h-full transition-all -translate-y-1/2 x-delay-60"
         :class="{ animating: isAnimating }"
         style="max-height: 95%"
       >
