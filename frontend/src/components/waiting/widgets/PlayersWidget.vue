@@ -53,18 +53,18 @@
           class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest"
         >
           <p class="text-lg tc-main-dark">
-            {{ player.name }}
-            <span v-if="gameHost === player.name" class="tc-primary text-lg">
+            {{ player.username }}
+            <span v-if="gameHost === player.username" class="tc-primary text-lg">
               <Icon icon="akar-icons:crown" class="inline ml-1" />
             </span>
           </p>
           <div class="flex items-center h-full justify-end">
-            <template v-if="!isHost && username === player.name">
+            <template v-if="!isHost && username === player.username">
               <button v-tooltip="t('wait.spectate')" @click="handleChangeToSpectator()" class="tc-primary h-full bg-light hover:bg-main rounded p-1">
                 <Icon icon="iconoir:eye-alt" />
               </button>
             </template>
-            <template v-if="isHost && username !== player.name">
+            <template v-if="isHost && username !== player.username">
               <button
                 v-tooltip="t('wait.spectate')"
                 @click="handlePlayerToSpectator(player.id)"
@@ -77,8 +77,8 @@
               </button>
               <ReassureDialog
                 @close="allowed => handlePromotePlayer(player.id, allowed)"
-                :title="t('dialogs.promotePlayer.title', [player.name])"
-                :body="t('dialogs.promotePlayer.body', [player.name])"
+                :title="t('dialogs.promotePlayer.title', [player.username])"
+                :body="t('dialogs.promotePlayer.body', [player.username])"
                 :is-open="playerPromoteDialogOpen"
               />
               <button v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
@@ -86,8 +86,8 @@
               </button>
               <ReassureDialog
                 @close="allowed => handleKickPlayer(player.id, allowed)"
-                :title="t('dialogs.kickPlayer.title', [player.name])"
-                :body="t('dialogs.kickPlayer.body', [player.name])"
+                :title="t('dialogs.kickPlayer.title', [player.username])"
+                :body="t('dialogs.kickPlayer.body', [player.username])"
                 :is-open="playerKickDialogOpen"
               />
             </template>

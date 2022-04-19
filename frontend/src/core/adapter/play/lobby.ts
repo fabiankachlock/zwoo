@@ -43,10 +43,10 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const translations = I18nInstance;
   const auth = useAuth();
   const gameConfig = useGameConfig();
-  let isInitialFetch = false;
+  let isInitialFetch = true;
 
   const addPlayer = (list: Ref<LobbyPlayer[]>, player: LobbyPlayer) => {
-    list.value = uniqueBy([...players.value, player], p => p.id);
+    list.value = uniqueBy([...list.value, player], p => p.id);
   };
 
   const removePlayer = (list: Ref<LobbyPlayer[]>, id: string) => {
