@@ -1,15 +1,16 @@
 <template>
   <div class="main-card-wrapper absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full" style="max-height: 70%">
-    <img :src="cardUrl" class="main-card" alt="card" />
+    <Card :layers="cardData.layers" alt="main card" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { computed } from 'vue';
+import Card from './Card.vue';
 
 const cardTheme = useCardTheme();
-const cardUrl = computed(() => cardTheme.theme.value.getCard({ type: 1, color: 1, id: '' }));
+const cardData = computed(() => cardTheme.theme.value.getCard({ type: 1, color: 1, id: '' }));
 </script>
 
 <style scoped>

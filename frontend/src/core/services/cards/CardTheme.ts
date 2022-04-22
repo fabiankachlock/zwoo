@@ -1,5 +1,13 @@
 import { Card } from '../game/card';
-import { CardDescriptor, CardThemeData, CardThemeIdentifier, CardThemeInformation, DefaultCardPreviews, MAX_THEME_PREVIEWS } from './CardThemeConfig';
+import {
+  CardDescriptor,
+  CardImageData,
+  CardLayerWildcard,
+  CardThemeData,
+  CardThemeIdentifier,
+  CardThemeInformation,
+  MAX_THEME_PREVIEWS
+} from './CardThemeConfig';
 
 export class CardTheme {
   constructor(
@@ -21,20 +29,30 @@ export class CardTheme {
   }
 
   get previewCards(): string[] {
-    if (this.config.previews.length === 0) {
-      return DefaultCardPreviews.slice();
-    }
     return this.config.previews.slice(0, MAX_THEME_PREVIEWS - 1);
   }
 
-  public getCard(card: Card | CardDescriptor): string {
+  public getCard(card: Card | CardDescriptor): CardImageData {
+    const layers: string[] = [];
     if (typeof card === 'string') {
-      return this.data[card];
+      layers.push(card);
+    } else {
+      layers.push(...this.cardToURI(card));
     }
-    return this.data[this.cardToURI(card)] ?? '';
+    return {
+      layers: layers.map(identifier => this.data[identifier] ?? ''),
+      description: typeof card === 'string' ? card : this.cardToAbsoluteUri(card)
+    };
   }
 
-  private cardToURI(card: Card): string {
+  private cardToAbsoluteUri(card: Card): string {
     return `front_${card.color}_${card.type.toString(16)}`;
+  }
+
+  private cardToURI(card: Card): string[] {
+    if (this.config.isMultilayer) {
+      return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(16)}`];
+    }
+    return [`front_${card.color}_${card.type.toString(16)}`];
   }
 }

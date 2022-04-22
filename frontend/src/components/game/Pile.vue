@@ -5,19 +5,19 @@
         class="pile-card absolute top-1/2 right-2 -translate-y-1/2 h-full transition-all x-delay-0"
         style="max-height: 95%; max-width: fit-content"
       >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+        <Card :layers="cardData.layers" :alt="cardData.description" image-class="max-h-full ml-auto mr-0" image-style="max-width: unset" />
       </div>
       <div
         class="pile-card absolute top-1/2 right-3 -translate-y-1/2 h-full transition-all x-delay-30"
         style="max-height: 95%; max-width: fit-content"
       >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+        <Card :layers="cardData.layers" :alt="cardData.description" image-class="max-h-full ml-auto mr-0" image-style="max-width: unset" />
       </div>
       <div
         class="pile-card absolute top-1/2 right-4 -translate-y-1/2 h-full transition-all x-delay-60"
         style="max-height: 95%; max-width: fit-content"
       >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+        <Card :layers="cardData.layers" :alt="cardData.description" image-class="max-h-full ml-auto mr-0" image-style="max-width: unset" />
       </div>
       <div
         @click="drawCard()"
@@ -25,7 +25,7 @@
         :class="{ animating: isAnimating }"
         style="max-height: 95%"
       >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+        <Card :layers="cardData.layers" :alt="cardData.description" image-class="max-h-full ml-auto mr-0" image-style="max-width: unset" />
       </div>
     </div>
   </div>
@@ -35,9 +35,10 @@
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { computed, ref } from '@vue/reactivity';
+import Card from './Card.vue';
 
 const { theme } = useCardTheme();
-const cardUrl = computed(() => theme.value.getCard(CardDescriptor.BackSideways));
+const cardData = computed(() => theme.value.getCard(CardDescriptor.BackSideways));
 const isAnimating = ref(false);
 
 const drawCard = () => {
@@ -45,7 +46,7 @@ const drawCard = () => {
     isAnimating.value = true;
     setTimeout(() => {
       isAnimating.value = false;
-    }, 700);
+    }, 750);
   }
 };
 </script>
