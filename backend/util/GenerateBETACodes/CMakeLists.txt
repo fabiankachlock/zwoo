@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
-project(zwoo_backend)
-
-set(CMAKE_CXX_STANDARD 17)
+project(zwoo_beta_codes)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(mongocxx REQUIRED)
 find_package(ftxui REQUIRED)
@@ -20,7 +20,7 @@ set(LIBS
     mongo::bsoncxx_static
 )
 
-add_executable(main ${SRC_FILES})
+add_executable(beta_codes ${SRC_FILES})
 
 include_directories("include/")
-target_link_libraries(main ${LIBS})
+target_link_libraries(beta_codes ${LIBS})

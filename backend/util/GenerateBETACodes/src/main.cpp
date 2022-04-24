@@ -1,29 +1,73 @@
+#include <memory>  // for allocator, __shared_ptr_access
+#include <string>  // for char_traits, operator+, string, basic_string
+
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for separator, gauge, text, Element, operator|, vbox, border
+#include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for InputOption
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
+#include "ftxui/util/ref.hpp"  // for Ref
+#include "ftxui/component/component_options.hpp"
  
 
 int main()
 {
     // Input defines
-    std::string s_code_amount = "";
-    std::string s_code_format = "xxx-xxx";
-    auto i_code_amount = ftxui::Input(&s_code_amount, "amount");
+    std::string s_code_amount;
+    std::string s_code_format;
+    std::string s_db_login_name;
+    std::string s_db_login_password;
+    std::string s_db_port;
+
+    ftxui::InputOption _amount = ftxui::InputOption();
+    _amount.on_change = [&] {
+        s_code_amount.erase(std::remove_if(s_code_amount.begin(), s_code_amount.end(), [] (auto i) { return !std::isdigit(i); }), s_code_amount.end());
+    };
+
+    ftxui::InputOption _port = ftxui::InputOption();
+    _port.on_change = [&] {
+        s_db_port.erase(std::remove_if(s_db_port.begin(), s_db_port.end(), [] (auto i) { return !std::isdigit(i); }), s_db_port.end());
+    };
+
+    ftxui::InputOption _pw = ftxui::InputOption();
+    _pw.password = true;
+
+    auto i_code_amount = ftxui::Input(&s_code_amount, "amount", _amount);
     auto i_code_format = ftxui::Input(&s_code_format, "format");
+    auto i_db_login_name = ftxui::Input(&s_db_login_name, "name");
+    auto i_db_login_password = ftxui::Input(&s_db_login_password, "password", _pw);
+    auto i_db_port = ftxui::Input(&s_db_port, "port", _port);
 
     auto inputs = ftxui::Container::Vertical({
-        i_code_amount
+        i_code_amount,
+        i_code_format,
+        i_db_login_name,
+        i_db_login_password,
+        i_db_port
     });
 
     // Define Layout
     auto main_window = ftxui::Renderer(inputs, [&]{
         return ftxui::hbox({
-            ftxui::hbox({
-                i_code_amount->Render() | ftxui::border | ftxui::flex_grow,
-                i_code_format->Render() | ftxui::border
-            })
+            /* Sidebar */
+            ftxui::vbox({
+                ftxui::text("ZWOO Beta codes") | ftxui::bold,
+                ftxui::separator(),
+                ftxui::hbox(ftxui::text("amount: "), i_code_amount->Render()),
+                ftxui::separator(),
+                ftxui::hbox(ftxui::text("format: "), i_code_format->Render()),
+                ftxui::text(" - x: random char or digit"),
+                ftxui::text(" - n: random number 0-9"),
+                ftxui::text(" - c: random char a-z, A-Z"),
+                ftxui::text(" - C: random char A-Z"),
+                ftxui::separator(),
+                ftxui::text("Databse Settings:"),
+                ftxui::hbox(ftxui::text("name    : "), i_db_login_name->Render()),
+                ftxui::hbox(ftxui::text("password: "), i_db_login_password->Render()),
+                ftxui::hbox(ftxui::text("port    : "), i_db_port->Render())
+            }),
+            ftxui::separator()
         }) |
         ftxui::border;
     });
