@@ -18,7 +18,9 @@ int main()
     std::string s_code_format;
     std::string s_db_login_name;
     std::string s_db_login_password;
-    std::string s_db_port;
+    std::string s_db_port = "27017";
+
+    bool save_to_file = false;
 
     ftxui::InputOption _amount = ftxui::InputOption();
     _amount.on_change = [&] {
@@ -38,13 +40,23 @@ int main()
     auto i_db_login_name = ftxui::Input(&s_db_login_name, "name");
     auto i_db_login_password = ftxui::Input(&s_db_login_password, "password", _pw);
     auto i_db_port = ftxui::Input(&s_db_port, "port", _port);
+    auto i_save_to_file = ftxui::Checkbox("", &save_to_file);
+    auto i_generate_codes = ftxui::Button("Generate", [](){
+        // Generate
+    });
+    auto i_save_to_db = ftxui::Button("Save To DB", [](){
+        // Save to MongoDB
+    });
 
     auto inputs = ftxui::Container::Vertical({
         i_code_amount,
         i_code_format,
         i_db_login_name,
         i_db_login_password,
-        i_db_port
+        i_db_port,
+        i_save_to_file,
+        i_generate_codes,
+        i_save_to_db
     });
 
     // Define Layout
@@ -65,7 +77,14 @@ int main()
                 ftxui::text("Databse Settings:"),
                 ftxui::hbox(ftxui::text("name    : "), i_db_login_name->Render()),
                 ftxui::hbox(ftxui::text("password: "), i_db_login_password->Render()),
-                ftxui::hbox(ftxui::text("port    : "), i_db_port->Render())
+                ftxui::hbox(ftxui::text("port    : "), i_db_port->Render()),
+                ftxui::separator(),
+                ftxui::text("General"),
+                ftxui::hbox(ftxui::text("save to file: "), i_save_to_file->Render()),
+                ftxui::separator(),
+                i_generate_codes->Render(),
+                ftxui::separator(),
+                i_save_to_db->Render()
             }),
             ftxui::separator()
         }) |
