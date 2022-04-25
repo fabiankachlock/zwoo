@@ -9,10 +9,13 @@
 #include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
 #include "ftxui/util/ref.hpp"  // for Ref
 #include "ftxui/component/component_options.hpp"
- 
+
+#include "CodeGenerator.h" 
 
 int main()
 {
+    std::string code = "";
+
     // Input defines
     std::string s_code_amount;
     std::string s_code_format;
@@ -41,9 +44,18 @@ int main()
     auto i_db_login_password = ftxui::Input(&s_db_login_password, "password", _pw);
     auto i_db_port = ftxui::Input(&s_db_port, "port", _port);
     auto i_save_to_file = ftxui::Checkbox("", &save_to_file);
-    auto i_generate_codes = ftxui::Button("Generate", [](){
-        // Generate
+    auto i_generate_codes = ftxui::Button("Generate", [&](){
+        if (std::stoi(s_code_amount) > 0 && !s_code_format.empty())
+        {
+            auto codes = generate_codes(std::stoi(s_code_amount), s_code_format);
+            for (auto i : codes)
+            {
+                code += i;
+                code += "    ";
+            }
+        }
     });
+
     auto i_save_to_db = ftxui::Button("Save To DB", [](){
         // Save to MongoDB
     });
@@ -58,6 +70,13 @@ int main()
         i_generate_codes,
         i_save_to_db
     });
+
+    // Text
+    auto codes_text = [&] () {
+        auto vbox = ftxui::vbox({});
+        return ftxui::paragraph(code);
+    };
+    
 
     // Define Layout
     auto main_window = ftxui::Renderer(inputs, [&]{
@@ -85,10 +104,11 @@ int main()
                 i_generate_codes->Render(),
                 ftxui::separator(),
                 i_save_to_db->Render()
-            }),
-            ftxui::separator()
+            }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 30),
+            ftxui::separator(),
+            codes_text() | ftxui::size(ftxui::WIDTH, ftxui::LESS_THAN, 120)
         }) |
-        ftxui::border;
+        ftxui::border | ftxui::flex_grow;
     });
     
     

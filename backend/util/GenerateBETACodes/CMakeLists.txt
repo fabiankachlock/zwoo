@@ -9,6 +9,7 @@ find_package(mongocxx REQUIRED)
 find_package(ftxui REQUIRED)
 
 set(SRC_FILES
+    "src/CodeGenerator.cpp"
     "src/main.cpp"
 )
 
