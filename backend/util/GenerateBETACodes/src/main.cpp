@@ -1,5 +1,7 @@
 #include <memory>  // for allocator, __shared_ptr_access
 #include <string>  // for char_traits, operator+, string, basic_string
+#include <fstream>
+#include <iostream>
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
@@ -11,12 +13,14 @@
 #include "ftxui/component/component_options.hpp"
 
 #include "CodeGenerator.h" 
+#include "mongo.h"
 
 int main()
 {
-    std::string code = "";
+    std::vector<std::string> codes;
 
     // Input defines
+    std::string s_codes;
     std::string s_code_amount;
     std::string s_code_format;
     std::string s_db_login_name;
@@ -47,17 +51,36 @@ int main()
     auto i_generate_codes = ftxui::Button("Generate", [&](){
         if (std::stoi(s_code_amount) > 0 && !s_code_format.empty())
         {
-            auto codes = generate_codes(std::stoi(s_code_amount), s_code_format);
+            codes = generate_codes(std::stoi(s_code_amount), s_code_format);
+            s_codes = "";
             for (auto i : codes)
             {
-                code += i;
-                code += "    ";
+                s_codes += i;
+                s_codes += "    ";
             }
         }
     });
 
-    auto i_save_to_db = ftxui::Button("Save To DB", [](){
-        // Save to MongoDB
+    auto i_save_to_db = ftxui::Button("Save To DB", [&](){
+        std::string conn_str = "mongodb://";
+        if (s_db_login_name != "" && s_db_login_password != "")
+            conn_str += s_db_login_name + ":" + s_db_login_password;
+        conn_str += "localhost:" + s_db_port;
+        write_codes_to_db(codes, conn_str);
+
+        if (save_to_file)
+        {
+            std::ofstream f;
+            f.open("./codes.csv");
+            f << ",code\n";
+            int i = 0;
+            for (auto c : codes)
+            {
+                f << std::to_string(i) << "," << c << '\n';
+                i++;
+            }
+            f.close();
+        }
     });
 
     auto inputs = ftxui::Container::Vertical({
@@ -74,7 +97,7 @@ int main()
     // Text
     auto codes_text = [&] () {
         auto vbox = ftxui::vbox({});
-        return ftxui::paragraph(code);
+        return ftxui::paragraph(s_codes);
     };
     
 
