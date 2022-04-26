@@ -81,6 +81,9 @@ void HttpServer::RunServer( )
     OATPP_COMPONENT( std::shared_ptr<oatpp::network::ConnectionHandler>,
                      connectionHandler, "http" );
 
+    if (ZWOO_BETA)
+        logger->log->info("Running in Beta Mode.");
+
     if ( USE_SSL )
     {
         auto conf = oatpp::openssl::Config::createDefaultServerConfigShared(
@@ -110,7 +113,6 @@ void HttpServer::RunServer( )
 
         /* create server */
         oatpp::network::Server server( connectionProvider, connectionHandler );
-
         logger->log->info(
             "Running on port {0}...",
             connectionProvider->getProperty( "port" ).toString( )->c_str( ) );
