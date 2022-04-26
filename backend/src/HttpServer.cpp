@@ -81,8 +81,8 @@ void HttpServer::RunServer( )
     OATPP_COMPONENT( std::shared_ptr<oatpp::network::ConnectionHandler>,
                      connectionHandler, "http" );
 
-    if (ZWOO_BETA)
-        logger->log->info("Running in Beta Mode.");
+    if ( ZWOO_BETA )
+        logger->log->info( "Running in Beta Mode." );
 
     if ( USE_SSL )
     {
