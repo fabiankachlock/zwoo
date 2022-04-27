@@ -1,0 +1,6 @@
+[requires]
+mongo-cxx-driver/3.6.6
+ftxui/2.0.0
+
+[generators]
+cmake_find_package
