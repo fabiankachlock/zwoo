@@ -84,7 +84,7 @@ void HttpServer::RunServer( )
     if ( USE_SSL )
     {
         auto conf = oatpp::openssl::Config::createDefaultServerConfigShared(
-            SSL_PEM, SSL_CERTIFICATE );
+            SSL_CERTIFICATE, SSL_PEM );
         auto connectionProvider =
             oatpp::openssl::server::ConnectionProvider::createShared(
                 conf, { ZWOO_BACKEND_DOMAIN, ZWOO_BACKEND_PORT,
