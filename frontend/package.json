@@ -37,7 +37,7 @@
     "@intlify/vue-i18n-loader": "^4.2.0",
     "@types/jest": "^27.4.1",
     "@types/vue-router": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.4",
     "@vue/cli-plugin-e2e-cypress": "~5.0.1",
