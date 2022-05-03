@@ -44,6 +44,7 @@ let StoreRef = {
 const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
   import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule => {
     const storeLoggerModule = await import(/* webpackChunkName: "logging" */ './storeLogger');
+    const logRushLoggerModule = await import(/* webpackChunkName: "logging" */ './logRushLogger');
     const consoleLoggerModule = await import(/* webpackChunkName: "logging" */ './consoleLogger');
     const multiLoggerModule = await import(/* webpackChunkName: "logging" */ './multiLogger');
 
@@ -65,6 +66,7 @@ const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
       _Logger.debug('--end-config--');
     });
 
+    mode = 'dev-log-rush'; // TODO: remove!!!
     if (mode === 'store') {
       const factory = await storeLoggerModule.GetLogger(store);
       LoggerBase = {
@@ -84,6 +86,15 @@ const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
 
       LoggerBase = {
         ...multiFactory(storeFactory(), consoleFactory()),
+        initialized: true
+      };
+    } else if (mode === 'dev-log-rush') {
+      const logRushFactory = await logRushLoggerModule.GetLogger();
+      const consoleFactory = await consoleLoggerModule.GetLogger();
+      const multiFactory = await multiLoggerModule.GetLogger();
+
+      LoggerBase = {
+        ...multiFactory(logRushFactory(), consoleFactory()),
         initialized: true
       };
     }
