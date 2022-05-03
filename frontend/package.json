@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "@iconify/vue": "^3.2.1",
+    "@types/jest": "^27.5.0",
     "@intlify/vue-i18n-loader": "^4.2.0",
-    "@types/jest": "^27.4.1",
     "@types/vue-router": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.4.0",
