@@ -22,6 +22,7 @@
     "setup:version": "node ./scripts/version.js"
   },
   "dependencies": {
+    "@log-rush/client": "^1.1.0",
     "autoprefixer": "^10",
     "core-js": "^3.21.1",
     "dexie": "^3.2.1",

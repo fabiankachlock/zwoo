@@ -1,86 +1,50 @@
-import { LogEntry, BaseLogger } from './logTypes';
+import { BaseLogger } from './logTypes';
+import { LogRushClient } from '@log-rush/client';
 
 export async function GetLogger(): Promise<() => BaseLogger> {
   const MAX_BUFFER_SIZE = 1;
 
-  const req = await fetch('http://localhost:7000/stream/register', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      alias: 'zwoo-frontend-test'
-    })
+  const client = new LogRushClient({
+    dataSourceUrl: 'http://localhost:7000/',
+    batchSize: MAX_BUFFER_SIZE
   });
 
-  if (req.status !== 200) {
-    throw new Error('cant register log stream', await req.json());
-  }
+  const sId = localStorage.getItem('zwoo:rmsid') ?? '';
+  const sKey = localStorage.getItem('$zwoo:rmskey') ?? '';
 
-  const stream = (await req.json()) as {
-    id: string;
-    alias: string;
-    key: string;
-  };
+  // TODO: add user to name
+  const stream = await client.resumeStream('zwoo-frontend', sId, sKey);
+
+  localStorage.setItem('zwoo:rmsid', stream.id);
+  localStorage.setItem('zwoo:rmskey', stream.secretKey);
 
   window.onbeforeunload = async () => {
-    await fetch('http://localhost:7000/stream/unregister', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: stream.id,
-        key: stream.key
-      })
-    }).then(req => req.json());
+    await client.disconnect();
+    return false;
   };
 
   function LoggerFactory() {
     const _Logger = {
-      buffer: [] as LogEntry[],
-      _saveBuffer() {
-        fetch('http://localhost:7000/batch', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            stream: stream.id,
-            logs: this.buffer.map(l => ({
-              log: l.log,
-              timestamp: l.date
-            }))
-          })
-        });
-        this.buffer = [];
-      },
-      _pushBuffer(msg: string) {
-        this.buffer.push({
-          date: Date.now(),
-          log: msg
-        } as LogEntry);
-        if (this.buffer.length >= MAX_BUFFER_SIZE) {
-          this._saveBuffer();
-        }
+      _pushLog(msg: string) {
+        stream.log(msg);
       },
       log(msg: string) {
-        this._pushBuffer(`${msg}`);
+        this._pushLog(`${msg}`);
       },
       info(msg: string) {
-        this._pushBuffer(`[info] ${msg}`);
+        this._pushLog(`[info] ${msg}`);
       },
       debug(msg: string) {
-        this._pushBuffer(`[debug] ${msg}`);
+        this._pushLog(`[debug] ${msg}`);
       },
       warn(msg: string) {
-        this._pushBuffer(`[warn] ${msg}`);
+        this._pushLog(`[warn] ${msg}`);
       },
       error(msg: string) {
-        this._pushBuffer(`[ERROR] ${msg}`);
+        this._pushLog(`[ERROR] ${msg}`);
       },
       trace(error: Error, msg: string) {
-        this._pushBuffer(`[trace] ${msg} ${error.stack}`);
+        this._pushLog(`[trace] ${msg} ${error.stack}`);
       }
     };
     return _Logger;
