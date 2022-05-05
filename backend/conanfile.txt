@@ -14,5 +14,7 @@ libcurl/7.80.0
 fmt/8.1.1
 spdlog/1.9.2
 
+ftxui/2.0.0
+
 [generators]
 cmake_find_package
