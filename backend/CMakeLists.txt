@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(zwoo_backend)
 
-
 set(CMAKE_CXX_STANDARD 17)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -15,8 +14,8 @@ find_package(CURL                  REQUIRED)
 find_package(mongocxx              REQUIRED)
 find_package(mailio                REQUIRED)
 
-option(BUILD_SWAGGER "Activate the build of Swagger Components" OFF)
-
+option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
+option(BUILD_BETA "Build Zwoo Betacode Application" ON)
 
 set(SRC_FILES
     "src/main.cpp"
@@ -66,6 +65,10 @@ if(${BUILD_SWAGGER})
 	add_definitions(-DBUILD_SWAGGER=1 -DOATPP_SWAGGER_RES_PATH="./res")
 	set(LIBS ${LIBS} oatpp::oatpp-swagger)
 endif(${BUILD_SWAGGER})
+
+if (${BUILD_BETA})
+    add_subdirectory(util/GenerateBETACodes)
+endif()
 
 include_directories("include/")
 target_link_libraries(main ${LIBS})
