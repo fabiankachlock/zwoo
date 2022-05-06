@@ -10,7 +10,7 @@ import { computed } from 'vue';
 import Card from './Card.vue';
 
 const cardTheme = useCardTheme();
-const cardData = computed(() => cardTheme.theme.value.getCard({ type: 1, color: 1, id: '' }));
+const cardData = computed(() => cardTheme.theme.getCard({ type: 1, color: 1, id: '' }));
 </script>
 
 <style scoped>

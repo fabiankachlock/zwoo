@@ -9,7 +9,7 @@ export type CardThemeInformation = {
   name: string;
   description: string;
   author: string;
-  isMultilayer: boolean;
+  isMultiLayer: boolean;
   variants: string[];
   previews: string[];
 };

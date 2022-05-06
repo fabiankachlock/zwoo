@@ -37,8 +37,8 @@ import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { computed, ref } from '@vue/reactivity';
 import Card from './Card.vue';
 
-const { theme } = useCardTheme();
-const cardData = computed(() => theme.value.getCard(CardDescriptor.BackSideways));
+const theme = useCardTheme();
+const cardData = computed(() => theme.theme.getCard(CardDescriptor.BackSideways));
 const isAnimating = ref(false);
 
 const drawCard = () => {

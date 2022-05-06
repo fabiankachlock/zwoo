@@ -4,7 +4,7 @@ import { CardThemeInformation, CARD_THEME_VARIANT_AUTO } from '@/core/services/c
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';
 import { CreateUseHook } from '@/core/services/helper/CreateUseHook';
 import Logger from '@/core/services/logging/logImport';
-import { ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { useConfig } from '../config';
 
 const DEBOUNCE_TIME = 1000;
@@ -40,7 +40,7 @@ export const useCardTheme = CreateUseHook(() => {
   Logger.Theme.debug('initial setup theme load');
   loadTheme(cardTheme, cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : cardThemeVariant);
 
-  return {
+  return reactive({
     theme
-  };
+  });
 });
