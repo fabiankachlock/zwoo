@@ -1,5 +1,8 @@
 {
   "name": "__default__",
-  "isMultiLayer": false,
-  "variants": ["dark", "light"]
+  "isMultiLayer": true,
+  "variants": ["dark", "light"],
+  "overrides": {
+    "layerWildcard": "x"
+  }
 }
