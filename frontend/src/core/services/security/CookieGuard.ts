@@ -22,7 +22,7 @@ export class CookieGuard implements RouterInterceptor {
       const cookies = useCookies();
       if (!cookies.cookies.recaptcha) {
         CookieGuard.Logger.log('insufficient cookie settings');
-        next('/missing-cookies');
+        next('/missing-cookies?redirect=' + to.fullPath);
       }
       CookieGuard.Logger.debug('all fine!');
     }
