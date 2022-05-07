@@ -23,12 +23,26 @@ export const useCardTheme = CreateUseHook(() => {
 
     // load new Theme
     if (debounceTimeout) {
-      Logger.Theme.debug('cancelling scheduled load');
-      clearTimeout(debounceTimeout);
+      Logger.Theme.debug('cancelling theme change, waiting for debounce timeout');
+      return;
     }
-    debounceTimeout = setTimeout(() => loadTheme(newTheme, newVariant), DEBOUNCE_TIME);
+    loadTheme(newTheme, newVariant);
+    debounceTimeout = setTimeout(() => {
+      debounceTimeout = undefined;
+      applyTheme();
+    }, DEBOUNCE_TIME);
     Logger.Theme.debug(`scheduled load (timeout: ${debounceTimeout})`);
   });
+
+  const applyTheme = () => {
+    Logger.Theme.debug('applying theme changes ');
+    const newVariant = cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : cardThemeVariant;
+    if (theme.value.variant !== newVariant || theme.value.name !== cardTheme) {
+      loadTheme(cardTheme, newVariant);
+    } else {
+      Logger.Theme.debug('no changes to apply');
+    }
+  };
 
   const loadTheme = async (name: string, variant: string) => {
     debounceTimeout = undefined;
