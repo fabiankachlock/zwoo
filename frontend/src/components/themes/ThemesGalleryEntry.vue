@@ -33,7 +33,10 @@
           v-for="variant in props.theme.variants"
           :key="variant"
           @click="previewVariant = variant"
-          :class="{ 'bc-primary hover:bc-primary': previewVariant === variant }"
+          :class="{
+            'bc-primary hover:bc-primary': previewVariant === variant,
+            'bc-secondary hover:bc-primary': selectedVariant === variant
+          }"
           class="tc-main text-xs inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer"
         >
           {{ variant }}
@@ -61,6 +64,7 @@ const { setTheme } = useCardTheme();
 const props = defineProps<{
   theme: CardThemeInformation;
   isSelected: boolean;
+  selectedVariant: string;
 }>();
 
 // TODO: compute that to current color mode or @auto
