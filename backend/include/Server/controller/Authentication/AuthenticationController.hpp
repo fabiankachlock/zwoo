@@ -114,13 +114,16 @@ class AuthenticationController : public oatpp::web::server::api::ApiController
                 constructErrorMessage( "Email Already Exists!",
                                        e_Errors::EMAIL_ALREADY_TAKEN ) );
 
-        if ( ( data->code.getValue( "" ) != "" &&
-               m_database->verifieAndUseBetaCode(
-                   data->code.getValue( "" ) ) ) ||
-             !ZWOO_BETA )
-            return createResponse( Status::CODE_400,
-                                   R"({"message": "no zwoo beta code!"})" );
-
+        if ( ZWOO_BETA )
+        {
+            if ( data->code.getValue( "" ) == "" )
+                return createResponse( Status::CODE_400,
+                                       R"({"message": "no zwoo beta code!"})" );
+            if ( !m_database->verifieAndUseBetaCode(
+                     data->code.getValue( "" ) ) )
+                return createResponse( Status::CODE_400,
+                                       R"({"message": "invalid BETA code!"})" );
+        }
         auto ret = m_database->createUser( data->username.getValue( "" ),
                                            data->email.getValue( "" ),
                                            data->password.getValue( "" ) );
