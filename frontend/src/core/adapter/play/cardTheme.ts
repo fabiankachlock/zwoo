@@ -12,11 +12,11 @@ const ThemeManager = CardThemeManager.global;
 
 export const useCardTheme = CreateUseHook(() => {
   const colorMode = useColorTheme();
-  const { cardTheme, cardThemeVariant } = useConfig();
+  const config = useConfig();
   const theme = ref<CardTheme>(new CardTheme('', '', {}, {} as CardThemeInformation));
   let debounceTimeout: number | undefined = undefined;
 
-  watch([colorMode, () => cardTheme, () => cardThemeVariant], ([colorMode, cardTheme, themeVariant]) => {
+  watch([colorMode, () => config.cardTheme, () => config.cardThemeVariant], ([colorMode, cardTheme, themeVariant]) => {
     Logger.Theme.debug('changed user settings');
     const newTheme = cardTheme;
     const newVariant = themeVariant === CARD_THEME_VARIANT_AUTO ? colorMode : themeVariant;
@@ -36,9 +36,9 @@ export const useCardTheme = CreateUseHook(() => {
 
   const applyTheme = () => {
     Logger.Theme.debug('applying theme changes ');
-    const newVariant = cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : cardThemeVariant;
-    if (theme.value.variant !== newVariant || theme.value.name !== cardTheme) {
-      loadTheme(cardTheme, newVariant);
+    const newVariant = config.cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : config.cardThemeVariant;
+    if (theme.value.variant !== newVariant || theme.value.name !== config.cardTheme) {
+      loadTheme(config.cardTheme, newVariant);
     } else {
       Logger.Theme.debug('no changes to apply');
     }
@@ -51,10 +51,17 @@ export const useCardTheme = CreateUseHook(() => {
     theme.value = loadedTheme;
   };
 
+  const setTheme = (name: string, variant: string) => {
+    config.cardTheme = name;
+    config.cardThemeVariant = variant;
+    loadTheme(name, variant);
+  };
+
   Logger.Theme.debug('initial setup theme load');
-  loadTheme(cardTheme, cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : cardThemeVariant);
+  loadTheme(config.cardTheme, config.cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : config.cardThemeVariant);
 
   return reactive({
-    theme
+    theme,
+    setTheme
   });
 });

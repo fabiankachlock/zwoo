@@ -8,7 +8,7 @@
       <div class="mx-2">
         <ul class="tags flex flex-row justify-start items-center tc-main text-sm">
           <li
-            v-if="props.theme.isMultilayer || true"
+            v-if="props.theme.isMultiLayer"
             class="inline-tag bg-light hover:bg-main bc-light hover:bc-darkest flex flex-row flex-nowrap items-center"
           >
             <Icon icon="fluent:layer-20-filled" class="mr-2 tc-primary text-xl" />
@@ -55,16 +55,20 @@
 import { defineProps, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
+import { useCardTheme } from '@/core/adapter/play/cardTheme';
 
+const { setTheme } = useCardTheme();
 const props = defineProps<{
   theme: CardThemeInformation;
   isSelected: boolean;
 }>();
 
+// TODO: compute that to current color mode or @auto
 const previewVariant = ref(props.theme.variants[0] ?? '');
 
 const selectAsTheme = () => {
   console.log('selecting', props.theme.name, previewVariant.value, 'as theme');
+  setTheme(props.theme.name, previewVariant.value);
 };
 </script>
 
