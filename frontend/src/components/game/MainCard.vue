@@ -1,6 +1,8 @@
 <template>
-  <div class="main-card-wrapper absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full" style="max-height: 70%">
+  <div class="main-card-wrapper absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full" style="max-height: 70%">
+    <!-- <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-full"> -->
     <Card :layers="cardData.layers" alt="main card" />
+    <!-- </div> -->
   </div>
 </template>
 
