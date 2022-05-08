@@ -82,15 +82,15 @@ const previewTheme = ref<CardTheme | undefined>(undefined);
 onMounted(async () => {
   const variant = props.theme.variants.includes(CARD_THEME_VARIANT_AUTO) ? colorMode.value : props.theme.variants[0] ?? '';
   previewVariant.value = variant;
-  await loadTheme();
+  await loadTheme(variant === CARD_THEME_VARIANT_AUTO ? colorMode.value : variant);
 });
 
-watch(previewVariant, () => loadTheme());
+watch([previewVariant, colorMode], ([variant, colorMode]) => loadTheme(variant === CARD_THEME_VARIANT_AUTO ? colorMode : variant));
 
-const loadTheme = async () => {
+const loadTheme = async (variant: string) => {
   const theme = await CardThemeManager.global.loadPreview({
     name: props.theme.name,
-    variant: previewVariant.value
+    variant: variant
   });
   previewTheme.value = theme;
 };
