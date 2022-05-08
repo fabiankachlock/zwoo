@@ -174,6 +174,16 @@ function computeThemeVariants(variants) {
 }
 
 /**
+ * compute a themes previews
+ * cut of everything over max len or add defaults
+ * @param {string[]} previews
+ * @returns {string[]} computed previews
+ */
+function computeThemePreviews(previews) {
+  return (previews ?? []).length === 0 ? DEFAULT_CARD_PREVIEWS.slice() : previews.slice(0, MAX_THEME_PREVIEWS - 1);
+}
+
+/**
  * Create a object with theme themes name as keys and der variants as sub keys
  * @param {(typeof BaseThemeConfig)[]} themes the list of themes
  * @param {(name: string, variant: string) => any} transformer
@@ -293,7 +303,7 @@ async function createMetaFiles(themes) {
           author: theme.author ?? '',
           isMultiLayer: theme.isMultiLayer,
           variants: computeThemeVariants(theme.variants),
-          previews: theme?.previews ?? []
+          previews: computeThemePreviews(theme.previews)
         }
       }))
     ),
@@ -413,7 +423,7 @@ async function buildTheme(theme) {
     // create preview
     const previewStart = process.hrtime();
     console.log('     building preview...');
-    const previews = (theme.previews ?? []).length === 0 ? DEFAULT_CARD_PREVIEWS.slice() : theme.previews.slice(0, MAX_THEME_PREVIEWS - 1);
+    const previews = computeThemePreviews(theme.previews);
     console.log('     selected previews cards: ' + previews.join(', '));
 
     const previewImages = theme.isMultiLayer ? unique(previews.map(card => resolveLayersForCard(card)).flat()) : previews;
