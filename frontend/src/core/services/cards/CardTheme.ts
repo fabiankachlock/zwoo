@@ -32,7 +32,7 @@ export class CardTheme {
     return this.config.previews.slice(0, MAX_THEME_PREVIEWS - 1);
   }
 
-  public getCard(card: Card | CardDescriptor): CardImageData {
+  public getCard(card: Card | CardDescriptor | string): CardImageData {
     const layers: string[] = [];
     if (typeof card === 'string') {
       layers.push(card);
