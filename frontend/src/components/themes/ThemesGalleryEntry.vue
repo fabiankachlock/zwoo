@@ -12,7 +12,7 @@
             class="inline-tag bg-light hover:bg-main bc-light hover:bc-darkest flex flex-row flex-nowrap items-center"
           >
             <Icon icon="fluent:layer-20-filled" class="mr-2 tc-primary text-xl" />
-            MultiLayer
+            {{ t('cardThemes.multiLayer') }}
           </li>
         </ul>
       </div>
@@ -22,13 +22,13 @@
         {{ props.theme.description }}
       </p>
       <p>
-        <span class="tc-main-secondary text-xs italic mr-2"> By: </span>
+        <span class="tc-main-secondary text-xs italic mr-2">{{ t('cardThemes.by') }}</span>
         <span class="tc-main">
-          {{ props.theme.author || 'unknown' }}
+          {{ props.theme.author || t('cardThemes.authorUnknown') }}
         </span>
       </p>
       <p>
-        <span class="tc-main-secondary text-xs italic mr-2"> Variants: </span>
+        <span class="tc-main-secondary text-xs italic mr-2">{{ t('cardThemes.variants') }}</span>
         <span
           v-for="variant in props.theme.variants"
           :key="variant"
@@ -39,7 +39,7 @@
           }"
           class="tc-main text-xs inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer"
         >
-          {{ variant }}
+          {{ t(`cardThemes.variant.${variant}`) }}
         </span>
       </p>
     </div>
@@ -52,7 +52,7 @@
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
     <div class="mx-2">
       <div class="flex flex-row flex-nowrap justify-end items-center mt-2">
-        <button class="py-1 px-2 rounded ml-2 bg-light hover:bg-main tc-primary" @click="selectAsTheme()">Select As Theme</button>
+        <button class="py-1 px-2 rounded ml-2 bg-light hover:bg-main tc-primary" @click="selectAsTheme()">{{ t('cardThemes.useTheme') }}</button>
       </div>
     </div>
   </div>
@@ -67,6 +67,7 @@ import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';
 import { useColorTheme } from '@/composables/colorTheme';
 import Card from '../game/Card.vue';
+import { useI18n } from 'vue-i18n';
 const { setTheme } = useCardTheme();
 
 const props = defineProps<{
@@ -75,6 +76,7 @@ const props = defineProps<{
   selectedVariant: string;
 }>();
 
+const { t } = useI18n();
 const colorMode = useColorTheme();
 const previewVariant = ref('');
 const previewTheme = ref<CardTheme | undefined>(undefined);

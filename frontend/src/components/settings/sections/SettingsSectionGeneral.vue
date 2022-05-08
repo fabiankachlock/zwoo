@@ -12,7 +12,7 @@
     <SettingsRow :title="t('settings.language')">
       <LanguageSelection />
     </SettingsRow>
-    <SettingsRow :title="t('settings.theme')">
+    <SettingsRow :title="t('settings.cardTheme')">
       <SelectTheme />
     </SettingsRow>
     <SettingsRow :title="t('settings.cookies')">
