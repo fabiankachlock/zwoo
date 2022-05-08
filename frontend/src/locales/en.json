@@ -262,7 +262,8 @@
       "dark": "Dark",
       "light": "Light",
       "@auto": "Auto"
-    }
+    },
+    "description": {}
   },
   "util": {
     "loading": "Wird geladen..."

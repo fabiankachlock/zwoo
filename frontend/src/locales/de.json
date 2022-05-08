@@ -262,7 +262,8 @@
       "dark": "Dunkel",
       "light": "Hell",
       "@auto": "Automatisch"
-    }
+    },
+    "description": {}
   },
   "util": {
     "loading": "Wird geladen..."

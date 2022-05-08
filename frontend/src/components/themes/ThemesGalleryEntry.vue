@@ -19,7 +19,7 @@
     </div>
     <div class="mx-2">
       <p class="tc-main-light italic" v-if="props.theme.description">
-        {{ props.theme.description }}
+        {{ t(`cardThemes.description.${props.theme.description}`) }}
       </p>
       <p>
         <span class="tc-main-secondary text-xs italic mr-2">{{ t('cardThemes.by') }}</span>
