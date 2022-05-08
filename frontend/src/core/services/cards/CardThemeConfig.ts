@@ -33,6 +33,7 @@ export enum CardDescriptor {
 export const MAX_THEME_PREVIEWS = 6;
 
 export const CardLayerWildcard = '$';
+export const CardLayerSeparator = '_';
 
 export type CardImageData = {
   layers: string[];

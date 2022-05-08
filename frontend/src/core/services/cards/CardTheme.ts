@@ -2,6 +2,7 @@ import { Card } from '../game/card';
 import {
   CardDescriptor,
   CardImageData,
+  CardLayerSeparator,
   CardLayerWildcard,
   CardThemeData,
   CardThemeIdentifier,
@@ -34,7 +35,12 @@ export class CardTheme {
 
   public getCard(card: Card | CardDescriptor | string): CardImageData {
     const layers: string[] = [];
-    if (typeof card === 'string') {
+    if (Object.values(CardDescriptor).includes(card as CardDescriptor)) {
+      layers.push(card as string);
+    } else if (typeof card === 'string' && this.config.isMultiLayer) {
+      console.log(card, this.cardDescriptionToLayers(card));
+      layers.push(...this.cardDescriptionToLayers(card));
+    } else if (typeof card === 'string') {
       layers.push(card);
     } else {
       layers.push(...this.cardToURI(card));
@@ -54,5 +60,14 @@ export class CardTheme {
       return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(16)}`];
     }
     return [`front_${card.color}_${card.type.toString(16)}`];
+  }
+
+  private cardDescriptionToLayers(descriptor: string): string[] {
+    const firstLayer = descriptor.replace(new RegExp(CardLayerSeparator + '.$'), CardLayerSeparator + CardLayerWildcard);
+    const secondLayer = descriptor.replace(
+      new RegExp(CardLayerSeparator + '.' + CardLayerSeparator),
+      CardLayerSeparator + CardLayerWildcard + CardLayerSeparator
+    );
+    return [firstLayer, secondLayer];
   }
 }
