@@ -426,8 +426,9 @@ async function buildTheme(theme) {
     const previews = computeThemePreviews(theme.previews);
     console.log('     selected previews cards: ' + previews.join(', '));
 
-    const previewImages = theme.isMultiLayer ? unique(previews.map(card => resolveLayersForCard(card)).flat()) : previews;
-
+    const previewImages = theme.isMultiLayer
+      ? unique(previews.map(card => resolveLayersForCard(card, BaseThemeConfig.overrides.layerWildcard)).flat())
+      : previews;
     const previewData = combineToObject(previewImages.map(card => ({ [card]: sheetData[card] })));
     const previewFileSize = await writeJSONFile(join(OUT_DIR, previewFileName), previewData);
     outFiles += 1;
