@@ -68,7 +68,6 @@ const isBeta = process.env.VUE_APP_BETA === 'true';
 onMounted(() => {
   useCookies().loadRecaptcha();
   const code = route.query['b'];
-  console.log(route.query, code);
   if (code) {
     betaCode.value = code as string;
   }

@@ -38,7 +38,6 @@ export class CardTheme {
     if (Object.values(CardDescriptor).includes(card as CardDescriptor)) {
       layers.push(card as string);
     } else if (typeof card === 'string' && this.config.isMultiLayer) {
-      console.log(card, this.cardDescriptionToLayers(card));
       layers.push(...this.cardDescriptionToLayers(card));
     } else if (typeof card === 'string') {
       layers.push(card);

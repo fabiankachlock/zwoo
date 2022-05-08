@@ -100,7 +100,6 @@ const loadTheme = async (variant: string) => {
 const getCardLayers = (descriptor: string) => previewTheme.value?.getCard(descriptor).layers ?? [];
 
 const selectAsTheme = () => {
-  console.log('selecting', props.theme.name, previewVariant.value, 'as theme');
   setTheme(props.theme.name, previewVariant.value);
 };
 </script>
