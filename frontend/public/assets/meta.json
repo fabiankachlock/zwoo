@@ -1,20 +1,72 @@
 {
   "themes": [
-    "__default__"
+    "__default__",
+    "test"
   ],
+  "configs": {
+    "__default__": {
+      "name": "__default__",
+      "description": "",
+      "author": "",
+      "isMultiLayer": true,
+      "variants": [
+        "dark",
+        "light",
+        "@auto"
+      ],
+      "previews": [
+        "back_u",
+        "front_1_1",
+        "front_2_a",
+        "front_3_b",
+        "front_4_d",
+        "front_5_e"
+      ]
+    },
+    "test": {
+      "name": "test",
+      "description": "",
+      "author": "",
+      "isMultiLayer": false,
+      "variants": [
+        "dark"
+      ],
+      "previews": [
+        "back_u",
+        "front_1_1",
+        "front_2_a",
+        "front_3_b",
+        "front_4_d",
+        "front_5_e"
+      ]
+    }
+  },
   "variants": {
     "__default__": [
       "dark",
       "light",
-      "xxx",
       "@auto"
+    ],
+    "test": [
+      "dark"
     ]
   },
   "files": {
+    "previews": {
+      "__default__": {
+        "dark": "__default__.dark.preview.json",
+        "light": "__default__.light.preview.json"
+      },
+      "test": {
+        "dark": "test.dark.preview.json"
+      }
+    },
     "__default__": {
       "dark": "__default__.dark.json",
-      "light": "__default__.light.json",
-      "xxx": "__default__.xxx.json"
+      "light": "__default__.light.json"
+    },
+    "test": {
+      "dark": "test.dark.json"
     }
   }
 }

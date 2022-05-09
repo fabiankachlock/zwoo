@@ -13,8 +13,6 @@ let initializedGameModules = false;
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
-    cardTheme: '__default__',
-    cardThemeVariant: '@auto',
     gameId: -1,
     name: '',
     role: undefined as ZRPRole | undefined,

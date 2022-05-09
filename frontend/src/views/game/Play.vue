@@ -32,7 +32,7 @@ import { computed } from 'vue';
 import Opponents from '@/components/game/OpponentsStrip.vue';
 import { useIsSpectator } from '@/composables/userRoles';
 import Pile from '@/components/game/Pile.vue';
-import MainCard from '@/components/game/chat/MainCard.vue';
+import MainCard from '@/components/game/MainCard.vue';
 
 const config = useConfig();
 const showCardDetail = computed(() => config.showCardDetail);

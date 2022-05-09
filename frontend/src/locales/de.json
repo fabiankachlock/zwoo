@@ -28,7 +28,8 @@
     "cookies": "Cookies",
     "deleteAccount": "Account löschen",
     "logging": "Loggen",
-    "goToLogging": "Zu den Einstellungen"
+    "goToLogging": "Zu den Einstellungen",
+    "cardTheme": "Karten Theme"
   },
   "lng": {
     "de": "Deutsch",
@@ -248,6 +249,21 @@
     "leave": "Verlassen",
     "startPlaying": "Mitspielen",
     "playAgain": "Weiterspielen"
+  },
+  "cardThemes": {
+    "galleryTitle": "zwoo - Themen Gallerie",
+    "select": "Auswählen",
+    "multiLayer": "MultiLayer",
+    "by": "Von:",
+    "authorUnknown": "Unbekannt",
+    "variants": "Varianten:",
+    "useTheme": "Theme nutzen",
+    "variant": {
+      "dark": "Dunkel",
+      "light": "Hell",
+      "@auto": "Automatisch"
+    },
+    "description": {}
   },
   "util": {
     "loading": "Wird geladen..."
