@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  frontend:
+    image: artireg.igd20.de/zwoo-frontend/frontend:latest
+    depends_on:
+      - backend
+    ports:
+      - 8080:80
+
+  backend:
+    image: artireg.igd20.de/zwoo-backend/backend:latest
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    environment:
+      # SMTP Settings
+      - SMTP_HOST_URL="###"
+      - SMTP_HOST_PORT="###"
+      - SMTP_HOST_EMAIL="###"
+      - SMTP_USERNAME="###"
+      - SMTP_PASSWORD="###"
+      # Database Settings
+      - ZWOO_DATABASE_CONNECTION_STRING="###"
+      # Backend Config
+      - ZWOO_RECAPTCHA_SIDESECRET="###"
+      # SSL Settings
+      - USE_SSL="###"
+      - ZWOO_CORS="###"
+      - ZWOO_DOMAIN="###"
+      - ZWOO_ENCRYPTION_KEY="###"
+
+  db:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - zwoo-db:/data/db
+      - zwoo-db-config:/data/configdb
+
+volumes:
+  zwoo-db:
+  zwoo-db-config:
