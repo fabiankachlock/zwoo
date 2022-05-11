@@ -25,6 +25,33 @@ export class DoublyLinkedList<T> {
     this.size = 0;
   }
 
+  static fromArray<E>(arr: E[]): DoublyLinkedList<E> {
+    const list = new DoublyLinkedList<E>();
+    arr.forEach(item => list.append(item));
+    return list;
+  }
+
+  public copy(): DoublyLinkedList<T> {
+    const list = new DoublyLinkedList<T>();
+    this.forEach(item => list.append(item));
+    return list;
+  }
+
+  public clear(): void {
+    this.head = undefined;
+    this.tail = undefined;
+    this.size = 0;
+  }
+
+  public get(index: number): T | undefined {
+    if (index > this.size || index < 0) return undefined;
+    let node = this.head as DoublyLinkedListNode<T>;
+    for (let idx = 0; idx < index; idx++) {
+      node = node.next!;
+    }
+    return node.value;
+  }
+
   public append(value: T): void {
     this.size++;
     if (this.isEmpty) {
