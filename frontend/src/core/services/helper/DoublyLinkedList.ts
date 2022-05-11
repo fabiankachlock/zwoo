@@ -53,39 +53,45 @@ export class DoublyLinkedList<T> {
   }
 
   public append(value: T): void {
-    this.size++;
     if (this.isEmpty) {
-      this.head = {
+      this.size++;
+      this.head = this.tail = {
         value,
         next: undefined,
         previous: undefined
       };
-      this.tail = this.head;
       return;
     }
+    this.size++;
     this.tail = {
       value,
       next: undefined,
       previous: this.tail
     };
+    if (this.tail.previous) {
+      this.tail.previous.next = this.tail;
+    }
   }
 
   public prepend(value: T): void {
-    this.size++;
     if (this.isEmpty) {
-      this.head = {
+      this.size++;
+      this.head = this.tail = {
         value,
         next: undefined,
         previous: undefined
       };
-      this.tail = this.head;
       return;
     }
+    this.size++;
     this.head = {
       value,
       next: this.head,
       previous: undefined
     };
+    if (this.head.next) {
+      this.head.next.previous = this.head;
+    }
   }
 
   public addAt(value: T, index: number): boolean {

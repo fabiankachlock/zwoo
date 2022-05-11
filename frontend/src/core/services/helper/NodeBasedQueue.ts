@@ -15,6 +15,10 @@ export class NodeBasedQueue<T> {
     this.list = new DoublyLinkedList();
   }
 
+  static fromArray<E>(arr: E[]): NodeBasedQueue<E> {
+    return NodeBasedQueue.fromList(DoublyLinkedList.fromArray(arr));
+  }
+
   private static fromList<E>(list: DoublyLinkedList<E>): NodeBasedQueue<E> {
     const queue = new NodeBasedQueue<E>();
     queue.list = list;
