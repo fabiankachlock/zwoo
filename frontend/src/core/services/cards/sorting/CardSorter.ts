@@ -4,7 +4,6 @@ import { NodeBasedQueue } from '../../helper/NodeBasedQueue';
 export class CardSorter {
   private cardToNumber = (card: Card): number => card.color * 100 + card.type;
   private numberToCard = (id: number): Card => ({
-    id: '',
     color: Math.floor(id / 100),
     type: id / 100 - Math.floor(id / 100)
   });

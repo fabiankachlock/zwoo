@@ -29,5 +29,4 @@ export enum CardType {
 export type Card = {
   type: CardType;
   color: CardColor;
-  id: string; // TODO: remove later
 };
