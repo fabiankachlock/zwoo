@@ -23,12 +23,16 @@
         <div class="card-to-play flex flex-col flex-nowrap justify-center items-center">
           <div class="relative">
             <div class="absolute" :class="{ 'animation-from-left z-10': isAnimatingFromLeft, 'animate-from-left-card': !isAnimatingFromLeft }">
-              <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
+              <div v-if="nextAfter" class="selected-card relative">
+                <Card :card="nextAfter" image-class="h-full"></Card>
+              </div>
             </div>
             <div class="absolute" :class="{ 'animation-from-right z-10': isAnimatingFromRight, 'animate-from-right-card': !isAnimatingFromRight }">
-              <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
+              <div v-if="nextBefore" class="selected-card relative">
+                <Card :card="nextBefore" image-class="h-full"></Card>
+              </div>
             </div>
-            <img
+            <div
               id="detailCard"
               :ref="r => (detailCard = r as HTMLElement)"
               class="selected-card relative cursor-pointer"
@@ -37,7 +41,9 @@
               }"
               src="/img/dummy_card.svg"
               alt=""
-            />
+            >
+              <Card :card="displayCard" image-class="h-full"></Card>
+            </div>
           </div>
           <button
             @click.stop="handlePlayCard()"
@@ -67,10 +73,11 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
-import { Card } from '@/core/type/game';
 import { computed, onMounted, ref, watch } from 'vue';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
 import { CardChecker } from '@/core/services/api/CardCheck';
+import { Card as CardTyping } from '@/core/services/game/card';
+import Card from './Card.vue';
 
 enum CardState {
   allowed,
@@ -83,8 +90,9 @@ const ANIMATION_DURATION = 300;
 const deckState = useGameCardDeck();
 
 const selectedCard = computed(() => deckState.selectedCard);
-const nextBefore = ref<Card | undefined>(undefined);
-const nextAfter = ref<Card | undefined>(undefined);
+const displayCard = ref<CardTyping>(selectedCard.value!);
+const nextBefore = ref<(CardTyping & { index: number }) | undefined>(undefined);
+const nextAfter = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const isAnimatingFromLeft = ref<boolean>(false);
 const isAnimatingFromRight = ref<boolean>(false);
 const isPlayingCard = ref<boolean>(false);
@@ -97,18 +105,42 @@ onMounted(() => {
   useSwipeGesture(detailCard, () => handleNextAfter(), SWIPE_DIRECTION.right);
 });
 
-watch(selectedCard, async () => {
-  nextBefore.value = deckState.prefetchNext(false);
-  nextAfter.value = deckState.prefetchNext(true);
-  canPlayCard.value = CardState.none;
-  if (selectedCard.value) {
-    canPlayCard.value = (await CardChecker.canPlayCard(selectedCard.value)) ? CardState.allowed : CardState.disallowed;
-  }
+watch(selectedCard, async card => {
+  if (!card) return;
+  setTimeout(async () => {
+    if (deckState.hasNext('before')) {
+      const [cardBefore, indexBefore] = deckState.getNext('before');
+      nextBefore.value = {
+        ...cardBefore!,
+        index: indexBefore
+      };
+    } else {
+      nextBefore.value = undefined;
+    }
+
+    if (deckState.hasNext('after')) {
+      const [cardAfter, indexAfter] = deckState.getNext('after');
+      nextAfter.value = {
+        ...cardAfter!,
+        index: indexAfter
+      };
+    } else {
+      nextAfter.value = undefined;
+    }
+    displayCard.value = {
+      color: card.color,
+      type: card.type
+    };
+    canPlayCard.value = CardState.none;
+    if (selectedCard.value) {
+      canPlayCard.value = (await CardChecker.canPlayCard(selectedCard.value)) ? CardState.allowed : CardState.disallowed;
+    }
+  }, ANIMATION_DURATION);
 });
 
 const handleNextBefore = () => {
   if (nextBefore.value && !isAnimatingFromRight.value) {
-    deckState.selectCard(nextBefore.value.id);
+    deckState.selectCard(nextBefore.value, nextBefore.value.index);
     isAnimatingFromRight.value = true;
     setTimeout(() => {
       isAnimatingFromRight.value = false;
@@ -118,7 +150,7 @@ const handleNextBefore = () => {
 
 const handleNextAfter = () => {
   if (nextAfter.value && !isAnimatingFromLeft.value) {
-    deckState.selectCard(nextAfter.value.id);
+    deckState.selectCard(nextAfter.value, nextAfter.value.index);
     isAnimatingFromLeft.value = true;
     setTimeout(() => {
       isAnimatingFromLeft.value = false;
@@ -157,6 +189,7 @@ const closeDetail = () => {
 }
 
 .selected-card {
+  height: 50vh;
   max-height: 50vh;
   max-width: 40vw;
 }

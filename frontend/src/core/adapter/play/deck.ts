@@ -28,17 +28,27 @@ export const useGameCardDeck = defineStore('game-cards', {
       }
       this.cards = this._deck.cards;
     },
-    prefetchNext(after: boolean): Card | undefined {
-      const nextIndex = (this.selectedCard?.index ?? 0) + (after ? 1 : -1);
+    hasNext(direction: 'before' | 'after'): boolean {
+      const nextIndex = (this.selectedCard?.index ?? 0) + (direction === 'after' ? 1 : -1);
+      console.log(nextIndex);
       const config = useConfig();
       if (config.sortCards) {
-        return this._deck.sortedCardAt(nextIndex);
+        return this._deck.sortedCardAt(nextIndex) !== undefined;
       }
-      return this._deck.cardAt(nextIndex);
+      return this._deck.cardAt(nextIndex) !== undefined;
+    },
+    getNext(direction: 'before' | 'after'): [Card | undefined, number] {
+      const nextIndex = (this.selectedCard?.index ?? 0) + (direction === 'after' ? 1 : -1);
+      const config = useConfig();
+      if (config.sortCards) {
+        return [this._deck.sortedCardAt(nextIndex), nextIndex];
+      }
+      return [this._deck.cardAt(nextIndex), nextIndex];
     },
     selectCard(card: Card, at: number) {
       this.selectedCard = {
-        ...card,
+        color: card.color,
+        type: card.type,
         index: at
       };
     },
