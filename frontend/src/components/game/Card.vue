@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full max-w-full max-h-full">
+  <div class="relative w-full h-full">
     <img
       v-for="(layer, i) in cardData.layers"
       :src="layer"
@@ -29,7 +29,6 @@ const cardData = computed(() => cardTheme.theme.getCard(props.card));
 </script>
 <style>
 .zwoo-card:not(:first-of-type) {
-  position: absolute;
-  top: 0;
+  @apply absolute top-0 left-1/2 -translate-x-1/2;
 }
 </style>

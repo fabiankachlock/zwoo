@@ -1,8 +1,8 @@
 <template>
   <div class="main-card-wrapper absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full" style="max-height: 70%">
-    <!-- <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-full"> -->
-    <Card :card="{ color: 1, type: 1 }" />
-    <!-- </div> -->
+    <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 h-full w-full max-h-full" style="min-width: 0">
+      <Card :card="{ color: 1, type: 1 }" image-class="max-h-full mx-auto" />
+    </div>
   </div>
 </template>
 
