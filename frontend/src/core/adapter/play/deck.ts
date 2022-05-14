@@ -30,7 +30,6 @@ export const useGameCardDeck = defineStore('game-cards', {
     },
     hasNext(direction: 'before' | 'after'): boolean {
       const nextIndex = (this.selectedCard?.index ?? 0) + (direction === 'after' ? 1 : -1);
-      console.log(nextIndex);
       const config = useConfig();
       if (config.sortCards) {
         return this._deck.sortedCardAt(nextIndex) !== undefined;

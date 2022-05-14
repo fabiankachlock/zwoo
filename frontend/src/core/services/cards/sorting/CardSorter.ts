@@ -5,7 +5,7 @@ export class CardSorter {
   private cardToNumber = (card: Card): number => card.color * 100 + card.type;
   private numberToCard = (id: number): Card => ({
     color: Math.floor(id / 100),
-    type: id / 100 - Math.floor(id / 100)
+    type: Math.round(id - Math.floor(id / 100) * 100)
   });
 
   private static RadixSortBase = 10;
@@ -17,7 +17,7 @@ export class CardSorter {
   radixSort(numbers: number[], max?: number): number[] {
     const mainQueue = NodeBasedQueue.fromArray(numbers);
     const buckets = this.createRadixSortBuckets();
-    const iterations = Math.floor(Math.log10(max ?? Math.max(...numbers)));
+    const iterations = Math.ceil(Math.log10(max ?? Math.max(...numbers)));
     for (let pointer = 0; pointer < iterations; pointer++) {
       const exp = Math.pow(10, pointer);
       while (!mainQueue.isEmpty) {

@@ -3,6 +3,7 @@ import { CardSorter } from '../cards/sorting/CardSorter';
 
 export class CardDeck {
   private content: Card[];
+  private sortedContent: Card[];
 
   private sorter = new CardSorter();
 
@@ -11,13 +12,12 @@ export class CardDeck {
   }
 
   get sorted(): Card[] {
-    // TODO: fix sorting
-    return [...this.content];
-    return this.sorter.sort(this.content);
+    return [...this.sortedContent];
   }
 
   constructor(cards: Card[]) {
     this.content = cards;
+    this.sortedContent = this.sorter.sort(this.content);
   }
 
   // TODO: colorChangeCards!!!
@@ -32,6 +32,7 @@ export class CardDeck {
     if (index >= 0) {
       const card = this.content[index];
       this.content.splice(index, 1);
+      this.sortedContent = this.sorter.sort(this.content);
       return card;
     }
     return undefined;
@@ -39,6 +40,7 @@ export class CardDeck {
 
   pushCard = (card: Card): void => {
     this.content.unshift(card);
+    this.sortedContent = this.sorter.sort(this.content);
   };
 
   cardAt = (index: number): Card | undefined => {
