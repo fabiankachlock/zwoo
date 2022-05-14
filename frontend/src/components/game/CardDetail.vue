@@ -90,6 +90,7 @@ const ANIMATION_DURATION = 300;
 const deckState = useGameCardDeck();
 
 const selectedCard = computed(() => deckState.selectedCard);
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const displayCard = ref<CardTyping>(selectedCard.value!);
 const nextBefore = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const nextAfter = ref<(CardTyping & { index: number }) | undefined>(undefined);
@@ -107,42 +108,47 @@ onMounted(() => {
 
 watch(selectedCard, async card => {
   if (!card) return;
-  setTimeout(async () => {
-    if (deckState.hasNext('before')) {
-      const [cardBefore, indexBefore] = deckState.getNext('before');
-      nextBefore.value = {
-        ...cardBefore!,
-        index: indexBefore
-      };
-    } else {
-      nextBefore.value = undefined;
-    }
-
-    if (deckState.hasNext('after')) {
-      const [cardAfter, indexAfter] = deckState.getNext('after');
-      nextAfter.value = {
-        ...cardAfter!,
-        index: indexAfter
-      };
-    } else {
-      nextAfter.value = undefined;
-    }
-    displayCard.value = {
-      color: card.color,
-      type: card.type
-    };
-    canPlayCard.value = CardState.none;
-    if (selectedCard.value) {
-      canPlayCard.value = (await CardChecker.canPlayCard(selectedCard.value)) ? CardState.allowed : CardState.disallowed;
-    }
-  }, ANIMATION_DURATION);
+  updateView(card);
 });
+
+const updateView = async (card: CardTyping) => {
+  if (deckState.hasNext('before')) {
+    const [cardBefore, indexBefore] = deckState.getNext('before');
+    nextBefore.value = {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ...cardBefore!,
+      index: indexBefore
+    };
+  } else {
+    nextBefore.value = undefined;
+  }
+
+  if (deckState.hasNext('after')) {
+    const [cardAfter, indexAfter] = deckState.getNext('after');
+    nextAfter.value = {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ...cardAfter!,
+      index: indexAfter
+    };
+  } else {
+    nextAfter.value = undefined;
+  }
+  displayCard.value = {
+    color: card.color,
+    type: card.type
+  };
+  canPlayCard.value = CardState.none;
+  if (selectedCard.value) {
+    canPlayCard.value = (await CardChecker.canPlayCard(card)) ? CardState.allowed : CardState.disallowed;
+  }
+};
 
 const handleNextBefore = () => {
   if (nextBefore.value && !isAnimatingFromRight.value) {
-    deckState.selectCard(nextBefore.value, nextBefore.value.index);
     isAnimatingFromRight.value = true;
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      deckState.selectCard(nextBefore.value!, nextBefore.value!.index);
       isAnimatingFromRight.value = false;
     }, ANIMATION_DURATION);
   }
@@ -150,9 +156,10 @@ const handleNextBefore = () => {
 
 const handleNextAfter = () => {
   if (nextAfter.value && !isAnimatingFromLeft.value) {
-    deckState.selectCard(nextAfter.value, nextAfter.value.index);
     isAnimatingFromLeft.value = true;
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      deckState.selectCard(nextAfter.value!, nextAfter.value!.index);
       isAnimatingFromLeft.value = false;
     }, ANIMATION_DURATION);
   }
