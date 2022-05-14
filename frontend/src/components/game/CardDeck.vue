@@ -15,7 +15,7 @@
         class="card-wrapper relative overflow-visible"
       >
         <div class="card relative" :style="getComputedCardStyle">
-          <Card :card="card" />
+          <Card :card="card" image-class="transition-all" />
         </div>
       </div>
     </div>

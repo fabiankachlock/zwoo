@@ -38,7 +38,7 @@ export class CardDeck {
   };
 
   pushCard = (card: Card): void => {
-    this.content.push(card);
+    this.content.unshift(card);
   };
 
   cardAt = (index: number): Card | undefined => {
