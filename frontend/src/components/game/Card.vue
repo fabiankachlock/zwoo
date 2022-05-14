@@ -5,7 +5,7 @@
       :src="layer"
       :key="i"
       :alt="`${cardData.description} - layer ${i}`"
-      class="absolute"
+      class="zwoo-card"
       :class="imageClass"
       :style="`z-index: ${i + 1};${imageStyle}`"
     />
@@ -19,7 +19,7 @@ import { Card } from '@/core/services/game/card';
 import { computed, defineProps } from 'vue';
 
 const props = defineProps<{
-  card: Card | CardDescriptor;
+  card: Card | CardDescriptor | string;
   imageStyle?: string;
   imageClass?: string;
 }>();
@@ -27,3 +27,9 @@ const props = defineProps<{
 const cardTheme = useCardTheme();
 const cardData = computed(() => cardTheme.theme.getCard(props.card));
 </script>
+<style>
+.zwoo-card:not(:first-of-type) {
+  position: absolute;
+  top: 0;
+}
+</style>
