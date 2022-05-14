@@ -15,7 +15,7 @@
         class="card-wrapper relative overflow-visible"
       >
         <div class="card relative" :style="getComputedCardStyle">
-          <Card :card="{ color: 1, type: 1 }" />
+          <Card :card="card" />
         </div>
       </div>
     </div>
@@ -26,8 +26,9 @@
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { Card as CardTyping, CardColor, CardType } from '@/core/services/game/card';
+import { Card as CardTyping } from '@/core/services/game/card';
 import Card from './Card.vue';
+import { Random } from '@/core/services/helper/Random';
 const CARD_ASPECT_RATIO = 420 / 720;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
@@ -55,10 +56,7 @@ onMounted(() => {
     (() => {
       const cards: CardTyping[] = [];
       for (let i = 0; i < 5; i++) {
-        cards.push({
-          color: CardColor.blue,
-          type: CardType.five
-        });
+        cards.push(Random.card());
       }
       return cards;
     })()

@@ -55,6 +55,7 @@ import { useGameCardDeck } from '@/core/adapter/play/deck';
 import GameChat from './chat/GameChat.vue';
 import ChatInput from './chat/ChatInput.vue';
 import EndTurnButton from './EndTurnButton.vue';
+import { Random } from '@/core/services/helper/Random';
 
 const stateStore = useGameState();
 const deckState = useGameCardDeck();
@@ -68,11 +69,7 @@ const handleLeave = () => {
   // TODO: Just Temp
   stateStore.setIsActive(!stateStore.isActivePlayer);
   stateStore.update();
-  deckState.addCard({
-    id: deckState.cards.length.toString(),
-    type: 0,
-    color: 0
-  });
+  deckState.addCard(Random.card());
 };
 </script>
 
