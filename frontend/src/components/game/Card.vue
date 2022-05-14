@@ -19,7 +19,14 @@ import { Card } from '@/core/services/game/card';
 import { computed, defineProps } from 'vue';
 
 const props = defineProps<{
-  card: Card | CardDescriptor | string;
+  card:
+    | CardDescriptor
+    | string
+    | Card
+    | {
+        color: number;
+        type: number;
+      };
   imageStyle?: string;
   imageClass?: string;
 }>();

@@ -2,18 +2,20 @@
   <div class="deck bg-darkest rounded-lg py-1 px-3 relative">
     <div
       :class="{ 'pointer-events-none': !cardsActive }"
-      class="absolute left-0 right-0 bottom-2 z-10 overflow-hidden px-2 flex flex-nowrap justify-center h-full"
+      :style="`height: ${cardWidth * CARD_ASPECT_RATIO}`"
+      class="absolute left-0 right-0 bottom-2 z-10 overflow-hidden px-2 flex flex-nowrap justify-center"
     >
       <div
         v-for="(card, index) of cards"
         :key="`${index}-${card.color}-${card.type}`"
+        :data-x="`${index}-${card.color}-${card.type}`"
         @click="selectCard(card, index)"
         :style="getComputedCardWrapperStyle"
         :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
         class="card-wrapper relative overflow-visible"
       >
         <div class="card relative" :style="getComputedCardStyle">
-          <CardComponent :card="card" />
+          <Card :card="{ color: 1, type: 1 }" />
         </div>
       </div>
     </div>
@@ -24,9 +26,9 @@
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { Card, CardColor, CardType } from '@/core/services/game/card';
-import CardComponent from './Card.vue';
-const CARD_ASPECT_RATIO = 420 / 420;
+import { Card as CardTyping, CardColor, CardType } from '@/core/services/game/card';
+import Card from './Card.vue';
+const CARD_ASPECT_RATIO = 420 / 720;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
 
@@ -51,7 +53,7 @@ const dimensions = reactive({
 onMounted(() => {
   deckStore.setState(
     (() => {
-      const cards: Card[] = [];
+      const cards: CardTyping[] = [];
       for (let i = 0; i < 5; i++) {
         cards.push({
           color: CardColor.blue,
@@ -129,7 +131,7 @@ const getComputedCardStyle = computed((): { [key: string]: string } => {
   };
 });
 
-const selectCard = (card: Card, index: number) => {
+const selectCard = (card: CardTyping, index: number) => {
   deckStore.selectCard(card, index);
 };
 </script>
@@ -139,19 +141,19 @@ const selectCard = (card: Card, index: number) => {
   height: calc(0.5rem + 6vh);
 }
 
-.card-wrapper .card img {
+.card-wrapper .card div {
   @apply transition-transform;
 }
 
 .card-wrapper {
-  @apply transition-all;
+  @apply transition-all relative;
 }
 
 .card-wrapper.active {
   transform: translateY(30%);
 }
 
-.card-wrapper.active .card:hover img {
+.card-wrapper.active .card:hover div {
   transform: scale(1.3, 1.3);
 }
 

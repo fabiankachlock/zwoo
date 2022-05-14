@@ -11,6 +11,8 @@ export class CardDeck {
   }
 
   get sorted(): Card[] {
+    // TODO: fix sorting
+    return [...this.content];
     return this.sorter.sort(this.content);
   }
 
