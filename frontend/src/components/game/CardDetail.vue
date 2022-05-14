@@ -73,12 +73,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
 import { CardChecker } from '@/core/services/api/CardCheck';
 import { Card as CardTyping } from '@/core/services/game/card';
 import Card from './Card.vue';
 import { useGameState } from '@/core/adapter/play/gameState';
+import { Key, useKeyPress } from '@/composables/KeyPress';
 
 enum CardState {
   allowed,
@@ -146,6 +147,14 @@ const updateView = async (card: CardTyping) => {
   }
 };
 
+const handleKeyPress = (key: string) => {
+  if (key === Key.ArrowLeft || key === Key.a) {
+    handleNextBefore();
+  } else if (key === Key.ArrowRight || key === Key.d) {
+    handleNextAfter();
+  }
+};
+
 const handleNextBefore = () => {
   if (nextBefore.value && !isAnimatingFromRight.value) {
     isAnimatingFromRight.value = true;
@@ -189,6 +198,12 @@ const closeDetail = () => {
     selectedCard: undefined
   });
 };
+
+const unregisterKeyListener = useKeyPress([Key.ArrowRight, Key.ArrowLeft, Key.a, Key.d], handleKeyPress);
+
+onUnmounted(() => {
+  unregisterKeyListener();
+});
 </script>
 
 <style>
