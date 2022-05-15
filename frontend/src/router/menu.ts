@@ -55,5 +55,9 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   {
     path: 'leaderboard',
     component: () => import(/* webpackChunkName: "menu" */ '../views/Leaderboard.vue')
+  },
+  {
+    path: 'shortcut-info',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/ShortcutInfo.vue')
   }
 ];

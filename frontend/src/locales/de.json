@@ -300,5 +300,20 @@
     "clearStore": "Speicher leeren",
     "reloadLogs": "Logs neu laden",
     "storedLogs": "Gespeicherte Logs"
+  },
+  "shortcuts": {
+    "title": "Tastenkombinationen",
+    "ui": "Benutzeroberfläche",
+    "navigation": "Navigation",
+    "home": "Zum Homebildschirm",
+    "newGame": "Erstelle ein neues Spiel",
+    "join": "Trete einem Spiel bei",
+    "settings": "Gehe zu den Einstellungen",
+    "leaderboard": "Gehe zum Leaderboard",
+    "login": "Gehe zum Login",
+    "info": "Zeige alle Tastenkombinationen",
+    "darkMode": "UI Modus umschalten",
+    "fullScreen": "Vollbildschirm umschalten",
+    "quickMenu": "Quick Menu umschalten"
   }
 }

@@ -1,5 +1,6 @@
 import {
   HomeShortcut,
+  InfoShortcut,
   LeaderboardShortcut,
   ListGamesShortcut,
   LoginShortcut,
@@ -18,7 +19,8 @@ const AllShortcuts = [
   ToggleDarkModeShortcut,
   FullScreenShortcut,
   LoginShortcut,
-  QuickMenuShortcut
+  QuickMenuShortcut,
+  InfoShortcut
 ];
 
 export class ShortcutManager {

@@ -54,3 +54,12 @@ export const LoginShortcut: Shortcut<KeyboardEvent> = {
     }
   }
 };
+
+export const InfoShortcut: Shortcut<KeyboardEvent> = {
+  type: 'keyboard',
+  execute(event) {
+    if ((event.ctrlKey && event.key === 'i') || event.key === '?') {
+      Router.push('/shortcut-info');
+    }
+  }
+};

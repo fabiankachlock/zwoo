@@ -300,5 +300,20 @@
     "clearStore": "Clear Store",
     "reloadLogs": "Reload Logs",
     "storedLogs": "Stored Logs"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "ui": "UI",
+    "navigation": "Navigation",
+    "home": "Go home",
+    "newGame": "Create a new game",
+    "join": "Join a game",
+    "settings": "Go to settings",
+    "leaderboard": "Go to leaderboard",
+    "login": "Go to login",
+    "info": "Show all keyboard shortcuts",
+    "darkMode": "Toggle UI Mode",
+    "fullScreen": "Toggle full screen",
+    "quickMenu": "Toggle quick menu"
   }
 }
