@@ -3,18 +3,18 @@
     <h1 class="tc-main">{{ t('shortcuts.title') }}</h1>
 
     <h2 class="tc-main">{{ t('shortcuts.ui') }}</h2>
-    <p><span>Ctrl</span>+<span>d</span>: {{ t('shortcuts.darkMode') }}</p>
-    <p><span>Ctrl</span>+<span>q</span>: {{ t('shortcuts.quickMenu') }}</p>
-    <p><span>Ctrl</span>+<span>f</span>: {{ t('shortcuts.fullScreen') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>d</kbd>: {{ t('shortcuts.darkMode') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>q</kbd>: {{ t('shortcuts.quickMenu') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>f</kbd>: {{ t('shortcuts.fullScreen') }}</p>
 
     <h2 class="tc-main">{{ t('shortcuts.navigation') }}</h2>
-    <p><span>Ctrl</span>+<span>h</span>: {{ t('shortcuts.home') }}</p>
-    <p><span>Ctrl</span>+<span>n</span>: {{ t('shortcuts.newGame') }}</p>
-    <p><span>Ctrl</span>+<span>j</span>: {{ t('shortcuts.join') }}</p>
-    <p><span>Ctrl</span>+<span>s</span>: {{ t('shortcuts.settings') }}</p>
-    <p><span>Ctrl</span>+<span>l</span>: {{ t('shortcuts.leaderboard') }}</p>
-    <p><span>Ctrl</span>+<span>a</span>: {{ t('shortcuts.login') }}</p>
-    <p><span>Ctrl</span>+ <span>i</span>, <span>?</span>: {{ t('shortcuts.info') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>h</kbd>: {{ t('shortcuts.home') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>n</kbd>: {{ t('shortcuts.newGame') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>j</kbd>: {{ t('shortcuts.join') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>s</kbd>: {{ t('shortcuts.settings') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>l</kbd>: {{ t('shortcuts.leaderboard') }}</p>
+    <p><kbd>Ctrl</kbd>+<kbd>a</kbd>: {{ t('shortcuts.login') }}</p>
+    <p><kbd>Ctrl</kbd>+ <kbd>i</kbd>, <kbd>?</kbd>: {{ t('shortcuts.info') }}</p>
   </div>
 </template>
 
@@ -29,8 +29,9 @@ const { t } = useI18n();
   @apply my-2 text-lg;
 }
 
-.info p span {
+.info p kbd {
   @apply bg-_bg-light-dark dark:bg-_bg-dark-dark px-2 py-0.5 rounded;
+  user-select: none;
 }
 
 .info h1 {
