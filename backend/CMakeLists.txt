@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
+find_package(logrush               REQUIRED)
 find_package(spdlog                REQUIRED)
 find_package(oatpp           1.3.0 REQUIRED)
 find_package(oatpp-mongo     1.3.0 REQUIRED)
@@ -52,6 +53,7 @@ set(LIBS
     mongo::mongocxx_static
     mongo::bsoncxx_static
     mailio::mailio
+    logrush::logrush
 )
 
 add_executable(main ${SRC_FILES})

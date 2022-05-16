@@ -14,7 +14,12 @@ int str2int( std::string str );
 #define ZWOO_ENCRYPTION_KEY                                                    \
     std::getenv( "ZWOO_ENCRYPTION_KEY" ) // recommended minimum 64 Chars
 #define ZWOO_BETA str2b( get_env( "ZWOO_BETA" ) )
+
 #define ZWOO_LOGS get_env( "ZWOO_LOGS" ) // Folder for Logs
+#define ZWOO_LOGRUSH_URL get_env("ZWOO_LOGRUSH_URL")
+#define ZWOO_LOGRUSH_ALIAS get_env("ZWOO_LOGRUSH_ALIAS")
+#define ZWOO_LOGRUSH_ID get_env("ZWOO_LOGRUSH_ID") // Logrush logger id
+#define ZWOO_LOGRUSH_KEY get_env("ZWOO_LOGRUSH_KEY") // Logrush logger key
 
 #define SMTP_HOST_URL get_env( "SMTP_HOST_URL" )
 #define SMTP_HOST_PORT str2int( get_env( "SMTP_HOST_PORT" ) )
