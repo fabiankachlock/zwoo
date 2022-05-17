@@ -15,6 +15,7 @@
         :id="id"
         :placeholder="placeholder"
         :value="modelValue"
+        @keyup.stop
         @input="updateInput"
       />
       <div class="my-2">

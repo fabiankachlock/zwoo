@@ -4,7 +4,7 @@ import Router from '@/router';
 export const HomeShortcut: Shortcut<KeyboardEvent> = {
   type: 'keyboard',
   execute(event) {
-    if (event.ctrlKey && event.key === 'h') {
+    if (event.key === 'h') {
       Router.push('/home');
     }
   }
@@ -13,7 +13,7 @@ export const HomeShortcut: Shortcut<KeyboardEvent> = {
 export const NewGameShortcut: Shortcut<KeyboardEvent> = {
   type: 'keyboard',
   execute(event) {
-    if (event.ctrlKey && event.key === 'n') {
+    if (event.key === 'n') {
       Router.push('/create-game');
     }
   }
@@ -22,7 +22,7 @@ export const NewGameShortcut: Shortcut<KeyboardEvent> = {
 export const ListGamesShortcut: Shortcut<KeyboardEvent> = {
   type: 'keyboard',
   execute(event) {
-    if (event.ctrlKey && event.key === 'j') {
+    if (event.key === 'j') {
       Router.push('/available-games');
     }
   }
@@ -31,7 +31,7 @@ export const ListGamesShortcut: Shortcut<KeyboardEvent> = {
 export const SettingsShortcut: Shortcut<KeyboardEvent> = {
   type: 'keyboard',
   execute(event) {
-    if (event.ctrlKey && event.key === 's') {
+    if (event.key === 's') {
       Router.push('/settings');
     }
   }
@@ -40,7 +40,7 @@ export const SettingsShortcut: Shortcut<KeyboardEvent> = {
 export const LeaderboardShortcut: Shortcut<KeyboardEvent> = {
   type: 'keyboard',
   execute(event) {
-    if (event.ctrlKey && event.key === 'l') {
+    if (event.key === 'l') {
       Router.push('/leaderboard');
     }
   }
@@ -49,7 +49,7 @@ export const LeaderboardShortcut: Shortcut<KeyboardEvent> = {
 export const LoginShortcut: Shortcut<KeyboardEvent> = {
   type: 'keyboard',
   execute(event) {
-    if (event.ctrlKey && event.key === 'a') {
+    if (event.key === 'a') {
       Router.push('/login');
     }
   }
@@ -58,7 +58,7 @@ export const LoginShortcut: Shortcut<KeyboardEvent> = {
 export const InfoShortcut: Shortcut<KeyboardEvent> = {
   type: 'keyboard',
   execute(event) {
-    if ((event.ctrlKey && event.key === 'i') || event.key === '?') {
+    if (event.key === 'i' || event.key === '?') {
       Router.push('/shortcut-info');
     }
   }
