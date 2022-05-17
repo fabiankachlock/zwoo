@@ -5,7 +5,8 @@
         class="appearance-none outline-none w-full bg-light tc-main-light px-2 py-0.5 rounded transition hover:bg-main focus:bg-main border border-transparent focus:bc-primary ring-0"
         type="text"
         v-model="message"
-        @keyup.stop.enter="sendMessage"
+        @keyup.stop
+        @keyup.enter="sendMessage"
       />
     </div>
     <div class="flex justify-center items-center bg-light px-3 py-0.5 rounded transition hover:bg-main">
