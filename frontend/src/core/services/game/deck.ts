@@ -1,56 +1,53 @@
 import { Card } from './card';
+import { CardSorter } from '../cards/sorting/CardSorter';
 
 export class CardDeck {
   private content: Card[];
+  private sortedContent: Card[];
+
+  private sorter = new CardSorter();
 
   get cards(): Card[] {
     return [...this.content];
   }
 
   get sorted(): Card[] {
-    // TODO: Sort cards
-    return [...this.content];
+    return [...this.sortedContent];
   }
 
   constructor(cards: Card[]) {
     this.content = cards;
+    this.sortedContent = this.sorter.sort(this.content);
   }
 
-  playCard = (id: string): Card | undefined => {
-    const index = this.content.findIndex(card => card.id === id);
+  // TODO: colorChangeCards!!!
+  private cardMatcher = (base: Card) => (card: Card) => base.color === card.color || base.type === card.type;
+
+  hasCard = (card: Card): boolean => {
+    return this.content.findIndex(this.cardMatcher(card)) !== undefined;
+  };
+
+  playCard = (card: Card): Card | undefined => {
+    const index = this.content.findIndex(this.cardMatcher(card));
     if (index >= 0) {
       const card = this.content[index];
       this.content.splice(index, 1);
+      this.sortedContent = this.sorter.sort(this.content);
       return card;
     }
     return undefined;
   };
 
   pushCard = (card: Card): void => {
-    const existingIndex = this.content.findIndex(_card => _card.id === card.id);
-    if (existingIndex < 0) {
-      this.content.push(card);
-    }
+    this.content.unshift(card);
+    this.sortedContent = this.sorter.sort(this.content);
   };
 
-  next = (id: string, after = true): Card | undefined => {
-    return this.findNextCard(this.cards, id, after ? 1 : -1);
+  cardAt = (index: number): Card | undefined => {
+    return this.content[index];
   };
 
-  nextSorted = (id: string, after = true): Card | undefined => {
-    return this.findNextCard(this.sorted, id, after ? 1 : -1);
-  };
-
-  private findNextCard = (cards: Card[], id: string, indexChange: number): Card | undefined => {
-    const index = cards.findIndex(card => card.id === id);
-    if (index < 0) {
-      return undefined;
-    }
-
-    const newIndex = index + indexChange;
-    if (newIndex >= 0 && newIndex <= cards.length - 1) {
-      return cards[newIndex];
-    }
-    return undefined;
+  sortedCardAt = (index: number): Card | undefined => {
+    return this.sorted[index];
   };
 }

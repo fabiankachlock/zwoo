@@ -1,18 +1,19 @@
 <template>
   <div class="main-card-wrapper absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full" style="max-height: 70%">
-    <!-- <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-full"> -->
-    <Card :layers="cardData.layers" alt="main card" />
-    <!-- </div> -->
+    <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 h-full w-full max-h-full" style="min-width: 0">
+      <template v-if="mainCard">
+        <Card :card="mainCard" image-class="max-h-full mx-auto" />
+      </template>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useCardTheme } from '@/core/adapter/play/cardTheme';
+import { useGameState } from '@/core/adapter/play/gameState';
 import { computed } from 'vue';
 import Card from './Card.vue';
-
-const cardTheme = useCardTheme();
-const cardData = computed(() => cardTheme.theme.getCard({ type: 1, color: 1, id: '' }));
+const gameState = useGameState();
+const mainCard = computed(() => gameState.mainCard);
 </script>
 
 <style scoped>
