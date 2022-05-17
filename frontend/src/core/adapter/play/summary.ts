@@ -29,6 +29,8 @@ export const useGameSummary = defineStore('game-summary', {
     },
     leave() {
       console.log('leaving game');
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });

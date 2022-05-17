@@ -65,9 +65,15 @@ export const useGameConfig = defineStore('game-config', {
     },
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {
-        // TODO: revisit this when working on code splitting
-        (await import('./play/lobby')).useLobbyStore().__init__();
-        (await import('./play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/cardTheme')).useCardTheme().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/chat')).useChatStore().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/deck')).useGameCardDeck().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/events')).useGameEvents().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/gameState')).useGameState().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/lobby')).useLobbyStore().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/rules')).useRules().__init__();
+        (await import(/* webpackChunkName: "game-logic" */ './play/summary')).useGameSummary().__init__();
         initializedGameModules = true;
       }
     },

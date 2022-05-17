@@ -24,6 +24,8 @@ export const useRules = defineStore('rules', {
         ...rule,
         isActivated: rule.id === ruleId ? isActive : rule.isActivated
       }));
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });

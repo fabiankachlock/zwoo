@@ -60,6 +60,8 @@ export const useGameCardDeck = defineStore('game-cards', {
         return;
       }
       this.cards = this._deck.cards;
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });
