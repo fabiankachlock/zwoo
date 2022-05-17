@@ -2,18 +2,20 @@
   <div class="deck bg-darkest rounded-lg py-1 px-3 relative">
     <div
       :class="{ 'pointer-events-none': !cardsActive }"
+      :style="`height: ${cardWidth * CARD_ASPECT_RATIO}`"
       class="absolute left-0 right-0 bottom-2 z-10 overflow-hidden px-2 flex flex-nowrap justify-center"
     >
       <div
-        v-for="card of cards"
-        :key="card.id"
-        @click="selectCard(card.id)"
+        v-for="(card, index) of cards"
+        :key="`${index}-${card.color}-${card.type}`"
+        :data-x="`${index}-${card.color}-${card.type}`"
+        @click="selectCard(card, index)"
         :style="getComputedCardWrapperStyle"
         :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
         class="card-wrapper relative overflow-visible"
       >
         <div class="card relative" :style="getComputedCardStyle">
-          <img src="/img/dummy_card.svg" alt="" />
+          <Card :card="card" image-class="transition-all" />
         </div>
       </div>
     </div>
@@ -24,8 +26,10 @@
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { Card } from '@/core/type/game';
-const CARD_ASPECT_RATIO = 476 / 716;
+import { Card as CardTyping } from '@/core/services/game/card';
+import Card from './Card.vue';
+import { Random } from '@/core/services/helper/Random';
+const CARD_ASPECT_RATIO = 420 / 720;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
 
@@ -50,11 +54,9 @@ const dimensions = reactive({
 onMounted(() => {
   deckStore.setState(
     (() => {
-      const cards: Card[] = [];
+      const cards: CardTyping[] = [];
       for (let i = 0; i < 5; i++) {
-        cards.push({
-          id: i.toString()
-        });
+        cards.push(Random.card());
       }
       return cards;
     })()
@@ -127,8 +129,8 @@ const getComputedCardStyle = computed((): { [key: string]: string } => {
   };
 });
 
-const selectCard = (id: string) => {
-  deckStore.selectCard(id);
+const selectCard = (card: CardTyping, index: number) => {
+  deckStore.selectCard(card, index);
 };
 </script>
 
@@ -137,19 +139,19 @@ const selectCard = (id: string) => {
   height: calc(0.5rem + 6vh);
 }
 
-.card-wrapper .card img {
+.card-wrapper .card div {
   @apply transition-transform;
 }
 
 .card-wrapper {
-  @apply transition-all;
+  @apply transition-all relative;
 }
 
 .card-wrapper.active {
   transform: translateY(30%);
 }
 
-.card-wrapper.active .card:hover img {
+.card-wrapper.active .card:hover div {
   transform: scale(1.3, 1.3);
 }
 

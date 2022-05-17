@@ -44,9 +44,9 @@
       </p>
     </div>
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
-    <div class="relative px-2 card-preview-wrapper flex flex-row w-full max-w-full overflow-x-auto">
+    <div class="relative px-2 flex flex-row w-full max-w-full overflow-x-auto">
       <div v-for="card in theme.previews" :key="card" class="card-preview max-h-full w-full mr-2">
-        <Card :layers="getCardLayers(card)" :alt="card" />
+        <Card :card="card" />
       </div>
     </div>
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
@@ -97,8 +97,6 @@ const loadTheme = async (variant: string) => {
   previewTheme.value = theme;
 };
 
-const getCardLayers = (descriptor: string) => previewTheme.value?.getCard(descriptor).layers ?? [];
-
 const selectAsTheme = () => {
   setTheme(props.theme.name, previewVariant.value);
 };
@@ -112,18 +110,10 @@ const selectAsTheme = () => {
 .card-preview {
   position: relative;
   height: min(20vh, 500px);
-  min-height: min(20vh, 500px);
-  max-height: min(20vh, 500px);
   width: calc(min(20vh, 500px) * (420 / 720));
-  min-width: calc(min(20vh, 500px) * (420 / 720));
 }
 
 .card-preview:last-of-type {
   margin-right: 0;
-}
-
-.card-preview-wrapper {
-  height: min(20vh, 500px);
-  max-height: min(20vh, 500px);
 }
 </style>
