@@ -8,7 +8,7 @@ export type DisplayRule = {
   isActivated: boolean;
 };
 
-export const useRules = defineStore('rules', {
+export const useRules = defineStore('game-rules', {
   state: () => ({
     rules: AllRules.map(id => ({
       id: id,
