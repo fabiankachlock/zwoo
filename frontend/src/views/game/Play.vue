@@ -18,7 +18,7 @@
           <CardDeck v-if="!isSpectator" />
         </div>
         <CardDetail v-if="showCardDetail" />
-        <template v-id="currentModal">
+        <template v-if="currentModal">
           <component :is="currentModal"></component>
         </template>
       </div>

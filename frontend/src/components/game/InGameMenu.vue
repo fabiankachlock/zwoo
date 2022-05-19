@@ -50,12 +50,14 @@ import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
-import { useGameState } from '@/core/adapter/play/gameState';
+//import { useGameState } from '@/core/adapter/play/gameState';
 import GameChat from './chat/GameChat.vue';
 import ChatInput from './chat/ChatInput.vue';
 import EndTurnButton from './EndTurnButton.vue';
+import { InGameModal, useGameModal } from '@/core/adapter/play/modal';
 
-const stateStore = useGameState();
+//const stateStore = useGameState();
+const x = useGameModal();
 const menuOpen = ref(false);
 
 const toggleMenu = () => {
@@ -64,7 +66,8 @@ const toggleMenu = () => {
 
 const handleLeave = () => {
   // TODO: Just Temp
-  stateStore.setIsActive(!stateStore.isActivePlayer);
+  x.openModal(InGameModal.ColorPicker);
+  //stateStore.setIsActive(!stateStore.isActivePlayer);
 };
 </script>
 
