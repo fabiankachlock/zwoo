@@ -31,6 +31,14 @@ const BaseThemeConfig = {
   variants: ['a', 'list', 'of', 'variants'], // required
   imageType: 'svg+xml', // optional,
   previews: [], // optional
+  colors: {
+    __example: {
+      1: '#FF0000',
+      2: '#FF0000',
+      3: '#FFFF00',
+      4: '#0000FF'
+    }
+  },
   overrides: {
     // optional
     cardFront: 'front',
@@ -303,7 +311,20 @@ async function createMetaFiles(themes) {
           author: theme.author ?? '',
           isMultiLayer: theme.isMultiLayer,
           variants: computeThemeVariants(theme.variants),
-          previews: computeThemePreviews(theme.previews)
+          previews: computeThemePreviews(theme.previews),
+          colors: theme.variants.reduce(
+            (acc, variant) => ({
+              ...acc,
+              [variant]: Object.entries(BaseThemeConfig.colors.__example).reduce(
+                (acc, [index, value]) => ({
+                  ...acc,
+                  [index]: ((theme.colors ?? {})[variant] ?? {})[index] ?? value
+                }),
+                {}
+              )
+            }),
+            {}
+          )
         }
       }))
     ),

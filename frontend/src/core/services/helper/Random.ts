@@ -5,7 +5,7 @@ export const Random = {
   },
 
   intInRange(lowerBound: number, higherBound: number) {
-    return Math.floor(Random.numberInRange(lowerBound, higherBound));
+    return Math.floor(Random.numberInRange(lowerBound, higherBound + 1));
   },
 
   card(): Card {
