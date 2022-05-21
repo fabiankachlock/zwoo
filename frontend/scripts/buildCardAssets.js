@@ -36,7 +36,8 @@ const BaseThemeConfig = {
       1: '#FF0000',
       2: '#FF0000',
       3: '#FFFF00',
-      4: '#0000FF'
+      4: '#0000FF',
+      5: '#000'
     }
   },
   overrides: {
