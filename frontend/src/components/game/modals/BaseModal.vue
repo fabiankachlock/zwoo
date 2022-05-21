@@ -1,5 +1,5 @@
 <template>
-  <FloatingDialog>
+  <FloatingDialog @click-outside="closeModal">
     <div class="mb-2 flex justify-between items-center">
       <h1 class="tc-main text-2xl">
         {{ t(title ?? '') }}
