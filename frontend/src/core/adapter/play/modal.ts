@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Component } from 'vue';
+import { Component, markRaw } from 'vue';
 import ColorSelectModal from '@/components/game/modals/ColorSelectModal.vue';
 import { CardColor } from '@/core/services/game/card';
 
@@ -25,7 +25,7 @@ export const useGameModal = defineStore('game-modal', {
   actions: {
     openModal(type: InGameModal): void {
       this.currentModal = type;
-      this.modalComponent = gameModals[type];
+      this.modalComponent = markRaw(gameModals[type]);
     },
     closeSelf(response: InGameModalResponse[keyof InGameModalResponse]): void {
       this.currentModal = undefined;

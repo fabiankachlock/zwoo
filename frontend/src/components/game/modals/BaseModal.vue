@@ -5,7 +5,7 @@
         {{ t(title ?? '') }}
       </h1>
     </div>
-    <div class="mb-2">
+    <div class="mb-4">
       <p class="tc-main-secondary text-lg">
         {{ t(info ?? '') }}
       </p>
