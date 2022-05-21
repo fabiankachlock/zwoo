@@ -181,11 +181,12 @@ const handlePlayCard = () => {
   if (!isPlayingCard.value) {
     isPlayingCard.value = true;
     setTimeout(() => {
-      // TODO: just temp
+      // TODO: just temp - is it?
       gameState.$patch({
         mainCard: selectedCard.value
       });
       setTimeout(() => {
+        deckState.playCard(displayCard.value);
         closeDetail();
       }, ANIMATION_DURATION);
       isPlayingCard.value = false;

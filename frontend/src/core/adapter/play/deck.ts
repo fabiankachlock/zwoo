@@ -1,7 +1,9 @@
-import { Card } from '@/core/services/game/card';
+import { Card, CardColor } from '@/core/services/game/card';
 import { defineStore } from 'pinia';
 import { CardDeck } from '../../services/game/deck';
 import { useConfig } from '../config';
+import { InGameModal } from './modal';
+import { useModalResponse } from './util/awaitModalResponse';
 
 export const useGameCardDeck = defineStore('game-cards', {
   state: () => ({
@@ -45,14 +47,21 @@ export const useGameCardDeck = defineStore('game-cards', {
       return [this._deck.cardAt(nextIndex), nextIndex];
     },
     selectCard(card: Card, at: number) {
-      this.selectedCard = {
-        color: card.color,
-        type: card.type,
-        index: at
-      };
+      const config = useConfig();
+      if (config.showCardDetail) {
+        this.selectedCard = {
+          color: card.color,
+          type: card.type,
+          index: at
+        };
+      } else {
+        this.playCard(card);
+      }
     },
-    playCard(card: Card) {
-      // TODO: Call Api
+    async playCard(card: Card) {
+      if (card.color === CardColor.black) {
+        card.color = await useModalResponse(InGameModal.ColorPicker);
+      }
       const config = useConfig();
       this._deck.playCard(card);
       if (config.sortCards) {
