@@ -27,7 +27,7 @@ export const useGameModal = defineStore('game-modal', {
       this.currentModal = type;
       this.modalComponent = markRaw(gameModals[type]);
     },
-    closeSelf(response: InGameModalResponse[keyof InGameModalResponse]): void {
+    closeSelf(response: InGameModalResponse[keyof InGameModalResponse] | undefined): void {
       this.currentModal = undefined;
       this.modalComponent = undefined;
       this._modalResponse = response;

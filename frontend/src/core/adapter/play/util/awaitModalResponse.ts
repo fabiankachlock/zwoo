@@ -9,11 +9,7 @@ export const useModalResponse = async <ModalType extends InGameModal>(modal: Mod
   const awaiter = new Awaiter<InGameModalResponse[ModalType]>();
   watch(
     () => modalState._modalResponse,
-    response => {
-      if (response) {
-        awaiter.callback(response);
-      }
-    }
+    response => awaiter.callback(response)
   );
   return awaiter.promise;
 };
