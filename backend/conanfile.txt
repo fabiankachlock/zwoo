@@ -5,7 +5,7 @@ oatpp-websocket/1.3.0
 oatpp-openssl/1.3.0
 oatpp-mongo/1.3.0@visual-rock/test
 mongo-cxx-driver/3.6.6
-logrush/1.0.0
+logrush/1.0.0@logrush/logrush
 
 boost/1.78.0
 openssl/1.1.1n
