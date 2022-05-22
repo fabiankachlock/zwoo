@@ -60,6 +60,7 @@ export const useGameCardDeck = defineStore('game-cards', {
       }
     },
     async playCard(card: Card) {
+      this._deck.playCard(card);
       if (card.color === CardColor.black) {
         const selectedColor = await useModalResponse(InGameModal.ColorPicker);
         if (!selectedColor) return;
@@ -69,7 +70,6 @@ export const useGameCardDeck = defineStore('game-cards', {
       // TODO: just temp - remove later
       const gameState = useGameState();
       gameState.mainCard = card;
-      this._deck.playCard(card);
       if (config.sortCards) {
         this.cards = this._deck.sorted;
         return;
