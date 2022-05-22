@@ -72,7 +72,6 @@ void send_verification_email( Email email, std::shared_ptr<Logger> logger )
         curl_easy_setopt( curl, CURLOPT_USERNAME, SMTP_HOST_EMAIL.c_str( ) );
         curl_easy_setopt( curl, CURLOPT_PASSWORD, SMTP_PASSWORD.c_str( ) );
         curl_easy_setopt( curl, CURLOPT_HTTPAUTH, (long)CURLAUTH_ANY );
-        curl_easy_setopt( curl, CURLOPT_VERBOSE, 1L );
 
         recipients = curl_slist_append( recipients, email.email.c_str( ) );
         curl_easy_setopt( curl, CURLOPT_MAIL_RCPT, recipients );
