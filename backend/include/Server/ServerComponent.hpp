@@ -17,6 +17,8 @@
 #include "oatpp/web/server/HttpConnectionHandler.hpp"
 #include "oatpp/web/server/HttpRouter.hpp"
 #include "zwoo.h"
+#include "utils/Queue.hpp"
+#include "Server/controller/Authentication/Email.h"
 #ifdef BUILD_SWAGGER
 #include "Server/SwaggerComponent.hpp"
 #endif
@@ -136,7 +138,14 @@ class ServerComponent
             auto _authHandler =
                 std::make_shared<ZwooAuthorizationHandler>( database );
             return _authHandler;
-        }( ) );
+        }( ) 
+    );
+
+    OATPP_CREATE_COMPONENT( std::shared_ptr<SynchronizedQueue<Email>>, emailQueue )
+    ([] {
+            return std::make_shared<SynchronizedQueue<Email>>( );
+        }( ) 
+    );
 };
 
 #endif // _SERVER_COMPONENT_HPP_

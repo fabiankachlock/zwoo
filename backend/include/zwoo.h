@@ -16,6 +16,7 @@ int str2int( std::string str );
 #define ZWOO_BETA str2b( get_env( "ZWOO_BETA" ) )
 
 #define ZWOO_LOGS get_env( "ZWOO_LOGS" ) // Folder for Logs
+#define ZWOO_USE_LOGRUSH str2b(get_env( "ZWOO_USE_LOGRUSH" ))
 #define ZWOO_LOGRUSH_URL get_env("ZWOO_LOGRUSH_URL")
 #define ZWOO_LOGRUSH_ALIAS get_env("ZWOO_LOGRUSH_ALIAS")
 #define ZWOO_LOGRUSH_ID get_env("ZWOO_LOGRUSH_ID") // Logrush logger id

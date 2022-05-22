@@ -77,6 +77,58 @@ void HttpServer::RunServer( )
     router->addController( AuthenticationController::createShared( ) );
     router->addController( GameManagerController::createShared( ) );
 
+    std::atomic<bool> stop_email_sender = false;
+    OATPP_COMPONENT( std::shared_ptr<SynchronizedQueue<Email>>, emailQueue );
+    std::thread email_thread(
+        [ & ]( )
+        {
+            Email email;
+            while ( !stop_email_sender.load( ) && emailQueue->empty( ) )
+            {
+                email = emailQueue->pop();
+
+                if (email.email == "")
+                    return;
+
+                try
+                {
+                    logger->log->debug( "new user:\n puid: {},\n code: {}",
+                                          email.puid, email.code );
+                    // create mail message
+                    mailio::message msg;
+                    msg.from( mailio::mail_address(
+                        "zwoo auth",
+                        SMTP_HOST_EMAIL ) ); // set the correct sender
+                                             // name and address
+                    msg.add_recipient( mailio::mail_address(
+                        "recipient",
+                        email.email ) ); // set the correct recipent name and
+                                         // address
+                    msg.subject( "Verify your ZWOO Account" );
+                    msg.content( generateVerificationEmailText(
+                        email.puid, email.code, email.username ) );
+                    // msg.content("Hello World!");
+                    //  connect to server
+                    mailio::smtps conn( SMTP_HOST_URL, SMTP_HOST_PORT );
+                    // modify username/password to use real credentials
+                    conn.authenticate(
+                        SMTP_USERNAME, SMTP_PASSWORD,
+                        mailio::smtps::auth_method_t::START_TLS );
+                    conn.submit( msg );
+                }
+                catch ( mailio::smtp_error &exc )
+                {
+                    logger->log->error( "Email failed to send: {0}",
+                                          exc.what( ) );
+                }
+                catch ( mailio::dialog_error &exc )
+                {
+                    logger->log->error( "Email failed to send: {0}",
+                                          exc.what( ) );
+                }
+            }
+        } );
+
     /* Get connection handler component */
     OATPP_COMPONENT( std::shared_ptr<oatpp::network::ConnectionHandler>,
                      connectionHandler, "http" );
@@ -122,5 +174,7 @@ void HttpServer::RunServer( )
         server.run( );
     }
 
+    stop_email_sender.store(true);
+    emailQueue->push({ "", "", "", 0 });
     oatpp::base::Environment::destroy( );
 }
