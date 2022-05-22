@@ -8,9 +8,6 @@
 #include "Server/dto/AuthenticationDTO.hpp"
 #include "Server/logger/logger.h"
 #include "fmt/format.h"
-#include "mailio/message.hpp"
-#include "mailio/mime.hpp"
-#include "mailio/smtp.hpp"
 #include "oatpp/core/macro/codegen.hpp"
 #include "oatpp/core/macro/component.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
@@ -29,6 +26,7 @@ class AuthenticationController : public oatpp::web::server::api::ApiController
     OATPP_COMPONENT( std::shared_ptr<Logger>, m_logger, "Backend" );
     OATPP_COMPONENT( std::shared_ptr<ZwooAuthorizationHandler>, authHandler );
     OATPP_COMPONENT( std::shared_ptr<Database>, m_database );
+    OATPP_COMPONENT( std::shared_ptr<SynchronizedQueue<Email>>, emailQueue );
 
   public:
     AuthenticationController(
@@ -128,38 +126,8 @@ class AuthenticationController : public oatpp::web::server::api::ApiController
                                            data->email.getValue( "" ),
                                            data->password.getValue( "" ) );
 
-        try
-        {
-            m_logger->log->info( "new user:\n puid: {},\n code: {}", ret.puid,
-                                 ret.code );
-            // create mail message
-            mailio::message msg;
-            msg.from( mailio::mail_address(
-                "zwoo auth",
-                SMTP_HOST_EMAIL ) ); // set the correct sender
-                                     // name and address
-            msg.add_recipient( mailio::mail_address(
-                "recipient",
-                data->email ) ); // set the correct recipent name and address
-            msg.subject( "Verify your ZWOO Account" );
-            msg.content( generateVerificationEmailText( ret.puid, ret.code,
-                                                        data->username ) );
-            // msg.content("Hello World!");
-            //  connect to server
-            mailio::smtps conn( SMTP_HOST_URL, SMTP_HOST_PORT );
-            // modify username/password to use real credentials
-            conn.authenticate( SMTP_USERNAME, SMTP_PASSWORD,
-                               mailio::smtps::auth_method_t::START_TLS );
-            conn.submit( msg );
-        }
-        catch ( mailio::smtp_error &exc )
-        {
-            m_logger->log->error( "Email failed to send: {0}", exc.what( ) );
-        }
-        catch ( mailio::dialog_error &exc )
-        {
-            m_logger->log->error( "Email failed to send: {0}", exc.what( ) );
-        }
+        emailQueue->push( { data->email, data->username, ret.code, ret.puid } );
+
         m_logger->log->info( "User successfully created!" );
         return createResponse( Status::CODE_200,
                                R"({"message": "Account Created"})" );

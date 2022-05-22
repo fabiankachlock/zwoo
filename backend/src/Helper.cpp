@@ -56,23 +56,6 @@ std::string randomNDigitNumber( int n )
     return out;
 }
 
-std::string generateVerificationEmailText( ulong puid, std::string code,
-                                           std::string username )
-{
-    std::string link = ( USE_SSL ? "https://" : "http://" ) + ZWOO_DOMAIN +
-                       "/auth/verify?id=" + std::to_string( puid ) +
-                       "&code=" + code;
-
-    std::string text = fmt::format(
-        "\r\nHello {0},\r\nplease click the link to verify your zwoo "
-        "account.\r\n{1}\r\n\r\nThe confirmation expires with the end of this "
-        "day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by accident or "
-        "don't want to\r\nregister, please ignore it.\r\n\r\nⒸ ZWOO 2022",
-        username, link );
-
-    return text;
-}
-
 std::string encrypt( std::string str )
 {
     std::string key = ZWOO_ENCRYPTION_KEY;
