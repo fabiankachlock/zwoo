@@ -2,6 +2,7 @@ import { Card, CardColor } from '@/core/services/game/card';
 import { defineStore } from 'pinia';
 import { CardDeck } from '../../services/game/deck';
 import { useConfig } from '../config';
+import { useGameState } from './gameState';
 import { InGameModal } from './modal';
 import { useModalResponse } from './util/awaitModalResponse';
 
@@ -65,6 +66,9 @@ export const useGameCardDeck = defineStore('game-cards', {
         card.color = selectedColor;
       }
       const config = useConfig();
+      // TODO: just temp - remove later
+      const gameState = useGameState();
+      gameState.mainCard = card;
       this._deck.playCard(card);
       if (config.sortCards) {
         this.cards = this._deck.sorted;
