@@ -5,11 +5,11 @@
 
 #include <array>
 
-void send_verification_mail( Email email, std::shared_ptr<Logger> logger )
+void send_verification_email( Email email, std::shared_ptr<Logger> logger )
 {
     static std::array<std::string, 5> headers_text = {
-        "Date: Tue, 22 Aug 2017 14:08:43 +0100", "To: " + email.email,
-        "From: " + SMTP_HOST_EMAIL, "Subject: Verify your ZWOO Account", "" };
+        "To: " + email.email, "From: " + SMTP_HOST_EMAIL,
+        "Subject: Verify your ZWOO Account", "" };
     static const char null = '\0';
 
     static std::string text =

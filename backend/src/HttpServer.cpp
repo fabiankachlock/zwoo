@@ -2,11 +2,13 @@
 
 #include "Server/ServerComponent.hpp"
 #include "Server/controller/Authentication/AuthenticationController.hpp"
+#include "Server/controller/Authentication/Email.h"
 #include "Server/controller/GameManager/GameManagerController.hpp"
 #include "oatpp-mongo/bson/mapping/ObjectMapper.hpp"
 #include "oatpp-openssl/Config.hpp"
 #include "oatpp-openssl/server/ConnectionProvider.hpp"
 #include "oatpp/network/Server.hpp"
+
 #include "utils/thread.h"
 
 #include <bsoncxx/document/value.hpp>
@@ -92,7 +94,7 @@ void HttpServer::RunServer( )
 
                 logger->log->debug( "new user:\n puid: {},\n code: {}",
                                     email.puid, email.code );
-                send_verification_mail( email, logger );
+                send_verification_email( email, logger );
             }
         } );
 

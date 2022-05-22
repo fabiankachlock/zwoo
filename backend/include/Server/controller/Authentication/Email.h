@@ -11,6 +11,6 @@ struct Email
     uint64_t puid;
 };
 
-void send_verification_mail( Email email, std::shared_ptr<Logger> logger );
+void send_verification_email( Email email, std::shared_ptr<Logger> logger );
 
 #endif

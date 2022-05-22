@@ -13,7 +13,6 @@ find_package(oatpp-websocket 1.3.0 REQUIRED)
 find_package(oatpp-openssl   1.3.0 REQUIRED)
 find_package(CURL                  REQUIRED)
 find_package(mongocxx              REQUIRED)
-find_package(mailio                REQUIRED)
 
 option(BUILD_SWAGGER "Activate the build of Swagger Components" ON)
 option(BUILD_BETA "Build Zwoo Betacode Application" ON)
@@ -38,6 +37,7 @@ set(SRC_FILES
 
     "src/Server/controller/Authentication/ReCaptcha.cpp"
     "src/Server/controller/Authentication/AuthenticationValidators.cpp"
+    "src/Server/controller/Authentication/Email.cpp"
 
     "src/Server/controller/GameManager/websocket/ZRPConnector.cpp"
     "src/Server/controller/GameManager/websocket/ZwooInstanceListener.cpp"
@@ -52,7 +52,6 @@ set(LIBS
     CURL::libcurl
     mongo::mongocxx_static
     mongo::bsoncxx_static
-    mailio::mailio
     logrush::logrush
 )
 
