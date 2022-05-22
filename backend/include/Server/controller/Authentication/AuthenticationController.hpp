@@ -129,7 +129,7 @@ class AuthenticationController : public oatpp::web::server::api::ApiController
                                            data->email.getValue( "" ),
                                            data->password.getValue( "" ) );
 
-        emailQueue->push({data->email, data->username, ret.code, ret.puid});
+        emailQueue->push( { data->email, data->username, ret.code, ret.puid } );
 
         m_logger->log->info( "User successfully created!" );
         return createResponse( Status::CODE_200,

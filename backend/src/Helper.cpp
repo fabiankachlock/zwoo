@@ -63,11 +63,55 @@ std::string generateVerificationEmailText( ulong puid, std::string code,
                        "/auth/verify?id=" + std::to_string( puid ) +
                        "&code=" + code;
 
+    // std::string text = fmt::format(
+    //     "\r\nHello {0},\r\nplease click the link to verify your zwoo "
+    //     "account.\r\n{1}\r\n\r\nThe confirmation expires with the end of this
+    //     " "day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by accident
+    //     or " "don't want to\r\nregister, please ignore it.\r\n\r\nⒸ ZWOO
+    //     2022", username, link );
+
     std::string text = fmt::format(
-        "\r\nHello {0},\r\nplease click the link to verify your zwoo "
-        "account.\r\n{1}\r\n\r\nThe confirmation expires with the end of this "
-        "day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by accident or "
-        "don't want to\r\nregister, please ignore it.\r\n\r\nⒸ ZWOO 2022",
+        /*        "--section\r\n"
+                "Content-Type: text/plain\r\n"
+                "\r\nHello {0},\r\nplease click the link to verify your zwoo "
+                "account.\r\n{1}\r\n\r\nThe confirmation expires with the end of
+           this " "day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by
+           accident or " "don't want to\r\nregister, please ignore it.\r\n\r\nⒸ
+           ZWOO 2022\r\n"
+                "--section\r\n"
+                "Content-Type: text/html\r\n"*/
+        "\r\n<html style=\"background-color: #363847; font-size: 16px; "
+        "font-family: sans-serif; width: 100%; height: 100%;\">\r\n"
+        "<head><meta charset=\"utf-8\"><title>ZWOO "
+        "VERFICATION</title></head>\r\n"
+        "<body style=\"margin-top: 7%\">\r\n"
+        "<h1 style=\"color: #3066BE; text-align: center; margin-bottom: 0; "
+        "margin-top: 1%; font-size: 450%\">ZWOO</h1>\r\n"
+        "<p style=\"color: #3066BE; text-align: center; margin-top: 0; "
+        "font-size: 280%\">the second challenge</p>\r\n)"
+        "<p style=\"color: white; text-align: left; margin-top: 7%;  "
+        "font-size: 250%;  margin-left: 10%\"> Dear {0},</br>please verify "
+        "your account via the <b>button</b> </br> or press <b>the link</b> "
+        "below:</p>\r\n"
+        "<div style=\"display: flex; justify-content: center; margin-top: "
+        "5%\"><a href=\"{1}\" target=\"_blank\"> <button style=\"background: "
+        "#3066BE; border: 0;color: white; text-align: center; font-size: 250%; "
+        "padding: 0.5em 1em; border-radius: "
+        "0.35em;\">verify</button></a></div>\r\n"
+        "<div> <a href=\"{1}\" target=\"_blank\"><p style=\"color: white; "
+        "text-align: left; margin-top: 7%;  font-size: 180%;  margin-left: "
+        "10%\">{1}</p>\r\n"
+        "</a><p style=\"color: white; text-align: left; margin-top: 13%;  "
+        "font-size: 200%;  margin-left: 10%\"> The confirmation expires with "
+        "the end of the day</br>(UTC + 01:00). </p> <p style=\"color: white; "
+        "text-align: left; margin-top: 7%;  font-size: 200%;  margin-left: "
+        "10%\"> If you've got this E-Mail by accident or don't want to</br> "
+        "register, please ignore it. </p>\r\n"
+        "</div><div style=\"color: white; text-align: left; margin-top: 18%;  "
+        "font-size: 150%;  margin-left: 10%\"> &#x24B8; ZWOO "
+        "2022</div></body></html>\r\n"
+        //         "--section\r\n"
+        ,
         username, link );
 
     return text;

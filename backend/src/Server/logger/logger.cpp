@@ -1,7 +1,7 @@
 #include "Server/logger/logger.h"
 
-#include "spdlog/sinks/daily_file_sink.h"
 #include "Server/logger/LogRushLogger.hpp"
+#include "spdlog/sinks/daily_file_sink.h"
 
 #include "zwoo.h"
 
@@ -16,9 +16,10 @@
 void Logger::init( std::string name )
 {
     std::vector<spdlog::sink_ptr> log_sinks;
-    if (ZWOO_USE_LOGRUSH)
-        log_sinks.emplace_back(
-            std::make_shared<LogRushBasicSink>( ZWOO_LOGRUSH_URL, ZWOO_LOGRUSH_ALIAS, ZWOO_LOGRUSH_ID, ZWOO_LOGRUSH_KEY) );
+    if ( ZWOO_USE_LOGRUSH )
+        log_sinks.emplace_back( std::make_shared<LogRushBasicSink>(
+            ZWOO_LOGRUSH_URL, ZWOO_LOGRUSH_ALIAS, ZWOO_LOGRUSH_ID,
+            ZWOO_LOGRUSH_KEY ) );
     log_sinks.emplace_back(
         std::make_shared<spdlog::sinks::stdout_color_sink_mt>( ) );
     log_sinks.emplace_back(
