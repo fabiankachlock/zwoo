@@ -24,20 +24,24 @@ cookies.setup();
 
 const asyncSetup = async () => {
   if (cookies.recaptchaCookie) {
-    cookies.loadRecaptcha();
+    setTimeout(() => {
+      cookies.loadRecaptcha();
+    });
   }
 };
 
-let shortcutManager: ShortcutManager;
+let shortcutManager: ShortcutManager | undefined;
 onMounted(() => {
-  import('./core/adapter/shortcuts/ShortcutManager').then(module => {
+  import(/* webpackChunkName: "shortcuts" */ './core/adapter/shortcuts/ShortcutManager').then(module => {
     shortcutManager = new module.ShortcutManager();
-    shortcutManager.activate();
+    setTimeout(() => {
+      shortcutManager?.activate();
+    });
   });
 });
 
 onUnmounted(() => {
-  shortcutManager.deActivate();
+  shortcutManager?.deActivate();
 });
 
 asyncSetup();

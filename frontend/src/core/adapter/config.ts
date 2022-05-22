@@ -84,13 +84,6 @@ export const useConfig = defineStore('config', {
       const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
       setI18nLanguage(storedLng);
 
-      let storedShowCardDetail = localStorage.getItem(showCardDetailKey);
-      if (!storedShowCardDetail) {
-        const hoverNotAvailable = 'ontouchstart' in document.documentElement;
-        storedShowCardDetail = hoverNotAvailable ? 'on' : 'off';
-        this.setShowCardDetail(hoverNotAvailable);
-      }
-
       const rawStoredDarkMode = localStorage.getItem(uiKey);
       const storedDarkMode = rawStoredDarkMode
         ? rawStoredDarkMode === 'dark'
@@ -99,7 +92,19 @@ export const useConfig = defineStore('config', {
 
       this.$patch({
         useDarkMode: storedDarkMode,
-        language: storedLng,
+        language: storedLng
+      });
+      setTimeout(() => this.asyncSetup());
+    },
+    asyncSetup() {
+      let storedShowCardDetail = localStorage.getItem(showCardDetailKey);
+      if (!storedShowCardDetail) {
+        const hoverNotAvailable = 'ontouchstart' in document.documentElement;
+        storedShowCardDetail = hoverNotAvailable ? 'on' : 'off';
+        this.setShowCardDetail(hoverNotAvailable);
+      }
+
+      this.$patch({
         showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
         sortCards: localStorage.getItem(sortCardsKey) === 'on',
         showCardDetail: storedShowCardDetail === 'on'

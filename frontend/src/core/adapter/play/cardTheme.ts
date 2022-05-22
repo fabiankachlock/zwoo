@@ -63,6 +63,8 @@ export const useCardTheme = CreateUseHook(() => {
 
   return reactive({
     theme,
-    setTheme
+    setTheme,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   });
 });

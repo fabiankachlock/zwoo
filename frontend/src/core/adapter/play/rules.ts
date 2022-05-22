@@ -8,7 +8,7 @@ export type DisplayRule = {
   isActivated: boolean;
 };
 
-export const useRules = defineStore('rules', {
+export const useRules = defineStore('game-rules', {
   state: () => ({
     rules: AllRules.map(id => ({
       id: id,
@@ -24,6 +24,8 @@ export const useRules = defineStore('rules', {
         ...rule,
         isActivated: rule.id === ruleId ? isActive : rule.isActivated
       }));
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });

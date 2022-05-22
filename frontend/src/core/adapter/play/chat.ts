@@ -55,6 +55,8 @@ export const useChatStore = defineStore('game-chat', () => {
     allMessages: computed(() => messages.value.filter(msg => !muted.value[msg.sender.id])),
     sendChatMessage,
     mutePlayer,
-    muted
+    muted,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   };
 });

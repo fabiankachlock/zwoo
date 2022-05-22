@@ -51,6 +51,8 @@ export const useGameState = defineStore('game-state', {
     },
     async update() {
       this.activePlayer = this.players[0].name;
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });
