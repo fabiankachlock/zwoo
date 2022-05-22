@@ -28,7 +28,8 @@
     "cookies": "Cookies",
     "deleteAccount": "Delete Account",
     "logging": "Logging",
-    "goToLogging": "Go to Settings"
+    "goToLogging": "Go to Settings",
+    "cardTheme": "Card Theme"
   },
   "lng": {
     "de": "German",
@@ -249,6 +250,21 @@
     "startPlaying": "Join Playing",
     "playAgain": "Play Again"
   },
+  "cardThemes": {
+    "galleryTitle": "zwoo - Themes Gallery",
+    "select": "Select",
+    "multiLayer": "MultiLayer",
+    "by": "By:",
+    "authorUnknown": "Unknown",
+    "variants": "Variant:",
+    "useTheme": "Use Theme",
+    "variant": {
+      "dark": "Dark",
+      "light": "Light",
+      "@auto": "Auto"
+    },
+    "description": {}
+  },
   "util": {
     "loading": "Wird geladen..."
   },
@@ -284,5 +300,20 @@
     "clearStore": "Clear Store",
     "reloadLogs": "Reload Logs",
     "storedLogs": "Stored Logs"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "ui": "UI",
+    "navigation": "Navigation",
+    "home": "Go home",
+    "newGame": "Create a new game",
+    "join": "Join a game",
+    "settings": "Go to settings",
+    "leaderboard": "Go to leaderboard",
+    "login": "Go to login",
+    "info": "Show all keyboard shortcuts",
+    "darkMode": "Toggle UI Mode",
+    "fullScreen": "Toggle full screen",
+    "quickMenu": "Toggle quick menu"
   }
 }

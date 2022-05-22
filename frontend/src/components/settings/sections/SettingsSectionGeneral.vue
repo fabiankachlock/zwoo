@@ -12,6 +12,9 @@
     <SettingsRow :title="t('settings.language')">
       <LanguageSelection />
     </SettingsRow>
+    <SettingsRow :title="t('settings.cardTheme')">
+      <SelectTheme />
+    </SettingsRow>
     <SettingsRow :title="t('settings.cookies')">
       <ManageCookies />
     </SettingsRow>
@@ -29,6 +32,7 @@ import { useI18n } from 'vue-i18n';
 import { useConfig } from '@/core/adapter/config';
 import { computed } from 'vue';
 import ManageCookies from '../ManageCookies.vue';
+import SelectTheme from '../SelectTheme.vue';
 
 const { t } = useI18n();
 const config = useConfig();

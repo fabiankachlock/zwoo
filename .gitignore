@@ -8,3 +8,4 @@ login_data.h
 backend/test.db
 tmp/
 docker-compose.local.yml
+docker-compose.prod.yml

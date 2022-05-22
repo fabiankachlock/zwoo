@@ -17,18 +17,22 @@
         </button>
       </div>
       <div class="flex flex-col justify-center items-center flex-nowrap">
-        <div>
-          <img class="target-card relative" src="/img/dummy_card.svg" alt="" />
+        <div v-if="targetCard" class="target-card">
+          <Card :card="targetCard" image-class="h-full"></Card>
         </div>
-        <div class="card-to-play flex flex-col flex-nowrap justify-center items-center">
+        <div class="card-to-play flex flex-col flex-nowrap justify-center items-center z-10">
           <div class="relative">
             <div class="absolute" :class="{ 'animation-from-left z-10': isAnimatingFromLeft, 'animate-from-left-card': !isAnimatingFromLeft }">
-              <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
+              <div v-if="nextAfter" class="selected-card relative">
+                <Card :card="nextAfter" image-class="h-full"></Card>
+              </div>
             </div>
             <div class="absolute" :class="{ 'animation-from-right z-10': isAnimatingFromRight, 'animate-from-right-card': !isAnimatingFromRight }">
-              <img class="selected-card relative" src="/img/dummy_card.svg" alt="" />
+              <div v-if="nextBefore" class="selected-card relative">
+                <Card :card="nextBefore" image-class="h-full"></Card>
+              </div>
             </div>
-            <img
+            <div
               id="detailCard"
               :ref="r => (detailCard = r as HTMLElement)"
               class="selected-card relative cursor-pointer"
@@ -37,7 +41,9 @@
               }"
               src="/img/dummy_card.svg"
               alt=""
-            />
+            >
+              <Card :card="displayCard" image-class="h-full"></Card>
+            </div>
           </div>
           <button
             @click.stop="handlePlayCard()"
@@ -67,10 +73,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
-import { Card } from '@/core/type/game';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
 import { CardChecker } from '@/core/services/api/CardCheck';
+import { Card as CardTyping } from '@/core/services/game/card';
+import Card from './Card.vue';
+import { useGameState } from '@/core/adapter/play/gameState';
+import { Key, useKeyPress } from '@/composables/KeyPress';
 
 enum CardState {
   allowed,
@@ -81,10 +90,14 @@ enum CardState {
 const ANIMATION_DURATION = 300;
 
 const deckState = useGameCardDeck();
+const gameState = useGameState();
 
 const selectedCard = computed(() => deckState.selectedCard);
-const nextBefore = ref<Card | undefined>(undefined);
-const nextAfter = ref<Card | undefined>(undefined);
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const displayCard = ref<CardTyping>(selectedCard.value!);
+const targetCard = computed(() => gameState.mainCard);
+const nextBefore = ref<(CardTyping & { index: number }) | undefined>(undefined);
+const nextAfter = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const isAnimatingFromLeft = ref<boolean>(false);
 const isAnimatingFromRight = ref<boolean>(false);
 const isPlayingCard = ref<boolean>(false);
@@ -97,20 +110,57 @@ onMounted(() => {
   useSwipeGesture(detailCard, () => handleNextAfter(), SWIPE_DIRECTION.right);
 });
 
-watch(selectedCard, async () => {
-  nextBefore.value = deckState.prefetchNext(false);
-  nextAfter.value = deckState.prefetchNext(true);
+watch(selectedCard, async card => {
+  if (!card) return;
+  updateView(card);
+});
+
+const updateView = async (card: CardTyping) => {
+  if (deckState.hasNext('before')) {
+    const [cardBefore, indexBefore] = deckState.getNext('before');
+    nextBefore.value = {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ...cardBefore!,
+      index: indexBefore
+    };
+  } else {
+    nextBefore.value = undefined;
+  }
+
+  if (deckState.hasNext('after')) {
+    const [cardAfter, indexAfter] = deckState.getNext('after');
+    nextAfter.value = {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ...cardAfter!,
+      index: indexAfter
+    };
+  } else {
+    nextAfter.value = undefined;
+  }
+  displayCard.value = {
+    color: card.color,
+    type: card.type
+  };
   canPlayCard.value = CardState.none;
   if (selectedCard.value) {
-    canPlayCard.value = (await CardChecker.canPlayCard(selectedCard.value)) ? CardState.allowed : CardState.disallowed;
+    canPlayCard.value = (await CardChecker.canPlayCard(card)) ? CardState.allowed : CardState.disallowed;
   }
-});
+};
+
+const handleKeyPress = (key: string) => {
+  if (key === Key.ArrowLeft || key === Key.a) {
+    handleNextBefore();
+  } else if (key === Key.ArrowRight || key === Key.d) {
+    handleNextAfter();
+  }
+};
 
 const handleNextBefore = () => {
   if (nextBefore.value && !isAnimatingFromRight.value) {
-    deckState.selectCard(nextBefore.value.id);
     isAnimatingFromRight.value = true;
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      deckState.selectCard(nextBefore.value!, nextBefore.value!.index);
       isAnimatingFromRight.value = false;
     }, ANIMATION_DURATION);
   }
@@ -118,9 +168,10 @@ const handleNextBefore = () => {
 
 const handleNextAfter = () => {
   if (nextAfter.value && !isAnimatingFromLeft.value) {
-    deckState.selectCard(nextAfter.value.id);
     isAnimatingFromLeft.value = true;
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      deckState.selectCard(nextAfter.value!, nextAfter.value!.index);
       isAnimatingFromLeft.value = false;
     }, ANIMATION_DURATION);
   }
@@ -130,6 +181,13 @@ const handlePlayCard = () => {
   if (!isPlayingCard.value) {
     isPlayingCard.value = true;
     setTimeout(() => {
+      // TODO: just temp
+      gameState.$patch({
+        mainCard: selectedCard.value
+      });
+      setTimeout(() => {
+        closeDetail();
+      }, ANIMATION_DURATION);
       isPlayingCard.value = false;
     }, ANIMATION_DURATION);
   }
@@ -140,6 +198,12 @@ const closeDetail = () => {
     selectedCard: undefined
   });
 };
+
+const unregisterKeyListener = useKeyPress([Key.ArrowRight, Key.ArrowLeft, Key.a, Key.d], handleKeyPress);
+
+onUnmounted(() => {
+  unregisterKeyListener();
+});
 </script>
 
 <style>
@@ -153,10 +217,12 @@ const closeDetail = () => {
 
 .target-card {
   max-height: 30vh;
+  height: 30vh;
   max-width: 30vw;
 }
 
 .selected-card {
+  height: 50vh;
   max-height: 50vh;
   max-width: 40vw;
 }

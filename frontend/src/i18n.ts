@@ -34,5 +34,15 @@ export const loadLocaleMessages = async (locale: string): Promise<void> => {
 loadLocaleMessages('en');
 setI18nLanguage(defaultLanguage);
 
+const customizablePaths = ['cardThemes.variant', 'cardThemes.description'];
+
+_i18n.global.setMissingHandler((_, key) => {
+  for (const path of customizablePaths) {
+    if (key.startsWith(path)) {
+      return key.substring(path.length + 1);
+    }
+  }
+});
+
 export default _i18n;
 export const I18nInstance = _i18n.global;

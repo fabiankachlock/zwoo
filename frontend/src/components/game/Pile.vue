@@ -1,23 +1,14 @@
 <template>
   <div class="pile absolute top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10">
     <div class="relative h-full pile-card-wrapper">
-      <div
-        class="pile-card absolute top-1/2 right-2 -translate-y-1/2 h-full transition-all x-delay-0"
-        style="max-height: 95%; max-width: fit-content"
-      >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+      <div class="pile-card absolute top-1/2 right-2 -translate-y-1/2 h-full transition-all x-delay-0" style="max-height: 95%">
+        <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>
-      <div
-        class="pile-card absolute top-1/2 right-3 -translate-y-1/2 h-full transition-all x-delay-30"
-        style="max-height: 95%; max-width: fit-content"
-      >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+      <div class="pile-card absolute top-1/2 right-3 -translate-y-1/2 h-full transition-all x-delay-30" style="max-height: 95%">
+        <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>
-      <div
-        class="pile-card absolute top-1/2 right-4 -translate-y-1/2 h-full transition-all x-delay-60"
-        style="max-height: 95%; max-width: fit-content"
-      >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+      <div class="pile-card absolute top-1/2 right-4 -translate-y-1/2 h-full transition-all x-delay-60" style="max-height: 95%">
+        <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>
       <div
         @click="drawCard()"
@@ -25,27 +16,31 @@
         :class="{ animating: isAnimating }"
         style="max-height: 95%"
       >
-        <img :src="cardUrl" alt="card" class="max-h-full ml-auto mr-0" style="max-width: unset" />
+        <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useCardTheme } from '@/core/adapter/play/cardTheme';
+import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { computed, ref } from '@vue/reactivity';
+import { Random } from '@/core/services/helper/Random';
+import { ref } from '@vue/reactivity';
+import Card from './Card.vue';
 
-const { theme } = useCardTheme();
-const cardUrl = computed(() => theme.value.getCard(CardDescriptor.BackSideways));
+const deckState = useGameCardDeck();
 const isAnimating = ref(false);
 
 const drawCard = () => {
   if (!isAnimating.value) {
     isAnimating.value = true;
     setTimeout(() => {
+      deckState.addCard(Random.card());
+    }, 500);
+    setTimeout(() => {
       isAnimating.value = false;
-    }, 700);
+    }, 850);
   }
 };
 </script>
@@ -57,6 +52,10 @@ const drawCard = () => {
   height: 100%;
   width: auto;
   aspect-ratio: 1/3;
+}
+
+.pile-card {
+  width: 100%;
 }
 
 @media only screen and (min-width: 620px) {
@@ -103,7 +102,7 @@ const drawCard = () => {
 }
 
 .draw-card.animating {
-  animation: DrawCard 0.7s linear 0s;
+  animation: DrawCard 0.8s linear 0s;
 }
 
 @keyframes DrawCard {
@@ -112,23 +111,23 @@ const drawCard = () => {
     opacity: 1;
   }
   33% {
-    transform: translateY(-50%) translateX(54%) rotate(0deg) scale(1, 1);
+    transform: translateY(-50%) translateX(80%) rotate(0deg) scale(1, 1);
     opacity: 1;
   }
   50% {
-    transform: translateY(-50%) translateX(69%) rotate(-45deg) scale(1, 1);
+    transform: translateY(-50%) translateX(180%) rotate(-45deg) scale(1, 1);
     opacity: 1;
   }
   66% {
-    transform: translateY(0%) translateX(69%) rotate(-90deg) scale(0.9, 0.9);
+    transform: translateY(0%) translateX(180%) rotate(-90deg) scale(0.9, 0.9);
     opacity: 1;
   }
   99% {
-    transform: translateY(150%) translateX(69%) rotate(-90deg) scale(0.6, 0.6);
+    transform: translateY(60%) translateX(180%) rotate(-90deg) scale(0.6, 0.6);
     opacity: 0.8;
   }
   100% {
-    transform: translateY(150%) translateX(69%) rotate(-90deg) scale(0.4, 0.4);
+    transform: translateY(70%) translateX(180%) rotate(-90deg) scale(0.4, 0.4);
     opacity: 0;
   }
 }
