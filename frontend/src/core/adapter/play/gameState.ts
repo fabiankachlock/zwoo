@@ -1,3 +1,4 @@
+import { Card } from '@/core/services/game/card';
 import { defineStore } from 'pinia';
 
 export type GamePlayer = {
@@ -8,6 +9,10 @@ export type GamePlayer = {
 export const useGameState = defineStore('game-state', {
   state: () => ({
     isActivePlayer: false,
+    mainCard: {
+      color: 1,
+      type: 1
+    } as Card | undefined,
     activePlayer: '',
     players: [
       {
@@ -46,6 +51,8 @@ export const useGameState = defineStore('game-state', {
     },
     async update() {
       this.activePlayer = this.players[0].name;
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });

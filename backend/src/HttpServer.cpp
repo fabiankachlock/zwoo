@@ -2,11 +2,13 @@
 
 #include "Server/ServerComponent.hpp"
 #include "Server/controller/Authentication/AuthenticationController.hpp"
+#include "Server/controller/Authentication/Email.h"
 #include "Server/controller/GameManager/GameManagerController.hpp"
 #include "oatpp-mongo/bson/mapping/ObjectMapper.hpp"
 #include "oatpp-openssl/Config.hpp"
 #include "oatpp-openssl/server/ConnectionProvider.hpp"
 #include "oatpp/network/Server.hpp"
+
 #include "utils/thread.h"
 
 #include <bsoncxx/document/value.hpp>
@@ -77,14 +79,36 @@ void HttpServer::RunServer( )
     router->addController( AuthenticationController::createShared( ) );
     router->addController( GameManagerController::createShared( ) );
 
+    std::atomic<bool> stop_email_sender = false;
+    OATPP_COMPONENT( std::shared_ptr<SynchronizedQueue<Email>>, emailQueue );
+    std::thread email_thread(
+        [ & ]( )
+        {
+            Email email;
+            while ( !stop_email_sender.load( ) && emailQueue->empty( ) )
+            {
+                email = emailQueue->pop( );
+
+                if ( email.email == "" )
+                    return;
+
+                logger->log->debug( "new user:\n puid: {},\n code: {}",
+                                    email.puid, email.code );
+                send_verification_email( email, logger );
+            }
+        } );
+
     /* Get connection handler component */
     OATPP_COMPONENT( std::shared_ptr<oatpp::network::ConnectionHandler>,
                      connectionHandler, "http" );
 
+    if ( ZWOO_BETA )
+        logger->log->info( "Running in Beta Mode." );
+
     if ( USE_SSL )
     {
         auto conf = oatpp::openssl::Config::createDefaultServerConfigShared(
-            SSL_PEM, SSL_CERTIFICATE );
+            SSL_CERTIFICATE, SSL_PEM );
         auto connectionProvider =
             oatpp::openssl::server::ConnectionProvider::createShared(
                 conf, { ZWOO_BACKEND_DOMAIN, ZWOO_BACKEND_PORT,
@@ -110,7 +134,6 @@ void HttpServer::RunServer( )
 
         /* create server */
         oatpp::network::Server server( connectionProvider, connectionHandler );
-
         logger->log->info(
             "Running on port {0}...",
             connectionProvider->getProperty( "port" ).toString( )->c_str( ) );
@@ -120,5 +143,7 @@ void HttpServer::RunServer( )
         server.run( );
     }
 
+    stop_email_sender.store( true );
+    emailQueue->push( { "", "", "", 0 } );
     oatpp::base::Environment::destroy( );
 }

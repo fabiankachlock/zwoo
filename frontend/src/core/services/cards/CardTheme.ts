@@ -1,17 +1,72 @@
 import { Card } from '../game/card';
-import { CardDescriptor, CardThemeConfig } from './CardThemeConfig';
+import {
+  CardDescriptor,
+  CardImageData,
+  CardLayerSeparator,
+  CardLayerWildcard,
+  CardThemeData,
+  CardThemeIdentifier,
+  CardThemeInformation,
+  MAX_THEME_PREVIEWS
+} from './CardThemeConfig';
 
 export class CardTheme {
-  constructor(public readonly name: string, public readonly variant: string, private readonly data: CardThemeConfig) {}
+  constructor(
+    public readonly name: string,
+    public readonly variant: string,
+    private readonly data: CardThemeData,
+    private readonly config: CardThemeInformation
+  ) {}
 
-  public getCard(card: Card | CardDescriptor): string {
-    if (typeof card === 'string') {
-      return this.data[card];
-    }
-    return this.data[this.cardToURI(card)] ?? '';
+  get info(): CardThemeInformation {
+    return this.config;
   }
 
-  private cardToURI(card: Card): string {
+  get identifier(): CardThemeIdentifier {
+    return {
+      name: this.name,
+      variant: this.variant
+    };
+  }
+
+  get previewCards(): string[] {
+    return this.config.previews.slice(0, MAX_THEME_PREVIEWS - 1);
+  }
+
+  public getCard(card: Card | CardDescriptor | string): CardImageData {
+    const layers: string[] = [];
+    if (Object.values(CardDescriptor).includes(card as CardDescriptor)) {
+      layers.push(card as string);
+    } else if (typeof card === 'string' && this.config.isMultiLayer) {
+      layers.push(...this.cardDescriptionToLayers(card));
+    } else if (typeof card === 'string') {
+      layers.push(card);
+    } else {
+      layers.push(...this.cardToURI(card));
+    }
+    return {
+      layers: layers.map(identifier => this.data[identifier] ?? ''),
+      description: typeof card === 'string' ? card : this.cardToAbsoluteUri(card)
+    };
+  }
+
+  private cardToAbsoluteUri(card: Card): string {
     return `front_${card.color}_${card.type.toString(16)}`;
+  }
+
+  private cardToURI(card: Card): string[] {
+    if (this.config.isMultiLayer) {
+      return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(16)}`];
+    }
+    return [`front_${card.color}_${card.type.toString(16)}`];
+  }
+
+  private cardDescriptionToLayers(descriptor: string): string[] {
+    const firstLayer = descriptor.replace(new RegExp(CardLayerSeparator + '.$'), CardLayerSeparator + CardLayerWildcard);
+    const secondLayer = descriptor.replace(
+      new RegExp(CardLayerSeparator + '.' + CardLayerSeparator),
+      CardLayerSeparator + CardLayerWildcard + CardLayerSeparator
+    );
+    return [firstLayer, secondLayer];
   }
 }

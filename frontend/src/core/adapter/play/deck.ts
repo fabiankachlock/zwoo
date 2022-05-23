@@ -6,7 +6,7 @@ import { useConfig } from '../config';
 export const useGameCardDeck = defineStore('game-cards', {
   state: () => ({
     cards: [] as Card[],
-    selectedCard: undefined as Card | undefined,
+    selectedCard: undefined as (Card & { index: number }) | undefined,
     _deck: new CardDeck([])
   }),
   actions: {
@@ -28,29 +28,40 @@ export const useGameCardDeck = defineStore('game-cards', {
       }
       this.cards = this._deck.cards;
     },
-    prefetchNext(after: boolean): Card | undefined {
+    hasNext(direction: 'before' | 'after'): boolean {
+      const nextIndex = (this.selectedCard?.index ?? 0) + (direction === 'after' ? 1 : -1);
       const config = useConfig();
       if (config.sortCards) {
-        return this._deck.nextSorted(this.selectedCard?.id ?? '', after);
+        return this._deck.sortedCardAt(nextIndex) !== undefined;
       }
-      return this._deck.next(this.selectedCard?.id ?? '', after);
+      return this._deck.cardAt(nextIndex) !== undefined;
     },
-    selectCard(id: string) {
-      this.selectedCard = this._deck.cards.find(card => card.id === id);
-    },
-    playCard(id: string) {
-      const playedCard = this._deck.cards.find(card => card.id === id);
-
-      if (playedCard) {
-        // TODO: Call Api
-        const config = useConfig();
-        this._deck.playCard(id);
-        if (config.sortCards) {
-          this.cards = this._deck.sorted;
-          return;
-        }
-        this.cards = this._deck.cards;
+    getNext(direction: 'before' | 'after'): [Card | undefined, number] {
+      const nextIndex = (this.selectedCard?.index ?? 0) + (direction === 'after' ? 1 : -1);
+      const config = useConfig();
+      if (config.sortCards) {
+        return [this._deck.sortedCardAt(nextIndex), nextIndex];
       }
-    }
+      return [this._deck.cardAt(nextIndex), nextIndex];
+    },
+    selectCard(card: Card, at: number) {
+      this.selectedCard = {
+        color: card.color,
+        type: card.type,
+        index: at
+      };
+    },
+    playCard(card: Card) {
+      // TODO: Call Api
+      const config = useConfig();
+      this._deck.playCard(card);
+      if (config.sortCards) {
+        this.cards = this._deck.sorted;
+        return;
+      }
+      this.cards = this._deck.cards;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });

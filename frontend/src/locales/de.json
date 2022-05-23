@@ -28,7 +28,8 @@
     "cookies": "Cookies",
     "deleteAccount": "Account löschen",
     "logging": "Loggen",
-    "goToLogging": "Zu den Einstellungen"
+    "goToLogging": "Zu den Einstellungen",
+    "cardTheme": "Karten Theme"
   },
   "lng": {
     "de": "Deutsch",
@@ -249,6 +250,21 @@
     "startPlaying": "Mitspielen",
     "playAgain": "Weiterspielen"
   },
+  "cardThemes": {
+    "galleryTitle": "zwoo - Themen Gallerie",
+    "select": "Auswählen",
+    "multiLayer": "MultiLayer",
+    "by": "Von:",
+    "authorUnknown": "Unbekannt",
+    "variants": "Varianten:",
+    "useTheme": "Theme nutzen",
+    "variant": {
+      "dark": "Dunkel",
+      "light": "Hell",
+      "@auto": "Automatisch"
+    },
+    "description": {}
+  },
   "util": {
     "loading": "Wird geladen..."
   },
@@ -284,5 +300,20 @@
     "clearStore": "Speicher leeren",
     "reloadLogs": "Logs neu laden",
     "storedLogs": "Gespeicherte Logs"
+  },
+  "shortcuts": {
+    "title": "Tastenkombinationen",
+    "ui": "Benutzeroberfläche",
+    "navigation": "Navigation",
+    "home": "Zum Homebildschirm",
+    "newGame": "Erstelle ein neues Spiel",
+    "join": "Trete einem Spiel bei",
+    "settings": "Gehe zu den Einstellungen",
+    "leaderboard": "Gehe zum Leaderboard",
+    "login": "Gehe zum Login",
+    "info": "Zeige alle Tastenkombinationen",
+    "darkMode": "UI Modus umschalten",
+    "fullScreen": "Vollbildschirm umschalten",
+    "quickMenu": "Quick Menu umschalten"
   }
 }

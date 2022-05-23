@@ -6,6 +6,7 @@
 #include "Server/ErrorHandler.hpp"
 #include "Server/ZwooRequestInterceptor.hpp"
 #include "Server/ZwooResponseInterceptor.hpp"
+#include "Server/controller/Authentication/Email.h"
 #include "Server/logger/logger.h"
 #include "controller/GameManager/websocket/ZRPConnector.hpp"
 #include "controller/GameManager/websocket/ZwooInstanceListener.hpp"
@@ -16,6 +17,7 @@
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 #include "oatpp/web/server/HttpConnectionHandler.hpp"
 #include "oatpp/web/server/HttpRouter.hpp"
+#include "utils/Queue.hpp"
 #include "zwoo.h"
 #ifdef BUILD_SWAGGER
 #include "Server/SwaggerComponent.hpp"
@@ -137,6 +139,10 @@ class ServerComponent
                 std::make_shared<ZwooAuthorizationHandler>( database );
             return _authHandler;
         }( ) );
+
+    OATPP_CREATE_COMPONENT( std::shared_ptr<SynchronizedQueue<Email>>,
+                            emailQueue )
+    ( [] { return std::make_shared<SynchronizedQueue<Email>>( ); }( ) );
 };
 
 #endif // _SERVER_COMPONENT_HPP_

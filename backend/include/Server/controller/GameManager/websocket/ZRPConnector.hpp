@@ -27,7 +27,7 @@ class ZRPConnector
 
     void kickPlayer( uint32_t guid, uint32_t puid, std::string data );
     void spectatorToPlayer( uint32_t guid, uint32_t puid );
-    void playerToSpectator( uint32_t guid, uint32_t puid );
+    void playerToSpectator( uint32_t guid, uint32_t puid, std::string data );
     void playerToHost( uint32_t guid, uint32_t puid, std::string data );
 
   private:

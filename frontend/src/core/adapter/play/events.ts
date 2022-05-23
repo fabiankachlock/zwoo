@@ -12,6 +12,8 @@ export const useGameEvents = defineStore('game-events', {
       Logger.Zrp.log(`[incoming] ${msg.code} ${JSON.stringify(msg.data)}`);
       this.lastEvent = msg;
       this.stack.push(msg);
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   }
 });

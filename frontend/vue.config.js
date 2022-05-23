@@ -45,7 +45,7 @@ module.exports = {
     plugins: process.env.ANALYZE === 'true' ? [new BundleAnalyzerPlugin()] : [],
     resolve: {
       alias: {
-        'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js'
+        'vue-i18n': 'vue-i18n/dist/vue-i18n.esm-bundler.js'
       }
     },
     module: {
@@ -65,6 +65,9 @@ module.exports = {
     msTileColor: '#404254',
     manifestOptions: {
       background_color: '#404254'
+    },
+    workboxOptions: {
+      skipWaiting: true
     }
   }
 };
