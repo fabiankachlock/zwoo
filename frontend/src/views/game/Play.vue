@@ -18,6 +18,9 @@
           <CardDeck v-if="!isSpectator" />
         </div>
         <CardDetail v-if="showCardDetail" />
+        <template v-if="currentModal">
+          <component :is="currentModal"></component>
+        </template>
       </div>
     </div>
   </div>
@@ -33,9 +36,12 @@ import Opponents from '@/components/game/OpponentsStrip.vue';
 import { useIsSpectator } from '@/composables/userRoles';
 import Pile from '@/components/game/Pile.vue';
 import MainCard from '@/components/game/MainCard.vue';
+import { useGameModal } from '@/core/adapter/play/modal';
 
 const config = useConfig();
+const modalState = useGameModal();
 const showCardDetail = computed(() => config.showCardDetail);
+const currentModal = computed(() => modalState.modalComponent);
 const { isSpectator } = useIsSpectator();
 </script>
 

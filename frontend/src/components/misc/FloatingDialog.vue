@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 top-10 z-10" @click="handleClick">
+  <div class="fixed inset-0 z-10" @click="handleClick">
     <div class="relative grid place-items-center w-full h-full">
       <div class="absolute inset-0 backdrop-blur"></div>
       <div class="absolute inset-0 backdrop-color z-10"></div>

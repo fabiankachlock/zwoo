@@ -95,7 +95,16 @@ const gameState = useGameState();
 const selectedCard = computed(() => deckState.selectedCard);
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const displayCard = ref<CardTyping>(selectedCard.value!);
-const targetCard = computed(() => gameState.mainCard);
+const _targetCardOverride = ref<CardTyping | undefined>(undefined);
+const targetCard = computed<CardTyping>({
+  get() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return _targetCardOverride.value ?? gameState.mainCard!;
+  },
+  set(newValue) {
+    _targetCardOverride.value = newValue;
+  }
+});
 const nextBefore = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const nextAfter = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const isAnimatingFromLeft = ref<boolean>(false);
@@ -181,11 +190,10 @@ const handlePlayCard = () => {
   if (!isPlayingCard.value) {
     isPlayingCard.value = true;
     setTimeout(() => {
-      // TODO: just temp
-      gameState.$patch({
-        mainCard: selectedCard.value
-      });
+      // TODO: just temp - is it?
+      targetCard.value = displayCard.value;
       setTimeout(() => {
+        deckState.playCard(displayCard.value);
         closeDetail();
       }, ANIMATION_DURATION);
       isPlayingCard.value = false;
