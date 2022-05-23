@@ -14,8 +14,7 @@ import { useConfig } from './core/adapter/config';
 import ConsentManager from './components/cookies/ConsentManager.vue';
 import { useCookies } from './core/adapter/cookies';
 import Snackbar from './components/misc/Snackbar.vue';
-import { onMounted, onUnmounted } from 'vue';
-import type { ShortcutManager } from './core/adapter/shortcuts/ShortcutManager';
+import { onMounted } from 'vue';
 
 useConfig().configure(); // load stored config from localStorage
 useAuth().configure(); // 'read' from may existing session
@@ -30,18 +29,10 @@ const asyncSetup = async () => {
   }
 };
 
-let shortcutManager: ShortcutManager | undefined;
 onMounted(() => {
   import(/* webpackChunkName: "shortcuts" */ './core/adapter/shortcuts/ShortcutManager').then(module => {
-    shortcutManager = new module.ShortcutManager();
-    setTimeout(() => {
-      shortcutManager?.activate();
-    });
+    module.ShortcutManager.global.activate();
   });
-});
-
-onUnmounted(() => {
-  shortcutManager?.deActivate();
 });
 
 asyncSetup();
