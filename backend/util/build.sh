@@ -1,6 +1,5 @@
 #!/bin/sh
 
-apt update
 apt update && DEBIAN_FRONTEND="noninteractive" TZ="Germany/Berlin" apt-get install -y tzdata
 apt install -y cmake python3 python3-pip git
 pip install conan
