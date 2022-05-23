@@ -1,4 +1,4 @@
-FROM ubuntu:latest AS build
+FROM ubuntu:jammy AS build
 
 ARG conan_user
 ARG conan_password
