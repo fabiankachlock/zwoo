@@ -97,12 +97,12 @@ void send_verification_email( Email email, std::shared_ptr<Logger> logger )
                         CURL_ZERO_TERMINATED );
         curl_mime_type( part, "text/html" );
 
-        /* Text message.
+        /* Text message. */
         part = curl_mime_addpart( alt );
         curl_mime_data( part,
                         fmt::format( text, email.username, link ).c_str( ),
                         CURL_ZERO_TERMINATED );
-        */
+        
         /* Create the inline part. */
         part = curl_mime_addpart( mime );
         curl_mime_subparts( part, alt );
