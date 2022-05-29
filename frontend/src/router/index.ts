@@ -13,6 +13,7 @@ import { CookieGuard } from '@/core/services/security/CookieGuard';
 import { InGameGuard } from '@/core/services/security/GameGuard';
 import { DeveloperRoute } from './developer';
 import { ThemesRoute } from './themes';
+import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -88,7 +89,10 @@ router.beforeEach(async (to, from, next) => {
 });
 
 const AfterEachSyncGuards: RouterInterceptor['afterEach'][] = [];
-const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [new ReCaptchaTermsRouteInterceptor().afterEachAsync];
+const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [
+  new ReCaptchaTermsRouteInterceptor().afterEachAsync,
+  ShortcutManager.global.afterEachAsync
+];
 // (async () => ([
 //   new (await import(/* webpackChunkName: "recaptcha" */ '../core/services/security/ReCaptchaTerms')).default().afterEachAsync
 // ]));
