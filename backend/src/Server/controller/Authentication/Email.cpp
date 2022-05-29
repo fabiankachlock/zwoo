@@ -26,7 +26,7 @@ void send_verification_email( Email email, std::shared_ptr<Logger> logger )
         "<h1 style=\"color: #3066BE; text-align: center; margin-bottom: 0; "
         "margin-top: 1%; font-size: 450%\">ZWOO</h1>\r\n"
         "<p style=\"color: #3066BE; text-align: center; margin-top: 0; "
-        "font-size: 280%\">the second challenge</p>\r\n)"
+        "font-size: 280%\">the second challenge</p>\r\n"
         "<p style=\"color: white; text-align: left; margin-top: 7%;  "
         "font-size: 250%;  margin-left: 10%\"> Dear {0},</br>please verify "
         "your account via the <b>button</b> </br> or press <b>the link</b> "
@@ -97,12 +97,12 @@ void send_verification_email( Email email, std::shared_ptr<Logger> logger )
                         CURL_ZERO_TERMINATED );
         curl_mime_type( part, "text/html" );
 
-        /* Text message. */
+        /* Text message.
         part = curl_mime_addpart( alt );
         curl_mime_data( part,
                         fmt::format( text, email.username, link ).c_str( ),
                         CURL_ZERO_TERMINATED );
-
+        */
         /* Create the inline part. */
         part = curl_mime_addpart( mime );
         curl_mime_subparts( part, alt );
