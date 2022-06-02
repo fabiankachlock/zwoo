@@ -12,7 +12,9 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "globalShortcut": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
