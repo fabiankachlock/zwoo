@@ -1,11 +1,11 @@
 [package]
-name = "app"
+name = "zwoo"
 version = "0.1.0"
-description = "A Tauri App"
+description = ""
 authors = ["you"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "zwoo"
 edition = "2021"
 rust-version = "1.57"
 
