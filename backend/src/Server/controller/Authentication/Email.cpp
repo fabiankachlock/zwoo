@@ -9,7 +9,7 @@ void send_verification_email( Email email, std::shared_ptr<Logger> logger )
 {
     std::array<std::string, 5> headers_text = {
         "To: " + email.email, "From: " + SMTP_HOST_EMAIL,
-        "Subject: Verify your ZWOO Account", "" };
+        "Subject: Verify your ZWOO Account", "Content-Type: multipart/alternative", "" };
     static const char null = '\0';
 
     static std::string text =
@@ -71,25 +71,21 @@ void send_verification_email( Email email, std::shared_ptr<Logger> logger )
         curl_easy_setopt( curl, CURLOPT_HTTPHEADER, headers );
 
         mime = curl_mime_init( curl );
-        alt = curl_mime_init( curl );
-
-        /* HTML message. */
-        part = curl_mime_addpart( alt );
-        curl_mime_data( part,
-                        html.c_str( ),
-                        CURL_ZERO_TERMINATED );
-        curl_mime_type( part, "text/html" );
 
         /* Text message. */
-        part = curl_mime_addpart( alt );
+        part = curl_mime_addpart( mime );
         curl_mime_data( part,
                         fmt::format( text, email.username, link ).c_str( ),
                         CURL_ZERO_TERMINATED );
-        /* Create the inline part. */
+        curl_mime_type( part, "text/plain" );
+
+        /* HTML message. */
         part = curl_mime_addpart( mime );
-        curl_mime_subparts( part, alt );
-        curl_mime_type( part, "multipart/alternative" );
-        slist = curl_slist_append( NULL, "Content-Disposition: inline" );
+        curl_mime_data( part,
+                        html.c_str( ),
+                        CURL_ZERO_TERMINATED );
+        curl_mime_type( part, "text/html; charset=utf-8" );
+
         curl_mime_headers( part, slist, 1 );
 
         /* Send the message */
