@@ -1,5 +1,5 @@
 <template>
-  <div class="game-summary overflow-y-scroll">
+  <div class="game-summary overflow-y-auto">
     <template v-if="winner">
       <div
         class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 bg-dark hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"

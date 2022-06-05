@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 bg-main overflow-y-scroll">
+  <div class="fixed inset-0 bg-main overflow-y-auto">
     <div class="w-full px-4 py-2">
       <h1 class="text-2xl tc-main mb-4">{{ t('logging.title') }}</h1>
       <div class="flex justify-start items-center flex-wrap gap-6 mb-4">
