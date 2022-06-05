@@ -16,7 +16,7 @@
     </div>
     <div class="menu-main w-screen pt-10">
       <div class="device-padding w-full h-full relative">
-        <div class="absolute inset-0 overflow-y-scroll">
+        <div class="absolute inset-0 overflow-y-auto">
           <router-view></router-view>
           <div class="h-10"></div>
         </div>
