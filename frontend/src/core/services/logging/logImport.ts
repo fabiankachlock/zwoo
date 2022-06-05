@@ -87,6 +87,7 @@ const setupLogger = (mode: string | null) => {
       _Logger.debug('I18N_LOCALE: ' + process.env.VUE_APP_I18N_LOCALE);
       _Logger.debug('BETA: ' + process.env.VUE_APP_BETA);
       _Logger.debug('LOG_RUSH_SERVER: ' + process.env.VUE_APP_LOG_RUSH_SERVER);
+      _Logger.debug('DEVICE_ID: ' + window.DEVICE_ID);
       _Logger.debug('--end-config--');
     });
 
