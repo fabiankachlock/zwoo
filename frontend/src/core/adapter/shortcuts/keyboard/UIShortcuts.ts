@@ -4,6 +4,7 @@ import { Shortcut } from '../types';
 export const ToggleDarkModeShortcut: Shortcut<KeyboardEvent> = {
   id: 'toggle-darkmode',
   type: 'keyboard',
+  keyCombination: 'd',
   execute(event) {
     if (event.key === 'd') {
       const config = useConfig();
@@ -15,6 +16,7 @@ export const ToggleDarkModeShortcut: Shortcut<KeyboardEvent> = {
 export const FullScreenShortcut: Shortcut<KeyboardEvent> = {
   id: 'toggle-fullscreen',
   type: 'keyboard',
+  keyCombination: 'f',
   execute(event) {
     if (event.key === 'f') {
       const config = useConfig();
@@ -26,6 +28,7 @@ export const FullScreenShortcut: Shortcut<KeyboardEvent> = {
 export const QuickMenuShortcut: Shortcut<KeyboardEvent> = {
   id: 'toggle-quickmenu',
   type: 'keyboard',
+  keyCombination: 'q',
   execute(event) {
     if (event.key === 'q') {
       const config = useConfig();

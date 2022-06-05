@@ -1,6 +1,6 @@
 <template>
   <FloatingDialog>
-    <div class="flex flex-col mx-2 overflow-y-scroll">
+    <div class="flex flex-col mx-2 overflow-y-auto">
       <h2 class="tc-main text-xl text-center my-2">{{ t('cookies.title') }}</h2>
       <div class="bc-darkest border-t border-b py-1">
         <h3 class="tc-main text-lg">{{ t('cookies.functional.title') }}</h3>

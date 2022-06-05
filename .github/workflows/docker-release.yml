@@ -1,12 +1,10 @@
 
 name: Zwoo Release Pipeline
 
-'on':
-  pull_request:
-    types:
-    - closed
-    branches: 
-    - 'release/**'
+on:
+  push:
+    tags:        
+      - '**'  
 
 jobs:
   frontend-release:
