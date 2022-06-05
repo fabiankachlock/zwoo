@@ -85,7 +85,8 @@ const setupLogger = (mode: string | null) => {
       _Logger.debug('BACKEND_URL: ' + process.env.VUE_APP_BACKEND_URL);
       _Logger.debug('WS_OVERRIDE: ' + process.env.VUE_APP_WS_OVERRIDE);
       _Logger.debug('I18N_LOCALE: ' + process.env.VUE_APP_I18N_LOCALE);
-      _Logger.debug('I18N_FALLBACK_LOCALE: ' + process.env.VUE_APP_I18N_FALLBACK_LOCALE);
+      _Logger.debug('BETA: ' + process.env.VUE_APP_BETA);
+      _Logger.debug('LOG_RUSH_SERVER: ' + process.env.VUE_APP_LOG_RUSH_SERVER);
       _Logger.debug('--end-config--');
     });
 
