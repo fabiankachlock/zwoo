@@ -300,6 +300,7 @@
     "title": "Logs",
     "console": "Console",
     "store": "Store (IndexedDB)",
+    "logrush": "LogRush (external service)",
     "storedCount": "no logs stored | 1 entry | {count} entries",
     "clearStore": "Clear Store",
     "reloadLogs": "Reload Logs",

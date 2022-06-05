@@ -41,7 +41,7 @@ let StoreRef = {
   getAll: () => Promise.resolve([] as LogEntry[])
 };
 
-const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
+const setupLogger = (mode: string | null) => {
   import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule => {
     const storeLoggerModule = await import(/* webpackChunkName: "logging" */ './storeLogger');
     const logRushLoggerModule = await import(/* webpackChunkName: "logging" */ './logRushLogger');
@@ -66,38 +66,24 @@ const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
       _Logger.debug('--end-config--');
     });
 
-    mode = 'dev-log-rush'; // TODO: remove!!!
-    if (mode === 'store') {
-      const factory = await storeLoggerModule.GetLogger(store);
-      LoggerBase = {
-        ...factory(),
-        initialized: true
-      };
-    } else if (mode === 'console') {
-      const factory = await consoleLoggerModule.GetLogger();
-      LoggerBase = {
-        ...factory(),
-        initialized: true
-      };
-    } else if (mode === 'both') {
-      const storeFactory = await storeLoggerModule.GetLogger(store);
-      const consoleFactory = await consoleLoggerModule.GetLogger();
-      const multiFactory = await multiLoggerModule.GetLogger();
+    const loggers: (() => BaseLogger)[] = [];
+    const multiFactory = await multiLoggerModule.GetLogger();
+    mode = mode ?? '';
 
-      LoggerBase = {
-        ...multiFactory(storeFactory(), consoleFactory()),
-        initialized: true
-      };
-    } else if (mode === 'dev-log-rush') {
-      const logRushFactory = await logRushLoggerModule.GetLogger();
-      const consoleFactory = await consoleLoggerModule.GetLogger();
-      const multiFactory = await multiLoggerModule.GetLogger();
-
-      LoggerBase = {
-        ...multiFactory(logRushFactory(), consoleFactory()),
-        initialized: true
-      };
+    if (mode.includes('s')) {
+      loggers.push(await storeLoggerModule.GetLogger(store));
     }
+    if (mode.includes('c')) {
+      loggers.push(await consoleLoggerModule.GetLogger());
+    }
+    if (mode.includes('l')) {
+      loggers.push(await logRushLoggerModule.GetLogger());
+    }
+
+    LoggerBase = {
+      ...multiFactory(...loggers.map(factory => factory())),
+      initialized: true
+    };
 
     _Logger.debug('logger loaded');
   });
