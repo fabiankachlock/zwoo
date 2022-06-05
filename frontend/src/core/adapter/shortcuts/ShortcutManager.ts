@@ -58,7 +58,7 @@ export class ShortcutManager implements RouterInterceptor {
   }
 
   private setKeyboardShortcuts(shortcuts: Shortcut<Event>[]) {
-    this.keyboardManager.setShortcuts(shortcuts.filter(s => s.type === 'keyboard'));
+    this.keyboardManager.setShortcuts(shortcuts.filter(s => s.type === 'keyboard') as Shortcut<KeyboardEvent>[]);
   }
 
   activate() {

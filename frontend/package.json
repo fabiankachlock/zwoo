@@ -1,13 +1,15 @@
 {
   "name": "frontend",
-  "version": "0.10.2",
+  "version": "1.0.0-alpha.2",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "serve:prod": "VUE_APP_USE_BACKEND=true vue-cli-service serve",
-    "build": "yarn build:assets && VUE_APP_USE_BACKEND=true vue-cli-service build",
-    "build:preview": "yarn build:assets && VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
-    "build:analyze": "yarn build:assets && ANALYZE=true vue-cli-service build",
+    "serve": "cross-env VUE_APP_USE_BACKEND=false vue-cli-service serve",
+    "serve:prod": "cross-env VUE_APP_USE_BACKEND=true vue-cli-service serve",
+    "build": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true vue-cli-service build",
+    "build:tauri": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_IS_TAURI=true vue-cli-service build --dest dist-preview && cp -r dist-preview ./dist-tmp",
+    "build:preview": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
+    "build:tauri:preview": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=false VUE_APP_IS_TAURI=true  vue-cli-service build --dest dist-preview && cp -r dist-preview ./dist-tmp",
+    "build:analyze": "yarn build:assets && cross-env ANALYZE=true vue-cli-service build",
     "build:assets": "node ./scripts/buildCardAssets.js",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
@@ -22,6 +24,7 @@
     "setup:version": "node ./scripts/version.js"
   },
   "dependencies": {
+    "@tauri-apps/api": "^1.0.0-rc.6",
     "autoprefixer": "^10",
     "core-js": "^3.22.4",
     "dexie": "^3.2.1",
@@ -36,6 +39,7 @@
   "devDependencies": {
     "@iconify/vue": "^3.2.1",
     "@intlify/vue-i18n-loader": "^4.2.0",
+    "@tauri-apps/cli": "^1.0.0-rc.13",
     "@types/jest": "^27.5.0",
     "@types/vue-router": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
@@ -53,6 +57,7 @@
     "@vue/eslint-config-typescript": "^10.0.0",
     "@vue/test-utils": "^2.0.0-rc.18",
     "@vue/vue3-jest": "^27.0.0-alpha.4",
+    "cross-env": "^7.0.3",
     "cypress": "^10.0.1",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
