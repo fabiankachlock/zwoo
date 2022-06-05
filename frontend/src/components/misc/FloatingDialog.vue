@@ -33,8 +33,17 @@ const handleDialogClick = (event: Event) => {
 </script>
 
 <style scoped>
+/* slightly transparent fallback */
 .backdrop-blur {
-  backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* if backdrop support: very transparent and blurred */
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  .backdrop-blur {
+    background-color: transparent;
+    backdrop-filter: blur(8px);
+  }
 }
 .backdrop-color {
   background-color: rgba(37, 37, 37, 0.4);

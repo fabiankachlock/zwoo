@@ -215,8 +215,17 @@ onUnmounted(() => {
 </script>
 
 <style>
+/* slightly transparent fallback */
 .backdrop {
-  backdrop-filter: blur(12px);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* if backdrop support: very transparent and blurred */
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  .backdrop {
+    background-color: transparent;
+    backdrop-filter: blur(8px);
+  }
 }
 
 .card-to-play {
