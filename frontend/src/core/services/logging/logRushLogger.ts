@@ -5,22 +5,20 @@ export async function GetLogger(): Promise<() => BaseLogger> {
   const MAX_BUFFER_SIZE = 1;
 
   const client = new LogRushClient({
-    dataSourceUrl: 'http://localhost:7000/',
+    dataSourceUrl: process.env.VUE_APP_LOG_RUSH_SERVER ?? '',
     batchSize: MAX_BUFFER_SIZE
   });
 
   const sId = localStorage.getItem('zwoo:rmsid') ?? '';
-  const sKey = localStorage.getItem('$zwoo:rmskey') ?? '';
+  const sKey = localStorage.getItem('zwoo:rmskey') ?? '';
 
-  // TODO: add user to name
-  const stream = await client.resumeStream('zwoo-frontend', sId, sKey);
+  const stream = await client.resumeStream(`zwoo-${window.DEVICE_ID ?? 'unknown user'}`, sId, sKey);
 
   localStorage.setItem('zwoo:rmsid', stream.id);
   localStorage.setItem('zwoo:rmskey', stream.secretKey);
 
   window.onbeforeunload = async () => {
     await client.disconnect();
-    return false;
   };
 
   function LoggerFactory() {
