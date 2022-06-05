@@ -26,14 +26,37 @@ let _Logger: ExtendedLogger = {
   }
 };
 
-let LoggerBase: BaseLogger & { initialized: boolean } = {
+let LoggerBase = {
   initialized: false,
-  info() {},
-  log() {},
-  debug() {},
-  warn() {},
-  error() {},
-  trace() {}
+  _qInfo: [] as unknown[][],
+  info(...args: unknown[]) {
+    this._qInfo.push(args);
+  },
+
+  _qLog: [] as unknown[][],
+  log(...args: unknown[]) {
+    this._qLog.push(args);
+  },
+
+  _qDebug: [] as unknown[][],
+  debug(...args: unknown[]) {
+    this._qDebug.push(args);
+  },
+
+  _qWarn: [] as unknown[][],
+  warn(...args: unknown[]) {
+    this._qWarn.push(args);
+  },
+
+  _qError: [] as unknown[][],
+  error(...args: unknown[]) {
+    this._qError.push(args);
+  },
+
+  _qTrace: [] as unknown[][],
+  trace(...args: unknown[]) {
+    this._qTrace.push(args);
+  }
 };
 
 let StoreRef = {
@@ -41,9 +64,10 @@ let StoreRef = {
   getAll: () => Promise.resolve([] as LogEntry[])
 };
 
-const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
+const setupLogger = (mode: string | null) => {
   import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule => {
     const storeLoggerModule = await import(/* webpackChunkName: "logging" */ './storeLogger');
+    const logRushLoggerModule = await import(/* webpackChunkName: "logging" */ './logRushLogger');
     const consoleLoggerModule = await import(/* webpackChunkName: "logging" */ './consoleLogger');
     const multiLoggerModule = await import(/* webpackChunkName: "logging" */ './multiLogger');
 
@@ -61,32 +85,38 @@ const setupLogger = (mode: 'both' | 'console' | 'store' | string | null) => {
       _Logger.debug('BACKEND_URL: ' + process.env.VUE_APP_BACKEND_URL);
       _Logger.debug('WS_OVERRIDE: ' + process.env.VUE_APP_WS_OVERRIDE);
       _Logger.debug('I18N_LOCALE: ' + process.env.VUE_APP_I18N_LOCALE);
-      _Logger.debug('I18N_FALLBACK_LOCALE: ' + process.env.VUE_APP_I18N_FALLBACK_LOCALE);
+      _Logger.debug('BETA: ' + process.env.VUE_APP_BETA);
+      _Logger.debug('LOG_RUSH_SERVER: ' + process.env.VUE_APP_LOG_RUSH_SERVER);
+      _Logger.debug('DEVICE_ID: ' + window.DEVICE_ID);
       _Logger.debug('--end-config--');
     });
 
-    if (mode === 'store') {
-      const factory = await storeLoggerModule.GetLogger(store);
-      LoggerBase = {
-        ...factory(),
-        initialized: true
-      };
-    } else if (mode === 'console') {
-      const factory = await consoleLoggerModule.GetLogger();
-      LoggerBase = {
-        ...factory(),
-        initialized: true
-      };
-    } else if (mode === 'both') {
-      const storeFactory = await storeLoggerModule.GetLogger(store);
-      const consoleFactory = await consoleLoggerModule.GetLogger();
-      const multiFactory = await multiLoggerModule.GetLogger();
+    const loggers: (() => BaseLogger)[] = [];
+    const multiFactory = await multiLoggerModule.GetLogger();
+    mode = mode ?? '';
 
-      LoggerBase = {
-        ...multiFactory(storeFactory(), consoleFactory()),
-        initialized: true
-      };
+    if (mode.includes('s')) {
+      loggers.push(await storeLoggerModule.GetLogger(store));
     }
+    if (mode.includes('c')) {
+      loggers.push(await consoleLoggerModule.GetLogger());
+    }
+    if (mode.includes('l')) {
+      loggers.push(await logRushLoggerModule.GetLogger());
+    }
+
+    LoggerBase = {
+      ...LoggerBase,
+      ...multiFactory(...loggers.map(factory => factory())),
+      initialized: true
+    };
+
+    LoggerBase._qInfo.forEach(call => LoggerBase.info(...call));
+    LoggerBase._qDebug.forEach(call => LoggerBase.debug(...call));
+    LoggerBase._qLog.forEach(call => LoggerBase.log(...call));
+    LoggerBase._qWarn.forEach(call => LoggerBase.warn(...call));
+    LoggerBase._qError.forEach(call => LoggerBase.error(...call));
+    LoggerBase._qTrace.forEach(call => LoggerBase.trace(...call));
 
     _Logger.debug('logger loaded');
   });
