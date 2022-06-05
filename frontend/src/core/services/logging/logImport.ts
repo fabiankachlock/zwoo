@@ -26,14 +26,37 @@ let _Logger: ExtendedLogger = {
   }
 };
 
-let LoggerBase: BaseLogger & { initialized: boolean } = {
+let LoggerBase = {
   initialized: false,
-  info() {},
-  log() {},
-  debug() {},
-  warn() {},
-  error() {},
-  trace() {}
+  _qInfo: [] as unknown[][],
+  info(...args: unknown[]) {
+    this._qInfo.push(args);
+  },
+
+  _qLog: [] as unknown[][],
+  log(...args: unknown[]) {
+    this._qLog.push(args);
+  },
+
+  _qDebug: [] as unknown[][],
+  debug(...args: unknown[]) {
+    this._qDebug.push(args);
+  },
+
+  _qWarn: [] as unknown[][],
+  warn(...args: unknown[]) {
+    this._qWarn.push(args);
+  },
+
+  _qError: [] as unknown[][],
+  error(...args: unknown[]) {
+    this._qError.push(args);
+  },
+
+  _qTrace: [] as unknown[][],
+  trace(...args: unknown[]) {
+    this._qTrace.push(args);
+  }
 };
 
 let StoreRef = {
@@ -81,9 +104,17 @@ const setupLogger = (mode: string | null) => {
     }
 
     LoggerBase = {
+      ...LoggerBase,
       ...multiFactory(...loggers.map(factory => factory())),
       initialized: true
     };
+
+    LoggerBase._qInfo.forEach(call => LoggerBase.info(...call));
+    LoggerBase._qDebug.forEach(call => LoggerBase.debug(...call));
+    LoggerBase._qLog.forEach(call => LoggerBase.log(...call));
+    LoggerBase._qWarn.forEach(call => LoggerBase.warn(...call));
+    LoggerBase._qError.forEach(call => LoggerBase.error(...call));
+    LoggerBase._qTrace.forEach(call => LoggerBase.trace(...call));
 
     _Logger.debug('logger loaded');
   });
