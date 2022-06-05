@@ -2,6 +2,7 @@ import { useConfig } from '../../config';
 import { Shortcut } from '../types';
 
 export const ToggleDarkModeShortcut: Shortcut<KeyboardEvent> = {
+  id: 'toggle-darkmode',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'd') {
@@ -12,6 +13,7 @@ export const ToggleDarkModeShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const FullScreenShortcut: Shortcut<KeyboardEvent> = {
+  id: 'toggle-fullscreen',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'f') {
@@ -22,6 +24,7 @@ export const FullScreenShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const QuickMenuShortcut: Shortcut<KeyboardEvent> = {
+  id: 'toggle-quickmenu',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'q') {

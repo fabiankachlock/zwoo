@@ -2,6 +2,7 @@ import { Shortcut } from '../types';
 import Router from '@/router';
 
 export const HomeShortcut: Shortcut<KeyboardEvent> = {
+  id: 'navigate-home',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'h') {
@@ -11,6 +12,7 @@ export const HomeShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const NewGameShortcut: Shortcut<KeyboardEvent> = {
+  id: 'new-game',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'n') {
@@ -20,6 +22,7 @@ export const NewGameShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const ListGamesShortcut: Shortcut<KeyboardEvent> = {
+  id: 'list-games',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'j') {
@@ -29,6 +32,7 @@ export const ListGamesShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const SettingsShortcut: Shortcut<KeyboardEvent> = {
+  id: 'navigate-settings',
   type: 'keyboard',
   execute(event) {
     if (event.key === 's') {
@@ -38,6 +42,7 @@ export const SettingsShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const LeaderboardShortcut: Shortcut<KeyboardEvent> = {
+  id: 'navigate-leaderboard',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'l') {
@@ -47,6 +52,7 @@ export const LeaderboardShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const LoginShortcut: Shortcut<KeyboardEvent> = {
+  id: 'navigate-login',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'a') {
@@ -56,6 +62,7 @@ export const LoginShortcut: Shortcut<KeyboardEvent> = {
 };
 
 export const InfoShortcut: Shortcut<KeyboardEvent> = {
+  id: 'show-info',
   type: 'keyboard',
   execute(event) {
     if (event.key === 'i' || event.key === '?') {
