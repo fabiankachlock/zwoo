@@ -23,6 +23,11 @@ const versionFiles = [
         path: '/frontend/src-tauri/Cargo.lock',
         regex: /"zwoo"\nversion = "(.*)"/,
         replace: '"zwoo"\nversion = "###"'
+    },
+    {
+        path: '/backend/include/version.h',
+        regex: /#define ZWOO_VERSION "(.*)"/,
+        replace: '#define ZWOO_VERSION "###"'
     }
 ]
 
@@ -36,3 +41,4 @@ const frontendPath = path.join(__dirname, '..', 'frontend')
 child_process.execSync(`cd ${frontendPath} && yarn setup:version`)
 child_process.execSync('git add -A')
 child_process.execSync(`git commit -m "release: v${newVersion}"`)
+child_process.execSync(`git tag v${newVersion}`)
