@@ -3,3 +3,5 @@ build/
 .cache/
 
 *.kdev4
+
+cmake-build-debug/
