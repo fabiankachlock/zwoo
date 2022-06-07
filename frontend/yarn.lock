@@ -1506,10 +1506,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@log-rush/client@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@log-rush/client/-/client-1.1.0.tgz#1a20e5b8dd73c0bf5139c5cf6467a0c1391945df"
-  integrity sha512-9wfNkP/ZdeFhBA+1xYB3wrk8DzwDqAtr1scRN2hpTtkDWTyBlg4XBLZwbtdOxf+vZXNsw+JoFQSPHBccgE84/Q==
+"@log-rush/client@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@log-rush/client/-/client-1.1.1.tgz#84300ca2ba0da815a04904cb774cebcdcc5bbea8"
+  integrity sha512-4cV16XXBPAPbD8Sbw+YGFjMGqG5aWoIL+LxXCWyDfT7Bl7UJps9rRFxn47Bc7KYSrjTfls264COPFuHduJm6Fg==
   dependencies:
     isomorphic-fetch "^3.0.0"
 

@@ -24,7 +24,7 @@
     "setup:version": "node ./scripts/version.js"
   },
   "dependencies": {
-    "@log-rush/client": "^1.1.0",
+    "@log-rush/client": "^1.1.1",
     "@tauri-apps/api": "^1.0.0-rc.6",
     "autoprefixer": "^10",
     "core-js": "^3.22.4",
