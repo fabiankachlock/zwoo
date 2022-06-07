@@ -5,12 +5,9 @@
 
 #include <bsoncxx/json.hpp>
 #include <chrono>
-#include <iostream>
 #include <mongocxx/client.hpp>
 #include <mongocxx/collection.hpp>
-#include <mongocxx/exception/operation_exception.hpp>
 #include <mongocxx/options/find.hpp>
-#include <mongocxx/options/insert.hpp>
 
 std::string Database::generateSID( )
 {

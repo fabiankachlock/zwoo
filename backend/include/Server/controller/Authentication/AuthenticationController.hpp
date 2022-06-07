@@ -76,7 +76,7 @@ class AuthenticationController : public oatpp::web::server::api::ApiController
         info->summary = "Endpoint for retrieving zwoo backend version .";
 
         info->addResponse<Object<StatusDto>>( Status::CODE_200,
-                                              "application/json" );
+                                              "text/plain" );
         info->addResponse<Object<StatusDto>>( Status::CODE_404,
                                               "application/json" );
         info->addResponse<Object<StatusDto>>( Status::CODE_500,
