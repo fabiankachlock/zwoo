@@ -95,7 +95,16 @@ const gameState = useGameState();
 const selectedCard = computed(() => deckState.selectedCard);
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const displayCard = ref<CardTyping>(selectedCard.value!);
-const targetCard = computed(() => gameState.mainCard);
+const _targetCardOverride = ref<CardTyping | undefined>(undefined);
+const targetCard = computed<CardTyping>({
+  get() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return _targetCardOverride.value ?? gameState.mainCard!;
+  },
+  set(newValue) {
+    _targetCardOverride.value = newValue;
+  }
+});
 const nextBefore = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const nextAfter = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const isAnimatingFromLeft = ref<boolean>(false);
@@ -181,11 +190,10 @@ const handlePlayCard = () => {
   if (!isPlayingCard.value) {
     isPlayingCard.value = true;
     setTimeout(() => {
-      // TODO: just temp
-      gameState.$patch({
-        mainCard: selectedCard.value
-      });
+      // TODO: just temp - is it?
+      targetCard.value = displayCard.value;
       setTimeout(() => {
+        deckState.playCard(displayCard.value);
         closeDetail();
       }, ANIMATION_DURATION);
       isPlayingCard.value = false;
@@ -207,8 +215,17 @@ onUnmounted(() => {
 </script>
 
 <style>
+/* slightly transparent fallback */
 .backdrop {
-  backdrop-filter: blur(12px);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* if backdrop support: very transparent and blurred */
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  .backdrop {
+    background-color: transparent;
+    backdrop-filter: blur(8px);
+  }
 }
 
 .card-to-play {

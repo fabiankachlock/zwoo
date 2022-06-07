@@ -276,6 +276,10 @@
     "kickPlayer": {
       "title": "{0} rauswerfen?",
       "body": "Bist du sicher, dass du {0} aus dem Spiel rauswerfen möchtest?"
+    },
+    "selectColor": {
+      "title": "Wähle eine Farbe",
+      "info": "Wähle die Farbe, mit der weiter gespielt werden soll."
     }
   },
   "reassureDialog": {
@@ -296,6 +300,7 @@
     "title": "Logs",
     "console": "Konsole",
     "store": "Speicher (IndexedDB)",
+    "logrush": "LogRush (externer Service)",
     "storedCount": "keine Logs gespeichert | ein Eintrag | {count} Einträge",
     "clearStore": "Speicher leeren",
     "reloadLogs": "Logs neu laden",

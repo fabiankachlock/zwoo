@@ -1,9 +1,9 @@
 export enum CardColor {
   none = 0,
   red = 1,
-  yellow = 2,
-  blue = 3,
-  green = 4,
+  green = 2,
+  yellow = 3,
+  blue = 4,
   black = 5
 }
 

@@ -1,3 +1,5 @@
+import { CardColor } from '../game/card';
+
 export interface CardThemesMeta {
   themes: string[];
   variants: Record<string, string[]>;
@@ -12,6 +14,7 @@ export type CardThemeInformation = {
   isMultiLayer: boolean;
   variants: string[];
   previews: string[];
+  colors: Record<string, Record<CardColor, string>>;
 };
 
 export type CardThemeIdentifier = {

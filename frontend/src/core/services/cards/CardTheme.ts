@@ -1,4 +1,4 @@
-import { Card } from '../game/card';
+import { Card, CardColor } from '../game/card';
 import {
   CardDescriptor,
   CardImageData,
@@ -31,6 +31,10 @@ export class CardTheme {
 
   get previewCards(): string[] {
     return this.config.previews.slice(0, MAX_THEME_PREVIEWS - 1);
+  }
+
+  get colors(): Record<CardColor, string> {
+    return this.config.colors[this.variant];
   }
 
   public getCard(card: Card | CardDescriptor | string): CardImageData {

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full relative flex flex-col flex-nowrap overflow-y-scroll py-2">
+  <div class="w-full h-full relative flex flex-col flex-nowrap overflow-y-auto py-2">
     <header class="mx-2 sticky top-0 left-0 right-0 z-10">
       <div class="w-full rounded-lg bg-darkest flex flex-nowrap flex-row px-2 py-1 justify-center items-center">
         <p class="text-3xl tc-main font-bold m-2 text-center" style="text-overflow: ellipsis; overflow: hidden">{{ gameConfig.name }}</p>
