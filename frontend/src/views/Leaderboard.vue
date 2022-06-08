@@ -43,7 +43,7 @@ const playerEntries = ref<LeaderBoardResponse['leaderboard'][number][] | undefin
 
 onMounted(async () => {
   const response = await LeaderBoardService.fetchLeaderBoards();
-  if (response) {
+  if (response && 'leaderboard' in response) {
     playerEntries.value = response.leaderboard;
   } else {
     playerEntries.value = undefined;

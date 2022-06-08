@@ -9,6 +9,10 @@ export type LeaderBoardResponse = {
   }[];
 };
 
+export type LeaderBoardPositionResponse = {
+  position: number;
+};
+
 export class LeaderBoardService {
   static async fetchLeaderBoards(): Promise<BackendErrorAble<LeaderBoardResponse>> {
     Logger.Api.log(`fetching leaderboard`);
@@ -22,7 +26,7 @@ export class LeaderBoardService {
       });
     }
 
-    const req = await fetch(Backend.getUrl(Endpoint.LeaderBoard));
+    const req = await fetch(Backend.getUrl(Endpoint.LeaderBoardPosition));
 
     if (req.status != 200) {
       Logger.Api.warn('received erroneous response while fetching leaderboard');
@@ -34,6 +38,28 @@ export class LeaderBoardService {
     const response = (await req.json()) as LeaderBoardResponse;
     // sort player to make sure
     response.leaderboard = response.leaderboard.sort((a, b) => b.wins - a.wins);
+    return response;
+  }
+
+  static async fetchOwnLeaderBoardPosition(): Promise<BackendErrorAble<LeaderBoardPositionResponse>> {
+    Logger.Api.log(`fetching own leaderboard position`);
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking own leaderboard position response');
+      return Promise.resolve({
+        position: 1
+      });
+    }
+
+    const req = await fetch(Backend.getUrl(Endpoint.LeaderBoard));
+
+    if (req.status != 200) {
+      Logger.Api.warn('received erroneous response while fetching own leaderboard position');
+      return {
+        error: parseBackendError(await req.text())
+      };
+    }
+
+    const response = (await req.json()) as LeaderBoardPositionResponse;
     return response;
   }
 }
