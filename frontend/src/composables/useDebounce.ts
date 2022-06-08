@@ -15,7 +15,6 @@ export const useDebounce = <T>(creator: () => T | Promise<T>, ttl: number): (() 
   };
 
   return async () => {
-    console.log('exec cache');
     if (lastCall + ttl < performance.now()) {
       await execute();
     }

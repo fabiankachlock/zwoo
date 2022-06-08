@@ -1,5 +1,5 @@
 import { CacheTTL, useDebounce } from '@/composables/useDebounce';
-import { LeaderBoardResponse, LeaderBoardService } from '../services/api/LeaderBoard';
+import { LeaderBoardPositionResponse, LeaderBoardResponse, LeaderBoardService } from '../services/api/LeaderBoard';
 
 export type LeaderBoardEntry = {
   position: number;
@@ -36,6 +36,14 @@ const leaderBoardStore = {
           }))
         ];
       }, [] as LeaderBoardEntry[]);
+  }, CacheTTL.minute * 5),
+
+  getOwnPosition: useDebounce<number>(async () => {
+    const response = await LeaderBoardService.fetchOwnLeaderBoardPosition();
+    if ('error' in response) {
+      return -1;
+    }
+    return (response as LeaderBoardPositionResponse).position + 200;
   }, CacheTTL.minute * 5)
 };
 
