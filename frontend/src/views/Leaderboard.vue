@@ -13,7 +13,7 @@
           >
             <div class="flex flex-row justify-between flex-wrap items-center">
               <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">
-                <p class="mr-2">{{ index + 1 }}. {{ player.username }}</p>
+                <p class="mr-2">{{ player.position }}. {{ player.name }}</p>
               </div>
               <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
                 <p class="text-md tc-main-secondary italic">
@@ -34,19 +34,16 @@
 </template>
 
 <script setup lang="ts">
-import { LeaderBoardResponse, LeaderBoardService } from '@/core/services/api/LeaderBoard';
+import { LeaderBoardEntry, useLeaderBoard } from '@/core/adapter/leaderboard';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const playerEntries = ref<LeaderBoardResponse['leaderboard'][number][] | undefined>(undefined);
+const leaderBoardStore = useLeaderBoard();
+const playerEntries = ref<LeaderBoardEntry[] | undefined>(undefined);
 
 onMounted(async () => {
-  const response = await LeaderBoardService.fetchLeaderBoards();
-  if (response && 'leaderboard' in response) {
-    playerEntries.value = response.leaderboard;
-  } else {
-    playerEntries.value = undefined;
-  }
+  console.log('mount');
+  playerEntries.value = (await leaderBoardStore.getLeaderBoard()) ?? [];
 });
 </script>
