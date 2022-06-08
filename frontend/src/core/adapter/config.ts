@@ -1,5 +1,7 @@
 import { defaultLanguage, setI18nLanguage } from '@/i18n';
+import router from '@/router';
 import { defineStore } from 'pinia';
+import { ConfigService } from '../services/api/Config';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -96,12 +98,17 @@ export const useConfig = defineStore('config', {
       });
       setTimeout(() => this.asyncSetup());
     },
-    asyncSetup() {
+    async asyncSetup() {
       let storedShowCardDetail = localStorage.getItem(showCardDetailKey);
       if (!storedShowCardDetail) {
         const hoverNotAvailable = 'ontouchstart' in document.documentElement;
         storedShowCardDetail = hoverNotAvailable ? 'on' : 'off';
         this.setShowCardDetail(hoverNotAvailable);
+      }
+
+      const version = await ConfigService.fetchVersion();
+      if (version !== process.env.VUE_APP_VERSION) {
+        router.push('/invalid-version');
       }
 
       this.$patch({
