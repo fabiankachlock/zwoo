@@ -5,6 +5,7 @@ import { WithBackendError, parseBackendError } from './errors';
 type UserInfo = {
   username: string;
   email: string;
+  wins: number;
 };
 
 export type AuthenticationStatus =
@@ -12,6 +13,7 @@ export type AuthenticationStatus =
       username: string;
       email: string;
       isLoggedIn: true;
+      wins?: number;
     }
   | WithBackendError<{
       isLoggedIn?: false;
@@ -44,7 +46,8 @@ export class AuthenticationService {
     return {
       isLoggedIn: true,
       username: data.username,
-      email: data.email
+      email: data.email,
+      wins: data.wins
     };
   };
 
