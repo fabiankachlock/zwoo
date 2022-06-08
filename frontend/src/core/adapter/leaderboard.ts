@@ -43,7 +43,7 @@ const leaderBoardStore = {
     if ('error' in response) {
       return -1;
     }
-    return (response as LeaderBoardPositionResponse).position + 200;
+    return (response as LeaderBoardPositionResponse).position;
   }, CacheTTL.minute * 5)
 };
 

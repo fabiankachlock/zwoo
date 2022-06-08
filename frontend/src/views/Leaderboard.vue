@@ -68,6 +68,9 @@ const isLoggedIn = computed(() => authStore.isLoggedIn);
 
 onMounted(async () => {
   playerEntries.value = (await leaderBoardStore.getLeaderBoard()) ?? [];
-  ownPosition.value = await leaderBoardStore.getOwnPosition();
+
+  if ((playerEntries.value ?? []).findIndex(player => player.name === authStore.username) < 0) {
+    ownPosition.value = await leaderBoardStore.getOwnPosition();
+  }
 });
 </script>
