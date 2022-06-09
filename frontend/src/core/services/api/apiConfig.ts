@@ -20,7 +20,8 @@ export enum Endpoint {
   JoinGame = 'game/join',
   Websocket = 'game/join/:id:',
   LeaderBoard = 'game/leaderboard',
-  LeaderBoardPosition = 'game/leaderboard/position'
+  LeaderBoardPosition = 'game/leaderboard/position',
+  Version = 'version'
 }
 
 export class Backend {
