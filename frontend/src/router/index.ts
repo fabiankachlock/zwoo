@@ -1,5 +1,6 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 import Menu from '../views/Menu.vue';
+import Version from '../views/Version.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
 import CatchAll from '../views/404.vue';
@@ -14,6 +15,7 @@ import { InGameGuard } from '@/core/services/security/GameGuard';
 import { DeveloperRoute } from './developer';
 import { ThemesRoute } from './themes';
 import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
+import { VersionGuard } from '@/core/services/security/VersionGuard';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -39,6 +41,10 @@ const routes: Array<RouteRecordRaw> = [
   GameRoute,
   ThemesRoute,
   DeveloperRoute,
+  {
+    path: '/invalid-version',
+    component: Version
+  },
   process.env.VUE_APP_BETA === 'true'
     ? {
         path: '/beta/:code',
@@ -60,6 +66,7 @@ const router = createRouter({
 });
 
 const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
+  new VersionGuard().beforeEach,
   new AuthGuard().beforeEach,
   new CookieGuard().beforeEach,
   new InGameGuard().beforeEach

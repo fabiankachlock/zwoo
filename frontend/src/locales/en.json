@@ -320,5 +320,11 @@
     "darkMode": "Toggle UI Mode",
     "fullScreen": "Toggle full screen",
     "quickMenu": "Toggle quick menu"
+  },
+  "wrongVersion": {
+    "title": "Wrong Version",
+    "info": "You need to upgrade zwoo to the latest version in order to play games.",
+    "reload": "Reload page",
+    "toSettings": "Go to settings"
   }
 }

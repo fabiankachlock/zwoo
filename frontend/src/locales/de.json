@@ -320,5 +320,11 @@
     "darkMode": "UI Modus umschalten",
     "fullScreen": "Vollbildschirm umschalten",
     "quickMenu": "Quick Menu umschalten"
+  },
+  "wrongVersion": {
+    "title": "Falsche Version",
+    "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden.",
+    "reload": "Seite neuladen",
+    "toSettings": "Zu den Einstellungen"
   }
 }
