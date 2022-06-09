@@ -1,6 +1,9 @@
 import { defaultLanguage, setI18nLanguage } from '@/i18n';
+import router from '@/router';
 import { defineStore } from 'pinia';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
+import { ConfigService } from '../services/api/Config';
+import { Awaiter } from '../services/helper/Awaiter';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -47,7 +50,9 @@ export const useConfig = defineStore('config', {
       sortCards: false,
       showCardDetail: false,
       cardTheme: '__default__',
-      cardThemeVariant: '@auto'
+      cardThemeVariant: '@auto',
+      serverVersion: new Awaiter() as string | Awaiter<string>,
+      clientVersion: process.env.VUE_APP_VERSION
     };
   },
 
@@ -103,7 +108,7 @@ export const useConfig = defineStore('config', {
       });
       setTimeout(() => this.asyncSetup());
     },
-    asyncSetup() {
+    async asyncSetup() {
       let storedShowCardDetail = localStorage.getItem(showCardDetailKey);
       if (!storedShowCardDetail) {
         const hoverNotAvailable = 'ontouchstart' in document.documentElement;
@@ -116,6 +121,14 @@ export const useConfig = defineStore('config', {
       if (storedTheme) {
         parsedTheme = JSON.parse(storedTheme);
       }
+      
+      const version = await ConfigService.fetchVersion();
+      if (version !== process.env.VUE_APP_VERSION) {
+        router.push('/invalid-version');
+      }
+      if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
+        this.serverVersion.callback(version);
+      }
 
       this.$patch({
         showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
@@ -123,6 +136,7 @@ export const useConfig = defineStore('config', {
         showCardDetail: storedShowCardDetail === 'on',
         cardTheme: parsedTheme.name ?? null,
         cardThemeVariant: parsedTheme.variant ?? null
+        serverVersion: version as string
       });
     }
   }
