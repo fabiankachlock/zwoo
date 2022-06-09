@@ -121,7 +121,8 @@ export const useConfig = defineStore('config', {
         showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
         sortCards: localStorage.getItem(sortCardsKey) === 'on',
         showCardDetail: storedShowCardDetail === 'on',
-        ...parsedTheme
+        cardTheme: parsedTheme.name ?? null,
+        cardThemeVariant: parsedTheme.variant ?? null
       });
     }
   }
