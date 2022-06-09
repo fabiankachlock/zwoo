@@ -121,7 +121,7 @@ export const useConfig = defineStore('config', {
       if (storedTheme) {
         parsedTheme = JSON.parse(storedTheme);
       }
-      
+
       const version = await ConfigService.fetchVersion();
       if (version !== process.env.VUE_APP_VERSION) {
         router.push('/invalid-version');
@@ -135,7 +135,7 @@ export const useConfig = defineStore('config', {
         sortCards: localStorage.getItem(sortCardsKey) === 'on',
         showCardDetail: storedShowCardDetail === 'on',
         cardTheme: parsedTheme.name ?? null,
-        cardThemeVariant: parsedTheme.variant ?? null
+        cardThemeVariant: parsedTheme.variant ?? null,
         serverVersion: version as string
       });
     }
