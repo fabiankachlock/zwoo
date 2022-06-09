@@ -1,11 +1,13 @@
 import { defaultLanguage, setI18nLanguage } from '@/i18n';
 import { defineStore } from 'pinia';
+import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
 const quickMenuKey = 'zwoo:qm';
 const sortCardsKey = 'zwoo:sc';
 const showCardDetailKey = 'zwoo:cd';
+const themeKey = 'zwoo:th';
 
 const versionInfo = {
   override: process.env.VUE_APP_VERSION_OVERRIDE as string,
@@ -80,6 +82,11 @@ export const useConfig = defineStore('config', {
       this.showCardDetail = show;
       localStorage.setItem(showCardDetailKey, show ? 'on' : 'off');
     },
+    setTheme(theme: CardThemeIdentifier) {
+      this.cardTheme = theme.name;
+      this.cardThemeVariant = theme.variant;
+      localStorage.setItem(themeKey, JSON.stringify(theme));
+    },
     configure() {
       const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
       setI18nLanguage(storedLng);
@@ -104,10 +111,17 @@ export const useConfig = defineStore('config', {
         this.setShowCardDetail(hoverNotAvailable);
       }
 
+      const storedTheme = localStorage.getItem(themeKey);
+      let parsedTheme = {} as CardThemeIdentifier;
+      if (storedTheme) {
+        parsedTheme = JSON.parse(storedTheme);
+      }
+
       this.$patch({
         showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
         sortCards: localStorage.getItem(sortCardsKey) === 'on',
-        showCardDetail: storedShowCardDetail === 'on'
+        showCardDetail: storedShowCardDetail === 'on',
+        ...parsedTheme
       });
     }
   }
