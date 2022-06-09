@@ -53,8 +53,10 @@ export const useCardTheme = CreateUseHook(() => {
 
   const setTheme = (name: string, variant: string) => {
     const newVariant = variant === CARD_THEME_VARIANT_AUTO ? colorMode.value : variant;
-    config.cardTheme = name;
-    config.cardThemeVariant = variant;
+    config.setTheme({
+      name,
+      variant
+    });
     loadTheme(name, newVariant);
   };
 
