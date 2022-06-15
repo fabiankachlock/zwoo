@@ -179,6 +179,9 @@
     }
   },
   "rules": {
+    "widget": {
+      "numberPlaceholder": "Number"
+    },
     "maxPlayers": {
       "title": "Amount of Players",
       "info": "Change maximum amount of players for your game."

@@ -1,4 +1,5 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { AllRules, EditableRules, RuleType, RuleTypeDefinitions } from '@/core/services/game/rules';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
@@ -6,9 +7,11 @@ import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type DisplayRule = {
   id: string;
+  value: number;
+  ruleType: RuleType;
+  isReadonly: boolean;
   title: string;
   description: string;
-  value: number;
 };
 
 const settingsWatcher = new MonolithicEventWatcher(ZRPOPCode.AllSettings, ZRPOPCode.SettingsUpdated);
@@ -19,12 +22,16 @@ export const useRules = defineStore('game-rules', () => {
 
   const _receiveMessage: typeof settingsWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.AllSettings) {
-      rules.value = msg.data.settings.map(setting => ({
-        id: setting.setting,
-        title: `rules.${setting.setting}.title`,
-        description: `rules.${setting.setting}.info`,
-        value: setting.value
-      }));
+      rules.value = msg.data.settings
+        .filter(setting => AllRules.includes(setting.setting))
+        .map(setting => ({
+          id: setting.setting,
+          title: `rules.${setting.setting}.title`,
+          description: `rules.${setting.setting}.info`,
+          value: setting.value,
+          isReadonly: !EditableRules.includes(setting.setting),
+          ruleType: RuleTypeDefinitions[setting.setting] as RuleType
+        }));
     } else if (msg.code === ZRPOPCode.SettingsUpdated) {
       for (const setting of rules.value) {
         if (setting.id === msg.data.setting) {

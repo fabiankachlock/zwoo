@@ -179,6 +179,9 @@
     }
   },
   "rules": {
+    "widget": {
+      "numberPlaceholder": "Zahl"
+    },
     "maxPlayers": {
       "title": "Spieleranzahl",
       "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."

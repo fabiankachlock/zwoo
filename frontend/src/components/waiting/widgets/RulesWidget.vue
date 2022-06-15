@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import Widget from '../Widget.vue';
-import Rules from '@/components/waiting/Rules.vue';
+import Rules from '@/components/waiting/rules/Rules.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 
 const isOpen = useUserDefaults('lobby:widgetRulesOpen', false);
