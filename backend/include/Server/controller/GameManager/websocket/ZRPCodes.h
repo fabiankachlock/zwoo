@@ -26,10 +26,14 @@ enum e_ZRPOpCodes
     YOU_ARE_HOST_NOW = 113,
     NEW_HOST = 114,
     KICK_PLAYER = 115,
-    PLAYER_CHANGED_ROLE = 116
+    PLAYER_CHANGED_ROLE = 116,
 
     // Lobby
-
+    CHANGE_SETTINGS = 200,
+    SETTINGS_CHANGED = 201,
+    GET_ALL_SETTINGS = 202,
+    ALL_SETTINGS = 203,
+    START_GAME = 210
     // Game
 };
 

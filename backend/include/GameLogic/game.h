@@ -70,7 +70,7 @@ class Game
     bool isWon( );                           // is the game won?
 
   public:
-    Game( );
+    Game( uint32_t id );
     ~Game( );
 
     bool start( );

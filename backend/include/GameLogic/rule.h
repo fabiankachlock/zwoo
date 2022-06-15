@@ -36,10 +36,11 @@ struct GameRules
                    // as Regular cards)
 
     /*
-    type	-	typeid	-	typename	-	arg1	-	arg2	-	arg3
-    -	arg4 typeid	-	1		-	gamerule	- typeid
-    -	2		-	cardrule	-	action	-	cardclr	-	cardnbr
-    -	mod
+    type	-	typeid	-	typename	-	arg1	-	arg2	-
+    arg3 -	arg4 typeid	-	1		-	gamerule
+    - typeid
+    -	2		-	cardrule	-	action	-	cardclr	-
+    cardnbr -	mod
     */
     uint8_t createRule( int _type, uint16_t _arg1, uint16_t _arg2,
                         uint16_t _arg3,

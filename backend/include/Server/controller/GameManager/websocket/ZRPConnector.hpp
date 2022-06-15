@@ -6,6 +6,8 @@
 #include "oatpp-websocket/ConnectionHandler.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 
+#include "GameLogic/gamemanager.h"
+
 #include <functional>
 #include <string>
 #include <unordered_map>
@@ -13,7 +15,7 @@
 class ZRPConnector
 {
   public:
-    ZRPConnector( );
+    ZRPConnector( std::shared_ptr<GameManager> gm );
 
     void addWebSocket( uint32_t guid, uint32_t puid,
                        std::shared_ptr<ZwooListener> listener );
@@ -21,6 +23,7 @@ class ZRPConnector
 
     void sendMessage( uint32_t guid, uint32_t puid, std::string data );
 
+    // 1xx
     void getAllPlayersInLobby( uint32_t guid, uint32_t puid );
 
     void leaveGame( uint32_t guid, uint32_t puid );
@@ -29,6 +32,11 @@ class ZRPConnector
     void spectatorToPlayer( uint32_t guid, uint32_t puid );
     void playerToSpectator( uint32_t guid, uint32_t puid, std::string data );
     void playerToHost( uint32_t guid, uint32_t puid, std::string data );
+
+    // 2xx
+    void changeSettings( uint32_t guid, uint32_t puid, std::string data );
+    void getAllSettings( uint32_t guid, uint32_t puid );
+    void startGame( uint32_t guid, uint32_t puid );
 
   private:
     void printWebsockets( );
@@ -40,6 +48,8 @@ class ZRPConnector
 
     //  std::unordered_map<uint32_t, std::shared_ptr<ZwooListener>>
     //  getGame(guid);
+
+    std::shared_ptr<GameManager> game_manager;
 
     std::shared_ptr<ZwooListener> getSocket( uint32_t guid, uint32_t puid );
     std::shared_ptr<ZwooListener> getSocket( uint32_t guid, std::string name );
