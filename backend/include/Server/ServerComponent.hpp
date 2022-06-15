@@ -1,6 +1,15 @@
 #ifndef _SERVER_COMPONENT_HPP_
 #define _SERVER_COMPONENT_HPP_
 
+#include "oatpp-websocket/ConnectionHandler.hpp"
+#include "oatpp/core/base/CommandLineArguments.hpp"
+#include "oatpp/core/macro/component.hpp"
+#include "oatpp/network/tcp/server/ConnectionProvider.hpp"
+#include "oatpp/parser/json/mapping/ObjectMapper.hpp"
+#include "oatpp/web/server/HttpConnectionHandler.hpp"
+#include "oatpp/web/server/HttpRouter.hpp"
+
+#include "GameLogic/gamemanager.h"
 #include "Server/AuthorizationHandler.hpp"
 #include "Server/DatabaseComponent.hpp"
 #include "Server/ErrorHandler.hpp"
@@ -10,13 +19,6 @@
 #include "Server/logger/logger.h"
 #include "controller/GameManager/websocket/ZRPConnector.hpp"
 #include "controller/GameManager/websocket/ZwooInstanceListener.hpp"
-#include "oatpp-websocket/ConnectionHandler.hpp"
-#include "oatpp/core/base/CommandLineArguments.hpp"
-#include "oatpp/core/macro/component.hpp"
-#include "oatpp/network/tcp/server/ConnectionProvider.hpp"
-#include "oatpp/parser/json/mapping/ObjectMapper.hpp"
-#include "oatpp/web/server/HttpConnectionHandler.hpp"
-#include "oatpp/web/server/HttpRouter.hpp"
 #include "utils/Queue.hpp"
 #include "zwoo.h"
 #ifdef BUILD_SWAGGER
