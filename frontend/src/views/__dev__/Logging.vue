@@ -60,7 +60,7 @@ import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
 import { LogStore } from '@/core/services/logging/logImport';
 import { LogEntry } from '@/core/services/logging/logTypes';
-import RuleSwitch from '@/components/waiting/RuleSwitch.vue';
+import RuleSwitch from '@/components/waiting/rules/contentTypes/RuleSwitch.vue';
 import { Icon } from '@iconify/vue';
 
 const { t } = useI18n();

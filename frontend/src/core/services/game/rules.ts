@@ -1,6 +1,15 @@
-export const AllRules = ['test-1', 'key-2'] as const;
+export const AllRules = ['maxPlayers', 'maxDraw', 'maxCardsOnHand', 'initialCards'];
 
-export const DefaultRuleConfig: Record<typeof AllRules[number], boolean> = {
-  'test-1': false,
-  'key-2': true
+export enum RuleType {
+  Numeric,
+  Boolean
+}
+
+export const EditableRules = [] as string[]; // AllRules; TODO: Allow after beta
+
+export const RuleTypeDefinitions: Record<typeof AllRules[number], RuleType> = {
+  maxPlayers: RuleType.Numeric,
+  maxDraw: RuleType.Numeric,
+  maxCardsOnHand: RuleType.Numeric,
+  initialCards: RuleType.Numeric
 };

@@ -146,6 +146,8 @@
       "146": "Du bist bereits in einem Spiel."
     },
     "zrp": {
+      "400": "Ein Fehler is aufgetreten",
+      "420": "Fehlende Berechtigung",
       "900": "Fehler aufgetreten",
       "901": "Verbindungsfehler",
       "911": "Verbindung getrennt",
@@ -179,9 +181,24 @@
     }
   },
   "rules": {
-    "test-1": {
-      "title": "Test Regel",
-      "info": "Test Regel Erklärung - optional extrem langer text..."
+    "widget": {
+      "numberPlaceholder": "Zahl"
+    },
+    "maxPlayers": {
+      "title": "Spieleranzahl",
+      "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."
+    },
+    "maxDraw": {
+      "title": "Max. Ziehmenge",
+      "info": "Lege eine maximale Anzahl an Karten fest, die auf einmal gezogen werden darf."
+    },
+    "maxCardsOnHand": {
+      "title": "Max. Karten auf der Hand",
+      "info": "Lege eine maximale Anzahl an Karten fest, die ein Spieler auf der Hand haben darf."
+    },
+    "initialCards": {
+      "title": "Anzahl an Karten",
+      "info": "Lege eine Anzahl an Karten fest, die ein Spieler am Anfang bekommt."
     }
   },
   "ingame": {
