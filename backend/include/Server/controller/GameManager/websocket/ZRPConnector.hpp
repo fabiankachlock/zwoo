@@ -7,6 +7,7 @@
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 
 #include "GameLogic/gamemanager.h"
+#include "Server/controller/error.h"
 
 #include <functional>
 #include <string>

@@ -184,7 +184,12 @@ void ZRPConnector::kickPlayer( uint32_t guid, uint32_t puid, std::string data )
     auto sender = getSocket( guid, puid );
 
     if ( sender->m_data.role != e_Roles::HOST )
-        return; // TODO: Send Error
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
     if ( sender == nullptr )
         return; // TODO: Send Error
 
@@ -279,7 +284,12 @@ void ZRPConnector::playerToHost( uint32_t guid, uint32_t puid,
     auto sender = getSocket( guid, puid );
 
     if ( sender->m_data.role != e_Roles::HOST )
-        return; // TODO: Send Error
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
     if ( sender == nullptr )
         return; // TODO: Send Error
 
@@ -311,7 +321,12 @@ void ZRPConnector::changeSettings( uint32_t guid, uint32_t puid,
     auto sender = getSocket( guid, puid );
 
     if ( sender->m_data.role != e_Roles::HOST )
-        return; // TODO: Send Error
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
     if ( sender == nullptr )
         return; // TODO: Send Error
 
@@ -333,7 +348,12 @@ void ZRPConnector::startGame( uint32_t guid, uint32_t puid )
     auto sender = getSocket( guid, puid );
 
     if ( sender->m_data.role != e_Roles::HOST )
-        return; // TODO: Send Error
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
     if ( sender == nullptr )
         return; // TODO: Send Error
 
