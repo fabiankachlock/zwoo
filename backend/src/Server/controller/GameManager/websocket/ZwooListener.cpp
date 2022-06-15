@@ -60,13 +60,13 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
             connector->kickPlayer( m_data.guid, m_data.puid, wholeMessage );
             break;
         case e_ZRPOpCodes::CHANGE_SETTINGS:
-            connector->changeSettings(m_data.guid, m_data.puid, wholeMessage);
+            connector->changeSettings( m_data.guid, m_data.puid, wholeMessage );
             break;
         case e_ZRPOpCodes::GET_ALL_SETTINGS:
-            connector->getAllSettings(m_data.guid, m_data.puid );
+            connector->getAllSettings( m_data.guid, m_data.puid );
             break;
         case e_ZRPOpCodes::START_GAME:
-            connector->startGame(m_data.guid, m_data.puid);
+            connector->startGame( m_data.guid, m_data.puid );
             break;
         default:
             logger->log->debug( "Unknown Code {0}!", code );

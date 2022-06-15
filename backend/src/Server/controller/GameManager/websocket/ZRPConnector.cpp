@@ -337,11 +337,10 @@ void ZRPConnector::startGame( uint32_t guid, uint32_t puid )
     if ( sender == nullptr )
         return; // TODO: Send Error
 
-
-    if (!game_manager->getGame(guid)->start())
+    if ( !game_manager->getGame( guid )->start( ) )
         return; // TODO: Send Error
 
-    sendZRPMessageToGame(guid, 0, createMessage(300, "{}"));
+    sendZRPMessageToGame( guid, 0, createMessage( 300, "{}" ) );
 }
 
 void ZRPConnector::printWebsockets( )
