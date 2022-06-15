@@ -84,8 +84,20 @@ const exampleMessages = {
   [203]: {
     settings: [
       {
-        setting: 'my-setting',
-        value: 1
+        setting: 'maxPlayers',
+        value: 5
+      },
+      {
+        setting: 'maxDraw',
+        value: 108
+      },
+      {
+        setting: 'maxCardsOnHand',
+        value: 108
+      },
+      {
+        setting: 'initialCards',
+        value: 7
       }
     ]
   },
