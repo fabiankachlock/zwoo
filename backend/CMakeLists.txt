@@ -42,6 +42,12 @@ set(SRC_FILES
     "src/Server/controller/GameManager/websocket/ZRPConnector.cpp"
     "src/Server/controller/GameManager/websocket/ZwooInstanceListener.cpp"
     "src/Server/controller/GameManager/websocket/ZwooListener.cpp"
+
+    "src/GameLogic/card.cpp"
+    "src/GameLogic/game.cpp"
+    "src/GameLogic/gamemanager.cpp"
+    "src/GameLogic/player.cpp"
+    "src/GameLogic/rule.cpp"
 )
 
 set(LIBS
