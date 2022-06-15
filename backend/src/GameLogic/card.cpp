@@ -123,8 +123,6 @@ void CardPile::createCard( Card _card )
 {
     cards.push_back( std::make_shared<Card>(
         _card ) ); // insert card at last position(top of pile)
-    // maxsize++;
-    // increaseCurSize();
 }
 
 void CardPile::destroyCard( Card _card )
@@ -138,8 +136,6 @@ void CardPile::destroyCard( Card _card )
         {
             // remove card from pile
             cards.erase( cards.begin( ) + i );
-            // maxsize--;
-            // cursize--;
             return;
         }
     }
@@ -148,16 +144,6 @@ void CardPile::destroyCard( Card _card )
 
 std::shared_ptr<Card> CardPile::drawTopCard( )
 {
-    // check if cardpile would survive xD
-    /*if (cards.size() == 0) {
-        // check if cardstack survives
-        if (this->stack->cards.size() == 1) {
-            generate();
-        }
-        else {
-            insertCardStack();
-        }
-    }*/
     std::shared_ptr<Card> card =
         cards.at( cards.size( ) - 1 ); // gets last vector element
     cards.pop_back( );                 // destroys last element
@@ -172,16 +158,6 @@ void CardPile::addCard( std::shared_ptr<Card> _card )
 
 void CardPile::addCards( std::vector<std::shared_ptr<Card>> _cards )
 {
-    // check if there is enough space for cards in pile
-    /*if (cursize + _cards.size() < maxsize) {
-        increaseCurSize(_cards.size()); // increase pilesize by number of cards
-    added
-
-    }
-    else {
-        // KEEP CALM AN DONT PUSH TOO MANY CARDS
-    }*/
-
     cards.insert( cards.end( ), _cards.begin( ),
                   _cards.end( ) ); // append _cards to cardpile
 }
