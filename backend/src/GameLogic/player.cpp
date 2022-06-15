@@ -1,59 +1,69 @@
 #include "GameLogic/player.h"
-#include "GameLogic/gamemanager.h"
 #include "GameLogic/game.h"
+#include "GameLogic/gamemanager.h"
 
-Player::Player(uint32_t id) : ID(id), isEmpty(true) {
-    cards.clear();
-}
+Player::Player( uint32_t id ) : ID( id ), isEmpty( true ) { cards.clear( ); }
 
-Player::~Player() {
+Player::~Player( )
+{
     // release ID
 }
 
-void Player::update() {
+void Player::update( )
+{
 
     // check if player's hand is empty
-    if (cards.size() <= 0) {
+    if ( cards.size( ) <= 0 )
+    {
         isEmpty = true;
     }
-    else {
+    else
+    {
         isEmpty = false;
     }
 }
 
-uint8_t Player::getCardsOnHand() {
-    return cards.size();
-}
+uint8_t Player::getCardsOnHand( ) { return cards.size( ); }
 
-bool Player::hasCard(Card _card) {
-    for (auto it = cards.begin(); it < cards.end(); it++) {
+bool Player::hasCard( Card _card )
+{
+    for ( auto it = cards.begin( ); it < cards.end( ); it++ )
+    {
         // compare color and number of cards
-        if ((it->get()->color == _card.color) && (it->get()->number == _card.number)) {
+        if ( ( it->get( )->color == _card.color ) &&
+             ( it->get( )->number == _card.number ) )
+        {
             return true;
         }
     }
     return false;
 }
 
-bool Player::reset() {
-    cards.clear();
-    update();
+bool Player::reset( )
+{
+    cards.clear( );
+    update( );
     return 1;
 }
 
-void Player::addCard(std::shared_ptr<Card> _card) {
-	cards.push_back(_card);
-    update();
+void Player::addCard( std::shared_ptr<Card> _card )
+{
+    cards.push_back( _card );
+    update( );
 }
 
-std::shared_ptr<Card> Player::removeCard(Card _card) {
+std::shared_ptr<Card> Player::removeCard( Card _card )
+{
     // go through each card in players inventory
-    for (auto it = cards.begin(); it < cards.end(); it++) {
+    for ( auto it = cards.begin( ); it < cards.end( ); it++ )
+    {
         // compare color and number of cards
-        if ((it->get()->color == _card.color) && (it->get()->number == _card.number)) {
+        if ( ( it->get( )->color == _card.color ) &&
+             ( it->get( )->number == _card.number ) )
+        {
             std::shared_ptr<Card> card = *it; // create ptr of card
-            cards.erase(it); // remove card from player
-            update();
+            cards.erase( it );                // remove card from player
+            update( );
             return card;
         }
     }
@@ -65,21 +75,20 @@ std::shared_ptr<Card> Player::removeCard(Card _card) {
     return nullptr;
 }
 
-uint32_t Player::getID() { 
-	return this->ID; 
-}
+uint32_t Player::getID( ) { return this->ID; }
 
-bool Player::IsEmpty() {
-    return isEmpty;
-}
+bool Player::IsEmpty( ) { return isEmpty; }
 
-void Player::PRINTSTATS() {
+void Player::PRINTSTATS( )
+{
 
-    std::cout << "==== PLAYER " << this->getID() << " ====\n";
+    std::cout << "==== PLAYER " << this->getID( ) << " ====\n";
 
     // print cards
-    for (auto it = cards.begin(); it != cards.end(); it++) {
-        std::cout << "[" << std::to_string(it->get()->color) << "," << std::to_string(it->get()->number) << "], ";
+    for ( auto it = cards.begin( ); it != cards.end( ); it++ )
+    {
+        std::cout << "[" << std::to_string( it->get( )->color ) << ","
+                  << std::to_string( it->get( )->number ) << "], ";
     }
-    std::cout << "\nCards: " << std::to_string(getCardsOnHand()) << "\n";
+    std::cout << "\nCards: " << std::to_string( getCardsOnHand( ) ) << "\n";
 }
