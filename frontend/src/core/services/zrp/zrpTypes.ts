@@ -50,6 +50,7 @@ export enum ZRPOPCode {
   PlayerWon = 399, // receiver
   // Errors
   GeneralError = 400, // receiver
+  AccessDeniedError = 420, // receiver
   EndTurnError = 433, // receiver
   PlaceCardError = 434, // receiver
   // internal Errors
@@ -107,6 +108,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.PlayerWon]: ZRPGameWinnerPayload;
   // Errors
   [ZRPOPCode.GeneralError]: ZRPErrorPayload;
+  [ZRPOPCode.AccessDeniedError]: ZRPErrorPayload;
   [ZRPOPCode.EndTurnError]: ZRPErrorPayload;
   [ZRPOPCode.PlaceCardError]: ZRPErrorPayload;
   // internal Errors

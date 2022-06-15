@@ -146,6 +146,8 @@
       "146": "You are already in a game."
     },
     "zrp": {
+      "400": "An Error occurred",
+      "420": "Missing Authorization",
       "900": "Error occurred",
       "901": "Connection error",
       "911": "Disconnected",

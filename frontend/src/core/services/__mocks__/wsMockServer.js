@@ -130,13 +130,14 @@ const exampleMessages = {
   [400]: {
     message: 'some-error'
   },
+  [420]: {},
   [433]: {
     message: 'some-error'
   },
   [434]: {
     message: 'some-error'
-  },
-}
+  }
+};
 
 function createExampleMessage(code, ...args) {
   const exampleMessage = { ...exampleMessages[code] };

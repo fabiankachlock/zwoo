@@ -146,6 +146,8 @@
       "146": "Du bist bereits in einem Spiel."
     },
     "zrp": {
+      "400": "Ein Fehler is aufgetreten",
+      "420": "Fehlende Berechtigung",
       "900": "Fehler aufgetreten",
       "901": "Verbindungsfehler",
       "911": "Verbindung getrennt",
