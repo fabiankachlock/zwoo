@@ -34,7 +34,9 @@ export enum ZRPOPCode {
   // Lobby
   ChangeSettings = 200, // sender (host)
   SettingsUpdated = 201, // receiver
-  StartGame = 202, // sender (host)
+  GetAllSettings = 202, // sender
+  AllSettings = 203, // receiver
+  StartGame = 210, // sender (host)
   // Game
   GameStarted = 300, // receiver
   StartTurn = 301, // receiver
@@ -89,6 +91,8 @@ export type ZRPPayloadMap = {
   // Lobby
   [ZRPOPCode.ChangeSettings]: ZRPSettingsChangePayload;
   [ZRPOPCode.SettingsUpdated]: ZRPSettingsChangePayload;
+  [ZRPOPCode.GetAllSettings]: Record<string, never>;
+  [ZRPOPCode.AllSettings]: ZRPSettingsPayload;
   [ZRPOPCode.StartGame]: Record<string, never>;
   // Game
   [ZRPOPCode.GameStarted]: Record<string, never>;
@@ -145,7 +149,14 @@ export type ZRPAllLobbyPlayersPayload = {
 
 export type ZRPSettingsChangePayload = {
   setting: string;
-  value: boolean | number;
+  value: number;
+};
+
+export type ZRPSettingsPayload = {
+  settings: {
+    setting: string;
+    value: number;
+  }[];
 };
 
 export type ZRPCardPayload = {
