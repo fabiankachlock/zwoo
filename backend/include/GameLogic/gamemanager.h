@@ -5,6 +5,9 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Helper.h"
+#include "Server/logger/logger.h"
+
 #include "card.h"
 #include "game.h"
 #include "player.h"
@@ -20,8 +23,11 @@ class GameManager
   private:
     std::unordered_map<uint32_t, std::shared_ptr<Game>> games;
 
+    std::shared_ptr<Logger> logger;
+    UIDGenerator id_generator = UIDGenerator( 0 );
+
   public:
-    GameManager( );
+    GameManager( std::shared_ptr<Logger> logger );
     ~GameManager( );
 
     // create empty game

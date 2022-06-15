@@ -5,7 +5,8 @@
 #include "Server/controller/GameManager/websocket/ZRPCodes.h"
 #include "Server/dto/ZRPMessageDTO.hpp"
 
-ZRPConnector::ZRPConnector( )
+ZRPConnector::ZRPConnector( std::shared_ptr<GameManager> gm )
+    : game_manager( gm )
 {
     logger = std::make_shared<Logger>( );
     logger->init( "ZRP" );
@@ -29,6 +30,8 @@ void ZRPConnector::addWebSocket( uint32_t guid, uint32_t puid,
     printWebsockets( );
 
     game = game_websockets.find( guid );
+
+    game_manager->getGame( guid )->addPlayer( puid );
 
     {
         auto ps_joined = UserJoined::createShared( );
@@ -56,9 +59,13 @@ void ZRPConnector::removeWebSocket( uint32_t guid, uint32_t puid )
         {
             game->second.erase( peer );
             if ( game->second.size( ) == 0 )
+            {
+                game_manager->destroyGame( guid );
                 game_websockets.erase( game );
+            }
             else
             {
+                game_manager->getGame( guid )->removePlayer( puid );
                 {
                     auto ps_joined = UserJoined::createShared( );
                     ps_joined->username = sender->m_data.username;
@@ -177,7 +184,12 @@ void ZRPConnector::kickPlayer( uint32_t guid, uint32_t puid, std::string data )
     auto sender = getSocket( guid, puid );
 
     if ( sender->m_data.role != e_Roles::HOST )
-        return; // TODO: Send Error
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
     if ( sender == nullptr )
         return; // TODO: Send Error
 
@@ -272,7 +284,12 @@ void ZRPConnector::playerToHost( uint32_t guid, uint32_t puid,
     auto sender = getSocket( guid, puid );
 
     if ( sender->m_data.role != e_Roles::HOST )
-        return; // TODO: Send Error
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
     if ( sender == nullptr )
         return; // TODO: Send Error
 
@@ -296,6 +313,54 @@ void ZRPConnector::playerToHost( uint32_t guid, uint32_t puid,
                 createMessage( e_ZRPOpCodes::YOU_ARE_HOST_NOW, "{}" ) );
         }
     }
+}
+
+void ZRPConnector::changeSettings( uint32_t guid, uint32_t puid,
+                                   std::string data )
+{
+    auto sender = getSocket( guid, puid );
+
+    if ( sender->m_data.role != e_Roles::HOST )
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
+    if ( sender == nullptr )
+        return; // TODO: Send Error
+
+    sender->websocket.sendOneFrameText( createMessage(
+        400, "changing settings is disabled for the first Beta" ) );
+}
+
+void ZRPConnector::getAllSettings( uint32_t guid, uint32_t puid )
+{
+    auto sender = getSocket( guid, puid );
+
+    sender->websocket.sendOneFrameText( createMessage(
+        203,
+        R"({"settings": [{"setting": "maxPlayers", "value": 5},{"setting": "maxDraw","value": 108},{"setting": "maxCardsOnHand","value": 108},{"setting": "initialCards","value": 7}]})" ) );
+}
+
+void ZRPConnector::startGame( uint32_t guid, uint32_t puid )
+{
+    auto sender = getSocket( guid, puid );
+
+    if ( sender->m_data.role != e_Roles::HOST )
+    {
+        sender->websocket.sendOneFrameText(
+            createMessage( e_ZRPError::ACCESS_DENIED_ERROR,
+                           R"({"message":"Access denied your not a host"})" ) );
+        return;
+    }
+    if ( sender == nullptr )
+        return; // TODO: Send Error
+
+    if ( !game_manager->getGame( guid )->start( ) )
+        return; // TODO: Send Error
+
+    sendZRPMessageToGame( guid, 0, createMessage( 300, "{}" ) );
 }
 
 void ZRPConnector::printWebsockets( )

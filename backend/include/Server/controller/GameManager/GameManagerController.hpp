@@ -36,6 +36,7 @@ class GameManagerController : public oatpp::web::server::api::ApiController
     OATPP_COMPONENT( std::shared_ptr<Logger>, m_logger_backend, "Backend" );
     OATPP_COMPONENT( std::shared_ptr<Logger>, m_logger_websocket, "Websocket" );
     OATPP_COMPONENT( std::shared_ptr<Database>, m_database );
+    OATPP_COMPONENT( std::shared_ptr<GameManager>, game_manager );
     OATPP_COMPONENT( std::shared_ptr<ZwooAuthorizationHandler>, authHandler );
     OATPP_COMPONENT( std::shared_ptr<oatpp::network::ConnectionHandler>,
                      websocketConnectionHandler, "websocket" );
@@ -106,8 +107,7 @@ class GameManagerController : public oatpp::web::server::api::ApiController
 
             if ( data->opcode == 1 )
             {
-                guid = createGame( ); // Create Game | TODO: use GameManager
-                                      // when finished (with player data)
+                guid = game_manager->createGame( );
                 m_logger_backend->log->info( "New Game Created!" );
                 s_Game g = { { { usr->puid, 1 } },
                              data->password.getValue( "" ),

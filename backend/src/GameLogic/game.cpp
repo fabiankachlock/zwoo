@@ -4,8 +4,8 @@
 
 #include "GameLogic/game.h"
 
-Game::Game( )
-    : ID( 1 ), rules( GameRules( ) ), pile( CardPile( ) ), playerorder( ),
+Game::Game( uint32_t id )
+    : ID( id ), rules( GameRules( ) ), pile( CardPile( ) ), playerorder( ),
       draw_active( false ), current_player( playerorder.first( ) ),
       current_draw_amount( 0 ), active( false ), direction( 1 ),
       pick_active( false ), turncount( 0 )
@@ -58,11 +58,11 @@ void Game::nextTurn( )
     // check direction
     if ( direction == true )
     {
-        current_player.operator++( );
+        ++current_player;
     }
     else
     {
-        current_player.operator--( );
+        --current_player;
     }
     turncount++;
 }

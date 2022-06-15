@@ -30,6 +30,12 @@ enum e_Errors
     ALREADY_INGAME = 146
 };
 
+enum e_ZRPError
+{
+    GENERAL_ERROR = 400,
+    ACCESS_DENIED_ERROR = 420
+};
+
 // Return Response Maybe?
 std::string constructErrorMessage( std::string message, e_Errors code );
 #endif
