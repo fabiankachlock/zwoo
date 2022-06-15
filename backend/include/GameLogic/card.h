@@ -1,9 +1,9 @@
 #pragma once
-#include <vector>
-#include<memory>
-#include <random>
 #include <algorithm>
-//DEBUG
+#include <memory>
+#include <random>
+#include <vector>
+// DEBUG
 #include <iostream>
 #include <string>
 
@@ -11,7 +11,8 @@ struct Card;
 class CardPile;
 class CardStack;
 
-enum e_action {
+enum e_action
+{
     A_NONE = 0,
     A_REGULAR = 1,
     A_SKIP = 2,
@@ -21,7 +22,8 @@ enum e_action {
     A_WILD_FOUR = 6
 };
 
-enum e_color {
+enum e_color
+{
     C_NONE = 0,
     C_RED = 1,
     C_YELLOW = 2,
@@ -30,7 +32,8 @@ enum e_color {
     C_BLACK = 5
 };
 
-enum e_number {
+enum e_number
+{
     N_NONE = 0,
     N_ZERO = 1,
     N_ONE = 2,
@@ -49,77 +52,76 @@ enum e_number {
     N_WILD_FOUR = 15
 };
 
-
-
-struct Card { 
+struct Card
+{
     e_color color;
     e_number number;
-    Card(e_color _color, e_number _number); // creates card
-    Card(uint8_t _color, uint8_t _number); // creates card
+    Card( e_color _color, e_number _number ); // creates card
+    Card( uint8_t _color, uint8_t _number );  // creates card
 
-    Card(); // creates NONE type card
-    bool operator==(Card& _card);
+    Card( ); // creates NONE type card
+    bool operator==( Card &_card );
 };
 
-class CardPile{
-private:
+class CardPile
+{
+  private:
     std::vector<std::shared_ptr<Card>> cards;
     uint16_t maxsize;
 
     // checks current size of pile and gets cards from stack if empty
-    bool isEmpty();
-public:
+    bool isEmpty( );
 
-    CardPile();
-    ~CardPile();
+  public:
+    CardPile( );
+    ~CardPile( );
 
-    void shuffle();
-    void generate();
-    bool reset();
-
-
+    void shuffle( );
+    void generate( );
+    bool reset( );
 
     // CREATES NEW card and adds it to the pile
-    void createCard(Card _card);
+    void createCard( Card _card );
     // DESTROYS card and remove it from pile
-    void destroyCard(Card _card); 
+    void destroyCard( Card _card );
 
     // returns card from top and removes it from pile
-    std::shared_ptr<Card> drawTopCard();
-    
+    std::shared_ptr<Card> drawTopCard( );
+
     // adds EXISTING card to top of pile(end of vector)
-    void addCard(std::shared_ptr<Card> _card);
+    void addCard( std::shared_ptr<Card> _card );
 
     // adds multiple EXISTING cards to top of pile(end of vector)
-    void addCards(std::vector<std::shared_ptr<Card>> _cards);
+    void addCards( std::vector<std::shared_ptr<Card>> _cards );
 
-    // get all cards from CardStack (except last(top) card) and add them to the pile
-    void insertCardStack(std::shared_ptr<CardStack> _stack);
+    // get all cards from CardStack (except last(top) card) and add them to the
+    // pile
+    void insertCardStack( std::shared_ptr<CardStack> _stack );
 
     // DEBUG
-    void PRINTSTATS();
+    void PRINTSTATS( );
 };
 
-class CardStack {
-    
-public:
+class CardStack
+{
 
+  public:
     std::vector<std::shared_ptr<Card>> cards;
 
-    CardStack();
+    CardStack( );
 
     // init CardStack with top card
-    CardStack(std::shared_ptr<Card> _card);
+    CardStack( std::shared_ptr<Card> _card );
 
     // adds card to top of stack
-    void addCard(std::shared_ptr<Card> _card);
+    void addCard( std::shared_ptr<Card> _card );
 
-    Card getTopCard();
-    bool reset();
+    Card getTopCard( );
+    bool reset( );
 
     // get all cards except top one from stack
-    std::vector<std::shared_ptr<Card>> drawBackCards();
+    std::vector<std::shared_ptr<Card>> drawBackCards( );
 
     // DEBUG
-    void PRINTSTATS();
+    void PRINTSTATS( );
 };

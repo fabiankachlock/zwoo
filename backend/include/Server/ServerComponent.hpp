@@ -9,6 +9,7 @@
 #include "oatpp/web/server/HttpConnectionHandler.hpp"
 #include "oatpp/web/server/HttpRouter.hpp"
 
+#include "GameLogic/gamemanager.h"
 #include "Server/AuthorizationHandler.hpp"
 #include "Server/DatabaseComponent.hpp"
 #include "Server/ErrorHandler.hpp"
@@ -18,7 +19,6 @@
 #include "Server/logger/logger.h"
 #include "controller/GameManager/websocket/ZRPConnector.hpp"
 #include "controller/GameManager/websocket/ZwooInstanceListener.hpp"
-#include "GameLogic/gamemanager.h"
 #include "utils/Queue.hpp"
 #include "zwoo.h"
 #ifdef BUILD_SWAGGER
@@ -89,15 +89,6 @@ class ServerComponent
 
     OATPP_CREATE_COMPONENT( std::shared_ptr<Logger>, be_logger )
     ( "Backend", [ this ] { return p_logger; }( ) );
-
-    OATPP_CREATE_COMPONENT( std::shared_ptr<Logger>, ws_logger )
-    ( "Websocket",
-      [ this ]
-      {
-          auto ws_logger = std::make_shared<Logger>( );
-          ws_logger->init( "WBS" );
-          return ws_logger;
-      }( ) );
 
     OATPP_CREATE_COMPONENT( std::shared_ptr<Logger>, ws_logger )
     ( "Websocket",
