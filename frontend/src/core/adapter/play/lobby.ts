@@ -187,7 +187,9 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const reset = () => {
-    //players.value = [];
+    players.value = [];
+    spectators.value = [];
+    gameHost.value = '';
   };
 
   const kickPlayer = (id: string) => {
