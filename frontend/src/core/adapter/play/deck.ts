@@ -111,6 +111,10 @@ export const useGameCardDeck = defineStore('game-cards', () => {
     cards.value = deck.cards;
   };
 
+  const drawCard = () => {
+    dispatchEvent(ZRPOPCode.DrawCard, {});
+  };
+
   deckWatcher.onMessage(_receiveMessage);
   deckWatcher.onClose(() => {
     deck = new CardDeck([]);
@@ -125,6 +129,7 @@ export const useGameCardDeck = defineStore('game-cards', () => {
     getNext,
     selectCard,
     playCard,
+    drawCard,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };
