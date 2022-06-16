@@ -5,6 +5,10 @@
 #include <unordered_map>
 #include <vector>
 
+#include <spdlog/spdlog.h>
+
+#include "Server/logger/LogRushLogger.hpp"
+
 #include "CyclingList.hpp"
 #include "card.h"
 #include "player.h"
@@ -31,6 +35,8 @@ enum e_gaction
 class Game
 {
   private:
+    std::shared_ptr<spdlog::logger> log;
+
     GameRules rules;
     CardPile pile;
     CardStack stack;

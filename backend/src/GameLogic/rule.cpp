@@ -14,7 +14,7 @@ GameRules::GameRules( )
 {
     idcnt = 1;
     // init gameoptions
-    gameoptions.insert( { "maxPlayers", 4 } );
+    gameoptions.insert( { "maxPlayers", 5 } );
     gameoptions.insert( { "maxDraw", 108 } );
     gameoptions.insert( { "maxCardsOnHand", 108 } );
     gameoptions.insert( { "initialCards", 7 } );
@@ -28,8 +28,8 @@ uint8_t GameRules::createRule( int _type, uint16_t _arg1, uint16_t _arg2,
     case 1: // GameRule
         break;
     case 2: // CardRule
-        std::cout << "CREATING A CARDRULE WITH FOLLOWING ARGUMENTS: " << _arg1
-                  << ", " << _arg2 << ", " << _arg3 << ", " << _arg4 << "\n";
+        log->info( "CREATING A CARDRULE WITH FOLLOWING ARGUMENTS: {} {} {} {}",
+                   _arg1, _arg2, _arg3, _arg4 );
         uint8_t id = idcnt++;
         e_action action = static_cast<e_action>( _arg1 );
         Card cardtype = Card( static_cast<e_color>( _arg2 ),
@@ -77,8 +77,7 @@ bool GameRules::canPlace( Card _stacktopcard, Card _playerplacecard,
         }
         else
         {
-            std::cout
-                << "WHAT THE HECK ARE YOU DOING?!? YOU CANT PLACE THIS CARD";
+            log->info( "cant place card!" );
             return false;
         }
     }
