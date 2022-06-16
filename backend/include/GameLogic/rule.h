@@ -1,6 +1,7 @@
 #pragma once
 #include "card.h"
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <unordered_map>
 
 struct CardRule
@@ -69,4 +70,7 @@ struct GameRules
                                         // according to activated rules
 
     bool checkMaxCardsOnHand( uint8_t _cardsdrawn, uint8_t _cards );
+
+    // TODO: Remove after Beta
+    std::shared_ptr<spdlog::logger> log;
 };

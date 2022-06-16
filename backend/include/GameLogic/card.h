@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 
+#include <spdlog/spdlog.h>
+
 struct Card;
 class CardPile;
 class CardStack;
@@ -100,6 +102,9 @@ class CardPile
 
     // DEBUG
     void PRINTSTATS( );
+
+    // TODO: REMOVE AFTER BETA
+    std::shared_ptr<spdlog::logger> log;
 };
 
 class CardStack
@@ -124,4 +129,7 @@ class CardStack
 
     // DEBUG
     void PRINTSTATS( );
+
+    // TODO: REMOVE AFTER BETA
+    std::shared_ptr<spdlog::logger> log;
 };

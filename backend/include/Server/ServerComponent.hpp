@@ -104,7 +104,7 @@ class ServerComponent
         [ this ]
         {
             auto gl_logger = std::make_shared<Logger>( );
-            gl_logger->init( "GLM" );
+            gl_logger->init( "GML" );
             return std::make_shared<GameManager>( gl_logger );
         }( ) );
 

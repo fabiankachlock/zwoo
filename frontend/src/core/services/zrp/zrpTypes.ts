@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type ZRPMessage<T extends {} | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
   ? {
       code: T;
@@ -17,6 +18,7 @@ export enum ZRPOPCode {
   SpectatorJoined = 101, // receiver
   PlayerLeft = 102, // receiver
   SpectatorLeft = 103, // receiver
+  LeaveGame = 106, // sender
   // - chat
   SendMessage = 104, // sender
   ReceiveMessage = 105, // receiver
@@ -83,6 +85,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.SpectatorJoined]: ZRPJoinedGamePayload;
   [ZRPOPCode.PlayerLeft]: ZRPLeftGamePayload;
   [ZRPOPCode.SpectatorLeft]: ZRPLeftGamePayload;
+  [ZRPOPCode.LeaveGame]: Record<string, never>;
   // Chat
   [ZRPOPCode.SendMessage]: ZRPSendChatMessagePayload;
   [ZRPOPCode.ReceiveMessage]: ZRPChatMessagePayload;

@@ -68,7 +68,8 @@ std::shared_ptr<Card> Player::removeCard( Card _card )
         }
     }
     // DEBUG
-    std::cout << "NO CARD FOUND IN PLAYER INVENTORY!";
+    log->info( "No matching card ({1}, {2}) found in player ({0}) inventory",
+               getID( ), _card.color, _card.number );
     // DEBUG
 
     // NO CARD FOUND
@@ -82,13 +83,13 @@ bool Player::IsEmpty( ) { return isEmpty; }
 void Player::PRINTSTATS( )
 {
 
-    std::cout << "==== PLAYER " << this->getID( ) << " ====\n";
+    log->info( "==== PLAYER {} ====", this->ID );
 
     // print cards
     for ( auto it = cards.begin( ); it != cards.end( ); it++ )
     {
-        std::cout << "[" << std::to_string( it->get( )->color ) << ","
-                  << std::to_string( it->get( )->number ) << "], ";
+        log->info( "[ {1}, {2}], ", std::to_string( it->get( )->color ),
+                   std::to_string( it->get( )->number ) );
     }
-    std::cout << "\nCards: " << std::to_string( getCardsOnHand( ) ) << "\n";
+    log->info( "Cards: {}", std::to_string( getCardsOnHand( ) ) );
 }

@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <spdlog/spdlog.h>
+
 class Game;
 struct Card;
 
@@ -35,4 +37,7 @@ class Player
     bool IsEmpty( );
 
     void PRINTSTATS( );
+
+    // TODO: REMOVE AFTER BETA
+    std::shared_ptr<spdlog::logger> log;
 };

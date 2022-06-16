@@ -13,7 +13,7 @@ let initializedGameModules = false;
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
-    gameId: -1,
+    gameId: undefined as number | undefined,
     name: '',
     role: undefined as ZRPRole | undefined,
     inActiveGame: false,
@@ -63,6 +63,18 @@ export const useGameConfig = defineStore('game-config', {
         this.connect();
       }
     },
+    leave(): void {
+      if (this.inActiveGame) {
+        this._connection?.close();
+        this.$patch({
+          inActiveGame: false,
+          gameId: undefined,
+          name: '',
+          role: undefined,
+          _connection: undefined
+        });
+      }
+    },
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {
         (await import(/* webpackChunkName: "game-logic" */ './play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
@@ -80,7 +92,10 @@ export const useGameConfig = defineStore('game-config', {
     async connect() {
       await this._initGameModules();
       setTimeout(() => {
-        this._connection = new ZRPWebsocketAdapter(Backend.getDynamicUrl(Endpoint.Websocket, { id: this.gameId.toString() }), this.gameId.toString());
+        this._connection = new ZRPWebsocketAdapter(
+          Backend.getDynamicUrl(Endpoint.Websocket, { id: (this.gameId ?? -1).toString() }),
+          (this.gameId ?? -1).toString()
+        );
         const events = useGameEvents();
         this._connection.readMessages(events.handleIncomingEvent);
       }, 0);
