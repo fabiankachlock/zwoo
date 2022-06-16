@@ -107,22 +107,56 @@ const exampleMessages = {
   [302]: {},
   [303]: {},
   [304]: {
-    type: 'x',
-    symbol: 'y'
+    type: 2,
+    symbol: 2
   },
   [305]: {},
   [306]: {
-    type: 'x',
-    symbol: 'y'
+    type: 2,
+    symbol: 2
   },
   [307]: {
-    type: 'x',
-    symbol: 'y'
+    type: 2,
+    symbol: 2
   },
   [308]: {
-    type: 'x',
-    symbol: 'y'
+    pileTop: {
+      type: 2,
+      symbol: 2
+    },
+    activePlayer: 'test1',
+    activePlayerCardAmount: 1,
+    lastPlayer: 'test2',
+    lastPlayerCardAmount: 1
   },
+  [310]: {},
+  [311]: {
+    hand: [
+      {
+        type: 2,
+        symbol: 2
+      }
+    ]
+  },
+  [312]: {},
+  [313]: {
+    players: [
+      {
+        username: 'test',
+        cards: 2,
+        isActivePlayer: true
+      }
+    ]
+  },
+  [314]: {},
+  [315]: {
+    type: 2,
+    symbol: 2
+  },
+  [316]: {
+    type: 1
+  },
+  [317]: {},
   [399]: {
     username: 'test-player',
     wins: 3

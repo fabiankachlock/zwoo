@@ -1,3 +1,4 @@
+import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { Card, CardColor } from '@/core/services/game/card';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
@@ -8,13 +9,37 @@ import { InGameModal } from './modal';
 import { useModalResponse } from './util/awaitModalResponse';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
-const deckWatcher = new MonolithicEventWatcher(ZRPOPCode.GameStarted, ZRPOPCode.GetCard, ZRPOPCode.RemoveCard);
+const deckWatcher = new MonolithicEventWatcher(ZRPOPCode.GameStarted, ZRPOPCode.GetCard, ZRPOPCode.RemoveCard, ZRPOPCode.GetHand);
 
 export const useGameCardDeck = defineStore('game-cards', () => {
   const cards = ref<Card[]>([]);
   const selectedCard = ref<(Card & { index: number }) | undefined>(undefined);
   let deck = new CardDeck([]);
+  const dispatchEvent = useGameEventDispatch();
   const config = useConfig();
+
+  const _receiveMessage: typeof deckWatcher['_msgHandler'] = msg => {
+    if (msg.code === ZRPOPCode.GameStarted) {
+      dispatchEvent(ZRPOPCode.RequestHand, {});
+    } else if (msg.code === ZRPOPCode.GetCard) {
+      addCard({
+        color: msg.data.type,
+        type: msg.data.symbol
+      });
+    } else if (msg.code === ZRPOPCode.RemoveCard) {
+      removeCard({
+        color: msg.data.type,
+        type: msg.data.symbol
+      });
+    } else if (msg.code === ZRPOPCode.GetHand) {
+      setState(
+        msg.data.hand.map(c => ({
+          color: c.type,
+          type: c.symbol
+        }))
+      );
+    }
+  };
 
   const setState = (newCards: Card[]) => {
     const config = useConfig();
@@ -65,12 +90,20 @@ export const useGameCardDeck = defineStore('game-cards', () => {
   };
 
   const playCard = async (card: Card) => {
-    deck.playCard(card);
+    // TODO: wait for server
     if (card.color === CardColor.black) {
       const selectedColor = await useModalResponse(InGameModal.ColorPicker);
       if (!selectedColor) return;
       card.color = selectedColor;
     }
+    dispatchEvent(ZRPOPCode.PlaceCard, {
+      type: card.color,
+      symbol: card.type
+    });
+  };
+
+  const removeCard = async (card: Card) => {
+    deck.playCard(card);
     if (config.sortCards) {
       cards.value = deck.sorted;
       return;
@@ -78,7 +111,16 @@ export const useGameCardDeck = defineStore('game-cards', () => {
     cards.value = deck.cards;
   };
 
+  deckWatcher.onMessage(_receiveMessage);
+  deckWatcher.onClose(() => {
+    deck = new CardDeck([]);
+    cards.value = [];
+    selectedCard.value = undefined;
+  });
+
   return {
+    cards,
+    selectedCard,
     hasNext,
     getNext,
     selectCard,
