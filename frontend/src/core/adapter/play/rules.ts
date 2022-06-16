@@ -53,8 +53,9 @@ export const useRules = defineStore('game-rules', () => {
     dispatchEvent(ZRPOPCode.GetAllSettings, {});
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const reset = () => {};
+  const reset = () => {
+    rules.value = [];
+  };
 
   settingsWatcher.onMessage(_receiveMessage);
   settingsWatcher.onClose(reset);

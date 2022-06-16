@@ -28,19 +28,19 @@ readline.on('line', input => {
 
 const exampleMessages = {
   [100]: {
-    name: 'test-player',
+    username: 'test-player',
     wins: 3
   },
   [101]: {
-    name: 'test-player',
+    username: 'test-player',
     wins: 3
   },
   [102]: {
-    name: 'test-player',
+    username: 'test-player',
     wins: 3
   },
   [103]: {
-    name: 'test-player',
+    username: 'test-player',
     wins: 3
   },
   [104]: {
@@ -48,19 +48,19 @@ const exampleMessages = {
   },
   [105]: {
     message: 'test-message',
-    name: 'test-player',
+    username: 'test-player',
     role: 3
   },
   [108]: {},
   [109]: {
     players: [
       {
-        name: 'test-batch-p',
+        username: 'test-batch-p',
         wins: 0,
         role: 2
       },
       {
-        name: 'test-batch-s',
+        username: 'test-batch-s',
         wins: 0,
         role: 3
       }
@@ -124,7 +124,7 @@ const exampleMessages = {
     symbol: 'y'
   },
   [399]: {
-    name: 'test-player',
+    username: 'test-player',
     wins: 3
   },
   [400]: {

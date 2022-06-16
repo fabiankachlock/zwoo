@@ -159,7 +159,6 @@
   "version": "Version",
   "wait": {
     "start": "Start",
-    "stop": "Stop",
     "leave": "Verlassen",
     "players": "Spieler",
     "spectators": "Zuschauer",

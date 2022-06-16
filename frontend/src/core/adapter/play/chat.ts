@@ -49,6 +49,7 @@ export const useChatStore = defineStore('game-chat', () => {
 
   chatWatcher.onClose(() => {
     messages.value = [];
+    muted.value = {};
   });
 
   return {
