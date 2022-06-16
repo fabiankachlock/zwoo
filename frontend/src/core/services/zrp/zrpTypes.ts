@@ -46,7 +46,15 @@ export enum ZRPOPCode {
   DrawCard = 305, // sender
   GetCard = 306, // receiver
   RemoveCard = 307, // receiver
-  NewCardOnPile = 308, // receiver
+  StateUpdate = 308, // receiver
+  RequestHand = 310, //sender
+  GetHand = 311, //receivers
+  RequestPlayerCardAmount = 312, // sender
+  GetPlayerCardAmount = 313, // receiver
+  RequestPileTop = 314, // sender
+  GetPileTop = 315, // receiver
+  GetPlayerDecision = 316, // receiver
+  SendPlayerDecision = 317, // sender
   PlayerWon = 399, // receiver
   // Errors
   GeneralError = 400, // receiver
@@ -104,7 +112,15 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.DrawCard]: Record<string, never>;
   [ZRPOPCode.GetCard]: ZRPCardPayload;
   [ZRPOPCode.RemoveCard]: ZRPCardPayload;
-  [ZRPOPCode.NewCardOnPile]: ZRPCardPayload;
+  [ZRPOPCode.StateUpdate]: ZRPStateUpdatePayload;
+  [ZRPOPCode.RequestHand]: Record<string, never>;
+  [ZRPOPCode.GetHand]: ZRPDeckPayload;
+  [ZRPOPCode.RequestPlayerCardAmount]: Record<string, never>;
+  [ZRPOPCode.GetPlayerCardAmount]: ZRPPlayerCardAmountPayload;
+  [ZRPOPCode.RequestPileTop]: Record<string, never>;
+  [ZRPOPCode.GetPileTop]: ZRPCardPayload;
+  [ZRPOPCode.GetPlayerDecision]: ZRPDecisionRequestPayload;
+  [ZRPOPCode.SendPlayerDecision]: ZRPDecisionResponsePayload;
   [ZRPOPCode.PlayerWon]: ZRPGameWinnerPayload;
   // Errors
   [ZRPOPCode.GeneralError]: ZRPErrorPayload;
@@ -164,6 +180,41 @@ export type ZRPSettingsPayload = {
 export type ZRPCardPayload = {
   type: number;
   symbol: number;
+};
+
+export type ZRPStateUpdatePayload = {
+  pileTop: {
+    type: number;
+    symbol: number;
+  };
+  activePlayer: string;
+  activePlayerCardAmount: number;
+  lastPlayer: string;
+  lastPlayerCardAmount: number;
+};
+
+export type ZRPDeckPayload = {
+  hand: {
+    type: number;
+    symbol: number;
+  }[];
+};
+
+export type ZRPPlayerCardAmountPayload = {
+  players: {
+    username: string;
+    cards: number;
+    isActivePlayer: boolean;
+  }[];
+};
+
+export type ZRPDecisionRequestPayload = {
+  type: number;
+};
+
+export type ZRPDecisionResponsePayload = {
+  type: number;
+  decision: number;
 };
 
 export type ZRPGameWinnerPayload = {
