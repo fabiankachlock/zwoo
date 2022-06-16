@@ -1,8 +1,11 @@
+#include <spdlog/logger.h>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "GameLogic/game.h"
+#include "zwoo.h"
 
 Game::Game( uint32_t id )
     : ID( id ), rules( GameRules( ) ), pile( CardPile( ) ), playerorder( ),
@@ -10,6 +13,37 @@ Game::Game( uint32_t id )
       current_draw_amount( 0 ), active( false ), direction( 1 ),
       pick_active( false ), turncount( 0 )
 {
+    // TODO: Remove after Beta !!!
+    if ( ZWOO_USE_LOGRUSH )
+    {
+        std::vector<spdlog::sink_ptr> log_sinks;
+        log_sinks.emplace_back( std::make_shared<LogRushBasicSink>(
+            ZWOO_LOGRUSH_URL,
+            std::string( "ZWOO Backend Game " + std::to_string( id ) ), "",
+            "" ) );
+
+        log = std::make_shared<spdlog::logger>( "Game", begin( log_sinks ),
+                                                end( log_sinks ) );
+        spdlog::register_logger( log );
+        log->set_level( spdlog::level::debug );
+        log->flush_on( spdlog::level::debug );
+    }
+    else
+    {
+        std::vector<spdlog::sink_ptr> log_sinks;
+
+        log = std::make_shared<spdlog::logger>( "Game", begin( log_sinks ),
+                                                end( log_sinks ) );
+
+        spdlog::register_logger( log );
+        log->set_level( spdlog::level::debug );
+        log->flush_on( spdlog::level::debug );
+    }
+
+    pile.log = log;
+    rules.log = log;
+    stack.log = log;
+
     rules.createRule( 2, A_WILD, C_BLACK, N_WILD, 0 );           // DEFAULT RULE
     rules.createRule( 2, A_WILD_FOUR, C_BLACK, N_WILD_FOUR, 4 ); // DEFAULT RULE
     rules.createRule( 2, A_SKIP, C_NONE, N_SKIP, 0 );            // DEFAULT RULE
@@ -24,6 +58,7 @@ void Game::drawCard( std::shared_ptr<Player> _player )
 {
     // draw card
     _player->addCard( this->pile.drawTopCard( ) );
+    log->info( "Card Drawn by player {}", _player->getID( ) );
 }
 
 void Game::drawCards( std::shared_ptr<Player> _player, uint8_t _amount )
@@ -33,6 +68,7 @@ void Game::drawCards( std::shared_ptr<Player> _player, uint8_t _amount )
     {
         _player->addCard( this->pile.drawTopCard( ) );
     }
+    log->info( "{0} Card/s Drawn by player {1}", _amount, _player->getID( ) );
 }
 
 void Game::placeCard( std::shared_ptr<Player> _player, Card _card )
@@ -102,7 +138,7 @@ bool Game::isValidAction( e_gaction _action )
             return true;
         }
     }
-    std::cout << "Invalid Action!!";
+    log->info( "Invalid Action!!" );
     return false;
 }
 
@@ -166,7 +202,7 @@ bool Game::stop( )
     reset( );
 
     // function call the game has ended
-    std::cout << "GAME HAS BEEN STOPPED";
+    log->info( "GAME HAS BEEN STOPPED" );
 
     return true;
 }
@@ -293,7 +329,7 @@ void Game::placeCardEvent( Card _card )
     }
     else
     {
-        std::cout << "You cannot place this card!";
+        log->info( "You cannot place this card!" );
     }
 }
 
@@ -306,7 +342,7 @@ void Game::drawCardEvent( )
         current_draw_amount = rules.canDraw(
             current_draw_amount, ( *current_player )->getCardsOnHand( ) );
 
-        std::cout << "drawn " << current_draw_amount << " cards!";
+        log->info( "drawn {} cards!", current_draw_amount );
         drawCards( *current_player, current_draw_amount );
         draw_active = false;     // disable drawchain
         current_draw_amount = 0; // reset drawCount
@@ -360,11 +396,12 @@ uint32_t Game::addPlayer( uint32_t puid )
     {
 
         // check if another player fits into game
-        if ( !( ( players.size( ) + 1 ) > rules.getOption( "maxPlayers" ) ) )
+        if ( ( players.size( ) + 1 ) <= rules.getOption( "maxPlayers" ) )
         {
 
             std::shared_ptr<Player> player =
                 std::make_shared<Player>( Player( puid ) ); // create a player
+            player->log = log;
             uint32_t playerid = player->getID( );
 
             this->players.insert(
@@ -373,14 +410,13 @@ uint32_t Game::addPlayer( uint32_t puid )
         }
         else
         {
-            std::cout << "THE LOBBY IS FREAKING FULL! WHAT THE HELL? ARE YOU "
-                         "GOING TO SQUISH HIM INSIDE OR WHAT?";
+            log->info( "The Game is full not able to join game" );
             return -1;
         }
     }
     else
     {
-        std::cout << "THE GAME IS ALREADY RUNNING YOU CUNT!";
+        log->info( "game is running cant join running game!" );
         return -1;
     }
 }

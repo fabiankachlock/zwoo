@@ -170,8 +170,7 @@ void CardPile::insertCardStack( std::shared_ptr<CardStack> _stack )
 void CardPile::PRINTSTATS( )
 {
 
-    std::cout << "==== CARDPILE ====\n";
-    std::cout << "Cards: " << cards.size( ) << "\n";
+    log->info( "==== CARDPILE ====\nCards: {}", cards.size( ) );
 }
 
 // CardStack //
@@ -215,14 +214,14 @@ std::vector<std::shared_ptr<Card>> CardStack::drawBackCards( )
 
 void CardStack::PRINTSTATS( )
 {
-    std::cout << "==== STACK ====\n";
+    log->info( "==== STACK ====\n" );
 
     // print cards
     for ( auto it = std::begin( cards ); it != std::end( cards ); it++ )
     {
-        std::cout << "[" << std::to_string( it->get( )->color ) << ","
-                  << std::to_string( it->get( )->number ) << "], ";
+        log->info( "[ {1}, {2}], ", std::to_string( it->get( )->color ),
+                   std::to_string( it->get( )->number ) );
     }
 
-    std::cout << "\nCards: " << cards.size( ) << "\n";
+    log->info( "\nCards: {}\n", cards.size( ) );
 }
