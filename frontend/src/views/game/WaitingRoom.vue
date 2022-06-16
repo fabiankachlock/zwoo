@@ -15,9 +15,7 @@
             <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
           </template>
           <template v-if="!isHost">
-            <router-link to="/game/play">
-              <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
-            </router-link>
+            <button @click="leave()" class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
           </template>
         </div>
       </div>
@@ -53,10 +51,16 @@ import SpectatorsWidget from '@/components/waiting/widgets/SpectatorsWidget.vue'
 import ChatWidget from '@/components/waiting/widgets/ChatWidget.vue';
 import { useIsHost } from '@/composables/userRoles';
 import { useGameConfig } from '@/core/adapter/game';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
+const lobby = useLobbyStore();
 const { isHost } = useIsHost();
+
+const leave = () => {
+  lobby.leave();
+};
 </script>
 
 <style>
