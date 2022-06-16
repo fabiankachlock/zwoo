@@ -1,82 +1,89 @@
 import { Card, CardColor } from '@/core/services/game/card';
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 import { CardDeck } from '../../services/game/deck';
 import { useConfig } from '../config';
-import { useGameState } from './gameState';
 import { InGameModal } from './modal';
 import { useModalResponse } from './util/awaitModalResponse';
+import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
-export const useGameCardDeck = defineStore('game-cards', {
-  state: () => ({
-    cards: [] as Card[],
-    selectedCard: undefined as (Card & { index: number }) | undefined,
-    _deck: new CardDeck([])
-  }),
-  actions: {
-    setState(cards: Card[]) {
-      const config = useConfig();
-      this._deck = new CardDeck(cards);
-      if (config.sortCards) {
-        this.cards = this._deck.sorted;
-        return;
-      }
-      this.cards = this._deck.cards;
-    },
-    addCard(card: Card) {
-      const config = useConfig();
-      this._deck.pushCard(card);
-      if (config.sortCards) {
-        this.cards = this._deck.sorted;
-        return;
-      }
-      this.cards = this._deck.cards;
-    },
-    hasNext(direction: 'before' | 'after'): boolean {
-      const nextIndex = (this.selectedCard?.index ?? 0) + (direction === 'after' ? 1 : -1);
-      const config = useConfig();
-      if (config.sortCards) {
-        return this._deck.sortedCardAt(nextIndex) !== undefined;
-      }
-      return this._deck.cardAt(nextIndex) !== undefined;
-    },
-    getNext(direction: 'before' | 'after'): [Card | undefined, number] {
-      const nextIndex = (this.selectedCard?.index ?? 0) + (direction === 'after' ? 1 : -1);
-      const config = useConfig();
-      if (config.sortCards) {
-        return [this._deck.sortedCardAt(nextIndex), nextIndex];
-      }
-      return [this._deck.cardAt(nextIndex), nextIndex];
-    },
-    selectCard(card: Card, at: number) {
-      const config = useConfig();
-      if (config.showCardDetail) {
-        this.selectedCard = {
-          color: card.color,
-          type: card.type,
-          index: at
-        };
-      } else {
-        this.playCard(card);
-      }
-    },
-    async playCard(card: Card) {
-      this._deck.playCard(card);
-      if (card.color === CardColor.black) {
-        const selectedColor = await useModalResponse(InGameModal.ColorPicker);
-        if (!selectedColor) return;
-        card.color = selectedColor;
-      }
-      const config = useConfig();
-      // TODO: just temp - remove later
-      const gameState = useGameState();
-      gameState.mainCard = card;
-      if (config.sortCards) {
-        this.cards = this._deck.sorted;
-        return;
-      }
-      this.cards = this._deck.cards;
-    },
+const deckWatcher = new MonolithicEventWatcher(ZRPOPCode.GameStarted, ZRPOPCode.GetCard, ZRPOPCode.RemoveCard);
+
+export const useGameCardDeck = defineStore('game-cards', () => {
+  const cards = ref<Card[]>([]);
+  const selectedCard = ref<(Card & { index: number }) | undefined>(undefined);
+  let deck = new CardDeck([]);
+  const config = useConfig();
+
+  const setState = (newCards: Card[]) => {
+    const config = useConfig();
+    deck = new CardDeck(newCards);
+    if (config.sortCards) {
+      cards.value = deck.sorted;
+      return;
+    }
+    cards.value = deck.cards;
+  };
+
+  const addCard = (card: Card) => {
+    const config = useConfig();
+    deck.pushCard(card);
+    if (config.sortCards) {
+      cards.value = deck.sorted;
+      return;
+    }
+    cards.value = deck.cards;
+  };
+
+  const hasNext = (direction: 'before' | 'after'): boolean => {
+    const nextIndex = (selectedCard.value?.index ?? 0) + (direction === 'after' ? 1 : -1);
+    if (config.sortCards) {
+      return deck.sortedCardAt(nextIndex) !== undefined;
+    }
+    return deck.cardAt(nextIndex) !== undefined;
+  };
+
+  const getNext = (direction: 'before' | 'after'): [Card | undefined, number] => {
+    const nextIndex = (selectedCard.value?.index ?? 0) + (direction === 'after' ? 1 : -1);
+    if (config.sortCards) {
+      return [deck.sortedCardAt(nextIndex), nextIndex];
+    }
+    return [deck.cardAt(nextIndex), nextIndex];
+  };
+
+  const selectCard = (card: Card, at: number) => {
+    if (config.showCardDetail) {
+      selectedCard.value = {
+        color: card.color,
+        type: card.type,
+        index: at
+      };
+    } else {
+      playCard(card);
+    }
+  };
+
+  const playCard = async (card: Card) => {
+    deck.playCard(card);
+    if (card.color === CardColor.black) {
+      const selectedColor = await useModalResponse(InGameModal.ColorPicker);
+      if (!selectedColor) return;
+      card.color = selectedColor;
+    }
+    if (config.sortCards) {
+      cards.value = deck.sorted;
+      return;
+    }
+    cards.value = deck.cards;
+  };
+
+  return {
+    hasNext,
+    getNext,
+    selectCard,
+    playCard,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
-  }
+  };
 });
