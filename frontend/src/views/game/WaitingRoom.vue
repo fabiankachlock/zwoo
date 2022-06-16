@@ -7,16 +7,10 @@
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost">
             <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">
-              <router-link to="/game/play">
-                <!-- TODO: just temp -->
-                {{ t('wait.start') }}
-              </router-link>
+              {{ t('wait.start') }}
             </button>
-            <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.stop') }}</button>
           </template>
-          <template v-if="!isHost">
-            <button @click="leave()" class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
-          </template>
+          <button @click="leave()" class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
         </div>
       </div>
     </header>
