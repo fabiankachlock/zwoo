@@ -30,7 +30,9 @@
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
           <ChatWidget />
           <RulesWidget />
-          <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
+          <!--
+            <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
+          -->
         </div>
       </div>
     </main>
