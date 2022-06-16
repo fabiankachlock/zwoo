@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-8 overflow-hidden">
-    <div class="overflow-x-scroll flex flex-row flex-nowrap items-center h-full">
+  <div class="w-full overflow-hidden">
+    <div class="opponents overflow-x-scroll flex flex-row flex-nowrap items-center h-12">
       <Opponent
         v-for="player in players"
         :key="player.name"
@@ -26,3 +26,9 @@ const players = computed(() => game.players);
 const activePlayer = computed(() => game.activePlayer);
 const mutedState = computed(() => chat.muted);
 </script>
+
+<style>
+.opponents::-webkit-scrollbar {
+  height: 0.4rem !important;
+}
+</style>
