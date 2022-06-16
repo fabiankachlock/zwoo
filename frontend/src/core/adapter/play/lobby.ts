@@ -16,6 +16,7 @@ import { arrayDiff, uniqueBy } from '@/core/services/utils';
 import { I18nInstance } from '@/i18n';
 import { useAuth } from '../auth';
 import { useGameConfig } from '../game';
+import router from '@/router';
 
 export type LobbyPlayer = {
   id: string;
@@ -31,7 +32,8 @@ const lobbyWatcher = new MonolithicEventWatcher(
   ZRPOPCode.ListAllPlayers,
   ZRPOPCode.NewHost,
   ZRPOPCode.PlayerChangedRole,
-  ZRPOPCode.PromoteToHost
+  ZRPOPCode.PromoteToHost,
+  ZRPOPCode.GameStarted
 );
 
 export const useLobbyStore = defineStore('game-lobby', () => {
@@ -71,6 +73,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     } else if (msg.code === ZRPOPCode.PromoteToHost) {
       gameHost.value = auth.username;
       gameConfig.changeRole(ZRPRole.Host);
+    } else if (msg.code == ZRPOPCode.GameStarted) {
+      router.push('/game/play');
     }
   };
 
