@@ -201,7 +201,10 @@
     }
   },
   "ingame": {
-    "endTurn": "End turn"
+    "endTurn": "End turn",
+    "options": "Options",
+    "actions": "Actions",
+    "leave": "Leave Game"
   },
   "recaptcha": {
     "title": "I'm not a robot",

@@ -201,7 +201,10 @@
     }
   },
   "ingame": {
-    "endTurn": "Zug beenden"
+    "endTurn": "Zug beenden",
+    "options": "Optionen",
+    "actions": "Aktionen",
+    "leave": "Spiel Verlassen"
   },
   "recaptcha": {
     "title": "Ich bin kein Roboter",
