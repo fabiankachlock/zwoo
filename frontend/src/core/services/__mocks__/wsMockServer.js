@@ -142,9 +142,14 @@ const exampleMessages = {
   [313]: {
     players: [
       {
-        username: 'test',
-        cards: 2,
+        username: 'test1',
+        cards: 4,
         isActivePlayer: true
+      },
+      {
+        username: 'test2',
+        cards: 5,
+        isActivePlayer: false
       }
     ]
   },

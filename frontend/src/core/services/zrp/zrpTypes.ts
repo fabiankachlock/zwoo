@@ -50,7 +50,7 @@ export enum ZRPOPCode {
   RemoveCard = 307, // receiver
   StateUpdate = 308, // receiver
   RequestHand = 310, //sender
-  GetHand = 311, //receivers
+  GetHand = 311, //receiver
   RequestPlayerCardAmount = 312, // sender
   GetPlayerCardAmount = 313, // receiver
   RequestPileTop = 314, // sender

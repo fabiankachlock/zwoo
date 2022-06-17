@@ -80,6 +80,7 @@ import { Card as CardTyping } from '@/core/services/game/card';
 import Card from './Card.vue';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Key, useKeyPress } from '@/composables/KeyPress';
+import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 
 enum CardState {
   allowed,
@@ -95,11 +96,11 @@ const gameState = useGameState();
 const selectedCard = computed(() => deckState.selectedCard);
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const displayCard = ref<CardTyping>(selectedCard.value!);
-const _targetCardOverride = ref<CardTyping | undefined>(undefined);
-const targetCard = computed<CardTyping>({
+const _targetCardOverride = ref<CardTyping | CardDescriptor | undefined>(undefined);
+const targetCard = computed<CardTyping | CardDescriptor>({
   get() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return _targetCardOverride.value ?? gameState.mainCard!;
+    return _targetCardOverride.value ?? gameState.topCard!;
   },
   set(newValue) {
     _targetCardOverride.value = newValue;

@@ -23,7 +23,7 @@ const game = useGameState();
 const chat = useChatStore();
 
 const players = computed(() => game.players);
-const activePlayer = computed(() => game.activePlayer);
+const activePlayer = computed(() => game.activePlayerName);
 const mutedState = computed(() => chat.muted);
 </script>
 
