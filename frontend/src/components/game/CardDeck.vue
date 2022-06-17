@@ -28,7 +28,6 @@ import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Card as CardTyping } from '@/core/services/game/card';
 import Card from './Card.vue';
-import { Random } from '@/core/services/helper/Random';
 const CARD_ASPECT_RATIO = 420 / 720;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
@@ -52,15 +51,6 @@ const dimensions = reactive({
 
 // register resize events
 onMounted(() => {
-  deckStore.setState(
-    (() => {
-      const cards: CardTyping[] = [];
-      for (let i = 0; i < 5; i++) {
-        cards.push(Random.card());
-      }
-      return cards;
-    })()
-  );
   window.addEventListener('resize', onResize);
   onResize();
 });

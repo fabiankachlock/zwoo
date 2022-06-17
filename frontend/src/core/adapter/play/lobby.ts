@@ -209,9 +209,12 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const leaveSelf = () => {
-    dispatchEvent(ZRPOPCode.LeaveGame, {});
     gameConfig.leave();
     router.push('/available-games');
+  };
+
+  const startGame = () => {
+    dispatchEvent(ZRPOPCode.StartGame, {});
   };
 
   lobbyWatcher.onMessage(_receiveMessage);
@@ -227,6 +230,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     promotePlayer,
     changeToSpectator,
     changeToPlayer,
+    startGame,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };

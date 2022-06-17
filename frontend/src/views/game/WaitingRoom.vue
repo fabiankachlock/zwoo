@@ -6,7 +6,7 @@
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost">
-            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition">
+            <button @click="startGame()" class="tc-main-dark bg-primary hover:bg-primary-dark transition">
               {{ t('wait.start') }}
             </button>
           </template>
@@ -56,6 +56,10 @@ const { isHost } = useIsHost();
 
 const leave = () => {
   lobby.leave();
+};
+
+const startGame = () => {
+  lobby.startGame();
 };
 </script>
 

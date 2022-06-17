@@ -1,3 +1,4 @@
+import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { defineStore } from 'pinia';
 import { Backend, Endpoint } from '../services/api/apiConfig';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
@@ -65,6 +66,7 @@ export const useGameConfig = defineStore('game-config', {
     },
     leave(): void {
       if (this.inActiveGame) {
+        useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
         this.$patch({
           inActiveGame: false,
