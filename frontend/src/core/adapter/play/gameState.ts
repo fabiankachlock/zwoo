@@ -48,7 +48,7 @@ export const useGameState = defineStore('game-state', () => {
     } else if (msg.code === ZRPOPCode.StateUpdate) {
       updateGame(msg.data);
     } else if (msg.code == ZRPOPCode.PlayerWon) {
-      router.push('/game/summary');
+      router.replace('/game/summary');
     }
   };
 

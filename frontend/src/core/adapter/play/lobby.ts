@@ -74,7 +74,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
       gameHost.value = auth.username;
       gameConfig.changeRole(ZRPRole.Host);
     } else if (msg.code == ZRPOPCode.GameStarted) {
-      router.push('/game/play');
+      router.replace('/game/play');
     }
   };
 
@@ -210,7 +210,6 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const leaveSelf = () => {
     gameConfig.leave();
-    router.push('/available-games');
   };
 
   const startGame = () => {

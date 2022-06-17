@@ -1,4 +1,5 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
+import router from '@/router';
 import { defineStore } from 'pinia';
 import { Backend, Endpoint } from '../services/api/apiConfig';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
@@ -75,6 +76,7 @@ export const useGameConfig = defineStore('game-config', {
           role: undefined,
           _connection: undefined
         });
+        router.replace('/available-games');
       }
     },
     async _initGameModules(): Promise<void> {
