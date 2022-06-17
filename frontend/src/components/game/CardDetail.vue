@@ -191,7 +191,6 @@ const handlePlayCard = () => {
   if (!isPlayingCard.value) {
     isPlayingCard.value = true;
     setTimeout(() => {
-      // TODO: just temp - is it?
       targetCard.value = displayCard.value;
       setTimeout(() => {
         deckState.playCard(displayCard.value);

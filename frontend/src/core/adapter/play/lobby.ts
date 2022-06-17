@@ -209,7 +209,6 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const leaveSelf = () => {
-    dispatchEvent(ZRPOPCode.LeaveGame, {});
     gameConfig.leave();
     router.push('/available-games');
   };

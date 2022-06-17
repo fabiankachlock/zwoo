@@ -68,7 +68,7 @@ const toggleMenu = () => {
 };
 
 const handleLeave = () => {
-  // TODO: Leave Games
+  game.leave();
 };
 </script>
 
