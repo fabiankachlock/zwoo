@@ -32,7 +32,7 @@ Game::Game( uint32_t id )
     {
         std::vector<spdlog::sink_ptr> log_sinks;
 
-        log = std::make_shared<spdlog::logger>( "Game", begin( log_sinks ),
+        log = std::make_shared<spdlog::logger>( fmt::format("Game {}", id), begin( log_sinks ),
                                                 end( log_sinks ) );
 
         spdlog::register_logger( log );

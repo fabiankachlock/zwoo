@@ -20,6 +20,7 @@
 
 struct s_Game
 {
+    std::string name;
     //                   puid  ,  role
     std::unordered_map<uint32_t, uint8_t>
         player; // Only Players who can join not all players
@@ -27,8 +28,6 @@ struct s_Game
     std::string password;
     bool is_private;
 };
-
-uint32_t createGame( ) { return 1; }
 
 class GameManagerController : public oatpp::web::server::api::ApiController
 {
@@ -109,7 +108,8 @@ class GameManagerController : public oatpp::web::server::api::ApiController
             {
                 guid = game_manager->createGame( );
                 m_logger_backend->log->info( "New Game Created!" );
-                s_Game g = { { { usr->puid, 1 } },
+                s_Game g = { data->name.getValue( "" ),
+                             { { usr->puid, 1 } },
                              data->password.getValue( "" ),
                              data->use_password };
                 games.insert( { guid, g } );
@@ -195,9 +195,7 @@ class GameManagerController : public oatpp::web::server::api::ApiController
         if ( usr )
         {
             m_logger_backend->log->info( "Player joined game" );
-            uint32_t guid =
-                createGame( ); // Create Game | TODO: use GameManager
-                               // when finished (with player data)
+            uint32_t guid = 1; // TODO: find player using game_manger
             auto res = oatpp::websocket::Handshaker::serversideHandshake(
                 request->getHeaders( ), websocketConnectionHandler );
             auto parameters = std::make_shared<
@@ -237,6 +235,34 @@ class GameManagerController : public oatpp::web::server::api::ApiController
         info->summary = "An Endpoint to get the top 100.";
 
         info->addResponse<Object<StatusDto>>( Status::CODE_200,
+                                              "application/json" );
+        info->addResponse<Object<StatusDto>>( Status::CODE_404,
+                                              "application/json" );
+        info->addResponse<Object<StatusDto>>( Status::CODE_500,
+                                              "application/json" );
+    }
+
+    ENDPOINT( "GET", "game/games/", get_games )
+    {
+        m_logger_backend->log->info( "/GET Games" );
+
+        auto ret = GetGameDTO::createShared();
+        for (auto& [k, v]: games)
+        {
+            auto game = oatpp::Object<GameDTO>::createShared();
+            game->name = v.name;
+            game->id = k;
+            game->isPublic = !v.is_private;
+            game->playerCount = v.player.size();
+            ret->games->push_back(game);
+        }
+        return createDtoResponse(Status::CODE_200, ret);
+    }
+    ENDPOINT_INFO( get_games )
+    {
+        info->summary = "An Endpoint to get all games.";
+
+        info->addResponse<Object<GetGameDTO>>( Status::CODE_200,
                                               "application/json" );
         info->addResponse<Object<StatusDto>>( Status::CODE_404,
                                               "application/json" );
