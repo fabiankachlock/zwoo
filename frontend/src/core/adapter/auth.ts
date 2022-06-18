@@ -13,9 +13,8 @@ export const useAuth = defineStore('auth', {
     return {
       isInitialized: false,
       isLoggedIn: false,
-      isAdmin: false,
       username: '',
-      userId: ''
+      wins: -1
     };
   },
   actions: {
@@ -49,7 +48,8 @@ export const useAuth = defineStore('auth', {
 
       this.$patch({
         username: '',
-        isLoggedIn: status.isLoggedIn
+        isLoggedIn: status.isLoggedIn,
+        wins: -1
       });
     },
     async createAccount(
@@ -82,6 +82,7 @@ export const useAuth = defineStore('auth', {
           username: status.username,
           isLoggedIn: status.isLoggedIn
         });
+        this.askStatus();
       } else {
         this.isLoggedIn = false;
         const [, error] = unwrapBackendError(status);
@@ -110,6 +111,7 @@ export const useAuth = defineStore('auth', {
         this.$patch({
           username: response.username,
           isLoggedIn: response.isLoggedIn,
+          wins: response.wins ?? -1,
           isInitialized: true
         });
       } else {

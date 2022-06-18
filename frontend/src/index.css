@@ -142,3 +142,23 @@ html {
 .padding-menu {
 	padding-top: 2.5rem;
 }
+
+/* width */
+::-webkit-scrollbar {
+	width: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	@apply bg-_bg-light dark:bg-_bg-dark;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	@apply bg-_bg-light-dark dark:bg-_bg-dark-dark rounded-sm;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	@apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest;
+}

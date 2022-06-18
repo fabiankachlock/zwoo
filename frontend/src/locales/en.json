@@ -146,6 +146,8 @@
       "146": "You are already in a game."
     },
     "zrp": {
+      "400": "An Error occurred",
+      "420": "Missing Authorization",
       "900": "Error occurred",
       "901": "Connection error",
       "911": "Disconnected",
@@ -157,7 +159,6 @@
   "version": "Version",
   "wait": {
     "start": "Start",
-    "stop": "Stop",
     "leave": "Leave",
     "players": "Players",
     "spectators": "Spectators",
@@ -179,13 +180,31 @@
     }
   },
   "rules": {
-    "test-1": {
-      "title": "Test Rule",
-      "info": "Test rule description - optional extrem long text..."
+    "widget": {
+      "numberPlaceholder": "Number"
+    },
+    "maxPlayers": {
+      "title": "Amount of Players",
+      "info": "Change maximum amount of players for your game."
+    },
+    "maxDraw": {
+      "title": "Max. Draw Amount",
+      "info": "Choose the maximum amount of cards a player can draw."
+    },
+    "maxCardsOnHand": {
+      "title": "Max. Cards On Hand",
+      "info": "Choose the maximum amount of cards a player is allowed to have on their hand."
+    },
+    "initialCards": {
+      "title": "Amount Of Cards",
+      "info": "Choose the amount of cards each player is supplied with at the start of a game.."
     }
   },
   "ingame": {
-    "endTurn": "End turn"
+    "endTurn": "End turn",
+    "options": "Options",
+    "actions": "Actions",
+    "leave": "Leave Game"
   },
   "recaptcha": {
     "title": "I'm not a robot",
@@ -276,6 +295,10 @@
     "kickPlayer": {
       "title": "Kick {0}?",
       "body": "Are you sure, that you want to kick {0}?"
+    },
+    "selectColor": {
+      "title": "Choose a color",
+      "info": "Choose the color, that should be played with from now on."
     }
   },
   "reassureDialog": {
@@ -296,6 +319,7 @@
     "title": "Logs",
     "console": "Console",
     "store": "Store (IndexedDB)",
+    "logrush": "LogRush (external service)",
     "storedCount": "no logs stored | 1 entry | {count} entries",
     "clearStore": "Clear Store",
     "reloadLogs": "Reload Logs",
@@ -315,5 +339,11 @@
     "darkMode": "Toggle UI Mode",
     "fullScreen": "Toggle full screen",
     "quickMenu": "Toggle quick menu"
+  },
+  "wrongVersion": {
+    "title": "Wrong Version",
+    "info": "You need to upgrade zwoo to the latest version in order to play games.",
+    "reload": "Reload page",
+    "toSettings": "Go to settings"
   }
 }

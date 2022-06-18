@@ -19,7 +19,9 @@ export enum Endpoint {
   DeleteAccount = 'auth/delete',
   JoinGame = 'game/join',
   Websocket = 'game/join/:id:',
-  LeaderBoard = 'game/leaderboard'
+  LeaderBoard = 'game/leaderboard',
+  LeaderBoardPosition = 'game/leaderboard/position',
+  Version = 'version'
 }
 
 export class Backend {

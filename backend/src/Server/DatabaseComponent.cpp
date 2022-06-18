@@ -7,9 +7,7 @@
 #include <chrono>
 #include <mongocxx/client.hpp>
 #include <mongocxx/collection.hpp>
-#include <mongocxx/exception/operation_exception.hpp>
 #include <mongocxx/options/find.hpp>
-#include <mongocxx/options/insert.hpp>
 
 std::string Database::generateSID( )
 {
@@ -311,4 +309,31 @@ oatpp::Object<LeaderBoardDTO> Database::getLeaderBoard( )
     }
     else
         return LeaderBoardDTO::createShared( );
+}
+uint32_t Database::getPlayerLeaderboardPosition( uint64_t puid )
+{
+    auto conn = m_pool->acquire( );
+    auto collection = ( *conn )[ m_databaseName ][ m_collectionName ];
+
+    auto usr = getUser(puid);
+
+    if (usr)
+    {
+        using namespace bsoncxx::builder::basic;
+
+        mongocxx::pipeline p{ };
+        p.match( make_document( kvp(
+            "wins", make_document( kvp(
+                        "$gte", usr->wins ) ) ) ) );
+        p.group( make_document(
+            kvp( "_id", 0 ),
+            kvp( "pos", make_document( kvp( "$sum", 1 ) ) ) ) );
+        auto res = collection.aggregate( p );
+        for (auto&& doc : res)
+        {
+            return doc["pos"].get_int32().value;
+            break;
+        }
+    }
+    return 0;
 }

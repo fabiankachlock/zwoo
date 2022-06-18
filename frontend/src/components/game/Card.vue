@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
+import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { Card } from '@/core/services/game/card';
 import { computed, defineProps } from 'vue';
@@ -29,10 +30,11 @@ const props = defineProps<{
       };
   imageStyle?: string;
   imageClass?: string;
+  overrideTheme?: CardTheme;
 }>();
 
 const cardTheme = useCardTheme();
-const cardData = computed(() => cardTheme.theme.getCard(props.card));
+const cardData = computed(() => (props.overrideTheme ?? cardTheme.theme).getCard(props.card));
 </script>
 <style>
 .zwoo-card:not(:first-of-type) {

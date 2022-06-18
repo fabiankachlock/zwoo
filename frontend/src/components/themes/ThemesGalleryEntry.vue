@@ -46,7 +46,7 @@
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
     <div class="relative px-2 flex flex-row w-full max-w-full overflow-x-auto">
       <div v-for="card in theme.previews" :key="card" class="card-preview max-h-full w-full mr-2">
-        <Card :card="card" />
+        <Card :card="card" :override-theme="(previewTheme as CardTheme)" />
       </div>
     </div>
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
@@ -83,8 +83,13 @@ const previewTheme = ref<CardTheme | undefined>(undefined);
 
 onMounted(async () => {
   const variant = props.theme.variants.includes(CARD_THEME_VARIANT_AUTO) ? colorMode.value : props.theme.variants[0] ?? '';
-  previewVariant.value = variant;
-  await loadTheme(variant === CARD_THEME_VARIANT_AUTO ? colorMode.value : variant);
+  if (props.isSelected) {
+    previewVariant.value = props.selectedVariant !== '' ? props.selectedVariant : variant;
+    await loadTheme(previewVariant.value);
+  } else {
+    previewVariant.value = variant;
+    await loadTheme(variant);
+  }
 });
 
 watch([previewVariant, colorMode], ([variant, colorMode]) => loadTheme(variant === CARD_THEME_VARIANT_AUTO ? colorMode : variant));

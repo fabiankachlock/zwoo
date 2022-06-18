@@ -1,4 +1,4 @@
-import { Card } from './card';
+import { Card, CardType } from './card';
 import { CardSorter } from '../cards/sorting/CardSorter';
 
 export class CardDeck {
@@ -20,8 +20,12 @@ export class CardDeck {
     this.sortedContent = this.sorter.sort(this.content);
   }
 
-  // TODO: colorChangeCards!!!
-  private cardMatcher = (base: Card) => (card: Card) => base.color === card.color || base.type === card.type;
+  private cardMatcher = (base: Card) => (card: Card) => {
+    if ((base.type === CardType.wild && card.type === CardType.wild) || (base.type === CardType.wild_four && card.type === CardType.wild_four)) {
+      return true;
+    }
+    return base.color === card.color || base.type === card.type;
+  };
 
   hasCard = (card: Card): boolean => {
     return this.content.findIndex(this.cardMatcher(card)) !== undefined;

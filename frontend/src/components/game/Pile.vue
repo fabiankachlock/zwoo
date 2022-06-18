@@ -25,7 +25,6 @@
 <script setup lang="ts">
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Random } from '@/core/services/helper/Random';
 import { ref } from '@vue/reactivity';
 import Card from './Card.vue';
 
@@ -36,8 +35,8 @@ const drawCard = () => {
   if (!isAnimating.value) {
     isAnimating.value = true;
     setTimeout(() => {
-      deckState.addCard(Random.card());
-    }, 500);
+      deckState.drawCard();
+    }, 400);
     setTimeout(() => {
       isAnimating.value = false;
     }, 850);
