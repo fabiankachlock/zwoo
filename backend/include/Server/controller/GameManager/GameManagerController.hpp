@@ -12,8 +12,8 @@
 #include "oatpp/web/server/api/ApiController.hpp"
 
 #include <boost/beast/core/detail/base64.hpp>
-#include <string>
 #include <functional>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -53,9 +53,8 @@ class GameManagerController : public oatpp::web::server::api::ApiController
         }
     }
 
-    std::function<void(uint32_t guid)> remove_game = [&] (uint32_t guid) {
-        games.erase(games.find(guid));
-    };
+    std::function<void( uint32_t guid )> remove_game = [ & ]( uint32_t guid )
+    { games.erase( games.find( guid ) ); };
 
   public:
     GameManagerController( const std::shared_ptr<ObjectMapper> &objectMapper )
@@ -251,24 +250,24 @@ class GameManagerController : public oatpp::web::server::api::ApiController
     {
         m_logger_backend->log->info( "/GET Games" );
 
-        auto ret = GetGameDTO::createShared();
-        for (auto& [k, v]: games)
+        auto ret = GetGameDTO::createShared( );
+        for ( auto &[ k, v ] : games )
         {
-            auto game = oatpp::Object<GameDTO>::createShared();
+            auto game = oatpp::Object<GameDTO>::createShared( );
             game->name = v.name;
             game->id = k;
             game->isPublic = !v.is_private;
-            game->playerCount = game_manager->getGame(k)->getPlayerCount();
-            ret->games->push_back(game);
+            game->playerCount = game_manager->getGame( k )->getPlayerCount( );
+            ret->games->push_back( game );
         }
-        return createDtoResponse(Status::CODE_200, ret);
+        return createDtoResponse( Status::CODE_200, ret );
     }
     ENDPOINT_INFO( get_games )
     {
         info->summary = "An Endpoint to get all games.";
 
         info->addResponse<Object<GetGameDTO>>( Status::CODE_200,
-                                              "application/json" );
+                                               "application/json" );
         info->addResponse<Object<StatusDto>>( Status::CODE_404,
                                               "application/json" );
         info->addResponse<Object<StatusDto>>( Status::CODE_500,
