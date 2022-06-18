@@ -201,7 +201,6 @@ class GameManagerController : public oatpp::web::server::api::ApiController
         if ( usr )
         {
             m_logger_backend->log->info( "Player joined game" );
-            uint32_t guid = 1; // TODO: find player using game_manger
             auto res = oatpp::websocket::Handshaker::serversideHandshake(
                 request->getHeaders( ), websocketConnectionHandler );
             auto parameters = std::make_shared<
@@ -259,7 +258,7 @@ class GameManagerController : public oatpp::web::server::api::ApiController
             game->name = v.name;
             game->id = k;
             game->isPublic = !v.is_private;
-            game->playerCount = v.player.size();
+            game->playerCount = game_manager->getGame(k)->getPlayerCount();
             ret->games->push_back(game);
         }
         return createDtoResponse(Status::CODE_200, ret);
