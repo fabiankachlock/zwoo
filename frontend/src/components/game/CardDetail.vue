@@ -80,6 +80,7 @@ import { Card as CardTyping } from '@/core/services/game/card';
 import Card from './Card.vue';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Key, useKeyPress } from '@/composables/KeyPress';
+import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 
 enum CardState {
   allowed,
@@ -95,7 +96,16 @@ const gameState = useGameState();
 const selectedCard = computed(() => deckState.selectedCard);
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const displayCard = ref<CardTyping>(selectedCard.value!);
-const targetCard = computed(() => gameState.mainCard);
+const _targetCardOverride = ref<CardTyping | CardDescriptor | undefined>(undefined);
+const targetCard = computed<CardTyping | CardDescriptor>({
+  get() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return _targetCardOverride.value ?? gameState.topCard!;
+  },
+  set(newValue) {
+    _targetCardOverride.value = newValue;
+  }
+});
 const nextBefore = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const nextAfter = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const isAnimatingFromLeft = ref<boolean>(false);
@@ -181,11 +191,9 @@ const handlePlayCard = () => {
   if (!isPlayingCard.value) {
     isPlayingCard.value = true;
     setTimeout(() => {
-      // TODO: just temp
-      gameState.$patch({
-        mainCard: selectedCard.value
-      });
+      targetCard.value = displayCard.value;
       setTimeout(() => {
+        deckState.playCard(displayCard.value);
         closeDetail();
       }, ANIMATION_DURATION);
       isPlayingCard.value = false;
@@ -207,8 +215,17 @@ onUnmounted(() => {
 </script>
 
 <style>
+/* slightly transparent fallback */
 .backdrop {
-  backdrop-filter: blur(12px);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* if backdrop support: very transparent and blurred */
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  .backdrop {
+    background-color: transparent;
+    backdrop-filter: blur(8px);
+  }
 }
 
 .card-to-play {

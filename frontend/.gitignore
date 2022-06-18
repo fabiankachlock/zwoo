@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-/dist
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
@@ -31,7 +30,9 @@ pnpm-debug.log*
 .env.private
 coverage
 
+/dist
 /dist-preview
+/dist-tmp
 /assets/cards/dist
 /public/assets/**/*
 !/public/assets/meta.json

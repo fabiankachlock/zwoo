@@ -60,6 +60,8 @@ class Database
                              std::string field, bool value );
     bool verifieAndUseBetaCode( std::string beta_code );
 
+    uint32_t getPlayerLeaderboardPosition(uint64_t puid);
+
     oatpp::Object<LeaderBoardDTO> getLeaderBoard( );
 };
 

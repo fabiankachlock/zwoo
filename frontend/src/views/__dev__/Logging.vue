@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 bg-main overflow-y-scroll">
+  <div class="fixed inset-0 bg-main overflow-y-auto">
     <div class="w-full px-4 py-2">
       <h1 class="text-2xl tc-main mb-4">{{ t('logging.title') }}</h1>
       <div class="flex justify-start items-center flex-wrap gap-6 mb-4">
@@ -11,6 +11,10 @@
           <div class="flex flex-nowrap items-center justify-between w-full">
             <p class="tc-main mr-2">{{ t('logging.store') }}</p>
             <RuleSwitch v-model="isStoreLogging" />
+          </div>
+          <div class="flex flex-nowrap items-center justify-between w-full">
+            <p class="tc-main mr-2">{{ t('logging.logrush') }}</p>
+            <RuleSwitch v-model="isLogrushLogging" />
           </div>
         </div>
         <div class="flex flex-col flex-nowrap justify-center items-center gap-2">
@@ -56,14 +60,15 @@ import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
 import { LogStore } from '@/core/services/logging/logImport';
 import { LogEntry } from '@/core/services/logging/logTypes';
-import RuleSwitch from '@/components/waiting/RuleSwitch.vue';
+import RuleSwitch from '@/components/waiting/rules/contentTypes/RuleSwitch.vue';
 import { Icon } from '@iconify/vue';
 
 const { t } = useI18n();
 let storedLogs = ref<LogEntry[]>([]);
-const stored = localStorage.getItem('zwoo:logging');
-const isStoreLogging = ref(stored === 'store' || stored === 'both');
-const isConsoleLogging = ref(stored === 'console' || stored === 'both');
+const stored = localStorage.getItem('zwoo:logging') ?? '';
+const isStoreLogging = ref(stored.includes('s'));
+const isConsoleLogging = ref(stored.includes('c'));
+const isLogrushLogging = ref(stored.includes('l'));
 
 onMounted(async () => {
   await reload();
@@ -78,15 +83,7 @@ const clear = () => {
   reload();
 };
 
-watch([isStoreLogging, isConsoleLogging], ([useStore, useConsole]) => {
-  if (useStore && useConsole) {
-    localStorage.setItem('zwoo:logging', 'both');
-  } else if (useStore) {
-    localStorage.setItem('zwoo:logging', 'store');
-  } else if (useConsole) {
-    localStorage.setItem('zwoo:logging', 'console');
-  } else {
-    localStorage.removeItem('zwoo:logging');
-  }
+watch([isStoreLogging, isConsoleLogging, isLogrushLogging], ([useStore, useConsole, useLogrush]) => {
+  localStorage.setItem('zwoo:logging', `${useStore ? 's' : ''}${useConsole ? 'c' : ''}${useLogrush ? 'l' : ''}`);
 });
 </script>

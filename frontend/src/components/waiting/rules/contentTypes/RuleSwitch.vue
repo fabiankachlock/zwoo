@@ -23,6 +23,7 @@ const { t } = useI18n();
 
 const props = defineProps<{
   modelValue: boolean;
+  readonly?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -31,6 +32,7 @@ const emit = defineEmits<{
 }>();
 
 const toggle = () => {
+  if (props.readonly) return;
   emit('update:modelValue', !props.modelValue);
   emit('toggle', !props.modelValue);
 };
