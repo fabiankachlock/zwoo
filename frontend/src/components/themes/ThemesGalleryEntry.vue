@@ -37,7 +37,7 @@
             'bc-primary hover:bc-primary': previewVariant === variant,
             'bc-secondary hover:bc-primary': selectedVariant === variant
           }"
-          class="tc-main text-xs inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer"
+          class="tc-main text-xs inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer select-none"
         >
           {{ t(`cardThemes.variant.${variant}`) }}
         </span>
