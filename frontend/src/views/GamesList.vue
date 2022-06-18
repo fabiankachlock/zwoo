@@ -26,7 +26,7 @@
           <div
             v-for="game of games"
             :key="game.id"
-            class="item my-1 rounded-xl border bc-darkest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-pointer"
+            class="item my-1 rounded-xl border bc-darkest mouse:hover:bg-darkest mouse:hover:bc-primary bg-dark px-3 py-2 cursor-pointer"
           >
             <router-link :to="'/join/' + game.id">
               <div class="flex flex-row justify-between flex-wrap items-center">

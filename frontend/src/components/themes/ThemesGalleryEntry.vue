@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-nowrap bg-dark rounded-lg w-full border-2 bc-darkest hover:bc-primary py-2 relative mb-2 overflow-hidden">
+  <div class="flex flex-col flex-nowrap bg-dark rounded-lg w-full border-2 bc-darkest mouse:hover:bc-primary py-2 relative mb-2 overflow-hidden">
     <div class="flex flex-row flex-wrap justify-between items-center mb-1">
       <h3 class="tc-main-dark text-xl mx-2">
         {{ props.theme.name }}
