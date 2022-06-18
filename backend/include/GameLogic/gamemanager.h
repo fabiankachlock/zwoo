@@ -39,4 +39,6 @@ class GameManager
     std::shared_ptr<Game> getGame( uint32_t _GID );
 
     std::shared_ptr<Player> getPlayer( uint32_t _GID, uint32_t _PUID );
+
+    std::function<void( uint32_t )> after_game_removed;
 };
