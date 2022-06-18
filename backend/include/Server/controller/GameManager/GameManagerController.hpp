@@ -13,6 +13,7 @@
 
 #include <boost/beast/core/detail/base64.hpp>
 #include <string>
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -52,11 +53,16 @@ class GameManagerController : public oatpp::web::server::api::ApiController
         }
     }
 
+    std::function<void(uint32_t guid)> remove_game = [&] (uint32_t guid) {
+        games.erase(games.find(guid));
+    };
+
   public:
     GameManagerController( const std::shared_ptr<ObjectMapper> &objectMapper )
         : oatpp::web::server::api::ApiController( objectMapper )
     {
         setDefaultAuthorizationHandler( authHandler );
+        game_manager->after_game_removed = remove_game;
     }
 
     static std::shared_ptr<GameManagerController> createShared(
