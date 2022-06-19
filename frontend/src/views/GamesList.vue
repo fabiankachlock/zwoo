@@ -92,25 +92,27 @@
 </template>
 
 <script setup lang="ts">
-import { GameManagementService, GamesList } from '@/core/services/api/GameManagement';
+import { GamesList } from '@/core/services/api/GameManagement';
 import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
 import QRCodeReader from '@/components/misc/QRCodeReader.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
+import { useGameConfig } from '@/core/adapter/game';
 
 const { t } = useI18n();
+const gameConfig = useGameConfig();
 
 const games = ref<GamesList>([]);
 const refreshing = ref(false);
 const scanDialogOpen = ref(false);
 
 onMounted(async () => {
-  games.value = await GameManagementService.listAll();
+  games.value = await gameConfig.listGames();
 });
 
 const refresh = async () => {
-  games.value = await GameManagementService.listAll();
+  games.value = await gameConfig.listGames();
   refreshing.value = true;
   setTimeout(() => {
     refreshing.value = false;
