@@ -53,6 +53,7 @@ export class AsyncMessageQueue {
       child.awaiter.callback(result);
       this.queue.shift();
       this.working = false;
+      this.tryExecute();
     }
   }
 }

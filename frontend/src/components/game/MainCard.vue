@@ -13,7 +13,7 @@ import { useGameState } from '@/core/adapter/play/gameState';
 import { computed } from 'vue';
 import Card from './Card.vue';
 const gameState = useGameState();
-const mainCard = computed(() => gameState.mainCard);
+const mainCard = computed(() => gameState.topCard);
 </script>
 
 <style scoped>

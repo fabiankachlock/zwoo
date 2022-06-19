@@ -1,6 +1,8 @@
 #ifndef _LOGRUSHLOGGER_HPP_
 #define _LOGRUSHLOGGER_HPP_
 
+#include <mutex>
+
 #include <logrush/logrush.h>
 
 #include <fmt/color.h>

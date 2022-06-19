@@ -1,6 +1,15 @@
 #ifndef _SERVER_COMPONENT_HPP_
 #define _SERVER_COMPONENT_HPP_
 
+#include "oatpp-websocket/ConnectionHandler.hpp"
+#include "oatpp/core/base/CommandLineArguments.hpp"
+#include "oatpp/core/macro/component.hpp"
+#include "oatpp/network/tcp/server/ConnectionProvider.hpp"
+#include "oatpp/parser/json/mapping/ObjectMapper.hpp"
+#include "oatpp/web/server/HttpConnectionHandler.hpp"
+#include "oatpp/web/server/HttpRouter.hpp"
+
+#include "GameLogic/gamemanager.h"
 #include "Server/AuthorizationHandler.hpp"
 #include "Server/DatabaseComponent.hpp"
 #include "Server/ErrorHandler.hpp"
@@ -10,13 +19,6 @@
 #include "Server/logger/logger.h"
 #include "controller/GameManager/websocket/ZRPConnector.hpp"
 #include "controller/GameManager/websocket/ZwooInstanceListener.hpp"
-#include "oatpp-websocket/ConnectionHandler.hpp"
-#include "oatpp/core/base/CommandLineArguments.hpp"
-#include "oatpp/core/macro/component.hpp"
-#include "oatpp/network/tcp/server/ConnectionProvider.hpp"
-#include "oatpp/parser/json/mapping/ObjectMapper.hpp"
-#include "oatpp/web/server/HttpConnectionHandler.hpp"
-#include "oatpp/web/server/HttpRouter.hpp"
 #include "utils/Queue.hpp"
 #include "zwoo.h"
 #ifdef BUILD_SWAGGER
@@ -97,6 +99,15 @@ class ServerComponent
           return ws_logger;
       }( ) );
 
+    OATPP_CREATE_COMPONENT( std::shared_ptr<GameManager>, game_manager )
+    (
+        [ this ]
+        {
+            auto gl_logger = std::make_shared<Logger>( );
+            gl_logger->init( "GML" );
+            return std::make_shared<GameManager>( gl_logger );
+        }( ) );
+
     OATPP_CREATE_COMPONENT( std::shared_ptr<Database>, database )
     (
         [ this ]
@@ -118,9 +129,11 @@ class ServerComponent
       {
           OATPP_COMPONENT( std::shared_ptr<Logger>, m_logger_websocket,
                            "Websocket" );
+          OATPP_COMPONENT( std::shared_ptr<GameManager>, gm );
+          OATPP_COMPONENT( std::shared_ptr<Database>, db );
           auto connectionHandler =
               oatpp::websocket::ConnectionHandler::createShared( );
-          auto zrpc = std::make_shared<ZRPConnector>( );
+          auto zrpc = std::make_shared<ZRPConnector>( gm, db );
           auto zil = std::make_shared<ZwooInstanceListener>( m_logger_websocket,
                                                              zrpc );
 
