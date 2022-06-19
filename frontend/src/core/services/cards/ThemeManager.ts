@@ -18,6 +18,10 @@ export class CardThemeManager {
   private constructor() {
     this.meta = {
       themes: [],
+      defaultTheme: {
+        name: '',
+        variant: ''
+      },
       variants: {},
       files: {
         previews: {}
@@ -55,6 +59,12 @@ export class CardThemeManager {
     }
 
     await this.waitForThemes();
+    if (!theme.name || !theme.variant) {
+      Logger.Theme.warn('no theme selected');
+      theme.name = this.meta.defaultTheme.name;
+      theme.variant = this.meta.defaultTheme.variant;
+    }
+
     const uri = this.meta.files[theme.name][theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
     const loadedTheme = new CardTheme(theme.name, theme.variant, config, this.meta.configs[theme.name]);

@@ -40,6 +40,7 @@ const BaseThemeConfig = {
       5: '#000'
     }
   },
+  isDefault: false, //optional
   overrides: {
     // optional
     cardFront: 'front',
@@ -302,8 +303,17 @@ async function searchThemeSources(themeConfig) {
  * @param {(typeof BaseThemeConfig)[]} themes list of all themes
  */
 async function createMetaFiles(themes) {
+  let defaultTheme = themes.find(t => t.isDefault);
+  if (!defaultTheme) {
+    console.warn('Invalid config: no default theme selected');
+    defaultTheme = themes[0];
+  }
   const data = {
     themes: themes.map(t => t.name),
+    defaultTheme: {
+      name: defaultTheme.name,
+      variant: defaultTheme.variants.includes(VARIANT_AUTO) ? VARIANT_AUTO : defaultTheme.variants[0]
+    },
     configs: combineToObject(
       themes.map(theme => ({
         [theme.name]: {

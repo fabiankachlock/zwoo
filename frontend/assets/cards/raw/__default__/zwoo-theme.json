@@ -1,5 +1,6 @@
 {
   "name": "__default__",
+  "isDefault": true,
   "isMultiLayer": true,
   "variants": ["dark", "light"],
   "colors": {
