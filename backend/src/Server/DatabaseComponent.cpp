@@ -3,6 +3,8 @@
 #include "Server/controller/error.h"
 #include "oatpp/core/data/stream/BufferStream.hpp"
 
+#include <bsoncxx/builder/stream/document.hpp>
+#include <bsoncxx/builder/stream/helpers.hpp>
 #include <bsoncxx/json.hpp>
 #include <chrono>
 #include <mongocxx/client.hpp>
@@ -315,25 +317,42 @@ uint32_t Database::getPlayerLeaderboardPosition( uint64_t puid )
     auto conn = m_pool->acquire( );
     auto collection = ( *conn )[ m_databaseName ][ m_collectionName ];
 
-    auto usr = getUser(puid);
+    auto usr = getUser( puid );
 
-    if (usr)
+    if ( usr )
     {
         using namespace bsoncxx::builder::basic;
 
         mongocxx::pipeline p{ };
-        p.match( make_document( kvp(
-            "wins", make_document( kvp(
-                        "$gte", usr->wins ) ) ) ) );
-        p.group( make_document(
-            kvp( "_id", 0 ),
-            kvp( "pos", make_document( kvp( "$sum", 1 ) ) ) ) );
+        p.match( make_document(
+            kvp( "wins", make_document( kvp( "$gte", usr->wins ) ) ) ) );
+        p.group(
+            make_document( kvp( "_id", 0 ),
+                           kvp( "pos", make_document( kvp( "$sum", 1 ) ) ) ) );
         auto res = collection.aggregate( p );
-        for (auto&& doc : res)
+        for ( auto &&doc : res )
         {
-            return doc["pos"].get_int32().value;
+            return doc[ "pos" ].get_int32( ).value;
             break;
         }
     }
     return 0;
+}
+uint32_t Database::incrementWins( uint64_t puid )
+{
+    auto conn = m_pool->acquire( );
+    auto collection = ( *conn )[ m_databaseName ][ m_collectionName ];
+
+    using bsoncxx::builder::stream::close_document;
+    using bsoncxx::builder::stream::document;
+    using bsoncxx::builder::stream::finalize;
+    using bsoncxx::builder::stream::open_document;
+
+    collection.update_one( document{ } << "_id" << open_document << "$eq"
+                                       << (long)puid << close_document
+                                       << finalize,
+                           document{ } << "$inc" << open_document << "wins" << 1
+                                       << close_document << finalize );
+
+    return getUser( puid )->wins;
 }

@@ -75,7 +75,7 @@ template <class T> class CyclingList
     auto for_each( std::function<void( std::size_t *, T )> exp ) -> void
     {
         Node<T> *node = m_first;
-        for ( std::size_t i = 0; i <= m_size; i++ )
+        for ( std::size_t i = 0; i < m_size; i++ )
         {
             exp( &i, node->value );
             node = node->next;

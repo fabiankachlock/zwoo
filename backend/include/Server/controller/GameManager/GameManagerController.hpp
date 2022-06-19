@@ -54,7 +54,11 @@ class GameManagerController : public oatpp::web::server::api::ApiController
     }
 
     std::function<void( uint32_t guid )> remove_game = [ & ]( uint32_t guid )
-    { games.erase( games.find( guid ) ); };
+    {
+        auto game = games.find( guid );
+        if ( game != games.end( ) )
+            games.erase( game );
+    };
 
   public:
     GameManagerController( const std::shared_ptr<ObjectMapper> &objectMapper )
@@ -273,13 +277,18 @@ class GameManagerController : public oatpp::web::server::api::ApiController
         info->addResponse<Object<StatusDto>>( Status::CODE_500,
                                               "application/json" );
     }
-                                               
+
     ENDPOINT( "GET", "game/leaderboard/position", position,
-              AUTHORIZATION( std::shared_ptr<UserAuthorizationObject>, usr ))
+              AUTHORIZATION( std::shared_ptr<UserAuthorizationObject>, usr ) )
     {
         m_logger_backend->log->info( "/GET leaderboard/position" );
-        m_database->getPlayerLeaderboardPosition(usr->puid);
-        return createResponse( Status::CODE_200, "{\"position\": " + std::to_string(m_database->getPlayerLeaderboardPosition(usr->puid)) + "}");
+        m_database->getPlayerLeaderboardPosition( usr->puid );
+        return createResponse(
+            Status::CODE_200,
+            "{\"position\": " +
+                std::to_string(
+                    m_database->getPlayerLeaderboardPosition( usr->puid ) ) +
+                "}" );
     }
     ENDPOINT_INFO( position )
     {

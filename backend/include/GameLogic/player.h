@@ -11,7 +11,6 @@ struct Card;
 class Player
 {
   private:
-    std::vector<std::shared_ptr<Card>> cards;
     const uint32_t ID;
     bool isEmpty; // Player has no cards
 
@@ -38,6 +37,10 @@ class Player
 
     void PRINTSTATS( );
 
+    std::vector<std::shared_ptr<Card>> cards;
+
+    std::function<void( uint32_t, Card )> card_added;
+    std::function<void( uint32_t, Card )> card_removed;
     // TODO: REMOVE AFTER BETA
     std::shared_ptr<spdlog::logger> log;
 };
