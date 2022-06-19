@@ -24,7 +24,7 @@ export class CardDeck {
     if ((base.type === CardType.wild && card.type === CardType.wild) || (base.type === CardType.wild_four && card.type === CardType.wild_four)) {
       return true;
     }
-    return base.color === card.color || base.type === card.type;
+    return base.color === card.color && base.type === card.type;
   };
 
   hasCard = (card: Card): boolean => {

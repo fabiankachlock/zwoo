@@ -1,12 +1,10 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { Card, CardColor } from '@/core/services/game/card';
+import { Card } from '@/core/services/game/card';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { CardDeck } from '../../services/game/deck';
 import { useConfig } from '../config';
-import { InGameModal } from './modal';
-import { useModalResponse } from './util/awaitModalResponse';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 const deckWatcher = new MonolithicEventWatcher(ZRPOPCode.GameStarted, ZRPOPCode.GetCard, ZRPOPCode.RemoveCard, ZRPOPCode.GetHand);
@@ -90,12 +88,6 @@ export const useGameCardDeck = defineStore('game-cards', () => {
   };
 
   const playCard = async (card: Card) => {
-    // TODO: wait for server
-    if (card.color === CardColor.black) {
-      const selectedColor = await useModalResponse(InGameModal.ColorPicker);
-      if (!selectedColor) return;
-      card.color = selectedColor;
-    }
     dispatchEvent(ZRPOPCode.PlaceCard, {
       type: card.color,
       symbol: card.type
