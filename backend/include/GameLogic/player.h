@@ -39,8 +39,8 @@ class Player
 
     std::vector<std::shared_ptr<Card>> cards;
 
-    std::function<void(uint32_t,Card)> card_added;
-    std::function<void(uint32_t,Card)> card_removed;
+    std::function<void( uint32_t, Card )> card_added;
+    std::function<void( uint32_t, Card )> card_removed;
     // TODO: REMOVE AFTER BETA
     std::shared_ptr<spdlog::logger> log;
 };

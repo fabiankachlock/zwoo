@@ -1,21 +1,21 @@
 #ifndef _AUTHENTICATION_CONTROLLER_HPP_
 #define _AUTHENTICATION_CONTROLLER_HPP_
 
-#include "version.h"
 #include "Server/DatabaseComponent.hpp"
 #include "Server/controller/Authentication/AuthenticationValidators.h"
 #include "Server/controller/Authentication/ReCaptcha.h"
 #include "Server/controller/error.h"
 #include "Server/dto/AuthenticationDTO.hpp"
 #include "Server/logger/logger.h"
+#include "version.h"
 
+#include "boost/beast/core/detail/base64.hpp"
 #include "fmt/format.h"
 #include "oatpp/core/macro/codegen.hpp"
 #include "oatpp/core/macro/component.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 #include "oatpp/web/protocol/http/Http.hpp"
 #include "oatpp/web/server/api/ApiController.hpp"
-#include "boost/beast/core/detail/base64.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -69,14 +69,13 @@ class AuthenticationController : public oatpp::web::server::api::ApiController
     ENDPOINT( "GET", "/version", version )
     {
         m_logger->log->debug( "/GET version" );
-        return createResponse( Status::CODE_200, std::string(ZWOO_VERSION) );
+        return createResponse( Status::CODE_200, std::string( ZWOO_VERSION ) );
     }
     ENDPOINT_INFO( version )
     {
         info->summary = "Endpoint for retrieving zwoo backend version .";
 
-        info->addResponse<Object<StatusDto>>( Status::CODE_200,
-                                              "text/plain" );
+        info->addResponse<Object<StatusDto>>( Status::CODE_200, "text/plain" );
         info->addResponse<Object<StatusDto>>( Status::CODE_404,
                                               "application/json" );
         info->addResponse<Object<StatusDto>>( Status::CODE_500,

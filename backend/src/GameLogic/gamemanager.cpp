@@ -37,7 +37,7 @@ void GameManager::destroyGame( uint32_t _GID )
 {
     // remove game from unordered map(games)
     games.erase( _GID );
-    after_game_removed(_GID);
+    after_game_removed( _GID );
     logger->log->info( "Game {} deleted", _GID );
 }
 

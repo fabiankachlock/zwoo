@@ -42,10 +42,10 @@ class GameManager
 
     std::function<void( uint32_t )> after_game_removed;
 
-    std::function<void(uint32_t,uint32_t)> end_turn;
-    std::function<void(uint32_t,uint32_t)> next_turn;
-    std::function<void(uint32_t,uint32_t,Card)> get_card;
-    std::function<void(uint32_t,uint32_t,Card)> remove_card;
-    std::function<void(uint32_t,Card,Player,Player)> state_changed;
-    std::function<void(uint32_t,uint32_t)> game_won;
+    std::function<void( uint32_t, uint32_t )> end_turn;
+    std::function<void( uint32_t, uint32_t )> next_turn;
+    std::function<void( uint32_t, uint32_t, Card )> get_card;
+    std::function<void( uint32_t, uint32_t, Card )> remove_card;
+    std::function<void( uint32_t, Card, Player, Player )> state_changed;
+    std::function<void( uint32_t, uint32_t )> game_won;
 };

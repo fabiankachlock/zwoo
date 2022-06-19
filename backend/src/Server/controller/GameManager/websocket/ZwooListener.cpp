@@ -27,19 +27,22 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
 {
     if ( size == 0 )
     { // message transfer finished
-        try {
+        try
+        {
             auto wholeMessage = m_messageBuffer.toString( );
             m_messageBuffer.setCurrentPosition( 0 );
 
             std::string scode = wholeMessage->substr( 0, 3 );
             int code = ( ( (int)scode[ 0 ] - 48 ) * 100 ) +
-                       ( ( (int)scode[ 1 ] - 48 ) * 10 ) + ( (int)scode[ 2 ] - 48 );
+                       ( ( (int)scode[ 1 ] - 48 ) * 10 ) +
+                       ( (int)scode[ 2 ] - 48 );
 
             switch ( code )
             {
             // 1xx
             case e_ZRPOpCodes::SEND_MESSAGE:
-                connector->sendMessage( m_data.guid, m_data.puid, wholeMessage );
+                connector->sendMessage( m_data.guid, m_data.puid,
+                                        wholeMessage );
                 break;
             case e_ZRPOpCodes::GET_ALL_PLAYERS_IN_LOBBY:
                 connector->getAllPlayersInLobby( m_data.guid, m_data.puid );
@@ -55,13 +58,15 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
                                               wholeMessage );
                 break;
             case e_ZRPOpCodes::PLAYER_TO_HOST: // Maybe username in body
-                connector->playerToHost( m_data.guid, m_data.puid, wholeMessage );
+                connector->playerToHost( m_data.guid, m_data.puid,
+                                         wholeMessage );
                 break;
             case e_ZRPOpCodes::KICK_PLAYER:
                 connector->kickPlayer( m_data.guid, m_data.puid, wholeMessage );
                 break;
             case e_ZRPOpCodes::CHANGE_SETTINGS:
-                connector->changeSettings( m_data.guid, m_data.puid, wholeMessage );
+                connector->changeSettings( m_data.guid, m_data.puid,
+                                           wholeMessage );
                 break;
             case e_ZRPOpCodes::GET_ALL_SETTINGS:
                 connector->getAllSettings( m_data.guid, m_data.puid );
@@ -92,9 +97,9 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
                 break;
             }
         }
-        catch (std::exception e)
+        catch ( std::exception e )
         {
-            logger->log->warn("Error: {}", e.what());
+            logger->log->warn( "Error: {}", e.what( ) );
         }
     }
     else if ( size > 0 )

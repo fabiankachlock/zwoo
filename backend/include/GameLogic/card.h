@@ -61,7 +61,7 @@ struct Card
     Card( e_color _color, e_number _number ); // creates card
     Card( uint8_t _color, uint8_t _number );  // creates card
 
-    uint32_t getValue();
+    uint32_t getValue( );
 
     Card( ); // creates NONE type card
     bool operator==( Card &_card );

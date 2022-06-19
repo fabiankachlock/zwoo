@@ -6,77 +6,97 @@
 #include "Server/controller/GameManager/websocket/ZRPCodes.h"
 #include "Server/dto/ZRPMessageDTO.hpp"
 
-ZRPConnector::ZRPConnector( std::shared_ptr<GameManager> gm, std::shared_ptr<Database> db )
-    : game_manager( gm ), database(db)
+ZRPConnector::ZRPConnector( std::shared_ptr<GameManager> gm,
+                            std::shared_ptr<Database> db )
+    : game_manager( gm ), database( db )
 {
     logger = std::make_shared<Logger>( );
     logger->init( "ZRP" );
 
     json_mapper = oatpp::parser::json::mapping::ObjectMapper::createShared( );
 
-    gm->next_turn = [&](uint32_t guid, uint32_t puid){
-        auto socket = getSocket(guid, puid);
-        if (socket != nullptr)
-            socket->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::START_TURN, "{}"));
+    gm->next_turn = [ & ]( uint32_t guid, uint32_t puid )
+    {
+        auto socket = getSocket( guid, puid );
+        if ( socket != nullptr )
+            socket->websocket.sendOneFrameText(
+                createMessage( e_ZRPOpCodes::START_TURN, "{}" ) );
     };
 
-    gm->end_turn = [&](uint32_t guid, uint32_t puid){
-        auto socket = getSocket(guid, puid);
-        if (socket != nullptr)
-            socket->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::END_TURN, "{}"));
+    gm->end_turn = [ & ]( uint32_t guid, uint32_t puid )
+    {
+        auto socket = getSocket( guid, puid );
+        if ( socket != nullptr )
+            socket->websocket.sendOneFrameText(
+                createMessage( e_ZRPOpCodes::END_TURN, "{}" ) );
     };
 
-    gm->get_card = [&](uint32_t guid, uint32_t puid, Card card) {
-        auto c = CardDTO::createShared();
+    gm->get_card = [ & ]( uint32_t guid, uint32_t puid, Card card )
+    {
+        auto c = CardDTO::createShared( );
         c->type = card.color;
         c->symbol = card.number;
-        auto socket = getSocket(guid, puid);
-        if (socket != nullptr)
-            socket->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::GET_CARD, json_mapper->writeToString(c)));
+        auto socket = getSocket( guid, puid );
+        if ( socket != nullptr )
+            socket->websocket.sendOneFrameText( createMessage(
+                e_ZRPOpCodes::GET_CARD, json_mapper->writeToString( c ) ) );
     };
 
-    gm->remove_card = [&](uint32_t guid, uint32_t puid, Card card) {
-        auto c = CardDTO::createShared();
+    gm->remove_card = [ & ]( uint32_t guid, uint32_t puid, Card card )
+    {
+        auto c = CardDTO::createShared( );
         c->type = card.color;
         c->symbol = card.number;
-        auto socket = getSocket(guid, puid);
-        if (socket != nullptr)
-            socket->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::REMOVE_CARD, json_mapper->writeToString(c)));
+        auto socket = getSocket( guid, puid );
+        if ( socket != nullptr )
+            socket->websocket.sendOneFrameText( createMessage(
+                e_ZRPOpCodes::REMOVE_CARD, json_mapper->writeToString( c ) ) );
     };
 
-    gm->state_changed = [&](uint32_t guid, Card card, Player activ, Player last) {
-        auto dto = StateChangedDTO::createShared();
-        auto c = oatpp::Object<CardDTO>::createShared();
+    gm->state_changed =
+        [ & ]( uint32_t guid, Card card, Player activ, Player last )
+    {
+        auto dto = StateChangedDTO::createShared( );
+        auto c = oatpp::Object<CardDTO>::createShared( );
         c->symbol = card.number;
         c->type = card.color;
         dto->pileTop = c;
-        dto->activePlayer = getSocket(guid, activ.getID())->m_data.username;
-        dto->activePlayerCardAmount = activ.getCardsOnHand();
-        dto->lastPlayer = getSocket(guid, last.getID())->m_data.username;
-        dto->lastPlayerCardAmount = last.getCardsOnHand();
+        dto->activePlayer = getSocket( guid, activ.getID( ) )->m_data.username;
+        dto->activePlayerCardAmount = activ.getCardsOnHand( );
+        dto->lastPlayer = getSocket( guid, last.getID( ) )->m_data.username;
+        dto->lastPlayerCardAmount = last.getCardsOnHand( );
 
-        sendZRPMessageToGame(guid, 0, createMessage(e_ZRPOpCodes::STATE_UPDATE, json_mapper->writeToString(dto)));
+        sendZRPMessageToGame(
+            guid, 0,
+            createMessage( e_ZRPOpCodes::STATE_UPDATE,
+                           json_mapper->writeToString( dto ) ) );
     };
 
-    gm->game_won = [&](uint32_t guid, uint32_t puid) {
-        auto ret = PlayerWonDTO::createShared();
-        ret->wins = database->incrementWins(puid);
-        ret->username = getSocket(guid, puid)->m_data.username;
+    gm->game_won = [ & ]( uint32_t guid, uint32_t puid )
+    {
+        auto ret = PlayerWonDTO::createShared( );
+        ret->wins = database->incrementWins( puid );
+        ret->username = getSocket( guid, puid )->m_data.username;
 
-        game_manager->getGame(guid)->playerorder.for_each([&](auto i, std::shared_ptr<Player> p){
-            auto ps = oatpp::Object<PlayerSummaryDTO>::createShared();
-            uint32_t score = 0;
-            for (auto card: p->cards)
-                score += card->getValue();
-            ps->score = score;
-            ps->username = getSocket(guid, p->getID())->m_data.username;
-            ret->summary->push_back(ps);
-        });
-        ret->summary->sort([&](auto a, auto b){ return b->score > a->score; });
-        for (int i = 1; i < ret->summary->size(); i++)
-            ret->summary[i]->position = i;
-        sendZRPMessageToGame(guid, 0, createMessage(e_ZRPOpCodes::GAME_WON, json_mapper->writeToString(ret)));
-
+        game_manager->getGame( guid )->playerorder.for_each(
+            [ & ]( auto i, std::shared_ptr<Player> p )
+            {
+                auto ps = oatpp::Object<PlayerSummaryDTO>::createShared( );
+                uint32_t score = 0;
+                for ( auto card : p->cards )
+                    score += card->getValue( );
+                ps->score = score;
+                ps->username = getSocket( guid, p->getID( ) )->m_data.username;
+                ret->summary->push_back( ps );
+            } );
+        ret->summary->sort( [ & ]( auto a, auto b )
+                            { return b->score > a->score; } );
+        for ( int i = 1; i < ret->summary->size( ); i++ )
+            ret->summary[ i ]->position = i;
+        sendZRPMessageToGame(
+            guid, 0,
+            createMessage( e_ZRPOpCodes::GAME_WON,
+                           json_mapper->writeToString( ret ) ) );
     };
 }
 
@@ -97,11 +117,11 @@ void ZRPConnector::addWebSocket( uint32_t guid, uint32_t puid,
 
     game = game_websockets.find( guid );
     listener->m_data.role_next_round = listener->m_data.role;
-    if (game_manager->getGame(guid)->isActive())
+    if ( game_manager->getGame( guid )->isActive( ) )
     {
         listener->m_data.role = e_Roles::SPECTATOR;
     }
-    if (listener->m_data.role != e_Roles::SPECTATOR)
+    if ( listener->m_data.role != e_Roles::SPECTATOR )
         game_manager->getGame( guid )->addPlayer( puid );
 
     {
@@ -275,14 +295,16 @@ void ZRPConnector::spectatorToPlayer( uint32_t guid, uint32_t puid )
     auto sender = getSocket( guid, puid );
     if ( sender != nullptr )
     {
-        if ( sender->m_data.role == e_Roles::SPECTATOR && game_manager->getGame(guid)->isActive() )
+        if ( sender->m_data.role == e_Roles::SPECTATOR &&
+             game_manager->getGame( guid )->isActive( ) )
         {
             sender->m_data.role_next_round = e_Roles::PLAYER;
         }
-        else if ( sender->m_data.role == e_Roles::SPECTATOR && !game_manager->getGame(guid)->isActive() )
+        else if ( sender->m_data.role == e_Roles::SPECTATOR &&
+                  !game_manager->getGame( guid )->isActive( ) )
         {
             sender->m_data.role = e_Roles::PLAYER;
-            game_manager->getGame(guid)->addPlayer(puid);
+            game_manager->getGame( guid )->addPlayer( puid );
             sendZRPMessageToGame(
                 guid, 0,
                 createMessage( e_ZRPOpCodes::PLAYER_CHANGED_ROLE,
@@ -314,9 +336,9 @@ void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid,
     {
         if ( ( sender->m_data.role == e_Roles::PLAYER ||
                sender->m_data.role == e_Roles::HOST ) &&
-               !game_manager->getGame(guid)->isActive())
+             !game_manager->getGame( guid )->isActive( ) )
         {
-            game_manager->getGame(guid)->removePlayer(puid);
+            game_manager->getGame( guid )->removePlayer( puid );
             if ( sender->m_data.role == e_Roles::HOST )
             {
                 auto game = getGame( guid );
@@ -341,7 +363,7 @@ void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid,
                                    std::to_string( (int)e_Roles::SPECTATOR ) +
                                    "}" ) );
         }
-        else if ( game_manager->getGame(guid)->isActive() )
+        else if ( game_manager->getGame( guid )->isActive( ) )
         {
             sender->m_data.role_next_round = e_Roles::SPECTATOR;
         }
@@ -419,15 +441,15 @@ void ZRPConnector::startGame( uint32_t guid, uint32_t puid )
 {
     auto sender = getSocket( guid, puid );
 
-    auto g = getGame(guid);
-    for (auto [k,v]: g)
+    auto g = getGame( guid );
+    for ( auto [ k, v ] : g )
     {
-        if (v->m_data.role != v->m_data.role_next_round)
+        if ( v->m_data.role != v->m_data.role_next_round )
         {
-            if (v->m_data.role_next_round == e_Roles::PLAYER)
-                spectatorToPlayer(v->m_data.guid, v->m_data.puid);
+            if ( v->m_data.role_next_round == e_Roles::PLAYER )
+                spectatorToPlayer( v->m_data.guid, v->m_data.puid );
             else
-                playerToSpectator(v->m_data.guid, v->m_data.puid, "111,{}");
+                playerToSpectator( v->m_data.guid, v->m_data.puid, "111,{}" );
         }
     }
 
@@ -443,23 +465,30 @@ void ZRPConnector::startGame( uint32_t guid, uint32_t puid )
     if ( !game_manager->getGame( guid )->canStart( ) )
         return; // TODO: Send Error
 
-    sendZRPMessageToGame( guid, 0, createMessage( e_ZRPOpCodes::GAME_STARTED, "{}" ) );
+    sendZRPMessageToGame( guid, 0,
+                          createMessage( e_ZRPOpCodes::GAME_STARTED, "{}" ) );
     game_manager->getGame( guid )->start( );
-    getSocket(guid, game_manager->getGame(guid)->getCurPlayer()->getID())->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::START_TURN, "{}"));
+    getSocket( guid, game_manager->getGame( guid )->getCurPlayer( )->getID( ) )
+        ->websocket.sendOneFrameText(
+            createMessage( e_ZRPOpCodes::START_TURN, "{}" ) );
 }
 
 void ZRPConnector::placeCard( uint32_t guid, uint32_t puid, std::string data )
 {
-    if (game_manager->getGame(guid)->getCurPlayer()->getID() != puid)
+    if ( game_manager->getGame( guid )->getCurPlayer( )->getID( ) != puid )
         return; // TODO: Send Error
 
     auto card = json_mapper->readFromString<oatpp::Object<CardDTO>>(
-        removeZRPCode( std::move(data) ) );
-    if (game_manager->getGame(guid)->placeCardEvent(Card(card->type, card->symbol)))
+        removeZRPCode( std::move( data ) ) );
+    if ( game_manager->getGame( guid )->placeCardEvent(
+             Card( card->type, card->symbol ) ) )
     {
         // Update Game state
-        if (game_manager->getGame(guid)->containsExpectedAction(e_gaction::G_PLAYER_PICK))
-            getSocket(guid, puid)->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::GET_PLAYER_DECISION, R"({"type": 1})"));
+        if ( game_manager->getGame( guid )->containsExpectedAction(
+                 e_gaction::G_PLAYER_PICK ) )
+            getSocket( guid, puid )
+                ->websocket.sendOneFrameText( createMessage(
+                    e_ZRPOpCodes::GET_PLAYER_DECISION, R"({"type": 1})" ) );
     }
     else
         return; // TODO: Send Error
@@ -467,78 +496,87 @@ void ZRPConnector::placeCard( uint32_t guid, uint32_t puid, std::string data )
 
 void ZRPConnector::drawCard( uint32_t guid, uint32_t puid )
 {
-    if (game_manager->getGame(guid)->getCurPlayer()->getID() != puid)
+    if ( game_manager->getGame( guid )->getCurPlayer( )->getID( ) != puid )
         return; // TODO: Send Error
 
-    game_manager->getGame(guid)->drawCardEvent();
+    game_manager->getGame( guid )->drawCardEvent( );
 }
 
 void ZRPConnector::getHand( uint32_t guid, uint32_t puid )
 {
-    auto socket = getSocket(guid, puid);
-    if (socket->m_data.role == e_Roles::SPECTATOR)
+    auto socket = getSocket( guid, puid );
+    if ( socket->m_data.role == e_Roles::SPECTATOR )
         return;
-    auto player = game_manager->getGame(guid)->getPlayer(puid);
+    auto player = game_manager->getGame( guid )->getPlayer( puid );
 
-    if (player == nullptr)
+    if ( player == nullptr )
         return; // TODO: Send Error
-    if (socket == nullptr)
+    if ( socket == nullptr )
         return; // TODO: Send Error
 
-    auto hand = PlayerHandDTO::createShared();
+    auto hand = PlayerHandDTO::createShared( );
 
-    for (auto c: player->cards)
+    for ( auto c : player->cards )
     {
-        auto card = oatpp::Object<CardDTO>::createShared();
+        auto card = oatpp::Object<CardDTO>::createShared( );
         card->type = c->color;
         card->symbol = c->number;
-        hand->hand->push_back(card);
+        hand->hand->push_back( card );
     }
 
-    socket->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::SEND_HAND, json_mapper->writeToString(hand)));
+    socket->websocket.sendOneFrameText( createMessage(
+        e_ZRPOpCodes::SEND_HAND, json_mapper->writeToString( hand ) ) );
 }
 
 void ZRPConnector::getPlayerCardAmount( uint32_t guid, uint32_t puid )
 {
-    auto sender = getSocket(guid, puid);
-    auto game = game_manager->getGame(guid);
-    auto curr_player = game->getCurPlayer();
-    auto ret = PlayerCardAmountDTO::createShared();
-    game->playerorder.for_each([&](auto i, std::shared_ptr<Player> p) {
-        auto player = oatpp::Object<PlayerDTO>::createShared();
-        auto s = getSocket(guid, p->getID());
-        player->username = s->m_data.username;
-        player->cards = p->cards.size();
-        player->isActivePlayer = p->getID() == curr_player->getID();
-        ret->players->push_back(player);
-    });
-    sender->websocket.sendOneFrameText( createMessage(e_ZRPOpCodes::SEND_PLAYER_CARD_AMOUNT, json_mapper->writeToString(ret)));
+    auto sender = getSocket( guid, puid );
+    auto game = game_manager->getGame( guid );
+    auto curr_player = game->getCurPlayer( );
+    auto ret = PlayerCardAmountDTO::createShared( );
+    game->playerorder.for_each(
+        [ & ]( auto i, std::shared_ptr<Player> p )
+        {
+            auto player = oatpp::Object<PlayerDTO>::createShared( );
+            auto s = getSocket( guid, p->getID( ) );
+            player->username = s->m_data.username;
+            player->cards = p->cards.size( );
+            player->isActivePlayer = p->getID( ) == curr_player->getID( );
+            ret->players->push_back( player );
+        } );
+    sender->websocket.sendOneFrameText(
+        createMessage( e_ZRPOpCodes::SEND_PLAYER_CARD_AMOUNT,
+                       json_mapper->writeToString( ret ) ) );
 }
 
 void ZRPConnector::getStackTop( uint32_t guid, uint32_t puid )
 {
     auto socket = getSocket( guid, puid );
-    if ( socket != nullptr)
+    if ( socket != nullptr )
     {
-        auto card = game_manager->getGame(guid)->getTopCard();
-        auto c = CardDTO::createShared();
+        auto card = game_manager->getGame( guid )->getTopCard( );
+        auto c = CardDTO::createShared( );
         c->type = card.color;
         c->symbol = card.number;
-        socket->websocket.sendOneFrameText( createMessage( e_ZRPOpCodes::SEND_STACK_TOP, json_mapper->writeToString(c)) );
+        socket->websocket.sendOneFrameText( createMessage(
+            e_ZRPOpCodes::SEND_STACK_TOP, json_mapper->writeToString( c ) ) );
     }
 }
 
-void ZRPConnector::receivePlayerDecision( uint32_t guid, uint32_t puid, std::string data )
+void ZRPConnector::receivePlayerDecision( uint32_t guid, uint32_t puid,
+                                          std::string data )
 {
-    auto decision = json_mapper->readFromString<oatpp::Object<PlayerDecisionDTO>>( removeZRPCode(data));
+    auto decision =
+        json_mapper->readFromString<oatpp::Object<PlayerDecisionDTO>>(
+            removeZRPCode( data ) );
 
     switch ( decision->type )
     {
     case e_DecisionTypes::CHOOSE_COLOR:
-        game_manager->getGame(guid)->wildEvent(decision->decision);
+        game_manager->getGame( guid )->wildEvent( decision->decision );
         break;
     default:
-        logger->log->warn("Decision {} not found!", decision->type);
+        logger->log->warn( "Decision {} not found!", decision->type );
     }
 }
 

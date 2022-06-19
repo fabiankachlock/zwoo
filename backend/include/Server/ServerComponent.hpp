@@ -130,7 +130,7 @@ class ServerComponent
           OATPP_COMPONENT( std::shared_ptr<Logger>, m_logger_websocket,
                            "Websocket" );
           OATPP_COMPONENT( std::shared_ptr<GameManager>, gm );
-          OATPP_COMPONENT( std::shared_ptr<Database>, db);
+          OATPP_COMPONENT( std::shared_ptr<Database>, db );
           auto connectionHandler =
               oatpp::websocket::ConnectionHandler::createShared( );
           auto zrpc = std::make_shared<ZRPConnector>( gm, db );
