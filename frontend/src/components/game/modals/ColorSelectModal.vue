@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :title="t('dialogs.selectColor.title')" :info="t('dialogs.selectColor.info')">
+  <BaseModal title="dialogs.selectColor.title" info="dialogs.selectColor.info">
     <div class="color-select-modal-grid">
       <button
         class="rounded-tl-full hover:scale-110 hover:-translate-x-3 hover:-translate-y-3 transition-transform"
@@ -34,10 +34,8 @@ import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { useGameModal } from '@/core/adapter/play/modal';
 import { CardColor } from '@/core/services/game/card';
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import BaseModal from './BaseModal.vue';
 
-const { t } = useI18n();
 const modalState = useGameModal();
 const theme = useCardTheme();
 

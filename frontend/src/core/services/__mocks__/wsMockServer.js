@@ -24,6 +24,11 @@ readline.on('line', input => {
     console.log('sending: %s', msg);
     senderFunc(msg);
   }
+  if (args[0] === 'sendr') {
+    const msg = args[1];
+    console.log('sending: %s', msg);
+    senderFunc(msg);
+  }
 });
 
 const exampleMessages = {
