@@ -278,6 +278,38 @@ class GameManagerController : public oatpp::web::server::api::ApiController
                                               "application/json" );
     }
 
+    ENDPOINT( "GET", "game/games/{guid}", get_game,
+              PATH( UInt32, guid, "guid" ) )
+    {
+        m_logger_backend->log->info( "/GET Games" );
+
+        auto g = games.find( guid );
+        if ( g != nullptr )
+        {
+            auto ret = GameDTO::createShared( );
+
+            ret->name = g->second.name;
+            ret->id = guid;
+            ret->isPublic = !g->second.is_private;
+            ret->playerCount = game_manager->getGame( guid )->getPlayerCount( );
+
+            return createDtoResponse( Status::CODE_200, ret );
+        }
+        return createResponse( Status::CODE_404,
+                               R"({"message": "Game not found"})" );
+    }
+    ENDPOINT_INFO( get_game )
+    {
+        info->summary = "An Endpoint to get data for a game.";
+
+        info->addResponse<Object<GameDTO>>( Status::CODE_200,
+                                            "application/json" );
+        info->addResponse<Object<StatusDto>>( Status::CODE_404,
+                                              "application/json" );
+        info->addResponse<Object<StatusDto>>( Status::CODE_500,
+                                              "application/json" );
+    }
+
     ENDPOINT( "GET", "game/leaderboard/position", position,
               AUTHORIZATION( std::shared_ptr<UserAuthorizationObject>, usr ) )
     {

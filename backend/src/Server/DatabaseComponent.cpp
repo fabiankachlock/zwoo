@@ -286,9 +286,9 @@ oatpp::Object<LeaderBoardDTO> Database::getLeaderBoard( )
     using namespace bsoncxx::builder::basic;
 
     mongocxx::pipeline p{ };
-    p.match( make_document(kvp("verified", true)));
-    p.sort(make_document(kvp("wins", -1)));
-    p.limit(100);
+    p.match( make_document( kvp( "verified", true ) ) );
+    p.sort( make_document( kvp( "wins", -1 ) ) );
+    p.limit( 100 );
     auto res = collection.aggregate( p );
 
     if ( res.begin( ) != res.end( ) )
