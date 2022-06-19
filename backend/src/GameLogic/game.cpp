@@ -22,7 +22,7 @@ Game::Game( uint32_t id )
             std::string( "ZWOO Backend Game " + std::to_string( id ) ), "",
             "" ) );
 
-        log = std::make_shared<spdlog::logger>( "Game", begin( log_sinks ),
+        log = std::make_shared<spdlog::logger>( fmt::format( "Game {}", id ), begin( log_sinks ),
                                                 end( log_sinks ) );
         spdlog::register_logger( log );
         log->set_level( spdlog::level::debug );
@@ -60,6 +60,7 @@ void Game::drawCard( std::shared_ptr<Player> _player )
     // draw card
     _player->addCard( this->pile.drawTopCard( ) );
     log->info( "Card Drawn by player {}", _player->getID( ) );
+    stateChanged( );
 }
 
 void Game::drawCards( std::shared_ptr<Player> _player, uint8_t _amount )
@@ -70,11 +71,13 @@ void Game::drawCards( std::shared_ptr<Player> _player, uint8_t _amount )
         _player->addCard( this->pile.drawTopCard( ) );
     }
     log->info( "{0} Card/s Drawn by player {1}", _amount, _player->getID( ) );
+    stateChanged( );
 }
 
 void Game::placeCard( std::shared_ptr<Player> _player, Card _card )
 {
     stack.addCard( _player->removeCard( _card ) );
+    remove_card(getID(), _player->getID(), _card);
 }
 
 void Game::placeCard( std::shared_ptr<Player> _player, Card _card1,
@@ -85,13 +88,16 @@ void Game::placeCard( std::shared_ptr<Player> _player, Card _card1,
     // modify card to new color/number
     card->color = _card2.color;
     card->number = _card2.number;
+    remove_card(getID(), _player->getID(), _card1);
     stack.addCard( card ); // add card to stack
+    stateChanged( );
 }
 
 void Game::nextTurn( )
 {
     // check if game has been won
 
+    end_turn(getID(), (*current_player)->getID());
     // check direction
     if ( direction == true )
     {
@@ -101,6 +107,8 @@ void Game::nextTurn( )
     {
         --current_player;
     }
+    next_turn(getID(), (*current_player)->getID());
+    stateChanged( );
     turncount++;
 }
 
@@ -150,11 +158,17 @@ bool Game::isWon( )
     {
         if ( it->second->IsEmpty( ) )
         {
+            game_won(ID, it->second->getID());
             return true;
         }
     }
 
     return false;
+}
+
+bool Game::canStart( )
+{
+    return !(active && players.size( ) <= 1);
 }
 
 bool Game::start( )
@@ -233,7 +247,9 @@ std::shared_ptr<Player> Game::getCurPlayer( ) { return *current_player; }
 
 std::vector<e_gaction> Game::getExpectedActions( ) { return expected_actions; }
 
-void Game::placeCardEvent( Card _card )
+Card Game::getTopCard( ) { return stack.getTopCard( ); }
+
+bool Game::placeCardEvent( Card _card )
 {
 
     // local variables
@@ -321,16 +337,18 @@ void Game::placeCardEvent( Card _card )
         default:
             break;
         }
-
+        stateChanged( );
         if ( isWon( ) )
         {
             stop( );
-            return;
+            return true;
         }
+        return true;
     }
     else
     {
         log->info( "You cannot place this card!" );
+        return false;
     }
 }
 
@@ -354,6 +372,7 @@ void Game::drawCardEvent( )
         drawCard( *current_player );
         nextTurn( );
     }
+    stateChanged( );
     return;
 }
 
@@ -405,6 +424,9 @@ uint32_t Game::addPlayer( uint32_t puid )
             player->log = log;
             uint32_t playerid = player->getID( );
 
+            player->card_added = [&](uint32_t puid, Card card) { get_card(getID(), puid, card); };
+            player->card_removed = [&](uint32_t puid, Card card) { remove_card(getID(), puid, card); };
+
             this->players.insert(
                 { playerid, player } ); // insert player into this players-map
             return playerid;
@@ -424,7 +446,24 @@ uint32_t Game::addPlayer( uint32_t puid )
 
 bool Game::removePlayer( uint32_t _playerid )
 {
-    this->players.erase( _playerid ); // remove player from players map
+    try
+    {
+        this->players.erase( _playerid ); // remove player from players map
+    }
+    catch (std::exception e) {}
     // remove player from playerorder
     return true;
+}
+bool Game::containsExpectedAction( e_gaction action )
+{
+    for (auto a: expected_actions)
+        if (a == action)
+            return true;
+    return false;
+}
+void Game::stateChanged( )
+{
+    auto last = *(direction ? current_player.node->prev : current_player.node->next)->value;
+    auto c = *(*current_player);
+    state_changed(ID, getTopCard(), c, last);
 }

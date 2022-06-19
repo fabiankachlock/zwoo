@@ -1,6 +1,7 @@
 #ifndef _ZRPCONNECTOR_HPP_
 #define _ZRPCONNECTOR_HPP_
 
+#include "Server/DatabaseComponent.hpp"
 #include "Server/controller/GameManager/websocket/ZwooListener.hpp"
 #include "Server/dto/ZRPMessageDTO.hpp"
 #include "oatpp-websocket/ConnectionHandler.hpp"
@@ -16,7 +17,7 @@
 class ZRPConnector
 {
   public:
-    ZRPConnector( std::shared_ptr<GameManager> gm );
+    ZRPConnector( std::shared_ptr<GameManager> gm, std::shared_ptr<Database> db );
 
     void addWebSocket( uint32_t guid, uint32_t puid,
                        std::shared_ptr<ZwooListener> listener );
@@ -39,6 +40,13 @@ class ZRPConnector
     void getAllSettings( uint32_t guid, uint32_t puid );
     void startGame( uint32_t guid, uint32_t puid );
 
+    // 3xx
+    void placeCard( uint32_t guid, uint32_t puid, std::string data);
+    void drawCard( uint32_t guid, uint32_t puid );
+    void getHand( uint32_t guid, uint32_t puid );
+    void getPlayerCardAmount ( uint32_t guid, uint32_t puid );
+    void getStackTop( uint32_t guid, uint32_t puid );
+    void receivePlayerDecision( uint32_t guid, uint32_t puid, std::string data );
   private:
     void printWebsockets( );
     void sendZRPMessageToGame( uint32_t guid, uint32_t puid_exclude,
@@ -51,6 +59,7 @@ class ZRPConnector
     //  getGame(guid);
 
     std::shared_ptr<GameManager> game_manager;
+    std::shared_ptr<Database> database;
 
     std::shared_ptr<ZwooListener> getSocket( uint32_t guid, uint32_t puid );
     std::shared_ptr<ZwooListener> getSocket( uint32_t guid, std::string name );

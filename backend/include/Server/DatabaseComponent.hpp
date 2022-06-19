@@ -63,6 +63,8 @@ class Database
     uint32_t getPlayerLeaderboardPosition(uint64_t puid);
 
     oatpp::Object<LeaderBoardDTO> getLeaderBoard( );
+
+    uint32_t incrementWins(uint64_t puid);
 };
 
 #endif // _DATABASE_COMPONENT_H_

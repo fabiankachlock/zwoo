@@ -21,6 +21,14 @@ uint32_t GameManager::createGame( )
     std::shared_ptr<Game> gameptr =
         std::make_shared<Game>( GID ); // create game
     games.insert( { GID, gameptr } );  // add game to games(unordered map)
+
+    gameptr->end_turn = end_turn;
+    gameptr->next_turn = next_turn;
+    gameptr->get_card = get_card;
+    gameptr->remove_card = remove_card;
+    gameptr->state_changed = state_changed;
+    gameptr->game_won = game_won;
+
     logger->log->info( "Created Game! ID: {}", GID );
     return GID;
 }

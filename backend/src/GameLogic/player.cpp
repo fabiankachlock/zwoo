@@ -13,7 +13,7 @@ void Player::update( )
 {
 
     // check if player's hand is empty
-    if ( cards.size( ) <= 0 )
+    if ( cards.empty() )
     {
         isEmpty = true;
     }
@@ -49,6 +49,7 @@ bool Player::reset( )
 void Player::addCard( std::shared_ptr<Card> _card )
 {
     cards.push_back( _card );
+    card_added(getID(), *_card);
     update( );
 }
 
@@ -64,6 +65,7 @@ std::shared_ptr<Card> Player::removeCard( Card _card )
             std::shared_ptr<Card> card = *it; // create ptr of card
             cards.erase( it );                // remove card from player
             update( );
+            card_removed(ID, _card);
             return card;
         }
     }
@@ -86,10 +88,10 @@ void Player::PRINTSTATS( )
     log->info( "==== PLAYER {} ====", this->ID );
 
     // print cards
-    for ( auto it = cards.begin( ); it != cards.end( ); it++ )
+    for (auto & card : cards)
     {
-        log->info( "[ {1}, {2}], ", std::to_string( it->get( )->color ),
-                   std::to_string( it->get( )->number ) );
+        log->info( "[ {1}, {2}], ", std::to_string( card->color ),
+                   std::to_string( card->number ) );
     }
     log->info( "Cards: {}", std::to_string( getCardsOnHand( ) ) );
 }

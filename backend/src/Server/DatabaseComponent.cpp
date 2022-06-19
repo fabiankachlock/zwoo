@@ -8,6 +8,8 @@
 #include <mongocxx/client.hpp>
 #include <mongocxx/collection.hpp>
 #include <mongocxx/options/find.hpp>
+#include <bsoncxx/builder/stream/helpers.hpp>
+#include <bsoncxx/builder/stream/document.hpp>
 
 std::string Database::generateSID( )
 {
@@ -336,4 +338,21 @@ uint32_t Database::getPlayerLeaderboardPosition( uint64_t puid )
         }
     }
     return 0;
+}
+uint32_t Database::incrementWins( uint64_t puid )
+{
+    auto conn = m_pool->acquire( );
+    auto collection = ( *conn )[ m_databaseName ][ m_collectionName ];
+
+    using bsoncxx::builder::stream::close_document;
+    using bsoncxx::builder::stream::document;
+    using bsoncxx::builder::stream::finalize;
+    using bsoncxx::builder::stream::open_document;
+
+    collection.update_one(
+        document{} << "_id" << open_document << "$eq" << (long)puid << close_document << finalize,
+        document{} << "$inc" << open_document << "wins" << 1 << close_document << finalize
+    );
+
+    return getUser(puid)->wins;
 }
