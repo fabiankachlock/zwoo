@@ -48,6 +48,11 @@ export class CardThemeManager {
     return fetch('/assets/meta.json').then(res => res.json());
   }
 
+  public async getDefaultTheme(): Promise<CardThemeIdentifier> {
+    await this.waitForThemes();
+    return this.meta.defaultTheme;
+  }
+
   public async loadTheme(theme: CardThemeIdentifier): Promise<CardTheme> {
     Logger.Theme.log(`loading theme ${theme.name}.${theme.variant}`);
 
