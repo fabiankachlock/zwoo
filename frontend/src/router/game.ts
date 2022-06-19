@@ -8,7 +8,7 @@ export const GameRoute: RouteRecordRaw = {
       path: 'play',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Play.vue'),
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -22,7 +22,7 @@ export const GameRoute: RouteRecordRaw = {
       path: 'summary',
       component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Summary.vue'),
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     }
   ]

@@ -24,6 +24,11 @@ readline.on('line', input => {
     console.log('sending: %s', msg);
     senderFunc(msg);
   }
+  if (args[0] === 'sendr') {
+    const msg = args[1];
+    console.log('sending: %s', msg);
+    senderFunc(msg);
+  }
 });
 
 const exampleMessages = {
@@ -164,7 +169,19 @@ const exampleMessages = {
   [317]: {},
   [399]: {
     username: 'test-player',
-    wins: 3
+    wins: 3,
+    summary: [
+      {
+        username: 'test-player',
+        score: 10,
+        position: 1
+      },
+      {
+        username: 'looser',
+        score: 12,
+        position: 2
+      }
+    ]
   },
   [400]: {
     message: 'some-error'

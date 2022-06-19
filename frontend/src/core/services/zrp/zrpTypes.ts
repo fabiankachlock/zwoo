@@ -223,6 +223,11 @@ export type ZRPDecisionResponsePayload = {
 export type ZRPGameWinnerPayload = {
   username: string;
   wins: number;
+  summary: {
+    username: string;
+    position: number;
+    score: number;
+  }[];
 };
 
 export type ZRPErrorPayload = {
