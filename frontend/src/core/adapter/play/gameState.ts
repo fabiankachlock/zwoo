@@ -6,6 +6,7 @@ import router from '@/router';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { useAuth } from '../auth';
+import { useGameCardDeck } from './deck';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GamePlayer = {
@@ -85,6 +86,7 @@ export const useGameState = defineStore('game-state', () => {
       }
     }
     activePlayerName.value = data.activePlayer;
+    verifyDeck();
   };
 
   const updatePlayers = (data: ZRPPlayerCardAmountPayload) => {
@@ -104,6 +106,15 @@ export const useGameState = defineStore('game-state', () => {
       if (auth.username === activePlayer) {
         activateSelf();
       }
+    }
+    verifyDeck();
+  };
+
+  const verifyDeck = () => {
+    // TODO: Optimize this
+    if (useGameCardDeck().cards.length !== players.value.find(p => p.name === auth.username)?.cards) {
+      console.warn('local deck didnt match remote state');
+      dispatchEvent(ZRPOPCode.RequestHand, {});
     }
   };
 
