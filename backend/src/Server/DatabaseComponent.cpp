@@ -283,11 +283,13 @@ oatpp::Object<LeaderBoardDTO> Database::getLeaderBoard( )
     auto conn = m_pool->acquire( );
     auto collection = ( *conn )[ m_databaseName ][ m_collectionName ];
 
-    mongocxx::options::find opts;
-    opts.sort( createMongoDocument(
-        oatpp::Fields<oatpp::Int32>( { { "wins", -1 } } ) ) );
-    opts.limit( 100 );
-    auto res = collection.find( { }, opts );
+    using namespace bsoncxx::builder::basic;
+
+    mongocxx::pipeline p{ };
+    p.match( make_document( kvp( "verified", true ) ) );
+    p.sort( make_document( kvp( "wins", -1 ) ) );
+    p.limit( 100 );
+    auto res = collection.aggregate( p );
 
     if ( res.begin( ) != res.end( ) )
     {
