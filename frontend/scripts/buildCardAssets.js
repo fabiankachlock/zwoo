@@ -167,7 +167,7 @@ function createThemeFileName(theme, variant, isPreview) {
  * @returns {boolean} whether it is valid
  */
 function validateThemeConfig(config) {
-  return 'name' in config && 'variants' in config;
+  return 'name' in config && 'variants' in config && Array.isArray(config.variants) && config.variants.length >= 1;
 }
 
 /**
@@ -225,7 +225,7 @@ function resolveLayersForCard(card, layerWildCard) {
 // --- THEME_RESOLVING ---
 /**
  * search for all themes in the /assets/cards/raw folder
- * @returns {typeof BaseThemeConfig} an list of all themes
+ * @returns {(typeof BaseThemeConfig)[]} an list of all themes
  */
 async function findThemes() {
   const allThemes = await fs.readdir(CARDS_SOURCES);
@@ -511,6 +511,12 @@ async function buildCards(themes) {
     themesWithSources.push(await searchThemeSources(theme));
   }
   const scanEnd = process.hrtime(scanStart);
+
+  if (themesWithSources.length < 1) {
+    console.error('cant find any themes');
+    throw new Error('cant find any themes');
+  }
+
   console.log('found %d themes (took %dms)', themes.length, scanEnd[1] / 1000000);
   console.log('start build process');
 
