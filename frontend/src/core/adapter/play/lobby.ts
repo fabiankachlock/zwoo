@@ -190,6 +190,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     players.value = [];
     spectators.value = [];
     gameHost.value = '';
+    // TODO: fix this when there is an internal reset code
+    router.replace('/available-games');
   };
 
   const kickPlayer = (id: string) => {
