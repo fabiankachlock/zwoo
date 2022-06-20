@@ -5,7 +5,7 @@
         {{ t(title ?? '') }}
       </h1>
       <button @click="closeModal">
-        <Icon class="text-2xl transition-transform hover:scale-110" icon="akar-icons:cross" />
+        <Icon class="text-2xl tc-main transition-transform hover:scale-110" icon="akar-icons:cross" />
       </button>
     </div>
     <div class="mb-4">
