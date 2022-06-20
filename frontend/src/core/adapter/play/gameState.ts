@@ -113,7 +113,7 @@ export const useGameState = defineStore('game-state', () => {
   const verifyDeck = () => {
     // TODO: Optimize this
     if (useGameCardDeck().cards.length !== players.value.find(p => p.name === auth.username)?.cards) {
-      console.warn('local deck didnt match remote state');
+      console.warn('local deck didnt match remote state:', JSON.stringify(useGameCardDeck().cards));
       dispatchEvent(ZRPOPCode.RequestHand, {});
     }
   };
