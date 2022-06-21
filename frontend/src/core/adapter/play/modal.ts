@@ -30,6 +30,7 @@ export const useGameModal = defineStore('game-modal', () => {
   const openModal = (type: InGameModal): void => {
     currentModal.value = type;
     modalComponent.value = markRaw(gameModals[type]);
+    _modalResponse.value = undefined; // reset response value
   };
 
   const closeSelf = (response: InGameModalResponse[keyof InGameModalResponse] | undefined) => {
@@ -41,8 +42,11 @@ export const useGameModal = defineStore('game-modal', () => {
   const useResponse = async <ModalType extends InGameModal>(modal: ModalType): Promise<InGameModalResponse[ModalType]> => {
     const awaiter = new Awaiter<InGameModalResponse[ModalType]>();
     openModal(modal);
-
-    watch(_modalResponse, response => awaiter.callback(response));
+    watch(_modalResponse, response => {
+      if (response) {
+        awaiter.callback(response);
+      }
+    });
     return awaiter.promise;
   };
 
