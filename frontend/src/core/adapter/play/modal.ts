@@ -60,6 +60,15 @@ export const useGameModal = defineStore('game-modal', () => {
     }
   });
 
+  const reset = () => {
+    currentModal.value = undefined;
+    modalComponent.value = undefined;
+    _modalResponse.value = undefined;
+  };
+
+  modalWatcher.onReset(reset);
+  modalWatcher.onClose(reset);
+
   return {
     currentModal,
     modalComponent,

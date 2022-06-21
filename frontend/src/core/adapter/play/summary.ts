@@ -28,6 +28,7 @@ export const useGameSummary = defineStore('game-summary', () => {
   };
 
   const playAgain = () => {
+    dispatchEvent(ZRPOPCode._ResetState, {});
     router.replace('/game/wait');
   };
 
@@ -36,10 +37,13 @@ export const useGameSummary = defineStore('game-summary', () => {
     router.replace('/home');
   };
 
-  summaryWatcher.onMessage(_receiveMessage);
-  summaryWatcher.onClose(() => {
+  const reset = () => {
     summary.value = [];
-  });
+  };
+
+  summaryWatcher.onMessage(_receiveMessage);
+  summaryWatcher.onReset(reset);
+  summaryWatcher.onClose(reset);
 
   return {
     summary,
