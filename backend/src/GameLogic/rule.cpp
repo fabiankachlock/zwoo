@@ -49,7 +49,7 @@ void GameRules::deactivateRule( uint8_t id ) {}
 bool GameRules::canPlace( Card _stacktopcard, Card _playerplacecard,
                           bool _playerDraw )
 {
-    // Player can ONLY lay draw cards
+    // Player can ONLY lay draw cards (playerdraw is active)
     if ( _playerDraw )
     {
         CardRule cardrule = getCardRule( _playerplacecard );
@@ -66,6 +66,11 @@ bool GameRules::canPlace( Card _stacktopcard, Card _playerplacecard,
     {
         // player can always place black cards
         if ( _playerplacecard.color == C_BLACK )
+        {
+            return true;
+        }
+        // player can always place ON black cards
+        if ( _stacktopcard.color == C_BLACK )
         {
             return true;
         }
