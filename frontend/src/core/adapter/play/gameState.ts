@@ -118,13 +118,16 @@ export const useGameState = defineStore('game-state', () => {
     }
   };
 
-  gameWatcher.onMessage(_receiveMessage);
-  gameWatcher.onClose(() => {
+  const reset = () => {
     isActivePlayer.value = false;
     activePlayerName.value = '';
     topCard.value = CardDescriptor.BackUpright;
     players.value = [];
-  });
+  };
+
+  gameWatcher.onMessage(_receiveMessage);
+  gameWatcher.onReset(reset);
+  gameWatcher.onClose(reset);
 
   return {
     topCard,

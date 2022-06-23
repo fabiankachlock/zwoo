@@ -190,8 +190,6 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     players.value = [];
     spectators.value = [];
     gameHost.value = '';
-    // TODO: fix this when there is an internal reset code
-    router.replace('/available-games');
   };
 
   const kickPlayer = (id: string) => {
@@ -218,9 +216,16 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     dispatchEvent(ZRPOPCode.StartGame, {});
   };
 
-  lobbyWatcher.onMessage(_receiveMessage);
-  lobbyWatcher.onClose(reset);
   lobbyWatcher.onOpen(setup);
+  lobbyWatcher.onMessage(_receiveMessage);
+  lobbyWatcher.onReset(() => {
+    reset();
+    setup();
+  });
+  lobbyWatcher.onClose(() => {
+    reset();
+    router.replace('/available-games');
+  });
 
   return {
     players: players,

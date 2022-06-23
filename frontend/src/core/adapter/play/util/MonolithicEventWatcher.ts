@@ -11,7 +11,7 @@ export class MonolithicEventWatcher<EventType extends ZRPOPCode[]> {
 
   constructor(...events: EventType) {
     this.events = events;
-    this._matcher = createZRPOPCodeMatcher(ZRPOPCode._Connected, ZRPOPCode._ConnectionClosed, ...events);
+    this._matcher = createZRPOPCodeMatcher(ZRPOPCode._Connected, ZRPOPCode._ConnectionClosed, ZRPOPCode._ResetState, ...events);
     this.stopWatcher = undefined;
     this.restart();
   }
@@ -30,7 +30,7 @@ export class MonolithicEventWatcher<EventType extends ZRPOPCode[]> {
     this.stopWatcher = useWatchGameEvents(this._matcher, this.eventHandler);
   }
 
-  private eventHandler = (msg: ZRPMessage<EventType[number] | ZRPOPCode._ConnectionClosed | ZRPOPCode._Connected>) => {
+  private eventHandler = (msg: ZRPMessage<EventType[number]>) => {
     if (msg.code === ZRPOPCode._Connected) {
       this._openHandler();
       if (this.events.includes(ZRPOPCode._Connected)) {
@@ -39,6 +39,11 @@ export class MonolithicEventWatcher<EventType extends ZRPOPCode[]> {
     } else if (msg.code === ZRPOPCode._ConnectionClosed) {
       this._closeHandler();
       if (this.events.includes(ZRPOPCode._ConnectionClosed)) {
+        this._msgHandler(msg as ZRPMessage<EventType[number]>);
+      }
+    } else if (msg.code === ZRPOPCode._ResetState) {
+      this._resetHandler();
+      if (this.events.includes(ZRPOPCode._ResetState)) {
         this._msgHandler(msg as ZRPMessage<EventType[number]>);
       }
     } else {
@@ -62,5 +67,11 @@ export class MonolithicEventWatcher<EventType extends ZRPOPCode[]> {
   private _closeHandler: () => void = () => {};
   public onClose(handler: () => void) {
     this._closeHandler = handler;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private _resetHandler: () => void = () => {};
+  public onReset(handler: () => void) {
+    this._resetHandler = handler;
   }
 }

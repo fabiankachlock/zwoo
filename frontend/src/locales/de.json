@@ -344,7 +344,7 @@
   "wrongVersion": {
     "title": "Falsche Version",
     "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden.",
-    "reload": "Seite neuladen",
+    "reload": "Seite neu laden",
     "toSettings": "Zu den Einstellungen"
   }
 }

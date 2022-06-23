@@ -17,7 +17,7 @@
             <button
               v-tooltip="t('wait.play')"
               @click="startPlaying()"
-              class="tc-primary h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-light hover:bg-main rounded"
+              class="tc-primary h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-light mouse:hover:bg-main rounded"
             >
               <Icon icon="iconoir:play-outline" />
             </button>

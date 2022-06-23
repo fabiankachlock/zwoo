@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { ConfigService } from '../services/api/Config';
 import { Awaiter } from '../services/helper/Awaiter';
+import { CardThemeManager } from '../services/cards/ThemeManager';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -120,6 +121,9 @@ export const useConfig = defineStore('config', {
       let parsedTheme = {} as CardThemeIdentifier;
       if (storedTheme) {
         parsedTheme = JSON.parse(storedTheme);
+      }
+      if (!parsedTheme.name || !parsedTheme.variant) {
+        parsedTheme = await CardThemeManager.global.getDefaultTheme();
       }
 
       const version = await ConfigService.fetchVersion();

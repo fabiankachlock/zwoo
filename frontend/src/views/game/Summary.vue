@@ -2,7 +2,7 @@
   <div class="game-summary overflow-y-auto">
     <template v-if="winner">
       <div
-        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 bg-dark hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
+        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 bg-dark mouse:hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
       >
         <div class="h-full flex flex-nowrap items-center justify-start">
           <img src="/img/logo/zwoo_logo_simple_none.png" alt="" class="max-h-full mr-3" />
@@ -13,7 +13,7 @@
       <div
         v-for="player in notWinners"
         :key="player.username"
-        class="player flex justify-between items-center flex-nowrap m-1 bg-lightest hover:bg-light rounded px-3 py-2 border bc-dark"
+        class="player flex justify-between items-center flex-nowrap m-1 bg-lightest mouse:hover:bg-light rounded px-3 py-2 border bc-dark"
       >
         <p class="tc-main-dark">
           <span class="mr-2">{{ player.position }}.</span> {{ player.username }}
@@ -35,7 +35,14 @@
           {{ t('summary.leave') }}
         </p>
       </button>
-      <button :click="handleSpectatorClick()" class="action bg-dark hover:bg-darkest">
+      <button :click="handlePlayClick()" class="action bg-dark hover:bg-darkest">
+        <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
+        <p class="text tc-main text-md">
+          {{ t('summary.playAgain') }}
+        </p>
+      </button>
+
+      <!-- TODO tmp(beta): might enabled later again <button :click="handleSpectatorClick()" class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="iconoir:eye-alt" />
         <p class="text tc-main text-md">
           {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
@@ -46,7 +53,7 @@
         <p class="text tc-main text-md">
           {{ t(isSpectator ? 'summary.startPlaying' : 'summary.playAgain') }}
         </p>
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -55,7 +62,6 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
-import { useIsSpectator } from '@/composables/userRoles';
 import { useGameSummary } from '@/core/adapter/play/summary';
 
 const { t } = useI18n();
@@ -63,14 +69,9 @@ const summary = useGameSummary();
 const players = computed(() => summary.summary);
 const winner = computed(() => (players.value.length > 0 ? players.value[0] : undefined));
 const notWinners = computed(() => [...players.value].slice(1) ?? []);
-const { isSpectator } = useIsSpectator();
 
 const handlePlayClick = () => {
-  summary.joinAgainAsPlayer();
-};
-
-const handleSpectatorClick = () => {
-  summary.joinAgainAsSpectator();
+  summary.playAgain();
 };
 
 const handleLeaveClick = () => {
@@ -95,12 +96,12 @@ const handleLeaveClick = () => {
 }
 
 .actions-grid {
-  @apply grid-cols-1 grid-rows-3;
+  @apply grid-cols-1 grid-rows-2;
 }
 
 @media only screen and (min-width: 640px) {
   .actions-grid {
-    @apply grid-cols-3 grid-rows-1;
+    @apply grid-cols-2 grid-rows-1;
   }
 }
 

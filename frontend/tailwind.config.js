@@ -61,6 +61,10 @@ module.exports = {
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite'
+      },
+      screens: {
+        touch: { raw: '(hover: none)' },
+        mouse: { raw: '(hover: hover) and (pointer: fine)' }
       }
     }
   },

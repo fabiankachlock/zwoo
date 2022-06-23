@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ 'border-secondary': isActive }"
-    class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border border-transparent bg-darkest hover:bg-dark"
+    class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border border-transparent bg-darkest mouse:hover:bg-dark"
     :ref="r => (elmRef = r as HTMLDivElement)"
   >
     <div class="flex flex-row flex-nowrap w-full h-full items-center tc-main cursor-default overflow-hidden whitespace-nowrap">

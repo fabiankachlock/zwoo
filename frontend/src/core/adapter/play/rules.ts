@@ -57,9 +57,13 @@ export const useRules = defineStore('game-rules', () => {
     rules.value = [];
   };
 
-  settingsWatcher.onMessage(_receiveMessage);
-  settingsWatcher.onClose(reset);
   settingsWatcher.onOpen(setup);
+  settingsWatcher.onMessage(_receiveMessage);
+  settingsWatcher.onReset(() => {
+    reset();
+    setup();
+  });
+  settingsWatcher.onClose(reset);
 
   return {
     rules,

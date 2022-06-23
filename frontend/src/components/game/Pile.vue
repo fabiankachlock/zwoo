@@ -1,5 +1,5 @@
 <template>
-  <div class="pile absolute top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10">
+  <div class="pile absolute top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10" :class="{ 'select-none pointer-events-none': !isActive }">
     <div class="relative h-full pile-card-wrapper">
       <div class="pile-card absolute top-1/2 right-2 -translate-y-1/2 h-full transition-all x-delay-0" style="max-height: 95%">
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
@@ -24,12 +24,15 @@
 
 <script setup lang="ts">
 import { useGameCardDeck } from '@/core/adapter/play/deck';
+import { useGameState } from '@/core/adapter/play/gameState';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { ref } from '@vue/reactivity';
+import { computed, ref } from '@vue/reactivity';
 import Card from './Card.vue';
 
 const deckState = useGameCardDeck();
+const gameState = useGameState();
 const isAnimating = ref(false);
+const isActive = computed(() => gameState.isActivePlayer);
 
 const drawCard = () => {
   if (!isAnimating.value) {
