@@ -45,12 +45,14 @@ export const useChatStore = defineStore('game-chat', () => {
     }
   };
 
-  chatWatcher.onMessage(_receiveMessage);
-
-  chatWatcher.onClose(() => {
+  const reset = () => {
     messages.value = [];
     muted.value = {};
-  });
+  };
+
+  chatWatcher.onMessage(_receiveMessage);
+  chatWatcher.onReset(reset);
+  chatWatcher.onClose(reset);
 
   return {
     allMessages: computed(() => messages.value.filter(msg => !muted.value[msg.sender.id])),

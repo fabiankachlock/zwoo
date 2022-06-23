@@ -1,4 +1,6 @@
+import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import router from '@/router';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
@@ -13,6 +15,7 @@ const summaryWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerWon);
 
 export const useGameSummary = defineStore('game-summary', () => {
   const summary = ref<GameSummaryEntry[]>([]);
+  const dispatchEvent = useGameEventDispatch();
 
   const _receiveMessage: typeof summaryWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerWon) {
@@ -24,27 +27,27 @@ export const useGameSummary = defineStore('game-summary', () => {
     }
   };
 
-  const joinAgainAsPlayer = () => {
-    console.log('joining as player');
-  };
-
-  const joinAgainAsSpectator = () => {
-    console.log('joining again as spectator');
+  const playAgain = () => {
+    dispatchEvent(ZRPOPCode._ResetState, {});
+    router.replace('/game/wait');
   };
 
   const leave = () => {
-    console.log('leaving game');
+    dispatchEvent(ZRPOPCode.LeaveGame, {});
+    router.replace('/home');
+  };
+
+  const reset = () => {
+    summary.value = [];
   };
 
   summaryWatcher.onMessage(_receiveMessage);
-  summaryWatcher.onClose(() => {
-    summary.value = [];
-  });
+  summaryWatcher.onReset(reset);
+  summaryWatcher.onClose(reset);
 
   return {
     summary,
-    joinAgainAsPlayer,
-    joinAgainAsSpectator,
+    playAgain,
     leave,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}

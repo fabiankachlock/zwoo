@@ -107,12 +107,15 @@ export const useGameCardDeck = defineStore('game-cards', () => {
     dispatchEvent(ZRPOPCode.DrawCard, {});
   };
 
-  deckWatcher.onMessage(_receiveMessage);
-  deckWatcher.onClose(() => {
+  const reset = () => {
     deck = new CardDeck([]);
     cards.value = [];
     selectedCard.value = undefined;
-  });
+  };
+
+  deckWatcher.onMessage(_receiveMessage);
+  deckWatcher.onReset(reset);
+  deckWatcher.onClose(reset);
 
   return {
     cards,
