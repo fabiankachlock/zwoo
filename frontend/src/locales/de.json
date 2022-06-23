@@ -29,7 +29,8 @@
     "deleteAccount": "Account löschen",
     "logging": "Loggen",
     "goToLogging": "Zu den Einstellungen",
-    "cardTheme": "Karten Theme"
+    "cardTheme": "Karten Theme",
+    "deviceId": "Anonyme GeräteID"
   },
   "lng": {
     "de": "Deutsch",

@@ -29,7 +29,8 @@
     "deleteAccount": "Delete Account",
     "logging": "Logging",
     "goToLogging": "Go to Settings",
-    "cardTheme": "Card Theme"
+    "cardTheme": "Card Theme",
+    "deviceId": "Anonymous DeviceID"
   },
   "lng": {
     "de": "German",
