@@ -2,7 +2,7 @@
   <div class="game-summary overflow-y-auto">
     <template v-if="winner">
       <div
-        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 bg-dark hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
+        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 bg-dark mouse:hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
       >
         <div class="h-full flex flex-nowrap items-center justify-start">
           <img src="/img/logo/zwoo_logo_simple_none.png" alt="" class="max-h-full mr-3" />
@@ -13,7 +13,7 @@
       <div
         v-for="player in notWinners"
         :key="player.username"
-        class="player flex justify-between items-center flex-nowrap m-1 bg-lightest hover:bg-light rounded px-3 py-2 border bc-dark"
+        class="player flex justify-between items-center flex-nowrap m-1 bg-lightest mouse:hover:bg-light rounded px-3 py-2 border bc-dark"
       >
         <p class="tc-main-dark">
           <span class="mr-2">{{ player.position }}.</span> {{ player.username }}

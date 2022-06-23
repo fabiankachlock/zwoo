@@ -9,7 +9,7 @@
           <div
             v-for="(player, index) in playerEntries"
             :key="index"
-            class="item my-1 rounded-xl border bc-darkest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2"
+            class="item my-1 rounded-xl border bc-darkest mouse:hover:bg-darkest mouse:hover:bc-primary bg-dark px-3 py-2"
           >
             <div class="flex flex-row justify-between flex-wrap items-center">
               <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">

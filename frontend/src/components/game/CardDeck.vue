@@ -147,7 +147,7 @@ const selectCard = (card: CardTyping, index: number) => {
 
 .card-wrapper.idle {
   transform: translateY(70%);
-  filter: grayscale(1);
+  filter: grayscale(0.2);
 }
 
 .card {

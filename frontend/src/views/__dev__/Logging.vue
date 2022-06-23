@@ -48,9 +48,9 @@
       </div>
     </div>
     <div class="absolute top-2 right-2">
-      <router-link to="/settings">
+      <button @click="close()">
         <Icon icon="gg:close" class="tc-main text-2xl" />
-      </router-link>
+      </button>
     </div>
   </div>
 </template>
@@ -81,6 +81,10 @@ const reload = async () => {
 const clear = () => {
   LogStore.reset();
   reload();
+};
+
+const close = () => {
+  window.location.href = '/settings';
 };
 
 watch([isStoreLogging, isConsoleLogging, isLogrushLogging], ([useStore, useConsole, useLogrush]) => {

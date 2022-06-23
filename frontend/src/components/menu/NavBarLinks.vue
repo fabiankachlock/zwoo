@@ -1,14 +1,18 @@
 <template>
-  <div class="flex flex-col sm:flex-row gap-1 sm:gap-3">
+  <div class="flex flex-col sm:flex-row gap-3">
     <div v-if="!isLoggedIn">
       <NavBarItem :title="t('nav.login')" link="/login" />
     </div>
     <div v-if="!isLoggedIn">
       <NavBarItem :title="t('nav.createAccount')" link="/create-account" />
+    </div>
+    <div v-if="!isLoggedIn">
       <div class="divider bc-invert-main"></div>
     </div>
     <div v-if="isLoggedIn" class="sm:flex flex-row">
       <NavBarItem :title="t('nav.home')" link="/home" />
+    </div>
+    <div v-if="isLoggedIn" class="sm:flex flex-row">
       <div class="divider bc-invert-main"></div>
     </div>
     <NavBarItem :title="t('nav.idea')" link="https://github.com/fabiankachlock/zwoo/discussions/categories/ideas" is-external />
@@ -35,6 +39,6 @@ const isLoggedIn = computed(() => auth.isLoggedIn);
 
 <style scoped>
 .divider {
-  @apply h-0 my-2 border border-solid border-t-0 opacity-50 sm:hidden;
+  @apply h-0 my-1 border border-solid border-t-0 opacity-50 sm:hidden;
 }
 </style>

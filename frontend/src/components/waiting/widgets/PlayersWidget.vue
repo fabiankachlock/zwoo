@@ -50,7 +50,7 @@
         <div
           v-for="player of players"
           :key="player.id"
-          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest"
+          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest"
         >
           <p class="text-lg tc-main-dark">
             {{ player.username }}

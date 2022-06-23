@@ -2,6 +2,10 @@ import { CardColor } from '../game/card';
 
 export interface CardThemesMeta {
   themes: string[];
+  defaultTheme: {
+    name: string;
+    variant: string;
+  };
   variants: Record<string, string[]>;
   files: Record<string, Record<string, string>> & { previews: Record<string, Record<string, string>> };
   configs: Record<string, CardThemeInformation>;
