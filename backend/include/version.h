@@ -1,6 +1,6 @@
 #ifndef ZWOO_BACKEND_VERSION_H
 #define ZWOO_BACKEND_VERSION_H
 
-#define ZWOO_VERSION "1.0.0-alpha.4"
+#define ZWOO_VERSION "1.0.0-alpha.5"
 
 #endif // ZWOO_BACKEND_VERSION_H
