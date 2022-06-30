@@ -352,6 +352,9 @@ bool Game::placeCardEvent( Card _card )
 
 void Game::drawCardEvent( )
 {
+    if (!containsExpectedAction(e_gaction::G_PLAYER_DRAW))
+        return ;
+
 
     if ( draw_active )
     {
@@ -386,10 +389,8 @@ void Game::wildEvent( uint32_t _chosencolor )
         invcard.number ); // card that appears on the stack e.g. red wild card
     placeCard( *current_player, invcard, placecard ); // place onto stack
 
-    if ( draw_active == true )
-    {
-        expected_actions = { G_PLAYER_PLACE, G_PLAYER_DRAW };
-    }
+    expected_actions = { G_PLAYER_PLACE, G_PLAYER_DRAW };
+
     nextTurn( );
 }
 

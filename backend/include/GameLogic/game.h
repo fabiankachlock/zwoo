@@ -41,8 +41,6 @@ enum e_gaction
 class Game
 {
   private:
-    std::shared_ptr<spdlog::logger> log;
-
     GameRules rules;
     CardPile pile;
     CardStack stack;
@@ -119,6 +117,7 @@ class Game
 
   public:
     CyclingList<std::shared_ptr<Player>> playerorder;
+    std::shared_ptr<spdlog::logger> log;
 
     std::function<void( uint32_t, uint32_t )> next_turn;
     std::function<void( uint32_t, uint32_t )> end_turn;

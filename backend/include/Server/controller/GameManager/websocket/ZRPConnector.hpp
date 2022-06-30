@@ -50,6 +50,7 @@ class ZRPConnector
     void receivePlayerDecision( uint32_t guid, uint32_t puid,
                                 std::string data );
 
+    std::shared_ptr<GameManager> game_manager;
   private:
     void printWebsockets( );
     void sendZRPMessageToGame( uint32_t guid, uint32_t puid_exclude,
@@ -61,7 +62,7 @@ class ZRPConnector
     //  std::unordered_map<uint32_t, std::shared_ptr<ZwooListener>>
     //  getGame(guid);
 
-    std::shared_ptr<GameManager> game_manager;
+
     std::shared_ptr<Database> database;
 
     std::shared_ptr<ZwooListener> getSocket( uint32_t guid, uint32_t puid );

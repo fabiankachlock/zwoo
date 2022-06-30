@@ -31,6 +31,7 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
         {
             auto wholeMessage = m_messageBuffer.toString( );
             m_messageBuffer.setCurrentPosition( 0 );
+            connector->game_manager->getGame(m_data.guid)->log->info("Received Message: {}", wholeMessage.getValue("") ); // TODO: REMOVE AFTER BETA
 
             std::string scode = wholeMessage->substr( 0, 3 );
             int code = ( ( (int)scode[ 0 ] - 48 ) * 100 ) +
@@ -100,6 +101,7 @@ void ZwooListener::readMessage( const WebSocket &socket, v_uint8 opcode,
         catch ( std::exception e )
         {
             logger->log->warn( "Error: {}", e.what( ) );
+            connector->game_manager->getGame(m_data.guid)->log->error("Error: {}", e.what( ) ); // TODO: REMOVE AFTER BETA
         }
     }
     else if ( size > 0 )

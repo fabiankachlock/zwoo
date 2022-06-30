@@ -124,19 +124,17 @@ void ZRPConnector::addWebSocket( uint32_t guid, uint32_t puid,
     if ( listener->m_data.role != e_Roles::SPECTATOR )
         game_manager->getGame( guid )->addPlayer( puid );
 
-    {
-        auto ps_joined = UserJoined::createShared( );
-        ps_joined->username = listener->m_data.username;
-        ps_joined->wins = listener->m_data.wins;
-        ps_joined->role = listener->m_data.role;
+    auto ps_joined = UserJoined::createShared( );
+    ps_joined->username = listener->m_data.username;
+    ps_joined->wins = listener->m_data.wins;
+    ps_joined->role = listener->m_data.role;
 
-        auto out =
-            createMessage( ( listener->m_data.role == (int)e_Roles::SPECTATOR )
+    auto out =
+        createMessage( ( listener->m_data.role == (int)e_Roles::SPECTATOR )
                                ? (int)e_ZRPOpCodes::SPECTATOR_JOINED
                                : (int)e_ZRPOpCodes::PLAYER_JOINED,
                            json_mapper->writeToString( ps_joined ) );
-        sendZRPMessageToGame( guid, puid, out );
-    }
+    sendZRPMessageToGame( guid, puid, out );
 }
 
 void ZRPConnector::removeWebSocket( uint32_t guid, uint32_t puid )
@@ -177,7 +175,7 @@ void ZRPConnector::removeWebSocket( uint32_t guid, uint32_t puid )
                         sendZRPMessageToGame(
                             guid, new_host->m_data.puid,
                             createMessage( e_ZRPOpCodes::NEW_HOST,
-                                           "{\"username\": \"" +
+                                           R"({"username": ")" +
                                                new_host->m_data.username +
                                                "\"}" ) );
 
@@ -304,6 +302,7 @@ void ZRPConnector::spectatorToPlayer( uint32_t guid, uint32_t puid )
                   !game_manager->getGame( guid )->isActive( ) )
         {
             sender->m_data.role = e_Roles::PLAYER;
+            sender->m_data.role_next_round = e_Roles::PLAYER;
             game_manager->getGame( guid )->addPlayer( puid );
             sendZRPMessageToGame(
                 guid, 0,
@@ -354,12 +353,13 @@ void ZRPConnector::playerToSpectator( uint32_t guid, uint32_t puid,
                                   R"("})" );
             }
             sender->m_data.role = e_Roles::SPECTATOR;
+            sender->m_data.role_next_round = e_Roles::SPECTATOR;
 
             sendZRPMessageToGame(
                 guid, 0,
                 createMessage( e_ZRPOpCodes::PLAYER_CHANGED_ROLE,
-                               "{\"username\": \"" + sender->m_data.username +
-                                   "\", \"role\": " +
+                               R"({"username": ")" + sender->m_data.username +
+                                   R"(", "role": )" +
                                    std::to_string( (int)e_Roles::SPECTATOR ) +
                                    "}" ) );
         }
@@ -403,6 +403,14 @@ void ZRPConnector::playerToHost( uint32_t guid, uint32_t puid,
                 R"({"username": ")" + player_socket->m_data.username + "\"}" );
             sendZRPMessageToGame( guid, player_socket->m_data.puid, msg );
 
+            sendZRPMessageToGame(
+                guid, 0,
+                createMessage( e_ZRPOpCodes::PLAYER_CHANGED_ROLE,
+                               R"({"username": ")" + sender->m_data.username +
+                                   R"(", "role": )" +
+                                   std::to_string( (int)e_Roles::PLAYER ) +
+                                   "}" ) );
+
             player_socket->websocket.sendOneFrameText(
                 createMessage( e_ZRPOpCodes::YOU_ARE_HOST_NOW, "{}" ) );
         }
@@ -444,7 +452,7 @@ void ZRPConnector::startGame( uint32_t guid, uint32_t puid )
     auto g = getGame( guid );
     for ( auto [ k, v ] : g )
     {
-        if ( v->m_data.role != v->m_data.role_next_round )
+        if ( v->m_data.role != v->m_data.role_next_round || v->m_data.role == e_Roles::HOST)
         {
             if ( v->m_data.role_next_round == e_Roles::PLAYER )
                 spectatorToPlayer( v->m_data.guid, v->m_data.puid );
@@ -476,6 +484,8 @@ void ZRPConnector::startGame( uint32_t guid, uint32_t puid )
 void ZRPConnector::placeCard( uint32_t guid, uint32_t puid, std::string data )
 {
     if ( game_manager->getGame( guid )->getCurPlayer( )->getID( ) != puid )
+        return; // TODO: Send Error
+    if ( !game_manager->getGame( guid )->containsExpectedAction(e_gaction::G_PLAYER_PLACE) )
         return; // TODO: Send Error
 
     auto card = json_mapper->readFromString<oatpp::Object<CardDTO>>(
