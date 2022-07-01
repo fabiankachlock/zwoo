@@ -23,7 +23,7 @@ public sealed class GameManager
     {
         Game.Game newGame = new Game.Game(nextGameId(), name, isPublic);
         ActiveGames.Add(newGame.Id, newGame);
-        _logger.Info($"Created Game ${newGame.Id}");
+        _logger.Info($"created game ${newGame.Id}");
         return newGame;
     }
 
@@ -33,13 +33,13 @@ public sealed class GameManager
         {
             return ActiveGames[id];
         }
-        _logger.Debug($"Game find game ${id}");
+        _logger.Debug($"game find game ${id}");
         return null;
     }
 
     public bool RemoveGame(long id)
     {
-        _logger.Debug($"Removing game {id}");
+        _logger.Debug($"removing game {id}");
         return ActiveGames.Remove(id);
     }
 
