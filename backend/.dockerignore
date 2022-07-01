@@ -1,5 +1,0 @@
-build/
-
-.gitignore
-.clang-format
-docker-compose

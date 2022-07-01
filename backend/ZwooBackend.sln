@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwooBackend", "ZwooBackend/ZwooBackend.csproj", "{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
