@@ -1,5 +1,7 @@
+using ZwooGameLogic;
+using ZwooGameLogic.Game;
+
 namespace ZwooGamelogicTest;
-using ZwooGamelogic;
 
 public class GameManagerTests
 {

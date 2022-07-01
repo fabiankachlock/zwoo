@@ -6,28 +6,28 @@ public sealed class GameManager
 {
     private readonly ILog _logger;
 
-    private Dictionary<long, Game> ActiveGames;
+    private Dictionary<long, Game.Game> ActiveGames;
     private long GameId;
 
-    public GameManager(ILog logger)
+    public GameManager()
     {
-        ActiveGames = new Dictionary<long, Game>();
+        ActiveGames = new Dictionary<long, Game.Game>();
         GameId = 0;
-        _logger = logger;
+        _logger = LogManager.GetLogger("GameManager");
     }
 
-    public Game CreateGame(
+    public Game.Game CreateGame(
         string name,
         bool isPublic
     )
     {
-        Game newGame = new Game(nextGameId(), name, isPublic);
+        Game.Game newGame = new Game.Game(nextGameId(), name, isPublic);
         ActiveGames.Add(newGame.Id, newGame);
         _logger.Info($"Created Game ${newGame.Id}");
         return newGame;
     }
 
-    public Game? GetGame(long id)
+    public Game.Game? GetGame(long id)
     {
         if (ActiveGames.ContainsKey(id))
         {
@@ -43,7 +43,7 @@ public sealed class GameManager
         return ActiveGames.Remove(id);
     }
 
-    public List<Game> FindGames(string search)
+    public List<Game.Game> FindGames(string search)
     {
         return ActiveGames
             .Where(pair => pair.Key.ToString().Contains(search) || pair.Value.Name.Contains(search))
@@ -51,7 +51,7 @@ public sealed class GameManager
             .ToList();
     }
 
-    public List<Game> GetAllGames()
+    public List<Game.Game> GetAllGames()
     {
         return ActiveGames
             .Select(pair => pair.Value)
@@ -62,7 +62,4 @@ public sealed class GameManager
     {
         return ++GameId;
     }
-
-
-
 }

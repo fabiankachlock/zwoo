@@ -4,16 +4,9 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZwooGameLogic.Game.Settings;
 
-namespace ZwooGameLogic;
-
-public struct GameMeta
-{
-    public long Id;
-    public string Name;
-    public bool IsPublic;
-    public bool IsRunning;
-}
+namespace ZwooGameLogic.Game;
 
 public sealed class Game
 {
@@ -79,10 +72,10 @@ public sealed class Game
 
     }
 
-    public void HandleEvent<T>(GameEvent<T> gameEvent)
-    {
+    // public void HandleEvent<T>(GameEvent<T> gameEvent)
+    // {
 
-    }
+    // }
 
 }
 
