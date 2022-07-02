@@ -98,7 +98,7 @@ internal class GameStateManager
 
     public void HandleEvent(ClientEvent clientEvent)
     {
-        // TODO queue events
+        // TODO: queue events
         GameState newState = _gameState.Clone();
         BaseRule? rule = _ruleManager.getRule(clientEvent, newState);
 
@@ -108,7 +108,7 @@ internal class GameStateManager
             return;
         }
 
-        GameStateUpdate stateUpdate = rule.applyRule(clientEvent, _gameState, _cardPile, _playerCycle);
+        GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
         // TODO: send state update events via notification manager
         _gameState = stateUpdate.NewState;
     }

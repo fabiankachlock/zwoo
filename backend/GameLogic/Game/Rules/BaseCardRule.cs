@@ -29,15 +29,15 @@ internal class BaseCardRule : BaseRule
         return top.Type == newCard.Type || top.Color == newCard.Color;
     }
 
-    public override bool isResponsible(ClientEvent gameEvent, GameState state)
+    public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
         return gameEvent.Type == ClientEventType.PlaceCard;
     }
 
 
-    public override GameStateUpdate applyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
-        if (!isResponsible(gameEvent, state)) return GameStateUpdate.None(state);
+        if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new List<GameEvent>();
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();

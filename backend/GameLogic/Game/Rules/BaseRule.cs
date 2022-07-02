@@ -20,13 +20,13 @@ internal abstract class BaseRule
 
     public BaseRule() { }
 
-    public virtual bool isResponsible(ClientEvent gameEvent, GameState state)
+    public virtual bool IsResponsible(ClientEvent clientEvent, GameState state)
     {
         return false;
     }
 
 
-    public virtual GameStateUpdate applyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public virtual GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         return new GameStateUpdate(state, new List<GameEvent>());
     }

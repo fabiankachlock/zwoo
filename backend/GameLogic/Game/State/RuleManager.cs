@@ -32,7 +32,7 @@ internal class RuleManager
 
     public List<BaseRule> GetResponsibleRules(ClientEvent clientEvent, GameState state)
     {
-        return _activeRules.Where(rule => rule.isResponsible(clientEvent, state)).ToList();
+        return _activeRules.Where(rule => rule.IsResponsible(clientEvent, state)).ToList();
     }
 
     public BaseRule GetPrioritiesedRule(List<BaseRule> rules)
