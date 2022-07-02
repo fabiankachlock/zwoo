@@ -14,6 +14,7 @@ internal class GameStateManager
 {
     public readonly long GameId;
     private readonly NotificationManager _notificationManager;
+    private readonly RuleManager _ruleManager;
     private PlayerManager _playerManager;
     private GameSettings _gameSettings;
     private GameState _gameState;
@@ -38,6 +39,7 @@ internal class GameStateManager
         _cardPile = new Pile();
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
+        _ruleManager = new RuleManager(_gameSettings);
         _logger = LogManager.GetLogger($"GameState-{id}");
     }
 

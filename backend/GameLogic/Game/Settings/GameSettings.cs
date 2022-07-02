@@ -44,7 +44,7 @@ public struct GameSettings
         return new GameSettings(new Dictionary<GameSettingsKey, int>());
     }
 
-    public void Set(GameSettingsKey key, int value)
+    public void Set(GameSettingsKey? key, int value)
     {
         if (Settings.ContainsKey(key))
         {
@@ -59,5 +59,24 @@ public struct GameSettings
             GameSettingsKey key = GameSettings.SettingKeys[stringKey];
             Set(key, value);
         }
+    }
+
+    public int Get(GameSettingsKey? key)
+    {
+        if (Settings.ContainsKey(key))
+        {
+            return Settings[key];
+        }
+        return 0;
+    }
+
+    public int Get(string stringKey)
+    {
+        if (GameSettings.SettingKeys.ContainsKey(stringKey))
+        {
+            GameSettingsKey key = GameSettings.SettingKeys[stringKey];
+            return Settings[key];
+        }
+        return 0;
     }
 }
