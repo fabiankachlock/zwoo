@@ -62,6 +62,15 @@ public sealed class GameManager
             .ToList();
     }
 
+    public void SendEvent(long gameId, ClientEvent clientEvent)
+    {
+        Game.Game? game = GetGame(gameId);
+        if (game != null)
+        {
+            game.HandleEvent(clientEvent);
+        }
+    }
+
     private long nextGameId()
     {
         return ++_gameId;
