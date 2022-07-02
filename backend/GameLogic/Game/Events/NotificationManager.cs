@@ -25,7 +25,7 @@ public readonly record struct DrawCardsDTO(
     List<Card> Cards
 );
 
-public interface NotificationManagerInterface
+public interface NotificationManager
 {
     void StartGame();
 

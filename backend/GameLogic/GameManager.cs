@@ -1,4 +1,5 @@
 ﻿using log4net;
+using ZwooGameLogic.Game.Events;
 
 namespace ZwooGameLogic;
 
@@ -6,13 +7,16 @@ public sealed class GameManager
 {
     private readonly ILog _logger;
 
-    private Dictionary<long, Game.Game> ActiveGames;
-    private long GameId;
+    private long _gameId;
+    private Dictionary<long, Game.Game> _activeGames;
+    private NotificationManager _notificationManager;
 
-    public GameManager()
+
+    public GameManager(NotificationManager notificationManager)
     {
-        ActiveGames = new Dictionary<long, Game.Game>();
-        GameId = 0;
+        _gameId = 0;
+        _activeGames = new Dictionary<long, Game.Game>();
+        _notificationManager = notificationManager;
         _logger = LogManager.GetLogger("GameManager");
     }
 
@@ -21,17 +25,17 @@ public sealed class GameManager
         bool isPublic
     )
     {
-        Game.Game newGame = new Game.Game(nextGameId(), name, isPublic);
-        ActiveGames.Add(newGame.Id, newGame);
+        Game.Game newGame = new Game.Game(nextGameId(), name, isPublic, _notificationManager);
+        _activeGames.Add(newGame.Id, newGame);
         _logger.Info($"created game ${newGame.Id}");
         return newGame;
     }
 
     public Game.Game? GetGame(long id)
     {
-        if (ActiveGames.ContainsKey(id))
+        if (_activeGames.ContainsKey(id))
         {
-            return ActiveGames[id];
+            return _activeGames[id];
         }
         _logger.Debug($"game find game ${id}");
         return null;
@@ -40,12 +44,12 @@ public sealed class GameManager
     public bool RemoveGame(long id)
     {
         _logger.Debug($"removing game {id}");
-        return ActiveGames.Remove(id);
+        return _activeGames.Remove(id);
     }
 
     public List<Game.Game> FindGames(string search)
     {
-        return ActiveGames
+        return _activeGames
             .Where(pair => pair.Key.ToString().Contains(search) || pair.Value.Name.Contains(search))
             .Select(pair => pair.Value)
             .ToList();
@@ -53,13 +57,13 @@ public sealed class GameManager
 
     public List<Game.Game> GetAllGames()
     {
-        return ActiveGames
+        return _activeGames
             .Select(pair => pair.Value)
             .ToList();
     }
 
     private long nextGameId()
     {
-        return ++GameId;
+        return ++_gameId;
     }
 }

@@ -14,40 +14,43 @@ namespace ZwooGameLogic.Game;
 public sealed class Game
 {
     private GameMeta _meta;
+    private GameSettings _gameSettings;
+    private PlayerManager _playerManager;
+    private GameStateManager _stateManager;
+    private readonly NotificationManager _notificationManager;
+    private readonly ILog _logger;
 
     public long Id { get => _meta.Id; }
     public string Name { get => _meta.Name; }
     public bool IsPublic { get => _meta.IsPublic; }
     public bool IsRunning { get => _stateManager.IsRunning; }
 
-    private GameSettings _gameSettings;
     public GameSettings Settings
     {
         get => _gameSettings;
     }
 
-    private PlayerManager _playerManager;
     public List<long> AllPlayers { get => _playerManager.Players; }
     public int PlayerCount { get => _playerManager.PlayerCount; }
 
-    private GameStateManager _stateManager;
 
-    private readonly ILog _logger;
 
     public Game(
         long id,
         string name,
-        bool isPublic
+        bool isPublic,
+        NotificationManager notificationManager
     )
     {
         _meta = new GameMeta();
         _meta.Name = name;
         _meta.Id = id;
         _meta.IsPublic = isPublic;
-        _playerManager = new PlayerManager();
-        _logger = LogManager.GetLogger($"Game-{id}");
+        _notificationManager = notificationManager;
         _gameSettings = GameSettings.FromDefaults();
+        _playerManager = new PlayerManager();
         _stateManager = new GameStateManager(id, _playerManager, _gameSettings);
+        _logger = LogManager.GetLogger($"Game-{id}");
     }
 
 

@@ -13,6 +13,7 @@ namespace ZwooGameLogic.Game.State;
 internal class GameStateManager
 {
     public readonly long GameId;
+    private readonly NotificationManager _notificationManager;
     private PlayerManager _playerManager;
     private GameSettings _gameSettings;
     private GameState _gameState;
@@ -27,15 +28,16 @@ internal class GameStateManager
         get => _isRunning;
     }
 
-    public GameStateManager(long id, PlayerManager playerManager, GameSettings settings)
+    public GameStateManager(long id, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
     {
         GameId = id;
         _gameSettings = settings;
         _playerManager = playerManager;
-        _playerCycle = new PlayerCycle(new List<long>());
-        _gameState = new GameState();
-        _cardPile = new Pile();
+        _notificationManager = notification;
         _isRunning = false;
+        _cardPile = new Pile();
+        _gameState = new GameState();
+        _playerCycle = new PlayerCycle(new List<long>());
         _logger = LogManager.GetLogger($"GameState-{id}");
     }
 
