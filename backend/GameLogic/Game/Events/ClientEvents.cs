@@ -9,9 +9,9 @@ namespace ZwooGameLogic.Game.Events;
 
 public enum ClientEventType
 {
-    PlaceCard,
-    DrawCard,
-    PlayerDecission
+    PlaceCard = 1,
+    DrawCard = 2,
+    PlayerDecission = 3
 }
 
 public struct ClientEvent<T>

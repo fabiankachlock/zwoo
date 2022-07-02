@@ -27,4 +27,9 @@ internal sealed class PlayerManager
     {
         return PreparedPlayers.Remove(id);
     }
+
+    public PlayerCycle ComputeOrder()
+    {
+        return new PlayerCycle(Players);
+    }
 }

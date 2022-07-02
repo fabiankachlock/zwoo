@@ -11,5 +11,4 @@ public struct GameMeta
     public long Id;
     public string Name;
     public bool IsPublic;
-    public bool IsRunning;
 }
