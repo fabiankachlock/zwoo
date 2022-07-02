@@ -9,9 +9,10 @@ namespace ZwooGameLogic.Game.Events;
 
 public enum ClientEventType
 {
-    PlaceCard = 1,
-    DrawCard = 2,
-    PlayerDecission = 3
+    RequestEndTurn = 303,
+    PlaceCard = 304,
+    DrawCard = 305,
+    SendPlayerDecission = 317
 }
 
 public struct ClientEvent<T>
@@ -23,6 +24,21 @@ public struct ClientEvent<T>
     {
         Type = type;
         Payload = payload;
+    }
+
+    public struct RequestEndTurnEvent
+    {
+        public readonly long Player;
+
+        public RequestEndTurnEvent(long player)
+        {
+            Player = player;
+        }
+    }
+
+    public static ClientEvent<RequestEndTurnEvent> RequestEndTurn(long player)
+    {
+        return new ClientEvent<RequestEndTurnEvent>(ClientEventType.DrawCard, new RequestEndTurnEvent(player));
     }
 
     public struct PlaceCardEvent
@@ -71,7 +87,7 @@ public struct ClientEvent<T>
 
     public static ClientEvent<PlayerDecissionEvent> PlayerDecission(long player, byte decission)
     {
-        return new ClientEvent<PlayerDecissionEvent>(ClientEventType.PlayerDecission, new PlayerDecissionEvent(player, decission));
+        return new ClientEvent<PlayerDecissionEvent>(ClientEventType.SendPlayerDecission, new PlayerDecissionEvent(player, decission));
     }
 
 }
