@@ -18,15 +18,20 @@ public enum GameEventType
     PlayerWon = 399
 }
 
-public struct GameEvent<T>
+public struct GameEvent
 {
     public readonly GameEventType Type;
-    public readonly T Payload;
+    public readonly object Payload;
 
-    private GameEvent(GameEventType type, T payload)
+    private GameEvent(GameEventType type, object payload)
     {
         Type = type;
         Payload = payload;
+    }
+
+    public T CastPayload<T>()
+    {
+        return (T)Payload;
     }
 
     // StartTurnEvent
@@ -40,9 +45,9 @@ public struct GameEvent<T>
         }
     }
 
-    public static GameEvent<StartTurnEvent> StartTurn(long player)
+    public static GameEvent StartTurn(long player)
     {
-        return new GameEvent<StartTurnEvent>(GameEventType.StartTurn, new StartTurnEvent(player));
+        return new GameEvent(GameEventType.StartTurn, new StartTurnEvent(player));
     }
 
     //EndTurnEvent
@@ -56,9 +61,9 @@ public struct GameEvent<T>
         }
     }
 
-    public static GameEvent<EndTurnEvent> EndTurn(long player)
+    public static GameEvent EndTurn(long player)
     {
-        return new GameEvent<EndTurnEvent>(GameEventType.EndTurn, new EndTurnEvent(player));
+        return new GameEvent(GameEventType.EndTurn, new EndTurnEvent(player));
     }
 
     // GetCardEvent
@@ -74,9 +79,9 @@ public struct GameEvent<T>
         }
     }
 
-    public static GameEvent<GetCardEvent> SendCard(long player, Card card)
+    public static GameEvent SendCard(long player, Card card)
     {
-        return new GameEvent<GetCardEvent>(GameEventType.GetCard, new GetCardEvent(player, card));
+        return new GameEvent(GameEventType.GetCard, new GetCardEvent(player, card));
     }
 
     // RemoveCardEvent
@@ -92,9 +97,9 @@ public struct GameEvent<T>
         }
     }
 
-    public static GameEvent<RemoveCardEvent> RemoveCard(long player, Card card)
+    public static GameEvent RemoveCard(long player, Card card)
     {
-        return new GameEvent<RemoveCardEvent>(GameEventType.RemoveCard, new RemoveCardEvent(player, card));
+        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, card));
     }
 
 
@@ -117,9 +122,9 @@ public struct GameEvent<T>
         }
     }
 
-    public static GameEvent<StateUpdateEvent> CreateStateUpdate(Card topCard, long activePlayer, int activePlayerCardAmount, long lastPlayer, int lastPlayerCardAmount)
+    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, int activePlayerCardAmount, long lastPlayer, int lastPlayerCardAmount)
     {
-        return new GameEvent<StateUpdateEvent>(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, activePlayerCardAmount, lastPlayer, lastPlayerCardAmount));
+        return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, activePlayerCardAmount, lastPlayer, lastPlayerCardAmount));
     }
 
     // PlayerDecissionEvent
@@ -135,9 +140,9 @@ public struct GameEvent<T>
         }
     }
 
-    public static GameEvent<PlayerDecissionEvent> GetPlayerDecission(long player, int decission)
+    public static GameEvent GetPlayerDecission(long player, int decission)
     {
-        return new GameEvent<PlayerDecissionEvent>(GameEventType.GetPlayerDecission, new PlayerDecissionEvent(player, decission));
+        return new GameEvent(GameEventType.GetPlayerDecission, new PlayerDecissionEvent(player, decission));
     }
 
     // PlayerWonEvent
@@ -153,9 +158,9 @@ public struct GameEvent<T>
         }
     }
 
-    public static GameEvent<PlayerWonEvent> PlayerWon(long player, Dictionary<long, int> scores)
+    public static GameEvent PlayerWon(long player, Dictionary<long, int> scores)
     {
-        return new GameEvent<PlayerWonEvent>(GameEventType.PlayerWon, new PlayerWonEvent(player, scores));
+        return new GameEvent(GameEventType.PlayerWon, new PlayerWonEvent(player, scores));
     }
 
 }

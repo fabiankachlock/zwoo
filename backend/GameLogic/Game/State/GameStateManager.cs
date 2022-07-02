@@ -93,7 +93,7 @@ internal class GameStateManager
         _playerCycle = new PlayerCycle(new List<long>());
     }
 
-    public void HandleEvent<T>(GameEvent<T> gameEvent)
+    public void HandleEvent(GameEvent gameEvent)
     {
 
     }

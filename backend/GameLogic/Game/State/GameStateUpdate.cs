@@ -10,9 +10,9 @@ namespace ZwooGameLogic.Game.State;
 internal struct GameStateUpdate
 {
     public GameState NewState;
-    public List<GameEvent<object>> Events;
+    public List<GameEvent> Events;
 
-    public GameStateUpdate(GameState newState, List<GameEvent<object>> events)
+    public GameStateUpdate(GameState newState, List<GameEvent> events)
     {
         NewState = newState;
         Events = events;
@@ -20,6 +20,6 @@ internal struct GameStateUpdate
 
     public static GameStateUpdate None(GameState state)
     {
-        return new GameStateUpdate(state, new List<GameEvent<object>>());
+        return new GameStateUpdate(state, new List<GameEvent>());
     }
 }

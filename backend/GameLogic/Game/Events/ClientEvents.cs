@@ -15,15 +15,20 @@ public enum ClientEventType
     SendPlayerDecission = 317
 }
 
-public struct ClientEvent<T>
+public struct ClientEvent
 {
     public readonly ClientEventType Type;
-    public readonly T Payload;
+    public readonly object Payload;
 
-    private ClientEvent(ClientEventType type, T payload)
+    private ClientEvent(ClientEventType type, object payload)
     {
         Type = type;
         Payload = payload;
+    }
+
+    public T CastPayload<T>()
+    {
+        return (T)Payload;
     }
 
     public struct RequestEndTurnEvent
@@ -36,9 +41,9 @@ public struct ClientEvent<T>
         }
     }
 
-    public static ClientEvent<RequestEndTurnEvent> RequestEndTurn(long player)
+    public static ClientEvent RequestEndTurn(long player)
     {
-        return new ClientEvent<RequestEndTurnEvent>(ClientEventType.DrawCard, new RequestEndTurnEvent(player));
+        return new ClientEvent(ClientEventType.DrawCard, new RequestEndTurnEvent(player));
     }
 
     public struct PlaceCardEvent
@@ -53,9 +58,9 @@ public struct ClientEvent<T>
         }
     }
 
-    public static ClientEvent<PlaceCardEvent> PlaceCard(long player, Card card)
+    public static ClientEvent PlaceCard(long player, Card card)
     {
-        return new ClientEvent<PlaceCardEvent>(ClientEventType.PlaceCard, new PlaceCardEvent(player, card));
+        return new ClientEvent(ClientEventType.PlaceCard, new PlaceCardEvent(player, card));
     }
 
     public struct DrawCardEvent
@@ -68,9 +73,9 @@ public struct ClientEvent<T>
         }
     }
 
-    public static ClientEvent<DrawCardEvent> DrawCard(long player)
+    public static ClientEvent DrawCard(long player)
     {
-        return new ClientEvent<DrawCardEvent>(ClientEventType.DrawCard, new DrawCardEvent(player));
+        return new ClientEvent(ClientEventType.DrawCard, new DrawCardEvent(player));
     }
 
     public struct PlayerDecissionEvent
@@ -85,9 +90,9 @@ public struct ClientEvent<T>
         }
     }
 
-    public static ClientEvent<PlayerDecissionEvent> PlayerDecission(long player, int decission)
+    public static ClientEvent PlayerDecission(long player, int decission)
     {
-        return new ClientEvent<PlayerDecissionEvent>(ClientEventType.SendPlayerDecission, new PlayerDecissionEvent(player, decission));
+        return new ClientEvent(ClientEventType.SendPlayerDecission, new PlayerDecissionEvent(player, decission));
     }
 
 }

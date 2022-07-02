@@ -29,25 +29,25 @@ internal class BaseCardRule : BaseRule
         return top.Type == newCard.Type || top.Color == newCard.Color;
     }
 
-    public override bool isResponsible(ClientEvent<object> gameEvent, GameState state)
+    public override bool isResponsible(ClientEvent gameEvent, GameState state)
     {
         return gameEvent.Type == ClientEventType.PlaceCard;
     }
 
 
-    public override GameStateUpdate applyRule(ClientEvent<object> gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate applyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!isResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent<object>> events = new List<GameEvent<object>>();
+        List<GameEvent> events = new List<GameEvent>();
 
-        ClientEvent<object>.PlaceCardEvent payload = (ClientEvent<object>.PlaceCardEvent)gameEvent.Payload;
+        ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
         bool isAllowed = CanThrowCard(state.TopCard, payload.Card) && state.CurrentPlayer == payload.Player;
         if (isAllowed)
         {
             state.CurrentPlayer = playerOrder.Next();
             state.TopCard = payload.Card;
             state.PlayerDecks[payload.Player].Remove(payload.Card);
-            events.Add((GameEvent<object>)(object)GameEvent<object>.RemoveCard(payload.Player, payload.Card));
+            events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
             return new GameStateUpdate(state, events);
         }
 
