@@ -1,4 +1,4 @@
-log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
+using ZwooBackend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    log.Info("Adding Swagger");
+    Globals.Logger.Info("Adding Swagger");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
