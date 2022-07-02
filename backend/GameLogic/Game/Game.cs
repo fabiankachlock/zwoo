@@ -66,7 +66,7 @@ public sealed class Game
         return _playerManager.RemovePlayer(id);
     }
 
-    public void SetSetting(string key, byte value)
+    public void SetSetting(string key, int value)
     {
         _gameSettings.Set(key, value);
     }

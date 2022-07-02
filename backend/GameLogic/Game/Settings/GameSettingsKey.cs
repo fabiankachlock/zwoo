@@ -8,6 +8,7 @@ namespace ZwooGameLogic.Game.Settings;
 
 public enum GameSettingsKey
 {
+    DEFAULT_RULE_SET = 0,
     MaxAmountOfPlayers = 1,
     NumberOfCards = 2
 }

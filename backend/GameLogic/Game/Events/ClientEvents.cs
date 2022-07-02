@@ -76,16 +76,16 @@ public struct ClientEvent<T>
     public struct PlayerDecissionEvent
     {
         public readonly long Player;
-        public readonly byte Decission;
+        public readonly int Decission;
 
-        public PlayerDecissionEvent(long player, byte decission)
+        public PlayerDecissionEvent(long player, int decission)
         {
             Player = player;
             Decission = decission;
         }
     }
 
-    public static ClientEvent<PlayerDecissionEvent> PlayerDecission(long player, byte decission)
+    public static ClientEvent<PlayerDecissionEvent> PlayerDecission(long player, int decission)
     {
         return new ClientEvent<PlayerDecissionEvent>(ClientEventType.SendPlayerDecission, new PlayerDecissionEvent(player, decission));
     }

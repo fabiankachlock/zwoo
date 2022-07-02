@@ -62,21 +62,21 @@ public struct GameEvent<T>
     }
 
     // GetCardEvent
-    public struct GetcardEvent
+    public struct GetCardEvent
     {
         public readonly long Player;
         public readonly Card Card;
 
-        public GetcardEvent(long player, Card card)
+        public GetCardEvent(long player, Card card)
         {
             Player = player;
             Card = card;
         }
     }
 
-    public static GameEvent<GetcardEvent> SendCard(long player, Card card)
+    public static GameEvent<GetCardEvent> SendCard(long player, Card card)
     {
-        return new GameEvent<GetcardEvent>(GameEventType.GetCard, new GetcardEvent(player, card));
+        return new GameEvent<GetCardEvent>(GameEventType.GetCard, new GetCardEvent(player, card));
     }
 
     // RemoveCardEvent
@@ -126,16 +126,16 @@ public struct GameEvent<T>
     public struct PlayerDecissionEvent
     {
         public readonly long Player;
-        public readonly byte Decission;
+        public readonly int Decission;
 
-        public PlayerDecissionEvent(long player, byte decission)
+        public PlayerDecissionEvent(long player, int decission)
         {
             Player = player;
             Decission = decission;
         }
     }
 
-    public static GameEvent<PlayerDecissionEvent> GetPlayerDecission(long player, byte decission)
+    public static GameEvent<PlayerDecissionEvent> GetPlayerDecission(long player, int decission)
     {
         return new GameEvent<PlayerDecissionEvent>(GameEventType.GetPlayerDecission, new PlayerDecissionEvent(player, decission));
     }

@@ -7,6 +7,16 @@ using ZwooGameLogic.Game.Cards;
 
 namespace ZwooGameLogic.Game.Events;
 
+public readonly record struct SendCardDTO(
+    long Player,
+    Card Card
+);
+
+public readonly record struct RemoveCardDTO(
+    long Player,
+    Card Card
+);
+
 public readonly record struct StateUpdateDTO(
     Card PileTop,
     long ActivePlayer,
@@ -17,13 +27,14 @@ public readonly record struct StateUpdateDTO(
 
 public readonly record struct PlayerDecissionDTO(
     long Player,
-    byte Decission
+    int Decission
 );
 
-public readonly record struct DrawCardsDTO(
-    long Player,
-    List<Card> Cards
+public readonly record struct PlayerWonDTO(
+    long Winner,
+    Dictionary<long, int> Scores
 );
+
 
 public interface NotificationManager
 {
@@ -31,13 +42,17 @@ public interface NotificationManager
 
     void StopGame();
 
+    void StartTurn(long player);
+
+    void EndTurn(long player);
+
+    void SendCard(SendCardDTO data);
+
+    void RemoveCard(RemoveCardDTO data);
+
     void StateUpdate(StateUpdateDTO data);
 
-    void SendGetDecission(PlayerDecissionDTO data);
+    void GetPlayerDecission(PlayerDecissionDTO data);
 
-    void SendDrawCards(DrawCardsDTO data);
-
-    void SendStartTurn(long player);
-
-    void SendEndTurn(long player);
+    void PlayerWon(PlayerWonDTO data);
 }
