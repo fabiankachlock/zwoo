@@ -83,18 +83,18 @@ public struct GameEvent<T>
     public struct RemoveCardEvent
     {
         public readonly long Player;
-        public readonly List<Card> Cards;
+        public readonly Card Card;
 
-        public RemoveCardEvent(long player, List<Card> cards)
+        public RemoveCardEvent(long player, Card card)
         {
             Player = player;
-            Cards = cards;
+            Card = card;
         }
     }
 
-    public static GameEvent<RemoveCardEvent> RemoveCard(long player, List<Card> cards)
+    public static GameEvent<RemoveCardEvent> RemoveCard(long player, Card card)
     {
-        return new GameEvent<RemoveCardEvent>(GameEventType.RemoveCard, new RemoveCardEvent(player, cards));
+        return new GameEvent<RemoveCardEvent>(GameEventType.RemoveCard, new RemoveCardEvent(player, card));
     }
 
 

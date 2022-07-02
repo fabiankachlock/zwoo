@@ -10,7 +10,7 @@ using ZwooGameLogic.Game.Cards;
 
 namespace ZwooGameLogic.Game.Rules;
 
-internal class BaseRule
+internal abstract class BaseRule
 {
     public readonly int Priority = -1;
 
@@ -20,13 +20,13 @@ internal class BaseRule
 
     public BaseRule() { }
 
-    public bool isResponsible(GameEvent<object> gameEvent, GameState state)
+    public virtual bool isResponsible(ClientEvent<object> gameEvent, GameState state)
     {
         return false;
     }
 
 
-    public GameStateUpdate applyRule(GameEvent<object> gameEvent, GameState state, Pile cardPile)
+    public virtual GameStateUpdate applyRule(ClientEvent<object> gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         return new GameStateUpdate(state, new List<object>());
     }
