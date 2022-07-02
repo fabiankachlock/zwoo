@@ -90,10 +90,10 @@ public sealed class Game
         _stateManager.Reset();
     }
 
-    public void HandleEvent(GameEvent gameEvent)
+    public void HandleEvent(ClientEvent clientEvent)
     {
-        _logger.Info($"received event: {gameEvent.Type}");
-        _stateManager.HandleEvent(gameEvent);
+        _logger.Info($"received event: {clientEvent.Type}");
+        _stateManager.HandleEvent(clientEvent);
     }
 
 }

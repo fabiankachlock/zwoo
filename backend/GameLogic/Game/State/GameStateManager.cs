@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using log4net;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Game.State;
@@ -95,8 +96,20 @@ internal class GameStateManager
         _playerCycle = new PlayerCycle(new List<long>());
     }
 
-    public void HandleEvent(GameEvent gameEvent)
+    public void HandleEvent(ClientEvent clientEvent)
     {
+        // TODO queue events
+        GameState newState = _gameState.Clone();
+        BaseRule? rule = _ruleManager.getRule(clientEvent, newState);
 
+        if (rule == null)
+        {
+            _logger.Error($"cant find rule for event ${clientEvent}");
+            return;
+        }
+
+        GameStateUpdate stateUpdate = rule.applyRule(clientEvent, _gameState, _cardPile, _playerCycle);
+        // TODO: send state update events via notification manager
+        _gameState = stateUpdate.NewState;
     }
 }
