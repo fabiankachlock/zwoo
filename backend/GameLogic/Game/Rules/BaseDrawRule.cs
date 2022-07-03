@@ -31,9 +31,14 @@ internal class BaseDrawRule : BaseRule
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new List<GameEvent>();
 
-        // TODO: check if player is active && in game
         int amount = 0;
         ClientEvent.DrawCardEvent payload = gameEvent.CastPayload<ClientEvent.DrawCardEvent>();
+
+        if (!IsActivePlayer(state, payload.Player))
+        {
+            return GameStateUpdate.None(state);
+        }
+
         if (CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated)
         {
             amount = GetDrawAmount(state.TopCard.Card);

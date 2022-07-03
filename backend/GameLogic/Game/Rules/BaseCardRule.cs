@@ -31,11 +31,9 @@ internal class BaseCardRule : BaseRule
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new List<GameEvent>();
 
-        // TODO: check if player is active && in game
-
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
         bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && state.CurrentPlayer == payload.Player;
-        if (isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
+        if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
             state.CurrentPlayer = playerOrder.Next();

@@ -32,8 +32,18 @@ internal abstract class BaseRule
     }
 
     // Rule utilities
+    protected bool IsValidPlayer(GameState state, long player)
+    {
+        return state.PlayerDecks.ContainsKey(player);
+    }
+
+    protected bool IsActivePlayer(GameState state, long player)
+    {
+        return IsValidPlayer(state, player) && state.CurrentPlayer == player;
+    }
+
     protected bool PlayerHasCard(GameState state, long player, Card card)
     {
-        return state.PlayerDecks[player].Contains(card);
+        return IsValidPlayer(state, player) && state.PlayerDecks[player].Contains(card);
     }
 }
