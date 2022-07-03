@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +21,8 @@ public sealed class GameStateManager
     private GameState _gameState;
     private PlayerCycle _playerCycle;
     private Pile _cardPile;
+    private ConcurrentQueue<ClientEvent> _events;
+    private bool _isExecutingEvent;
     private bool _isRunning;
 
     private ILog _logger;
@@ -37,10 +39,12 @@ public sealed class GameStateManager
         _playerManager = playerManager;
         _notificationManager = notification;
         _isRunning = false;
+        _isExecutingEvent = false;
         _cardPile = new Pile();
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
         _ruleManager = new RuleManager(_gameSettings);
+        _events = new ConcurrentQueue<ClientEvent>();
         _logger = LogManager.GetLogger($"GameState-{id}");
     }
 
@@ -122,13 +126,33 @@ public sealed class GameStateManager
 
     internal void HandleEvent(ClientEvent clientEvent)
     {
-        // TODO: queue events
+        _events.Enqueue(clientEvent);
+        TryExecuteEvent();
+    }
+
+    private void TryExecuteEvent()
+    {
+        if (!_isExecutingEvent && _events.Count > 0)
+        {
+            ClientEvent evt;
+            if (_events.TryDequeue(out evt))
+            {
+                ExecuteEvent(evt);
+            }
+        }
+    }
+
+    private void ExecuteEvent(ClientEvent clientEvent)
+    {
+        _isExecutingEvent = true;
         GameState newState = _gameState.Clone();
         BaseRule? rule = _ruleManager.getRule(clientEvent, newState);
 
         if (rule == null)
         {
             _logger.Error($"cant find rule for event ${clientEvent}");
+            _isExecutingEvent = false;
+            TryExecuteEvent();
             return;
         }
         _logger.Debug($"selected rule: {rule.Name}");
@@ -144,6 +168,10 @@ public sealed class GameStateManager
         _gameState = stateUpdate.NewState;
 
         SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
+
+        // handle next event
+        _isExecutingEvent = false;
+        TryExecuteEvent();
     }
 
     private void SendEvents(List<GameEvent> events)
