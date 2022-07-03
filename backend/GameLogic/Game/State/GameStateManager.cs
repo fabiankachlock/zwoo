@@ -11,7 +11,7 @@ using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Game.State;
 
-internal sealed class GameStateManager
+public sealed class GameStateManager
 {
     public readonly long GameId;
     private readonly NotificationManager _notificationManager;
@@ -30,7 +30,7 @@ internal sealed class GameStateManager
         get => _isRunning;
     }
 
-    public GameStateManager(long id, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
+    internal GameStateManager(long id, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
     {
         GameId = id;
         _gameSettings = settings;
@@ -45,7 +45,7 @@ internal sealed class GameStateManager
     }
 
 
-    public void Start()
+    internal void Start()
     {
         if (_isRunning)
         {
@@ -75,7 +75,7 @@ internal sealed class GameStateManager
         return decks;
     }
 
-    public void Stop()
+    internal void Stop()
     {
         if (!_isRunning)
         {
@@ -85,7 +85,7 @@ internal sealed class GameStateManager
         _isRunning = false;
     }
 
-    public void Reset()
+    internal void Reset()
     {
         if (!_isRunning)
         {
@@ -97,7 +97,30 @@ internal sealed class GameStateManager
         _playerCycle = new PlayerCycle(new List<long>());
     }
 
-    public void HandleEvent(ClientEvent clientEvent)
+    public List<Card>? GetPlayerDeck(long playerId)
+    {
+        if (_gameState.PlayerDecks.ContainsKey(playerId))
+        {
+            return _gameState.PlayerDecks[playerId];
+        }
+        return null;
+    }
+
+    public int? GetPlayerCardAmount(long playerId)
+    {
+        if (_gameState.PlayerDecks.ContainsKey(playerId))
+        {
+            return _gameState.PlayerDecks[playerId].Count;
+        }
+        return null;
+    }
+
+    public Card GetPileTop()
+    {
+        return _gameState.TopCard;
+    }
+
+    internal void HandleEvent(ClientEvent clientEvent)
     {
         // TODO: queue events
         GameState newState = _gameState.Clone();

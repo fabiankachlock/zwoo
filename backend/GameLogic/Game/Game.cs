@@ -33,7 +33,10 @@ public sealed class Game
     public List<long> AllPlayers { get => _playerManager.Players; }
     public int PlayerCount { get => _playerManager.PlayerCount; }
 
-
+    public GameStateManager State
+    {
+        get => _stateManager;
+    }
 
     public Game(
         long id,
