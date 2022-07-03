@@ -20,15 +20,6 @@ internal class BaseCardRule : BaseRule
 
     public BaseCardRule() : base() { }
 
-    protected bool CanThrowCard(Card top, Card newCard)
-    {
-        if (CardUtilities.IsWild(newCard))
-        {
-            return top.Type == CardType.WildFour ? newCard.Type == CardType.WildFour : true;
-        }
-        return top.Type == newCard.Type || top.Color == newCard.Color;
-    }
-
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
         return gameEvent.Type == ClientEventType.PlaceCard;
@@ -40,9 +31,11 @@ internal class BaseCardRule : BaseRule
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new List<GameEvent>();
 
+        // TODO: check if player is active && in game
+
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        bool isAllowed = CanThrowCard(state.TopCard, payload.Card) && state.CurrentPlayer == payload.Player;
-        if (isAllowed)
+        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && state.CurrentPlayer == payload.Player;
+        if (isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
             state.CurrentPlayer = playerOrder.Next();
@@ -52,5 +45,28 @@ internal class BaseCardRule : BaseRule
 
         // TODO: may send not allowed to throw or error if not active player 
         return GameStateUpdate.None(state);
+    }
+
+    // Rule utilities
+    protected bool CanThrowCard(Card top, Card newCard)
+    {
+        if (CardUtilities.IsWild(newCard))
+        {
+            return top.Type == CardType.WildFour ? newCard.Type == CardType.WildFour : true;
+        }
+        return top.Type == newCard.Type || top.Color == newCard.Color;
+    }
+
+    protected GameState PlaceCardOnStack(GameState state, Card card)
+    {
+        state.TopCard = new StackCard(card);
+        state.CardStack.Add(state.TopCard);
+        return state;
+    }
+
+    protected GameState PlayPlayerCard(GameState state, long player, Card card)
+    {
+        state.PlayerDecks[player].Remove(card);
+        return PlaceCardOnStack(state, card);
     }
 }

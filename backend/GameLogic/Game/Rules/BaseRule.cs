@@ -32,16 +32,8 @@ internal abstract class BaseRule
     }
 
     // Rule utilities
-    protected GameState PlaceCardOnStack(GameState state, Card card)
+    protected bool PlayerHasCard(GameState state, long player, Card card)
     {
-        state.TopCard = card;
-        state.CardStack.Add(new StackCard(card));
-        return state;
-    }
-
-    protected GameState PlayPlayerCard(GameState state, long player, Card card)
-    {
-        state.PlayerDecks[player].Remove(card);
-        return PlaceCardOnStack(state, card);
+        return state.PlayerDecks[player].Contains(card);
     }
 }
