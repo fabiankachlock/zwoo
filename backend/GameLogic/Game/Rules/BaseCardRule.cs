@@ -44,9 +44,8 @@ internal class BaseCardRule : BaseRule
         bool isAllowed = CanThrowCard(state.TopCard, payload.Card) && state.CurrentPlayer == payload.Player;
         if (isAllowed)
         {
+            state = PlayPlayerCard(state, payload.Player, payload.Card);
             state.CurrentPlayer = playerOrder.Next();
-            state.TopCard = payload.Card;
-            state.PlayerDecks[payload.Player].Remove(payload.Card);
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
             return new GameStateUpdate(state, events);
         }

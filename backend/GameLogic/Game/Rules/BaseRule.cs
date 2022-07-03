@@ -30,4 +30,18 @@ internal abstract class BaseRule
     {
         return new GameStateUpdate(state, new List<GameEvent>());
     }
+
+    // Rule utilities
+    protected GameState PlaceCardOnStack(GameState state, Card card)
+    {
+        state.TopCard = card;
+        state.CardStack.Add(new StackCard(card));
+        return state;
+    }
+
+    protected GameState PlayPlayerCard(GameState state, long player, Card card)
+    {
+        state.PlayerDecks[player].Remove(card);
+        return PlaceCardOnStack(state, card);
+    }
 }
