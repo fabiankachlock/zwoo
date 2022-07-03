@@ -55,6 +55,7 @@ internal class GameStateManager
         _isRunning = true;
         _playerCycle = _playerManager.ComputeOrder();
         _cardPile = new Pile();
+        _ruleManager.Configure();
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
@@ -107,6 +108,7 @@ internal class GameStateManager
             _logger.Error($"cant find rule for event ${clientEvent}");
             return;
         }
+        _logger.Debug($"selected rule: {rule.Name}");
 
         GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
         GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
