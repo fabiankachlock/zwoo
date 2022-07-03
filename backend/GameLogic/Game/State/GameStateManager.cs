@@ -109,7 +109,59 @@ internal class GameStateManager
         }
 
         GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
-        // TODO: send state update events via notification manager
+        GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
+            topCard: stateUpdate.NewState.TopCard,
+            activePlayer: stateUpdate.NewState.CurrentPlayer,
+            activePlayerCardAmount: stateUpdate.NewState.PlayerDecks[stateUpdate.NewState.CurrentPlayer].Count,
+            lastPlayer: _gameState.CurrentPlayer,
+            lastPlayerCardAmount: stateUpdate.NewState.PlayerDecks[_gameState.CurrentPlayer].Count
+         );
         _gameState = stateUpdate.NewState;
+
+        SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
+    }
+
+    private void SendEvents(List<GameEvent> events)
+    {
+        foreach (GameEvent evt in events)
+        {
+            switch (evt.Type)
+            {
+                case GameEventType.StartTurn:
+                    GameEvent.StartTurnEvent startTurnEvent = evt.CastPayload<GameEvent.StartTurnEvent>();
+                    _notificationManager.StartTurn(startTurnEvent.Player);
+                    break;
+                case GameEventType.EndTurn:
+                    GameEvent.EndTurnEvent endTurnEvent = evt.CastPayload<GameEvent.EndTurnEvent>();
+                    _notificationManager.EndTurn(endTurnEvent.Player);
+                    break;
+                case GameEventType.GetCard:
+                    GameEvent.GetCardEvent getCardEvent = evt.CastPayload<GameEvent.GetCardEvent>();
+                    _notificationManager.SendCard(new SendCardDTO(getCardEvent.Player, getCardEvent.Card));
+                    break;
+                case GameEventType.RemoveCard:
+                    GameEvent.RemoveCardEvent removeCardEvent = evt.CastPayload<GameEvent.RemoveCardEvent>();
+                    _notificationManager.RemoveCard(new RemoveCardDTO(removeCardEvent.Player, removeCardEvent.Card));
+                    break;
+                case GameEventType.StateUpdate:
+                    GameEvent.StateUpdateEvent stateUpdateEvent = evt.CastPayload<GameEvent.StateUpdateEvent>();
+                    _notificationManager.StateUpdate(new StateUpdateDTO(
+                        stateUpdateEvent.TopCard,
+                        stateUpdateEvent.ActivePlayer,
+                        stateUpdateEvent.ActivePlayerCardAmount,
+                        stateUpdateEvent.LastPlayer,
+                        stateUpdateEvent.LastPlayerCardAmount
+                    ));
+                    break;
+                case GameEventType.GetPlayerDecission:
+                    GameEvent.PlayerDecissionEvent playerDecissionEvent = evt.CastPayload<GameEvent.PlayerDecissionEvent>();
+                    _notificationManager.GetPlayerDecission(new PlayerDecissionDTO(playerDecissionEvent.Player, playerDecissionEvent.Decission));
+                    break;
+                case GameEventType.PlayerWon:
+                    GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();
+                    _notificationManager.PlayerWon(new PlayerWonDTO(playerWonEvent.Winner, playerWonEvent.Scores));
+                    break;
+            }
+        }
     }
 }
