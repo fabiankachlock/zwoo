@@ -49,7 +49,8 @@ internal class BaseDrawRule : BaseRule
         }
 
         List<Card> newCards;
-        (state, newCards) = DrawCardForPlayer(state, payload.Player, amount, cardPile);
+        (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
+        (state, events) = ChangeActivePlayer(state, playerOrder.Next());
         state.CurrentPlayer = playerOrder.Next();
         foreach (Card card in newCards)
         {
@@ -69,7 +70,7 @@ internal class BaseDrawRule : BaseRule
         else return 0;
     }
 
-    protected (GameState, List<Card>) DrawCardForPlayer(GameState state, long player, int amount, Pile pile)
+    protected (GameState, List<Card>) DrawCardsForPlayer(GameState state, long player, int amount, Pile pile)
     {
         List<Card> newCards = new List<Card>();
         for (int i = 0; i < amount; i++)

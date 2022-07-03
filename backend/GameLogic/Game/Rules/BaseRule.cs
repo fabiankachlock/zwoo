@@ -46,4 +46,14 @@ internal abstract class BaseRule
     {
         return IsValidPlayer(state, player) && state.PlayerDecks[player].Contains(card);
     }
+
+    protected (GameState, List<GameEvent>) ChangeActivePlayer(GameState state, long nextPlayer)
+    {
+        List<GameEvent> events = new List<GameEvent>() {
+            GameEvent.EndTurn(state.CurrentPlayer),
+            GameEvent.StartTurn(nextPlayer),
+        };
+        state.CurrentPlayer = nextPlayer;
+        return (state, events);
+    }
 }

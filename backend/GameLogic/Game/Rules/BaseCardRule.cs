@@ -36,7 +36,7 @@ internal class BaseCardRule : BaseRule
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
-            state.CurrentPlayer = playerOrder.Next();
+            (state, events) = ChangeActivePlayer(state, playerOrder.Next());
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
             return new GameStateUpdate(state, events);
         }
