@@ -11,7 +11,7 @@ using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Game.State;
 
-internal class GameStateManager
+internal sealed class GameStateManager
 {
     public readonly long GameId;
     private readonly NotificationManager _notificationManager;
@@ -60,7 +60,7 @@ internal class GameStateManager
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
             topCard: _cardPile.DrawCard(),
-            cardStack: new List<Card>(),
+            cardStack: new List<StackCard>(),
             playerDecks: GeneratePlayerDecks()
         );
     }

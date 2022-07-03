@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZwooGameLogic.Game.Cards;
 
-internal class CardUtilities
+internal sealed class CardUtilities
 {
     public static bool IsDraw(Card card)
     {

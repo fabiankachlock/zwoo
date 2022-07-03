@@ -49,7 +49,7 @@ public sealed class Game
         _notificationManager = notificationManager;
         _gameSettings = GameSettings.FromDefaults();
         _playerManager = new PlayerManager();
-        _stateManager = new GameStateManager(id, _playerManager, _gameSettings);
+        _stateManager = new GameStateManager(id, _playerManager, _gameSettings, _notificationManager);
         _logger = LogManager.GetLogger($"Game-{id}");
     }
 

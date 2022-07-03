@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZwooGameLogic.Game;
 
-public struct GameMeta
+internal struct GameMeta
 {
     public long Id;
     public string Name;

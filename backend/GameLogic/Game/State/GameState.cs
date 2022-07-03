@@ -13,7 +13,7 @@ internal struct GameState
     public GameDirection Direction;
     public long CurrentPlayer;
     public Card TopCard;
-    public List<Card> CardStack;
+    public List<StackCard> CardStack;
     public Dictionary<long, List<Card>> PlayerDecks;
 
     public GameState()
@@ -21,7 +21,7 @@ internal struct GameState
         Direction = GameDirection.Left;
         CurrentPlayer = 0;
         TopCard = new Card(CardColor.None, CardType.None);
-        CardStack = new List<Card>();
+        CardStack = new List<StackCard>();
         PlayerDecks = new Dictionary<long, List<Card>>();
     }
 
@@ -29,7 +29,7 @@ internal struct GameState
         GameDirection direction,
         long currentPlayer,
         Card topCard,
-        List<Card> cardStack,
+        List<StackCard> cardStack,
         Dictionary<long, List<Card>> playerDecks
     )
     {
