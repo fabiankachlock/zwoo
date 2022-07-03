@@ -12,7 +12,7 @@ namespace ZwooGameLogic.Game.Rules;
 
 internal abstract class BaseRule
 {
-    public readonly int Priority = -1;
+    public readonly int Priority = RulePriorirty.None;
 
     public readonly string Name = "__BaseRule__";
 

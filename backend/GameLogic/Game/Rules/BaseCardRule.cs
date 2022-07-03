@@ -12,7 +12,7 @@ namespace ZwooGameLogic.Game.Rules;
 
 internal class BaseCardRule : BaseRule
 {
-    public new readonly int Priority = 1;
+    public new readonly int Priority = RulePriorirty.BaseRule;
 
     public new readonly string Name = "BaseCardRule";
 
