@@ -63,7 +63,7 @@ public sealed class GameStateManager
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
-            topCard: _cardPile.DrawCard(),
+            topCard: new StackCard(_cardPile.DrawCard()),
             cardStack: new List<StackCard>(),
             playerDecks: GeneratePlayerDecks()
         );
@@ -101,6 +101,11 @@ public sealed class GameStateManager
         _playerCycle = new PlayerCycle(new List<long>());
     }
 
+    public long ActivePlayer()
+    {
+        return _gameState.CurrentPlayer;
+    }
+
     public List<Card>? GetPlayerDeck(long playerId)
     {
         if (_gameState.PlayerDecks.ContainsKey(playerId))
@@ -121,7 +126,7 @@ public sealed class GameStateManager
 
     public Card GetPileTop()
     {
-        return _gameState.TopCard;
+        return _gameState.TopCard.Card;
     }
 
     internal void HandleEvent(ClientEvent clientEvent)
@@ -159,7 +164,7 @@ public sealed class GameStateManager
 
         GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
         GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
-            topCard: stateUpdate.NewState.TopCard,
+            topCard: stateUpdate.NewState.TopCard.Card,
             activePlayer: stateUpdate.NewState.CurrentPlayer,
             activePlayerCardAmount: stateUpdate.NewState.PlayerDecks[stateUpdate.NewState.CurrentPlayer].Count,
             lastPlayer: _gameState.CurrentPlayer,
