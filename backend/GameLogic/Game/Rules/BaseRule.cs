@@ -21,7 +21,7 @@ internal abstract class BaseRule
 
     protected ILog _logger;
 
-    public BaseRule(ILog? logger)
+    public BaseRule(ILog? logger = null)
     {
         _logger = logger ?? LogManager.GetLogger(Name);
     }

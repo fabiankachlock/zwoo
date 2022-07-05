@@ -22,7 +22,7 @@ internal class BaseCardRule : BaseRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card);
+        return gameEvent.Type == ClientEventType.PlaceCard && !CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card);
     }
 
 
@@ -32,7 +32,7 @@ internal class BaseCardRule : BaseRule
         List<GameEvent> events = new List<GameEvent>();
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && state.CurrentPlayer == payload.Player;
+        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card);
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
