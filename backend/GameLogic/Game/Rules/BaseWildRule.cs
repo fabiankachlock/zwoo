@@ -18,7 +18,7 @@ internal class BaseWildCardRule : BaseCardRule
 
     public new readonly GameSettingsKey? AssociatedOption = GameSettingsKey.DEFAULT_RULE_SET;
 
-    private record struct StoredEvent(Card Card, long Player);
+    private record struct StoredEvent(long Player, Card Card);
 
     private StoredEvent? _storedEvent = null;
 
@@ -26,8 +26,8 @@ internal class BaseWildCardRule : BaseCardRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        // TODO: don't check for stored here, rather return error in apply
-        return (gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card) && _storedEvent == null) || (gameEvent.Type == ClientEventType.SendPlayerDecission && _storedEvent != null);
+        return (gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card))
+            || (gameEvent.Type == ClientEventType.SendPlayerDecission && gameEvent.CastPayload<GameEvent.PlayerDecissionEvent>().Decission == PlayerDecission.SelectColor);
     }
 
 
@@ -43,7 +43,8 @@ internal class BaseWildCardRule : BaseCardRule
             if (isAllowed)
             {
                 // TODO: enum for decisions;
-                events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, 1));
+                _storedEvent = new StoredEvent(payload.Player, payload.Card);
+                events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecission.SelectColor));
                 return new GameStateUpdate(state, events);
             }
             else
@@ -56,11 +57,12 @@ internal class BaseWildCardRule : BaseCardRule
             ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();
             if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
             {
-                Card newCard = new Card((CardColor)payload.Decission, _storedEvent.Value.Card.Type);
+                Card newCard = new Card((CardColor)payload.Value, _storedEvent.Value.Card.Type);
                 state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
                 state = PlaceCardOnStack(state, newCard);
                 (state, events) = ChangeActivePlayer(state, playerOrder.Next());
                 events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
+                _storedEvent = null;
                 return new GameStateUpdate(state, events);
             }
         }
