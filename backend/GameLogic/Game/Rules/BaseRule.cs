@@ -7,6 +7,7 @@ using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
+using log4net;
 
 namespace ZwooGameLogic.Game.Rules;
 
@@ -18,7 +19,17 @@ internal abstract class BaseRule
 
     public readonly GameSettingsKey? AssociatedOption;
 
-    public BaseRule() { }
+    protected ILog _logger;
+
+    public BaseRule(ILog? logger)
+    {
+        _logger = logger ?? LogManager.GetLogger(Name);
+    }
+
+    internal void SetLogger(ILog? logger)
+    {
+        _logger = logger ?? _logger;
+    }
 
     public virtual bool IsResponsible(ClientEvent clientEvent, GameState state)
     {
@@ -34,17 +45,33 @@ internal abstract class BaseRule
     // Rule utilities
     protected bool IsValidPlayer(GameState state, long player)
     {
-        return state.PlayerDecks.ContainsKey(player);
+        bool isValid = state.PlayerDecks.ContainsKey(player);
+        if (!isValid)
+        {
+            _logger.Warn($"player {player} not in game");
+        }
+        return isValid;
     }
 
     protected bool IsActivePlayer(GameState state, long player)
     {
-        return IsValidPlayer(state, player) && state.CurrentPlayer == player;
+        bool isValid = state.CurrentPlayer == player;
+        if (!isValid)
+        {
+            _logger.Warn($"player {player} not active");
+        }
+        return IsValidPlayer(state, player) && isValid;
     }
 
     protected bool PlayerHasCard(GameState state, long player, Card card)
     {
-        return IsValidPlayer(state, player) && state.PlayerDecks[player].Contains(card);
+        if (!IsValidPlayer(state, player)) return false;
+        bool isValid = state.PlayerDecks[player].Contains(card);
+        if (!isValid)
+        {
+            _logger.Warn($"player {player} does not has card {card}");
+        }
+        return isValid;
     }
 
     protected (GameState, List<GameEvent>) ChangeActivePlayer(GameState state, long nextPlayer)

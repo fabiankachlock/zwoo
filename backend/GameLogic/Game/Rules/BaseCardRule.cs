@@ -22,7 +22,7 @@ internal class BaseCardRule : BaseRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return gameEvent.Type == ClientEventType.PlaceCard;
+        return gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card);
     }
 
 
@@ -48,11 +48,7 @@ internal class BaseCardRule : BaseRule
     // Rule utilities
     protected bool CanThrowCard(Card top, Card newCard)
     {
-        if (CardUtilities.IsWild(newCard))
-        {
-            return top.Type == CardType.WildFour ? newCard.Type == CardType.WildFour : true;
-        }
-        return top.Type == newCard.Type || top.Color == newCard.Color;
+        return top.Type == newCard.Type || top.Color == newCard.Color || CardUtilities.IsWild(newCard);
     }
 
     protected GameState PlaceCardOnStack(GameState state, Card card)
