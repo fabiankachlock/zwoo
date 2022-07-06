@@ -16,6 +16,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+
+webSocketOptions.AllowedOrigins.Add("http://localhost");
+
+app.UseWebSockets(webSocketOptions);
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
