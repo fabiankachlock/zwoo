@@ -69,6 +69,22 @@ public class WebSocketManager
         }
     }
 
+    public async Task SendPlayer(long playerId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isFinalMessage)
+    {
+        if (_websockets.ContainsKey(playerId))
+        {
+            await _websockets[playerId].SendAsync(content, messageType, isFinalMessage, CancellationToken.None);
+        }
+    }
+
+    public async Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isFinalMessage)
+    {
+        if (_games.ContainsKey(gameId))
+        {
+            await Task.WhenAll(_games[gameId].Select(player => _websockets[player].SendAsync(content, messageType, isFinalMessage, CancellationToken.None)));
+        }
+    }
+
     private static async Task Echo(WebSocket webSocket)
     {
         var buffer = new byte[1024 * 4];
