@@ -58,7 +58,6 @@ internal class BaseDrawRule : BaseRule
         }
 
 
-        // TODO: may send not allowed to throw or error if not active player 
         return new GameStateUpdate(state, events);
     }
 

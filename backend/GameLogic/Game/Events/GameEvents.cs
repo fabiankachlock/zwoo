@@ -15,7 +15,8 @@ public enum GameEventType
     RemoveCard = 307,
     StateUpdate = 308,
     GetPlayerDecission = 316,
-    PlayerWon = 399
+    PlayerWon = 399,
+    Error = 400
 }
 
 public struct GameEvent
@@ -161,6 +162,27 @@ public struct GameEvent
     public static GameEvent PlayerWon(long player, Dictionary<long, int> scores)
     {
         return new GameEvent(GameEventType.PlayerWon, new PlayerWonEvent(player, scores));
+    }
+
+    // PlayerWonEvent
+    public struct GameErrorEvent
+    {
+        public readonly long? Player;
+        public readonly GameError Error;
+        public readonly string Message;
+
+        public GameErrorEvent(long? player, GameError error, string message)
+        {
+            Player = player;
+            Error = error;
+            Message = message;
+        }
+    }
+
+    // TODO sent message according to error type
+    public static GameEvent Error(long? player, GameError error, string message = "")
+    {
+        return new GameEvent(GameEventType.Error, new GameErrorEvent(player, error, message));
     }
 
 }

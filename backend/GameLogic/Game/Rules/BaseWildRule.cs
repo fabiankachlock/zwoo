@@ -42,14 +42,13 @@ internal class BaseWildCardRule : BaseCardRule
             bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && IsActivePlayer(state, payload.Player);
             if (isAllowed)
             {
-                // TODO: enum for decisions;
                 _storedEvent = new StoredEvent(payload.Player, payload.Card);
                 events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecission.SelectColor));
                 return new GameStateUpdate(state, events);
             }
             else
             {
-                // TODO: send error
+                return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
             }
         }
         else

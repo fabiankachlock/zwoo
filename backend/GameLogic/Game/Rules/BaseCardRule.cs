@@ -41,8 +41,7 @@ internal class BaseCardRule : BaseRule
             return new GameStateUpdate(state, events);
         }
 
-        // TODO: may send not allowed to throw or error if not active player 
-        return GameStateUpdate.None(state);
+        return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
     }
 
     // Rule utilities
