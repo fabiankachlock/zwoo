@@ -24,7 +24,7 @@ internal struct StackCard
         EventActivated = false;
     }
 
-    public void ActivateEvnt()
+    public void ActivateEvent()
     {
         EventActivated = true;
     }

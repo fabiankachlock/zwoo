@@ -42,6 +42,7 @@ internal class BaseDrawRule : BaseRule
         if (CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated)
         {
             amount = GetDrawAmount(state.TopCard.Card);
+            state.TopCard.ActivateEvent();
         }
         else
         {
