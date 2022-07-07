@@ -35,6 +35,12 @@ public readonly record struct PlayerWonDTO(
     Dictionary<long, int> Scores
 );
 
+public readonly record struct ErrorDto(
+    long? Player,
+    GameError Error,
+    string Message
+);
+
 
 public interface NotificationManager
 {
@@ -55,4 +61,6 @@ public interface NotificationManager
     void GetPlayerDecission(PlayerDecissionDTO data);
 
     void PlayerWon(PlayerWonDTO data);
+
+    void Error(ErrorDto data);
 }
