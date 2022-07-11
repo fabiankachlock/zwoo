@@ -2,6 +2,13 @@ using ZwooBackend;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(s =>
+{
+    s.AddPolicy("zwoo-cors", p =>
+    {
+        p.WithOrigins("http://localhost:8080").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
+    });
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,6 +30,7 @@ var webSocketOptions = new WebSocketOptions
 
 webSocketOptions.AllowedOrigins.Add("http://localhost");
 
+app.UseCors("zwoo-cors");
 app.UseWebSockets(webSocketOptions);
 
 app.UseHttpsRedirection();

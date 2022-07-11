@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using ZwooBackend.Websockets;
 using System.Net.WebSockets;
+using System.Net.Http;
 
 
 namespace ZwooBackend.Controllers;
@@ -10,7 +12,15 @@ public class WebSocketController : Controller
 {
     private Websockets.WebSocketManager _websocketManager = new Websockets.WebSocketManager();
 
+    [EnableCors("zwoo-cors")]
+    [HttpGet]
+    [Route("/version")]
+    public string Test()
+    {
+        return "hello world";
+    }
 
+    [HttpGet]
     [Route("/game/join/{id}")]
     public async Task Index(int gameId)
     {
