@@ -7,7 +7,7 @@ public class UIDGenerator
         _cid = start;
     }
 
-    UInt64 GetNextID() => _cid++;
+    public UInt64 GetNextID() => ++_cid;
     
     private UInt64 _cid;
 }
