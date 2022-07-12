@@ -7,12 +7,16 @@ type ExtractRouteParams<str extends string> = str extends ''
   ? { [K in front]: string } & ExtractRouteParams<rest>
   : str extends `${string}/${infer rest}`
   ? ExtractRouteParams<rest>
+  : str extends `${string}?${infer paramName}=$${infer rest}`
+  ? { [K in paramName]: string } & ExtractRouteParams<rest>
+  : str extends `&${infer paramName}=$${infer rest}`
+  ? { [K in paramName]: string } & ExtractRouteParams<rest>
   : {};
 
 export enum Endpoint {
   CreateAccount = 'auth/create',
   Recaptcha = 'auth/recaptcha',
-  AccountVerify = 'auth/verify',
+  AccountVerify = 'auth/verify?id=$&code=$',
   AccountLogin = 'auth/login',
   AccountLogout = 'auth/logout',
   UserInfo = 'auth/user',

@@ -1,6 +1,6 @@
 import { Logger } from '../logging/logImport';
 import { Backend, Endpoint } from './apiConfig';
-import { WithBackendError, parseBackendError } from './errors';
+import { WithBackendError, parseBackendError, BackendErrorAble } from './errors';
 
 type UserInfo = {
   username: string;
@@ -171,5 +171,32 @@ export class AuthenticationService {
     return {
       isLoggedIn: false
     };
+  };
+
+  static verifyAccount = async (id: string, code: string): Promise<BackendErrorAble<boolean>> => {
+    Logger.Api.log('verifying account');
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking verify response');
+      return Math.random() > 0.5;
+    }
+
+    const response = await fetch(
+      Backend.getDynamicUrl(Endpoint.AccountVerify, {
+        code,
+        id
+      }),
+      {
+        method: 'GET'
+      }
+    );
+
+    if (response.status !== 200) {
+      Logger.Api.warn('cant verify account');
+      return {
+        error: parseBackendError(await response.text())
+      };
+    }
+
+    return true;
   };
 }
