@@ -1,36 +1,55 @@
+import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import router from '@/router';
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
-export const useGameSummary = defineStore('game-summary', {
-  state: () => ({
-    positions: {} as Record<string, number>
-  }),
-  actions: {
-    async requestGameSummary(): Promise<{ name: string; position: number; score: number }[]> {
-      this._computePositions();
-      return Object.entries(this.positions)
-        .map(([name, position]) => ({
-          name,
-          position,
-          score: Math.floor(Math.random() * 20)
-        }))
-        .sort((a, b) => a.position - b.position);
-    },
-    _computePositions() {
-      this.positions['test-winner'] = 1;
-      this.positions['test-second'] = 2;
-      this.positions['test-third'] = 3;
-      this.positions['test-third-2'] = 3;
-    },
-    joinAgainAsPlayer() {
-      console.log('joining as player');
-    },
-    joinAgainAsSpectator() {
-      console.log('joining again as spectator');
-    },
-    leave() {
-      console.log('leaving game');
-    },
+export type GameSummaryEntry = {
+  username: string;
+  score: number;
+  position: number;
+};
+
+const summaryWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerWon);
+
+export const useGameSummary = defineStore('game-summary', () => {
+  const summary = ref<GameSummaryEntry[]>([]);
+  const dispatchEvent = useGameEventDispatch();
+
+  const _receiveMessage: typeof summaryWatcher['_msgHandler'] = msg => {
+    if (msg.code === ZRPOPCode.PlayerWon) {
+      summary.value = msg.data.summary.map(e => ({
+        username: e.username,
+        position: e.position,
+        score: e.score
+      }));
+    }
+  };
+
+  const playAgain = () => {
+    dispatchEvent(ZRPOPCode._ResetState, {});
+    router.replace('/game/wait');
+  };
+
+  const leave = () => {
+    dispatchEvent(ZRPOPCode.LeaveGame, {});
+    router.replace('/home');
+  };
+
+  const reset = () => {
+    summary.value = [];
+  };
+
+  summaryWatcher.onMessage(_receiveMessage);
+  summaryWatcher.onReset(reset);
+  summaryWatcher.onClose(reset);
+
+  return {
+    summary,
+    playAgain,
+    leave,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
-  }
+  };
 });

@@ -5,7 +5,7 @@
       :class="{ 'rotate-90': isOpen }"
       @click="toggleOpen"
     >
-      <Icon icon="carbon:settings" class="text-2xl tc-main-light" />
+      <Icon icon="carbon:settings" class="text-3xl sm:text-2xl tc-main-light" />
     </div>
     <!-- can't be w-auto, otherwise the transition won't work-->
     <div

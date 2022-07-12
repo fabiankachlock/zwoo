@@ -1,6 +1,6 @@
 <template>
   <div class="w-full overflow-hidden">
-    <div class="opponents overflow-x-scroll flex flex-row flex-nowrap items-center h-12">
+    <div class="opponents overflow-x-scroll flex flex-row flex-nowrap items-center h-12 select-none">
       <Opponent
         v-for="player in players"
         :key="player.name"

@@ -2,7 +2,7 @@
   <div
     @click="toggleOpenState"
     v-tooltip="t(isOpen ? 'wait.collapse' : 'wait.expand')"
-    class="px-2 py-1 my-1 bg-dark border bc-darkest transition hover:bc-primary rounded-lg hover:bg-darkest cursor-pointer"
+    class="px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest cursor-pointer"
   >
     <div class="flex flex-row flex-nowrap justify-between items-center">
       <p class="text-lg tc-main-dark">{{ t(title) }}</p>

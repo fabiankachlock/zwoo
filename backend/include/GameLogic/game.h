@@ -14,6 +14,12 @@
 #include "player.h"
 #include "rule.h"
 
+enum e_DecisionTypes
+{
+    NONE = 0,
+    CHOOSE_COLOR = 1
+};
+
 enum e_gaction
 {
     G_NONE,
@@ -53,7 +59,6 @@ class Game
 
     CyclingList<std::shared_ptr<Player>>::iterator
         current_player; // currently active player
-    CyclingList<std::shared_ptr<Player>> playerorder;
 
     std::unordered_map<uint32_t, std::shared_ptr<Player>>
         players; // all players anticipating in the game
@@ -75,10 +80,13 @@ class Game
     bool isValidAction( e_gaction _action ); // is action expected?
     bool isWon( );                           // is the game won?
 
+    void stateChanged( );
+
   public:
     Game( uint32_t id );
     ~Game( );
 
+    bool canStart( );
     bool start( );
     bool stop( );
 
@@ -90,13 +98,15 @@ class Game
     std::shared_ptr<Player> getPlayer( uint32_t _PUID );
     std::shared_ptr<Player> getCurPlayer( );
     std::vector<e_gaction> getExpectedActions( );
+    Card getTopCard( );
 
     // EVENTS //
-    void placeCardEvent( Card _card ); // player places a card
+    bool placeCardEvent( Card _card ); // player places a card
     void drawCardEvent( );             // lets player draw one or multiple cards
     void skipEvent( );                 // skip the next player
     void reverseEvent( );              // changes play direction of game
     void wildEvent( uint32_t _chosencolor ); // lets player choose a color
+    bool containsExpectedAction( e_gaction action );
 
     bool setOption( std::string _option, uint8_t _value );
     uint8_t getOption( std::string _option );
@@ -106,4 +116,14 @@ class Game
 
     uint32_t addPlayer( uint32_t puid );
     bool removePlayer( uint32_t _playerid );
+
+  public:
+    CyclingList<std::shared_ptr<Player>> playerorder;
+
+    std::function<void( uint32_t, uint32_t )> next_turn;
+    std::function<void( uint32_t, uint32_t )> end_turn;
+    std::function<void( uint32_t, uint32_t, Card )> get_card;
+    std::function<void( uint32_t, uint32_t, Card )> remove_card;
+    std::function<void( uint32_t, Card, Player, Player )> state_changed;
+    std::function<void( uint32_t, uint32_t )> game_won;
 };

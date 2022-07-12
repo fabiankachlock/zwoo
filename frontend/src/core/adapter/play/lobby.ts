@@ -74,7 +74,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
       gameHost.value = auth.username;
       gameConfig.changeRole(ZRPRole.Host);
     } else if (msg.code == ZRPOPCode.GameStarted) {
-      router.push('/game/play');
+      router.replace('/game/play');
     }
   };
 
@@ -182,16 +182,6 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     });
   };
 
-  const setup = () => {
-    dispatchEvent(ZRPOPCode.GetAllPlayers, {});
-  };
-
-  const reset = () => {
-    players.value = [];
-    spectators.value = [];
-    gameHost.value = '';
-  };
-
   const kickPlayer = (id: string) => {
     dispatchEvent(ZRPOPCode.KickPlayer, { username: id });
   };
@@ -210,16 +200,29 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const leaveSelf = () => {
     gameConfig.leave();
-    router.push('/available-games');
   };
 
   const startGame = () => {
     dispatchEvent(ZRPOPCode.StartGame, {});
   };
 
-  lobbyWatcher.onMessage(_receiveMessage);
-  lobbyWatcher.onClose(reset);
+  const setup = () => {
+    dispatchEvent(ZRPOPCode.GetAllPlayers, {});
+  };
+
+  const reset = () => {
+    players.value = [];
+    spectators.value = [];
+    gameHost.value = '';
+  };
+
   lobbyWatcher.onOpen(setup);
+  lobbyWatcher.onMessage(_receiveMessage);
+  lobbyWatcher.onReset(() => {
+    reset();
+    setup();
+  });
+  lobbyWatcher.onClose(reset);
 
   return {
     players: players,

@@ -21,6 +21,8 @@ export enum Endpoint {
   Websocket = 'game/join/:id:',
   LeaderBoard = 'game/leaderboard',
   LeaderBoardPosition = 'game/leaderboard/position',
+  Games = 'game/games',
+  Game = 'game/games/:id:',
   Version = 'version'
 }
 

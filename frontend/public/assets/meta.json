@@ -3,6 +3,10 @@
     "__default__",
     "test"
   ],
+  "defaultTheme": {
+    "name": "__default__",
+    "variant": "dark"
+  },
   "configs": {
     "__default__": {
       "name": "__default__",

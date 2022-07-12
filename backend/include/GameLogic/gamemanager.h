@@ -39,4 +39,13 @@ class GameManager
     std::shared_ptr<Game> getGame( uint32_t _GID );
 
     std::shared_ptr<Player> getPlayer( uint32_t _GID, uint32_t _PUID );
+
+    std::function<void( uint32_t )> after_game_removed;
+
+    std::function<void( uint32_t, uint32_t )> end_turn;
+    std::function<void( uint32_t, uint32_t )> next_turn;
+    std::function<void( uint32_t, uint32_t, Card )> get_card;
+    std::function<void( uint32_t, uint32_t, Card )> remove_card;
+    std::function<void( uint32_t, Card, Player, Player )> state_changed;
+    std::function<void( uint32_t, uint32_t )> game_won;
 };

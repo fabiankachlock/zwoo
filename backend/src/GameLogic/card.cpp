@@ -28,6 +28,14 @@ bool Card::operator==( Card &_card )
         return false;
     }
 }
+uint32_t Card::getValue( )
+{
+    if ( color == e_color::C_BLACK )
+        return 40;
+    if ( number > e_number::N_NINE )
+        return 10;
+    return 1;
+}
 
 // CardPile //
 

@@ -1,8 +1,9 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
+import router from '@/router';
 import { defineStore } from 'pinia';
 import { Backend, Endpoint } from '../services/api/apiConfig';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
-import { GameManagementService } from '../services/api/GameManagement';
+import { GameManagementService, GameMeta, GamesList } from '../services/api/GameManagement';
 import Logger from '../services/logging/logImport';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
@@ -14,6 +15,7 @@ let initializedGameModules = false;
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
+    allGames: [] as GamesList,
     gameId: undefined as number | undefined,
     name: '',
     role: undefined as ZRPRole | undefined,
@@ -21,6 +23,7 @@ export const useGameConfig = defineStore('game-config', {
     _connection: undefined as ZRPWebsocketAdapter | undefined
   }),
   getters: {
+    // TODO: delete this?
     host: state => state.role === ZRPRole.Host
   },
   actions: {
@@ -40,7 +43,7 @@ export const useGameConfig = defineStore('game-config', {
           inActiveGame: true,
           role: ZRPRole.Host,
           gameId: game.id,
-          name: game.name
+          name: name
         });
         this.connect();
       }
@@ -49,6 +52,8 @@ export const useGameConfig = defineStore('game-config', {
       if (asPlayer && asSpectator) {
         throw new Error('cant join as player & spectator');
       }
+
+      const data = await this.getGameMeta(id);
 
       const status = await GameManagementService.joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
       const [game, error] = unwrapBackendError(status);
@@ -59,7 +64,7 @@ export const useGameConfig = defineStore('game-config', {
           inActiveGame: true,
           role: asPlayer ? ZRPRole.Player : ZRPRole.Spectator,
           gameId: game.id,
-          name: game.name
+          name: data?.name ?? 'error'
         });
         this.connect();
       }
@@ -75,7 +80,26 @@ export const useGameConfig = defineStore('game-config', {
           role: undefined,
           _connection: undefined
         });
+        router.replace('/available-games');
       }
+    },
+    async listGames(): Promise<GamesList> {
+      const response = await GameManagementService.listAll();
+      const [games, error] = unwrapBackendError(response);
+      if (!error) {
+        this.allGames = games;
+        return games;
+      }
+      return [];
+    },
+    async getGameMeta(id: number): Promise<GameMeta | undefined> {
+      const game = this.allGames.find(game => game.id === id);
+      if (game) {
+        return game;
+      }
+
+      const response = await GameManagementService.getJoinMeta(id);
+      return unwrapBackendError(response)[0];
     },
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {

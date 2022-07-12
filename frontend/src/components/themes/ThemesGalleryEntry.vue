@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-nowrap bg-dark rounded-lg w-full border-2 bc-darkest hover:bc-primary py-2 relative mb-2 overflow-hidden">
+  <div class="flex flex-col flex-nowrap bg-dark rounded-lg w-full border-2 bc-darkest mouse:hover:bc-primary py-2 relative mb-2 overflow-hidden">
     <div class="flex flex-row flex-wrap justify-between items-center mb-1">
       <h3 class="tc-main-dark text-xl mx-2">
         {{ props.theme.name }}
@@ -37,7 +37,7 @@
             'bc-primary hover:bc-primary': previewVariant === variant,
             'bc-secondary hover:bc-primary': selectedVariant === variant
           }"
-          class="tc-main text-xs inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer"
+          class="tc-main text-xs inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer select-none"
         >
           {{ t(`cardThemes.variant.${variant}`) }}
         </span>

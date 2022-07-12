@@ -17,7 +17,7 @@ GameRules::GameRules( )
     gameoptions.insert( { "maxPlayers", 5 } );
     gameoptions.insert( { "maxDraw", 108 } );
     gameoptions.insert( { "maxCardsOnHand", 108 } );
-    gameoptions.insert( { "initialCards", 7 } );
+    gameoptions.insert( { "initialCards", 9 } );
 }
 
 uint8_t GameRules::createRule( int _type, uint16_t _arg1, uint16_t _arg2,

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full flex flex-row justify-between items-center bg-dark px-1 py-3 my-3 rounded-lg border border-transparent hover:bc-primary hover:bg-darkest"
+    class="w-full flex flex-row justify-between items-center bg-dark px-1 py-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
   >
     <div class="h-full flex-1 mx-2 tc-main-light">
       <span>{{ title }}</span>
