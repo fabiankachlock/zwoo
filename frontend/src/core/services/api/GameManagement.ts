@@ -59,6 +59,9 @@ export class GameManagementService {
     const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         name: name,
         password: password,
@@ -118,6 +121,9 @@ export class GameManagementService {
     const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         guid: gameId,
         password: password,
