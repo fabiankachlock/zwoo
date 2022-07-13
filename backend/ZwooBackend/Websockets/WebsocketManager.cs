@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
-
+using ZwooGameLogic.Game.Events;
+using ZwooBackend.Websockets.Interfaces;
 
 namespace ZwooBackend.Websockets;
 
-public class WebSocketManager
+public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketManager
 {
     private Dictionary<long, WebSocket> _websockets = new Dictionary<long, WebSocket>();
     private Dictionary<long, HashSet<long>> _games = new Dictionary<long, HashSet<long>>();
@@ -83,6 +84,11 @@ public class WebSocketManager
         {
             await Task.WhenAll(_games[gameId].Select(player => _websockets[player].SendAsync(content, messageType, isFinalMessage, CancellationToken.None)));
         }
+    }
+
+    public NotificationManager GetNotificationManager(long gameId)
+    {
+        return new WebSocketNotificationManager(this, gameId);
     }
 
     private static async Task Echo(WebSocket webSocket)
