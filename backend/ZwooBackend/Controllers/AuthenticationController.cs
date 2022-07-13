@@ -145,13 +145,13 @@ public class AuthenticationController : Controller
             "Session ID not Matching"));
     }
 
-    [HttpGet("delete")]
+    [HttpPost("delete")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Delete([FromBody] string password)
+    public IActionResult Delete([FromBody] Delete body)
     {
-        if (!StringHelper.IsValidPassword(password))
+        if (!StringHelper.IsValidPassword(body.password))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
         
         var auth =  HttpContext.User.FindFirst("auth");
@@ -162,9 +162,14 @@ public class AuthenticationController : Controller
         if (Globals.ZwooDatabase.GetUser(
                 Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))), out var user))
         {
-            if (Globals.ZwooDatabase.DeleteUser(user, password))
+            if (Globals.ZwooDatabase.DeleteUser(user, body.password))
+            {
+                var t = HttpContext.SignOutAsync();
+                t.Wait();
                 return Ok("Account Deleted");
+            }
         }
+
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
             "Session ID not Matching"));
     }

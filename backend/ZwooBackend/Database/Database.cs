@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using BackendHelper;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
+using ZwooBackend.Controllers.DTO;
 
 namespace ZwooBackend.Database;
 
@@ -37,10 +38,10 @@ public class Database
             
         Globals.Logger.Info($"Connected to zwoo Database");
 
-        _collection = _database.GetCollection<BsonDocument>("users");
+        _collection = _database.GetCollection<User>("users");
 
         var t = _collection.Find(x => true).Sort(new BsonDocument {{"_id", -1}}).Limit(1).ToList();
-        _generator = t.Count != 0 ? new UIDGenerator(BsonSerializer.Deserialize<User>(t[0].ToBson()).Id) : new UIDGenerator(0);
+        _generator = t.Count != 0 ? new UIDGenerator(t[0].Id) : new UIDGenerator(0);
     }
 
     public (string, UInt64, string, string) CreateUser(string username, string email, string password)
@@ -66,7 +67,7 @@ public class Database
         user.ValidationCode = code.Trim().Normalize();
         user.Verified = false;
         
-        _collection.InsertOne(user.ToBsonDocument());
+        _collection.InsertOne(user);
         
         return (username, id, code, email);
     }
@@ -89,8 +90,9 @@ public class Database
 
     public bool VerifyUser(UInt64 id, string code)
     {
-        var filter = Builders<BsonDocument>.Filter.Eq("_id", (Int64)id) & Builders<BsonDocument>.Filter.Eq("validation_code", code);
-        var update = Builders<BsonDocument>.Update.Set("verified", true);
+        var user = _collection.Find(x => x.Id == id);
+        var filter = Builders<User>.Filter.Eq(u => u.Id, id) & Builders<User>.Filter.Eq(u => u.ValidationCode, code);
+        var update = Builders<User>.Update.Set(u => u.Verified, true);
         if(_collection.UpdateOne(filter, update).ModifiedCount == 0)
             return false;
         return true;
@@ -100,10 +102,10 @@ public class Database
     {
         sid = "";
         id = 0;
-        var u = _collection.Find(Builders<BsonDocument>.Filter.Eq("email", email)).ToList();
+        var u = _collection.Find(Builders<User>.Filter.Eq(u => u.Email, email)).ToList();
         if (u.Count == 0)
             return false;
-        var user = BsonSerializer.Deserialize<User>(u[0].ToBson());
+        var user = u[0];
         
         byte[] salt = Convert.FromBase64String(user.Password.Split(':')[1]);
         byte[] pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
@@ -117,8 +119,8 @@ public class Database
         {
             id = user.Id;
             sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
-            var filter = Builders<BsonDocument>.Filter.Eq("email", email);
-            var update = Builders<BsonDocument>.Update.Set("sid", sid);
+            var filter = Builders<User>.Filter.Eq(u => u.Email, email);
+            var update = Builders<User>.Update.Set(u => u.Sid, sid);
             if(_collection.UpdateOne(filter, update).ModifiedCount == 0)
                 return false;
             return true;
@@ -130,11 +132,10 @@ public class Database
     {
         user = null;
         var cookie_data = cookie.Split(",");
-        
-        var u = _collection.Find(Builders<BsonDocument>.Filter.Eq("_id", Convert.ToInt64(cookie_data[0]))).ToList();
+        var u = _collection.Find(Builders<User>.Filter.Eq<UInt64>(u=> u.Id, Convert.ToUInt64(cookie_data[0]))).ToList();
         if (u.Count == 0)
-            return false; 
-        user = BsonSerializer.Deserialize<User>(u[0].ToBson());
+            return false;
+        user = u[0];
         if (user.Sid == cookie_data[1])
             return true;
         return false;
@@ -142,8 +143,8 @@ public class Database
 
     public void LogoutUser(User user)
     {
-        var filter = Builders<BsonDocument>.Filter.Eq("_id", user.Id);
-        var update = Builders<BsonDocument>.Update.Set("sid", "");
+        var filter = Builders<User>.Filter.Eq(u => u.Id , user.Id);
+        var update = Builders<User>.Update.Set(u => u.Sid, "");
         _collection.UpdateOne(filter, update);
     }
 
@@ -159,15 +160,40 @@ public class Database
 
         if (Convert.ToBase64String(pw) == user.Password.Split(':')[2] && user.Verified)
         {
-            _collection.DeleteOne(Builders<BsonDocument>.Filter.Eq("_id", user.Id));
+            _collection.DeleteOne(Builders<User>.Filter.Eq(u => u.Id, user.Id));
             return true;
         }
         return false;
     }
+
+    public LeaderBoard GetLeaderBoard()
+    {
+        var leaderboard = new LeaderBoard();
+        leaderboard.TopPlayers = new List<LeaderBoardPlayer>();
+
+        var players = _collection.Find(Builders<User>.Filter.Eq(u => u.Verified, true)).Sort(new BsonDocument { { "wins", -1 } })
+            .Limit(100).ToList();
+
+        if (players != null)
+        {
+            foreach (var player in players)
+            {
+                leaderboard.TopPlayers.Add(new LeaderBoardPlayer(player.Username, player.Wins));
+            }
+        }
+
+        return leaderboard;
+    }
+    
+    public Int64 GetPosition(string cookie)
+    {
+        GetUser(cookie, out var user);
+        return _collection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
+    }
     
     private MongoClient _client;
     private IMongoDatabase _database;
-    private IMongoCollection<BsonDocument> _collection;
+    private IMongoCollection<User> _collection;
 
     private UIDGenerator _generator;
 }

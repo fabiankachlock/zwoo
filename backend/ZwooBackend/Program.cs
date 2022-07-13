@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.SlidingExpiration = true;
     o.Cookie.Name = "auth";
     o.Cookie.HttpOnly = true;
-    o.Cookie.Domain = Environment.GetEnvironmentVariable("ZWOO_DOMAIN");
+    o.Cookie.Domain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? Environment.GetEnvironmentVariable("ZWOO_DOMAIN");
 });
 
 Globals.Logger.Info(Environment.GetEnvironmentVariable("ZWOO_CORS"));
