@@ -1,21 +1,20 @@
-using System.Net;
 using System.Net.Mime;
+using System.Security.Claims;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Web.Http;
+using System.Text.Json;
 using BackendHelper;
-using log4net;
-using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Mvc.Route("auth")]
+[Route("auth")]
 public class AuthenticationController : Controller
 {
-    [Microsoft.AspNetCore.Mvc.HttpPost("recaptcha")]
+    [HttpPost("recaptcha")]
     [Consumes(MediaTypeNames.Text.Plain)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult reCaptcha()
@@ -35,11 +34,10 @@ public class AuthenticationController : Controller
         }
     }
     
-    [Microsoft.AspNetCore.Mvc.HttpPost("create")]
-    [Consumes(MediaTypeNames.Application.Json)]
+    [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CreateAccount([Microsoft.AspNetCore.Mvc.FromBody] CreateAccount body)
+    public IActionResult CreateAccount([FromBody] CreateAccount body)
     {
         if (!StringHelper.IsValidEmail(body.email))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
@@ -67,8 +65,7 @@ public class AuthenticationController : Controller
         return Ok("{\"message\": \"Account create\"}");
     }
 
-    [Microsoft.AspNetCore.Mvc.HttpGet("verify")]
-    [Consumes(MediaTypeNames.Application.Json)]
+    [HttpGet("verify")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult VerifyAccount([FromQuery(Name = "id")] UInt64 id, [FromQuery(Name = "code")] string code)
@@ -79,14 +76,95 @@ public class AuthenticationController : Controller
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.ACCOUNT_FAILED_TO_VERIFIED,
                 "could not verify the account!"));
     }
-    
-    [Microsoft.AspNetCore.Mvc.HttpGet("user")]
-    [Consumes(MediaTypeNames.Application.Json)]
+
+    [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult Login([FromBody] Login body)
+    {
+        if (!StringHelper.IsValidEmail(body.email))
+            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
+        if (!StringHelper.IsValidPassword(body.password))
+            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
+        
+        if (Globals.ZwooDatabase.LoginUser(body.email, body.password, out var sid, out var id))
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("auth", Convert.ToBase64String(CryptoHelper.Encrypt(Encoding.UTF8.GetBytes($"{id},{sid}"))))
+            };
+            Globals.Logger.Info($"{id},{sid}");
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var t = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity));
+            t.Wait();
+            return Ok("user logged in!");
+        }
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "could not log in"));
+    }
+    
+    [HttpGet("user")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult GetUser()
     {
+        var auth =  HttpContext.User.FindFirst("auth");
+        if (auth == null)
+            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
+                "Missing Cookie"));
+
+        if (Globals.ZwooDatabase.GetUser(
+                Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))), out var user))
+        {
+            return Ok(JsonSerializer.Serialize(user));
+        }
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
+            "Session ID not Matching"));
+    }
+
+    [HttpGet("logout")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult Logout()
+    {
+        var auth =  HttpContext.User.FindFirst("auth");
+        if (auth == null)
+            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
+                "Missing Cookie"));
+
+        if (Globals.ZwooDatabase.GetUser(
+                Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))), out var user))
+        {
+            Globals.ZwooDatabase.LogoutUser(user);
+            var t = HttpContext.SignOutAsync();
+            t.Wait();
+            return Ok(JsonSerializer.Serialize(user));
+        }
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
+            "Session ID not Matching"));
+    }
+
+    [HttpGet("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult Delete([FromBody] string password)
+    {
+        if (!StringHelper.IsValidPassword(password))
+            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
+        
+        var auth =  HttpContext.User.FindFirst("auth");
+        if (auth == null)
+            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
+                "Missing Cookie"));
+
+        if (Globals.ZwooDatabase.GetUser(
+                Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))), out var user))
+        {
+            if (Globals.ZwooDatabase.DeleteUser(user, password))
+                return Ok("Account Deleted");
+        }
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
             "Session ID not Matching"));
     }

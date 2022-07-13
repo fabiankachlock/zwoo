@@ -95,6 +95,75 @@ public class Database
             return false;
         return true;
     }
+
+    public bool LoginUser(string email, string password, out string sid, out UInt64 id)
+    {
+        sid = "";
+        id = 0;
+        var u = _collection.Find(Builders<BsonDocument>.Filter.Eq("email", email)).ToList();
+        if (u.Count == 0)
+            return false;
+        var user = BsonSerializer.Deserialize<User>(u[0].ToBson());
+        
+        byte[] salt = Convert.FromBase64String(user.Password.Split(':')[1]);
+        byte[] pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
+        
+        using (var sha = SHA512.Create())
+        {
+            foreach (int i in Enumerable.Range(0, 10000)) pw = sha.ComputeHash(pw);
+        }
+
+        if (Convert.ToBase64String(pw) == user.Password.Split(':')[2] && user.Verified)
+        {
+            id = user.Id;
+            sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
+            var filter = Builders<BsonDocument>.Filter.Eq("email", email);
+            var update = Builders<BsonDocument>.Update.Set("sid", sid);
+            if(_collection.UpdateOne(filter, update).ModifiedCount == 0)
+                return false;
+            return true;
+        }
+        return false;
+    }
+
+    public bool GetUser(string cookie, out User user)
+    {
+        user = null;
+        var cookie_data = cookie.Split(",");
+        
+        var u = _collection.Find(Builders<BsonDocument>.Filter.Eq("_id", Convert.ToInt64(cookie_data[0]))).ToList();
+        if (u.Count == 0)
+            return false; 
+        user = BsonSerializer.Deserialize<User>(u[0].ToBson());
+        if (user.Sid == cookie_data[1])
+            return true;
+        return false;
+    }
+
+    public void LogoutUser(User user)
+    {
+        var filter = Builders<BsonDocument>.Filter.Eq("_id", user.Id);
+        var update = Builders<BsonDocument>.Update.Set("sid", "");
+        _collection.UpdateOne(filter, update);
+    }
+
+    public bool DeleteUser(User user, string password)
+    {
+        byte[] salt = Convert.FromBase64String(user.Password.Split(':')[1]);
+        byte[] pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
+        
+        using (var sha = SHA512.Create())
+        {
+            foreach (int i in Enumerable.Range(0, 10000)) pw = sha.ComputeHash(pw);
+        }
+
+        if (Convert.ToBase64String(pw) == user.Password.Split(':')[2] && user.Verified)
+        {
+            _collection.DeleteOne(Builders<BsonDocument>.Filter.Eq("_id", user.Id));
+            return true;
+        }
+        return false;
+    }
     
     private MongoClient _client;
     private IMongoDatabase _database;

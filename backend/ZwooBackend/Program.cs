@@ -1,4 +1,5 @@
 using BackendHelper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors;
 using ZwooBackend;
@@ -12,6 +13,14 @@ builder.Services.AddCors(s => s.AddPolicy("Zwoo",
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
+{
+    o.ExpireTimeSpan = TimeSpan.FromDays(7);
+    o.SlidingExpiration = true;
+    o.Cookie.Name = "auth";
+    o.Cookie.HttpOnly = true;
+    o.Cookie.Domain = Environment.GetEnvironmentVariable("ZWOO_DOMAIN");
+});
 
 Globals.Logger.Info(Environment.GetEnvironmentVariable("ZWOO_CORS"));
 
@@ -27,6 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("Zwoo");
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
