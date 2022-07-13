@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.Json;
 
 namespace ZwooBackend.ZRP;
@@ -13,5 +14,10 @@ public class ZRPEncoder
     static public string Encode<T>(ZRPCode code, T payload)
     {
         return $"{code},{JsonSerializer.Serialize(payload, ZRPEncoder._options)}";
+    }
+
+    static public byte[] EncodeToBytes<T>(ZRPCode code, T payload)
+    {
+        return Encoding.UTF8.GetBytes(Encode(code, payload));
     }
 }

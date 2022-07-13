@@ -70,19 +70,19 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         }
     }
 
-    public async Task SendPlayer(long playerId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isFinalMessage)
+    public async Task SendPlayer(long playerId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isEndOfMessage)
     {
         if (_websockets.ContainsKey(playerId))
         {
-            await _websockets[playerId].SendAsync(content, messageType, isFinalMessage, CancellationToken.None);
+            await _websockets[playerId].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
         }
     }
 
-    public async Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isFinalMessage)
+    public async Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isEndOfMessage)
     {
         if (_games.ContainsKey(gameId))
         {
-            await Task.WhenAll(_games[gameId].Select(player => _websockets[player].SendAsync(content, messageType, isFinalMessage, CancellationToken.None)));
+            await Task.WhenAll(_games[gameId].Select(player => _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None)));
         }
     }
 

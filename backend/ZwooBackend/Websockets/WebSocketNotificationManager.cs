@@ -1,4 +1,6 @@
-﻿using ZwooBackend.Websockets.Interfaces;
+﻿using System.Net.WebSockets
+using ZwooBackend.Websockets.Interfaces;
+using ZwooBackend.ZRP;
 using ZwooGameLogic.Game.Events;
 
 namespace ZwooBackend.Websockets;
@@ -18,46 +20,56 @@ public class WebSocketNotificationManager : NotificationManager
 
     public void EndTurn(long player)
     {
-        throw new NotImplementedException();
+        _webSockets.SendPlayer(player, ZRPEncoder.EncodeToBytes(ZRPCode.EndTurn, new EndTurnDTO()), WebSocketMessageType.Text, true);
     }
 
-    public void GetPlayerDecission(PlayerDecissionDTO data)
+    public void GetPlayerDecission(ZwooGameLogic.Game.Events.PlayerDecissionDTO data)
     {
-        throw new NotImplementedException();
+        _webSockets.SendPlayer(data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GetPlayerDecision, new GetPlayerDecisionDTO(data.Decission)), WebSocketMessageType.Text, true)
     }
 
-    public void PlayerWon(PlayerWonDTO data)
+    public void PlayerWon(ZwooGameLogic.Game.Events.PlayerWonDTO data)
     {
-        throw new NotImplementedException();
+        // TODO: construct message
+        _webSockets.BroadcastGame(_gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerWon, new ZRP.PlayerWonDTO()), WebSocketMessageType.Text, true);
     }
 
-    public void RemoveCard(RemoveCardDTO data)
+    public void RemoveCard(ZwooGameLogic.Game.Events.RemoveCardDTO data)
     {
-        throw new NotImplementedException();
+        _webSockets.SendPlayer(data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.RemoveCard, new ZRP.RemoveCardDTO(data.Card.Color, data.Card.Type)), WebSocketMessageType.Text, true);
     }
 
-    public void SendCard(SendCardDTO data)
+    public void SendCard(ZwooGameLogic.Game.Events.SendCardDTO data)
     {
-        throw new NotImplementedException();
+        _webSockets.SendPlayer(data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.SendCard, new ZRP.SendCardDTO(data.Card.Color, data.Card.Type)), WebSocketMessageType.Text, true);
     }
 
     public void StartGame()
     {
-        throw new NotImplementedException();
+        _webSockets.BroadcastGame(_gameId, ZRPEncoder.EncodeToBytes(ZRPCode.EndTurn, new StartGameDTO()), WebSocketMessageType.Text, true);
     }
 
     public void StartTurn(long player)
     {
-        throw new NotImplementedException();
+        _webSockets.SendPlayer(player, ZRPEncoder.EncodeToBytes(ZRPCode.EndTurn, new StartTurnDTO()), WebSocketMessageType.Text, true);
     }
 
-    public void StateUpdate(StateUpdateDTO data)
+    public void StateUpdate(ZwooGameLogic.Game.Events.StateUpdateDTO data)
     {
-        throw new NotImplementedException();
+        // TODO: resolve player names
+        _webSockets.BroadcastGame(
+            _gameId,
+            ZRPEncoder.EncodeToBytes(
+                ZRPCode.StateUpdated,
+                new ZRP.StateUpdatedDTO(new StateUpdated_PileTopDTO(data.PileTop.Color, data.PileTop.Type), data.ActivePlayer.ToString(), data.ActivePlayerCardAmount, data.LastPlayer.ToString(), data.LastPlayerCardAmount)
+            ),
+            WebSocketMessageType.Text,
+            true
+        );
     }
 
     public void StopGame()
     {
-        throw new NotImplementedException();
+        // TODO: disconnect websocket / handle stop
     }
 }
