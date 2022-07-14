@@ -27,12 +27,18 @@ public readonly record struct StateUpdateDTO(
 
 public readonly record struct PlayerDecissionDTO(
     long Player,
-    int Decission
+    PlayerDecission Decission
 );
 
 public readonly record struct PlayerWonDTO(
     long Winner,
     Dictionary<long, int> Scores
+);
+
+public readonly record struct ErrorDto(
+    long? Player,
+    GameError Error,
+    string Message
 );
 
 
@@ -55,4 +61,6 @@ public interface NotificationManager
     void GetPlayerDecission(PlayerDecissionDTO data);
 
     void PlayerWon(PlayerWonDTO data);
+
+    void Error(ErrorDto data);
 }

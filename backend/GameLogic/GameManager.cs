@@ -9,23 +9,21 @@ public sealed class GameManager
 
     private long _gameId;
     private Dictionary<long, Game.Game> _activeGames;
-    private NotificationManager _notificationManager;
+    private Func<long, NotificationManager> _notificationManagerFactory;
 
 
-    public GameManager(NotificationManager notificationManager)
+    public GameManager(Func<long, NotificationManager> notificationManagerFactory)
     {
         _gameId = 0;
         _activeGames = new Dictionary<long, Game.Game>();
-        _notificationManager = notificationManager;
+        _notificationManagerFactory = notificationManagerFactory;
         _logger = LogManager.GetLogger("GameManager");
     }
 
-    public Game.Game CreateGame(
-        string name,
-        bool isPublic
-    )
+    public Game.Game CreateGame(string name, bool isPublic)
     {
-        Game.Game newGame = new Game.Game(nextGameId(), name, isPublic, _notificationManager);
+        long id = nextGameId();
+        Game.Game newGame = new Game.Game(id, name, isPublic, _notificationManagerFactory(id));
         _activeGames.Add(newGame.Id, newGame);
         _logger.Info($"created game ${newGame.Id}");
         return newGame;

@@ -219,6 +219,10 @@ public sealed class GameStateManager
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();
                     _notificationManager.PlayerWon(new PlayerWonDTO(playerWonEvent.Winner, playerWonEvent.Scores));
                     break;
+                case GameEventType.Error:
+                    GameEvent.GameErrorEvent errorEvent = evt.CastPayload<GameEvent.GameErrorEvent>();
+                    _notificationManager.Error(new ErrorDto(errorEvent.Player, errorEvent.Error, errorEvent.Message));
+                    break;
             }
         }
     }

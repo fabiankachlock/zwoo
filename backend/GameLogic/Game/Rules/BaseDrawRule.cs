@@ -42,6 +42,7 @@ internal class BaseDrawRule : BaseRule
         if (CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated)
         {
             amount = GetDrawAmount(state.TopCard.Card);
+            state.TopCard.ActivateEvent();
         }
         else
         {
@@ -58,7 +59,6 @@ internal class BaseDrawRule : BaseRule
         }
 
 
-        // TODO: may send not allowed to throw or error if not active player 
         return new GameStateUpdate(state, events);
     }
 

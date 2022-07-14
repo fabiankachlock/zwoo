@@ -22,4 +22,9 @@ internal struct GameStateUpdate
     {
         return new GameStateUpdate(state, new List<GameEvent>());
     }
+
+    public static GameStateUpdate WithEvents(GameState state, List<GameEvent> events)
+    {
+        return new GameStateUpdate(state, events);
+    }
 }
