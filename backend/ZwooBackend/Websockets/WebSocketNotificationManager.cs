@@ -1,4 +1,4 @@
-﻿using System.Net.WebSockets
+﻿using System.Net.WebSockets;
 using ZwooBackend.Websockets.Interfaces;
 using ZwooBackend.ZRP;
 using ZwooGameLogic.Game.Events;
@@ -23,9 +23,21 @@ public class WebSocketNotificationManager : NotificationManager
         _webSockets.SendPlayer(player, ZRPEncoder.EncodeToBytes(ZRPCode.EndTurn, new EndTurnDTO()), WebSocketMessageType.Text, true);
     }
 
+    public void Error(ErrorDto data)
+    {
+        if (data.Player != null)
+        {
+            _webSockets.SendPlayer((long)data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new GeneralErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
+        }
+        else
+        {
+            _webSockets.BroadcastGame(this._gameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new GeneralErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
+        }
+    }
+
     public void GetPlayerDecission(ZwooGameLogic.Game.Events.PlayerDecissionDTO data)
     {
-        _webSockets.SendPlayer(data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GetPlayerDecision, new GetPlayerDecisionDTO(data.Decission)), WebSocketMessageType.Text, true)
+        _webSockets.SendPlayer(data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GetPlayerDecision, new GetPlayerDecisionDTO((int)data.Decission)), WebSocketMessageType.Text, true);
     }
 
     public void PlayerWon(ZwooGameLogic.Game.Events.PlayerWonDTO data)

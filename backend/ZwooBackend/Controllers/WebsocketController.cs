@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using ZwooBackend.Websockets;
 using System.Net.WebSockets;
 using System.Net.Http;
+using ZwooBackend.Games;
 
 
 namespace ZwooBackend.Controllers;
@@ -10,15 +11,6 @@ namespace ZwooBackend.Controllers;
 [ApiController]
 public class WebSocketController : Controller
 {
-    private Websockets.WebSocketManager _websocketManager = new Websockets.WebSocketManager();
-
-    [EnableCors("zwoo-cors")]
-    [HttpGet]
-    [Route("/version")]
-    public string Test()
-    {
-        return "hello world";
-    }
 
     [HttpGet]
     [Route("/game/join/{id}")]
@@ -29,7 +21,7 @@ public class WebSocketController : Controller
             WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
             TaskCompletionSource finished = new TaskCompletionSource();
             // TODO: get player id from auth
-            _websocketManager.AddWebsocket(gameId, 0, webSocket, finished);
+            GameGlobals.WebSocketManager.AddWebsocket(gameId, 0, webSocket, finished);
             await finished.Task;
         }
         else

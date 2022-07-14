@@ -11,7 +11,7 @@ public static class Globals
 
     public static Database.Database ZwooDatabase = new Database.Database();
 
-    public static ConcurrentQueue<EmailData> EmailQueue = new ConcurrentQueue<EmailData>();
+    public static ConcurrentQueue<EmailData> EmailQueue = new ConcurrentQueue<EmailData>(); // use BlockingCollection here?
 
     public static bool IsBeta = Convert.ToBoolean(Environment.GetEnvironmentVariable("ZWOO_BETA"));
 }
