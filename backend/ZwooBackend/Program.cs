@@ -1,8 +1,9 @@
+using System.Net;
+using System.Text;
 using BackendHelper;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Cors;
 using ZwooBackend;
+using ZwooBackend.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,10 +47,13 @@ var mail_thread = new Thread(() =>
     {
         if (!Globals.EmailQueue.IsEmpty)
         {
-            EmailData data;
-            Globals.EmailQueue.TryDequeue(out data);
-            if (data.Puid == 0)
-                break;
+            EmailData? data;
+            if (Globals.EmailQueue.TryDequeue(out data))
+            {
+                if (data.Puid == 0)
+                    break;
+            }
+
             EmailData.SendMail(data);
         }
         else
