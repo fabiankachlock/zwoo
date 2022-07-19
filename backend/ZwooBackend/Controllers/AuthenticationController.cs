@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using BackendHelper;
@@ -92,12 +93,13 @@ public class AuthenticationController : Controller
         {
             var claims = new List<Claim>
             {
-                new Claim("auth", Convert.ToBase64String(CryptoHelper.Encrypt(Encoding.UTF8.GetBytes($"{id},{sid}"))))
+                new Claim("auth", $"{id},{sid}")
             };
             Globals.Logger.Info($"{id},{sid}");
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var t = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity));
+
             t.Wait();
             return Ok("user logged in!");
         }
@@ -109,13 +111,7 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult GetUser()
     {
-        var auth =  HttpContext.User.FindFirst("auth");
-        if (auth == null)
-            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
-                "Missing Cookie"));
-
-        if (Globals.ZwooDatabase.GetUser(
-                Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))), out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
         {
             return Ok(JsonSerializer.Serialize(user));
         }
@@ -128,13 +124,7 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult Logout()
     {
-        var auth =  HttpContext.User.FindFirst("auth");
-        if (auth == null)
-            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
-                "Missing Cookie"));
-
-        if (Globals.ZwooDatabase.GetUser(
-                Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))), out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
         {
             Globals.ZwooDatabase.LogoutUser(user);
             var t = HttpContext.SignOutAsync();
@@ -154,13 +144,7 @@ public class AuthenticationController : Controller
         if (!StringHelper.IsValidPassword(body.password))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
         
-        var auth =  HttpContext.User.FindFirst("auth");
-        if (auth == null)
-            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
-                "Missing Cookie"));
-
-        if (Globals.ZwooDatabase.GetUser(
-                Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))), out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
         {
             if (Globals.ZwooDatabase.DeleteUser(user, body.password))
             {
@@ -169,7 +153,6 @@ public class AuthenticationController : Controller
                 return Ok("Account Deleted");
             }
         }
-
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
             "Session ID not Matching"));
     }

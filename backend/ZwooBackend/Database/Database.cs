@@ -185,9 +185,8 @@ public class Database
         return leaderboard;
     }
     
-    public Int64 GetPosition(string cookie)
+    public Int64 GetPosition( User user )
     {
-        GetUser(cookie, out var user);
         return _collection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
     }
     

@@ -20,10 +20,9 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult GetLeaderBoardPosition()
     {
-        var auth =  HttpContext.User.FindFirst("auth");
-        if (auth == null)
-            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
-                "Missing Cookie"));
-        return Ok($"{{\"position\": {Globals.ZwooDatabase.GetPosition(Encoding.UTF8.GetString(CryptoHelper.Encrypt(Convert.FromBase64String(auth.Value))))}}}");
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+            return Ok($"{{\"position\": {Globals.ZwooDatabase.GetPosition(user)}}}");
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
+            "Missing Cookie"));
     }
 }

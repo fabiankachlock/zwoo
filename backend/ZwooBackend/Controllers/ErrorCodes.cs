@@ -5,7 +5,7 @@ namespace ZwooBackend.Controllers;
 public static class ErrorCodes
 {
     public enum Errors
-    {
+    { 
         BACKEND_ERROR = 100,
 
         COOKIE_MISSING = 111,

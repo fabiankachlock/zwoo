@@ -29,7 +29,6 @@
         "ZWOO_RECAPTCHA_SIDESECRET": "",
         "ZWOO_RECAPTCHA_URL": "",
         "ZWOO_CORS": "",
-        "ZWOO_ENCRYPTION_KEY": "",
         "ZWOO_COOKIE_DOMAIN": "localhost"
       }
     },
