@@ -52,9 +52,8 @@ var mail_thread = new Thread(() =>
             {
                 if (data.Puid == 0)
                     break;
+                EmailData.SendMail(data);
             }
-
-            EmailData.SendMail(data);
         }
         else
         {
