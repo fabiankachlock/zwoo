@@ -10,6 +10,8 @@ public class GameManager
 
     private readonly Dictionary<long, GameRecord> _games;
 
+    public static GameManager Global = new GameManager();
+
     private GameManager()
     {
         _webSocketManager = new Websockets.WebSocketManager();
@@ -23,8 +25,12 @@ public class GameManager
         return this._games.ContainsKey(id);
     }
 
-    public void CreateGame()
+    public long CreateGame(string name, bool isPublic)
     {
+        // TODO: implement password
+        Game game = _gameManager.CreateGame(name, isPublic);
+        _games[game.Id] = new GameRecord(game, new LobbyManager(game.Id));
+        return game.Id;
     }
 
     public void RemoveGame()

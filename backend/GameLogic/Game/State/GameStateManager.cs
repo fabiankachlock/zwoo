@@ -43,7 +43,7 @@ public sealed class GameStateManager
         _cardPile = new Pile();
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
-        _ruleManager = new RuleManager(_gameSettings);
+        _ruleManager = new RuleManager(id, _gameSettings);
         _events = new ConcurrentQueue<ClientEvent>();
         _logger = LogManager.GetLogger($"GameState-{id}");
     }

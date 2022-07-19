@@ -42,11 +42,9 @@ var webSocketOptions = new WebSocketOptions
 
 webSocketOptions.AllowedOrigins.Add("http://localhost");
 
-app.UseCors("zwoo-cors");
-app.UseWebSockets(webSocketOptions);
-
 app.UseCors("Zwoo");
-app.UseHttpsRedirection();
+app.UseWebSockets(webSocketOptions);
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

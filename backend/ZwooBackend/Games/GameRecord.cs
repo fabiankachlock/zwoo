@@ -4,8 +4,8 @@ namespace ZwooBackend.Games;
 
 public class GameRecord
 {
-    Game Game;
-    LobbyManager Lobby;
+    public Game Game;
+    public LobbyManager Lobby;
 
     public GameRecord(Game game, LobbyManager lobby)
     {

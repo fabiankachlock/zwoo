@@ -7,7 +7,6 @@ namespace ZwooBackend.Controllers;
 [Microsoft.AspNetCore.Mvc.Route("")]
 public class MiscController : Controller
 {
-    [EnableCors("Zwoo")] 
     [Microsoft.AspNetCore.Mvc.HttpGet("version")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetVersion()

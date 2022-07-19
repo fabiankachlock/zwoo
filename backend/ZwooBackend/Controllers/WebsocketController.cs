@@ -21,7 +21,7 @@ public class WebSocketController : Controller
             WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
             TaskCompletionSource finished = new TaskCompletionSource();
             // TODO: get player id from auth
-            GameGlobals.WebSocketManager.AddWebsocket(gameId, 0, webSocket, finished);
+            // GameGlobals.WebSocketManager.AddWebsocket(gameId, 0, webSocket, finished);
             await finished.Task;
         }
         else

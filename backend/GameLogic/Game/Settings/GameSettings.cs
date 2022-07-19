@@ -46,9 +46,9 @@ public struct GameSettings
 
     public void Set(GameSettingsKey? key, int value)
     {
-        if (Settings.ContainsKey(key))
+        if (key.HasValue && Settings.ContainsKey(key.Value!))
         {
-            Settings[key] = value;
+            Settings[key.Value!] = value;
         }
     }
 
@@ -63,9 +63,9 @@ public struct GameSettings
 
     public int Get(GameSettingsKey? key)
     {
-        if (Settings.ContainsKey(key))
+        if (key.HasValue && Settings.ContainsKey(key.Value!))
         {
-            return Settings[key];
+            return Settings[key.Value!];
         }
         return 0;
     }
