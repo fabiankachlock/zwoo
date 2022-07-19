@@ -8,11 +8,13 @@ public class LobbyManager
 
     internal class PlayerEntry
     {
+        public long Id;
         public string Username;
         public ZRPRole Role;
 
-        public PlayerEntry(string username, ZRPRole role)
+        public PlayerEntry(long id, string username, ZRPRole role)
         {
+            Id = id;
             Username = username;
             Role = role;
         }
@@ -65,17 +67,41 @@ public class LobbyManager
         }
     }
 
-    public bool Initialized(string host)
+    public string ResolvePlayer(long id)
+    {
+        try
+        {
+            return _players.First(p => p.Id == id).Username;
+        }
+        catch (Exception e)
+        {
+            return "unknown player";
+        }
+    }
+
+    public long ResolvePlayer(string name)
+    {
+        try
+        {
+            return _players.First(p => p.Username == name).Id;
+        }
+        catch (Exception e)
+        {
+            return 0;
+        }
+    }
+
+    public bool Initialized(long hostId, string host)
     {
         if (HasHost()) return false;
-        _players.Add(new PlayerEntry(host, ZRPRole.Host));
+        _players.Add(new PlayerEntry(hostId, host, ZRPRole.Host));
         return true;
     }
 
-    public bool AddPlayer(string name, ZRPRole role)
+    public bool AddPlayer(long id, string name, ZRPRole role)
     {
         if (HasPlayer(name) && role == ZRPRole.Host) return false;
-        _players.Add(new PlayerEntry(name, role));
+        _players.Add(new PlayerEntry(id, name, role));
         return true;
     }
 
