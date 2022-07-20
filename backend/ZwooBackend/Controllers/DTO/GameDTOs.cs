@@ -61,3 +61,38 @@ public class JoinGameResponse
         GameId = gameId;
     }
 }
+
+public class GameMetaResponse
+{
+    [JsonPropertyName("id")]
+    public long Id { set; get; }
+
+    [JsonPropertyName("name")]
+    public string Name { set; get; }
+
+    [JsonPropertyName("isPublic")]
+    public bool IsPublic { set; get; }
+
+    [JsonPropertyName("playerCount")]
+    public int PlayerCount { set; get; }
+
+    public GameMetaResponse(long id, string name, bool isPublic, int playerCount)
+    {
+        Id = id;
+        Name = name;
+        IsPublic = isPublic;
+        PlayerCount = playerCount;
+    }
+}
+
+public class GamesListResponse
+{
+
+    [JsonPropertyName("games")]
+    public GameMetaResponse[] Games { set; get; }
+
+    public GamesListResponse(GameMetaResponse[] games)
+    {
+        Games = games;
+    }
+}

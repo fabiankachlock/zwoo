@@ -45,6 +45,11 @@ public class LobbyManager
         return _players.FindAll(p => p.Role == ZRPRole.Spectator).Select(p => p.Username).ToList();
     }
 
+    public int PlayerCount()
+    {
+        return Players().Count();
+    }
+
     public bool HasHost()
     {
         return _players.Where(p => p.Role == ZRPRole.Host).Count() == 1;

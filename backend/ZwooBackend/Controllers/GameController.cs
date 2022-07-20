@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 using ZwooBackend.Games;
+using ZwooGameLogic.Game;
 
 namespace ZwooBackend.Controllers;
 
@@ -49,8 +50,7 @@ public class GameController : Controller
             {
                 if (body.Name == null || body.UsePassword == null || (body.UsePassword == true && body.Password == null))
                 {
-                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NAME_MISSING,
-                                "Insufficient create game data"));
+                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NAME_MISSING, "Insufficient create game data"));
                 }
 
                 long gameId = GameManager.Global.CreateGame(body.Name, !body.UsePassword.Value);
@@ -63,13 +63,13 @@ public class GameController : Controller
             {
                 if (body.GameId == null)
                 {
-                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_GAMEID, ""));
+                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_GAMEID, "gameid is null"));
                 }
 
                 GameRecord? game = GameManager.Global.GetGame(body.GameId.Value);
                 if (game == null)
                 {
-                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, ""));
+                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
                 }
 
                 game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode);
@@ -78,10 +78,45 @@ public class GameController : Controller
                 return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id)));
             }
 
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_OPCODE, ""));
+            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));
         }
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
     }
 
+    [HttpGet("games")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GamesListResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult ListGames()
+    {
+        Globals.Logger.Info("GET /game/games");
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        {
+            List<GameRecord> games = GameManager.Global.ListAll();
+            GamesListResponse response = new GamesListResponse(games.Select(game => new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount())).ToArray());
 
+            return Ok(JsonSerializer.Serialize(response));
+        }
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+    }
+
+    [HttpGet("games/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameMetaResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetGames(long id)
+    {
+        Globals.Logger.Info($"GET /game/games/{id}");
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        {
+            GameRecord? game = GameManager.Global.GetGame(id);
+            if (game == null)
+            {
+                return NotFound(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "game Not found"));
+            }
+            GameMetaResponse response = new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount());
+
+            return Ok(JsonSerializer.Serialize(response));
+        }
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+    }
 }

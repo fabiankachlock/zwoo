@@ -22,7 +22,7 @@ public class GameManager
 
     public bool HasGame(long id)
     {
-        return this._games.ContainsKey(id);
+        return _games.ContainsKey(id);
     }
 
     public long CreateGame(string name, bool isPublic)
@@ -47,5 +47,9 @@ public class GameManager
         return null;
     }
 
+    public List<GameRecord> ListAll()
+    {
+        return _games.Values.ToList();
+    }
 
 }
