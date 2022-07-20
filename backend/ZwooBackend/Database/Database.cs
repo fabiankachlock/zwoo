@@ -129,9 +129,7 @@ public class Database
             sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
             var filter = Builders<User>.Filter.Eq(u => u.Email, email);
             var update = Builders<User>.Update.Set(u => u.Sid, sid);
-            if(_collection.UpdateOne(filter, update).ModifiedCount == 0)
-                return false;
-            return true;
+            return _collection.UpdateOne(filter, update).ModifiedCount != 0;
         }
         error = ErrorCodes.Errors.PASSWORD_NOT_MATCHING;
         return false;
@@ -139,7 +137,7 @@ public class Database
 
     public bool GetUser(string cookie, out User user)
     {
-        user = null;
+        user = new User();
         var cookie_data = cookie.Split(",");
         var u = _collection.Find(Builders<User>.Filter.Eq<UInt64>(u=> u.Id, Convert.ToUInt64(cookie_data[0]))).ToList();
         if (u.Count == 0)

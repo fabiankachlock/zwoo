@@ -3,13 +3,13 @@ using System.Text.RegularExpressions;
 
 namespace BackendHelper;
 
-public class StringHelper
+public static class StringHelper
 {
     public static string GenerateNDigitString(int len)
     {
         var rand = new Random();
         var ss = new StringWriter();
-        foreach (var i in Enumerable.Range(0, len))
+        foreach (var _ in Enumerable.Range(0, len))
             ss.Write(Convert.ToString(rand.Next(0, 9)));
         return ss.ToString();
     }
@@ -30,10 +30,10 @@ public class StringHelper
     {
         try
         {
-            MailAddress mail = new MailAddress(email);
+            MailAddress _ = new MailAddress(email);
             return true;
         }
-        catch (Exception e)
+        catch
         {
             return false;
         }
