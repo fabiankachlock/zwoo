@@ -182,6 +182,16 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     });
   };
 
+  const setup = () => {
+    dispatchEvent(ZRPOPCode.GetAllPlayers, {});
+  };
+
+  const reset = () => {
+    players.value = [];
+    spectators.value = [];
+    gameHost.value = '';
+  };
+
   const kickPlayer = (id: string) => {
     dispatchEvent(ZRPOPCode.KickPlayer, { username: id });
   };
@@ -206,23 +216,16 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     dispatchEvent(ZRPOPCode.StartGame, {});
   };
 
-  const setup = () => {
-    dispatchEvent(ZRPOPCode.GetAllPlayers, {});
-  };
-
-  const reset = () => {
-    players.value = [];
-    spectators.value = [];
-    gameHost.value = '';
-  };
-
   lobbyWatcher.onOpen(setup);
   lobbyWatcher.onMessage(_receiveMessage);
   lobbyWatcher.onReset(() => {
     reset();
     setup();
   });
-  lobbyWatcher.onClose(reset);
+  lobbyWatcher.onClose(() => {
+    reset();
+    router.replace('/available-games');
+  });
 
   return {
     players: players,

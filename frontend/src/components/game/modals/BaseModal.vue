@@ -4,9 +4,9 @@
       <h1 class="tc-main text-2xl">
         {{ t(title ?? '') }}
       </h1>
-      <button @click="closeModal">
-        <Icon class="text-2xl transition-transform hover:scale-110" icon="akar-icons:cross" />
-      </button>
+      <!-- TODO tmp(beta): breaks game currently <button @click="closeModal">
+        <Icon class="text-2xl tc-main transition-transform hover:scale-110" icon="akar-icons:cross" />
+      </button> -->
     </div>
     <div class="mb-4">
       <p class="tc-main-secondary text-lg">
@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import FloatingDialog from '../../misc/FloatingDialog.vue';
-import { Icon } from '@iconify/vue';
 import { defineProps } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useGameModal } from '@/core/adapter/play/modal';

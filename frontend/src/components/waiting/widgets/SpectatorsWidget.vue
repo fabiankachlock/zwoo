@@ -7,7 +7,8 @@
       <div
         v-for="player of spectators"
         :key="player.id"
-        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition hover:bc-primary rounded-lg hover:bg-dark"
+        :class="{ 'bc-secondary': username === player.username }"
+        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-dark"
       >
         <p class="text-lg tc-main-secondary">
           {{ player.username }}

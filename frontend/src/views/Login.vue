@@ -2,7 +2,7 @@
   <FlatDialog>
     <Form show-back-button>
       <FormTitle> {{ t('login.title') }} </FormTitle>
-      <TextInput id="username" v-model="email" labelKey="login.username" :placeholder="t('login.username')" />
+      <TextInput id="email" v-model="email" labelKey="login.email" :placeholder="t('login.email')" />
       <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
       <FormError :error="error" />
