@@ -1,11 +1,8 @@
-using System.Text;
-using BackendHelper;
 using ZwooBackend.ZRP;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 using ZwooBackend.Games;
-using ZwooGameLogic.Game;
 
 namespace ZwooBackend.Controllers;
 
@@ -54,7 +51,7 @@ public class GameController : Controller
                 }
 
                 long gameId = GameManager.Global.CreateGame(body.Name, !body.UsePassword.Value);
-                GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username);
+                GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "");
 
                 Globals.Logger.Info($"{user.Id} created game {gameId}");
                 return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId)));
@@ -72,7 +69,7 @@ public class GameController : Controller
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
                 }
 
-                game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode);
+                game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
                 Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
 
                 return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id)));

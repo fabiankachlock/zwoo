@@ -28,7 +28,9 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
         try
         {
+            Globals.Logger.Info($"{playerId} connected!");
             await Echo(ws);
+            Globals.Logger.Info($"{playerId} closing socket!");
         }
         catch (Exception e) { }
 
@@ -38,7 +40,8 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     private void InsertWs(long gameId, long playerId, WebSocket ws)
     {
-        if (_websockets.ContainsKey(playerId))
+        Globals.Logger.Warn($"cant store webSocket for {playerId}");
+        if (!_websockets.ContainsKey(playerId))
         {
             _websockets[playerId] = ws;
         }
@@ -59,6 +62,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     private void RemoveWs(long gameId, long playerId, WebSocket ws)
     {
+        Globals.Logger.Info($"removing webSocket from {playerId}");
         if (_websockets.ContainsKey(playerId))
         {
             _websockets.Remove(playerId);
@@ -108,7 +112,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
                 receiveResult.EndOfMessage,
                 CancellationToken.None);
 
-        /*while (!receiveResult.CloseStatus.HasValue)
+        while (!receiveResult.CloseStatus.HasValue)
         {
             await webSocket.SendAsync(
                 new ArraySegment<byte>(buffer, 0, receiveResult.Count),
@@ -118,7 +122,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
             receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
-        }*/
+        }
 
         await webSocket.CloseAsync(
             receiveResult.CloseStatus.Value,

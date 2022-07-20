@@ -23,11 +23,15 @@ public class LobbyManager
 
     public readonly long GameId;
     private List<PlayerEntry> _players;
+    private List<PlayerEntry> _preparedPlayers;
+    private string _password;
 
     public LobbyManager(long gameId)
     {
         GameId = gameId;
         _players = new List<PlayerEntry>();
+        _preparedPlayers = new List<PlayerEntry>();
+        _password = "";
     }
 
     public string Host()
@@ -57,7 +61,7 @@ public class LobbyManager
 
     public bool HasPlayer(string name)
     {
-        return _players.Where(p => p.Username == name).Count() == 1;
+        return _players.Where(p => p.Username == name).Count() == 1 || _preparedPlayers.Where(p => p.Username == name).Count() == 1;
     }
 
     private PlayerEntry? GetPlayer(string name)
@@ -96,18 +100,34 @@ public class LobbyManager
         }
     }
 
-    public bool Initialize(long hostId, string host)
+    public bool Initialize(long hostId, string host, string password)
     {
         if (HasHost()) return false;
-        _players.Add(new PlayerEntry(hostId, host, ZRPRole.Host));
+        _preparedPlayers.Add(new PlayerEntry(hostId, host, ZRPRole.Host));
+        _password = password;
         return true;
     }
 
-    public bool AddPlayer(long id, string name, ZRPRole role)
+    public bool AddPlayer(long id, string name, ZRPRole role, string password)
     {
-        if (HasPlayer(name) && role == ZRPRole.Host) return false;
-        _players.Add(new PlayerEntry(id, name, role));
+        if (HasPlayer(name) || role == ZRPRole.Host || password != _password) return false;
+        _preparedPlayers.Add(new PlayerEntry(id, name, role));
         return true;
+    }
+
+    public bool PlayerConnected(long id)
+    {
+        try
+        {
+            PlayerEntry preparedPlayer = _preparedPlayers.First(p => p.Id == id);
+            _preparedPlayers.Remove(preparedPlayer);
+            _players.Add(preparedPlayer);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
     public bool RemovePlayer(string name)
