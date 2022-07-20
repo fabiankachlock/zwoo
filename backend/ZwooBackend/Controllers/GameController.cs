@@ -1,11 +1,13 @@
 using System.Text;
 using BackendHelper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 
 namespace ZwooBackend.Controllers;
 
 [ApiController]
+[EnableCors("Zwoo")] 
 [Route("game")]
 public class GameController : Controller
 {

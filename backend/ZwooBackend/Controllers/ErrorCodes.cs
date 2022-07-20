@@ -6,6 +6,8 @@ public static class ErrorCodes
 {
     public enum Errors
     { 
+        NONE = 0,
+        
         BACKEND_ERROR = 100,
 
         COOKIE_MISSING = 111,

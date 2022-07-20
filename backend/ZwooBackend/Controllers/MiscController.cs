@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Mvc.Route("")]
+[EnableCors("Zwoo")] 
+[Route("")]
 public class MiscController : Controller
 {
-    [EnableCors("Zwoo")] 
     [Microsoft.AspNetCore.Mvc.HttpGet("version")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetVersion()
