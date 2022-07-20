@@ -91,7 +91,7 @@ public class LobbyManager
         }
     }
 
-    public bool Initialized(long hostId, string host)
+    public bool Initialize(long hostId, string host)
     {
         if (HasHost()) return false;
         _players.Add(new PlayerEntry(hostId, host, ZRPRole.Host));

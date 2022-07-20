@@ -91,6 +91,11 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         return new WebSocketNotificationManager(this, gameId);
     }
 
+    public bool HasWebsocket(long playerId)
+    {
+        return _websockets.ContainsKey(playerId);
+    }
+
     private static async Task Echo(WebSocket webSocket)
     {
         var buffer = new byte[1024 * 4];

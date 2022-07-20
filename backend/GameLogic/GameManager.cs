@@ -25,7 +25,7 @@ public sealed class GameManager
         long id = nextGameId();
         Game.Game newGame = new Game.Game(id, name, isPublic, _notificationManagerFactory(id));
         _activeGames.Add(newGame.Id, newGame);
-        _logger.Info($"created game ${newGame.Id}");
+        _logger.Info($"created game {newGame.Id}");
         return newGame;
     }
 
@@ -35,7 +35,7 @@ public sealed class GameManager
         {
             return _activeGames[id];
         }
-        _logger.Debug($"game find game ${id}");
+        _logger.Debug($"game find game {id}");
         return null;
     }
 

@@ -40,27 +40,47 @@ public class GameController : Controller
         Globals.Logger.Info("POST /game/join");
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
         {
+            if (GameManager.Global.WebSocketManager.HasWebsocket((long)user.Id))
+            {
+                return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.ALREADY_INGAME, ""));
+            }
+
             if (body.Opcode == ZRPRole.Host)
             {
                 if (body.Name == null || body.UsePassword == null || (body.UsePassword == true && body.Password == null))
                 {
-                    return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NAME_MISSING,
+                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NAME_MISSING,
                                 "Insufficient create game data"));
                 }
 
                 long gameId = GameManager.Global.CreateGame(body.Name, !body.UsePassword.Value);
-                Globals.Logger.Info($"Create Game {gameId}");
-                GameManager.Global.GetGame(gameId)?.Lobby.Initialized((long)user.Id, user.Username);
+                GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username);
+
+                Globals.Logger.Info($"{user.Id} created game {gameId}");
                 return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId)));
             }
-            else
+            else if (body.Opcode == ZRPRole.Player || body.Opcode == ZRPRole.Spectator)
             {
-                Globals.Logger.Info("Join Game");
+                if (body.GameId == null)
+                {
+                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_GAMEID, ""));
+                }
+
+                GameRecord? game = GameManager.Global.GetGame(body.GameId.Value);
+                if (game == null)
+                {
+                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, ""));
+                }
+
+                game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode);
+                Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
+
+                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id)));
             }
-            return Ok(JsonSerializer.Serialize(new JoinGameResponse(0)));
+
+            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_OPCODE, ""));
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
-            "Unauthorized"));
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
     }
 
 
