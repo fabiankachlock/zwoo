@@ -19,7 +19,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.ExpireTimeSpan = TimeSpan.FromDays(7);
     o.SlidingExpiration = true;
     o.Cookie.Name = "auth";
-    o.Cookie.HttpOnly = true;
+    o.Cookie.HttpOnly = false;
+    o.Cookie.SameSite = SameSiteMode.None;
+    o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     o.Cookie.Domain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? Environment.GetEnvironmentVariable("ZWOO_DOMAIN");
 });
 
@@ -33,14 +35,15 @@ if (app.Environment.IsDevelopment())
     Globals.Logger.Info("Adding Swagger");
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
 var webSocketOptions = new WebSocketOptions
 {
-    KeepAliveInterval = TimeSpan.FromMinutes(2)
+    KeepAliveInterval = TimeSpan.FromMinutes(2),
 };
 
-webSocketOptions.AllowedOrigins.Add("http://localhost");
+webSocketOptions.AllowedOrigins.Add(Environment.GetEnvironmentVariable("ZWOO_CORS"));
 
 app.UseCors("Zwoo");
 app.UseWebSockets(webSocketOptions);

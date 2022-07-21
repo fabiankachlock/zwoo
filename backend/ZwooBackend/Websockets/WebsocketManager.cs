@@ -22,6 +22,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         }
         catch (Exception e)
         {
+            Globals.Logger.Warn($"cant store webSocket for {playerId}");
             closed.SetResult();
             return;
         }
@@ -40,7 +41,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     private void InsertWs(long gameId, long playerId, WebSocket ws)
     {
-        Globals.Logger.Warn($"cant store webSocket for {playerId}");
+        Globals.Logger.Warn($"storing webSocket for {playerId}");
         if (!_websockets.ContainsKey(playerId))
         {
             _websockets[playerId] = ws;
@@ -102,15 +103,16 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     private static async Task Echo(WebSocket webSocket)
     {
+
         var buffer = new byte[1024 * 4];
         var receiveResult = await webSocket.ReceiveAsync(
             new ArraySegment<byte>(buffer), CancellationToken.None);
 
-        await webSocket.SendAsync(
-                new ArraySegment<byte>(buffer, 0, receiveResult.Count),
-                receiveResult.MessageType,
-                receiveResult.EndOfMessage,
-                CancellationToken.None);
+        //await webSocket.SendAsync(
+        //        new ArraySegment<byte>(buffer, 0, receiveResult.Count),
+        //        receiveResult.MessageType,
+        //        receiveResult.EndOfMessage,
+        //        CancellationToken.None);
 
         while (!receiveResult.CloseStatus.HasValue)
         {
