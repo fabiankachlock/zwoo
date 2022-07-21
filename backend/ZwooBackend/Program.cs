@@ -8,7 +8,7 @@ using ZwooBackend.Controllers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(s => s.AddPolicy("Zwoo",
-    b => b.WithOrigins(Environment.GetEnvironmentVariable("ZWOO_CORS")).AllowAnyHeader().AllowAnyMethod()
+    b => b.WithOrigins(Globals.Cors).AllowAnyHeader().AllowAnyMethod()
         .AllowCredentials()));
 
 builder.Services.AddControllers();
@@ -24,8 +24,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     o.Cookie.Domain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? Environment.GetEnvironmentVariable("ZWOO_DOMAIN");
 });
-
-Globals.Logger.Info(Environment.GetEnvironmentVariable("ZWOO_CORS"));
 
 var app = builder.Build();
 

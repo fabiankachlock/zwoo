@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Mvc.Route("")]
+[EnableCors("Zwoo")] 
+[Route("")]
 public class MiscController : Controller
 {
     [Microsoft.AspNetCore.Mvc.HttpGet("version")]

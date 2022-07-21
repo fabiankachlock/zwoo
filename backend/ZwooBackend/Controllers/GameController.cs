@@ -1,5 +1,8 @@
 using ZwooBackend.ZRP;
 using System.Text.Json;
+using System.Text;
+using BackendHelper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 using ZwooBackend.Games;
@@ -7,6 +10,7 @@ using ZwooBackend.Games;
 namespace ZwooBackend.Controllers;
 
 [ApiController]
+[EnableCors("Zwoo")] 
 [Route("game")]
 public class GameController : Controller
 {

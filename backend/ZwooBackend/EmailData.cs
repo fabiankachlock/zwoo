@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mail;
+using ZwooBackend;
 
 namespace BackendHelper;
 
@@ -20,7 +21,7 @@ public class EmailData
     
     public static void SendMail(EmailData data)
     {
-        string link = $"{(Convert.ToBoolean(Environment.GetEnvironmentVariable("USE_SSL")) ? "https://" : "http://")}{Environment.GetEnvironmentVariable("ZWOO_DOMAIN")}/auth/verify?id={data.Puid}&code={data.Code}";
+        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/auth/verify?id={data.Puid}&code={data.Code}";
         string text = $"\r\nHello {data.Username},\r\nplease click the link to verify your zwoo account.\r\n{link}\r\n\r\nThe confirmation expires with the end of this day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by accident or don't want to\r\nregister, please ignore it.\r\n\r\nⒸ ZWOO 2022\r\n";
         string html =
             "<!DOCTYPE html>" +
@@ -171,7 +172,7 @@ public class EmailData
             "--></body></html>\r\n";
 
         var mail = new MailMessage();
-        mail.From = new MailAddress(Environment.GetEnvironmentVariable("SMTP_HOST_EMAIL"));
+        mail.From = new MailAddress(Globals.SmtpHostEmail);
         mail.To.Add(new MailAddress(data.Email));
 
         mail.Subject = "Verify your ZWOO Account";
@@ -181,8 +182,8 @@ public class EmailData
         mail.AlternateViews.Add(plain);
         mail.AlternateViews.Add(htmlview);
 
-        var smtp = new SmtpClient(Environment.GetEnvironmentVariable("SMTP_HOST_URL"), Convert.ToInt32(Environment.GetEnvironmentVariable("SMTP_HOST_PORT")));
-        smtp.Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("SMTP_USERNAME"), Environment.GetEnvironmentVariable("SMTP_PASSWORD"));
+        var smtp = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort);
+        smtp.Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword);
         smtp.Send(mail);
     }
 }
