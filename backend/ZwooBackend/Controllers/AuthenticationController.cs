@@ -6,12 +6,14 @@ using System.Text.Json;
 using BackendHelper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 
 namespace ZwooBackend.Controllers;
 
 [ApiController]
+[EnableCors("Zwoo")] 
 [Route("auth")]
 public class AuthenticationController : Controller
 {
@@ -27,7 +29,7 @@ public class AuthenticationController : Controller
         {  
             var s = reader.ReadToEndAsync();
             s.Wait();
-            var res = client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={Environment.GetEnvironmentVariable("ZWOO_RECAPTCHA_SIDESECRET")}&response={s.Result}", null);
+            var res = client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={Globals.RecaptchaSideSecret}&response={s.Result}", null);
             res.Wait();
             var body = res.Result.Content.ReadAsStringAsync();
             body.Wait();
@@ -89,7 +91,7 @@ public class AuthenticationController : Controller
         if (!StringHelper.IsValidPassword(body.password))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
         
-        if (Globals.ZwooDatabase.LoginUser(body.email, body.password, out var sid, out var id))
+        if (Globals.ZwooDatabase.LoginUser(body.email, body.password, out var sid, out var id, out var error))
         {
             var claims = new List<Claim>
             {
@@ -103,7 +105,7 @@ public class AuthenticationController : Controller
             t.Wait();
             return Ok("user logged in!");
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "could not log in"));
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(error, "could not log in"));
     }
     
     [HttpGet("user")]

@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using BackendHelper;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
+using ZwooBackend.Controllers;
 using ZwooBackend.Controllers.DTO;
 
 namespace ZwooBackend.Database;
@@ -28,13 +29,16 @@ public class Database
                 new User(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.ValidationCode, p.Verified));
         });
 
-        _client = new MongoClient(Environment.GetEnvironmentVariable("ZWOO_DATABASE_CONNECTION_STRING"));
-        Globals.Logger.Info($"Established MongoDB Connection to {Environment.GetEnvironmentVariable("ZWOO_DATABASE_CONNECTION_STRING")}");
+        _client = new MongoClient(Globals.ConnectionString);
+        Globals.Logger.Info($"Established MongoDB Connection to {Globals.ConnectionString}");
 
         _database = _client.GetDatabase("zwoo");
 
         if (_database == null)
-            throw new DatabaseException(message: "couldn't connect to zwoo database!");
+        {
+            Globals.Logger.Error("Couldn't connect to zwoo database");
+            Environment.Exit(1);
+        }
             
         Globals.Logger.Info($"Connected to zwoo Database");
 
@@ -98,13 +102,17 @@ public class Database
         return true;
     }
 
-    public bool LoginUser(string email, string password, out string sid, out UInt64 id)
+    public bool LoginUser(string email, string password, out string sid, out UInt64 id, out ErrorCodes.Errors error)
     {
+        error = ErrorCodes.Errors.NONE;
         sid = "";
         id = 0;
         var u = _collection.Find(Builders<User>.Filter.Eq(u => u.Email, email)).ToList();
         if (u.Count == 0)
+        {
+            error = ErrorCodes.Errors.USER_NOT_FOUND;
             return false;
+        }
         var user = u[0];
         
         byte[] salt = Convert.FromBase64String(user.Password.Split(':')[1]);
@@ -121,16 +129,15 @@ public class Database
             sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
             var filter = Builders<User>.Filter.Eq(u => u.Email, email);
             var update = Builders<User>.Update.Set(u => u.Sid, sid);
-            if(_collection.UpdateOne(filter, update).ModifiedCount == 0)
-                return false;
-            return true;
+            return _collection.UpdateOne(filter, update).ModifiedCount != 0;
         }
+        error = ErrorCodes.Errors.PASSWORD_NOT_MATCHING;
         return false;
     }
 
     public bool GetUser(string cookie, out User user)
     {
-        user = null;
+        user = new User();
         var cookie_data = cookie.Split(",");
         var u = _collection.Find(Builders<User>.Filter.Eq<UInt64>(u=> u.Id, Convert.ToUInt64(cookie_data[0]))).ToList();
         if (u.Count == 0)
