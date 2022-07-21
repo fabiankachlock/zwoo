@@ -19,10 +19,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.ExpireTimeSpan = TimeSpan.FromDays(7);
     o.SlidingExpiration = true;
     o.Cookie.Name = "auth";
-    o.Cookie.HttpOnly = false;
-    o.Cookie.SameSite = SameSiteMode.None;
-    o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    o.Cookie.Domain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? Environment.GetEnvironmentVariable("ZWOO_DOMAIN");
+    o.Cookie.HttpOnly = Globals.UseSsl;
+    if (Globals.UseSsl)
+    {
+        o.Cookie.SameSite = SameSiteMode.None;
+        o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    }
+    o.Cookie.Domain = Globals.ZwooCookieDomain;
 });
 
 var app = builder.Build();
@@ -40,12 +43,10 @@ var webSocketOptions = new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromMinutes(2),
 };
-
-webSocketOptions.AllowedOrigins.Add(Environment.GetEnvironmentVariable("ZWOO_CORS"));
+webSocketOptions.AllowedOrigins.Add(Globals.Cors);
 
 app.UseCors("Zwoo");
 app.UseWebSockets(webSocketOptions);
-//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
