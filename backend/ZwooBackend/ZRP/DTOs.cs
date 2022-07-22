@@ -149,7 +149,7 @@ public readonly record struct PlayerWonDTO(
     PlayerWon_SummaryDTO[] Summary
 );
 
-public readonly record struct GeneralErrorDTO(
+public readonly record struct ErrorDTO(
     int Code,
     string Message
 );

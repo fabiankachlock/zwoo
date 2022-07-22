@@ -25,13 +25,14 @@ public class WebSocketNotificationManager : NotificationManager
 
     public void Error(ErrorDto data)
     {
+        // TODO: Use zrp errors or remove them from zrp
         if (data.Player != null)
         {
-            _webSockets.SendPlayer((long)data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new GeneralErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
+            _webSockets.SendPlayer((long)data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
         }
         else
         {
-            _webSockets.BroadcastGame(this._gameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new GeneralErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
+            _webSockets.BroadcastGame(this._gameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
         }
     }
 

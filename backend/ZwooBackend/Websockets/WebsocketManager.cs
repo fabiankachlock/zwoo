@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Net.WebSockets;
 using ZwooGameLogic.Game.Events;
+using ZwooBackend.ZRP;
 using ZwooBackend.Websockets.Interfaces;
 
 namespace ZwooBackend.Websockets;
@@ -13,6 +10,13 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 {
     private Dictionary<long, WebSocket> _websockets = new Dictionary<long, WebSocket>();
     private Dictionary<long, HashSet<long>> _games = new Dictionary<long, HashSet<long>>();
+    private WebSocketMessageDistributer _distributer;
+
+    public WebSocketManager()
+    {
+        _distributer = new WebSocketMessageDistributer(this);
+    }
+
 
     public async void AddWebsocket(long gameId, long playerId, WebSocket ws, TaskCompletionSource closed)
     {
@@ -20,7 +24,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         {
             InsertWs(gameId, playerId, ws);
         }
-        catch (Exception e)
+        catch
         {
             Globals.Logger.Warn($"cant store webSocket for {playerId}");
             closed.SetResult();
@@ -30,10 +34,10 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         try
         {
             Globals.Logger.Info($"{playerId} connected!");
-            await Echo(ws);
+            await Handle(ws, playerId, gameId);
             Globals.Logger.Info($"{playerId} closing socket!");
         }
-        catch (Exception e) { }
+        catch { }
 
         RemoveWs(gameId, playerId, ws);
         closed.SetResult();
@@ -101,29 +105,34 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         return _websockets.ContainsKey(playerId);
     }
 
-    private static async Task Echo(WebSocket webSocket)
+    private async Task Handle(WebSocket webSocket, long playerId, long gameId)
     {
 
         var buffer = new byte[1024 * 4];
         var receiveResult = await webSocket.ReceiveAsync(
             new ArraySegment<byte>(buffer), CancellationToken.None);
 
-        //await webSocket.SendAsync(
-        //        new ArraySegment<byte>(buffer, 0, receiveResult.Count),
-        //        receiveResult.MessageType,
-        //        receiveResult.EndOfMessage,
-        //        CancellationToken.None);
+        bool hasTooLongMessage = false;
 
         while (!receiveResult.CloseStatus.HasValue)
         {
-            await webSocket.SendAsync(
-                new ArraySegment<byte>(buffer, 0, receiveResult.Count),
-                receiveResult.MessageType,
-                receiveResult.EndOfMessage,
-                CancellationToken.None);
+            // received message
+            if (!receiveResult.EndOfMessage)
+            {
+                hasTooLongMessage = true;
+            }
+            else if (hasTooLongMessage)
+            {
+                await SendPlayer(playerId, ZRPEncoder.EncodeToBytes(ZRPCode.MessagetoLongError, new ErrorDTO((int)ZRPCode.MessagetoLongError, "message to long")), WebSocketMessageType.Text, true);
+                hasTooLongMessage = false;
+            }
+            else
+            {
+                Globals.Logger.Info($" {playerId} received message: {Encoding.UTF8.GetString(buffer, 0, receiveResult.Count)}");
+                _distributer.Distribute(buffer, receiveResult.Count, playerId, gameId);
+            }
 
-            receiveResult = await webSocket.ReceiveAsync(
-                new ArraySegment<byte>(buffer), CancellationToken.None);
+            receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
         }
 
         await webSocket.CloseAsync(

@@ -6,7 +6,7 @@ namespace ZwooBackend.Games;
 public class LobbyManager
 {
 
-    internal class PlayerEntry
+    public class PlayerEntry
     {
         public long Id;
         public string Username;
@@ -64,17 +64,30 @@ public class LobbyManager
         return _players.Where(p => p.Username == name).Count() == 1 || _preparedPlayers.Where(p => p.Username == name).Count() == 1;
     }
 
-    private PlayerEntry? GetPlayer(string name)
+    public PlayerEntry? GetPlayer(string name)
     {
         try
         {
             return _players.First(p => p.Username == name);
         }
-        catch (Exception e)
+        catch
         {
             return null;
         }
     }
+
+    public PlayerEntry? GetPlayer(long id)
+    {
+        try
+        {
+            return _players.First(p => p.Id == id);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
 
     public string ResolvePlayer(long id)
     {
@@ -82,7 +95,7 @@ public class LobbyManager
         {
             return _players.First(p => p.Id == id).Username;
         }
-        catch (Exception e)
+        catch
         {
             return "unknown player";
         }
@@ -94,7 +107,7 @@ public class LobbyManager
         {
             return _players.First(p => p.Username == name).Id;
         }
-        catch (Exception e)
+        catch
         {
             return 0;
         }
@@ -124,7 +137,7 @@ public class LobbyManager
             _players.Add(preparedPlayer);
             return true;
         }
-        catch (Exception e)
+        catch
         {
             return false;
         }

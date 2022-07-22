@@ -50,6 +50,7 @@ public enum ZRPCode
     PlayerWon = 399, // send
     // Errors
     GeneralError = 400, // send
+    MessagetoLongError = 401, // send
     AccessDeniedError = 420, // send
     EndTurnError = 433, // send
     PlaceCardError = 434, // send

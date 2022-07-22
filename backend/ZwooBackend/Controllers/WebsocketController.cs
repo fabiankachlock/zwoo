@@ -40,7 +40,6 @@ public class WebSocketController : Controller
                 bool success = game.Lobby.PlayerConnected((long)user.Id);
                 if (!success)
                 {
-                    Globals.Logger.Info("cant join");
                     HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "not allowed to join"));
                     await HttpContext.Response.Body.WriteAsync(response, 0, response.Length);
@@ -54,7 +53,6 @@ public class WebSocketController : Controller
                 await finished.Task;
                 return;
             }
-            Globals.Logger.Info("un auth");
             HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
             response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
             await HttpContext.Response.Body.WriteAsync(response, 0, response.Length);
