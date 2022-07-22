@@ -2,6 +2,7 @@
 using System.Net.WebSockets;
 using ZwooGameLogic.Game.Events;
 using ZwooBackend.ZRP;
+using ZwooBackend.Games;
 using ZwooBackend.Websockets.Interfaces;
 
 namespace ZwooBackend.Websockets;
@@ -40,6 +41,11 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         catch { }
 
         RemoveWs(gameId, playerId, ws);
+        GameRecord? game = GameManager.Global.GetGame(gameId);
+        if (game != null)
+        {
+            game.Lobby.RemovePlayer(playerId);
+        }
         closed.SetResult();
     }
 

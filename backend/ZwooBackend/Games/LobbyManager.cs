@@ -41,7 +41,7 @@ public class LobbyManager
 
     public List<string> Players()
     {
-        return _players.FindAll(p => p.Role == ZRPRole.Player).Select(p => p.Username).ToList();
+        return _players.FindAll(p => p.Role != ZRPRole.Spectator).Select(p => p.Username).ToList();
     }
 
     public List<string> Spectators()
@@ -154,6 +154,11 @@ public class LobbyManager
         }
         _players.RemoveAll(p => p.Username == name);
         return true;
+    }
+
+    public bool RemovePlayer(long id)
+    {
+        return RemovePlayer(ResolvePlayer(id));
     }
 
     public bool ChangeRole(string name, ZRPRole newRole)
