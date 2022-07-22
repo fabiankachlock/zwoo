@@ -56,11 +56,11 @@ public class AuthenticationController : Controller
                 "Email already Exists!"));
         
         if (Globals.IsBeta)
-            if (!Globals.ZwooDatabase.UseBetaCode(body.code))
+            if (!Globals.ZwooDatabase.CheckBetaCode(body.code))
                 return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_BETACODE,
                     "Invalid or Missing Beta-code!"));
         
-        var data = Globals.ZwooDatabase.CreateUser(body.username, body.email, body.password);
+        var data = Globals.ZwooDatabase.CreateUser(body.username, body.email, body.password, body.code);
         
         Globals.EmailQueue.Enqueue(new EmailData(data.Item1, data.Item2,data.Item3, data.Item4));
         
@@ -97,7 +97,6 @@ public class AuthenticationController : Controller
             {
                 new Claim("auth", $"{id},{sid}")
             };
-            Globals.Logger.Info($"{id},{sid}");
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var t = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity));

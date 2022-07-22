@@ -2,8 +2,11 @@ using System.Net;
 using System.Text;
 using BackendHelper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Quartz;
+using Quartz.Impl;
 using ZwooBackend;
 using ZwooBackend.Controllers;
+using ZwooBackend.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,9 +75,16 @@ var mail_thread = new Thread(() =>
     }
 });
 
+var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+scheduler.Start();
+scheduler.ScheduleJob(
+    JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
+    TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
+
 mail_thread.Start();
 
 app.Run();
 
 Globals.EmailQueue.Enqueue(new EmailData("", 0, "", ""));
 mail_thread.Join();
+scheduler.Shutdown();

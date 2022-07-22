@@ -9,7 +9,7 @@ public class User
     public User() {}
     
     [BsonConstructor]
-    public User(UInt64 id, string sid, string username, string email, string password, uint wins, string validationCode, bool verified)
+    public User(ulong id, string sid, string username, string email, string password, uint wins, string validationCode, bool verified)
     {
         Id = id;
         Sid = sid;
@@ -62,4 +62,10 @@ public class User
     [JsonIgnore]
     [BsonElement("verified")]
     public bool Verified { set; get; } = false;
+    
+    [BsonRepresentation(BsonType.String)]
+    [BsonElement("beta_code")]
+    [JsonIgnore]
+    [BsonIgnoreIfDefault]
+    public string? BetaCode { set; get; }
 }
