@@ -33,9 +33,14 @@ public class GameManager
         return game.Id;
     }
 
-    public void RemoveGame()
+    public void RemoveGame(long id)
     {
-
+        if (HasGame(id))
+        {
+            var record = _games[id];
+            _gameManager.RemoveGame(record.Game.Id);
+            _games.Remove(id);
+        }
     }
 
     public GameRecord? GetGame(long id)

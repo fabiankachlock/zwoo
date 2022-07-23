@@ -74,6 +74,11 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             {
                 await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
             }
+
+            if (game?.Lobby.PlayerCount() == 0)
+            {
+                GameManager.Global.RemoveGame(game.Game.Id);
+            }
         }
         closed.SetResult();
     }
