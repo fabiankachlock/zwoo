@@ -32,19 +32,48 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             return;
         }
 
+        GameRecord? game = GameManager.Global.GetGame(gameId);
+        var player = game?.Lobby.GetPlayer(playerId);
+        if (game == null || player == null)
+        {
+            Globals.Logger.Warn($"no game found for {playerId}");
+            closed.SetResult();
+            return;
+
+        }
+
+        if (player.Role == ZRPRole.Spectator)
+        {
+            // TODO: change player model to include wins
+            await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorJoined, new SpectatorJoinedDTO(player.Username, 0)));
+        }
+        else
+        {
+            await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerJoined, new PlayerJoinedDTO(player.Username, 0)));
+        }
+
+
         try
         {
             Globals.Logger.Info($"{playerId} connected!");
-            await Handle(ws, playerId, gameId);
+            await Handle(ws, player, game);
             Globals.Logger.Info($"{playerId} closing socket!");
         }
         catch { }
 
         RemoveWs(gameId, playerId, ws);
-        GameRecord? game = GameManager.Global.GetGame(gameId);
         if (game != null)
         {
             game.Lobby.RemovePlayer(playerId);
+            if (player != null && player.Role == ZRPRole.Spectator)
+            {
+                // TODO: change player model to include wins
+                await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
+            }
+            else if (player != null)
+            {
+                await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
+            }
         }
         closed.SetResult();
     }
@@ -85,7 +114,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         }
     }
 
-    public async Task SendPlayer(long playerId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isEndOfMessage)
+    public async Task SendPlayer(long playerId, ArraySegment<byte> content, WebSocketMessageType messageType = WebSocketMessageType.Text, bool isEndOfMessage = true)
     {
         if (_websockets.ContainsKey(playerId))
         {
@@ -93,7 +122,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         }
     }
 
-    public async Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType, bool isEndOfMessage)
+    public async Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType = WebSocketMessageType.Text, bool isEndOfMessage = true)
     {
         if (_games.ContainsKey(gameId))
         {
@@ -111,7 +140,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         return _websockets.ContainsKey(playerId);
     }
 
-    private async Task Handle(WebSocket webSocket, long playerId, long gameId)
+    private async Task Handle(WebSocket webSocket, LobbyManager.PlayerEntry player, GameRecord game)
     {
 
         var buffer = new byte[1024 * 4];
@@ -129,13 +158,13 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             }
             else if (hasTooLongMessage)
             {
-                await SendPlayer(playerId, ZRPEncoder.EncodeToBytes(ZRPCode.MessagetoLongError, new ErrorDTO((int)ZRPCode.MessagetoLongError, "message to long")), WebSocketMessageType.Text, true);
+                await SendPlayer(player.Id, ZRPEncoder.EncodeToBytes(ZRPCode.MessagetoLongError, new ErrorDTO((int)ZRPCode.MessagetoLongError, "message to long")), WebSocketMessageType.Text, true);
                 hasTooLongMessage = false;
             }
             else
             {
-                Globals.Logger.Info($" {playerId} received message: {Encoding.UTF8.GetString(buffer, 0, receiveResult.Count)}");
-                _distributer.Distribute(buffer, receiveResult.Count, playerId, gameId);
+                Globals.Logger.Info($" {player.Id} received message: {Encoding.UTF8.GetString(buffer, 0, receiveResult.Count)}");
+                _distributer.Distribute(buffer, receiveResult.Count, player, game.Game.Id, game);
             }
 
             receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);

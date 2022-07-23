@@ -30,8 +30,8 @@ public readonly record struct GetAllPlayersDTO(); // empty
 
 public readonly record struct ListPlayers_PlayerDTO(
     string Username,
-    int Wins,
-    ZRPRole Role
+    ZRPRole Role,
+    int Wins
 );
 public readonly record struct ListPlayersDTO(ListPlayers_PlayerDTO[] Players);
 
@@ -49,8 +49,8 @@ public readonly record struct KickPlayerDTO(string Username);
 
 public readonly record struct PlayerChangedRoleDTO(
     string Username,
-    int Wins,
-    ZRPRole NewRole
+    ZRPRole Role,
+    int Wins
 );
 
 public readonly record struct UpdateSettingDTO(); // TODO: implement settings

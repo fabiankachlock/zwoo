@@ -147,7 +147,7 @@ public class LobbyManager
     {
         PlayerEntry? player = GetPlayer(name);
         if (player == null) return false;
-        if (player.Role == ZRPRole.Host && Players().Count > 0)
+        if (player.Role == ZRPRole.Host && Players().Count > 1)
         {
             PlayerEntry newHost = _players.First(p => p.Role == ZRPRole.Player);
             newHost.Role = ZRPRole.Host;
@@ -178,6 +178,11 @@ public class LobbyManager
             player.Role = newRole;
         }
         return true;
+    }
+
+    public List<PlayerEntry> ListAll()
+    {
+        return _players.ToList();
     }
 
 }

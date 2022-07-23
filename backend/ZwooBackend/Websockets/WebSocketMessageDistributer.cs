@@ -18,17 +18,17 @@ public class WebSocketMessageDistributer
         _webSocketManager = webSocketManager;
         _handlers = new MessageHandler[] {
             new ChatHandler(_webSocketManager),
+            new LobbyHandler(_webSocketManager),
         };
     }
 
-    public void Distribute(byte[] message, int length, long playerId, long gameId)
+    public void Distribute(byte[] message, int length, LobbyManager.PlayerEntry player, long gameId, GameRecord game)
     {
         string stringMessage = Encoding.UTF8.GetString(message, 0, length);
         ZRPCode? code = ZRPDecoder.GetCode(stringMessage);
         if (code != null)
         {
-            LobbyManager.PlayerEntry player = GameManager.Global.GetGame(gameId)!.Lobby.GetPlayer(playerId)!;
-            UserContext context = new UserContext(playerId, player.Username, player.Role, gameId);
+            UserContext context = new UserContext(player.Id, player.Username, player.Role, gameId, game);
             ZRPMessage zrpMessage = new ZRPMessage(code.Value, stringMessage);
 
             foreach (MessageHandler handler in _handlers)
