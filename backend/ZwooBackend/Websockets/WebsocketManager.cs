@@ -170,9 +170,27 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
         }
 
-        await webSocket.CloseAsync(
-            receiveResult.CloseStatus.Value,
-            receiveResult.CloseStatusDescription,
-            CancellationToken.None);
+        if (webSocket.CloseStatus == null)
+        {
+            await webSocket.CloseAsync(
+                receiveResult.CloseStatus.Value,
+                receiveResult.CloseStatusDescription,
+                CancellationToken.None);
+        }
+    }
+
+    public async Task Disconnect(long playerId)
+    {
+        try
+        {
+            WebSocket webSocket = _websockets[playerId];
+            await webSocket.CloseAsync(
+                WebSocketCloseStatus.NormalClosure,
+                "you got kicked",
+                CancellationToken.None);
+            return;
+        }
+        catch { }
+        return;
     }
 }

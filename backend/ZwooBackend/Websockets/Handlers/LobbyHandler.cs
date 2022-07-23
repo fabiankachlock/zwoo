@@ -65,7 +65,7 @@ public class LobbyHandler : MessageHandler
         }
         catch
         {
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
         }
     }
 
@@ -82,14 +82,38 @@ public class LobbyHandler : MessageHandler
         }
         catch
         {
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
         }
     }
 
     private void KickPlayer(UserContext context, ZRPMessage message)
     {
-        // disconnect from server
-        // handled after connection close
+        try
+        {
+            KickPlayerDTO payload = message.DecodePyload<KickPlayerDTO>();
+            var player = context.GameRecord.Lobby.GetPlayer(payload.Username);
+
+            context.GameRecord.Lobby.RemovePlayer(payload.Username);
+            if (player != null && player.Role == ZRPRole.Spectator)
+            {
+                _webSocketManager.Disconnect(player.Id);
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
+            }
+            else if (player != null)
+            {
+                _webSocketManager.Disconnect(player.Id);
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
+            }
+        }
+        catch
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+        }
+    }
+
+    private void LeavePlayer(UserContext context, ZRPMessage message)
+    {
+
     }
 
     private void GetPlayers(UserContext context, ZRPMessage message)
