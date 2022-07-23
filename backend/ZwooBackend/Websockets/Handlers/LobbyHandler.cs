@@ -15,9 +15,9 @@ public class LobbyHandler : MessageHandler
 
     public bool HandleMessage(UserContext context, ZRPMessage message)
     {
-        if (message.Code == ZRPCode.PlayerLeft)
+        if (message.Code == ZRPCode.PlayerLeftGame)
         {
-            // TODO: ignore for now - is handled when connection is closed
+            LeavePlayer(context, message);
             return true;
         }
         else if (message.Code == ZRPCode.SpectatorWantsToPlay)
@@ -113,7 +113,32 @@ public class LobbyHandler : MessageHandler
 
     private void LeavePlayer(UserContext context, ZRPMessage message)
     {
+        try
+        {
+            bool result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
+            if (context.Role == ZRPRole.Host)
+            {
+                string newHost = context.GameRecord.Lobby.Host();
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(newHost, ZRPRole.Host, 0)));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.HostChanged, new HostChangedDTO(newHost)));
+                _webSocketManager.SendPlayer(context.GameRecord.Lobby.ResolvePlayer(newHost), ZRPEncoder.EncodeToBytes(ZRPCode.PromotedToHost, new PromotedToHostDTO()));
+            }
 
+            if (!result) return;
+            if (context.Role == ZRPRole.Spectator)
+            {
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(context.UserName)));
+            }
+            else
+            {
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(context.UserName)));
+            }
+
+        }
+        catch
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+        }
     }
 
     private void GetPlayers(UserContext context, ZRPMessage message)
