@@ -22,7 +22,6 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult reCaptcha()
     {
-        Globals.Logger.Info("POST /recaptch");
         HttpClient client = new HttpClient();
        
         using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -62,9 +61,7 @@ public class AuthenticationController : Controller
         
         var data = Globals.ZwooDatabase.CreateUser(body.username, body.email, body.password, body.code);
         
-        Globals.EmailQueue.Enqueue(new EmailData(data.Item1, data.Item2,data.Item3, data.Item4));
-        
-        Globals.Logger.Info($"Account with username {body.username} created");
+        Globals.EmailQueue.Enqueue(new EmailData(data.Item1, data.Item2,data.Item3, data.Item4));        
         return Ok("{\"message\": \"Account create\"}");
     }
 

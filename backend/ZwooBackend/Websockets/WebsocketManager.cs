@@ -4,6 +4,7 @@ using ZwooGameLogic.Game.Events;
 using ZwooBackend.ZRP;
 using ZwooBackend.Games;
 using ZwooBackend.Websockets.Interfaces;
+using static ZwooBackend.Globals;
 
 namespace ZwooBackend.Websockets;
 
@@ -27,7 +28,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         }
         catch
         {
-            Globals.Logger.Warn($"cant store webSocket for {playerId}");
+            WebSocketLogger.Warn($"cant store websocket for {playerId}");
             closed.SetResult();
             return;
         }
@@ -36,7 +37,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         var player = game?.Lobby.GetPlayer(playerId);
         if (game == null || player == null)
         {
-            Globals.Logger.Warn($"no game found for {playerId}");
+            WebSocketLogger.Warn($"no game found for {playerId}");
             closed.SetResult();
             return;
 
@@ -55,9 +56,9 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
         try
         {
-            Globals.Logger.Info($"{playerId} connected!");
+            WebSocketLogger.Info($"{playerId} connected");
             await Handle(ws, player, game);
-            Globals.Logger.Info($"{playerId} closing socket!");
+            WebSocketLogger.Info($"{playerId} closing socket");
         }
         catch { }
 
@@ -80,12 +81,13 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
                 GameManager.Global.RemoveGame(game.Game.Id);
             }
         }
+        WebSocketLogger.Info($"{playerId} disconnected");
         closed.SetResult();
     }
 
     private void InsertWs(long gameId, long playerId, WebSocket ws)
     {
-        Globals.Logger.Warn($"storing webSocket for {playerId}");
+        WebSocketLogger.Warn($"storing websocket for {playerId}");
         if (!_websockets.ContainsKey(playerId))
         {
             _websockets[playerId] = ws;
@@ -107,7 +109,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     private void RemoveWs(long gameId, long playerId, WebSocket ws)
     {
-        Globals.Logger.Info($"removing webSocket from {playerId}");
+        WebSocketLogger.Info($"removing websocket from {playerId}");
         if (_websockets.ContainsKey(playerId))
         {
             _websockets.Remove(playerId);
@@ -123,6 +125,8 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
     {
         if (_websockets.ContainsKey(playerId))
         {
+            WebSocketLogger.Info($"[Player] [{playerId}] sending message");
+            WsLogger.Debug($"[Player] [{playerId}] sending: {Encoding.UTF8.GetString(content)}");
             await _websockets[playerId].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
         }
     }
@@ -131,6 +135,8 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
     {
         if (_games.ContainsKey(gameId))
         {
+            WebSocketLogger.Info($"[Game] [{gameId}] broadcasting");
+            WsLogger.Debug($"[Game] [{gameId}] sending: {Encoding.UTF8.GetString(content)}");
             await Task.WhenAll(_games[gameId].Select(player => _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None)));
         }
     }
@@ -168,7 +174,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             }
             else
             {
-                Globals.Logger.Info($" {player.Id} received message: {Encoding.UTF8.GetString(buffer, 0, receiveResult.Count)}");
+                WsLogger.Debug($"{player.Id} received message: {Encoding.UTF8.GetString(buffer, 0, receiveResult.Count)}");
                 _distributer.Distribute(buffer, receiveResult.Count, player, game.Game.Id, game);
             }
 
@@ -188,6 +194,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
     {
         try
         {
+            WebSocketLogger.Info($"forcing disconnect for {playerId}");
             WebSocket webSocket = _websockets[playerId];
             await webSocket.CloseAsync(
                 WebSocketCloseStatus.NormalClosure,

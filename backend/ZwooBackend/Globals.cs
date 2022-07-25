@@ -24,7 +24,7 @@ public static class Globals
         Cors = ReturnIfValidEnvVar("ZWOO_CORS");
         ZwooDomain = ReturnIfValidEnvVar("ZWOO_DOMAIN");
         ZwooCookieDomain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? ZwooDomain;
-        
+
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
         SmtpHostUrl = ReturnIfValidEnvVar("SMTP_HOST_URL");
         if (!int.TryParse(ReturnIfValidEnvVar("SMTP_HOST_PORT").Trim(), out SmtpHostPort))
@@ -41,7 +41,13 @@ public static class Globals
         ZwooDatabase = new Database.Database();
     }
 
-    public static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
+    public static readonly ILog Logger = LogManager.GetLogger("Global");
+    public static readonly ILog DatabaseLogger = LogManager.GetLogger("Database");
+    public static readonly ILog HttpLogger = LogManager.GetLogger("HTTP");
+    public static readonly ILog WsLogger = LogManager.GetLogger("WS");
+    public static readonly ILog WebSocketLogger = LogManager.GetLogger("WebSocket");
+    public static readonly ILog LobbyLogger = LogManager.GetLogger("Lobby");
+    public static readonly ILog GameLogger = LogManager.GetLogger("Game");
 
     public static readonly Database.Database ZwooDatabase;
 

@@ -17,9 +17,9 @@ public class DatabaseCleanupJob : IJob
 {
     public Task Execute(IJobExecutionContext context)
     {
-        Logger.Info("Starting DB Cleanup");
+        DatabaseLogger.Info("[CleanUp] starting db cleanup");
         ZwooDatabase.CleanDatabase();
-        Logger.Info("DB Cleanup Finished!");
+        DatabaseLogger.Info("[CleanUp] finished db cleanup");
         return Task.CompletedTask;
     }
 }
@@ -43,17 +43,17 @@ public class Database
         });
 
         var client = new MongoClient(ConnectionString);
-        Logger.Info($"Established MongoDB Connection to {ConnectionString}");
+        DatabaseLogger.Info($"connected to {ConnectionString}");
 
         _database = client.GetDatabase("zwoo");
 
         if (_database == null)
         {
-            Logger.Error("Couldn't connect to zwoo database");
+            DatabaseLogger.Error("cant connect to database");
             Environment.Exit(1);
         }
-            
-        Logger.Info($"Connected to zwoo Database");
+
+        DatabaseLogger.Info($"established connection with database");
 
         _collection = _database.GetCollection<User>("users");
 
@@ -63,6 +63,7 @@ public class Database
 
     public (string, ulong, string, string) CreateUser(string username, string email, string password, string? betaCode)
     {
+        DatabaseLogger.Debug($"[User] creating {username}");
         var code = StringHelper.GenerateNDigitString(6);
         var id = _generator.GetNextID();
         
@@ -88,7 +89,6 @@ public class Database
         };
 
         _collection.InsertOne(user);
-        
         return (username, id, code, email);
     }
 
@@ -101,7 +101,7 @@ public class Database
     public bool CheckBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
-        Logger.Info(betaCode);
+        DatabaseLogger.Debug($"[BetaCode] checking {betaCode}");
         var coll = _database.GetCollection<BsonDocument>("betacodes");
         return coll.Find(new BsonDocument { { "code", betaCode! } }).ToList().Count != 0;
     }
@@ -109,12 +109,14 @@ public class Database
     private bool RemoveBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
+        DatabaseLogger.Debug($"[BetaCode] removing {betaCode}");
         var coll = _database.GetCollection<BsonDocument>("betacodes");
         return coll.DeleteOne(new BsonDocument { { "code", betaCode! } }).DeletedCount != 0;
     }
 
     public bool VerifyUser(ulong id, string code)
     {
+        DatabaseLogger.Debug($"[User] verifying {id}");
         var user = _collection.Find(x => x.Id == id).FirstOrDefault();
         if (!RemoveBetaCode(user.BetaCode))
             return false;
@@ -125,6 +127,7 @@ public class Database
 
     public bool LoginUser(string email, string password, out string sid, out UInt64 id, out ErrorCodes.Errors error)
     {
+        DatabaseLogger.Debug($"[User] login {email}");
         error = ErrorCodes.Errors.NONE;
         sid = "";
         id = 0;
@@ -171,6 +174,7 @@ public class Database
 
     public void LogoutUser(User user)
     {
+        DatabaseLogger.Debug($"[User] logout {user.Email}");
         var filter = Builders<User>.Filter.Eq(u => u.Id , user.Id);
         var update = Builders<User>.Update.Set(u => u.Sid, "");
         _collection.UpdateOne(filter, update);
@@ -178,6 +182,7 @@ public class Database
 
     public bool DeleteUser(User user, string password)
     {
+        DatabaseLogger.Debug($"[User] deleting {user.Email}");
         var salt = Convert.FromBase64String(user.Password.Split(':')[1]);
         var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
         
@@ -217,7 +222,7 @@ public class Database
 
     public void CleanDatabase()
     {
-        Logger.Info($"Deleted {_collection.DeleteMany(x => x.Verified == false).DeletedCount} User(s).");
+        DatabaseLogger.Info($"[CleanUp] deleted {_collection.DeleteMany(x => x.Verified == false).DeletedCount} user(s).");
     }
 
     private readonly IMongoDatabase _database;

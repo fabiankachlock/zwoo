@@ -33,10 +33,23 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method != "OPTIONS")
+    {
+        Globals.HttpLogger.Info($"[{context.Request.Method}] {context.Request.Path}");
+    }
+    await next.Invoke();
+    if (context.Response.StatusCode >= 300)
+    {
+        Globals.HttpLogger.Info($"sending error response: {context.Response.StatusCode} ([{context.Request.Method}] {context.Request.Path})");
+    }
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    Globals.Logger.Info("Adding Swagger");
+    Globals.Logger.Debug("adding swagger");
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
