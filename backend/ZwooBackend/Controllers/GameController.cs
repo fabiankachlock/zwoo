@@ -73,9 +73,13 @@ public class GameController : Controller
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
                 }
 
-                game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
-                Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
+                bool success = game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
+                if (!success)
+                {
+                    return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                }
 
+                Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
                 return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id)));
             }
 
