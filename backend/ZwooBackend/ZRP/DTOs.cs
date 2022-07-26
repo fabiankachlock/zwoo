@@ -53,13 +53,21 @@ public readonly record struct PlayerChangedRoleDTO(
     int Wins
 );
 
-public readonly record struct UpdateSettingDTO(); // TODO: implement settings
-public readonly record struct ChangedSettingsDTO(); // TODO: implement settings
+public readonly record struct UpdateSettingDTO(
+    string Setting,
+    int Value
+);
+
+public readonly record struct ChangedSettingsDTO(
+    string Setting,
+    int Value
+);
+
 public readonly record struct GetAllSettingsDTO(); // empty
 
 public readonly record struct AllSettings_SettingDTO(
     string Setting,
-    string Value
+    int Value
 );
 
 public readonly record struct AllSettingsDTO(AllSettings_SettingDTO[] Settings);

@@ -60,7 +60,9 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             await Handle(ws, player, game);
             WebSocketLogger.Info($"{playerId} closing socket");
         }
-        catch { }
+        catch (Exception e) {
+            Console.WriteLine(e);
+        }
 
         RemoveWs(gameId, playerId, ws);
         if (game != null)

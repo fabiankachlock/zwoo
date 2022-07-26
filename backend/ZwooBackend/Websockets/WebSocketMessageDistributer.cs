@@ -19,6 +19,7 @@ public class WebSocketMessageDistributer
         _handlers = new MessageHandler[] {
             new ChatHandler(_webSocketManager),
             new LobbyHandler(_webSocketManager),
+            new SettingsHandler(_webSocketManager),
         };
     }
 

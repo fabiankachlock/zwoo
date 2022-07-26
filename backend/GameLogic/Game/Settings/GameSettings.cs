@@ -8,75 +8,75 @@ namespace ZwooGameLogic.Game.Settings;
 
 public struct GameSettings
 {
-    private Dictionary<GameSettingsKey, int> Settings;
-
-    private static Dictionary<string, GameSettingsKey> SettingKeys = new Dictionary<string, GameSettingsKey>
-    {
-        { "maxAmountOfPlayers", GameSettingsKey.MaxAmountOfPlayers },
-        { "numberOfCards", GameSettingsKey.NumberOfCards },
-    };
+    private Dictionary<GameSettingsKey, int> _settings;
 
     public int MaxAmountOfPlayers
     {
-        get => Settings[GameSettingsKey.MaxAmountOfPlayers];
+        get => _settings[GameSettingsKey.MaxAmountOfPlayers];
     }
 
     public int NumberOfCards
     {
-        get => Settings[GameSettingsKey.NumberOfCards];
+        get => _settings[GameSettingsKey.NumberOfCards];
     }
 
     private GameSettings(Dictionary<GameSettingsKey, int> initialSettings)
     {
-        Settings = initialSettings;
+        _settings = initialSettings;
     }
 
     public static GameSettings FromDefaults()
     {
         Dictionary<GameSettingsKey, int> settings = new Dictionary<GameSettingsKey, int>();
+        settings.Add(GameSettingsKey.DEFAULT_RULE_SET, 1);
         settings.Add(GameSettingsKey.MaxAmountOfPlayers, 5);
         settings.Add(GameSettingsKey.NumberOfCards, 7);
-        return new GameSettings();
+        return new GameSettings(settings);
     }
 
     public static GameSettings Empty()
     {
-        return new GameSettings(new Dictionary<GameSettingsKey, int>());
+        return new GameSettings(new Dictionary<GameSettingsKey, int>() { { GameSettingsKey.DEFAULT_RULE_SET, 1 } });
     }
 
-    public void Set(GameSettingsKey? key, int value)
+    public bool Set(GameSettingsKey? key, int value)
     {
-        if (key.HasValue && Settings.ContainsKey(key.Value!))
+        if (key.HasValue && _settings.ContainsKey(key.Value!))
         {
-            Settings[key.Value!] = value;
+            _settings[key.Value!] = value;
+            return true;
         }
+        return false;
     }
 
-    public void Set(string stringKey, int value)
+    public bool Set(string stringKey, int value)
     {
-        if (GameSettings.SettingKeys.ContainsKey(stringKey))
-        {
-            GameSettingsKey key = GameSettings.SettingKeys[stringKey];
-            Set(key, value);
-        }
+        GameSettingsKey? key = SettingsKeyMapper.ToKey(stringKey);
+        return Set(key, value);
     }
 
     public int Get(GameSettingsKey? key)
     {
-        if (key.HasValue && Settings.ContainsKey(key.Value!))
+        if (key.HasValue && _settings.ContainsKey(key.Value!))
         {
-            return Settings[key.Value!];
+            return _settings[key.Value!];
         }
         return 0;
     }
 
     public int Get(string stringKey)
     {
-        if (GameSettings.SettingKeys.ContainsKey(stringKey))
+        GameSettingsKey? key = SettingsKeyMapper.ToKey(stringKey);
+        if (key.HasValue)
         {
-            GameSettingsKey key = GameSettings.SettingKeys[stringKey];
-            return Settings[key];
+            return _settings[key.Value];
         }
         return 0;
+    }
+
+    // return only enabled settings
+    public Dictionary<GameSettingsKey, int> GetSettings()
+    {
+        return new Dictionary<GameSettingsKey, int>(_settings);
     }
 }
