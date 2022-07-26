@@ -1,5 +1,6 @@
 ﻿using System.Net.WebSockets;
 using ZwooBackend.Websockets.Interfaces;
+using ZwooBackend.Games;
 using ZwooBackend.ZRP;
 
 namespace ZwooBackend.Websockets.Handlers;
@@ -116,6 +117,14 @@ public class LobbyHandler : MessageHandler
         try
         {
             bool result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
+            if (context.GameRecord.Lobby.PlayerCount() == 0)
+            {
+                // close game
+                _webSocketManager.QuitGame(context.GameId);
+                GameManager.Global.RemoveGame(context.GameId);
+                return;
+            }
+
             if (context.Role == ZRPRole.Host)
             {
                 string newHost = context.GameRecord.Lobby.Host();

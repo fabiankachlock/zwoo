@@ -8,5 +8,7 @@ public interface SendableWebSocketManager
 
     public Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType = WebSocketMessageType.Text, bool isEndOfMessage = true);
 
+    public Task QuitGame(long gameId);
+
     public Task Disconnect(long playerdId);
 }

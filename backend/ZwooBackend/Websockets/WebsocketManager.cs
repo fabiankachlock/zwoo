@@ -60,7 +60,8 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             await Handle(ws, player, game);
             WebSocketLogger.Info($"{playerId} closing socket");
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Console.WriteLine(e);
         }
 
@@ -120,6 +121,10 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         if (_games.ContainsKey(gameId))
         {
             _games[gameId].Remove(playerId);
+            if (_games[gameId].Count == 0)
+            {
+                _games.Remove(gameId);
+            }
         }
     }
 
@@ -206,5 +211,17 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         }
         catch { }
         return;
+    }
+
+    public async Task QuitGame(long gameId)
+    {
+        if (_games.ContainsKey(gameId))
+        {
+            HashSet<long> players = _games[gameId];
+            foreach (long player in players)
+            {
+                await Disconnect(player);
+            }
+        }
     }
 }
