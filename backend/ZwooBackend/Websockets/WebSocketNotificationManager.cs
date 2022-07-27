@@ -12,10 +12,13 @@ public class WebSocketNotificationManager : NotificationManager
 
     private long _gameId;
 
-    public WebSocketNotificationManager(SendableWebSocketManager webSocketManager, long gameId)
+    private Func<long, string> _resolvePlayerName;
+
+    public WebSocketNotificationManager(SendableWebSocketManager webSocketManager, long gameId, Func<long, string> playerNameResolver)
     {
         _webSockets = webSocketManager;
         _gameId = gameId;
+        _resolvePlayerName = playerNameResolver;
     }
 
     public void EndTurn(long player)
@@ -69,7 +72,7 @@ public class WebSocketNotificationManager : NotificationManager
             _gameId,
             ZRPEncoder.EncodeToBytes(
                 ZRPCode.StateUpdated,
-                new ZRP.StateUpdatedDTO(new StateUpdated_PileTopDTO(data.PileTop.Color, data.PileTop.Type), data.ActivePlayer.ToString(), data.ActivePlayerCardAmount, data.LastPlayer.ToString(), data.LastPlayerCardAmount)
+                new ZRP.StateUpdatedDTO(new StateUpdated_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _resolvePlayerName(data.ActivePlayer), data.ActivePlayerCardAmount, _resolvePlayerName(data.LastPlayer), data.LastPlayerCardAmount)
             ),
             WebSocketMessageType.Text,
             true

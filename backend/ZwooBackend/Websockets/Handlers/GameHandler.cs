@@ -73,7 +73,7 @@ public class GameHandler : MessageHandler
 
         foreach (long player in context.GameRecord.Game.AllPlayers)
         {
-            amounts.Add(new SendCardAmount_PlayersDTO("", context.GameRecord.Game.State.GetPlayerCardAmount(player)!.Value, context.GameRecord.Game.State.ActivePlayer() == player));
+            amounts.Add(new SendCardAmount_PlayersDTO(context.GameRecord.Lobby.GetPlayer(player)!.Username, context.GameRecord.Game.State.GetPlayerCardAmount(player)!.Value, context.GameRecord.Game.State.ActivePlayer() == player));
         }
 
         _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendCardAmount, new SendCardAmountDTO(amounts.ToArray())));
