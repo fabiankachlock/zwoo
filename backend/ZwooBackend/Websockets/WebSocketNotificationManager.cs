@@ -57,14 +57,9 @@ public class WebSocketNotificationManager : NotificationManager
         _webSockets.SendPlayer(data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.SendCard, new ZRP.SendCardDTO(data.Card.Color, data.Card.Type)), WebSocketMessageType.Text, true);
     }
 
-    public void StartGame()
-    {
-        _webSockets.BroadcastGame(_gameId, ZRPEncoder.EncodeToBytes(ZRPCode.EndTurn, new StartGameDTO()), WebSocketMessageType.Text, true);
-    }
-
     public void StartTurn(long player)
     {
-        _webSockets.SendPlayer(player, ZRPEncoder.EncodeToBytes(ZRPCode.EndTurn, new StartTurnDTO()), WebSocketMessageType.Text, true);
+        _webSockets.SendPlayer(player, ZRPEncoder.EncodeToBytes(ZRPCode.StartTurn, new StartTurnDTO()), WebSocketMessageType.Text, true);
     }
 
     public void StateUpdate(ZwooGameLogic.Game.Events.StateUpdateDTO data)

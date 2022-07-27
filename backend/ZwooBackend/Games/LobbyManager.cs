@@ -39,19 +39,30 @@ public class LobbyManager
         return _players.FirstOrDefault(p => p.Role == ZRPRole.Host)?.Username ?? "";
     }
 
-    public List<string> Players()
+    public List<string> PlayersNames()
     {
         return _players.FindAll(p => p.Role != ZRPRole.Spectator).Select(p => p.Username).ToList();
     }
 
-    public List<string> Spectators()
+    public List<string> SpectatorsNames()
     {
         return _players.FindAll(p => p.Role == ZRPRole.Spectator).Select(p => p.Username).ToList();
     }
 
+    public List<long> Players()
+    {
+        return _players.FindAll(p => p.Role != ZRPRole.Spectator).Select(p => p.Id).ToList();
+    }
+
+    public List<long> Spectators()
+    {
+        return _players.FindAll(p => p.Role == ZRPRole.Spectator).Select(p => p.Id).ToList();
+    }
+
+
     public int PlayerCount()
     {
-        return Players().Count();
+        return PlayersNames().Count();
     }
 
     public bool HasHost()
@@ -147,7 +158,7 @@ public class LobbyManager
     {
         PlayerEntry? player = GetPlayer(name);
         if (player == null) return false;
-        if (player.Role == ZRPRole.Host && Players().Count > 1)
+        if (player.Role == ZRPRole.Host && PlayersNames().Count > 1)
         {
             PlayerEntry newHost = _players.First(p => p.Role == ZRPRole.Player);
             newHost.Role = ZRPRole.Host;

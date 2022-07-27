@@ -20,6 +20,7 @@ public class WebSocketMessageDistributer
             new ChatHandler(_webSocketManager),
             new LobbyHandler(_webSocketManager),
             new SettingsHandler(_webSocketManager),
+            new GameHandler(_webSocketManager),
         };
     }
 

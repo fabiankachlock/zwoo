@@ -44,8 +44,6 @@ public readonly record struct ErrorDto(
 
 public interface NotificationManager
 {
-    void StartGame();
-
     void StopGame();
 
     void StartTurn(long player);

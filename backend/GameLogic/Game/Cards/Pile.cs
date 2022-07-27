@@ -52,7 +52,7 @@ internal sealed class Pile
 
     private void PopulateStack()
     {
-        AvailableCards.Concat(GetScrambeledCardSet());
+        AvailableCards = AvailableCards.Concat(GetScrambeledCardSet()).ToList();
     }
 
     public Card DrawCard()
