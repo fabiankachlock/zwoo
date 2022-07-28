@@ -41,7 +41,7 @@ internal class BaseCardRule : BaseRule
         List<GameEvent> events = new List<GameEvent>();
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card);
+        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && !(CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated);
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
