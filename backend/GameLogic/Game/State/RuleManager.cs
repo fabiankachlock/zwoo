@@ -13,7 +13,7 @@ namespace ZwooGameLogic.Game.State;
 
 internal class RuleManager
 {
-    public static List<BaseRule> AllRules = new List<BaseRule>() { new BaseCardRule(), new BaseDrawRule() };
+    public static List<BaseRule> AllRules = new List<BaseRule>() { new BaseCardRule(), new BaseDrawRule(), new BaseWildCardRule() };
 
     public readonly long GameId;
 

@@ -101,8 +101,9 @@ public class GameHandler : MessageHandler
             ReceiveDecisionDTO payload = message.DecodePyload<ReceiveDecisionDTO>();
             context.GameRecord.Game.HandleEvent(ClientEvent.PlayerDecission(context.Id, (PlayerDecission)payload.Type, payload.Decision));
         }
-        catch
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
         }
     }
