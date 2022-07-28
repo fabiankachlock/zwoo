@@ -30,7 +30,11 @@ internal class RuleManager
     public void Configure()
     {
         _activeRules = AllRules
-            .Where(rule => rule.AssociatedOption == GameSettingsKey.DEFAULT_RULE_SET || _settings.Get(rule.AssociatedOption) > 0)
+            .Where(rule =>
+            {
+                Console.WriteLine(rule.AssociatedOption == GameSettingsKey.DEFAULT_RULE_SET);
+                return rule.AssociatedOption == GameSettingsKey.DEFAULT_RULE_SET || _settings.Get(rule.AssociatedOption) > 0;
+            })
             .ToList();
 
         foreach (var rule in _activeRules)

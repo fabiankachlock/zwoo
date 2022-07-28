@@ -150,7 +150,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     public NotificationManager GetNotificationManager(long gameId)
     {
-            // TODO: optimize this
+        // TODO: optimize this
         return new WebSocketNotificationManager(this, gameId, id =>
             {
                 if (GameManager.Global.HasGame(gameId))

@@ -12,11 +12,20 @@ namespace ZwooGameLogic.Game.Rules;
 
 internal class BaseDrawRule : BaseRule
 {
-    public new readonly int Priority = RulePriorirty.BaseRule;
+    public override int Priority
+    {
+        get => RulePriorirty.BaseRule;
+    }
 
-    public new readonly string Name = "BaseDrawRule";
+    public override string Name
+    {
+        get => "BaseDrawRule";
+    }
 
-    public new readonly GameSettingsKey? AssociatedOption = GameSettingsKey.DEFAULT_RULE_SET;
+    public override GameSettingsKey? AssociatedOption
+    {
+        get => GameSettingsKey.DEFAULT_RULE_SET;
+    }
 
     public BaseDrawRule() : base() { }
 
@@ -52,7 +61,6 @@ internal class BaseDrawRule : BaseRule
         List<Card> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next());
-        state.CurrentPlayer = playerOrder.Next();
         foreach (Card card in newCards)
         {
             events.Add(GameEvent.SendCard(payload.Player, card));

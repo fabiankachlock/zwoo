@@ -1,7 +1,8 @@
 ﻿using System.Net.WebSockets;
 using ZwooBackend.Websockets.Interfaces;
 using ZwooBackend.ZRP;
-using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.Game.Cards;
 
 namespace ZwooBackend.Websockets.Handlers;
 
@@ -36,6 +37,21 @@ public class GameHandler : MessageHandler
             SendCardAmount(context, message);
             return true;
         }
+        else if (message.Code == ZRPCode.PlaceCard)
+        {
+            HandleCardPlace(context, message);
+            return true;
+        }
+        else if (message.Code == ZRPCode.DrawCard)
+        {
+            HandleCardDraw(context, message);
+            return true;
+        }
+        else if (message.Code == ZRPCode.ReceiveDecision)
+        {
+            HandleSendDecission(context, message);
+            return true;
+        }
         return false;
     }
 
@@ -53,13 +69,42 @@ public class GameHandler : MessageHandler
 
     private void HandleCardPlace(UserContext context, ZRPMessage message)
     {
+        try
+        {
+            PlaceCardDTO payload = message.DecodePyload<PlaceCardDTO>();
+            context.GameRecord.Game.HandleEvent(ClientEvent.PlaceCard(context.Id, new Card(payload.Type, payload.Symbol)));
+        }
+        catch
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+        }
     }
+
     private void HandleCardDraw(UserContext context, ZRPMessage message)
     {
+        try
+        {
+            DrawCardDTO payload = message.DecodePyload<DrawCardDTO>();
+            context.GameRecord.Game.HandleEvent(ClientEvent.DrawCard(context.Id));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+        }
     }
 
     private void HandleSendDecission(UserContext context, ZRPMessage message)
     {
+        try
+        {
+            ReceiveDecisionDTO payload = message.DecodePyload<ReceiveDecisionDTO>();
+            context.GameRecord.Game.HandleEvent(ClientEvent.PlayerDecission(context.Id, (PlayerDecission)payload.Type, payload.Decision));
+        }
+        catch
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+        }
     }
 
     private void SendHand(UserContext context, ZRPMessage message)

@@ -83,8 +83,8 @@ public readonly record struct EndTurnDTO(); // empty
 public readonly record struct RequestEndTurnDTO(); // empty
 
 public readonly record struct PlaceCardDTO(
-    CardColor Type,
-    CardType Symbol
+    int Type,
+    int Symbol
 );
 
 public readonly record struct DrawCardDTO(); // empty
@@ -109,7 +109,7 @@ public readonly record struct StateUpdatedDTO(
     string ActivePlayer,
     int ActivePlayerCardAmount,
     string LastPlayer,
-    int LastPlayercardAmount
+    int LastPlayerCardAmount
 );
 
 public readonly record struct GetHandDTO(); // empty

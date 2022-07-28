@@ -13,11 +13,11 @@ namespace ZwooGameLogic.Game.Rules;
 
 internal abstract class BaseRule
 {
-    public readonly int Priority = RulePriorirty.None;
+    public abstract int Priority { get; }
 
-    public readonly string Name = "__BaseRule__";
+    public abstract string Name { get; }
 
-    public readonly GameSettingsKey? AssociatedOption;
+    public abstract GameSettingsKey? AssociatedOption { get; }
 
     protected ILog _logger;
 

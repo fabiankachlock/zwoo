@@ -12,11 +12,20 @@ namespace ZwooGameLogic.Game.Rules;
 
 internal class BaseCardRule : BaseRule
 {
-    public new readonly int Priority = RulePriorirty.BaseRule;
+    public override int Priority
+    {
+        get => RulePriorirty.BaseRule;
+    }
 
-    public new readonly string Name = "BaseCardRule";
+    public override string Name
+    {
+        get => "BaseCardRule";
+    }
 
-    public new readonly GameSettingsKey? AssociatedOption = GameSettingsKey.DEFAULT_RULE_SET;
+    public override GameSettingsKey? AssociatedOption
+    {
+        get => GameSettingsKey.DEFAULT_RULE_SET;
+    }
 
     public BaseCardRule() : base() { }
 
