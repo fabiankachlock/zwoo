@@ -29,7 +29,8 @@
     "deleteAccount": "Delete Account",
     "logging": "Logging",
     "goToLogging": "Go to Settings",
-    "cardTheme": "Card Theme"
+    "cardTheme": "Card Theme",
+    "deviceId": "Anonymous DeviceID"
   },
   "lng": {
     "de": "German",
@@ -47,6 +48,7 @@
   "login": {
     "title": "Login",
     "username": "Username",
+    "email": "E-Mail",
     "password": "Password",
     "login": "Login",
     "resetPassword": "Reset Password"
@@ -343,7 +345,7 @@
   },
   "wrongVersion": {
     "title": "Wrong Version",
-    "info": "You need to upgrade zwoo to the latest version in order to play games.",
+    "info": "You need to upgrade zwoo to the latest version in order to play games. (Client: {0}, Server: {1})",
     "reload": "Reload page",
     "toSettings": "Go to settings"
   },

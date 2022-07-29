@@ -65,6 +65,9 @@ export class AuthenticationService {
     const response = await fetch(Backend.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         email: email,
         password: password
@@ -122,6 +125,9 @@ export class AuthenticationService {
 
     const response = await fetch(Backend.getUrl(Endpoint.CreateAccount), {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         username: username,
         email: email,
@@ -155,6 +161,9 @@ export class AuthenticationService {
     const response = await fetch(Backend.getUrl(Endpoint.DeleteAccount), {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         password: password
       })
