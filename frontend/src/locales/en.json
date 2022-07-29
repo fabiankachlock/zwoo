@@ -133,6 +133,7 @@
       "115": "The email is invalid.",
       "116": "The username is invalid.",
       "117": "The password is invalid.",
+      "118": "The BETA-Code is invalid.",
       "120": "The email is already used.",
       "121": "The username is already used.",
       "122": "The account could not be verified.",
