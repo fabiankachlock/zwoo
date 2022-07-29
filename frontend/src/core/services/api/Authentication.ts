@@ -177,6 +177,9 @@ export class AuthenticationService {
     Logger.Api.log(`verifying account ${id} with code ${code}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking verify response');
+      await new Promise(r => {
+        setTimeout(() => r({}), 5000);
+      });
       return Math.random() > 0.5;
     }
 

@@ -1,8 +1,11 @@
 <template>
   <div class="max-w-xl mx-auto m-4">
-    <h1 class="tc-main text-center text-4xl mb-2">{{ t('verifyAccount.verifying') }}</h1>
-    <div v-if="isLoading || true" class="flex flex-row justify-center flex-nowrap items-center tc-main">
-      <Icon icon="iconoir:system-restart" class="text-3xl tc-main-light animate-spin-slow mr-3" />
+    <h1 class="tc-main text-center text-4xl mb-2">{{ t('verifyAccount.title') }}</h1>
+    <div v-if="isLoading" class="flex flex-row justify-center flex-nowrap items-center tc-main">
+      <p class="tc-main-secondary text-center my-6 mr-4">
+        {{ t(`verifyAccount.verifying`) }}
+      </p>
+      <Icon icon="iconoir:system-restart" class="text-2xl tc-main-light animate-spin-slow mr-3" />
     </div>
     <div v-else>
       <p class="tc-main-secondary text-center my-6">
@@ -31,7 +34,7 @@ const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 
-const isLoading = ref(false);
+const isLoading = ref(true);
 const isSuccess = ref(false);
 const displayText = ref('');
 
@@ -40,13 +43,13 @@ onMounted(async () => {
   const code = Array.isArray(route.params['code']) ? route.params['code'][0] : route.params['code'];
 
   const response = await AuthenticationService.verifyAccount(id, code);
-  const [success, error] = typeof response === 'object' ? unwrapBackendError(response) : [response, undefined];
+  const [success] = typeof response === 'object' ? unwrapBackendError(response) : [response, undefined];
   isLoading.value = false;
   if (success) {
     isSuccess.value = true;
     displayText.value = 'success';
   } else {
-    displayText.value = error?.message ?? 'error'; // TODO: display general error
+    displayText.value = 'error'; // TODO: display general error
   }
 });
 

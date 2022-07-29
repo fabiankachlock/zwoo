@@ -345,5 +345,12 @@
     "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden.",
     "reload": "Seite neu laden",
     "toSettings": "Zu den Einstellungen"
+  },
+  "verifyAccount": {
+    "title": "Account-Verifizierung",
+    "verifying": "Dein Account wird verifiziert...",
+    "success": "Der Account wurde erfolgreich verifiziert.",
+    "error": "Bei der verifizierung ist ein Fehler aufgetreten.",
+    "login": "Einloggen"
   }
 }

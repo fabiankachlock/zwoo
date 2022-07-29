@@ -345,5 +345,12 @@
     "info": "You need to upgrade zwoo to the latest version in order to play games.",
     "reload": "Reload page",
     "toSettings": "Go to settings"
+  },
+  "verifyAccount": {
+    "title": "Account-Verification",
+    "verifying": "Your account is being verified...",
+    "success": "Your account has been successfully verified.",
+    "error": "An error happened while verifying you account.",
+    "login": "Login"
   }
 }
