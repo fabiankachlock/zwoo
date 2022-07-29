@@ -174,7 +174,7 @@ export class AuthenticationService {
   };
 
   static verifyAccount = async (id: string, code: string): Promise<BackendErrorAble<boolean>> => {
-    Logger.Api.log('verifying account');
+    Logger.Api.log(`verifying account ${id} with code ${code}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking verify response');
       return Math.random() > 0.5;
