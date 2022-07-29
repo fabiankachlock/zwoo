@@ -9,10 +9,10 @@ export class InGameGuard implements RouterInterceptor {
   private Logger = Logger.RouterGuard.createOne('game');
 
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
+    const game = useGameConfig();
     if (InGameGuard.InGameRoutes.includes(to.path)) {
       this.Logger.debug(`${to.fullPath} needs active game`);
 
-      const game = useGameConfig();
       if (!game.inActiveGame) {
         this.Logger.warn(`not allowed to access ${to.fullPath}`);
         const redirect = to.meta['redirect'] as string | boolean | undefined;
@@ -28,6 +28,8 @@ export class InGameGuard implements RouterInterceptor {
         return true;
       }
       this.Logger.debug('all fine!');
+    } else if (game.inActiveGame) {
+      game.tryLeave();
     }
     return false;
   };
