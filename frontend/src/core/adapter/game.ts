@@ -126,6 +126,13 @@ export const useGameConfig = defineStore('game-config', {
         this._connection.readMessages(events.handleIncomingEvent);
       }, 0);
     },
+    async tryLeave() {
+      Logger.RouterGuard.warn('routing out of active game');
+      if (this._connection) {
+        Logger.RouterGuard.warn('force closing game connection');
+        this.leave();
+      }
+    },
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
       if (this._connection) {
         Logger.Zrp.log(`[outgoing] ${code} ${JSON.stringify(payload)}`);

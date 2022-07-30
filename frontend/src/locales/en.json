@@ -135,6 +135,7 @@
       "115": "The email is invalid.",
       "116": "The username is invalid.",
       "117": "The password is invalid.",
+      "118": "The BETA-Code is invalid.",
       "120": "The email is already used.",
       "121": "The username is already used.",
       "122": "The account could not be verified.",
@@ -347,5 +348,12 @@
     "info": "You need to upgrade zwoo to the latest version in order to play games. (Client: {0}, Server: {1})",
     "reload": "Reload page",
     "toSettings": "Go to settings"
+  },
+  "verifyAccount": {
+    "title": "Account-Verification",
+    "verifying": "Your account is being verified...",
+    "success": "Your account has been successfully verified.",
+    "error": "An error happened while verifying you account.",
+    "login": "Login"
   }
 }
