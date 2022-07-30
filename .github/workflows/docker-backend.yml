@@ -3,8 +3,8 @@ name: Backend Docker Pipeline
 
 'on':
   push:
-    #branches:
-    #  - main
+    branches:
+      - main
     paths:
       - 'backend/**'
       - '.github/workflows/**'
