@@ -19,11 +19,11 @@ jobs:
       with:
         dotnet-version: '6.0.x'
     - name: Install dependencies
-      working-directory: ./frontend
+      working-directory: ./backend
       run: dotnet restore "./ZwooBackend/ZwooBackend.csproj"
     - name: Build
       working-directory: ./backend
       run: dotnet build "./ZwooBackend/ZwooBackend.csproj" -c Release --no-restore
     - name: Test
       working-directory: ./backend
-      run: dotnet test dotnet build "./GameLogic/GameLogic.csproj" -c Release --no-restore --verbosity normal
+      run: dotnet test "./GameLogic/GameLogic.csproj" -c Release --no-restore --verbosity normal
