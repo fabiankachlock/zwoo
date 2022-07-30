@@ -1,0 +1,55 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:26871",
+      "sslPort": 44395
+    }
+  },
+  "profiles": {
+    "ZwooBackend": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7259;http://localhost:8000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "USE_SSL": false,
+        "ZWOO_DATABASE_CONNECTION_STRING": "mongodb://127.0.0.1:27017",
+        "ZWOO_BETA": false,
+        "ZWOO_DOMAIN": "localhost:8000",
+        "SMTP_HOST_URL": "",
+        "SMTP_HOST_PORT": "",
+        "SMTP_HOST_EMAIL": "",
+        "SMTP_USERNAME": "",
+        "SMTP_PASSWORD": "",
+        "ZWOO_RECAPTCHA_SIDESECRET": "",
+        "ZWOO_RECAPTCHA_URL": "",
+        "ZWOO_CORS": "",
+        "ZWOO_COOKIE_DOMAIN": "localhost"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "USE_SSL": false,
+        "ZWOO_DATABASE_CONNECTION_STRING": "mongodb://127.0.0.1:27017",
+        "ZWOO_BETA": false,
+        "ZWOO_DOMAIN": "localhost:8000",
+        "SMTP_HOST_URL": "",
+        "SMTP_HOST_PORT": "",
+        "SMTP_HOST_EMAIL": "",
+        "SMTP_USERNAME": "",
+        "SMTP_PASSWORD": "",
+        "ZWOO_RECAPTCHA_SIDESECRET": "",
+        "ZWOO_CORS": ""
+      }
+    }
+  }
+}

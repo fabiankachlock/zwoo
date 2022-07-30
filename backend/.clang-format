@@ -1,7 +1,0 @@
-﻿BasedOnStyle: LLVM
-IndentWidth: 4
-BreakBeforeBraces: Allman
-SpaceInEmptyParentheses: true
-SpacesBeforeTrailingComments: 1
-SpacesInParentheses: true
-SpacesInSquareBrackets: true
