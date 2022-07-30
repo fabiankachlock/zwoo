@@ -13,6 +13,6 @@ public class MiscController : Controller
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetVersion()
     {
-        return Ok(Version);
+        return Ok(Globals.Version);
     }
 }
