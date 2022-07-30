@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using static ZwooBackend.Globals;
 
 namespace ZwooBackend.Controllers;
 
@@ -12,6 +13,6 @@ public class MiscController : Controller
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetVersion()
     {
-        return Ok("1.0.0-alpha.5");
+        return Ok(Version);
     }
 }
