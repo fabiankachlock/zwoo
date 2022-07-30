@@ -1,0 +1,27 @@
+name: Backend Pipeline
+
+on:
+  workflow_call:
+  push:
+    paths-ignore:
+      - "frontend/**"
+  pull_request:
+    paths-ignore:
+      - "frontend/**"
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: dotnet restore "./ZwooBackend/ZwooBackend.csproj"
+    - name: Build
+      run: dotnet build "./ZwooBackend/ZwooBackend.csproj" -c Release --no-restore
+    - name: Test
+      run: dotnet test dotnet build "./GameLogic/GameLogic.csproj" -c Release --no-restore --verbosity normal
