@@ -5,7 +5,7 @@
         <p class="text-3xl tc-main font-bold m-2 text-center" style="text-overflow: ellipsis; overflow: hidden">{{ gameConfig.name }}</p>
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
-          <template v-if="isHost">
+          <template v-if="isHost && playerCount > 1">
             <button @click="startGame()" class="tc-main-dark bg-primary hover:bg-primary-dark transition">
               {{ t('wait.start') }}
             </button>
@@ -48,11 +48,13 @@ import ChatWidget from '@/components/waiting/widgets/ChatWidget.vue';
 import { useIsHost } from '@/composables/userRoles';
 import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { computed } from 'vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
 const lobby = useLobbyStore();
 const { isHost } = useIsHost();
+const playerCount = computed(() => lobby.players.length);
 
 const leave = () => {
   lobby.leave();

@@ -113,18 +113,21 @@ export const useGameState = defineStore('game-state', () => {
   const verifyDeck = () => {
     // TODO: Optimize this
     if (useGameCardDeck().cards.length !== players.value.find(p => p.name === auth.username)?.cards) {
-      console.warn('local deck didnt match remote state');
+      console.warn('local deck didnt match remote state:', JSON.stringify(useGameCardDeck().cards));
       dispatchEvent(ZRPOPCode.RequestHand, {});
     }
   };
 
-  gameWatcher.onMessage(_receiveMessage);
-  gameWatcher.onClose(() => {
+  const reset = () => {
     isActivePlayer.value = false;
     activePlayerName.value = '';
     topCard.value = CardDescriptor.BackUpright;
     players.value = [];
-  });
+  };
+
+  gameWatcher.onMessage(_receiveMessage);
+  gameWatcher.onReset(reset);
+  gameWatcher.onClose(reset);
 
   return {
     topCard,

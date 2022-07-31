@@ -1,6 +1,6 @@
 import { Logger } from '../logging/logImport';
 import { Backend, Endpoint } from './apiConfig';
-import { WithBackendError, parseBackendError } from './errors';
+import { WithBackendError, parseBackendError, BackendErrorAble } from './errors';
 
 type UserInfo = {
   username: string;
@@ -65,6 +65,9 @@ export class AuthenticationService {
     const response = await fetch(Backend.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         email: email,
         password: password
@@ -122,6 +125,9 @@ export class AuthenticationService {
 
     const response = await fetch(Backend.getUrl(Endpoint.CreateAccount), {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         username: username,
         email: email,
@@ -155,6 +161,9 @@ export class AuthenticationService {
     const response = await fetch(Backend.getUrl(Endpoint.DeleteAccount), {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         password: password
       })
@@ -171,5 +180,35 @@ export class AuthenticationService {
     return {
       isLoggedIn: false
     };
+  };
+
+  static verifyAccount = async (id: string, code: string): Promise<BackendErrorAble<boolean>> => {
+    Logger.Api.log(`verifying account ${id} with code ${code}`);
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking verify response');
+      await new Promise(r => {
+        setTimeout(() => r({}), 5000);
+      });
+      return Math.random() > 0.5;
+    }
+
+    const response = await fetch(
+      Backend.getDynamicUrl(Endpoint.AccountVerify, {
+        code,
+        id
+      }),
+      {
+        method: 'GET'
+      }
+    );
+
+    if (response.status !== 200) {
+      Logger.Api.warn('cant verify account');
+      return {
+        error: parseBackendError(await response.text())
+      };
+    }
+
+    return true;
   };
 }

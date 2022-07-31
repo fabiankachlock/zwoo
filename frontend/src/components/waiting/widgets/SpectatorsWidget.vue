@@ -7,7 +7,8 @@
       <div
         v-for="player of spectators"
         :key="player.id"
-        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition hover:bc-primary rounded-lg hover:bg-dark"
+        :class="{ 'bc-secondary': username === player.username }"
+        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-dark"
       >
         <p class="text-lg tc-main-secondary">
           {{ player.username }}
@@ -17,7 +18,7 @@
             <button
               v-tooltip="t('wait.play')"
               @click="startPlaying()"
-              class="tc-primary h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-light hover:bg-main rounded"
+              class="tc-primary h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-light mouse:hover:bg-main rounded"
             >
               <Icon icon="iconoir:play-outline" />
             </button>

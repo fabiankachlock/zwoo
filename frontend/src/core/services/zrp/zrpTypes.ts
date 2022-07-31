@@ -70,7 +70,8 @@ export enum ZRPOPCode {
   _ClientError = 920,
   _DecodingError = 921,
   // internal messages
-  _Connected = 930
+  _Connected = 930,
+  _ResetState = 932
 }
 
 export enum ZRPRole {
@@ -138,6 +139,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode._DecodingError]: ZRPInternalErrorPayload;
   // internal messages
   [ZRPOPCode._Connected]: Record<string, never>;
+  [ZRPOPCode._ResetState]: Record<string, never>;
 };
 
 export type ZRPNamePayload = {

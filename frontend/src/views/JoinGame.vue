@@ -42,7 +42,7 @@
       <FormTitle>
         {{ t('join.enterPassword') }}
       </FormTitle>
-      <TextInput id="password" v-model="password" labelKey="join.password" is-password placeholder="******" />
+      <TextInput id="password" @keyup.enter="performJoinRequest" v-model="password" labelKey="join.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="performJoinRequest">
@@ -60,9 +60,7 @@ import { Icon } from '@iconify/vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import { onMounted, ref } from 'vue';
-import { GameManagementService } from '@/core/services/api/GameManagement';
 import { useGameConfig } from '@/core/adapter/game';
-import { unwrapBackendError } from '@/core/services/api/errors';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -120,13 +118,12 @@ const tryJoin = () => {
 };
 
 onMounted(async () => {
-  const gameData = await GameManagementService.getJoinMeta(gameId);
-  const [game] = unwrapBackendError(gameData);
+  const game = await gameConfig.getGameMeta(gameId);
   if (game) {
     isLoading.value = false;
 
     gameName.value = game.name;
-    needsValidation = game.needsValidation;
+    needsValidation = !game.isPublic;
     tryJoin();
   }
 });
