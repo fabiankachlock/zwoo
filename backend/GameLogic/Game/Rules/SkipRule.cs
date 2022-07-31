@@ -56,12 +56,12 @@ internal class SkipCardRule : BaseCardRule
     // Rule utilities
     protected (GameState, List<GameEvent>) ChangeActivePlayerByAmount(GameState state, PlayerCycle playerOrder, int amount)
     {
-        long nextPlayer = playerOrder.Next();
+        long nextPlayer = playerOrder.Next(state.Direction);
         if (amount > 1)
         {
             for (int i = 0; i < amount - 1; i++)
             {
-                nextPlayer = playerOrder.Next();
+                nextPlayer = playerOrder.Next(state.Direction);
             }
         }
 
