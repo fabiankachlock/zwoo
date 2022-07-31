@@ -47,7 +47,17 @@ public class WebSocketNotificationManager : NotificationManager
     public void PlayerWon(ZwooGameLogic.Game.Events.PlayerWonDTO data)
     {
         // TODO: construct message
-        _webSockets.BroadcastGame(_gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerWon, new ZRP.PlayerWonDTO()), WebSocketMessageType.Text, true);
+        _webSockets.BroadcastGame(
+            _gameId,
+            ZRPEncoder.EncodeToBytes(
+                ZRPCode.PlayerWon,
+                new ZRP.PlayerWonDTO(
+                    _resolvePlayerName(data.Winner),
+                    0,
+                    data.Scores.Select(score => new PlayerWon_SummaryDTO(_resolvePlayerName(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).ToArray()
+                )
+            )
+        );
     }
 
     public void RemoveCard(ZwooGameLogic.Game.Events.RemoveCardDTO data)

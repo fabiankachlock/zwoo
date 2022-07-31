@@ -144,7 +144,13 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         {
             WebSocketLogger.Info($"[Game] [{gameId}] broadcasting");
             WsLogger.Debug($"[Game] [{gameId}] sending: {Encoding.UTF8.GetString(content)}");
-            await Task.WhenAll(_games[gameId].Select(player => _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None)));
+            await Task.WhenAll(_games[gameId].Select(async player =>
+            {
+                if (_websockets.ContainsKey(player) && _websockets[player].State == WebSocketState.Open)
+                {
+                    await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+                }
+            }));
         }
     }
 
