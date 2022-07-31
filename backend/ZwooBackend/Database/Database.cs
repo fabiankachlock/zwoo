@@ -29,10 +29,10 @@ public class Database
     [Serializable]
     private class DatabaseException : Exception
     {
-        public DatabaseException() : base() {}
-        public DatabaseException(string message) : base(message) {}
+        public DatabaseException() : base() { }
+        public DatabaseException(string message) : base(message) { }
     }
-    
+
     public Database()
     {
         BsonClassMap.RegisterClassMap<User>(cm =>
@@ -57,7 +57,7 @@ public class Database
 
         _collection = _database.GetCollection<User>("users");
 
-        var t = _collection.Find(x => true).Sort(new BsonDocument {{"_id", -1}}).Limit(1).ToList();
+        var t = _collection.Find(x => true).Sort(new BsonDocument { { "_id", -1 } }).Limit(1).ToList();
         _generator = t.Count != 0 ? new UIDGenerator(t[0].Id) : new UIDGenerator(0);
     }
 
@@ -66,10 +66,10 @@ public class Database
         DatabaseLogger.Debug($"[User] creating {username}");
         var code = StringHelper.GenerateNDigitString(6);
         var id = _generator.GetNextID();
-        
+
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
-        
+
         using (var sha = SHA512.Create())
         {
             foreach (int i in Enumerable.Range(0, 10000)) pw = sha.ComputeHash(pw);
@@ -138,10 +138,10 @@ public class Database
             return false;
         }
         var user = u[0];
-        
+
         var salt = Convert.FromBase64String(user.Password.Split(':')[1]);
         var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
-        
+
         using (var sha = SHA512.Create())
         {
             pw = Enumerable.Range(0, 10000).Aggregate(pw, (current, i) => sha.ComputeHash(current));
@@ -163,7 +163,7 @@ public class Database
     {
         user = new User();
         var cookieData = cookie.Split(",");
-        var u = _collection.Find(Builders<User>.Filter.Eq<ulong>(u=> u.Id, Convert.ToUInt64(cookieData[0]))).ToList();
+        var u = _collection.Find(Builders<User>.Filter.Eq<ulong>(u => u.Id, Convert.ToUInt64(cookieData[0]))).ToList();
         if (u.Count == 0)
             return false;
         user = u[0];
@@ -175,7 +175,7 @@ public class Database
     public void LogoutUser(User user)
     {
         DatabaseLogger.Debug($"[User] logout {user.Email}");
-        var filter = Builders<User>.Filter.Eq(u => u.Id , user.Id);
+        var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
         var update = Builders<User>.Update.Set(u => u.Sid, "");
         _collection.UpdateOne(filter, update);
     }
@@ -185,7 +185,7 @@ public class Database
         DatabaseLogger.Debug($"[User] deleting {user.Email}");
         var salt = Convert.FromBase64String(user.Password.Split(':')[1]);
         var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
-        
+
         using (var sha = SHA512.Create())
         {
             pw = Enumerable.Range(0, 10000).Aggregate(pw, (current, i) => sha.ComputeHash(current));
@@ -214,8 +214,16 @@ public class Database
 
         return leaderboard;
     }
-    
-    public long GetPosition( User user )
+
+    public uint IncrementWin(ulong puid)
+    {
+        DatabaseLogger.Info($"Incrementing win for user {puid}");
+        if (_collection.UpdateOne(x => x.Id == puid, Builders<User>.Update.Inc(u => u.Wins, (uint)1)).ModifiedCount != 0)
+            return _collection.Find(u => u.Id == puid).FirstOrDefault().Wins;
+        return 0;
+    }
+
+    public long GetPosition(User user)
     {
         return _collection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
     }
