@@ -118,7 +118,7 @@ public class Database
     {
         DatabaseLogger.Debug($"[User] verifying {id}");
         var user = _collection.Find(x => x.Id == id).FirstOrDefault();
-        if (!RemoveBetaCode(user.BetaCode))
+        if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
         var filter = Builders<User>.Filter.Eq(u => u.Id, id) & Builders<User>.Filter.Eq(u => u.ValidationCode, code);
         var update = Builders<User>.Update.Set(u => u.Verified, true);
