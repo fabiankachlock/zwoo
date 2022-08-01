@@ -29,13 +29,13 @@
   </div>
   <div class="actions">
     <div class="actions-grid w-full grid gap-2">
-      <button :click="handleLeaveClick()" class="action bg-dark hover:bg-darkest">
+      <button @click="handleLeaveClick()" class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
         <p class="text tc-main text-md">
           {{ t('summary.leave') }}
         </p>
       </button>
-      <button :click="handlePlayClick()" class="action bg-dark hover:bg-darkest">
+      <button @click="handlePlayClick()" class="action bg-dark hover:bg-darkest">
         <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
         <p class="text tc-main text-md">
           {{ t('summary.playAgain') }}

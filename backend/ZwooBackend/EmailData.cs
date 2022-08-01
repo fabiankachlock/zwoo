@@ -18,10 +18,10 @@ public class EmailData
         this.Code = code;
         this.Email = email;
     }
-    
+
     public static void SendMail(EmailData data)
     {
-        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/auth/verify?id={data.Puid}&code={data.Code}";
+        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/verify-account?id={data.Puid}&code={data.Code}";
         string text = $"\r\nHello {data.Username},\r\nplease click the link to verify your zwoo account.\r\n{link}\r\n\r\nThe confirmation expires with the end of this day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by accident or don't want to\r\nregister, please ignore it.\r\n\r\nⒸ ZWOO 2022\r\n";
         string html =
             "<!DOCTYPE html>" +
@@ -38,7 +38,7 @@ public class EmailData
             "apple-data-detectors]{color:inherit!important;text-decoration:" +
             "inherit!important;}#MessageViewBody " +
             "a{color:inherit;text-decoration:none;}p{line-height:inherit}." +
-            "desktop_hide,.desktop_hide " + 
+            "desktop_hide,.desktop_hide " +
             "table{mso-hide:all;display:none;max-height:0px;overflow:hidden;}@" +
             "media(max-width:520px){.desktop_hide " +
             "table.icons-inner{display:inline-block!important;}.icons-inner{" +
@@ -59,81 +59,81 @@ public class EmailData
             "width=\"100%\"><tbody><tr><td><table align=\"center\" " +
             "border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"row " +
             "row-1\" role=\"presentation\" " +
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\" "+
-            "width=\"100%\"><tbody><tr><td><table align=\"center\" "+
-            "border=\"0\" cellpadding=\"0\" cellspacing=\"0\" "+
-            "class=\"row-content stack\" role=\"presentation\" "+
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;color:#000000;"+
-            "width:500px;\" width=\"500\">"+
-            "<tbody><tr><td class=\"column column-1\" "+
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;font-weight:400;"+
-            "text-align:left;vertical-align:top;padding-top:5px;padding-bottom:"+
-            "5px;border-top:0px;border-right:0px;border-bottom:0px;border-left:"+
-            "0px;\" width=\"100%\"><table border=\"0\" cellpadding=\"0\" "+
-            "cellspacing=\"0\" class=\"heading_block\" role=\"presentation\" "+
-            "style=\"mso-table-lspace: 0pt;mso-table-rspace:0pt;\" "+
-            "width=\"100%\"><tr><td "+
-            "style=\"width:100%;text-align:center;\"><h1 "+
-            "style=\"margin:0;color:#ebebeb;font-size:30px;font-family:Arial,"+
-            "Helvetica "+
-            "Neue,Helvetica,sans-serif;line-height:120%;text-align:center;"+
-            "direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;"+
-            "margin-bottom:0;\"><span "+
-            "class=\"tinyMce-placeholder\">ZWOO</span></h1>"+
-            "</td></tr></table><table border=\"0\" cellpadding=\"0\" "+
-            "cellspacing=\"0\" class=\"icons_block\" role=\"presentation\" "+
-            "style=\"mso-table-lspace: 0pt;mso-table-rspace:0pt;\" "+
-            "width=\"100%\"><tr><td style=\"vertical-align: middle; color: "+
-            "#000000; text-align: center; font-family: inherit; font-size: "+
-            "14px;\"><table align=\"center\" cellpadding=\"0\" "+
-            "cellspacing=\"0\" role=\"presentation\" "+
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\"><tr><td "+
-            "style=\"vertical-align:middle;text-align:center;padding-top:15px;"+
-            "padding-bottom:15px;padding-left:15px;padding-right:15px;\"><img "+
-            "align=\"center\" alt=\"\" class=\"icon\" height=\"64\" src=\""+
-            "https://zwoo-ui.web.app/img/logo/zwoo_logo_none.svg"+
-            "\" style=\"display:block;height:auto;margin:0 auto;border:0;\" "+
-            "width=\"64\"/></td>"+
-            "</tr></table></td></tr></table><table border=\"0\" "+
-            "cellpadding=\"0\" cellspacing=\"0\" class=\"heading_block\" "+
-            "role=\"presentation\" "+
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\" "+
-            "width=\"100%\"><tr><td "+
-            "style=\"width:100%;text-align:center;\"><h2 "+
-            "style=\"margin:0;color:#ebebeb;font-size:24px;font-family:Arial, "+
-            "Helvetica "+
-            "Neue,Helvetica,sans-serif;line-height:120%;text-align:center;"+
-            "direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;"+
-            "margin-bottom:0;\"><span class=\"tinyMce-placeholder\">the second "+
-            "challenge</span></h2></td></tr></table><table border=\"0\" "+
-            "cellpadding=\"0\" cellspacing=\"0\" class=\"heading_block\" "+
-            "role=\"presentation\" "+
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\" "+
-            "width=\"100%\"><tr><td "+
-            "style=\"width:100%;text-align:center;padding-top:20px;\"><h3 "+
-            "style=\"margin:0;color:#ebebeb;font-size:16px;font-family:Arial,"+
-            "Helvetica "+
-            "Neue,Helvetica,sans-serif;line-height:120%;text-align:left;"+
-            "direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;"+
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\" " +
+            "width=\"100%\"><tbody><tr><td><table align=\"center\" " +
+            "border=\"0\" cellpadding=\"0\" cellspacing=\"0\" " +
+            "class=\"row-content stack\" role=\"presentation\" " +
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;color:#000000;" +
+            "width:500px;\" width=\"500\">" +
+            "<tbody><tr><td class=\"column column-1\" " +
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;font-weight:400;" +
+            "text-align:left;vertical-align:top;padding-top:5px;padding-bottom:" +
+            "5px;border-top:0px;border-right:0px;border-bottom:0px;border-left:" +
+            "0px;\" width=\"100%\"><table border=\"0\" cellpadding=\"0\" " +
+            "cellspacing=\"0\" class=\"heading_block\" role=\"presentation\" " +
+            "style=\"mso-table-lspace: 0pt;mso-table-rspace:0pt;\" " +
+            "width=\"100%\"><tr><td " +
+            "style=\"width:100%;text-align:center;\"><h1 " +
+            "style=\"margin:0;color:#ebebeb;font-size:30px;font-family:Arial," +
+            "Helvetica " +
+            "Neue,Helvetica,sans-serif;line-height:120%;text-align:center;" +
+            "direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;" +
+            "margin-bottom:0;\"><span " +
+            "class=\"tinyMce-placeholder\">ZWOO</span></h1>" +
+            "</td></tr></table><table border=\"0\" cellpadding=\"0\" " +
+            "cellspacing=\"0\" class=\"icons_block\" role=\"presentation\" " +
+            "style=\"mso-table-lspace: 0pt;mso-table-rspace:0pt;\" " +
+            "width=\"100%\"><tr><td style=\"vertical-align: middle; color: " +
+            "#000000; text-align: center; font-family: inherit; font-size: " +
+            "14px;\"><table align=\"center\" cellpadding=\"0\" " +
+            "cellspacing=\"0\" role=\"presentation\" " +
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\"><tr><td " +
+            "style=\"vertical-align:middle;text-align:center;padding-top:15px;" +
+            "padding-bottom:15px;padding-left:15px;padding-right:15px;\"><img " +
+            "align=\"center\" alt=\"\" class=\"icon\" height=\"64\" src=\"" +
+            "https://zwoo-ui.web.app/img/logo/zwoo_logo_none.svg" +
+            "\" style=\"display:block;height:auto;margin:0 auto;border:0;\" " +
+            "width=\"64\"/></td>" +
+            "</tr></table></td></tr></table><table border=\"0\" " +
+            "cellpadding=\"0\" cellspacing=\"0\" class=\"heading_block\" " +
+            "role=\"presentation\" " +
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\" " +
+            "width=\"100%\"><tr><td " +
+            "style=\"width:100%;text-align:center;\"><h2 " +
+            "style=\"margin:0;color:#ebebeb;font-size:24px;font-family:Arial, " +
+            "Helvetica " +
+            "Neue,Helvetica,sans-serif;line-height:120%;text-align:center;" +
+            "direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;" +
+            "margin-bottom:0;\"><span class=\"tinyMce-placeholder\">the second " +
+            "challenge</span></h2></td></tr></table><table border=\"0\" " +
+            "cellpadding=\"0\" cellspacing=\"0\" class=\"heading_block\" " +
+            "role=\"presentation\" " +
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;\" " +
+            "width=\"100%\"><tr><td " +
+            "style=\"width:100%;text-align:center;padding-top:20px;\"><h3 " +
+            "style=\"margin:0;color:#ebebeb;font-size:16px;font-family:Arial," +
+            "Helvetica " +
+            "Neue,Helvetica,sans-serif;line-height:120%;text-align:left;" +
+            "direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;" +
             "margin-bottom:0;\">Hello " +
             data.Username +
-            ",</h3></td></tr></table><table border=\"0\" cellpadding=\"10\" "+
-            "cellspacing=\"0\" class=\"paragraph_block\" role=\"presentation\" "+
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;word-break:"+
-            "break-word;\" width=\"100%\"><tr><td><div "+
-            "style=\"color:#ebebeb;font-size:14px;font-family:Arial, Helvetica "+
-            "Neue, Helvetica, "+
-            "sans-serif;font-weight:400;line-height:120%;text-align:left;"+
-            "direction:ltr;letter-spacing:0px;\"><p style=\"margin: "+
-            "0;\">please verify your account via the <strong>button</strong> "+
-            "<br/>or press <strong>the "+
-            "link.</strong></p></div></td></tr></table><table border=\"0\" "+
-            "cellpadding=\"10\" cellspacing=\"0\" class=\"button_block\" "+
-            "role=\"presentation\" style=\"mso-table-lspace: 0pt; "+
-            "mso-table-rspace: 0pt;\" width=\"100%\"><tr><td><div "+
-            "align=\"center\">"+
-            "<!--[if mso]><v:roundrect "+
-            "xmlns:v=\"urn:schemas-microsoft-com:vml\" "+
+            ",</h3></td></tr></table><table border=\"0\" cellpadding=\"10\" " +
+            "cellspacing=\"0\" class=\"paragraph_block\" role=\"presentation\" " +
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;word-break:" +
+            "break-word;\" width=\"100%\"><tr><td><div " +
+            "style=\"color:#ebebeb;font-size:14px;font-family:Arial, Helvetica " +
+            "Neue, Helvetica, " +
+            "sans-serif;font-weight:400;line-height:120%;text-align:left;" +
+            "direction:ltr;letter-spacing:0px;\"><p style=\"margin: " +
+            "0;\">please verify your account via the <strong>button</strong> " +
+            "<br/>or press <strong>the " +
+            "link.</strong></p></div></td></tr></table><table border=\"0\" " +
+            "cellpadding=\"10\" cellspacing=\"0\" class=\"button_block\" " +
+            "role=\"presentation\" style=\"mso-table-lspace: 0pt; " +
+            "mso-table-rspace: 0pt;\" width=\"100%\"><tr><td><div " +
+            "align=\"center\">" +
+            "<!--[if mso]><v:roundrect " +
+            "xmlns:v=\"urn:schemas-microsoft-com:vml\" " +
             "xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"" +
             link +
             " style=\"height:42px;width:78px;v-text-anchor:middle;\" arcsize=\"10%\" stroke=\"false\" fillcolor=\"#3AAEE0\"><w:anchorlock/><v:textbox inset=\"0px,0px,0px,0px\"><center style=\"color:#ffffff; font-family:Arial, sans-serif; font-size:16px\"><![endif]--><a href=\"" +
@@ -146,29 +146,29 @@ public class EmailData
             "#3AAEE0;padding-top:5px;padding-bottom:5px;font-family:Arial, " +
             "Helvetica Neue, Helvetica, " +
             "sans-serif;text-align:center;mso-border-alt:none;word-break:keep-" +
-            "all;\" target=\"_blank\"><span "+
-            "style=\"padding-left:20px;padding-right:20px;font-size:16px;"+
-            "display:inline-block;letter-spacing:normal;\"><span "+
-            "style=\"font-size:16px;line-height:2;word-break:break-word;mso-"+
-            "line-height-alt:32px;\">verify</span></span></a><!--[if "+
-            "mso]></center></v:textbox></v:roundrect><![endif]-->"+
-            "</div></td></tr></table><table border=\"0\" cellpadding=\"10\" "+
-            "cellspacing=\"0\" class=\"paragraph_block\" role=\"presentation\" "+
-            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;word-break:"+
-            "break-word;\" width=\"100%\"><tr><td><div "+
-            "style=\"color:#ebebeb;font-size:14px;font-family:Arial, Helvetica "+
-            "Neue, Helvetica, "+
-            "sans-serif;font-weight:400;line-height:120%;text-align:left;"+
-            "direction:ltr;letter-spacing:0px;\"><p "+
+            "all;\" target=\"_blank\"><span " +
+            "style=\"padding-left:20px;padding-right:20px;font-size:16px;" +
+            "display:inline-block;letter-spacing:normal;\"><span " +
+            "style=\"font-size:16px;line-height:2;word-break:break-word;mso-" +
+            "line-height-alt:32px;\">verify</span></span></a><!--[if " +
+            "mso]></center></v:textbox></v:roundrect><![endif]-->" +
+            "</div></td></tr></table><table border=\"0\" cellpadding=\"10\" " +
+            "cellspacing=\"0\" class=\"paragraph_block\" role=\"presentation\" " +
+            "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;word-break:" +
+            "break-word;\" width=\"100%\"><tr><td><div " +
+            "style=\"color:#ebebeb;font-size:14px;font-family:Arial, Helvetica " +
+            "Neue, Helvetica, " +
+            "sans-serif;font-weight:400;line-height:120%;text-align:left;" +
+            "direction:ltr;letter-spacing:0px;\"><p " +
             "style=\"margin:0;margin-bottom:16px;\">" +
             link +
-            "</p><p style=\"margin:0;margin-bottom:16px;\">The confirmation "+
-            "expires with the end of this day (UTC + 01:00).<br/>If you've got "+
-            "this E-Mail by accident or don't want to register, please ignore "+
-            "it.</p><p style=\"margin:0;margin-bottom:16px;\"></p><p "+
-            "style=\"margin:0;\">Ⓒ ZWOO "+
-            "2022</p></div></td></tr></table></td></tr></tbody></table></td></"+
-            "tr></tbody></table></td></tr></tbody></table><!-- End "+
+            "</p><p style=\"margin:0;margin-bottom:16px;\">The confirmation " +
+            "expires with the end of this day (UTC + 01:00).<br/>If you've got " +
+            "this E-Mail by accident or don't want to register, please ignore " +
+            "it.</p><p style=\"margin:0;margin-bottom:16px;\"></p><p " +
+            "style=\"margin:0;\">Ⓒ ZWOO " +
+            "2022</p></div></td></tr></table></td></tr></tbody></table></td></" +
+            "tr></tbody></table></td></tr></tbody></table><!-- End " +
             "--></body></html>\r\n";
 
         var mail = new MailMessage();

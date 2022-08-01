@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZwooGameLogic.Game.State;
 
 namespace ZwooGameLogic.Game;
 
@@ -37,6 +38,15 @@ internal class PlayerCycle
     {
         _currentIndex = (_currentIndex + 1) % _players.Count;
         return _players[_currentIndex];
+    }
+
+    public long Next(GameDirection direction)
+    {
+        if (direction == GameDirection.Left)
+        {
+            return Next();
+        }
+        return Previous();
     }
 
     public long Previous()
