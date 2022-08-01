@@ -67,4 +67,6 @@ public static class Globals
     public static readonly string SmtpPassword;
 
     public static readonly string RecaptchaSideSecret;
+
+    public static readonly string Version = "1.0.0-alpha.5";
 }

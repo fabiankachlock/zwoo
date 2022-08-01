@@ -25,9 +25,9 @@ const versionFiles = [
         replace: '"zwoo"\nversion = "###"'
     },
     {
-        path: '/backend/include/version.h',
-        regex: /#define ZWOO_VERSION "(.*)"/,
-        replace: '#define ZWOO_VERSION "###"'
+        path: '/backend/ZwooBackend/Globals.cs',
+        regex: /public static readonly string Version = "(.*)";/,
+        replace: 'public static readonly string Version = "###";'
     }
 ]
 
