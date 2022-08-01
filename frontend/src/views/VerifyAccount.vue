@@ -39,10 +39,10 @@ const isSuccess = ref(false);
 const displayText = ref('');
 
 onMounted(async () => {
-  const id = Array.isArray(route.params['id']) ? route.params['id'][0] : route.params['id'];
-  const code = Array.isArray(route.params['code']) ? route.params['code'][0] : route.params['code'];
+  const id = Array.isArray(route.query['id']) ? route.query['id'][0] : route.query['id'];
+  const code = Array.isArray(route.query['code']) ? route.query['code'][0] : route.query['code'];
 
-  const response = await AuthenticationService.verifyAccount(id, code);
+  const response = await AuthenticationService.verifyAccount(id ?? '', code ?? '');
   const [success] = typeof response === 'object' ? unwrapBackendError(response) : [response, undefined];
   isLoading.value = false;
   if (success) {
