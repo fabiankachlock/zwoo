@@ -10,11 +10,11 @@ using ZwooGameLogic.Game.Cards;
 
 namespace ZwooGameLogic.Game.Rules;
 
-internal class BaseCardRule : BaseRule
+internal class ReverseCardRule : BaseCardRule
 {
     public override int Priority
     {
-        get => RulePriorirty.BaseRule;
+        get => RulePriorirty.DefaultRule;
     }
 
     public override string Name
@@ -27,11 +27,11 @@ internal class BaseCardRule : BaseRule
         get => GameSettingsKey.DEFAULT_RULE_SET;
     }
 
-    public BaseCardRule() : base() { }
+    public ReverseCardRule() : base() { }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return gameEvent.Type == ClientEventType.PlaceCard && !CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card);
+        return gameEvent.Type == ClientEventType.PlaceCard && gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card.Type == CardType.Reverse;
     }
 
 
@@ -45,30 +45,12 @@ internal class BaseCardRule : BaseRule
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
+            state.Direction = state.Direction == GameDirection.Left ? GameDirection.Rigth : GameDirection.Left;
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
             return new GameStateUpdate(state, events);
         }
 
         return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
-    }
-
-    // Rule utilities
-    protected bool CanThrowCard(Card top, Card newCard)
-    {
-        return top.Type == newCard.Type || top.Color == newCard.Color || CardUtilities.IsWild(newCard);
-    }
-
-    protected GameState PlaceCardOnStack(GameState state, Card card)
-    {
-        state.TopCard = new StackCard(card);
-        state.CardStack.Add(state.TopCard);
-        return state;
-    }
-
-    protected GameState PlayPlayerCard(GameState state, long player, Card card)
-    {
-        state.PlayerDecks[player].Remove(card);
-        return PlaceCardOnStack(state, card);
     }
 }

@@ -172,11 +172,36 @@ public sealed class GameStateManager
          );
         _gameState = stateUpdate.NewState;
 
-        SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
+        GameEvent? isFinishedEvent = IsGameFinished(_gameState);
 
-        // handle next event
-        _isExecutingEvent = false;
-        TryExecuteEvent();
+        if (isFinishedEvent.HasValue)
+        {
+            SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
+            // reset queue
+            _isExecutingEvent = false;
+            _events.Clear();
+            Stop();
+        }
+        else
+        {
+            SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
+            // handle next event
+            _isExecutingEvent = false;
+            TryExecuteEvent();
+        }
+    }
+
+    private GameEvent? IsGameFinished(GameState state)
+    {
+        foreach (KeyValuePair<long, List<Card>> entry in state.PlayerDecks)
+        {
+            if (entry.Value.Count() == 0)
+            {
+                // has winner
+                return GameEvent.PlayerWon(entry.Key, state.PlayerDecks.Select(entry => new KeyValuePair<long, int>(entry.Key, entry.Value.Count())).ToDictionary(entry => entry.Key, entry => entry.Value));
+            }
+        }
+        return null;
     }
 
     private void SendEvents(List<GameEvent> events)
