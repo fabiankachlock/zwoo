@@ -11,9 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v2
+        - name: Set env
+          run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         - name: Build Image
           working-directory: ./frontend
-          run: 'docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ github.ref }}'
+          run: 'docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }}'
         - name: Log into JFrog
           run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
         - name: Push Image (version latest)
@@ -25,9 +27,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Build Backend Image
         working-directory: ./backend
-        run: 'docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ github.ref }}'
+        run: 'docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ env.RELEASE_VERSION }}'
       - name: Log into JFrog
         run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
       - name: Push Image (version latest)
