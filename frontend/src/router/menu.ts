@@ -22,6 +22,10 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "menu" */ '../views/CreateAccount.vue')
   },
   {
+    path: 'verify-account',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/VerifyAccount.vue')
+  },
+  {
     path: 'tutorial',
     component: () => import(/* webpackChunkName: "menu" */ '../views/Tutorial.vue')
   },

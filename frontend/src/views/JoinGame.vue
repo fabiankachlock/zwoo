@@ -42,7 +42,7 @@
       <FormTitle>
         {{ t('join.enterPassword') }}
       </FormTitle>
-      <TextInput id="password" v-model="password" labelKey="join.password" is-password placeholder="******" />
+      <TextInput id="password" @keyup.enter="performJoinRequest" v-model="password" labelKey="join.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="performJoinRequest">

@@ -29,7 +29,8 @@
     "deleteAccount": "Account löschen",
     "logging": "Loggen",
     "goToLogging": "Zu den Einstellungen",
-    "cardTheme": "Karten Theme"
+    "cardTheme": "Karten Theme",
+    "deviceId": "Anonyme GeräteID"
   },
   "lng": {
     "de": "Deutsch",
@@ -47,6 +48,7 @@
   "login": {
     "title": "Anmeldung",
     "username": "Benutzername",
+    "email": "E-Mail",
     "password": "Passwort",
     "login": "Anmelden",
     "resetPassword": "Passwort zurücksetzten"
@@ -133,6 +135,7 @@
       "115": "Die Email ist ungültig.",
       "116": "Der Benutzername ist ungültig.",
       "117": "Das Passwort ist ungültig.",
+      "118": "Der BETA-Code ist ungültig.",
       "120": "Die Email wird bereits genutzt.",
       "121": "Der Benutzername wird bereits genutzt.",
       "122": "Der Account konnte nicht verifiziert werden.",
@@ -342,8 +345,15 @@
   },
   "wrongVersion": {
     "title": "Falsche Version",
-    "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden.",
+    "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden. (Client: {0}, Server: {1})",
     "reload": "Seite neu laden",
     "toSettings": "Zu den Einstellungen"
+  },
+  "verifyAccount": {
+    "title": "Account-Verifizierung",
+    "verifying": "Dein Account wird verifiziert...",
+    "success": "Der Account wurde erfolgreich verifiziert.",
+    "error": "Bei der verifizierung ist ein Fehler aufgetreten.",
+    "login": "Einloggen"
   }
 }
