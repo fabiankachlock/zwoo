@@ -55,7 +55,7 @@ public class WebSocketNotificationManager : NotificationManager
                 new ZRP.PlayerWonDTO(
                     _resolvePlayerName(data.Winner),
                     (int)winnerWins,
-                    data.Scores.Select(score => new PlayerWon_SummaryDTO(_resolvePlayerName(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).ToArray()
+                    data.Scores.Select(score => new PlayerWon_SummaryDTO(_resolvePlayerName(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).OrderBy(s => s.Position).ToArray()
                 )
             )
         );
