@@ -228,12 +228,6 @@ public class Database
         return _collection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
     }
 
-    public bool IncrementWin(ulong puid)
-    {
-        DatabaseLogger.Info($"Incrementing win for user {puid}");
-        return _collection.UpdateOne(x => x.Id == puid, Builders<User>.Update.Inc(u => u.Wins, (uint)1)).ModifiedCount != 0;
-    }
-    
     public void CleanDatabase()
     {
         DatabaseLogger.Info($"[CleanUp] deleted {_collection.DeleteMany(x => x.Verified == false).DeletedCount} user(s).");
