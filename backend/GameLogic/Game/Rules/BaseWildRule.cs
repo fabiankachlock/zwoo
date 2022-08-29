@@ -68,7 +68,7 @@ internal class BaseWildCardRule : BaseCardRule
                 Card newCard = new Card((CardColor)payload.Value, _storedEvent.Value.Card.Type);
                 state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
                 state = PlaceCardOnStack(state, newCard);
-                (state, events) = ChangeActivePlayer(state, playerOrder.Next());
+                (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
                 events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
                 _storedEvent = null;
                 return new GameStateUpdate(state, events);

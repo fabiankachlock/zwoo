@@ -69,6 +69,7 @@ public class GameHandler : MessageHandler
 
     private void HandleCardPlace(UserContext context, ZRPMessage message)
     {
+        if (context.Role == ZRPRole.Spectator) return;
         try
         {
             PlaceCardDTO payload = message.DecodePyload<PlaceCardDTO>();
@@ -82,6 +83,7 @@ public class GameHandler : MessageHandler
 
     private void HandleCardDraw(UserContext context, ZRPMessage message)
     {
+        if (context.Role == ZRPRole.Spectator) return;
         try
         {
             DrawCardDTO payload = message.DecodePyload<DrawCardDTO>();
@@ -96,6 +98,7 @@ public class GameHandler : MessageHandler
 
     private void HandleSendDecission(UserContext context, ZRPMessage message)
     {
+        if (context.Role == ZRPRole.Spectator) return;
         try
         {
             ReceiveDecisionDTO payload = message.DecodePyload<ReceiveDecisionDTO>();
@@ -110,6 +113,7 @@ public class GameHandler : MessageHandler
 
     private void SendHand(UserContext context, ZRPMessage message)
     {
+        if (context.Role == ZRPRole.Spectator) return;
         _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendHand, new SendHandDTO(context.GameRecord.Game.State.GetPlayerDeck(context.Id)!.Select(card => new SendHand_HandDTO(card.Color, card.Type)).ToArray())));
     }
 

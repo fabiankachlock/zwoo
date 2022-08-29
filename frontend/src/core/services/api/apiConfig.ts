@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+
 type ExtractRouteParams<str extends string> = str extends ''
   ? {}
   : str extends `/${infer rest}`
@@ -7,16 +8,16 @@ type ExtractRouteParams<str extends string> = str extends ''
   ? { [K in front]: string } & ExtractRouteParams<rest>
   : str extends `${string}/${infer rest}`
   ? ExtractRouteParams<rest>
-  : str extends `${string}?${infer paramName}=$${infer rest}`
+  : str extends `${string}?${string}=:${infer paramName}:${infer rest}`
   ? { [K in paramName]: string } & ExtractRouteParams<rest>
-  : str extends `&${infer paramName}=$${infer rest}`
+  : str extends `&${string}=:${infer paramName}:${infer rest}`
   ? { [K in paramName]: string } & ExtractRouteParams<rest>
   : {};
 
 export enum Endpoint {
   CreateAccount = 'auth/create',
   Recaptcha = 'auth/recaptcha',
-  AccountVerify = 'auth/verify?id=$&code=$',
+  AccountVerify = 'auth/verify?id=:id:&code=:code:',
   AccountLogin = 'auth/login',
   AccountLogout = 'auth/logout',
   UserInfo = 'auth/user',
