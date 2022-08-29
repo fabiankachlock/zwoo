@@ -19,11 +19,13 @@ export const useGameSummary = defineStore('game-summary', () => {
 
   const _receiveMessage: typeof summaryWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerWon) {
-      summary.value = msg.data.summary.map(e => ({
-        username: e.username,
-        position: e.position,
-        score: e.score
-      }));
+      summary.value = msg.data.summary
+        .map(e => ({
+          username: e.username,
+          position: e.position,
+          score: e.score
+        }))
+        .sort((a, b) => a.score - b.score);
     }
   };
 

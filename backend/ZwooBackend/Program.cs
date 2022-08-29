@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Quartz;
 using Quartz.Impl;
 using ZwooBackend;
-using ZwooBackend.Controllers;
 using ZwooBackend.Database;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
+    app.UseHttpsRedirection();
 }
 
 var webSocketOptions = new WebSocketOptions
