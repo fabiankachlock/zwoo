@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Quartz;
 using Quartz.Impl;
 using ZwooBackend;
-using ZwooBackend.Controllers;
 using ZwooBackend.Database;
 
 var builder = WebApplication.CreateBuilder(args);

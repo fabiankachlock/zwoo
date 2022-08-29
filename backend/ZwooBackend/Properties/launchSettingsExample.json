@@ -29,7 +29,12 @@
         "ZWOO_RECAPTCHA_SIDESECRET": "",
         "ZWOO_RECAPTCHA_URL": "",
         "ZWOO_CORS": "",
-        "ZWOO_COOKIE_DOMAIN": "localhost"
+        "ZWOO_COOKIE_DOMAIN": "localhost",
+        "ZWOO_USE_LOGRUSH": "false",
+        "ZWOO_LOGRUSH_URL": "",
+        "ZWOO_LOGRUSH_ALIAS": "",
+        "ZWOO_LOGRUSH_ID": "",
+        "ZWOO_LOGRUSH_KEY": ""
       }
     },
     "IIS Express": {
@@ -48,7 +53,12 @@
         "SMTP_USERNAME": "",
         "SMTP_PASSWORD": "",
         "ZWOO_RECAPTCHA_SIDESECRET": "",
-        "ZWOO_CORS": ""
+        "ZWOO_CORS": "",
+        "ZWOO_USE_LOGRUSH": "false",
+        "ZWOO_LOGRUSH_URL": "",
+        "ZWOO_LOGRUSH_ALIAS": "",
+        "ZWOO_LOGRUSH_ID": "",
+        "ZWOO_LOGRUSH_KEY": ""
       }
     }
   }
