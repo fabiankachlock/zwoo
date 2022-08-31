@@ -3,6 +3,8 @@ using ZwooBackend.Websockets.Interfaces;
 using ZwooBackend.ZRP;
 using ZwooGameLogic.Game.Events;
 using ZwooBackend;
+using ZwooGameLogic.Game;
+using PlayerWonDTO = ZwooGameLogic.Game.Events.PlayerWonDTO;
 
 namespace ZwooBackend.Websockets;
 
@@ -45,9 +47,10 @@ public class WebSocketNotificationManager : NotificationManager
         _webSockets.SendPlayer(data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GetPlayerDecision, new GetPlayerDecisionDTO((int)data.Decission)), WebSocketMessageType.Text, true);
     }
 
-    public void PlayerWon(ZwooGameLogic.Game.Events.PlayerWonDTO data)
+    public void PlayerWon(PlayerWonDTO data, GameMeta gameMeta)
     {
         uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
+        Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta);
         _webSockets.BroadcastGame(
             _gameId,
             ZRPEncoder.EncodeToBytes(

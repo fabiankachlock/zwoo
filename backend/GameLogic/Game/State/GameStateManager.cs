@@ -13,7 +13,7 @@ namespace ZwooGameLogic.Game.State;
 
 public sealed class GameStateManager
 {
-    public readonly long GameId;
+    public readonly GameMeta Meta;
     private readonly NotificationManager _notificationManager;
     private readonly RuleManager _ruleManager;
     private PlayerManager _playerManager;
@@ -32,9 +32,9 @@ public sealed class GameStateManager
         get => _isRunning;
     }
 
-    internal GameStateManager(long id, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
+    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
     {
-        GameId = id;
+        Meta = meta;
         _gameSettings = settings;
         _playerManager = playerManager;
         _notificationManager = notification;
@@ -43,9 +43,9 @@ public sealed class GameStateManager
         _cardPile = new Pile();
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
-        _ruleManager = new RuleManager(id, _gameSettings);
+        _ruleManager = new RuleManager(meta.Id, _gameSettings);
         _events = new ConcurrentQueue<ClientEvent>();
-        _logger = LogManager.GetLogger($"GameState-{id}");
+        _logger = LogManager.GetLogger($"GameState-{Meta.Id}");
     }
 
 
@@ -242,7 +242,7 @@ public sealed class GameStateManager
                     break;
                 case GameEventType.PlayerWon:
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();
-                    _notificationManager.PlayerWon(new PlayerWonDTO(playerWonEvent.Winner, playerWonEvent.Scores));
+                    _notificationManager.PlayerWon(new PlayerWonDTO(playerWonEvent.Winner, playerWonEvent.Scores), Meta);
                     break;
                 case GameEventType.Error:
                     GameEvent.GameErrorEvent errorEvent = evt.CastPayload<GameEvent.GameErrorEvent>();
