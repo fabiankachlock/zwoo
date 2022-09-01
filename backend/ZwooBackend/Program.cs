@@ -23,10 +23,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.Name = "auth";
     o.Cookie.HttpOnly = Globals.UseSsl;
     if (Globals.UseSsl)
-    {
-        o.Cookie.SameSite = SameSiteMode.None;
         o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    }
+    
     o.Cookie.Domain = Globals.ZwooCookieDomain;
 });
 

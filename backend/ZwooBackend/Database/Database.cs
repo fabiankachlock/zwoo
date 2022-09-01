@@ -266,7 +266,7 @@ public class Database
     // Info Stuff
     
     public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
-        _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(x.Key, x.Value)).ToArray(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+        _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(x.Key, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
     
     private void CreateAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("create", puid, success,
