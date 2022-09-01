@@ -63,10 +63,22 @@ public sealed class GameStateManager
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
-            topCard: new StackCard(_cardPile.DrawCard()),
+            topCard: new StackCard(DrawSaveCard()),
             cardStack: new List<StackCard>(),
             playerDecks: GeneratePlayerDecks()
         );
+    }
+
+    private Card DrawSaveCard()
+    {
+        while (true)
+        {
+            Card card = _cardPile.DrawCard();
+            if (card.Color != CardColor.Black && card.Type <= CardType.Nine)
+            {
+                return card;
+            }
+        }
     }
 
     private Dictionary<long, List<Card>> GeneratePlayerDecks()
