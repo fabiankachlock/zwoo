@@ -38,7 +38,6 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult JoinGame([FromBody] JoinGame body)
     {
-
         Globals.Logger.Info("POST /game/join");
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
         {
@@ -55,7 +54,7 @@ public class GameController : Controller
                 }
 
                 long gameId = GameManager.Global.CreateGame(body.Name, !body.UsePassword.Value);
-                GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "");
+                GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
 
                 Globals.Logger.Info($"{user.Id} created game {gameId}");
                 return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId)));

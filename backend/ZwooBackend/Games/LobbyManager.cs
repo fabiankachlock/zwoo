@@ -25,6 +25,7 @@ public class LobbyManager
     private List<PlayerEntry> _players;
     private List<PlayerEntry> _preparedPlayers;
     private string _password;
+    private bool _usePassword = false;
 
     public LobbyManager(long gameId)
     {
@@ -34,41 +35,20 @@ public class LobbyManager
         _password = "";
     }
 
-    public string Host()
-    {
-        return _players.FirstOrDefault(p => p.Role == ZRPRole.Host)?.Username ?? "";
-    }
+    public string Host() => _players.FirstOrDefault(p => p.Role == ZRPRole.Host)?.Username ?? "";
 
-    public List<string> PlayersNames()
-    {
-        return _players.FindAll(p => p.Role != ZRPRole.Spectator).Select(p => p.Username).ToList();
-    }
+    public List<string> PlayersNames() => _players.FindAll(p => p.Role != ZRPRole.Spectator).Select(p => p.Username).ToList();
 
-    public List<string> SpectatorsNames()
-    {
-        return _players.FindAll(p => p.Role == ZRPRole.Spectator).Select(p => p.Username).ToList();
-    }
+    public List<string> SpectatorsNames() => _players.FindAll(p => p.Role == ZRPRole.Spectator).Select(p => p.Username).ToList();
 
-    public List<long> Players()
-    {
-        return _players.FindAll(p => p.Role != ZRPRole.Spectator).Select(p => p.Id).ToList();
-    }
+    public List<long> Players() => _players.FindAll(p => p.Role != ZRPRole.Spectator).Select(p => p.Id).ToList();
 
-    public List<long> Spectators()
-    {
-        return _players.FindAll(p => p.Role == ZRPRole.Spectator).Select(p => p.Id).ToList();
-    }
+    public List<long> Spectators() => _players.FindAll(p => p.Role == ZRPRole.Spectator).Select(p => p.Id).ToList();
 
 
-    public int PlayerCount()
-    {
-        return PlayersNames().Count();
-    }
+    public int PlayerCount() => PlayersNames().Count();
 
-    public bool HasHost()
-    {
-        return _players.Where(p => p.Role == ZRPRole.Host).Count() == 1;
-    }
+    public bool HasHost() => _players.Where(p => p.Role == ZRPRole.Host).Count() == 1;
 
     public bool HasPlayer(string name)
     {
@@ -124,17 +104,18 @@ public class LobbyManager
         }
     }
 
-    public bool Initialize(long hostId, string host, string password)
+    public bool Initialize(long hostId, string host, string password, bool usePassword)
     {
         if (HasHost()) return false;
         _preparedPlayers.Add(new PlayerEntry(hostId, host, ZRPRole.Host));
         _password = password;
+        _usePassword = usePassword;
         return true;
     }
 
     public bool AddPlayer(long id, string name, ZRPRole role, string password)
     {
-        if (HasPlayer(name) || role == ZRPRole.Host || password != _password) return false;
+        if (HasPlayer(name) || role == ZRPRole.Host || (_usePassword && password != _password) ) return false;
         _preparedPlayers.Add(new PlayerEntry(id, name, role));
         return true;
     }
@@ -167,10 +148,7 @@ public class LobbyManager
         return true;
     }
 
-    public bool RemovePlayer(long id)
-    {
-        return RemovePlayer(ResolvePlayer(id));
-    }
+    public bool RemovePlayer(long id) => RemovePlayer(ResolvePlayer(id));
 
     public bool ChangeRole(string name, ZRPRole newRole)
     {
@@ -191,9 +169,5 @@ public class LobbyManager
         return true;
     }
 
-    public List<PlayerEntry> ListAll()
-    {
-        return _players.ToList();
-    }
-
+    public List<PlayerEntry> ListAll() => _players.ToList();
 }
