@@ -11,7 +11,8 @@
           {{ greeting }}
         </p>
       </div>
-      <div class="relative flex-1 w-full grid grid-cols-3">
+      <!-- Add stats when implemented -->
+      <div class="relative flex-1 w-full grid grid-cols-2">
         <div class="action main bg-dark hover:bg-darkest">
           <router-link class="link" to="/create-game">
             <Icon class="icon tc-secondary" icon="fluent:window-new-16-regular" />
@@ -24,12 +25,14 @@
             <p class="tc-main-light">{{ t('home.join') }}</p>
           </router-link>
         </div>
-        <div class="action main bg-dark hover:bg-darkest">
-          <router-link class="link" to="/stats">
+        <!--
+          <div class="action main bg-dark hover:bg-darkest">
+            <router-link class="link" to="/stats">
             <Icon class="icon tc-secondary" icon="fluent:ribbon-star-20-regular" />
             <p class="tc-main-light">{{ t('home.stats') }}</p>
           </router-link>
         </div>
+        -->
       </div>
       <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
         <router-link class="flex flex-row items-center" to="/leaderboard">
