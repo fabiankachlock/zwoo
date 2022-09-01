@@ -34,7 +34,7 @@ export const useGameConfig = defineStore('game-config', {
       const nameValid = new GameNameValidator().validate(name);
       if (!nameValid.isValid) throw nameValid.getErrors();
 
-      const status = await GameManagementService.createGame(name, isPublic, password);
+      const status = await GameManagementService.createGame(name, isPublic, isPublic ? '' : password);
       const [game, error] = unwrapBackendError(status);
       if (error) {
         throw getBackendErrorTranslation(error);
