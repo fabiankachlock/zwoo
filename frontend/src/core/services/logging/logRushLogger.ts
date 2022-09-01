@@ -17,8 +17,8 @@ export async function GetLogger(): Promise<() => BaseLogger> {
   localStorage.setItem('zwoo:rmsid', stream.id);
   localStorage.setItem('zwoo:rmskey', stream.secretKey);
 
-  window.onbeforeunload = async () => {
-    await client.disconnect();
+  window.onbeforeunload = () => {
+    client.disconnect();
   };
 
   function LoggerFactory() {
