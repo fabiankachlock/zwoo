@@ -9,6 +9,7 @@ using MongoDB.Bson.Serialization;
 using Quartz;
 using ZwooBackend.Controllers;
 using ZwooBackend.Controllers.DTO;
+using ZwooGameLogic.Game;
 using static ZwooBackend.Globals;
 
 namespace ZwooBackend.Database;
@@ -41,6 +42,27 @@ public class Database
             cm.MapCreator(p =>
                 new User(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.ValidationCode, p.Verified));
         });
+        
+        BsonClassMap.RegisterClassMap<GameInfo>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new GameInfo(p.GameName, p.GameID, p.IsPublic, p.Scores, p.TimeStamp));
+        });
+        
+        BsonClassMap.RegisterClassMap<PlayerScore>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new PlayerScore(p.PlayerID, p.Score));
+        });
+        
+        BsonClassMap.RegisterClassMap<AccountEvent>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new AccountEvent(p.EventType, p.PlayerID, p.Success, p.TimeStamp));
+        });
 
         var client = new MongoClient(ConnectionString);
         DatabaseLogger.Info($"connected to {ConnectionString}");
@@ -55,9 +77,11 @@ public class Database
 
         DatabaseLogger.Info($"established connection with database");
 
-        _collection = _database.GetCollection<User>("users");
+        _userCollection = _database.GetCollection<User>("users");
+        _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
+        _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
 
-        var t = _collection.Find(x => true).Sort(new BsonDocument { { "_id", -1 } }).Limit(1).ToList();
+        var t = _userCollection.Find(x => true).Sort(new BsonDocument { { "_id", -1 } }).Limit(1).ToList();
         _generator = t.Count != 0 ? new UIDGenerator(t[0].Id) : new UIDGenerator(0);
     }
 
@@ -88,13 +112,14 @@ public class Database
             BetaCode = betaCode
         };
 
-        _collection.InsertOne(user);
+        _userCollection.InsertOne(user);
+        CreateAttempt(id, true);
         return (username, id, code, email);
     }
 
     public bool EntryExists(string field, string value)
     {
-        var res = _collection.Find(new BsonDocument { { field, value } }).ToList();
+        var res = _userCollection.Find(new BsonDocument { { field, value } }).ToList();
         return res.Count != 0;
     }
 
@@ -117,12 +142,14 @@ public class Database
     public bool VerifyUser(ulong id, string code)
     {
         DatabaseLogger.Debug($"[User] verifying {id}");
-        var user = _collection.Find(x => x.Id == id).FirstOrDefault();
+        var user = _userCollection.Find(x => x.Id == id).FirstOrDefault();
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
         var filter = Builders<User>.Filter.Eq(u => u.Id, id) & Builders<User>.Filter.Eq(u => u.ValidationCode, code);
         var update = Builders<User>.Update.Set(u => u.Verified, true);
-        return _collection.UpdateOne(filter, update).ModifiedCount != 0;
+        var res = _userCollection.UpdateOne(filter, update).ModifiedCount != 0;
+        VerifyAttempt(id, res);
+        return res;
     }
 
     public bool LoginUser(string email, string password, out string sid, out UInt64 id, out ErrorCodes.Errors error)
@@ -131,7 +158,7 @@ public class Database
         error = ErrorCodes.Errors.NONE;
         sid = "";
         id = 0;
-        var u = _collection.Find(Builders<User>.Filter.Eq(u => u.Email, email)).ToList();
+        var u = _userCollection.Find(Builders<User>.Filter.Eq(u => u.Email, email)).ToList();
         if (u.Count == 0)
         {
             error = ErrorCodes.Errors.USER_NOT_FOUND;
@@ -153,9 +180,12 @@ public class Database
             sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
             var filter = Builders<User>.Filter.Eq(u => u.Email, email);
             var update = Builders<User>.Update.Set(u => u.Sid, sid);
-            return _collection.UpdateOne(filter, update).ModifiedCount != 0;
+            var res = _userCollection.UpdateOne(filter, update).ModifiedCount != 0;
+            LoginAttempt(id, res);
+            return res;
         }
         error = ErrorCodes.Errors.PASSWORD_NOT_MATCHING;
+        LoginAttempt(id, false);
         return false;
     }
 
@@ -163,7 +193,7 @@ public class Database
     {
         user = new User();
         var cookieData = cookie.Split(",");
-        var u = _collection.Find(Builders<User>.Filter.Eq<ulong>(u => u.Id, Convert.ToUInt64(cookieData[0]))).ToList();
+        var u = _userCollection.Find(Builders<User>.Filter.Eq<ulong>(u => u.Id, Convert.ToUInt64(cookieData[0]))).ToList();
         if (u.Count == 0)
             return false;
         user = u[0];
@@ -177,7 +207,8 @@ public class Database
         DatabaseLogger.Debug($"[User] logout {user.Email}");
         var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
         var update = Builders<User>.Update.Set(u => u.Sid, "");
-        _collection.UpdateOne(filter, update);
+        LogoutAttempt(user.Id, _userCollection.UpdateOne(filter, update).ModifiedCount != 0);
+        
     }
 
     public bool DeleteUser(User user, string password)
@@ -191,8 +222,13 @@ public class Database
             pw = Enumerable.Range(0, 10000).Aggregate(pw, (current, i) => sha.ComputeHash(current));
         }
 
-        if (Convert.ToBase64String(pw) != user.Password.Split(':')[2] || !user.Verified) return false;
-        _collection.DeleteOne(Builders<User>.Filter.Eq(u => u.Id, user.Id));
+        if (Convert.ToBase64String(pw) != user.Password.Split(':')[2] || !user.Verified)
+        {
+            DeleteAttempt(user.Id, false);
+            return false;
+        }
+        _userCollection.DeleteOne(Builders<User>.Filter.Eq(u => u.Id, user.Id));
+        DeleteAttempt(user.Id, true);
         return true;
     }
 
@@ -203,7 +239,7 @@ public class Database
             TopPlayers = new List<LeaderBoardPlayer>()
         };
 
-        var players = _collection.Find(Builders<User>.Filter.Eq(u => u.Verified, true)).Sort(new BsonDocument { { "wins", -1 } })
+        var players = _userCollection.Find(Builders<User>.Filter.Eq(u => u.Verified, true)).Sort(new BsonDocument { { "wins", -1 } })
             .Limit(100).ToList();
 
         if (players == null) return leaderboard;
@@ -218,23 +254,43 @@ public class Database
     public uint IncrementWin(ulong puid)
     {
         DatabaseLogger.Info($"Incrementing win for user {puid}");
-        if (_collection.UpdateOne(x => x.Id == puid, Builders<User>.Update.Inc(u => u.Wins, (uint)1)).ModifiedCount != 0)
-            return _collection.Find(u => u.Id == puid).FirstOrDefault().Wins;
+        if (_userCollection.UpdateOne(x => x.Id == puid, Builders<User>.Update.Inc(u => u.Wins, (uint)1)).ModifiedCount != 0)
+            return _userCollection.Find(u => u.Id == puid).FirstOrDefault().Wins;
         return 0;
     }
 
-    public long GetPosition(User user)
-    {
-        return _collection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
-    }
+    public long GetPosition(User user) => _userCollection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
 
-    public void CleanDatabase()
-    {
-        DatabaseLogger.Info($"[CleanUp] deleted {_collection.DeleteMany(x => x.Verified == false).DeletedCount} user(s).");
-    }
+    public void CleanDatabase() => DatabaseLogger.Info($"[CleanUp] deleted {_userCollection.DeleteMany(x => x.Verified == false).DeletedCount} user(s).");
 
+    // Info Stuff
+    
+    public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
+        _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(x.Key, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    
+    private void CreateAttempt(ulong puid, bool success) =>
+        _accountEventCollection.InsertOne(new AccountEvent("create", puid, success,
+            (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    
+    private void VerifyAttempt(ulong puid, bool success) =>
+        _accountEventCollection.InsertOne(new AccountEvent("verify", puid, success,
+            (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    private void LoginAttempt(ulong puid, bool success) =>
+        _accountEventCollection.InsertOne(new AccountEvent("login", puid, success,
+            (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    
+    private void LogoutAttempt(ulong puid, bool success) =>
+        _accountEventCollection.InsertOne(new AccountEvent("logout", puid, success,
+            (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    
+    private void DeleteAttempt(ulong puid, bool success) =>
+        _accountEventCollection.InsertOne(new AccountEvent("delete", puid, success,
+            (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    
     private readonly IMongoDatabase _database;
-    private readonly IMongoCollection<User> _collection;
+    private readonly IMongoCollection<User> _userCollection;
+    private readonly IMongoCollection<GameInfo> _gameInfoCollection;
+    private readonly IMongoCollection<AccountEvent> _accountEventCollection;
 
     private readonly UIDGenerator _generator;
 }

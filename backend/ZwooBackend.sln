@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogicTests", "GameLogic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendHelper", "BackendHelper\BackendHelper.csproj", "{38DE1F6C-DC47-495A-BDFF-2155866B2FFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeImporter", "CodeImporter\CodeImporter.csproj", "{D526D903-307A-4AA7-993F-5F6F0085230A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{38DE1F6C-DC47-495A-BDFF-2155866B2FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38DE1F6C-DC47-495A-BDFF-2155866B2FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38DE1F6C-DC47-495A-BDFF-2155866B2FFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D526D903-307A-4AA7-993F-5F6F0085230A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D526D903-307A-4AA7-993F-5F6F0085230A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D526D903-307A-4AA7-993F-5F6F0085230A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D526D903-307A-4AA7-993F-5F6F0085230A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
