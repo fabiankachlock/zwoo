@@ -8,7 +8,7 @@
       <Checkbox styles="tc-primary mx-3" v-model="isPublic">
         {{ t('createGame.isPublic') }}
       </Checkbox>
-      <TextInput id="game-password" v-model="password" labelKey="createGame.password" is-password placeholder="******" v-show="!isPublic" />
+      <TextInput v-if="!isPublic" id="game-password" v-model="password" labelKey="createGame.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="create">

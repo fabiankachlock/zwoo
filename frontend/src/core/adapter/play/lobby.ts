@@ -128,7 +128,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     if (!isInitialFetch) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Joined`, [data.username]),
-        position: SnackBarPosition.TopRight
+        position: SnackBarPosition.Top
       });
     }
   };
@@ -142,7 +142,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     if (!isInitialFetch) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Left`, [data.username]),
-        position: SnackBarPosition.TopRight
+        position: SnackBarPosition.Top
       });
     }
   };
@@ -178,7 +178,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
     snackbar.pushMessage({
       message: translations.t(`snackbar.lobby.${data.role === ZRPRole.Player ? 'spectator' : 'player'}ChangedRole`, [data.username]),
-      position: SnackBarPosition.TopRight
+      position: SnackBarPosition.Top
     });
   };
 
