@@ -1,10 +1,8 @@
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using BackendHelper;
-using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using Quartz;
 using ZwooBackend.Controllers;
@@ -80,16 +78,13 @@ public class Database
         _userCollection = _database.GetCollection<User>("users");
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
-
-        var t = _userCollection.Find(x => true).Sort(new BsonDocument { { "_id", -1 } }).Limit(1).ToList();
-        _generator = t.Count != 0 ? new UIDGenerator(t[0].Id) : new UIDGenerator(0);
     }
 
     public (string, ulong, string, string) CreateUser(string username, string email, string password, string? betaCode)
     {
         DatabaseLogger.Debug($"[User] creating {username}");
         var code = StringHelper.GenerateNDigitString(6);
-        var id = _generator.GetNextID();
+        var id = _userCollection.AsQueryable().Max(x => x.Id) + 1;
 
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
@@ -291,6 +286,4 @@ public class Database
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<GameInfo> _gameInfoCollection;
     private readonly IMongoCollection<AccountEvent> _accountEventCollection;
-
-    private readonly UIDGenerator _generator;
 }

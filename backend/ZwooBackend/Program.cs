@@ -76,7 +76,14 @@ var mail_thread = new Thread(() =>
             {
                 if (data.Puid == 0)
                     break;
-                EmailData.SendMail(data);
+                try
+                {
+                    EmailData.SendMail(data);
+                }
+                catch (Exception e)
+                {
+                    Globals.Logger.Error($"Could not send Email: {e.Message}");
+                }
             }
         }
         else
