@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "cross-env VUE_APP_USE_BACKEND=false vue-cli-service serve",
-    "serve:prod": "cross-env VUE_APP_USE_BACKEND=true vue-cli-service serve",
-    "build": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true vue-cli-service build",
-    "build:tauri": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_IS_TAURI=true vue-cli-service build --dest dist-preview && cp -r dist-preview ./dist-tmp",
+    "serve:prod": "cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false vue-cli-service serve",
+    "build": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false vue-cli-service build",
+    "build:tauri": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false VUE_APP_IS_TAURI=true vue-cli-service build --dest dist-preview && cp -r dist-preview ./dist-tmp",
     "build:preview": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
     "build:tauri:preview": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=false VUE_APP_IS_TAURI=true  vue-cli-service build --dest dist-preview && cp -r dist-preview ./dist-tmp",
     "build:analyze": "yarn build:assets && cross-env ANALYZE=true vue-cli-service build",
