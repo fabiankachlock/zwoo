@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-beta.0",
   "private": true,
   "scripts": {
     "serve": "cross-env VUE_APP_USE_BACKEND=false vue-cli-service serve",
