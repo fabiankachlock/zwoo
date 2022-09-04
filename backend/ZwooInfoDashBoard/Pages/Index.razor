@@ -1,0 +1,62 @@
+﻿@page "/"
+@using ZwooInfoDashBoard.Data
+
+<PageTitle>Home</PageTitle>
+
+@inject DialogService DialogService
+
+<h1 class="align-center">Home</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <RadzenCard class="w-100">
+                <h2>Statistics</h2>
+                <div class="row w-100">
+                    <div class="col">
+                        <RadzenLabel Text="Played Games:"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="Players:"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="Not Verified:"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="Failed Login Attempts:"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="Used Beta Codes:"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="Available Beta Codes:"/>
+                    </div>
+                    <div class="col">
+                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetPlayedGamesAsQueryable().Count()}")"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count()}")"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count(x=> !x.Verified)}")"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetAccountEventsAsQueryable().Count(x => x.EventType == "login" && !x.Success)}")"/>
+                                                <div class="w-100"></div>
+                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count(x => x.BetaCode != null)}")"/>
+                        <div class="w-100"></div>
+                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetBetaCodes().Count()}")"/>
+                    </div>
+                </div>
+            </RadzenCard>
+        </div>
+        <div class="col">
+            <RadzenCard>
+                <h2>Leaderboard</h2>
+                <RadzenDataGrid TItem="User" Data="_leaderboard">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="User" Property="Position" Title="Position"/>
+                        <RadzenDataGridColumn TItem="User" Property="Username" Title="Name"/>
+                        <RadzenDataGridColumn TItem="User" Property="Wins" Title="Wins"/>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenCard>
+        </div>
+    </div>
+</div>
+
+@code {
+    readonly List<User> _leaderboard = Globals.ZwooDatabase.GetLeaderboard();
+}

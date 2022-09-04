@@ -1,0 +1,48 @@
+@page "/player-info-dialog/{id}"
+@using ZwooInfoDashBoard.Data
+
+<RadzenCard>
+    <div class="d-flex flex-row">
+        <h3>@_player.Username</h3>
+        @if (_player.Verified)
+        {
+            <RadzenIcon Icon="check_circle_outline" IconStyle="IconStyle.Success" Style="margin-left: 5px; margin-bottom: 5px"/>
+        }
+        else
+        {
+            <RadzenIcon Icon="highlight_off" IconStyle="IconStyle.Danger" Style="margin-left: 5px; margin-bottom: 5px"/>
+        }
+        
+    </div>
+    <p>@($"ID: {_player.Id}")</p>
+    <p>@($"Email: {_player.Email}")</p>
+    <p>@($"Wins: {_player.Wins}")</p>
+    @if (_player.BetaCode != null)
+    {
+        <p>@($"Betacode: {_player.BetaCode}")</p>
+    }
+</RadzenCard>
+<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="4"
+                TItem="AccountEvent" Data="_events" AllowVirtualization="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Event"/>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success"/>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
+            <Template Context="aevent">
+                @DateTimeOffset.FromUnixTimeSeconds((long)aevent.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    [Parameter] public ulong Id { set; get; }
+
+    private User _player; 
+    private IEnumerable<AccountEvent> _events;
+    protected override void OnInitialized()
+    {
+        _player = Globals.ZwooDatabase.GetUser(Id);
+        _events = Globals.ZwooDatabase.GetUserAccountEvents(Id);
+    }
+}

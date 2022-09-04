@@ -1,0 +1,152 @@
+@page "/players"
+
+<PageTitle>Players</PageTitle>
+
+@using ZwooInfoDashBoard.Data
+@using ZwooInfoDashBoard.Pages.Dialogs
+@using System.Security.Cryptography
+@using System.Text
+@inject DialogService DialogService
+
+<h1>Players</h1>
+<p>List of All Players.</p>
+
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(playerToInsert != null)/>
+<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
+                TItem="User" Data="players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
+                @ref="playerGrid" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+    <Columns>
+        <RadzenDataGridColumn TItem="User" Property="Id" Title="ID"/>
+        <RadzenDataGridColumn TItem="User" Property="Username" Title="Username">
+            <Template Context="player">
+                @player.Username
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenTextBox @bind-Value="player.Username" Style="width:100%; display: block" Name="Name"/>
+                <RadzenRequiredValidator Component="Name" Text="Username is Required"/>
+                <RadzenLengthValidator Component="Name" Text="Username too short" Min="4"/>
+                <RadzenLengthValidator Component="Name" Text="Username too long" Max="20"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="User" Property="Email" Title="Email">
+            <Template Context="player">
+                @player.Email
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenTextBox @bind-Value="player.Email" Style="width:100%; display: block" Name="Email"/>
+                <RadzenRequiredValidator Component="Email" Text="Email is Required"/>
+                <RadzenEmailValidator Component="Email" Text="Email is Invalid."/> 
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="User" Property="Wins" Title="Wins"/>
+        <RadzenDataGridColumn TItem="User" Property="Verified" Title="Verified">
+            <Template Context="player">
+                <RadzenCheckBox Disabled="true" Value="player.Verified"/>
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenCheckBox @bind-Value="player.Verified"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="User" Property="BetaCode" Title="Betacode">
+            <Template Context="player">
+                @player.BetaCode
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenTextBox @bind-Value="player.BetaCode" Style="width:100%; display: block" Name="Name"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="User" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="player">
+                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="info" Class="m-1" Click="@(() => OpenPlayer(player.Id))"/>
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="build" Class="m-1" Click="@(() => ChangePlayerPassword(player))"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="User" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="120px">
+            <Template Context="player">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" class="m-1" Click="@(() => EditRow(player))" @onabort:stopPropagation="true"/>
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(player))"/>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(player))"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="User" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="player">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(player))"  @onclick:stopPropagation="true" />
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(player))" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+
+@code {
+    private IQueryable<User> players;
+    RadzenDataGrid<User> playerGrid;
+    User playerToInsert;
+
+    protected override async Task OnInitializedAsync() => players = Globals.ZwooDatabase.GetUsersAsQueryable();
+
+    private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
+
+    async Task EditRow(User player) => await playerGrid.EditRow(player);
+
+    private async void InsertRow()
+    {
+        playerToInsert = Globals.ZwooDatabase.GenerateUser();
+        await playerGrid.InsertRow(playerToInsert);
+    }
+    
+    private void SaveRow(User player)
+    {
+        if (playerToInsert == player)
+            playerToInsert = null;
+        playerGrid.UpdateRow(player);
+    }
+
+    private void CancelEdit(User player)
+    {
+        if (playerToInsert == player)
+            playerToInsert = null;
+        playerGrid.CancelEditRow(player);
+        playerGrid.Reload();
+    }
+
+    private async Task DeleteRow(User player)
+    {
+        if (playerToInsert == player)
+            playerToInsert = null;
+        Globals.ZwooDatabase.DeleteUser(player);
+        await playerGrid.Reload();
+    } 
+    
+    private void OnUpdateRow(User player)
+    {
+        if (playerToInsert == player)
+            playerToInsert = null;
+        Globals.ZwooDatabase.UpdateUser(player);
+    }
+
+    private void OnCreateRow(User player) => Globals.ZwooDatabase.UpdateUser(player);
+
+    private async Task ChangePlayerPassword(User player)
+    {
+        var res = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "460px", Height = "210px", Resizable = true, Draggable = true });
+        if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
+        {
+            var salt = RandomNumberGenerator.GetBytes(16);
+            var pw = Encoding.ASCII.GetBytes(changePassword.Password).Concat(salt).ToArray();
+
+            using (var sha = SHA512.Create())
+            {
+                foreach (int i in Enumerable.Range(0, 10000)) pw = sha.ComputeHash(pw);
+            }
+            player.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
+        }
+    }
+
+}
