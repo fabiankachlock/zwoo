@@ -32,21 +32,23 @@ export enum Endpoint {
 }
 
 export class Backend {
-  public static readonly URL = process.env.VUE_APP_BACKEND_URL as string;
+  public static readonly isDev = process.env.VUE_APP_DEVELOPMENT === 'true';
+  public static readonly Url: string = Backend.isDev ? process.env.VUE_APP_DEV_BACKEND : process.env.VUE_APP_PROD_BACKEND;
+  public static readonly WsOverride: string | undefined = Backend.isDev ? process.env.VUE_APP_DEV_WS_OVERRIDE : process.env.VUE_APP_PROD_WS_OVERRIDE;
 
   public static getUrl(endpoint: Endpoint): string {
     if (endpoint === Endpoint.Websocket) {
-      return process.env.VUE_APP_WS_OVERRIDE ? `${process.env.VUE_APP_WS_OVERRIDE}${endpoint}` : `${Backend.URL}${endpoint}`;
+      return Backend.WsOverride ? `${Backend.WsOverride}${endpoint}` : `${Backend.Url}${endpoint}`;
     }
-    return `${Backend.URL}${endpoint}`;
+    return `${Backend.Url}${endpoint}`;
   }
 
   public static getDynamicUrl<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>): string {
     let url = '';
     if (endpoint === Endpoint.Websocket) {
-      url = process.env.VUE_APP_WS_OVERRIDE ? `${process.env.VUE_APP_WS_OVERRIDE}${endpoint}` : `${Backend.URL}${endpoint}`;
+      url = Backend.WsOverride ? `${Backend.WsOverride}${endpoint}` : `${Backend.Url}${endpoint}`;
     } else {
-      url = `${Backend.URL}${endpoint}`;
+      url = `${Backend.Url}${endpoint}`;
     }
 
     for (const key in params) {

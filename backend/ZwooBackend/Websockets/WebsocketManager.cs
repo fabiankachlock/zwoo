@@ -134,7 +134,13 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         {
             WebSocketLogger.Info($"[Player] [{playerId}] sending message");
             WsLogger.Debug($"[Player] [{playerId}] sending: {Encoding.UTF8.GetString(content)}");
-            await _websockets[playerId].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+            try 
+            { 
+                await _websockets[playerId].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+            } catch (Exception e)
+            {
+                WebSocketLogger.Warn($"[Player] [{playerId}] error while sending a message {e}");
+            }
         }
     }
 
@@ -148,9 +154,15 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             {
                 if (_websockets.ContainsKey(player) && _websockets[player].State == WebSocketState.Open)
                 {
-                    await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+                    try
+                    {
+                        await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+                    } catch (Exception e)
+                    {
+                        WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
+                    }
                 }
-            }));
+        }));
         }
     }
 

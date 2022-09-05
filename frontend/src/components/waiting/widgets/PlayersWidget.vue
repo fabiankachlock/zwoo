@@ -73,23 +73,27 @@
               >
                 <Icon icon="iconoir:eye-alt" />
               </button>
-              <button v-tooltip="t('wait.promote')" @click="askPromotePlayer()" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+              <button
+                v-tooltip="t('wait.promote')"
+                @click="askPromotePlayer(player.id)"
+                class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+              >
                 <Icon icon="akar-icons:crown" />
               </button>
               <ReassureDialog
                 @close="allowed => handlePromotePlayer(player.id, allowed)"
                 :title="t('dialogs.promotePlayer.title', [player.username])"
                 :body="t('dialogs.promotePlayer.body', [player.username])"
-                :is-open="playerPromoteDialogOpen"
+                :is-open="playerToPromote === player.id"
               />
-              <button v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+              <button v-tooltip="t('wait.kick')" @click="askKickPlayer(player.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
                 <Icon icon="iconoir:delete-circled-outline" />
               </button>
               <ReassureDialog
                 @close="allowed => handleKickPlayer(player.id, allowed)"
                 :title="t('dialogs.kickPlayer.title', [player.username])"
                 :body="t('dialogs.kickPlayer.body', [player.username])"
-                :is-open="playerKickDialogOpen"
+                :is-open="playerToKick === player.id"
               />
             </template>
           </div>
@@ -124,8 +128,8 @@ const gameId = computed(() => gameConfig.gameId);
 const { isHost } = useIsHost();
 const username = computed(() => auth.username);
 const gameHost = computed(() => lobby.host);
-const playerPromoteDialogOpen = ref(false);
-const playerKickDialogOpen = ref(false);
+const playerToPromote = ref<string | undefined>(undefined);
+const playerToKick = ref<string | undefined>(undefined);
 const shareSheetOpen = ref(false);
 const qrCodeOpen = ref(false);
 const players = computed(() => lobby.players);
@@ -134,22 +138,22 @@ const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
     lobby.promotePlayer(id);
   }
-  playerPromoteDialogOpen.value = false;
+  playerToPromote.value = undefined;
 };
 
-const askPromotePlayer = () => {
-  playerPromoteDialogOpen.value = true;
+const askPromotePlayer = (id: string) => {
+  playerToPromote.value = id;
 };
 
 const handleKickPlayer = (id: string, allowed: boolean) => {
   if (allowed) {
     lobby.kickPlayer(id);
   }
-  playerKickDialogOpen.value = false;
+  playerToKick.value = undefined;
 };
 
-const askKickPlayer = () => {
-  playerKickDialogOpen.value = true;
+const askKickPlayer = (id: string) => {
+  playerToKick.value = id;
 };
 
 const handleChangeToSpectator = () => {

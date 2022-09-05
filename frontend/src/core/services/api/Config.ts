@@ -10,7 +10,7 @@ export class ConfigService {
       return process.env.VUE_APP_VERSION;
     }
 
-    const req = await fetch(Backend.getUrl(Endpoint.Version));
+    const req = await fetch(`${Backend.getUrl(Endpoint.Version)}?t=${Date.now()}`);
 
     if (req.status != 200) {
       Logger.Api.warn('received erroneous response while fetching version');

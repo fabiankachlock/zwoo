@@ -29,7 +29,7 @@ public class GameInfo
     /// Winner has a Score of 0
     /// </summary>
     [BsonElement("scores")]
-    public List<PlayerScore> Scores;
+    public List<PlayerScore> Scores = new List<PlayerScore>();
 
     [BsonElement("timestamp")]
     public ulong TimeStamp { set; get; } = 0;
