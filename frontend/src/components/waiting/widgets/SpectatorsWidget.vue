@@ -23,14 +23,14 @@
             </button>
           </template>
           <template v-if="isHost && username !== player.username">
-            <button v-tooltip="t('wait.kick')" @click="askKickPlayer()" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+            <button v-tooltip="t('wait.kick')" @click="askKickPlayer(player.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
               <Icon icon="iconoir:delete-circled-outline" />
             </button>
             <ReassureDialog
               @close="allowed => handleKickPlayer(player.id, allowed)"
               :title="t('dialogs.kickPlayer.title', [player.username])"
               :body="t('dialogs.kickPlayer.body', [player.username])"
-              :is-open="playerKickDialogOpen"
+              :is-open="playerToKick === player.id"
             />
           </template>
         </div>
@@ -57,17 +57,17 @@ const spectators = computed(() => lobby.spectators);
 const auth = useAuth();
 const { isHost } = useIsHost();
 const username = computed(() => auth.username);
-const playerKickDialogOpen = ref(false);
+const playerToKick = ref<string | undefined>(undefined);
 
 const handleKickPlayer = (id: string, allowed: boolean) => {
   if (allowed) {
     lobby.kickPlayer(id);
   }
-  playerKickDialogOpen.value = false;
+  playerToKick.value = undefined;
 };
 
-const askKickPlayer = () => {
-  playerKickDialogOpen.value = true;
+const askKickPlayer = (id: string) => {
+  playerToKick.value = id;
 };
 
 const startPlaying = () => {
