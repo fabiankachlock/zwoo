@@ -16,6 +16,7 @@ public class GameInfo
         IsPublic = isPublic;
         Scores = scores;
         TimeStamp = timeStamp;
+        Winner = Globals.ZwooDatabase.GetUser((ulong)scores.First(x => x.Score == 0).PlayerID).Username;
     }
     
     [BsonElement("_id")]
@@ -37,6 +38,8 @@ public class GameInfo
 
     [BsonElement("timestamp")]
     public ulong TimeStamp { set; get; } = 0;
+
+    [BsonIgnore] public string Winner { set; get; } = "";
 }
 
 public class PlayerScore

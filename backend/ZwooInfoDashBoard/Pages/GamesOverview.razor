@@ -46,11 +46,7 @@
                 <RadzenCheckBox Disabled="true" Value="info.IsPublic"/>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="GameInfo" Property="Scores" Title="Winner">
-            <Template Context="info">
-                @GetUser((ulong)info.Scores.First(x => x.Score == 0).PlayerID).Username
-            </Template>
-        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="GameInfo" Property="Winner" Title="Winner"/>
     </Columns>
 </RadzenDataGrid>
 
