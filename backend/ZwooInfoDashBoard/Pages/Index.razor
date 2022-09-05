@@ -1,11 +1,12 @@
 ﻿@page "/"
 @using ZwooInfoDashBoard.Data
+@using ZwooInfoDashBoard.Pages.Dialogs
 
 <PageTitle>Home</PageTitle>
 
 @inject DialogService DialogService
 
-<h1 class="align-center">Home</h1>
+<h1>Home</h1>
 
 <div class="container">
     <div class="row">
@@ -41,6 +42,11 @@
                     </div>
                 </div>
             </RadzenCard>
+            <RadzenCard class="w-100" Style="margin-top: 10px">
+                <h2>Quick Actions</h2>
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Code" Click="@(async () => await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true }))"/>
+                <RadzenButton Icon="search" style="margin-bottom: 10px" Text="Quick Find Player" Click="QuickFindPlayer"/>
+            </RadzenCard>
         </div>
         <div class="col">
             <RadzenCard>
@@ -50,6 +56,11 @@
                         <RadzenDataGridColumn TItem="User" Property="Position" Title="Position"/>
                         <RadzenDataGridColumn TItem="User" Property="Username" Title="Name"/>
                         <RadzenDataGridColumn TItem="User" Property="Wins" Title="Wins"/>
+                        <RadzenDataGridColumn TItem="User" TextAlign="TextAlign.Center" Width="60px">
+                            <Template Context="player">
+                                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="info" Class="m-1" Click="@(() => OpenPlayer(player.Id))"/>
+                            </Template>
+                        </RadzenDataGridColumn>
                     </Columns>
                 </RadzenDataGrid>
             </RadzenCard>
@@ -59,4 +70,13 @@
 
 @code {
     readonly List<User> _leaderboard = Globals.ZwooDatabase.GetLeaderboard();
+    
+    private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
+
+    private async Task QuickFindPlayer()
+    {
+        var res = await DialogService.OpenAsync<QuickFindPlayerDialog>("Quick Find Player", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "200px", Resizable = false, Draggable = true });
+        if (res is User usr)
+            await OpenPlayer(usr.Id);
+    }
 }

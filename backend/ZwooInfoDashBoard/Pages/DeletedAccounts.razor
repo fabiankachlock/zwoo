@@ -1,0 +1,22 @@
+@page "/deleted-accounts"
+@using ZwooInfoDashBoard.Data
+
+<PageTitle>Deleted Accounts</PageTitle>
+
+<h1>Deleted Accounts</h1>
+
+<RadzenDataGrid TItem="AccountEvent" Data="_events">
+    <Columns>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="PlayerID" Title="ID"/>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success"/>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
+            <Template Context="info">
+                @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    readonly IQueryable<AccountEvent> _events = Globals.ZwooDatabase.GetAccountEventsAsQueryable().Where(x => x.EventType == "");
+}

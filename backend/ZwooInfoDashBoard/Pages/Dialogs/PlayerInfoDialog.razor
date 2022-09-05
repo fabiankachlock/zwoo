@@ -22,7 +22,7 @@
         <p>@($"Betacode: {_player.BetaCode}")</p>
     }
 </RadzenCard>
-<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="4"
+<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="20"
                 TItem="AccountEvent" Data="_events" AllowVirtualization="true">
     <Columns>
         <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Event"/>

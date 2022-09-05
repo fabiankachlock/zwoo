@@ -1,0 +1,67 @@
+@page "/QuickFindPlayerDialog"
+@using ZwooInfoDashBoard.Data
+
+@inject DialogService DialogService
+
+<div class="container">
+    <div class="row"> 
+        <div class="col-sm-4">
+            <RadzenDropDown AllowClear="false" AllowFiltering="false"
+                            TValue="SearchType" Data="Enum.GetValues(typeof(SearchType))" @bind-Value="_searchType"/>
+        </div>
+        <div class="col-sm-8">
+            <RadzenTextBox @bind-Value="_query" Placeholder="Search Query"/>
+        </div>
+    </div>
+    <div class="row">
+        <RadzenLabel Text="@error" Style="color: red"/>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <RadzenButton Click="@((args) => DialogService.Close(false))" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="width: 120px" Class="mr-1" />
+            <RadzenButton Click="@((args) => FindUser())" Text="Search" Style="width: 120px" />
+        </div>
+    </div>
+</div>
+    
+@code {
+    enum SearchType
+    {
+        ID,
+        NAME
+    }
+
+    string _query = "";
+    SearchType _searchType = SearchType.ID;
+    string error = "";
+
+    private void FindUser()
+    {
+        User usr = null;
+        switch (_searchType)
+        {
+            case SearchType.ID:
+            {
+                if (!ulong.TryParse(_query, out var val))
+                {
+                    error = "ID could not be parsed";
+                    break;
+                }
+                usr = Globals.ZwooDatabase.GetUsersAsQueryable().FirstOrDefault(x => x.Id == val);
+                break;
+            }
+            case SearchType.NAME:
+            {
+                usr = Globals.ZwooDatabase.GetUsersAsQueryable().FirstOrDefault(x => x.Username == _query);
+                break;
+            }
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        if (usr == null)
+            error = "User could not be found";
+        else
+            DialogService.Close(usr);
+    }
+
+}
