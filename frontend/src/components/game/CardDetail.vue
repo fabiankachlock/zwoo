@@ -193,6 +193,7 @@ const handlePlayCard = () => {
       targetCard.value = displayCard.value;
       setTimeout(() => {
         deckState.playCard(displayCard.value);
+        _targetCardOverride.value = undefined;
         closeDetail();
       }, ANIMATION_DURATION);
       isPlayingCard.value = false;
