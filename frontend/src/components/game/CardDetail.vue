@@ -53,7 +53,7 @@
               'border-red-500': canPlayCard === CardState.disallowed
             }"
           >
-            #play card#
+            {{ t('ingame.playCard') }}
           </button>
         </div>
       </div>
@@ -81,6 +81,7 @@ import Card from './Card.vue';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Key, useKeyPress } from '@/composables/KeyPress';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
+import { useI18n } from 'vue-i18n';
 
 enum CardState {
   allowed,
@@ -90,6 +91,7 @@ enum CardState {
 
 const ANIMATION_DURATION = 300;
 
+const { t } = useI18n();
 const deckState = useGameCardDeck();
 const gameState = useGameState();
 
