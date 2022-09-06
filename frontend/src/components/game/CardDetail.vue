@@ -45,14 +45,11 @@
               <Card :card="displayCard" image-class="h-full"></Card>
             </div>
           </div>
-          <button
-            @click.stop="handlePlayCard()"
-            class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent"
-            :class="{
+          <button @click.stop="handlePlayCard()" class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent">
+            <!-- TODO: add back when implemented :class="{
               'border-green-600': canPlayCard === CardState.allowed,
               'border-red-500': canPlayCard === CardState.disallowed
-            }"
-          >
+            }" -->
             {{ t('ingame.playCard') }}
           </button>
         </div>
