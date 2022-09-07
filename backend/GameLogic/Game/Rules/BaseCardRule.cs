@@ -41,8 +41,7 @@ internal class BaseCardRule : BaseRule
         List<GameEvent> events = new List<GameEvent>();
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        // only allowed when the topmost card is no draw card or the event is already activated
-        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && (!CardUtilities.IsDraw(state.TopCard.Card) || state.TopCard.EventActivated);
+        bool isAllowed = IsAllowedToThrowCard(state.TopCard, payload.Card);
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
@@ -58,6 +57,12 @@ internal class BaseCardRule : BaseRule
     protected bool CanThrowCard(Card top, Card newCard)
     {
         return top.Type == newCard.Type || top.Color == newCard.Color || CardUtilities.IsWild(newCard);
+    }
+
+    protected bool IsAllowedToThrowCard(StackCard top, Card newCard)
+    {
+        // only allowed when the topmost card is no draw card or the event is already activated
+        return CanThrowCard(top.Card, newCard) && (!CardUtilities.IsDraw(top.Card) || top.EventActivated);
     }
 
     protected GameState PlaceCardOnStack(GameState state, Card card)

@@ -48,7 +48,7 @@ internal class BaseWildCardRule : BaseCardRule
         if (gameEvent.Type == ClientEventType.PlaceCard)
         {
             ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-            bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && IsActivePlayer(state, payload.Player);
+            bool isAllowed = IsAllowedToThrowCard(state.TopCard, payload.Card) && IsActivePlayer(state, payload.Player);
             if (isAllowed)
             {
                 _storedEvent = new StoredEvent(payload.Player, payload.Card);
