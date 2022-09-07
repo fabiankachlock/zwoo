@@ -16,7 +16,12 @@ public class LobbyHandler : MessageHandler
 
     public bool HandleMessage(UserContext context, ZRPMessage message)
     {
-        if (message.Code == ZRPCode.PlayerLeftGame)
+        if (message.Code == ZRPCode.KeepAlive)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.AckKeepAlive, new AckKeepAliveDTO()));
+            return true;
+        }
+        else if (message.Code == ZRPCode.PlayerLeftGame)
         {
             LeavePlayer(context, message);
             return true;

@@ -23,6 +23,9 @@ public enum ZRPCode
     HostChanged = 114, // send
     KickPlayer = 115, // receive
     PlayerChangedRole = 116, // send
+
+    KeepAlive = 198, // receive
+    AckKeepAlive = 199, // send
     // Lobby
     UpdateSetting = 200, // receive
     ChangedSettings = 201, // send
