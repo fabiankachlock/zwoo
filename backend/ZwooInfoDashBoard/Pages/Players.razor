@@ -88,6 +88,7 @@
     private IQueryable<User> players;
     RadzenDataGrid<User> playerGrid;
     User playerToInsert;
+    bool newPlayer = false;
 
     protected override async Task OnInitializedAsync() => players = Globals.ZwooDatabase.GetUsersAsQueryable();
 
@@ -98,6 +99,7 @@
     private async void InsertRow()
     {
         playerToInsert = Globals.ZwooDatabase.GenerateUser();
+        newPlayer = true;
         await playerGrid.InsertRow(playerToInsert);
     }
     
@@ -105,15 +107,18 @@
     {
         if (playerToInsert == player)
             playerToInsert = null;
+        newPlayer = false;
         playerGrid.UpdateRow(player);
     }
 
-    private void CancelEdit(User player)
+    private async Task CancelEdit(User player)
     {
         if (playerToInsert == player)
             playerToInsert = null;
+        if (newPlayer == true)
+            await DeleteRow(player);
         playerGrid.CancelEditRow(player);
-        playerGrid.Reload();
+        await playerGrid.Reload();
     }
 
     private async Task DeleteRow(User player)
