@@ -20,7 +20,7 @@ public static class StringHelper
             return false;
 
         var m1 = Regex.Match(pw, "[0-9]+");
-        var m2 = Regex.Match(pw, "[!#$%&'*+/=?^_´{|}\\-[\\]]+");
+        var m2 = Regex.Match(pw, "[@!#$%&'*+/=?^_´{|}\\-[\\]]+");
         var m3 = Regex.Match(pw, "[a-zA-Z]+");
 
         return m1.Success && m2.Success && m3.Success;
