@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "cross-env VUE_APP_USE_BACKEND=false vue-cli-service serve",
-    "serve:prod": "cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false vue-cli-service serve",
+    "serve:prod": "cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=true vue-cli-service serve",
     "build": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false vue-cli-service build",
     "build:tauri": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false VUE_APP_IS_TAURI=true vue-cli-service build --dest dist-preview && cp -r dist-preview ./dist-tmp",
     "build:preview": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=false vue-cli-service build --dest dist-preview",
@@ -27,15 +27,15 @@
     "@log-rush/client": "^1.1.1",
     "@tauri-apps/api": "^1.0.0-rc.6",
     "autoprefixer": "^10",
-    "core-js": "^3.23.3",
+    "core-js": "^3.25.1",
     "dexie": "^3.2.1",
     "pinia": "^2.0.11",
     "postcss": "^8",
     "register-service-worker": "^1.7.1",
     "tailwindcss": "^3",
     "vue": "^3.2.31",
-    "vue-i18n": "^9.1.0",
-    "vue-router": "^4.0.13"
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.1.5"
   },
   "devDependencies": {
     "@iconify/vue": "^3.2.1",
@@ -43,8 +43,8 @@
     "@tauri-apps/cli": "^1.0.0-rc.13",
     "@types/jest": "^27.5.0",
     "@types/vue-router": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.3",
-    "@typescript-eslint/parser": "^5.30.3",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
     "@vue/cli-plugin-babel": "~5.0.4",
     "@vue/cli-plugin-e2e-cypress": "~5.0.1",
     "@vue/cli-plugin-eslint": "~5.0.1",
@@ -59,8 +59,8 @@
     "@vue/test-utils": "^2.0.0-rc.18",
     "@vue/vue3-jest": "^27.0.0-alpha.4",
     "cross-env": "^7.0.3",
-    "cypress": "^10.3.0",
-    "eslint": "^8.19.0",
+    "cypress": "^10.7.0",
+    "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^8.7.1",
@@ -73,7 +73,7 @@
     "typescript": "~4.7.2",
     "vue-cli-plugin-i18n": "~2.3.1",
     "vue-jest": "^5.0.0-0",
-    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-bundle-analyzer": "^4.6.1",
     "ws": "^8.8.0"
   },
   "lint-staged": {

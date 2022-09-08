@@ -45,7 +45,7 @@ export class CardThemeManager {
   }
 
   private async loadThemes(): Promise<CardThemesMeta> {
-    return fetch('/assets/meta.json').then(res => res.json());
+    return fetch(`/assets/meta.json?t=${Date.now()}`).then(res => res.json());
   }
 
   public async getDefaultTheme(): Promise<CardThemeIdentifier> {

@@ -50,11 +50,12 @@
         <div
           v-for="player of players"
           :key="player.id"
-          :class="{ 'bc-secondary': username === player.username }"
           class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest"
         >
           <p class="text-lg tc-main-dark">
-            {{ player.username }}
+            <span :class="{ 'tc-primary': username === player.username }">
+              {{ player.username }}
+            </span>
             <span v-if="gameHost === player.username" class="tc-primary text-lg">
               <Icon icon="akar-icons:crown" class="inline ml-1" />
             </span>

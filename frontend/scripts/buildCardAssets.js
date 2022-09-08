@@ -312,7 +312,7 @@ async function createMetaFiles(themes) {
     themes: themes.map(t => t.name),
     defaultTheme: {
       name: defaultTheme.name,
-      variant: defaultTheme.variants.includes(VARIANT_AUTO) ? VARIANT_AUTO : defaultTheme.variants[0]
+      variant: computeThemeVariants(defaultTheme.variants).includes(VARIANT_AUTO) ? VARIANT_AUTO : defaultTheme.variants[0]
     },
     configs: combineToObject(
       themes.map(theme => ({
