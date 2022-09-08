@@ -26,7 +26,6 @@ public class GameInfo
     public string GameName { set; get; } = "";
     [BsonElement("game_id")]
     public long GameId { set; get; } = 0;
-    [BsonRepresentation(BsonType.Boolean)]
     [BsonElement("is_public")]
     public bool IsPublic { set; get; } = false;
     /// <summary>
@@ -58,16 +57,10 @@ public class PlayerScore
 
     [BsonElement("score")]
     public int Score { set; get; } = 0;
+    
+    [BsonIgnore]
+    public User Player => _player ??= Globals.ZwooDatabase.GetUser((ulong)PlayerId);
 
-    public User Player
-    {
-        get
-        {
-            if (_player.Id == 0)
-                _player = Globals.ZwooDatabase.GetUser((ulong)PlayerId);
-            return _player;
-        }
-    }
-
-    private User _player = null!;
+    [BsonIgnore]
+    private User? _player = null;
 }
