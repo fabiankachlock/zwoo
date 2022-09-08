@@ -125,6 +125,9 @@
     {
         if (playerToInsert == player)
             playerToInsert = null;
+        var res = await DialogService.Confirm($"Are you sure that you want to delete {player.Username}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (res == null || (bool)!res)
+            return;
         Globals.ZwooDatabase.DeleteUser(player);
         await playerGrid.Reload();
     } 
