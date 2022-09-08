@@ -151,6 +151,7 @@
     "zrp": {
       "400": "Ein Fehler is aufgetreten",
       "420": "Fehlende Berechtigung",
+      "434": "Karte nicht erlaubt",
       "900": "Fehler aufgetreten",
       "901": "Verbindungsfehler",
       "911": "Verbindung getrennt",

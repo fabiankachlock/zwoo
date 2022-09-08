@@ -1,7 +1,7 @@
 import { ValidationResult, Validator } from './_type';
 
 const NumberRegex = /[0-9]+/;
-const SpecialCharacterRegex = /[!#$%&'*+/=?^_´{|}\-[\]]+/;
+const SpecialCharacterRegex = /[@!#$%&'*+/=?^_´{|}\-[\]]+/;
 const NormalCharacterRegex = /[a-zA-Z]+/;
 
 export class PasswordValidator implements Validator<string> {
