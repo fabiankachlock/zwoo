@@ -39,6 +39,7 @@
               :class="{
                 'play-card-animation': isPlayingCard
               }"
+              @click.stop="handlePlayCard()"
               src="/img/dummy_card.svg"
               alt=""
             >
