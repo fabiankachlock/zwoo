@@ -38,7 +38,7 @@
                                                 <div class="w-100"></div>
                         <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count(x => x.BetaCode != null)}")"/>
                         <div class="w-100"></div>
-                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetBetaCodes().Count()}")"/>
+                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetBetaCodesAsQueryable().Count()}")"/>
                     </div>
                 </div>
             </RadzenCard>

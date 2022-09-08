@@ -12,7 +12,7 @@ public class AccountEvent
     {
         Id = id;
         EventType = eventType;
-        PlayerID = playerId;
+        PlayerId = playerId;
         Success = success;
         TimeStamp = timeStamp;
     }
@@ -24,7 +24,7 @@ public class AccountEvent
     public string EventType { set; get; } = "none";
 
     [BsonElement("player_id")]
-    public ulong PlayerID { set; get; } = 0;
+    public ulong PlayerId { set; get; } = 0;
     
     [BsonElement("success")]
     public bool Success { set; get; }

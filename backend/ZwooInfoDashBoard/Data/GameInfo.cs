@@ -12,11 +12,11 @@ public class GameInfo
     {
         Id = id;
         GameName = gameName;
-        GameID = gameId;
+        GameId = gameId;
         IsPublic = isPublic;
         Scores = scores;
         TimeStamp = timeStamp;
-        Winner = Globals.ZwooDatabase.GetUser((ulong)scores.First(x => x.Score == 0).PlayerID).Username;
+        Winner = Globals.ZwooDatabase.GetUser((ulong)scores.First(x => x.Score == 0).PlayerId).Username;
     }
     
     [BsonElement("_id")]
@@ -25,7 +25,7 @@ public class GameInfo
     [BsonElement("name")]
     public string GameName { set; get; } = "";
     [BsonElement("game_id")]
-    public long GameID { set; get; } = 0;
+    public long GameId { set; get; } = 0;
     [BsonRepresentation(BsonType.Boolean)]
     [BsonElement("is_public")]
     public bool IsPublic { set; get; } = false;
@@ -34,7 +34,7 @@ public class GameInfo
     /// Winner has a Score of 0
     /// </summary>
     [BsonElement("scores")]
-    public List<PlayerScore> Scores;
+    public List<PlayerScore> Scores = null!;
 
     [BsonElement("timestamp")]
     public ulong TimeStamp { set; get; } = 0;
@@ -49,12 +49,12 @@ public class PlayerScore
     [BsonConstructor]
     public PlayerScore(long playerId, int score)
     {
-        PlayerID = playerId;
+        PlayerId = playerId;
         Score = score;
     }
 
     [BsonElement("player_id")]
-    public long PlayerID { set; get; } = 0;
+    public long PlayerId { set; get; } = 0;
 
     [BsonElement("score")]
     public int Score { set; get; } = 0;
@@ -63,11 +63,11 @@ public class PlayerScore
     {
         get
         {
-            if (_player == null)
-                _player = Globals.ZwooDatabase.GetUser((ulong)PlayerID);
+            if (_player.Id == 0)
+                _player = Globals.ZwooDatabase.GetUser((ulong)PlayerId);
             return _player;
         }
     }
 
-    private User _player = null;
+    private User _player = null!;
 }

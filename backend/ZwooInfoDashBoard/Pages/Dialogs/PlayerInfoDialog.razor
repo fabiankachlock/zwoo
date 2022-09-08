@@ -38,8 +38,9 @@
 @code {
     [Parameter] public ulong Id { set; get; }
 
-    private User _player; 
-    private IEnumerable<AccountEvent> _events;
+    private User _player = null!; 
+    private IEnumerable<AccountEvent> _events = null!;
+    
     protected override void OnInitialized()
     {
         _player = Globals.ZwooDatabase.GetUser(Id);

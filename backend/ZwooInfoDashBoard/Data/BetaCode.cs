@@ -20,5 +20,5 @@ public class BetaCode
     public ObjectId Id { set; get; }
     
     [BsonElement("code")]
-    public string Code { set; get; } 
+    public string Code { set; get; } = null!;
 }

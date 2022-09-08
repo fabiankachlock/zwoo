@@ -26,21 +26,21 @@ public class Database
         {
             cm.AutoMap();
             cm.MapCreator(p =>
-                new GameInfo(p.Id, p.GameName, p.GameID, p.IsPublic, p.Scores, p.TimeStamp));
+                new GameInfo(p.Id, p.GameName, p.GameId, p.IsPublic, p.Scores, p.TimeStamp));
         });
         
         BsonClassMap.RegisterClassMap<PlayerScore>(cm =>
         {
             cm.AutoMap();
             cm.MapCreator(p =>
-                new PlayerScore(p.PlayerID, p.Score));
+                new PlayerScore(p.PlayerId, p.Score));
         });
         
         BsonClassMap.RegisterClassMap<AccountEvent>(cm =>
         {
             cm.AutoMap();
             cm.MapCreator(p =>
-                new AccountEvent(p.Id, p.EventType, p.PlayerID, p.Success, p.TimeStamp));
+                new AccountEvent(p.Id, p.EventType, p.PlayerId, p.Success, p.TimeStamp));
         });
         
         
@@ -63,13 +63,13 @@ public class Database
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
 
     }
-
     public IQueryable<GameInfo> GetPlayedGamesAsQueryable() => _gameInfoCollection.AsQueryable();
     public IQueryable<User> GetUsersAsQueryable() => _userCollection.AsQueryable();
-    public IQueryable<BetaCode> GetBetaCodes() => _betacodesCollection.AsQueryable();
+    public IQueryable<BetaCode> GetBetaCodesAsQueryable() => _betacodesCollection.AsQueryable();
     public IQueryable<AccountEvent> GetAccountEventsAsQueryable() => _accountEventsCollection.AsQueryable();
-    public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerID == id);
+    public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerId == id);
     public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
+    public User GetUser(ulong id) => _userCollection.Find(x => x.Id == id).First();
     public User GenerateUser()
     {
         var user = new User();
@@ -80,8 +80,6 @@ public class Database
     }
     public void DeleteUser(User user) => _userCollection.DeleteOne(x => x.Id == user.Id);
     public void InsertBetacode(BetaCode code) => _betacodesCollection.InsertOne(code);
-    public User GetUser(ulong id) => _userCollection.Find(x => x.Id == id).First();
-
     public List<User> GetLeaderboard()
     {
         var players = new List<User>();

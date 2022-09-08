@@ -10,7 +10,7 @@
 <p>List of All Betacodes.</p>
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Code" Click="@InsertBetaCode"/>
-<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="grid"
+<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="_grid"
                 TItem="BetaCode" Data="_codes" AllowVirtualization="true">
     <Columns>
         <RadzenDataGridColumn TItem="BetaCode" Property="Id" Title="_id"/>
@@ -19,13 +19,13 @@
 </RadzenDataGrid>
 
 @code {
-    readonly IQueryable<BetaCode> _codes = Globals.ZwooDatabase.GetBetaCodes();
-    RadzenDataGrid<BetaCode> grid;
+    readonly IQueryable<BetaCode> _codes = Globals.ZwooDatabase.GetBetaCodesAsQueryable();
+    RadzenDataGrid<BetaCode> _grid = null!;
     
     private async Task InsertBetaCode()
     {
         await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true });
-        grid.Reload();
+        await _grid.Reload();
     }
 
 }

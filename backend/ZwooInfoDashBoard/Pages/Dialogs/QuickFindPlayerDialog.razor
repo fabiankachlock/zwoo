@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="row">
-        <RadzenLabel Text="@error" Style="color: red"/>
+        <RadzenLabel Text="@_error" Style="color: red"/>
     </div>
     <div class="row">
         <div class="col-md-12 text-right">
@@ -27,39 +27,43 @@
 @code {
     enum SearchType
     {
-        ID,
-        NAME
+        Id,
+        Name
     }
 
     string _query = "";
-    SearchType _searchType = SearchType.ID;
-    string error = "";
+    SearchType _searchType = SearchType.Id;
+    string _error = "";
 
     private void FindUser()
     {
-        User usr = null;
+        User usr = null!;
         switch (_searchType)
         {
-            case SearchType.ID:
+            case SearchType.Id:
             {
                 if (!ulong.TryParse(_query, out var val))
                 {
-                    error = "ID could not be parsed";
+                    _error = "ID could not be parsed";
                     break;
                 }
+#pragma warning disable CS8600
                 usr = Globals.ZwooDatabase.GetUsersAsQueryable().FirstOrDefault(x => x.Id == val);
+#pragma warning restore CS8600
                 break;
             }
-            case SearchType.NAME:
+            case SearchType.Name:
             {
+#pragma warning disable CS8600
                 usr = Globals.ZwooDatabase.GetUsersAsQueryable().FirstOrDefault(x => x.Username == _query);
+#pragma warning restore CS8600
                 break;
             }
             default:
                 throw new ArgumentOutOfRangeException();
         }
         if (usr == null)
-            error = "User could not be found";
+            _error = "User could not be found";
         else
             DialogService.Close(usr);
     }

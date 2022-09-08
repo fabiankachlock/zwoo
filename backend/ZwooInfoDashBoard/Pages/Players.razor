@@ -11,10 +11,10 @@
 <h1>Players</h1>
 <p>List of All Players.</p>
 
-<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(playerToInsert != null)/>
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(_playerToInsert != null)/>
 <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
-                TItem="User" Data="players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
-                @ref="playerGrid" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+                TItem="User" Data="_players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
+                @ref="_playerGrid" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
     <Columns>
         <RadzenDataGridColumn TItem="User" Property="Id" Title="ID"/>
         <RadzenDataGridColumn TItem="User" Property="Username" Title="Username">
@@ -85,57 +85,55 @@
 
 
 @code {
-    private IQueryable<User> players;
-    RadzenDataGrid<User> playerGrid;
-    User playerToInsert;
-    bool newPlayer = false;
-
-    protected override async Task OnInitializedAsync() => players = Globals.ZwooDatabase.GetUsersAsQueryable();
+    IQueryable<User> _players = Globals.ZwooDatabase.GetUsersAsQueryable();
+    RadzenDataGrid<User> _playerGrid = new RadzenDataGrid<User>();
+    User? _playerToInsert = null;
+    bool _newPlayer = false;
 
     private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
 
-    async Task EditRow(User player) => await playerGrid.EditRow(player);
+    async Task EditRow(User player) => await _playerGrid.EditRow(player);
 
     private async void InsertRow()
     {
-        playerToInsert = Globals.ZwooDatabase.GenerateUser();
-        newPlayer = true;
-        await playerGrid.InsertRow(playerToInsert);
+        _playerToInsert = Globals.ZwooDatabase.GenerateUser();
+        _newPlayer = true;
+        await _playerGrid.InsertRow(_playerToInsert);
     }
     
     private void SaveRow(User player)
     {
-        if (playerToInsert == player)
-            playerToInsert = null;
-        newPlayer = false;
-        playerGrid.UpdateRow(player);
+        if (_playerToInsert == player)
+            _playerToInsert = null;
+        _newPlayer = false;
+        _playerGrid.UpdateRow(player);
     }
 
     private async Task CancelEdit(User player)
     {
-        if (playerToInsert == player)
-            playerToInsert = null;
-        if (newPlayer == true)
+        if (_playerToInsert == player)
+            _playerToInsert = null;
+        if (_newPlayer == true)
             await DeleteRow(player);
-        playerGrid.CancelEditRow(player);
-        await playerGrid.Reload();
+        _playerGrid.CancelEditRow(player);
+        await _playerGrid.Reload();
     }
 
     private async Task DeleteRow(User player)
     {
-        if (playerToInsert == player)
-            playerToInsert = null;
+        if (_playerToInsert == player)
+            _playerToInsert = null;
         var res = await DialogService.Confirm($"Are you sure that you want to delete {player.Username}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
         if (res == null || (bool)!res)
             return;
         Globals.ZwooDatabase.DeleteUser(player);
-        await playerGrid.Reload();
+        await _playerGrid.Reload();
     } 
     
     private void OnUpdateRow(User player)
     {
-        if (playerToInsert == player)
-            playerToInsert = null;
+        if (_playerToInsert == player)
+            _playerToInsert = null;
         Globals.ZwooDatabase.UpdateUser(player);
     }
 
