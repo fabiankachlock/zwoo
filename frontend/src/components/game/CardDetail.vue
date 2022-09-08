@@ -39,21 +39,19 @@
               :class="{
                 'play-card-animation': isPlayingCard
               }"
+              @click.stop="handlePlayCard()"
               src="/img/dummy_card.svg"
               alt=""
             >
               <Card :card="displayCard" image-class="h-full"></Card>
             </div>
           </div>
-          <button
-            @click.stop="handlePlayCard()"
-            class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent"
-            :class="{
+          <button @click.stop="handlePlayCard()" class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent">
+            <!-- TODO: add back when implemented :class="{
               'border-green-600': canPlayCard === CardState.allowed,
               'border-red-500': canPlayCard === CardState.disallowed
-            }"
-          >
-            #play card#
+            }" -->
+            {{ t('ingame.playCard') }}
           </button>
         </div>
       </div>
@@ -81,6 +79,7 @@ import Card from './Card.vue';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Key, useKeyPress } from '@/composables/KeyPress';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
+import { useI18n } from 'vue-i18n';
 
 enum CardState {
   allowed,
@@ -90,6 +89,7 @@ enum CardState {
 
 const ANIMATION_DURATION = 300;
 
+const { t } = useI18n();
 const deckState = useGameCardDeck();
 const gameState = useGameState();
 
@@ -194,6 +194,7 @@ const handlePlayCard = () => {
       targetCard.value = displayCard.value;
       setTimeout(() => {
         deckState.playCard(displayCard.value);
+        _targetCardOverride.value = undefined;
         closeDetail();
       }, ANIMATION_DURATION);
       isPlayingCard.value = false;

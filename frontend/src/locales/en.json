@@ -208,7 +208,8 @@
     "endTurn": "End turn",
     "options": "Options",
     "actions": "Actions",
-    "leave": "Leave Game"
+    "leave": "Leave Game",
+    "playCard": "Play card"
   },
   "recaptcha": {
     "title": "I'm not a robot",

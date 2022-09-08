@@ -208,7 +208,8 @@
     "endTurn": "Zug beenden",
     "options": "Optionen",
     "actions": "Aktionen",
-    "leave": "Spiel Verlassen"
+    "leave": "Spiel Verlassen",
+    "playCard": "Karte legen"
   },
   "recaptcha": {
     "title": "Ich bin kein Roboter",
