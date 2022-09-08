@@ -1,4 +1,4 @@
-import { defaultLanguage, setI18nLanguage } from '@/i18n';
+import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 import router from '@/router';
 import { defineStore } from 'pinia';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
@@ -95,7 +95,11 @@ export const useConfig = defineStore('config', {
       localStorage.setItem(themeKey, JSON.stringify(theme));
     },
     configure() {
-      const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
+      let storedLng = localStorage.getItem(languageKey);
+      if (!storedLng) {
+        const userLng = navigator.language.split('-')[0]?.toLowerCase();
+        storedLng = supportedLanguages.includes(userLng) ? userLng : defaultLanguage;
+      }
       setI18nLanguage(storedLng);
 
       const rawStoredDarkMode = localStorage.getItem(uiKey);
