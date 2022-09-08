@@ -34,11 +34,11 @@ public class WebSocketNotificationManager : NotificationManager
         // TODO: Use zrp errors or remove them from zrp
         if (data.Player != null)
         {
-            _webSockets.SendPlayer((long)data.Player, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
+            _webSockets.SendPlayer((long)data.Player, ZRPEncoder.EncodeToBytes(ErrorToZRPCode(data.Error), new ErrorDTO((int)data.Error, data.Message)), WebSocketMessageType.Text, true);
         }
         else
         {
-            _webSockets.BroadcastGame(this._gameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)data.Error, "")), WebSocketMessageType.Text, true);
+            _webSockets.BroadcastGame(this._gameId, ZRPEncoder.EncodeToBytes(ErrorToZRPCode(data.Error), new ErrorDTO((int)data.Error, data.Message)), WebSocketMessageType.Text, true);
         }
     }
 
@@ -96,5 +96,16 @@ public class WebSocketNotificationManager : NotificationManager
     public void StopGame()
     {
         // TODO: disconnect websocket / handle stop
+    }
+
+    private ZRPCode ErrorToZRPCode(GameError error)
+    {
+        switch (error)
+        {
+            case GameError.CantPlaceCard:
+                return ZRPCode.PlaceCardError;
+            default:
+                return ZRPCode.GeneralError;
+        }
     }
 }
