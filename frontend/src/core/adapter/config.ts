@@ -5,6 +5,7 @@ import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { ConfigService } from '../services/api/Config';
 import { Awaiter } from '../services/helper/Awaiter';
 import { CardThemeManager } from '../services/cards/ThemeManager';
+import { MigrationRunner } from '../services/migrations/MigrationRunner';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -133,6 +134,8 @@ export const useConfig = defineStore('config', {
       if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
         this.serverVersion.callback(version);
       }
+
+      MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
 
       this.$patch({
         showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
