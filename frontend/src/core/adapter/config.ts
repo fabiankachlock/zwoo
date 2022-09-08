@@ -1,10 +1,11 @@
-import { defaultLanguage, setI18nLanguage } from '@/i18n';
+import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 import router from '@/router';
 import { defineStore } from 'pinia';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { ConfigService } from '../services/api/Config';
 import { Awaiter } from '../services/helper/Awaiter';
 import { CardThemeManager } from '../services/cards/ThemeManager';
+import { MigrationRunner } from '../services/migrations/MigrationRunner';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -94,7 +95,11 @@ export const useConfig = defineStore('config', {
       localStorage.setItem(themeKey, JSON.stringify(theme));
     },
     configure() {
-      const storedLng = localStorage.getItem(languageKey) || defaultLanguage;
+      let storedLng = localStorage.getItem(languageKey);
+      if (!storedLng) {
+        const userLng = navigator.language.split('-')[0]?.toLowerCase();
+        storedLng = supportedLanguages.includes(userLng) ? userLng : defaultLanguage;
+      }
       setI18nLanguage(storedLng);
 
       const rawStoredDarkMode = localStorage.getItem(uiKey);
@@ -133,6 +138,8 @@ export const useConfig = defineStore('config', {
       if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
         this.serverVersion.callback(version);
       }
+
+      MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
 
       this.$patch({
         showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',

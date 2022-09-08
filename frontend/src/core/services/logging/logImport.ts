@@ -82,12 +82,17 @@ const setupLogger = (mode: string | null) => {
       _Logger.debug('VERSION_HASH: ' + process.env.VUE_APP_VERSION_HASH);
       _Logger.debug('DOMAIN: ' + process.env.VUE_APP_DOMAIN);
       _Logger.debug('USE_BACKEND: ' + process.env.VUE_APP_USE_BACKEND);
-      _Logger.debug('BACKEND_URL: ' + process.env.VUE_APP_BACKEND_URL);
-      _Logger.debug('WS_OVERRIDE: ' + process.env.VUE_APP_WS_OVERRIDE);
+      _Logger.debug('DEVELOPMENT: ' + process.env.VUE_APP_DEVELOPMENT);
+      _Logger.debug('PROD_BACKEND: ' + process.env.VUE_APP_PROD_BACKEND);
+      _Logger.debug('PROD_WS_OVERRIDE: ' + process.env.VUE_APP_PROD_WS_OVERRIDE);
+      _Logger.debug('DEV_BACKEND: ' + process.env.VUE_APP_DEV_BACKEND);
+      _Logger.debug('DEV_WS_OVERRIDE: ' + process.env.VUE_APP_DEV_WS_OVERRIDE);
       _Logger.debug('I18N_LOCALE: ' + process.env.VUE_APP_I18N_LOCALE);
       _Logger.debug('BETA: ' + process.env.VUE_APP_BETA);
       _Logger.debug('LOG_RUSH_SERVER: ' + process.env.VUE_APP_LOG_RUSH_SERVER);
       _Logger.debug('DEVICE_ID: ' + window.DEVICE_ID);
+      _Logger.debug('NAVIGATOR_LNG: ' + navigator.language);
+      _Logger.debug('USER_AGENT: ' + navigator.userAgent);
       _Logger.debug('--end-config--');
     });
 
