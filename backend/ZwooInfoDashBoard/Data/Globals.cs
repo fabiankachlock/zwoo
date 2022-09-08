@@ -14,9 +14,11 @@ public static class Globals
             return Environment.GetEnvironmentVariable(s)!;
         }
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
+        LogrushDashboardUrl = Environment.GetEnvironmentVariable("LOGRUSH_DASHBOARD") ?? "";
         ZwooDatabase = new Database();
     }
 
     public static string ConnectionString;
+    public static string LogrushDashboardUrl;
     public static Database ZwooDatabase { set; get; }
 }
