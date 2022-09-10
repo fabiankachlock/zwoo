@@ -30,7 +30,6 @@ export const useGameSummary = defineStore('game-summary', () => {
   };
 
   const playAgain = () => {
-    dispatchEvent(ZRPOPCode._ResetState, {});
     router.replace('/game/wait');
   };
 
