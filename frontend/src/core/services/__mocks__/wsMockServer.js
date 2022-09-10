@@ -77,6 +77,11 @@ const exampleMessages = {
   [113]: {},
   [114]: {},
   [115]: {},
+  [116]: {
+    username: 'test-player',
+    wins: 0,
+    role: 1
+  },
   [200]: {
     setting: 'my-setting',
     value: 1
