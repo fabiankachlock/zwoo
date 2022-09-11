@@ -50,6 +50,7 @@ export const useGameState = defineStore('game-state', () => {
       updateGame(msg.data);
     } else if (msg.code == ZRPOPCode.PlayerWon) {
       router.replace('/game/summary');
+      dispatchEvent(ZRPOPCode._ResetState, {});
     }
   };
 
