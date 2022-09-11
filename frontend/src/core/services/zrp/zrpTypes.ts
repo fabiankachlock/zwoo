@@ -215,6 +215,7 @@ export type ZRPPlayerCardAmountPayload = {
   players: {
     username: string;
     cards: number;
+    order: number;
     isActivePlayer: boolean;
   }[];
 };

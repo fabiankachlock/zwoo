@@ -28,8 +28,16 @@ internal sealed class PlayerManager
         return PreparedPlayers.Remove(id);
     }
 
-    public PlayerCycle ComputeOrder()
+    public (PlayerCycle, Dictionary<long, int>) ComputeOrder()
     {
-        return new PlayerCycle(Players);
+        PlayerCycle cycle = new PlayerCycle(Players);
+        Dictionary<long, int> order = new Dictionary<long, int>();
+
+        foreach (long player in Players)
+        {
+            order[player] = cycle.GetOrder(player);
+        }
+
+        return (cycle, order);
     }
 }
