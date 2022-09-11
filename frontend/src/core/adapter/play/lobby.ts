@@ -159,7 +159,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     const player = players.value.find(player => player.id === data.username);
     const spectator = spectators.value.find(player => player.id === data.username);
     const user = player ?? spectator;
-    console.log(data, user);
+
     if (!user) return; // no user existing
     if (data.role === ZRPRole.Player) {
       // changed to player
