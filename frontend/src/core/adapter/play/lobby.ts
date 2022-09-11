@@ -123,7 +123,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         role: role
       });
     }
-    if (pushMessage) {
+    if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Joined`, [data.username]),
         position: SnackBarPosition.Top
@@ -137,7 +137,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     } else {
       removePlayer(players, data.username);
     }
-    if (pushMessage) {
+    if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Left`, [data.username]),
         position: SnackBarPosition.Top
@@ -147,7 +147,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const newHost = (data: ZRPNamePayload, pushMessage = false) => {
     gameHost.value = data.username;
-    if (pushMessage) {
+    if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.changedRoleToHost`, [data.username]),
         position: SnackBarPosition.Top
@@ -169,7 +169,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         id: data.username,
         role: data.role
       });
-      if (pushMessage) {
+      if (pushMessage && data.username !== auth.username) {
         snackbar.pushMessage({
           message: translations.t(`snackbar.lobby.changedRoleToPlayer`, [data.username]),
           position: SnackBarPosition.Top
@@ -183,7 +183,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         id: data.username,
         role: data.role
       });
-      if (pushMessage) {
+      if (pushMessage && data.username !== auth.username) {
         snackbar.pushMessage({
           message: translations.t(`snackbar.lobby.changedRoleToSpectator`, [data.username]),
           position: SnackBarPosition.Top

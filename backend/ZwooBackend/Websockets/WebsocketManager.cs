@@ -68,13 +68,14 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         RemoveWs(gameId, playerId, ws);
         if (game != null)
         {
-            game.Lobby.RemovePlayer(playerId);
-            if (player != null && player.Role == ZRPRole.Spectator)
+            bool sucess = game.Lobby.RemovePlayer(playerId);
+            // only send leave message when the player disconnects
+            if (player != null && player.Role == ZRPRole.Spectator && sucess)
             {
                 // TODO: change player model to include wins
                 await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
             }
-            else if (player != null)
+            else if (player != null && sucess)
             {
                 await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
             }
