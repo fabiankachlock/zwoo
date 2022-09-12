@@ -91,6 +91,7 @@ public sealed class Game
     {
         _logger.Info("resetting game");
         _stateManager.Reset();
+        _playerManager.Reset();
     }
 
     public void HandleEvent(ClientEvent clientEvent)
