@@ -8,24 +8,29 @@ namespace ZwooGameLogic.Game;
 
 internal sealed class PlayerManager
 {
-    private HashSet<long> PreparedPlayers;
+    private HashSet<long> _preparedPlayers;
 
-    public List<long> Players { get => PreparedPlayers.ToList(); }
+    public List<long> Players { get => _preparedPlayers.ToList(); }
     public int PlayerCount { get => PlayerCount; }
 
     public PlayerManager()
     {
-        PreparedPlayers = new HashSet<long>();
+        _preparedPlayers = new HashSet<long>();
     }
 
     public bool AddPlayer(long id)
     {
-        return PreparedPlayers.Add(id);
+        return _preparedPlayers.Add(id);
     }
 
     public bool RemovePlayer(long id)
     {
-        return PreparedPlayers.Remove(id);
+        return _preparedPlayers.Remove(id);
+    }
+
+    public void Reset()
+    {
+        _preparedPlayers.Clear();
     }
 
     public (PlayerCycle, Dictionary<long, int>) ComputeOrder()
