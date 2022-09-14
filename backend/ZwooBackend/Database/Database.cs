@@ -59,7 +59,7 @@ public class Database
         {
             cm.AutoMap();
             cm.MapCreator(c =>
-                new Changelog(c.Version, c.ChangelogText));
+                new Changelog(c.Id, c.Version, c.ChangelogText));
         });
         
         BsonClassMap.RegisterClassMap<AccountEvent>(cm =>
