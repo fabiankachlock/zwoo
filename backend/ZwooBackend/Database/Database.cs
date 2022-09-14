@@ -55,6 +55,13 @@ public class Database
                 new PlayerScore(p.PlayerID, p.Score));
         });
         
+        BsonClassMap.RegisterClassMap<Changelog>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(c =>
+                new Changelog(c.Version, c.ChangelogText));
+        });
+        
         BsonClassMap.RegisterClassMap<AccountEvent>(cm =>
         {
             cm.AutoMap();
@@ -78,6 +85,10 @@ public class Database
         _userCollection = _database.GetCollection<User>("users");
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
+        _changelogCollection = _database.GetCollection<Changelog>("changelogs");
+        
+        if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == Globals.Version) == null)
+            _changelogCollection.InsertOne(new Changelog(Globals.Version, ""));
     }
 
     public (string, ulong, string, string) CreateUser(string username, string email, string password, string? betaCode)
@@ -258,6 +269,8 @@ public class Database
 
     public void CleanDatabase() => DatabaseLogger.Info($"[CleanUp] deleted {_userCollection.DeleteMany(x => x.Verified == false).DeletedCount} user(s).");
 
+    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version);
+    
     // Info Stuff
     
     public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
@@ -286,4 +299,5 @@ public class Database
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<GameInfo> _gameInfoCollection;
     private readonly IMongoCollection<AccountEvent> _accountEventCollection;
+    private readonly IMongoCollection<Changelog> _changelogCollection;
 }
