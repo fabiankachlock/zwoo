@@ -316,8 +316,9 @@
       "spectatorJoined": "Spectator {0} joined",
       "playerLeft": "{0} left",
       "spectatorLeft": "{0} left",
-      "playerChangedRole": "{0} is now Spectator",
-      "spectatorChangedRole": "{0} is now Player"
+      "changedRoleToHost": "{0} is now Host",
+      "changedRoleToPlayer": "{0} is now Player",
+      "changedRoleToSpectator": "{0} is now Spectator"
     }
   },
   "logging": {

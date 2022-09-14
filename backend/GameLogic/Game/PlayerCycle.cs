@@ -17,6 +17,11 @@ internal class PlayerCycle
         get => _players[_currentIndex];
     }
 
+    public List<long> Order
+    {
+        get => _players;
+    }
+
     public PlayerCycle(List<long> players)
     {
         _currentIndex = 0;
@@ -55,5 +60,9 @@ internal class PlayerCycle
         return _players[_currentIndex];
     }
 
+    public int GetOrder(long playerId)
+    {
+        return _players.FindIndex(id => playerId == id);
+    }
 
 }

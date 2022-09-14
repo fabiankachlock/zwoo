@@ -1,5 +1,5 @@
 <template>
-  <div v-if="msg" class="snackbar-container fixed z-50" :class="SnackBarPositionClasses[msg.position]">
+  <div v-if="msg" class="snackbar-container fixed z-50 pointer-events-none" :class="SnackBarPositionClasses[msg.position]">
     <div class="snackbar-box bg-lightest rounded overflow-hidden max-w-xs relative">
       <div class="snackbar-content px-3 pt-2 pb-2 flex flex-row flex-nowrap items-center">
         <p class="text-sm tc-main">

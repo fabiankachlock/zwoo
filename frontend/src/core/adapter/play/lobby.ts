@@ -45,7 +45,6 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const translations = I18nInstance;
   const auth = useAuth();
   const gameConfig = useGameConfig();
-  let isInitialFetch = true;
 
   const addPlayer = (list: Ref<LobbyPlayer[]>, player: LobbyPlayer) => {
     list.value = uniqueBy([...list.value, player], p => p.id);
@@ -57,19 +56,19 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const _receiveMessage: typeof lobbyWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerJoined) {
-      joinPlayer(msg.data, ZRPRole.Player);
+      joinPlayer(msg.data, ZRPRole.Player, true);
     } else if (msg.code === ZRPOPCode.PlayerLeft) {
-      leavePlayer(msg.data, ZRPRole.Player);
+      leavePlayer(msg.data, ZRPRole.Player, true);
     } else if (msg.code === ZRPOPCode.SpectatorJoined) {
-      joinPlayer(msg.data, ZRPRole.Spectator);
+      joinPlayer(msg.data, ZRPRole.Spectator, true);
     } else if (msg.code === ZRPOPCode.SpectatorLeft) {
-      leavePlayer(msg.data, ZRPRole.Spectator);
+      leavePlayer(msg.data, ZRPRole.Spectator, true);
     } else if (msg.code === ZRPOPCode.ListAllPlayers) {
       updatePlayers(msg.data);
     } else if (msg.code === ZRPOPCode.NewHost) {
-      newHost(msg.data);
+      newHost(msg.data, true);
     } else if (msg.code === ZRPOPCode.PlayerChangedRole) {
-      changePlayerRole(msg.data);
+      changePlayerRole(msg.data, true);
     } else if (msg.code === ZRPOPCode.PromoteToHost) {
       gameHost.value = auth.username;
       gameConfig.changeRole(ZRPRole.Host);
@@ -108,10 +107,9 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     for (const addition of [...playerDiff.added, ...spectatorDiff.added]) {
       joinPlayer(addition as unknown as ZRPJoinedGamePayload, addition.role);
     }
-    isInitialFetch = false;
   };
 
-  const joinPlayer = (data: ZRPJoinedGamePayload, role: ZRPRole) => {
+  const joinPlayer = (data: ZRPJoinedGamePayload, role: ZRPRole, pushMessage = false) => {
     if (role === ZRPRole.Spectator) {
       addPlayer(spectators, {
         username: data.username,
@@ -125,7 +123,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         role: role
       });
     }
-    if (!isInitialFetch) {
+    if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Joined`, [data.username]),
         position: SnackBarPosition.Top
@@ -133,13 +131,13 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     }
   };
 
-  const leavePlayer = (data: ZRPLeftGamePayload, role: ZRPRole) => {
+  const leavePlayer = (data: ZRPLeftGamePayload, role: ZRPRole, pushMessage = false) => {
     if (role === ZRPRole.Spectator) {
       removePlayer(spectators, data.username);
     } else {
       removePlayer(players, data.username);
     }
-    if (!isInitialFetch) {
+    if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Left`, [data.username]),
         position: SnackBarPosition.Top
@@ -147,39 +145,54 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     }
   };
 
-  const newHost = (data: ZRPNamePayload) => {
+  const newHost = (data: ZRPNamePayload, pushMessage = false) => {
     gameHost.value = data.username;
+    if (pushMessage && data.username !== auth.username) {
+      snackbar.pushMessage({
+        message: translations.t(`snackbar.lobby.changedRoleToHost`, [data.username]),
+        position: SnackBarPosition.Top
+      });
+    }
   };
 
-  const changePlayerRole = (data: ZRPPlayerWithRolePayload) => {
+  const changePlayerRole = (data: ZRPPlayerWithRolePayload, pushMessage = false) => {
     const player = players.value.find(player => player.id === data.username);
     const spectator = spectators.value.find(player => player.id === data.username);
     const user = player ?? spectator;
 
     if (!user) return; // no user existing
     if (data.role === ZRPRole.Player) {
+      // changed to player
       removePlayer(spectators, data.username);
       addPlayer(players, {
         username: data.username,
         id: data.username,
         role: data.role
       });
+      if (pushMessage && data.username !== auth.username) {
+        snackbar.pushMessage({
+          message: translations.t(`snackbar.lobby.changedRoleToPlayer`, [data.username]),
+          position: SnackBarPosition.Top
+        });
+      }
     } else if (data.role === ZRPRole.Spectator) {
+      // changed to spectator
       removePlayer(players, data.username);
       addPlayer(spectators, {
         username: data.username,
         id: data.username,
         role: data.role
       });
+      if (pushMessage && data.username !== auth.username) {
+        snackbar.pushMessage({
+          message: translations.t(`snackbar.lobby.changedRoleToSpectator`, [data.username]),
+          position: SnackBarPosition.Top
+        });
+      }
     }
     if (data.username === auth.username) {
       gameConfig.changeRole(data.role);
     }
-
-    snackbar.pushMessage({
-      message: translations.t(`snackbar.lobby.${data.role === ZRPRole.Player ? 'spectator' : 'player'}ChangedRole`, [data.username]),
-      position: SnackBarPosition.Top
-    });
   };
 
   const setup = () => {

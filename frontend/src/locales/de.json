@@ -316,8 +316,9 @@
       "spectatorJoined": "Zuschauer {0} ist beigetreten",
       "playerLeft": "{0} hat das Spiel verlassen",
       "spectatorLeft": "{0} hat das Spiel verlassen",
-      "playerChangedRole": "{0} ist nun Zuschauer",
-      "spectatorChangedRole": "{0} ist nun Spieler"
+      "changedRoleToHost": "{0} ist nun Host",
+      "changedRoleToPlayer": "{0} ist nun Spieler",
+      "changedRoleToSpectator": "{0} ist nun Zuschauer"
     }
   },
   "logging": {

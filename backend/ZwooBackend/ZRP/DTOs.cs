@@ -131,6 +131,7 @@ public readonly record struct GetCardAmountDTO(); // empty
 public readonly record struct SendCardAmount_PlayersDTO(
     string Username,
     int Cards,
+    int Order,
     bool IsActivePlayer
 );
 

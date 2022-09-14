@@ -12,6 +12,7 @@ import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 export type GamePlayer = {
   name: string;
   cards: number;
+  order: number;
 };
 
 const gameWatcher = new MonolithicEventWatcher(
@@ -50,6 +51,7 @@ export const useGameState = defineStore('game-state', () => {
       updateGame(msg.data);
     } else if (msg.code == ZRPOPCode.PlayerWon) {
       router.replace('/game/summary');
+      dispatchEvent(ZRPOPCode._ResetState, {});
     }
   };
 
@@ -91,15 +93,18 @@ export const useGameState = defineStore('game-state', () => {
 
   const updatePlayers = (data: ZRPPlayerCardAmountPayload) => {
     let activePlayer: string | undefined;
-    players.value = data.players.map(p => {
-      if (p.isActivePlayer) {
-        activePlayer = p.username;
-      }
-      return {
-        name: p.username,
-        cards: p.cards
-      };
-    });
+    players.value = data.players
+      .map(p => {
+        if (p.isActivePlayer) {
+          activePlayer = p.username;
+        }
+        return {
+          name: p.username,
+          cards: p.cards,
+          order: p.order
+        };
+      })
+      .sort((a, b) => a.order - b.order);
 
     if (activePlayer) {
       activePlayerName.value = activePlayer;

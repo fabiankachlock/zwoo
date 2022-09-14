@@ -65,6 +65,7 @@ public class GameHandler : MessageHandler
         context.GameRecord.Game.Start();
 
         _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GameStarted, new GameStartedDTO()));
+        _webSocketManager.SendPlayer(context.GameRecord.Game.State.ActivePlayer(), ZRPEncoder.EncodeToBytes(ZRPCode.StartTurn, new StartTurnDTO()));
     }
 
     private void HandleCardPlace(UserContext context, ZRPMessage message)
@@ -91,7 +92,6 @@ public class GameHandler : MessageHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
             _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
         }
     }
@@ -106,7 +106,6 @@ public class GameHandler : MessageHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
             _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
         }
     }
@@ -123,7 +122,12 @@ public class GameHandler : MessageHandler
 
         foreach (long player in context.GameRecord.Game.AllPlayers)
         {
-            amounts.Add(new SendCardAmount_PlayersDTO(context.GameRecord.Lobby.GetPlayer(player)!.Username, context.GameRecord.Game.State.GetPlayerCardAmount(player)!.Value, context.GameRecord.Game.State.ActivePlayer() == player));
+            amounts.Add(new SendCardAmount_PlayersDTO(
+                context.GameRecord.Lobby.GetPlayer(player)!.Username, 
+                context.GameRecord.Game.State.GetPlayerCardAmount(player)!.Value,
+                context.GameRecord.Game.State.GetPlayerOrder(player)!.Value,
+                context.GameRecord.Game.State.ActivePlayer() == player
+            ));
         }
 
         _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendCardAmount, new SendCardAmountDTO(amounts.ToArray())));

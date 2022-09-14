@@ -20,6 +20,7 @@ public sealed class GameStateManager
     private GameSettings _gameSettings;
     private GameState _gameState;
     private PlayerCycle _playerCycle;
+    private Dictionary<long, int> _playerOrder;
     private Pile _cardPile;
     private ConcurrentQueue<ClientEvent> _events;
     private bool _isExecutingEvent;
@@ -43,6 +44,7 @@ public sealed class GameStateManager
         _cardPile = new Pile();
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
+        _playerOrder = new Dictionary<long, int>();
         _ruleManager = new RuleManager(meta.Id, _gameSettings);
         _events = new ConcurrentQueue<ClientEvent>();
         _logger = LogManager.GetLogger($"GameState-{Meta.Id}");
@@ -57,7 +59,7 @@ public sealed class GameStateManager
             return;
         }
         _isRunning = true;
-        _playerCycle = _playerManager.ComputeOrder();
+        (_playerCycle, _playerOrder) = _playerManager.ComputeOrder();
         _cardPile = new Pile();
         _ruleManager.Configure();
         _gameState = new GameState(
@@ -132,6 +134,15 @@ public sealed class GameStateManager
         if (_gameState.PlayerDecks.ContainsKey(playerId))
         {
             return _gameState.PlayerDecks[playerId].Count;
+        }
+        return null;
+    }
+
+    public int? GetPlayerOrder(long playerId)
+    {
+        if (_playerOrder.ContainsKey(playerId))
+        {
+            return _playerOrder[playerId];
         }
         return null;
     }
