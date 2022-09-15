@@ -27,9 +27,8 @@ public class GameManager
 
     public long CreateGame(string name, bool isPublic)
     {
-        // TODO: implement password
         Game game = _gameManager.CreateGame(name, isPublic);
-        _games[game.Id] = new GameRecord(game, new LobbyManager(game.Id));
+        _games[game.Id] = new GameRecord(game, new LobbyManager(game.Id, game.Settings));
         return game.Id;
     }
 

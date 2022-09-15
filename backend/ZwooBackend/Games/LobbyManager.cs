@@ -1,4 +1,5 @@
 ﻿using ZwooBackend.ZRP;
+using ZwooGameLogic.Game.Settings;
 
 namespace ZwooBackend.Games;
 
@@ -26,13 +27,15 @@ public class LobbyManager
     private List<PlayerEntry> _preparedPlayers;
     private string _password;
     private bool _usePassword = false;
+    private GameSettings _settings;
 
-    public LobbyManager(long gameId)
+    public LobbyManager(long gameId, GameSettings settings)
     {
         GameId = gameId;
         _players = new List<PlayerEntry>();
         _preparedPlayers = new List<PlayerEntry>();
         _password = "";
+        _settings = settings;
     }
 
     public string Host() => _players.FirstOrDefault(p => p.Role == ZRPRole.Host)?.Username ?? "";
@@ -104,69 +107,73 @@ public class LobbyManager
         }
     }
 
-    public bool Initialize(long hostId, string host, string password, bool usePassword)
+    public LobbyResult Initialize(long hostId, string host, string password, bool usePassword)
     {
-        if (HasHost()) return false;
+        if (HasHost()) return LobbyResult.ErrorAlredyInitialized;
         _preparedPlayers.Add(new PlayerEntry(hostId, host, ZRPRole.Host));
         _password = password;
         _usePassword = usePassword;
-        return true;
+        return LobbyResult.Success;
     }
 
-    public bool AddPlayer(long id, string name, ZRPRole role, string password)
+    public LobbyResult AddPlayer(long id, string name, ZRPRole role, string password)
     {
-        if (HasPlayer(name) || role == ZRPRole.Host || (_usePassword && password != _password) ) return false;
+        if (_usePassword && password != _password) return LobbyResult.ErrorWrongPassword;
+        if (HasPlayer(name) || role == ZRPRole.Host) return LobbyResult.ErrorAlredyInGame;
+        if (PlayerCount() >= _settings.MaxAmountOfPlayers) return LobbyResult.ErrorLobbyFull;
+
         _preparedPlayers.Add(new PlayerEntry(id, name, role));
-        return true;
+        return LobbyResult.Success;
     }
 
-    public bool PlayerConnected(long id)
+    public LobbyResult PlayerConnected(long id)
     {
         try
         {
             PlayerEntry preparedPlayer = _preparedPlayers.First(p => p.Id == id);
             _preparedPlayers.Remove(preparedPlayer);
             _players.Add(preparedPlayer);
-            return true;
+            return LobbyResult.Success;
         }
         catch
         {
-            return false;
+            return LobbyResult.Error;
         }
     }
 
-    public bool RemovePlayer(string name)
+    public LobbyResult RemovePlayer(string name)
     {
         PlayerEntry? player = GetPlayer(name);
-        if (player == null) return false;
+        if (player == null) return LobbyResult.ErrorInvalidPlayer;
         if (player.Role == ZRPRole.Host && PlayersNames().Count > 1)
         {
             PlayerEntry newHost = _players.First(p => p.Role == ZRPRole.Player);
             newHost.Role = ZRPRole.Host;
         }
         _players.RemoveAll(p => p.Username == name);
-        return true;
+        return LobbyResult.Success;
     }
 
-    public bool RemovePlayer(long id) => RemovePlayer(ResolvePlayer(id));
+    public LobbyResult RemovePlayer(long id) => RemovePlayer(ResolvePlayer(id));
 
-    public bool ChangeRole(string name, ZRPRole newRole)
+    public LobbyResult ChangeRole(string name, ZRPRole newRole)
     {
         if (newRole == ZRPRole.Host)
         {
             PlayerEntry? currentHost = GetPlayer(Host());
             PlayerEntry? newHost = GetPlayer(name);
-            if (newHost == null || currentHost == null) return false;
+            if (newHost == null || currentHost == null) return LobbyResult.ErrorInvalidPlayer;
             newHost.Role = ZRPRole.Host;
             currentHost.Role = ZRPRole.Player;
         }
         else
         {
             PlayerEntry? player = GetPlayer(name);
-            if (player == null) return false;
+            if (player == null) return LobbyResult.ErrorInvalidPlayer;
+            if (newRole == ZRPRole.Player && PlayerCount() >= _settings.MaxAmountOfPlayers) return LobbyResult.ErrorLobbyFull;
             player.Role = newRole;
         }
-        return true;
+        return LobbyResult.Success;
     }
 
     public List<PlayerEntry> ListAll() => _players.ToList();
