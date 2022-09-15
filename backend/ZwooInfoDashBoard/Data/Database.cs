@@ -22,6 +22,13 @@ public class Database
                 new BetaCode(p.Id, p.Code));
         });
         
+        BsonClassMap.RegisterClassMap<Changelog>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(c =>
+                new Changelog(c.Id, c.Version, c.ChangelogText));
+        });
+        
         BsonClassMap.RegisterClassMap<GameInfo>(cm =>
         {
             cm.AutoMap();
@@ -61,14 +68,18 @@ public class Database
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventsCollection = _database.GetCollection<AccountEvent>("account_events");
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
+        _changelogCollection = _database.GetCollection<Changelog>("changelogs");
+        
 
     }
     public IQueryable<GameInfo> GetPlayedGamesAsQueryable() => _gameInfoCollection.AsQueryable();
     public IQueryable<User> GetUsersAsQueryable() => _userCollection.AsQueryable();
     public IQueryable<BetaCode> GetBetaCodesAsQueryable() => _betacodesCollection.AsQueryable();
+    public IQueryable<Changelog> GetChangelogs() => _changelogCollection.AsQueryable();
     public IQueryable<AccountEvent> GetAccountEventsAsQueryable() => _accountEventsCollection.AsQueryable();
     public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerId == id);
     public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
+    public void UpdateChangelog(Changelog changelog) => _changelogCollection.ReplaceOne(x => x.Id == changelog.Id, changelog);
     public User GetUser(ulong id) => _userCollection.Find(x => x.Id == id).First();
     public User GenerateUser()
     {
@@ -80,6 +91,13 @@ public class Database
     }
     public void DeleteUser(User user) => _userCollection.DeleteOne(x => x.Id == user.Id);
     public void InsertBetacode(BetaCode code) => _betacodesCollection.InsertOne(code);
+    public Changelog InsertVersion(Changelog changelog)
+    {
+        if (_changelogCollection.AsQueryable().FirstOrDefault(x => x.Version == changelog.Version) == null )
+            _changelogCollection.InsertOne(changelog);
+        return _changelogCollection.AsQueryable().First(x => x.Version == changelog.Version);
+    }
+
     public List<User> GetLeaderboard()
     {
         var players = new List<User>();
@@ -95,4 +113,5 @@ public class Database
     private readonly IMongoCollection<GameInfo> _gameInfoCollection;
     private readonly IMongoCollection<AccountEvent> _accountEventsCollection;
     private readonly IMongoCollection<BetaCode> _betacodesCollection;
+    private readonly IMongoCollection<Changelog> _changelogCollection;
 }

@@ -1,0 +1,35 @@
+@page "/changelog-editor"
+@using ZwooInfoDashBoard.Data
+@using ZwooInfoDashBoard.Pages.Dialogs
+
+@inject DialogService DialogService
+
+<PageTitle>Changelog Editor</PageTitle>
+<h1>Changelog Editor</h1>
+
+<RadzenButton Icon="add_circle_outline" Text="Add Version Changelog" Click="CreateVersion" style="margin-bottom: 10px"/>
+
+<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25"
+                               TItem="Changelog" Data="_changelogs" AllowVirtualization="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="Changelog" Property="Version" Title="Version"/>
+        <RadzenDataGridColumn TItem="Changelog" Property="Changelog" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="220px">
+            <Template Context="changelog">
+                <RadzenButton Text="Edit Changelog" Icon="edit" Click="@(() => DialogService.Open<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true }))"/>
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    IQueryable<Changelog> _changelogs = Globals.ZwooDatabase.GetChangelogs();
+
+    protected override void OnInitialized() => DialogService.OnClose += (o => _changelogs = Globals.ZwooDatabase.GetChangelogs());
+    
+    private async Task CreateVersion()
+    {
+        var res = await DialogService.OpenAsync<AddVersionDialog>("Create version", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "200px", Resizable = false, Draggable = true });
+        if (res is Changelog changelog)
+            await DialogService.OpenAsync<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true });
+    }
+}
