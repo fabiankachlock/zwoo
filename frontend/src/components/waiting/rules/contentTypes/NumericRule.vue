@@ -33,6 +33,6 @@ const emit = defineEmits<{
 }>();
 
 const update = (event: Event) => {
-  emit('update:modelValue', (event.target as unknown as { value: number }).value as number);
+  emit('update:modelValue', new Number((event.target as unknown as { value: number }).value).valueOf());
 };
 </script>
