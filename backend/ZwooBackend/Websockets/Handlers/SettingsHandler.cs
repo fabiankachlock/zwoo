@@ -42,6 +42,12 @@ public class SettingsHandler : MessageHandler
         {
             UpdateSettingDTO payload = message.DecodePyload<UpdateSettingDTO>();
 
+            if (context.Role != ZRPRole.Host)
+            {
+                _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.AccessDeniedError, new ErrorDTO((int)ZRPCode.AccessDeniedError, "you are not the host")));
+                return;
+            }
+
             if (context.GameRecord.Game.Settings.Set(payload.Setting, payload.Value))
             {
                 _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.ChangedSettings, new ChangedSettingsDTO(payload.Setting, payload.Value)));
