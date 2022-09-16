@@ -4,7 +4,7 @@
     <router-view />
   </div>
 
-  <Changelog version="test" />
+  <ChangelogManager />
   <ConsentManager />
   <Snackbar />
 </template>
@@ -15,14 +15,13 @@ import { useConfig } from './core/adapter/config';
 import ConsentManager from './components/cookies/ConsentManager.vue';
 import { useCookies } from './core/adapter/cookies';
 import Snackbar from './components/misc/Snackbar.vue';
-import { onMounted } from 'vue';
-import Changelog from './components/misc/changelog/ChangelogDialog.vue';
+import { defineAsyncComponent, onMounted } from 'vue';
+const ChangelogManager = defineAsyncComponent(() => import(/* webpackChunkName: "changelog" */ '././components/misc/changelog/ChangelogManager.vue'));
 
 useConfig().configure(); // load stored config from localStorage
 useAuth().configure(); // 'read' from may existing session
 const cookies = useCookies();
 cookies.setup();
-
 const asyncSetup = async () => {
   if (cookies.recaptchaCookie) {
     setTimeout(() => {
