@@ -4,6 +4,7 @@
     <router-view />
   </div>
 
+  <Changelog version="test" />
   <ConsentManager />
   <Snackbar />
 </template>
@@ -15,6 +16,7 @@ import ConsentManager from './components/cookies/ConsentManager.vue';
 import { useCookies } from './core/adapter/cookies';
 import Snackbar from './components/misc/Snackbar.vue';
 import { onMounted } from 'vue';
+import Changelog from './components/misc/changelog/ChangelogDialog.vue';
 
 useConfig().configure(); // load stored config from localStorage
 useAuth().configure(); // 'read' from may existing session

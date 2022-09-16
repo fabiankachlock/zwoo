@@ -61,8 +61,7 @@ export const createEmptyBackendError = (): BackendErrorType => ({
 });
 
 export const unwrapBackendError = <T>(value: BackendErrorAble<T> | WithBackendError<T>): [T, undefined] | [undefined, BackendErrorType] => {
-  const hasError = 'error' in value;
-  if (hasError) {
+  if (typeof value === 'object' && value && 'error' in value) {
     return [undefined, value.error as BackendErrorType];
   }
   return [value as T, undefined];
