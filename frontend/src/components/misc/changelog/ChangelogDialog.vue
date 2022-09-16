@@ -108,8 +108,4 @@ const close = () => {
 #changelog ul {
   @apply list-inside list-disc;
 }
-/*#changelog li {*/
-/*  padding-left: 2em;*/
-/*  text-indent: -2em;*/
-/*}*/
 </style>
