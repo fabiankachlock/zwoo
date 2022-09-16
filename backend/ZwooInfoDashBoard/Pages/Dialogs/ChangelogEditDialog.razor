@@ -1,0 +1,38 @@
+@page "/ChangelogEditDialog/{changelog}"
+@using ZwooInfoDashBoard.Data
+
+@inject DialogService DialogService
+
+<RadzenHtmlEditor @bind-Value="@changelog.ChangelogText" Style="flex-grow: 1">
+    <RadzenHtmlEditorUndo />
+    <RadzenHtmlEditorRedo />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorBold />
+    <RadzenHtmlEditorItalic />
+    <RadzenHtmlEditorUnderline />
+    <RadzenHtmlEditorStrikeThrough />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorAlignLeft />
+    <RadzenHtmlEditorAlignCenter />
+    <RadzenHtmlEditorAlignRight />
+    <RadzenHtmlEditorJustify />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorIndent />
+    <RadzenHtmlEditorOutdent />
+    <RadzenHtmlEditorUnorderedList />
+    <RadzenHtmlEditorOrderedList />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorRemoveFormat />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorSubscript />
+    <RadzenHtmlEditorSuperscript />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorFormatBlock />
+</RadzenHtmlEditor>
+
+@code {
+    [Parameter] public Changelog changelog { set; get; }
+
+    protected override void OnInitialized() => DialogService.OnClose += (o => Globals.ZwooDatabase.UpdateChangelog(changelog));
+
+}
