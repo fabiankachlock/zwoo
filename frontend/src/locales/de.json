@@ -358,5 +358,9 @@
     "success": "Der Account wurde erfolgreich verifiziert.",
     "error": "Bei der verifizierung ist ein Fehler aufgetreten.",
     "login": "Einloggen"
+  },
+  "changelog": {
+    "title": "Update {0}",
+    "close": "Schließen"
   }
 }

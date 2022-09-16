@@ -358,5 +358,9 @@
     "success": "Your account has been successfully verified.",
     "error": "An error happened while verifying you account.",
     "login": "Login"
+  },
+  "changelog": {
+    "title": "Update {0}",
+    "close": "Close"
   }
 }
