@@ -6,7 +6,7 @@ const allMigrations: Migration[] = [
   {
     name: 'wrong-default-language',
     version: 'v1.0.0-beta.2',
-    module: () => import(/* webpackChunkName: "game-logic" */ './scripts/0001_migration_beta1-beta2').then(m => m.default)
+    module: () => import(/* webpackChunkName: "migrations" */ './scripts/0001_migration_beta1-beta2').then(m => m.default)
   }
 ];
 

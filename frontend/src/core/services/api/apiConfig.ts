@@ -28,7 +28,8 @@ export enum Endpoint {
   LeaderBoardPosition = 'game/leaderboard/position',
   Games = 'game/games',
   Game = 'game/games/:id:',
-  Version = 'version'
+  Version = 'version',
+  Changelog = 'changelog?version=:version:'
 }
 
 export class Backend {
