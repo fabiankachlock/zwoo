@@ -1,7 +1,7 @@
 <template>
   <FloatingDialog :without-padding="true">
     <div class="sticky top-0 z-10 px-5 pt-5 bg-lightest">
-      <h2 class="tc-main text-xl text-center py-2 bc-darkest border-b">{{ t('changelog.title', ['version']) }}</h2>
+      <h2 class="tc-main text-xl text-center py-2 bc-darkest border-b">{{ t('changelog.title', [version]) }}</h2>
     </div>
     <div id="changelog" :ref="r => changelogWrapper = (r as HTMLDivElement)" class="py-1 px-5"></div>
     <div class="sticky -bottom-[0.5px] bg-lightest px-5 pb-3">
