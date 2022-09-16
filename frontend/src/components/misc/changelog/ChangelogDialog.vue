@@ -1,5 +1,5 @@
 <template>
-  <FloatingDialog :without-padding="true">
+  <FloatingDialog :without-padding="true" v-show="changelog">
     <div class="sticky top-0 z-10 px-5 pt-5 bg-lightest">
       <h2 class="tc-main text-xl text-center py-2 bc-darkest border-b">{{ t('changelog.title', [version]) }}</h2>
     </div>
@@ -63,6 +63,10 @@ const loadVersion = async (version: string) => {
     }
   } catch {
     changelog.value = undefined;
+  }
+  if (changelog.value === undefined) {
+    // don't show empty changelogs
+    close();
   }
 };
 
