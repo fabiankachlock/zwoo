@@ -19,5 +19,5 @@
 </RadzenDataGrid>
 
 @code {
-    readonly IQueryable<AccountEvent> _events = Globals.ZwooDatabase.GetAccountEventsAsQueryable().Where(x => x.EventType == "");
+    readonly IQueryable<AccountEvent> _events = Globals.ZwooDatabase.GetAccountEventsAsQueryable().Where(x => x.EventType == "delete");
 }
