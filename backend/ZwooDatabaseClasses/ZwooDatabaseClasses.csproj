@@ -7,9 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="MongoDB.Bson">
-        <HintPath>..\..\..\..\..\.nuget\packages\mongodb.bson\2.16.1\lib\netstandard2.1\MongoDB.Bson.dll</HintPath>
-      </Reference>
+      <PackageReference Include="MongoDB.Bson" Version="2.17.1" />
     </ItemGroup>
 
 </Project>
