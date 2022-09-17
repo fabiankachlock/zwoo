@@ -22,4 +22,8 @@
     <PackageReference Include="Radzen.Blazor" Version="3.20.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ZwooDatabaseClasses\ZwooDatabaseClasses.csproj" />
+  </ItemGroup>
+
 </Project>

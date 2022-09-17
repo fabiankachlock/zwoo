@@ -23,8 +23,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.Name = "auth";
     o.Cookie.HttpOnly = Globals.UseSsl;
     if (Globals.UseSsl)
+    {
         o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    
+        o.Cookie.SameSite = SameSiteMode.None;
+    }
     o.Cookie.Domain = Globals.ZwooCookieDomain;
 });
 
@@ -87,9 +89,7 @@ var mail_thread = new Thread(() =>
             }
         }
         else
-        {
             Thread.Sleep(500);
-        }
     }
 });
 

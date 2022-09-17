@@ -3,6 +3,7 @@
 <PageTitle>Games Overview</PageTitle>
 
 @using ZwooInfoDashBoard.Data
+@using ZwooDatabaseClasses
 
 <h1>Games Overview</h1>
 <p>Tabel with all Played Games and the Scores of every Player.</p>
@@ -17,17 +18,7 @@
                 <RadzenDataGridColumn TItem="PlayerScore" Property="Score" Title="Score"/>
                 <RadzenDataGridColumn TItem="PlayerScore" Property="Player" Title="Name">
                     <Template Context="score">
-                        @score.Player.Username
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PlayerScore" Property="Player" Title="Email">
-                    <Template Context="score">
-                        @score.Player.Email
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PlayerScore" Property="Player" Title="Wins">
-                    <Template Context="score">
-                        @score.Player.Wins
+                        @score.PlayerUsername
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
