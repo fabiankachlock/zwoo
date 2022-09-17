@@ -1,13 +1,12 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ZwooBackend.Database;
+namespace ZwooDatabaseClasses;
 
 public class AccountEvent
 {
     public AccountEvent() {}
-    
-    [BsonConstructor]
+
     public AccountEvent(string eventType, ulong playerId, bool success, ulong timeStamp)
     {
         EventType = eventType;
@@ -15,6 +14,19 @@ public class AccountEvent
         Success = success;
         TimeStamp = timeStamp;
     }
+    
+    [BsonConstructor]
+    public AccountEvent(ObjectId id, string eventType, ulong playerId, bool success, ulong timeStamp)
+    {
+        Id = id;
+        EventType = eventType;
+        PlayerID = playerId;
+        Success = success;
+        TimeStamp = timeStamp;
+    }
+    
+    [BsonElement("_id")]
+    public ObjectId Id { set; get; }
     
     [BsonElement("event_type")]
     public string EventType { set; get; } = "none";

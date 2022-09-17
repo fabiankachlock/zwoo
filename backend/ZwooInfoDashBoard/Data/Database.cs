@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using ZwooDatabaseClasses;
 
 namespace ZwooInfoDashBoard.Data;
 
@@ -8,49 +9,6 @@ public class Database
 {
     public Database()
     {
-        BsonClassMap.RegisterClassMap<User>(cm =>
-        {
-            cm.AutoMap();
-            cm.MapCreator(p =>
-                new User(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.ValidationCode, p.Verified));
-        });
-        
-        BsonClassMap.RegisterClassMap<BetaCode>(cm =>
-        {
-            cm.AutoMap();
-            cm.MapCreator(p =>
-                new BetaCode(p.Id, p.Code));
-        });
-        
-        BsonClassMap.RegisterClassMap<Changelog>(cm =>
-        {
-            cm.AutoMap();
-            cm.MapCreator(c =>
-                new Changelog(c.Id, c.Version, c.ChangelogText));
-        });
-        
-        BsonClassMap.RegisterClassMap<GameInfo>(cm =>
-        {
-            cm.AutoMap();
-            cm.MapCreator(p =>
-                new GameInfo(p.Id, p.GameName, p.GameId, p.IsPublic, p.Scores, p.TimeStamp));
-        });
-        
-        BsonClassMap.RegisterClassMap<PlayerScore>(cm =>
-        {
-            cm.AutoMap();
-            cm.MapCreator(p =>
-                new PlayerScore(p.PlayerId, p.Score));
-        });
-        
-        BsonClassMap.RegisterClassMap<AccountEvent>(cm =>
-        {
-            cm.AutoMap();
-            cm.MapCreator(p =>
-                new AccountEvent(p.Id, p.EventType, p.PlayerId, p.Success, p.TimeStamp));
-        });
-        
-        
         var client = new MongoClient(Globals.ConnectionString);
         Console.WriteLine($"connected to {Globals.ConnectionString}");
 
@@ -77,7 +35,7 @@ public class Database
     public IQueryable<BetaCode> GetBetaCodesAsQueryable() => _betacodesCollection.AsQueryable();
     public IQueryable<Changelog> GetChangelogs() => _changelogCollection.AsQueryable();
     public IQueryable<AccountEvent> GetAccountEventsAsQueryable() => _accountEventsCollection.AsQueryable();
-    public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerId == id);
+    public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerID == id);
     public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
     public void UpdateChangelog(Changelog changelog) => _changelogCollection.ReplaceOne(x => x.Id == changelog.Id, changelog);
     public User GetUser(ulong id) => _userCollection.Find(x => x.Id == id).First();
