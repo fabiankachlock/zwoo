@@ -1,0 +1,173 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ZwooGameLogic.Game;
+using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.Game.Rules;
+using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.State;
+
+namespace GameLogic.Game.Rules;
+
+internal class AddUpDrawRule: BaseRule
+{
+    public override int Priority
+    {
+        get => RulePriorirty.GameLogicExtendions;
+    }
+
+    public override string Name
+    {
+        get => "AddUpDrawRule";
+    }
+
+    public override GameSettingsKey? AssociatedOption
+    {
+        get => GameSettingsKey.DEFAULT_RULE_SET;
+    }
+
+    private BaseRule _placeCardRule;
+    private BaseRule _drawRule;
+
+    public AddUpDrawRule() : base() 
+    {
+        _placeCardRule = new AddUpDrawRule_PlaceCard();
+        _drawRule = new AddUpDrawRule_Draw();
+    }
+
+    public override bool IsResponsible(ClientEvent clientEvent, GameState state)
+    {
+        return _placeCardRule.IsResponsible(clientEvent, state) || _drawRule.IsResponsible(clientEvent, state);
+    }
+
+    public override GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    {
+        if (_placeCardRule.IsResponsible(clientEvent, state))
+        {
+            return _placeCardRule.ApplyRule(clientEvent, state, cardPile, playerOrder);
+        }
+        if (_drawRule.IsResponsible(clientEvent, state))
+        {
+            return _drawRule.ApplyRule(clientEvent, state, cardPile, playerOrder);
+        }
+        return GameStateUpdate.None(state);
+    }
+}
+
+internal class AddUpDrawRule_PlaceCard: BaseCardRule
+{
+    public override string Name
+    {
+        get => "AddUpDrawRule_PlaceCard";
+    }
+
+    public AddUpDrawRule_PlaceCard() : base() { }
+
+    public override bool IsResponsible(ClientEvent gameEvent, GameState state)
+    {
+        return gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsDraw(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card);
+    }
+
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    {
+        if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
+        List<GameEvent> events = new List<GameEvent>();
+
+        ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
+        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card);
+        if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
+        {
+            state = PlayPlayerCard(state, payload.Player, payload.Card);
+            (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+            events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
+            return new GameStateUpdate(state, events);
+        }
+
+        return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+    }
+}
+
+internal class AddUpDrawRule_Draw : BaseDrawRule
+{
+    public override string Name
+    {
+        get => "AddUpDrawRule_Draw";
+    }
+
+    public AddUpDrawRule_Draw() : base() { }
+
+    public override bool IsResponsible(ClientEvent gameEvent, GameState state)
+    {
+        return gameEvent.Type == ClientEventType.DrawCard && CardUtilities.IsDraw(state.TopCard.Card);
+    }
+
+
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    {
+        if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
+        List<GameEvent> events = new List<GameEvent>();
+
+        int amount = 0;
+        ClientEvent.DrawCardEvent payload = gameEvent.CastPayload<ClientEvent.DrawCardEvent>();
+
+
+        if (!IsActivePlayer(state, payload.Player))
+        {
+            return GameStateUpdate.None(state);
+        }
+
+        if (CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated)
+        {
+            amount = GetRecursiveDrawAmount(state.CardStack);
+            state.CardStack = ActiveCardsRecursive(state.CardStack);
+            state.TopCard.ActivateEvent();
+        }
+        else
+        {
+            amount = 1;
+        }
+
+
+        List<Card> newCards;
+        (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
+        (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+        foreach (Card card in newCards)
+        {
+            events.Add(GameEvent.SendCard(payload.Player, card));
+        }
+
+
+        return new GameStateUpdate(state, events);
+    }
+
+    protected int GetRecursiveDrawAmount(List<StackCard> stack)
+    {
+        int amount = 0;
+        for (int i = stack.Count-1; i >= 0; i--) 
+        {
+            if (stack[i].EventActivated || !CardUtilities.IsDraw(stack[i].Card))
+            {
+                break;
+            }
+            amount += GetDrawAmount(stack[i].Card);
+        }
+        return amount;
+    }
+
+    protected List<StackCard> ActiveCardsRecursive(List<StackCard> stack)
+    {
+        for (int i = stack.Count-1; i >= 0; i--)
+        {   
+            if (stack[i].EventActivated || !CardUtilities.IsDraw(stack[i].Card))
+            {
+                break;
+            }
+            stack[i].ActivateEvent();
+        }
+        return stack;
+    }
+
+}
