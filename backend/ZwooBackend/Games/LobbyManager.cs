@@ -120,7 +120,7 @@ public class LobbyManager
     {
         if (_usePassword && password != _password) return LobbyResult.ErrorWrongPassword;
         if (HasPlayer(name) || role == ZRPRole.Host) return LobbyResult.ErrorAlredyInGame;
-        if (PlayerCount() >= _settings.MaxAmountOfPlayers) return LobbyResult.ErrorLobbyFull;
+        if (PlayerCount() >= _settings.MaxAmountOfPlayers && role != ZRPRole.Spectator) return LobbyResult.ErrorLobbyFull;
 
         _preparedPlayers.Add(new PlayerEntry(id, name, role));
         return LobbyResult.Success;
