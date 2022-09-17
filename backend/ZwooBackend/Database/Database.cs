@@ -113,11 +113,13 @@ public class Database
     public bool VerifyUser(ulong id, string code)
     {
         DatabaseLogger.Debug($"[User] verifying {id}");
-        var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == id && x.BetaCode == code);
+        var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == id && x.ValidationCode == code);
+        
+        if (user != null) return false;
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
-        var update = Builders<User>.Update.Set(u => u.Verified, true);
-        var res = _userCollection.UpdateOne(x => x.Id == id && x.BetaCode == code, update).ModifiedCount != 0;
+        
+        var res = _userCollection.UpdateOne(x => x.Id == id && x.BetaCode == code, Builders<User>.Update.Set(u => u.Verified, true)).ModifiedCount != 0;
         VerifyAttempt(id, res);
         return res;
     }
