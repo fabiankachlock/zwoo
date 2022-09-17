@@ -36,15 +36,13 @@ public partial class GameInfo
     public long GameId { set; get; } = 0;
     [BsonElement("is_public")]
     public bool IsPublic { set; get; } = false;
-    /// <summary>
-    /// PlayerID, Score
-    /// Winner has a Score of 0
-    /// </summary>
     [BsonElement("scores")]
     public List<PlayerScore> Scores = null!;
-
     [BsonElement("timestamp")]
     public ulong TimeStamp { set; get; } = 0;
+    
+    [BsonIgnore]
+    public string Winner => Scores.First(x => x.Score == 0).PlayerUsername;
 }
 
 public class PlayerScore
