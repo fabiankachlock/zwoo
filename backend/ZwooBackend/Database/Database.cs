@@ -159,7 +159,7 @@ public class Database
     {
         user = new User();
         var cookieData = cookie.Split(",");
-        var u = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
+        user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
         if (user == null)
             return false;
         if (user.Sid == cookieData[1])
@@ -190,7 +190,7 @@ public class Database
             return false;
         }
         _userCollection.DeleteOne(x => x.Id == user.Id);
-        DeleteAttempt(user.Id, true);
+        DeleteAttempt(user.Id, true, user);
         return true;
     }
 
@@ -225,7 +225,6 @@ public class Database
         DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} user(s).");
         foreach (var user in users)
             DeleteAttempt(user.Id, _userCollection.DeleteOne(x => x.Id == user.Id).DeletedCount == 1);
-
     }
 
     public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version);
@@ -250,10 +249,15 @@ public class Database
         _accountEventCollection.InsertOne(new AccountEvent("logout", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
     
-    private void DeleteAttempt(ulong puid, bool success) =>
-        _accountEventCollection.InsertOne(new AccountEvent("delete", puid, success,
-            (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+    private void DeleteAttempt(ulong puid, bool success, User? user = null)
+    {
+        var u = new AccountEvent("delete", puid, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds())
+        {
+            UserData = new DeletedUserData(user)
+        };
+        _accountEventCollection.InsertOne(u);
+    }
+
     private readonly IMongoDatabase _database;
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<GameInfo> _gameInfoCollection;
