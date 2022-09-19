@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,7 +57,7 @@ internal class AddUpDrawRule: BaseRule
     }
 }
 
-internal class AddUpDrawRule_PlaceCard: BaseCardRule
+internal class AddUpDrawRule_PlaceCard: BaseWildCardRule
 {
     public override string Name
     {
@@ -68,25 +68,41 @@ internal class AddUpDrawRule_PlaceCard: BaseCardRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsDraw(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card);
+        return (gameEvent.Type == ClientEventType.PlaceCard 
+            && CardUtilities.IsDraw(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card)
+        ) || base.IsResponsible(gameEvent, state);
     }
 
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
 
-        ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card);
-        if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
+        if (gameEvent.Type == ClientEventType.PlaceCard)
         {
-            state = PlayPlayerCard(state, payload.Player, payload.Card);
-            (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
-            events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return new GameStateUpdate(state, events);
+            ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
+            bool isNormalWild = CardUtilities.IsWild(payload.Card) && !CardUtilities.IsDraw(payload.Card);
+            bool isAllowed = isNormalWild ? IsAllowedToThrowCard(state.TopCard, payload.Card) : CanThrowCard(state.TopCard.Card, payload.Card);
+            if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
+            {
+                if (CardUtilities.IsWild(payload.Card))
+                {
+                    return HandlePlaceWild(gameEvent, state);
+                }
+                else
+                {
+                    List<GameEvent> events = new List<GameEvent>();
+                    state = PlayPlayerCard(state, payload.Player, payload.Card);
+                    (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+                    events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
+                    return new GameStateUpdate(state, events);
+                }
+            }
+            else
+            {
+                return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+            }
         }
-
-        return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+        return HandleDecission(gameEvent, state, playerOrder);
     }
 }
 

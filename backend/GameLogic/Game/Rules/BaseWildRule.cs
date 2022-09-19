@@ -43,36 +43,48 @@ internal class BaseWildCardRule : BaseCardRule
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
 
         if (gameEvent.Type == ClientEventType.PlaceCard)
         {
             ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-            bool isAllowed = IsAllowedToThrowCard(state.TopCard, payload.Card) && IsActivePlayer(state, payload.Player);
+            bool isAllowed = IsAllowedToThrowCard(state.TopCard, payload.Card) && IsActivePlayer(state, payload.Player) && PlayerHasCard(state, payload.Player, payload.Card);
             if (isAllowed)
             {
-                _storedEvent = new StoredEvent(payload.Player, payload.Card);
-                events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecission.SelectColor));
-                return new GameStateUpdate(state, events);
+                return HandlePlaceWild(gameEvent, state);
             }
             else
             {
                 return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
             }
         }
-        else
+        return HandleDecission(gameEvent, state, playerOrder);
+    }
+
+    protected GameStateUpdate HandlePlaceWild(ClientEvent gameEvent, GameState state)
+    {
+        List<GameEvent> events = new List<GameEvent>();
+        ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
+
+        _storedEvent = new StoredEvent(payload.Player, payload.Card);
+        events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecission.SelectColor));
+        
+        return new GameStateUpdate(state, events);
+    }
+
+    protected GameStateUpdate HandleDecission(ClientEvent gameEvent, GameState state, PlayerCycle playerOrder)
+    {
+        List<GameEvent> events = new List<GameEvent>();
+        ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();
+        
+        if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
         {
-            ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();
-            if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
-            {
-                Card newCard = new Card((CardColor)payload.Value, _storedEvent.Value.Card.Type);
-                state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
-                state = PlaceCardOnStack(state, newCard);
-                (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
-                events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
-                _storedEvent = null;
-                return new GameStateUpdate(state, events);
-            }
+            Card newCard = new Card((CardColor)payload.Value, _storedEvent.Value.Card.Type);
+            state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
+            state = PlaceCardOnStack(state, newCard);
+            (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+            events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
+            _storedEvent = null;
+            return new GameStateUpdate(state, events);
         }
         return GameStateUpdate.None(state);
     }
