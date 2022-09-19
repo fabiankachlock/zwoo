@@ -47,20 +47,26 @@ internal class BaseWildCardRule : BaseCardRule
         if (gameEvent.Type == ClientEventType.PlaceCard)
         {
             ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-            bool isAllowed = IsAllowedToThrowCard(state.TopCard, payload.Card) && IsActivePlayer(state, payload.Player) && PlayerHasCard(state, payload.Player, payload.Card);
+            bool isAllowed = IsAllowedCard(state.TopCard, payload.Card) && IsActivePlayer(state, payload.Player) && PlayerHasCard(state, payload.Player, payload.Card);
             if (isAllowed)
             {
-                return HandlePlaceWild(gameEvent, state);
+                return PerformHandlePlaceWild(gameEvent, state);
             }
             else
             {
                 return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
             }
         }
-        return HandleDecission(gameEvent, state, playerOrder);
+        return PerformHandleDecission(gameEvent, state, playerOrder);
     }
 
-    protected GameStateUpdate HandlePlaceWild(ClientEvent gameEvent, GameState state)
+    /// <summary>
+    /// place a players wild card
+    /// </summary>
+    /// <param name="gameEvent">incoming client event</param>
+    /// <param name="state">game state object</param>
+    /// <returns>the game state update to return to the client</returns>
+    protected GameStateUpdate PerformHandlePlaceWild(ClientEvent gameEvent, GameState state)
     {
         List<GameEvent> events = new List<GameEvent>();
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
@@ -71,7 +77,14 @@ internal class BaseWildCardRule : BaseCardRule
         return new GameStateUpdate(state, events);
     }
 
-    protected GameStateUpdate HandleDecission(ClientEvent gameEvent, GameState state, PlayerCycle playerOrder)
+    /// <summary>
+    /// handle an incoming player decision
+    /// </summary>
+    /// <param name="gameEvent">incoming client event</param>
+    /// <param name="state">game state object</param>
+    /// <param name="playerOrder">cycle of players</param>
+    /// <returns></returns>
+    protected GameStateUpdate PerformHandleDecission(ClientEvent gameEvent, GameState state, PlayerCycle playerOrder)
     {
         List<GameEvent> events = new List<GameEvent>();
         ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();
@@ -80,7 +93,7 @@ internal class BaseWildCardRule : BaseCardRule
         {
             Card newCard = new Card((CardColor)payload.Value, _storedEvent.Value.Card.Type);
             state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
-            state = PlaceCardOnStack(state, newCard);
+            state = AddCardToStack(state, newCard);
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
             _storedEvent = null;
@@ -88,4 +101,6 @@ internal class BaseWildCardRule : BaseCardRule
         }
         return GameStateUpdate.None(state);
     }
+
+    // TODO: provide IsResponsible helpers
 }

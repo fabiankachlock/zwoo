@@ -81,12 +81,12 @@ internal class AddUpDrawRule_PlaceCard: BaseWildCardRule
         {
             ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
             bool isNormalWild = CardUtilities.IsWild(payload.Card) && !CardUtilities.IsDraw(payload.Card);
-            bool isAllowed = isNormalWild ? IsAllowedToThrowCard(state.TopCard, payload.Card) : CanThrowCard(state.TopCard.Card, payload.Card);
+            bool isAllowed = isNormalWild ? IsAllowedCard(state.TopCard, payload.Card) : IsFittingCard(state.TopCard.Card, payload.Card);
             if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
             {
                 if (CardUtilities.IsWild(payload.Card))
                 {
-                    return HandlePlaceWild(gameEvent, state);
+                    return PerformHandlePlaceWild(gameEvent, state);
                 }
                 else
                 {
@@ -102,7 +102,7 @@ internal class AddUpDrawRule_PlaceCard: BaseWildCardRule
                 return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
             }
         }
-        return HandleDecission(gameEvent, state, playerOrder);
+        return PerformHandleDecission(gameEvent, state, playerOrder);
     }
 }
 

@@ -71,6 +71,11 @@ internal class BaseDrawRule : BaseRule
     }
 
     // Rule utilities
+    /// <summary>
+    /// get the draw amount of a card
+    /// </summary>
+    /// <param name="card">card</param>
+    /// <returns>the amount of card a player should draw</returns>
     protected int GetDrawAmount(Card card)
     {
         if (card.Type == CardType.DrawTwo) return 2;
@@ -78,6 +83,14 @@ internal class BaseDrawRule : BaseRule
         else return 0;
     }
 
+    /// <summary>
+    /// draw a certain amount of cards for a player
+    /// </summary>
+    /// <param name="state">game state object</param>
+    /// <param name="player">ID of the player</param>
+    /// <param name="amount">amount of cards to draw</param>
+    /// <param name="pile">games card pile</param>
+    /// <returns>updated game state and drawn cards</returns>
     protected (GameState, List<Card>) DrawCardsForPlayer(GameState state, long player, int amount, Pile pile)
     {
         List<Card> newCards = new List<Card>();
@@ -88,4 +101,6 @@ internal class BaseDrawRule : BaseRule
         state.PlayerDecks[player].AddRange(newCards);
         return (state, newCards);
     }
+
+    // TODO: add PerformBasicDraw() method as ApplyRule wrapper
 }
