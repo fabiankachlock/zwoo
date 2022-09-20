@@ -1,9 +1,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ZwooInfoDashBoard.Data;
+namespace ZwooDatabaseClasses;
 
-public class BetaCode
+public partial class BetaCode
 {
     BetaCode() {}
 

@@ -31,7 +31,8 @@ public static class ErrorCodes
         OPCODE_MISSING = 143,
         INVALID_OPCODE = 144,
         INVALID_GAMEID = 145,
-        ALREADY_INGAME = 146
+        ALREADY_INGAME = 146,
+        GAME_FULL = 147,
     };
 
     public static string GetErrorResponseMessage(Errors code, string text)

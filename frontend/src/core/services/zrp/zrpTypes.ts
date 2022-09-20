@@ -64,6 +64,7 @@ export enum ZRPOPCode {
   // Errors
   GeneralError = 400, // receiver
   AccessDeniedError = 420, // receiver
+  LobbyFullError = 421, // receiver
   EndTurnError = 433, // receiver
   PlaceCardError = 434, // receiver
   // internal Errors
@@ -135,6 +136,7 @@ export type ZRPPayloadMap = {
   // Errors
   [ZRPOPCode.GeneralError]: ZRPErrorPayload;
   [ZRPOPCode.AccessDeniedError]: ZRPErrorPayload;
+  [ZRPOPCode.LobbyFullError]: ZRPErrorPayload;
   [ZRPOPCode.EndTurnError]: ZRPErrorPayload;
   [ZRPOPCode.PlaceCardError]: ZRPErrorPayload;
   // internal Errors

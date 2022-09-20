@@ -47,10 +47,10 @@ public class AuthenticationController : Controller
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_USERNAME, "Username Invalid!"));
         if (!StringHelper.IsValidPassword(body.password))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
-        if (Globals.ZwooDatabase.EntryExists("username", body.username))
+        if (Globals.ZwooDatabase.UsernameExists(body.username))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USERNAME_ALREADY_TAKEN,
                 "Username already Exists!"));
-        if (Globals.ZwooDatabase.EntryExists("email", body.email))
+        if (Globals.ZwooDatabase.EmailExists(body.email))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.EMAIL_ALREADY_TAKEN,
                 "Email already Exists!"));
         

@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using ZwooInfoDashBoard.Data
 @using ZwooInfoDashBoard.Pages.Dialogs
+@using ZwooDatabaseClasses
 
 <PageTitle>Home</PageTitle>
 
@@ -46,6 +47,7 @@
                 <h2>Quick Actions</h2>
                 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Code" Click="@(async () => await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true }))"/>
                 <RadzenButton Icon="search" style="margin-bottom: 10px" Text="Quick Find Player" Click="QuickFindPlayer"/>
+                <RadzenButton Icon="add_circle_outline" Text="Add Version Changelog" Click="CreateVersion"/>
             </RadzenCard>
         </div>
         <div class="col">
@@ -78,5 +80,12 @@
         var res = await DialogService.OpenAsync<QuickFindPlayerDialog>("Quick Find Player", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "200px", Resizable = false, Draggable = true });
         if (res is User usr)
             await OpenPlayer(usr.Id);
+    }
+
+    private async Task CreateVersion()
+    {
+        var res = await DialogService.OpenAsync<AddVersionDialog>("Create version", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "200px", Resizable = false, Draggable = true });
+        if (res is Changelog changelog)
+            await DialogService.OpenAsync<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true });
     }
 }

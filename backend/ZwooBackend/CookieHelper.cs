@@ -5,6 +5,7 @@ using System.Text;
 using BackendHelper;
 using ZwooBackend.Controllers;
 using ZwooBackend.Database;
+using ZwooDatabaseClasses;
 
 namespace ZwooBackend;
 
