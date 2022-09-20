@@ -1,11 +1,14 @@
 <template>
   <p v-if="readonly" class="tc-main-light leading-tight">{{ modelValue }}</p>
+  <!-- TODO: make min & max danymic -->
   <input
     v-else
     autocomplete=""
     class="bg-dark shadow appearance-none border bc-main rounded w-20 h-full py-1 px-2 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
     :name="name ?? 'rule-input'"
     type="number"
+    min="1"
+    max="20"
     :id="name ?? 'rule-input'"
     :placeholder="placeholder ?? t('rules.widget.numberPlaceholder')"
     :value="modelValue"
@@ -33,6 +36,8 @@ const emit = defineEmits<{
 }>();
 
 const update = (event: Event) => {
-  emit('update:modelValue', (event.target as unknown as { value: number }).value as number);
+  const num = new Number((event.target as unknown as { value: number }).value).valueOf();
+  // TODO: make min & max dynamic
+  emit('update:modelValue', num < 1 ? 1 : num > 20 ? 20 : num);
 };
 </script>
