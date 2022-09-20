@@ -26,7 +26,7 @@ internal class AddUpDrawRule: BaseRule
 
     public override GameSettingsKey? AssociatedOption
     {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
+        get => GameSettingsKey.AddUpDraw;
     }
 
     private BaseRule _placeCardRule;

@@ -1,4 +1,4 @@
-export const AllRules = ['maxPlayers', 'initialCards'];
+export const AllRules = ['maxPlayers', 'initialCards', 'addUpDraw'];
 
 export enum RuleType {
   Numeric,
@@ -9,5 +9,6 @@ export const EditableRules = [...AllRules] as string[]; // AllRules; TODO: Allow
 
 export const RuleTypeDefinitions: Record<typeof AllRules[number], RuleType> = {
   maxPlayers: RuleType.Numeric,
-  initialCards: RuleType.Numeric
+  initialCards: RuleType.Numeric,
+  addUpDraw: RuleType.Boolean
 };
