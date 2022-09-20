@@ -20,7 +20,7 @@
         <PlayersWidget />
         <SpectatorsWidget />
         <RulesWidget />
-        <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
+        <!-- <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div> -->
       </div>
       <div class="main-content hidden md:grid grid-cols-2 gap-2 mx-auto max-w-5xl">
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">

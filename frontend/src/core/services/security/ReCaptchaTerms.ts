@@ -4,10 +4,10 @@ import { RouteLocationNormalized } from 'vue-router';
 export class ReCaptchaTermsVisibilityManager {
   private static instance = new ReCaptchaTermsVisibilityManager();
 
-  private badge: Element | null = null;
+  private getBadgeElement: () => Element | null = () => null;
 
   static init = (): void => {
-    ReCaptchaTermsVisibilityManager.instance.badge = document.querySelector('.grecaptcha-badge');
+    ReCaptchaTermsVisibilityManager.instance.getBadgeElement = () => document.querySelector('.grecaptcha-badge');
   };
 
   static updateState = (): void => {
@@ -19,11 +19,11 @@ export class ReCaptchaTermsVisibilityManager {
   };
 
   static showBadge = (): void => {
-    ReCaptchaTermsVisibilityManager.instance.badge?.classList.remove('hidden');
+    ReCaptchaTermsVisibilityManager.instance.getBadgeElement()?.classList.add('visible');
   };
 
   static hideBadge = (): void => {
-    ReCaptchaTermsVisibilityManager.instance.badge?.classList.add('hidden');
+    ReCaptchaTermsVisibilityManager.instance.getBadgeElement()?.classList.remove('visible');
   };
 }
 
