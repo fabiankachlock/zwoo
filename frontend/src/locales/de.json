@@ -193,13 +193,9 @@
       "title": "Spieleranzahl",
       "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."
     },
-    "maxDraw": {
-      "title": "Max. Ziehmenge",
-      "info": "Lege eine maximale Anzahl an Karten fest, die auf einmal gezogen werden darf."
-    },
-    "maxCardsOnHand": {
-      "title": "Max. Karten auf der Hand",
-      "info": "Lege eine maximale Anzahl an Karten fest, die ein Spieler auf der Hand haben darf."
+    "addUpDraw": {
+      "title": "Ziehkarten addieren",
+      "info": "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."
     },
     "initialCards": {
       "title": "Anzahl an Karten",

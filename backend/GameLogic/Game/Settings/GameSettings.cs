@@ -20,6 +20,11 @@ public struct GameSettings
         get => _settings[GameSettingsKey.NumberOfCards];
     }
 
+    public bool AddUpDrawRuleEnabled
+    {
+        get => _settings[GameSettingsKey.AddUpDraw] != 0;
+    }
+
     private GameSettings(Dictionary<GameSettingsKey, int> initialSettings)
     {
         _settings = initialSettings;
@@ -31,6 +36,7 @@ public struct GameSettings
         settings.Add(GameSettingsKey.DEFAULT_RULE_SET, 1);
         settings.Add(GameSettingsKey.MaxAmountOfPlayers, 5);
         settings.Add(GameSettingsKey.NumberOfCards, 7);
+        settings.Add(GameSettingsKey.AddUpDraw, 1);
         return new GameSettings(settings);
     }
 
