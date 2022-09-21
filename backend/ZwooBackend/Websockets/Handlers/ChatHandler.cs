@@ -27,10 +27,9 @@ public class ChatHandler : MessageHandler
             _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.DistributeMessage, new DistributeMessageDTO(payload.Message, context.UserName, context.Role)));
             return false;
         }
-        catch
+        catch (Exception e)
         {
-            // TODO: handle errors correctly
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
             return true;
         }
     }

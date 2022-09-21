@@ -32,8 +32,15 @@ public class SettingsHandler : MessageHandler
 
     private void GetSettings(UserContext context, ZRPMessage message)
     {
-        AllSettingsDTO payload = new AllSettingsDTO(context.GameRecord.Game.Settings.GetSettings().Select(setting => new AllSettings_SettingDTO(SettingsKeyMapper.ToString(setting.Key), setting.Value)).ToArray());
-        _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.AllSettings, payload));
+        try
+        {
+            AllSettingsDTO payload = new AllSettingsDTO(context.GameRecord.Game.Settings.GetSettings().Select(setting => new AllSettings_SettingDTO(SettingsKeyMapper.ToString(setting.Key), setting.Value)).ToArray());
+            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.AllSettings, payload));
+        }
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+        }
     }
 
     private void UpdateSettings(UserContext context, ZRPMessage message)
@@ -47,9 +54,9 @@ public class SettingsHandler : MessageHandler
                 _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.ChangedSettings, new ChangedSettingsDTO(payload.Setting, payload.Value)));
             }
         }
-        catch
-        {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+        catch (Exception e) 
+        { 
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()))); 
         }
     }
 }

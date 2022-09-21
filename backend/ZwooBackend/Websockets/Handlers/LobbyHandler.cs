@@ -57,8 +57,15 @@ public class LobbyHandler : MessageHandler
     // TODO wins
     private void SpectatorToPlayer(UserContext context, ZRPMessage message)
     {
-        context.GameRecord.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
-        _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
+        try
+        {
+            context.GameRecord.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
+            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
+        }
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+        }
     }
 
     private void PlayerToSpectator(UserContext context, ZRPMessage message)
@@ -69,9 +76,9 @@ public class LobbyHandler : MessageHandler
             context.GameRecord.Lobby.ChangeRole(payload.Username, ZRPRole.Spectator);
             _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Spectator, 0)));
         }
-        catch
+        catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
         }
     }
 
@@ -86,9 +93,9 @@ public class LobbyHandler : MessageHandler
             _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.HostChanged, new HostChangedDTO(payload.Username)));
             _webSocketManager.SendPlayer(context.GameRecord.Lobby.ResolvePlayer(payload.Username), ZRPEncoder.EncodeToBytes(ZRPCode.PromotedToHost, new PromotedToHostDTO()));
         }
-        catch
+        catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
         }
     }
 
@@ -111,9 +118,9 @@ public class LobbyHandler : MessageHandler
                 _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
             }
         }
-        catch
+        catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
         }
     }
 
@@ -149,15 +156,22 @@ public class LobbyHandler : MessageHandler
             }
 
         }
-        catch
+        catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
         }
     }
 
     private void GetPlayers(UserContext context, ZRPMessage message)
     {
-        ListPlayersDTO payload = new ListPlayersDTO(context.GameRecord.Lobby.ListAll().Select(p => new ListPlayers_PlayerDTO(p.Username, p.Role, 0)).ToArray());
-        _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.ListAllPlayers, payload));
+        try
+        {
+            ListPlayersDTO payload = new ListPlayersDTO(context.GameRecord.Lobby.ListAll().Select(p => new ListPlayers_PlayerDTO(p.Username, p.Role, 0)).ToArray());
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.ListAllPlayers, payload));
+        }
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+        }
     }
 }
