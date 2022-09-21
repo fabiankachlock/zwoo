@@ -59,12 +59,19 @@ public class LobbyHandler : MessageHandler
     {
         try
         {
-            context.GameRecord.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
+            LobbyResult result = context.GameRecord.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
+            if (result == LobbyResult.Success)
+            {
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
+            }
+            else if (result == LobbyResult.ErrorLobbyFull)
+            {
+                _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.LobbyFullError, new ErrorDTO((int)ZRPCode.LobbyFullError, "max amount of players reached")));
+            }
         }
-        catch (Exception e)
+        catch
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int) ZRPCode.GeneralError, e.ToString())));
         }
     }
 
@@ -128,7 +135,7 @@ public class LobbyHandler : MessageHandler
     {
         try
         {
-            bool result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
+            LobbyResult result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
             if (context.GameRecord.Lobby.PlayerCount() == 0)
             {
                 // close game
@@ -145,7 +152,7 @@ public class LobbyHandler : MessageHandler
                 _webSocketManager.SendPlayer(context.GameRecord.Lobby.ResolvePlayer(newHost), ZRPEncoder.EncodeToBytes(ZRPCode.PromotedToHost, new PromotedToHostDTO()));
             }
 
-            if (!result) return;
+            if (result != LobbyResult.Success) return;
             if (context.Role == ZRPRole.Spectator)
             {
                 _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(context.UserName)));

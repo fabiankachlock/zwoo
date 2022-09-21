@@ -10,7 +10,7 @@ using ZwooBackend.Games;
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[EnableCors("Zwoo")] 
+[EnableCors("Zwoo")]
 [Route("game")]
 public class GameController : Controller
 {
@@ -72,10 +72,21 @@ public class GameController : Controller
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
                 }
 
-                bool success = game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
-                if (!success)
+                LobbyResult result = game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
+                if (LobbyResult.Success != result)
                 {
-                    return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                    if (result == LobbyResult.ErrorLobbyFull)
+                    {
+                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_FULL, "lobby is full"));
+                    }
+                    else if (result == LobbyResult.ErrorWrongPassword)
+                    {
+                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                    } 
+                    else
+                    {
+                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "cant join"));
+                    }
                 }
 
                 Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");

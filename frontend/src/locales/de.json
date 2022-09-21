@@ -146,11 +146,13 @@
       "143": "Der OPCode fehlt (dies ist ein interner fehler).",
       "144": "Der OPCode is ungültig (dies ist ein interner fehler).",
       "145": "Die Spiele ID ist ungültig.",
-      "146": "Du bist bereits in einem Spiel."
+      "146": "Du bist bereits in einem Spiel.",
+      "147": "Das Spiel ist bereits voll."
     },
     "zrp": {
       "400": "Ein Fehler is aufgetreten",
       "420": "Fehlende Berechtigung",
+      "421": "Das Spiel ist voll",
       "434": "Karte nicht erlaubt",
       "900": "Fehler aufgetreten",
       "901": "Verbindungsfehler",
@@ -191,13 +193,9 @@
       "title": "Spieleranzahl",
       "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."
     },
-    "maxDraw": {
-      "title": "Max. Ziehmenge",
-      "info": "Lege eine maximale Anzahl an Karten fest, die auf einmal gezogen werden darf."
-    },
-    "maxCardsOnHand": {
-      "title": "Max. Karten auf der Hand",
-      "info": "Lege eine maximale Anzahl an Karten fest, die ein Spieler auf der Hand haben darf."
+    "addUpDraw": {
+      "title": "Ziehkarten addieren",
+      "info": "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."
     },
     "initialCards": {
       "title": "Anzahl an Karten",
@@ -358,5 +356,9 @@
     "success": "Der Account wurde erfolgreich verifiziert.",
     "error": "Bei der verifizierung ist ein Fehler aufgetreten.",
     "login": "Einloggen"
+  },
+  "changelog": {
+    "title": "Update {0}",
+    "close": "Schließen"
   }
 }

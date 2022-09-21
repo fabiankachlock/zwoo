@@ -43,6 +43,12 @@ internal abstract class BaseRule
     }
 
     // Rule utilities
+    /// <summary>
+    /// checks if the PlayerId is in the game (valid)
+    /// </summary>
+    /// <param name="state">game state object</param>
+    /// <param name="player">ID of the player</param>
+    /// <returns></returns>
     protected bool IsValidPlayer(GameState state, long player)
     {
         bool isValid = state.PlayerDecks.ContainsKey(player);
@@ -53,6 +59,12 @@ internal abstract class BaseRule
         return isValid;
     }
 
+    /// <summary>
+    /// checks if the provided PlayerID is the currently active player
+    /// </summary>
+    /// <param name="state">game state object</param>
+    /// <param name="player">ID of the player</param>
+    /// <returns></returns>
     protected bool IsActivePlayer(GameState state, long player)
     {
         bool isValid = state.CurrentPlayer == player;
@@ -63,6 +75,13 @@ internal abstract class BaseRule
         return IsValidPlayer(state, player) && isValid;
     }
 
+    /// <summary>
+    /// checks if a player has a certain card
+    /// </summary>
+    /// <param name="state">game state object</param>
+    /// <param name="player">ID of the player</param>
+    /// <param name="card">card the player should have</param>
+    /// <returns></returns>
     protected bool PlayerHasCard(GameState state, long player, Card card)
     {
         if (!IsValidPlayer(state, player)) return false;
@@ -74,6 +93,12 @@ internal abstract class BaseRule
         return isValid;
     }
 
+    /// <summary>
+    /// change the currently active player of the game
+    /// </summary>
+    /// <param name="state">game state object</param>
+    /// <param name="nextPlayer">ID of the next player</param>
+    /// <returns>updated state and the created events</returns>
     protected (GameState, List<GameEvent>) ChangeActivePlayer(GameState state, long nextPlayer)
     {
         List<GameEvent> events = new List<GameEvent>() {
