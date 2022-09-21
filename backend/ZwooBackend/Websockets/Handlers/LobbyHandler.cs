@@ -69,7 +69,7 @@ public class LobbyHandler : MessageHandler
                 _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.LobbyFullError, new ErrorDTO((int)ZRPCode.LobbyFullError, "max amount of players reached")));
             }
         }
-        catch
+        catch (Exception e)
         {
             _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int) ZRPCode.GeneralError, e.ToString())));
         }
