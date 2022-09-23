@@ -57,8 +57,22 @@ public class LobbyHandler : MessageHandler
     // TODO wins
     private void SpectatorToPlayer(UserContext context, ZRPMessage message)
     {
-        context.GameRecord.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
-        _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
+        try
+        {
+            LobbyResult result = context.GameRecord.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
+            if (result == LobbyResult.Success)
+            {
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
+            }
+            else if (result == LobbyResult.ErrorLobbyFull)
+            {
+                _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.LobbyFullError, new ErrorDTO((int)ZRPCode.LobbyFullError, "max amount of players reached")));
+            }
+        }
+        catch
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int) ZRPCode.GeneralError, "cant parse")));
+        }
     }
 
     private void PlayerToSpectator(UserContext context, ZRPMessage message)
@@ -66,8 +80,11 @@ public class LobbyHandler : MessageHandler
         try
         {
             PlayerWantsToSpectateDTO payload = message.DecodePyload<PlayerWantsToSpectateDTO>();
-            context.GameRecord.Lobby.ChangeRole(payload.Username, ZRPRole.Spectator);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Spectator, 0)));
+            LobbyResult result =   context.GameRecord.Lobby.ChangeRole(payload.Username, ZRPRole.Spectator);
+            if (result == LobbyResult.Success)
+            {
+                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Spectator, 0)));
+            }
         }
         catch
         {
@@ -121,7 +138,7 @@ public class LobbyHandler : MessageHandler
     {
         try
         {
-            bool result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
+            LobbyResult result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
             if (context.GameRecord.Lobby.PlayerCount() == 0)
             {
                 // close game
@@ -138,7 +155,7 @@ public class LobbyHandler : MessageHandler
                 _webSocketManager.SendPlayer(context.GameRecord.Lobby.ResolvePlayer(newHost), ZRPEncoder.EncodeToBytes(ZRPCode.PromotedToHost, new PromotedToHostDTO()));
             }
 
-            if (!result) return;
+            if (result != LobbyResult.Success) return;
             if (context.Role == ZRPRole.Spectator)
             {
                 _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(context.UserName)));

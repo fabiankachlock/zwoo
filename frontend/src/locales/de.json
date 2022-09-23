@@ -146,11 +146,13 @@
       "143": "Der OPCode fehlt (dies ist ein interner fehler).",
       "144": "Der OPCode is ungültig (dies ist ein interner fehler).",
       "145": "Die Spiele ID ist ungültig.",
-      "146": "Du bist bereits in einem Spiel."
+      "146": "Du bist bereits in einem Spiel.",
+      "147": "Das Spiel ist bereits voll."
     },
     "zrp": {
       "400": "Ein Fehler is aufgetreten",
       "420": "Fehlende Berechtigung",
+      "421": "Das Spiel ist voll",
       "434": "Karte nicht erlaubt",
       "900": "Fehler aufgetreten",
       "901": "Verbindungsfehler",

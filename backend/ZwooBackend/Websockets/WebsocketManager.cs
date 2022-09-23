@@ -68,14 +68,14 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         RemoveWs(gameId, playerId, ws);
         if (game != null)
         {
-            bool sucess = game.Lobby.RemovePlayer(playerId);
+            LobbyResult result = game.Lobby.RemovePlayer(playerId);
             // only send leave message when the player disconnects
-            if (player != null && player.Role == ZRPRole.Spectator && sucess)
+            if (player != null && player.Role == ZRPRole.Spectator && result == LobbyResult.Success)
             {
                 // TODO: change player model to include wins
                 await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
             }
-            else if (player != null && sucess)
+            else if (player != null && result == LobbyResult.Success)
             {
                 await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
             }
@@ -135,10 +135,11 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         {
             WebSocketLogger.Info($"[Player] [{playerId}] sending message");
             WsLogger.Debug($"[Player] [{playerId}] sending: {Encoding.UTF8.GetString(content)}");
-            try 
-            { 
+            try
+            {
                 await _websockets[playerId].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 WebSocketLogger.Warn($"[Player] [{playerId}] error while sending a message {e}");
             }
@@ -158,12 +159,13 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
                     try
                     {
                         await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
                         WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
                     }
                 }
-        }));
+            }));
         }
     }
 

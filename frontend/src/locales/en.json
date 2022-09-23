@@ -146,11 +146,13 @@
       "143": "The opcode is missing (this is an internal error).",
       "144": "The opcode is invalid (this is an internal error).",
       "145": "The game ID is invalid.",
-      "146": "You are already in a game."
+      "146": "You are already in a game.",
+      "147": "The game is already full"
     },
     "zrp": {
       "400": "An Error occurred",
       "420": "Missing Authorization",
+      "421": "Game full",
       "434": "Card not allowed",
       "900": "Error occurred",
       "901": "Connection error",
