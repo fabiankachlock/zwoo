@@ -8,7 +8,7 @@
     </button>
     <div v-if="showDialog">
       <FloatingDialog>
-        <Form show-back-button>
+        <Form show-close-button @close="showDialog = false">
           <FormTitle>
             {{ t('deleteAccount.title') }}
           </FormTitle>

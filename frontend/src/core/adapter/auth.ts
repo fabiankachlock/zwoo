@@ -105,6 +105,9 @@ export const useAuth = defineStore('auth', {
         isLoggedIn: false
       });
     },
+    async changePassword(oldPassword: string, newPassword: string, newPasswordRepeat: string) {
+      console.log({ oldPassword, newPassword, newPasswordRepeat });
+    },
     async askStatus() {
       const response = await AuthenticationService.getUserInfo();
       if (response.isLoggedIn) {
