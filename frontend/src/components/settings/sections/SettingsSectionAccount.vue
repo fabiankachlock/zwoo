@@ -1,6 +1,6 @@
 <template>
-  <template v-if="hasContent">
-    <SettingsSection :title="t('settings.sections.danger')">
+  <template v-if="isLoggedIn">
+    <SettingsSection :title="t('settings.sections.account')">
       <SettingsRow v-if="isLoggedIn" title="">
         <DeleteAccount />
       </SettingsRow>
@@ -19,5 +19,4 @@ import { computed } from 'vue';
 const { t } = useI18n();
 const auth = useAuth();
 const isLoggedIn = computed(() => auth.isLoggedIn);
-const hasContent = computed(() => auth.isLoggedIn);
 </script>
