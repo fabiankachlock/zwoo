@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwooInfoDashBoard", "ZwooIn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwooDatabaseClasses", "ZwooDatabaseClasses\ZwooDatabaseClasses.csproj", "{ECA1A273-39CC-48E8-AA90-FEBDE089813B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwooDatabaseUpdater", "ZwooDatabaseUpdater\ZwooDatabaseUpdater.csproj", "{BB8BCDCC-C8D3-4D3E-8D36-8FB00B964B63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{ECA1A273-39CC-48E8-AA90-FEBDE089813B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECA1A273-39CC-48E8-AA90-FEBDE089813B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECA1A273-39CC-48E8-AA90-FEBDE089813B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB8BCDCC-C8D3-4D3E-8D36-8FB00B964B63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB8BCDCC-C8D3-4D3E-8D36-8FB00B964B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB8BCDCC-C8D3-4D3E-8D36-8FB00B964B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB8BCDCC-C8D3-4D3E-8D36-8FB00B964B63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
