@@ -41,7 +41,7 @@ internal class ReverseCardRule : BaseCardRule
         List<GameEvent> events = new List<GameEvent>();
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && !(CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated);
+        bool isAllowed = IsFittingCard(state.TopCard.Card, payload.Card) && !(CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated);
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
@@ -53,4 +53,6 @@ internal class ReverseCardRule : BaseCardRule
 
         return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
     }
+
+    // TODO: add PerformReversDirection() method as ApplyRule wrapper
 }

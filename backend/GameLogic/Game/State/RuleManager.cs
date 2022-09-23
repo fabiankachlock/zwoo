@@ -8,6 +8,7 @@ using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Settings;
 using log4net;
+using GameLogic.Game.Rules;
 
 namespace ZwooGameLogic.Game.State;
 
@@ -18,7 +19,8 @@ internal class RuleManager
         new BaseDrawRule(),
         new BaseWildCardRule(),
         new SkipCardRule(),
-        new ReverseCardRule()
+        new ReverseCardRule(),
+        new AddUpDrawRule()
     };
 
     public readonly long GameId;
