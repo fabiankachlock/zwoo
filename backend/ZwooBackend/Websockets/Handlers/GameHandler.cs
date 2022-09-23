@@ -57,15 +57,22 @@ public class GameHandler : MessageHandler
 
     private void StartGame(UserContext context, ZRPMessage message)
     {
-        context.GameRecord.Game.Reset();
-        foreach (long player in context.GameRecord.Lobby.Players())
+        try
         {
-            context.GameRecord.Game.AddPlayer(player);
-        }
-        context.GameRecord.Game.Start();
+            context.GameRecord.Game.Reset();
+            foreach (long player in context.GameRecord.Lobby.Players())
+            {
+                context.GameRecord.Game.AddPlayer(player);
+            }
+            context.GameRecord.Game.Start();
 
-        _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GameStarted, new GameStartedDTO()));
-        _webSocketManager.SendPlayer(context.GameRecord.Game.State.ActivePlayer(), ZRPEncoder.EncodeToBytes(ZRPCode.StartTurn, new StartTurnDTO()));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GameStarted, new GameStartedDTO()));
+            _webSocketManager.SendPlayer(context.GameRecord.Game.State.ActivePlayer(), ZRPEncoder.EncodeToBytes(ZRPCode.StartTurn, new StartTurnDTO()));
+        }
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+        }
     }
 
     private void HandleCardPlace(UserContext context, ZRPMessage message)
@@ -76,9 +83,9 @@ public class GameHandler : MessageHandler
             PlaceCardDTO payload = message.DecodePyload<PlaceCardDTO>();
             context.GameRecord.Game.HandleEvent(ClientEvent.PlaceCard(context.Id, new Card(payload.Type, payload.Symbol)));
         }
-        catch
+        catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
         }
     }
 
@@ -92,7 +99,7 @@ public class GameHandler : MessageHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
         }
     }
 
@@ -106,36 +113,57 @@ public class GameHandler : MessageHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, "cant parse")));
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
         }
     }
 
     private void SendHand(UserContext context, ZRPMessage message)
     {
-        if (context.Role == ZRPRole.Spectator) return;
-        _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendHand, new SendHandDTO(context.GameRecord.Game.State.GetPlayerDeck(context.Id)!.Select(card => new SendHand_HandDTO(card.Color, card.Type)).ToArray())));
+        try
+        {
+            if (context.Role == ZRPRole.Spectator) return;
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendHand, new SendHandDTO(context.GameRecord.Game.State.GetPlayerDeck(context.Id)!.Select(card => new SendHand_HandDTO(card.Color, card.Type)).ToArray())));
+        } 
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+        }
     }
 
     private void SendCardAmount(UserContext context, ZRPMessage message)
     {
-        List<SendCardAmount_PlayersDTO> amounts = new List<SendCardAmount_PlayersDTO>();
-
-        foreach (long player in context.GameRecord.Game.AllPlayers)
+        try
         {
-            amounts.Add(new SendCardAmount_PlayersDTO(
-                context.GameRecord.Lobby.GetPlayer(player)!.Username, 
-                context.GameRecord.Game.State.GetPlayerCardAmount(player)!.Value,
-                context.GameRecord.Game.State.GetPlayerOrder(player)!.Value,
-                context.GameRecord.Game.State.ActivePlayer() == player
-            ));
-        }
+            List<SendCardAmount_PlayersDTO> amounts = new List<SendCardAmount_PlayersDTO>();
 
-        _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendCardAmount, new SendCardAmountDTO(amounts.ToArray())));
+            foreach (long player in context.GameRecord.Game.AllPlayers)
+            {
+                amounts.Add(new SendCardAmount_PlayersDTO(
+                    context.GameRecord.Lobby.GetPlayer(player)!.Username, 
+                    context.GameRecord.Game.State.GetPlayerCardAmount(player)!.Value,
+                    context.GameRecord.Game.State.GetPlayerOrder(player)!.Value,
+                    context.GameRecord.Game.State.ActivePlayer() == player
+                ));
+            }
+
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendCardAmount, new SendCardAmountDTO(amounts.ToArray())));
+        }
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+        }
     }
 
     private void SendPileTop(UserContext context, ZRPMessage message)
     {
-        var top = context.GameRecord.Game.State.GetPileTop();
-        _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendPileTop, new SendPileTopDTO(top.Color, top.Type)));
+        try
+        {
+            var top = context.GameRecord.Game.State.GetPileTop();
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.SendPileTop, new SendPileTopDTO(top.Color, top.Type)));
+        }
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+        }
     }
 }
