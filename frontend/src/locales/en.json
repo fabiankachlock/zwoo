@@ -224,7 +224,12 @@
   "deleteAccount": {
     "title": "Delete Account",
     "password": "Password",
-    "delete": "Delete Now!"
+    "delete": "Delete Now!",
+    "reassure": {
+      "title": "Delete Account",
+      "body": "Once the account is deleted, the action cannot be undone.",
+      "accept": "Yes, I want to delete my account."
+    }
   },
   "cookies": {
     "title": "Cookie Consent",

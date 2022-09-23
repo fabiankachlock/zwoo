@@ -224,7 +224,12 @@
   "deleteAccount": {
     "title": "Account Löschen",
     "password": "Passwort",
-    "delete": "Jetzt Löschen!"
+    "delete": "Jetzt Löschen!",
+    "reassure": {
+      "title": "Account löschen",
+      "body": "Wenn der Account einmal gelöscht wurde, kann die Action nicht wieder Rückgängig gemacht werden.",
+      "accept": "Ja, ich möchte meinen Account löschen."
+    }
   },
   "cookies": {
     "title": "Cookie Zustimmungen",

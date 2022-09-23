@@ -15,11 +15,20 @@
           <TextInput id="password" v-model="password" labelKey="deleteAccount.password" is-password placeholder="******" />
           <FormError :error="error" />
           <FormActions>
-            <FormSubmit @click="deleteAccount">
-              {{ t('deleteAccount.delete') }}
+            <FormSubmit @click="reassureDecision">
+              <span class="tc-secondary">
+                {{ t('deleteAccount.delete') }}
+              </span>
             </FormSubmit>
           </FormActions>
         </Form>
+        <ReassureDialog
+          :is-open="reassureDialogOpen"
+          :title="t('deleteAccount.reassure.title')"
+          :body="t('deleteAccount.reassure.body')"
+          :accept="t('deleteAccount.reassure.accept')"
+          @close="handleUserDecision"
+        />
       </FloatingDialog>
     </div>
   </div>
@@ -36,16 +45,32 @@ import TextInput from '../forms/TextInput.vue';
 import FormActions from '../forms/FormActions.vue';
 import FormError from '../forms/FormError.vue';
 import FormSubmit from '../forms/FormSubmit.vue';
+import ReassureDialog from '../misc/ReassureDialog.vue';
 
 const auth = useAuth();
 const { t } = useI18n();
 
 const showDialog = ref(false);
+const reassureDialogOpen = ref(false);
 const password = ref('');
 const error = ref<string[]>([]);
 
 const openDialog = () => {
   showDialog.value = true;
+};
+
+const reassureDecision = () => {
+  reassureDialogOpen.value = true;
+};
+
+const handleUserDecision = (accepted: boolean) => {
+  if (accepted) {
+    reassureDialogOpen.value = false;
+    deleteAccount();
+  } else {
+    reassureDialogOpen.value = false;
+    showDialog.value = false;
+  }
 };
 
 const deleteAccount = async () => {
