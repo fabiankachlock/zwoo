@@ -30,7 +30,8 @@
     "logging": "Loggen",
     "goToLogging": "Zu den Einstellungen",
     "cardTheme": "Karten Theme",
-    "deviceId": "Anonyme GeräteID"
+    "deviceId": "Anonyme GeräteID",
+    "changePassword": "Passwort ändern"
   },
   "lng": {
     "de": "Deutsch",
@@ -362,5 +363,12 @@
   "changelog": {
     "title": "Update {0}",
     "close": "Schließen"
+  },
+  "changePassword": {
+    "title": "Passwort ändern",
+    "oldPassword": "Altes Passwort",
+    "newPassword": "Neues Passwort",
+    "newPasswordRepeat": "Neues Passwort Wiederholen",
+    "change": "Passwort jetzt ändern!"
   }
 }
