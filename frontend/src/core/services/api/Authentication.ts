@@ -1,6 +1,6 @@
 import { Logger } from '../logging/logImport';
 import { Backend, Endpoint } from './apiConfig';
-import { WithBackendError, parseBackendError, BackendErrorAble } from './errors';
+import { WithBackendError, parseBackendError, BackendErrorAble, BackendErrorType } from './errors';
 
 type UserInfo = {
   username: string;
@@ -180,6 +180,33 @@ export class AuthenticationService {
     return {
       isLoggedIn: false
     };
+  };
+
+  static performChangePassword = async (oldPassword: string, newPassword: string): Promise<BackendErrorType | undefined> => {
+    Logger.Api.log('performing change password action');
+    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking change password response');
+      return undefined;
+    }
+
+    const response = await fetch('TODO', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        password: oldPassword, // TODO
+        newPassword: newPassword
+      })
+    });
+
+    if (response.status !== 200) {
+      Logger.Api.warn('received erroneous response while changing password');
+      return parseBackendError(await response.text());
+    }
+
+    return undefined;
   };
 
   static verifyAccount = async (id: string, code: string): Promise<BackendErrorAble<boolean>> => {

@@ -106,7 +106,17 @@ export const useAuth = defineStore('auth', {
       });
     },
     async changePassword(oldPassword: string, newPassword: string, newPasswordRepeat: string) {
-      console.log({ oldPassword, newPassword, newPasswordRepeat });
+      const passwordValid = new PasswordValidator().validate(newPassword);
+      if (!passwordValid.isValid) throw passwordValid.getErrors();
+
+      const passwordMatchValid = new PasswordMatchValidator().validate([newPassword, newPasswordRepeat]);
+      if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
+
+      const error = await AuthenticationService.performChangePassword(oldPassword, newPassword);
+
+      if (error) {
+        throw getBackendErrorTranslation(error);
+      }
     },
     async askStatus() {
       const response = await AuthenticationService.getUserInfo();
