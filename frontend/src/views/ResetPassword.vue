@@ -1,6 +1,6 @@
 <template>
   <FlatDialog>
-    <Form show-back-button>
+    <Form>
       <FormTitle>
         {{ t('resetPassword.title') }}
       </FormTitle>
@@ -17,6 +17,11 @@
       <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
         <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
         <p class="tc-main-secondary">{{ t('resetPassword.info') }}</p>
+        <router-link to="/login">
+          <p class="tc-primary mt-2 bg-main rounded-sm px-2 py-1 text-center">
+            {{ t('resetPassword.login') }}
+          </p>
+        </router-link>
       </div>
     </Form>
   </FlatDialog>

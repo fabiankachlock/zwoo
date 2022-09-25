@@ -375,5 +375,20 @@
     "newPassword": "New Password",
     "newPasswordRepeat": "Repeat New Password",
     "change": "Change my password now!"
+  },
+  "requestPasswordReset": {
+    "title": "Password forgotten",
+    "email": "E-Mail",
+    "request": "Reset Request",
+    "login": "Go to login",
+    "info": "An email will be sent to the specified email address with a link to reset the password."
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "password": "Password",
+    "passwordRepeat": "Repeat Password",
+    "reset": "Reset Password",
+    "info": "The password has been successfully reset, you can log in now.",
+    "login": "Go to login"
   }
 }

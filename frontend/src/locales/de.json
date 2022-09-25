@@ -375,5 +375,20 @@
     "newPassword": "Neues Passwort",
     "newPasswordRepeat": "Neues Passwort Wiederholen",
     "change": "Passwort jetzt ändern!"
+  },
+  "requestPasswordReset": {
+    "title": "Passwort vergessen",
+    "email": "E-Mail",
+    "request": "Zurücksetzung Anfordern",
+    "login": "Gehe zum Login",
+    "info": "An die angegebene E-Mail Adresse wird eine E-Mail geschickt, in der sich ein Link, mit dem das Passwort zurückgesetzt werden kann, befindet."
+  },
+  "resetPassword": {
+    "title": "Passwort zurücksetzten",
+    "password": "Passwort",
+    "passwordRepeat": "Passwort Wiederholen",
+    "reset": "Passwort Zurücksetzten",
+    "info": "Das Passwort wurde erfolgreich zurückgesetzt, du kannst dich jetzt anmelden.",
+    "login": "Gehe zum Login"
   }
 }

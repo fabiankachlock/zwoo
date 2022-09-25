@@ -2,6 +2,7 @@
   <FlatDialog>
     <Form show-back-button>
       <FormTitle> {{ t('requestPasswordReset.title') }} </FormTitle>
+      <p class="m-2 tc-main-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
       <TextInput id="email" v-model="email" labelKey="requestPasswordReset.email" :placeholder="t('requestPasswordReset.email')" />
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
       <FormError :error="error" />
