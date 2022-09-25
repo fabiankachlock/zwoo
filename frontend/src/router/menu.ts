@@ -26,6 +26,10 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "menu" */ '../views/RequestPasswordReset.vue')
   },
   {
+    path: 'reset-password',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/ResetPassword.vue')
+  },
+  {
     path: 'verify-account',
     component: () => import(/* webpackChunkName: "menu" */ '../views/VerifyAccount.vue')
   },
