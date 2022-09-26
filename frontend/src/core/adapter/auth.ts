@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { AccountService } from '../services/api/Account';
 import { AuthenticationService } from '../services/api/Authentication';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
 import { ReCaptchaResponse } from '../services/api/reCAPTCHA';
@@ -112,7 +113,7 @@ export const useAuth = defineStore('auth', {
       const passwordMatchValid = new PasswordMatchValidator().validate([newPassword, newPasswordRepeat]);
       if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
 
-      const error = await AuthenticationService.performChangePassword(oldPassword, newPassword);
+      const error = await AccountService.performChangePassword(oldPassword, newPassword);
 
       if (error) {
         throw getBackendErrorTranslation(error);
