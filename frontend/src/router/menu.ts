@@ -11,7 +11,10 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: 'login',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/Login.vue')
+    component: () => import(/* webpackChunkName: "menu" */ '../views/Login.vue'),
+    meta: {
+      noAuth: true
+    }
   },
   {
     path: 'logout',
@@ -19,15 +22,24 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: 'create-account',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/CreateAccount.vue')
+    component: () => import(/* webpackChunkName: "menu" */ '../views/CreateAccount.vue'),
+    meta: {
+      noAuth: true
+    }
   },
   {
     path: 'request-password-reset',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/RequestPasswordReset.vue')
+    component: () => import(/* webpackChunkName: "menu" */ '../views/RequestPasswordReset.vue'),
+    meta: {
+      noAuth: true
+    }
   },
   {
     path: 'reset-password',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/ResetPassword.vue')
+    component: () => import(/* webpackChunkName: "menu" */ '../views/ResetPassword.vue'),
+    meta: {
+      noAuth: true
+    }
   },
   {
     path: 'verify-account',
