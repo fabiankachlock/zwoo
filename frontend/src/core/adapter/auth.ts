@@ -119,6 +119,35 @@ export const useAuth = defineStore('auth', {
         throw getBackendErrorTranslation(error);
       }
     },
+    async requestPasswordReset(email: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+      const emailValid = new EmailValidator().validate(email);
+      if (!emailValid.isValid) throw emailValid.getErrors();
+
+      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
+      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+
+      const error = await AccountService.requestPasswordReset(email);
+
+      if (error) {
+        throw getBackendErrorTranslation(error);
+      }
+    },
+    async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+      const passwordValid = new PasswordValidator().validate(password);
+      if (!passwordValid.isValid) throw passwordValid.getErrors();
+
+      const passwordMatchValid = new PasswordMatchValidator().validate([password, passwordRepeat]);
+      if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
+
+      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
+      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+
+      const error = await AccountService.performResetPassword(code, password);
+
+      if (error) {
+        throw getBackendErrorTranslation(error);
+      }
+    },
     async askStatus() {
       const response = await AuthenticationService.getUserInfo();
       if (response.isLoggedIn) {
