@@ -35,19 +35,22 @@ import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-// import { useAuth } from '@/core/adapter/auth';
+import { useAuth } from '@/core/adapter/auth';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
 import { useCookies } from '@/core/adapter/cookies';
+import { useRoute } from 'vue-router';
 
 const { t } = useI18n();
-// const auth = useAuth();
+const auth = useAuth();
+const route = useRoute();
 
 onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
+const code = route.params['code'] as string;
 const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
@@ -73,7 +76,7 @@ const create = async () => {
   error.value = [];
 
   try {
-    // await auth.resetPassword(password.value, passwordRepeat.value, reCaptchaResponse.value);
+    await auth.resetPassword(code, password.value, passwordRepeat.value, reCaptchaResponse.value);
     showInfo.value = true;
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
