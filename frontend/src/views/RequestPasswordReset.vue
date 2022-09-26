@@ -25,14 +25,14 @@ import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
-//import { useAuth } from '@/core/adapter/auth';
+import { useAuth } from '@/core/adapter/auth';
 import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { useCookies } from '@/core/adapter/cookies';
 
 const { t } = useI18n();
-//const auth = useAuth();
+const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
 
@@ -49,7 +49,7 @@ const error = ref<string[]>([]);
 const logIn = async () => {
   error.value = [];
   try {
-    //await auth.requestPasswordReset(email.value, reCaptchaResponse.value);
+    await auth.requestPasswordReset(email.value, reCaptchaResponse.value);
     const redirect = route.query['redirect'] as string;
 
     if (redirect) {
