@@ -7,7 +7,7 @@
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="logIn">
+        <FormSubmit @click="requestReset">
           {{ t('requestPasswordReset.request') }}
         </FormSubmit>
         <FormSecondaryAction>
@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { Form, FormActions, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { joinQuery } from '@/core/services/utils';
@@ -46,7 +46,12 @@ const email = ref('');
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 
-const logIn = async () => {
+watch([email, reCaptchaResponse], () => {
+  // clear error since there are changes
+  error.value = [];
+});
+
+const requestReset = async () => {
   error.value = [];
   try {
     await auth.requestPasswordReset(email.value, reCaptchaResponse.value);
@@ -56,8 +61,6 @@ const logIn = async () => {
       router.replace(redirect);
       return;
     }
-
-    router.push('/home');
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }

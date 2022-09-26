@@ -67,7 +67,7 @@ watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   matchError.value = result.isValid ? [] : result.getErrors();
 });
 
-watch([password, passwordRepeat], () => {
+watch([password, passwordRepeat, reCaptchaResponse], () => {
   // clear error since there are changes
   error.value = [];
 });
