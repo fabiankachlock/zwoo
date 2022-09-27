@@ -162,3 +162,7 @@ html {
 ::-webkit-scrollbar-thumb:hover {
 	@apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest;
 }
+
+::-ms-reveal {
+	display: none;
+}
