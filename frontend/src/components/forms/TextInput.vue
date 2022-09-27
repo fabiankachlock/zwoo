@@ -12,7 +12,7 @@
           autocomplete=""
           class="bg-dark shadow appearance-none border bc-main rounded w-full py-2 pl-3 pr-7 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
           :name="id"
-          :type="isPassword ? (isPasswordVisible ? 'password' : 'text') : 'text'"
+          :type="isPassword ? (isPasswordVisible ? 'text' : 'password') : 'text'"
           :id="id"
           :placeholder="placeholder"
           :value="modelValue"
