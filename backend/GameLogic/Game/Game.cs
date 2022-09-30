@@ -84,7 +84,6 @@ public sealed class Game
     {
         _logger.Info("stopping game");
         _stateManager.Stop();
-
     }
 
     public void Reset()

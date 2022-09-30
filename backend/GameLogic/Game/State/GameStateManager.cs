@@ -8,6 +8,7 @@ using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Helper;
 
 namespace ZwooGameLogic.Game.State;
 
@@ -22,8 +23,7 @@ public sealed class GameStateManager
     private PlayerCycle _playerCycle;
     private Dictionary<long, int> _playerOrder;
     private Pile _cardPile;
-    private ConcurrentQueue<ClientEvent> _events;
-    private bool _isExecutingEvent;
+    private AsyncExecutionQueue _actionsQueue;
     private bool _isRunning;
 
     private ILog _logger;
@@ -40,17 +40,19 @@ public sealed class GameStateManager
         _playerManager = playerManager;
         _notificationManager = notification;
         _isRunning = false;
-        _isExecutingEvent = false;
         _cardPile = new Pile();
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
         _playerOrder = new Dictionary<long, int>();
         _ruleManager = new RuleManager(meta.Id, _gameSettings);
-        _events = new ConcurrentQueue<ClientEvent>();
+        _actionsQueue = new AsyncExecutionQueue();
         _logger = LogManager.GetLogger($"GameState-{Meta.Id}");
+        _playerManager.OnPlayerLeave(HandlePlayerLeave);
     }
 
-
+    /// <summary>
+    /// start a game
+    /// </summary>
     internal void Start()
     {
         if (_isRunning)
@@ -61,38 +63,35 @@ public sealed class GameStateManager
         _isRunning = true;
         (_playerCycle, _playerOrder) = _playerManager.ComputeOrder();
         _cardPile = new Pile();
+        _actionsQueue.Start();
         _ruleManager.Configure();
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
             topCard: new StackCard(DrawSaveCard()),
             cardStack: new List<StackCard>(),
-            playerDecks: GeneratePlayerDecks()
+            playerDecks: GeneratePlayerDecks(_playerManager.Players)
         );
     }
 
-    private Card DrawSaveCard()
-    {
-        while (true)
-        {
-            Card card = _cardPile.DrawCard();
-            if (card.Color != CardColor.Black && card.Type <= CardType.Nine)
-            {
-                return card;
-            }
-        }
-    }
-
-    private Dictionary<long, List<Card>> GeneratePlayerDecks()
+    /// <summary>
+    /// create card decks for every player
+    /// </summary>
+    /// <param name="players">the list of players to generate decks for</param>
+    /// <returns>a list of cards for every player id</returns>
+    private Dictionary<long, List<Card>> GeneratePlayerDecks(List<long> players)
     {
         Dictionary<long, List<Card>> decks = new Dictionary<long, List<Card>>();
-        foreach (long player in _playerManager.Players)
+        foreach (long player in players)
         {
             decks[player] = _cardPile.DrawCard(_gameSettings.NumberOfCards);
         }
         return decks;
     }
 
+    /// <summary>
+    /// stop a running game
+    /// </summary>
     internal void Stop()
     {
         if (!_isRunning)
@@ -103,6 +102,10 @@ public sealed class GameStateManager
         _isRunning = false;
     }
 
+    /// <summary>
+    /// reset a game to its default state
+    /// if the game is running it will be stopped
+    /// </summary>
     internal void Reset()
     {
         if (!_isRunning)
@@ -115,72 +118,33 @@ public sealed class GameStateManager
         _playerCycle = new PlayerCycle(new List<long>());
     }
 
-    public long ActivePlayer()
+    private void HandlePlayerLeave(long id)
     {
-        return _gameState.CurrentPlayer;
-    }
-
-    public List<Card>? GetPlayerDeck(long playerId)
-    {
-        if (_gameState.PlayerDecks.ContainsKey(playerId))
+        #pragma warning disable CS4014
+        _actionsQueue.Intercept(() =>
         {
-            return _gameState.PlayerDecks[playerId];
-        }
-        return null;
-    }
-
-    public int? GetPlayerCardAmount(long playerId)
-    {
-        if (_gameState.PlayerDecks.ContainsKey(playerId))
-        {
-            return _gameState.PlayerDecks[playerId].Count;
-        }
-        return null;
-    }
-
-    public int? GetPlayerOrder(long playerId)
-    {
-        if (_playerOrder.ContainsKey(playerId))
-        {
-            return _playerOrder[playerId];
-        }
-        return null;
-    }
-
-    public Card GetPileTop()
-    {
-        return _gameState.TopCard.Card;
+            _logger.Warn($"player {id} left the running game");
+            _playerCycle.RemovePlayer(id);
+        });
+        #pragma warning restore CS4014
     }
 
     internal void HandleEvent(ClientEvent clientEvent)
     {
-        _events.Enqueue(clientEvent);
-        TryExecuteEvent();
-    }
-
-    private void TryExecuteEvent()
-    {
-        if (!_isExecutingEvent && _events.Count > 0)
-        {
-            ClientEvent evt;
-            if (_events.TryDequeue(out evt))
-            {
-                ExecuteEvent(evt);
-            }
-        }
+        // these calls don't need to be awaited, because the caller doesn't care when the event is executed
+        #pragma warning disable CS4014
+        _actionsQueue.Enqueue(() => ExecuteEvent(clientEvent));
+        #pragma warning restore CS4014
     }
 
     private void ExecuteEvent(ClientEvent clientEvent)
     {
-        _isExecutingEvent = true;
         GameState newState = _gameState.Clone();
         BaseRule? rule = _ruleManager.getRule(clientEvent, newState);
 
         if (rule == null)
         {
             _logger.Error($"cant find rule for event ${clientEvent}");
-            _isExecutingEvent = false;
-            TryExecuteEvent();
             return;
         }
         _logger.Debug($"selected rule: {rule.Name}");
@@ -200,17 +164,12 @@ public sealed class GameStateManager
         if (isFinishedEvent.HasValue)
         {
             SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
-            // reset queue
-            _isExecutingEvent = false;
-            _events.Clear();
+            _actionsQueue.Clear();
             Stop();
         }
         else
         {
             SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
-            // handle next event
-            _isExecutingEvent = false;
-            TryExecuteEvent();
         }
     }
 
@@ -273,5 +232,55 @@ public sealed class GameStateManager
                     break;
             }
         }
+    }
+
+    private Card DrawSaveCard()
+    {
+        while (true)
+        {
+            Card card = _cardPile.DrawCard();
+            if (card.Color != CardColor.Black && card.Type <= CardType.Nine)
+            {
+                return card;
+            }
+        }
+    }
+
+    /* Game State Info Getters */
+    public long ActivePlayer()
+    {
+        return _gameState.CurrentPlayer;
+    }
+
+    public List<Card>? GetPlayerDeck(long playerId)
+    {
+        if (_gameState.PlayerDecks.ContainsKey(playerId))
+        {
+            return _gameState.PlayerDecks[playerId];
+        }
+        return null;
+    }
+
+    public int? GetPlayerCardAmount(long playerId)
+    {
+        if (_gameState.PlayerDecks.ContainsKey(playerId))
+        {
+            return _gameState.PlayerDecks[playerId].Count;
+        }
+        return null;
+    }
+
+    public int? GetPlayerOrder(long playerId)
+    {
+        if (_playerOrder.ContainsKey(playerId))
+        {
+            return _playerOrder[playerId];
+        }
+        return null;
+    }
+
+    public Card GetPileTop()
+    {
+        return _gameState.TopCard.Card;
     }
 }

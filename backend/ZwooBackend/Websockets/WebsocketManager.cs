@@ -65,9 +65,11 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             Console.WriteLine(e);
         }
 
+        // TODO: clean this up aka move this somewhere else
         RemoveWs(gameId, playerId, ws);
         if (game != null)
         {
+            // this handles only disconnects!!!
             LobbyResult result = game.Lobby.RemovePlayer(playerId);
             // only send leave message when the player disconnects
             if (player != null && player.Role == ZRPRole.Spectator && result == LobbyResult.Success)
