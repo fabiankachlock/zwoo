@@ -113,6 +113,7 @@ export const useGameConfig = defineStore('game-config', {
         (await import(/* webpackChunkName: "game-logic" */ './play/rules')).useRules().__init__();
         (await import(/* webpackChunkName: "game-logic" */ './play/summary')).useGameSummary().__init__();
         (await import(/* webpackChunkName: "game-logic" */ './play/util/keepAlive')).useKeepAlive().__init__();
+        (await import(/* webpackChunkName: "internal" */ './play/features/chatBroadCast')).useChatBroadcast().__init__();
         initializedGameModules = true;
       }
     },

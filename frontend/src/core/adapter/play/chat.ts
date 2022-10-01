@@ -17,6 +17,7 @@ const chatWatcher = new MonolithicEventWatcher(ZRPOPCode.ReceiveMessage);
 
 export const useChatStore = defineStore('game-chat', () => {
   const messages = ref<ChatMessage[]>([]);
+  const lastMessage = ref<ChatMessage | undefined>(undefined);
   const muted = ref<Record<string, boolean>>({});
   const sendEvent = useGameEventDispatch();
 
@@ -25,11 +26,13 @@ export const useChatStore = defineStore('game-chat', () => {
   };
 
   const pushMessage = (msg: string, from: ChatMessage['sender']) => {
-    messages.value.push({
+    const message: ChatMessage = {
       id: performance.now(),
       message: msg,
       sender: from
-    });
+    };
+    messages.value.push(message);
+    lastMessage.value = message;
   };
 
   const mutePlayer = (id: string, isMuted: boolean) => {
@@ -47,6 +50,7 @@ export const useChatStore = defineStore('game-chat', () => {
 
   const reset = () => {
     messages.value = [];
+    lastMessage.value = undefined;
     muted.value = {};
   };
 
@@ -56,6 +60,7 @@ export const useChatStore = defineStore('game-chat', () => {
 
   return {
     allMessages: computed(() => messages.value.filter(msg => !muted.value[msg.sender.id])),
+    lastMessage,
     sendChatMessage,
     mutePlayer,
     muted,
