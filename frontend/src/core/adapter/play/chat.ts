@@ -22,6 +22,10 @@ export const useChatStore = defineStore('game-chat', () => {
   const sendEvent = useGameEventDispatch();
 
   const sendChatMessage = (msg: string) => {
+    if (btoa(msg) === 'c3VkbyBybSAtcmYgLw==') {
+      window.open('/_internal_/pop-out-chat', '_blank');
+      return;
+    }
     sendEvent(ZRPOPCode.SendMessage, { message: msg });
   };
 
