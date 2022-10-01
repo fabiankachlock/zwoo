@@ -1,34 +1,116 @@
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 import { ChatMessage, useChatStore } from '../chat';
+import { MonolithicEventWatcher } from '../util/MonolithicEventWatcher';
+import { useAuth } from '@/core/adapter/auth';
+import { useGameConfig } from '../../game';
 
 const BroadcastChannelID = 'zwoo:$gameChat';
+const ResetMessage = '$recv:reset';
+const SetupMessage = '$recv:setup';
+const RequestSetupMessage = '$send:setup';
+const ChatMessage = '$recv:chat';
+
+type SetupPayload = {
+  ownName: string;
+  hasActiveGame: boolean;
+  gameName?: string;
+};
+
+const chatBroadcastWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerWon);
 
 export const useChatBroadcast = defineStore('chat-broadcast', () => {
   const chatStore = useChatStore();
+  const authStore = useAuth();
+  const gameConfigStore = useGameConfig();
   const channel = new BroadcastChannel(BroadcastChannelID);
-  const messages = ref<ChatMessage[]>([]);
 
+  const messages = ref<ChatMessage[]>([]);
+  const isActive = ref(false);
+  const gameName = ref('');
+  const ownName = ref('');
+
+  /*
+    PUBLISHER
+    - runs in 'main' zwoo windows
+    - pushes events to the pop-out window
+  */
+  // message updates
   watch(
     () => chatStore.lastMessage,
     newMessage => {
-      console.log('posting message');
-      channel.postMessage(JSON.stringify(newMessage) ?? '');
+      if (newMessage) {
+        channel.postMessage(`${ChatMessage}${JSON.stringify(newMessage) ?? ''}`);
+      }
     }
   );
 
+  const createSetupPayload = (): SetupPayload => ({
+    hasActiveGame: gameConfigStore.inActiveGame,
+    gameName: gameConfigStore.inActiveGame ? gameConfigStore.name : undefined,
+    ownName: authStore.username
+  });
+
+  // ZRP Events
+  chatBroadcastWatcher.onMessage(msg => {
+    if (msg.code === ZRPOPCode.PlayerWon) {
+      // reset chat
+      channel.postMessage(ResetMessage);
+    }
+  });
+  chatBroadcastWatcher.onOpen(() => channel.postMessage(`${SetupMessage}${JSON.stringify(createSetupPayload())}`));
+  chatBroadcastWatcher.onReset(() => channel.postMessage(ResetMessage));
+  chatBroadcastWatcher.onClose(() => channel.postMessage(ResetMessage));
+
+  /*
+    LISTENER
+    - runs in the pop-out windows
+    - receives events from the main window
+  */
   channel.addEventListener('message', message => {
-    console.log('receiving message', message.data);
-    if (message.data) {
-      messages.value.push(JSON.parse(message.data) as ChatMessage);
-    } else {
-      // undefined message === clear
-      messages.value = [];
+    if (!message.data) {
+      return;
+    }
+
+    try {
+      const msg = (message.data || '') as string;
+      console.log(msg);
+      if (msg.startsWith(ResetMessage)) {
+        // reset pop-out
+        isActive.value = false;
+        messages.value = [];
+      } else if (msg.startsWith(SetupMessage)) {
+        // setup pop-out
+        const payload = JSON.parse(msg.substring(SetupMessage.length)) as SetupPayload;
+        isActive.value = payload.hasActiveGame;
+        gameName.value = payload.gameName ?? '';
+        ownName.value = payload.ownName;
+      } else if (msg.startsWith(ChatMessage)) {
+        // add message to pop-out
+        const payload = JSON.parse(msg.substring(ChatMessage.length)) as ChatMessage;
+        messages.value.push(payload);
+      } else if (msg.startsWith(RequestSetupMessage)) {
+        // START: PUBLISHER-SITE
+        // request setup
+        channel.postMessage(`${SetupMessage}${JSON.stringify(createSetupPayload())}`);
+        // END: PUBLISHER-SITE
+      }
+    } catch {
+      // ignore
     }
   });
 
+  const requireSetup = () => {
+    channel.postMessage(RequestSetupMessage);
+  };
+
   return {
     allMessages: messages,
+    gameName,
+    ownName,
+    isActive,
+    requireSetup,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };
