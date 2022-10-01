@@ -1,7 +1,12 @@
 <template>
-  <div class="mx-auto px-2 max-w-xl">
-    <div v-if="!isActive">no active game</div>
-    <div v-if="isActive && messages.length > 0">
+  <div v-if="!isActive" class="mx-auto px-2 max-w-xl">
+    <p class="text-xl tc-main text-center m-2">no active game</p>
+  </div>
+  <div v-else>
+    <div class="bg-darkest m-2 rounded-lg p-1 flex flex-row justify-between items-center">
+      <p class="ml-2 tc-main text-xl" style="text-overflow: ellipsis; overflow: hidden">{{ gameName }}</p>
+    </div>
+    <div v-if="messages.length > 0" class="mx-auto px-2 max-w-xl">
       <div :ref="r => container = (r as HTMLDivElement)" class="h-full py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto">
         <ChatMessage
           v-for="message in messages"
@@ -14,7 +19,9 @@
         />
       </div>
     </div>
-    <div v-if="isActive && messages.length === 0">No messages to dispalay</div>
+    <div v-else class="mx-auto px-2 max-w-xl">
+      <p class="text-xl tc-main text-center m-2">No messages to dispalay</p>
+    </div>
   </div>
 </template>
 
@@ -28,6 +35,7 @@ const chat = useChatBroadcast();
 const messages = computed(() => chat.allMessages);
 const isActive = computed(() => chat.isActive);
 const username = computed(() => chat.ownName);
+const gameName = computed(() => chat.gameName);
 const container = ref<HTMLDivElement | undefined>(undefined);
 
 watch(messages, () => {
