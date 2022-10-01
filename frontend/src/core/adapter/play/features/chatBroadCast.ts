@@ -11,6 +11,7 @@ const ResetMessage = '$recv:reset';
 const SetupMessage = '$recv:setup';
 const RequestSetupMessage = '$send:setup';
 const ChatMessage = '$recv:chat';
+const RequestSendMessage = '$send:send';
 
 type SetupPayload = {
   ownName: string;
@@ -94,6 +95,10 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
         // START: PUBLISHER-SITE
         // request setup
         channel.postMessage(`${SetupMessage}${JSON.stringify(createSetupPayload())}`);
+      } else if (msg.startsWith(RequestSendMessage)) {
+        // send message
+        const payload = msg.substring(RequestSendMessage.length);
+        chatStore.sendChatMessage(payload);
         // END: PUBLISHER-SITE
       }
     } catch {
@@ -105,12 +110,17 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
     channel.postMessage(RequestSetupMessage);
   };
 
+  const sendMessage = (message: string) => {
+    channel.postMessage(`${RequestSendMessage}${message}`);
+  };
+
   return {
     allMessages: messages,
     gameName,
     ownName,
     isActive,
     requireSetup,
+    sendMessage,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };
