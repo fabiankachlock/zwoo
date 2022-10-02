@@ -58,10 +58,10 @@
     "@vue/compiler-sfc": "^3.2.31",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
-    "@vue/test-utils": "^2.0.0-rc.18",
+    "@vue/test-utils": "^2.1.0",
     "@vue/vue3-jest": "^27.0.0-alpha.4",
     "cross-env": "^7.0.3",
-    "cypress": "^10.7.0",
+    "cypress": "^10.9.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -76,7 +76,7 @@
     "vue-cli-plugin-i18n": "~2.3.1",
     "vue-jest": "^5.0.0-0",
     "webpack-bundle-analyzer": "^4.6.1",
-    "ws": "^8.8.0"
+    "ws": "^8.9.0"
   },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [
