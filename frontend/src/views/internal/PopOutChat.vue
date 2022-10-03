@@ -27,16 +27,19 @@
         <div class="m-2 flex flex-row flex-nowrap justify-between items-stretch">
           <div class="w-full mr-2">
             <input
-              class="appearance-none outline-none w-full bg-dark tc-main-light px-2 py-0.5 rounded transition hover:bg-darkest focus:bg-darkest border border-transparent focus:bc-primary ring-0"
+              class="appearance-none outline-none w-full bg-darkest tc-main-light px-2 py-0.5 rounded transition focus:bg-darkest border border-transparent focus:bc-primary ring-0"
               type="text"
               v-model="message"
               @keyup.stop
               @keyup.enter="sendMessage"
             />
           </div>
-          <div @click="sendMessage" class="flex justify-center items-center bg-dark px-3 py-0.5 rounded transition hover:bg-darkest cursor-pointer">
+          <div
+            @click="sendMessage"
+            class="sendMessageButton flex justify-center items-center bg-darkest px-3 py-0.5 rounded transition cursor-pointer"
+          >
             <button class="tc-primary">
-              <Icon icon="teenyicons:send-outline" />
+              <Icon icon="teenyicons:send-outline" class="trasform" />
             </button>
           </div>
         </div>
@@ -88,9 +91,13 @@ const sendMessage = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .pop-out-grid {
   @apply grid h-full w-full max-w-full fixed;
   grid-template-rows: min-content auto min-content;
+}
+
+.sendMessageButton:hover svg {
+  @apply scale-110;
 }
 </style>

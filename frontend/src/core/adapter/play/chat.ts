@@ -21,8 +21,8 @@ export const useChatStore = defineStore('game-chat', () => {
   const muted = ref<Record<string, boolean>>({});
   const sendEvent = useGameEventDispatch();
 
-  const sendChatMessage = (msg: string) => {
-    if (btoa(msg) === 'c3VkbyBybSAtcmYgLw==') {
+  const sendChatMessage = (msg: string, self = true) => {
+    if (btoa(msg) === 'c3VkbyBybSAtcmYgLw==' && self) {
       window.open('/_internal_/pop-out-chat', '_blank');
       return;
     }

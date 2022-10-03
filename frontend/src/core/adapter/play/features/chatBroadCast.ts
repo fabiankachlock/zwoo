@@ -99,7 +99,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
       } else if (msg.startsWith(RequestSendMessage) && isPublisher) {
         // send message
         const payload = msg.substring(RequestSendMessage.length);
-        chatStore.sendChatMessage(payload);
+        chatStore.sendChatMessage(payload, false); // don't open popup from host window triggered by this window
         // END: PUBLISHER-SITE
       }
     } catch {
