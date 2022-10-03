@@ -24,7 +24,7 @@
         <p class="text-xl tc-main text-center m-2">No messages to dispalay</p>
       </div>
       <div>
-        <div class="py-1 px-3 flex flex-row flex-nowrap justify-between items-stretch">
+        <div class="m-2 flex flex-row flex-nowrap justify-between items-stretch">
           <div class="w-full mr-2">
             <input
               class="appearance-none outline-none w-full bg-dark tc-main-light px-2 py-0.5 rounded transition hover:bg-darkest focus:bg-darkest border border-transparent focus:bc-primary ring-0"
@@ -90,7 +90,7 @@ const sendMessage = () => {
 
 <style>
 .pop-out-grid {
-  @apply grid h-full w-full max-w-full;
+  @apply grid h-full w-full max-w-full fixed;
   grid-template-rows: min-content auto min-content;
 }
 </style>
