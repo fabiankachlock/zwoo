@@ -254,6 +254,7 @@
     "reddit": "Share on Reddit",
     "whatsapp": "Share on Whatsapp",
     "telegram": "Share on Telegram",
+    "link": "Copy link",
     "join": {
       "title": "Join {0}!",
       "text": "You got invited into a zwoo game, use the link to join now!"
