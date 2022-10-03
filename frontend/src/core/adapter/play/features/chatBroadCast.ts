@@ -31,6 +31,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
   const isActive = ref(false);
   const gameName = ref('');
   const ownName = ref('');
+  let isPublisher = true;
 
   /*
     PUBLISHER
@@ -91,11 +92,11 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
         // add message to pop-out
         const payload = JSON.parse(msg.substring(ChatMessage.length)) as ChatMessage;
         messages.value.push(payload);
-      } else if (msg.startsWith(RequestSetupMessage)) {
+      } else if (msg.startsWith(RequestSetupMessage) && isPublisher) {
         // START: PUBLISHER-SITE
         // request setup
         channel.postMessage(`${SetupMessage}${JSON.stringify(createSetupPayload())}`);
-      } else if (msg.startsWith(RequestSendMessage)) {
+      } else if (msg.startsWith(RequestSendMessage) && isPublisher) {
         // send message
         const payload = msg.substring(RequestSendMessage.length);
         chatStore.sendChatMessage(payload);
@@ -107,6 +108,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
   });
 
   const requireSetup = () => {
+    isPublisher = false;
     channel.postMessage(RequestSetupMessage);
   };
 

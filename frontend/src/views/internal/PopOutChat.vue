@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { useChatBroadcast } from '@/core/adapter/play/features/chatBroadCast';
+import { useChatBroadcast } from '@/core/adapter/play/features/chatBroadcast';
 import { ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { computed, onMounted, ref, watch } from 'vue';
 import ChatMessage from '@/components/game/chat/ChatMessage.vue';
