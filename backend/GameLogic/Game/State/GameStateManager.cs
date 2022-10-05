@@ -124,8 +124,32 @@ public sealed class GameStateManager
         _actionsQueue.Intercept(() =>
         {
             _logger.Warn($"player {id} left the running game");
+            long lastPlayer = _playerCycle.ActivePlayer;
             _playerCycle.RemovePlayer(id);
-            _gameState.PlayerDecks.Remove(id);
+            long newPlayer = _playerCycle.ActivePlayer;
+
+            GameState newState = _gameState.Clone();
+            newState.PlayerDecks.Remove(id);
+            if (newPlayer != lastPlayer)
+            {
+                // active player changed --> update game state
+                newState.CurrentPlayer = newPlayer;
+                List<GameEvent> events = new List<GameEvent>()
+                {
+                    GameEvent.EndTurn(lastPlayer),
+                    GameEvent.StartTurn(newPlayer),
+                    GameEvent.CreateStateUpdate(
+                        topCard: newState.TopCard.Card,
+                        activePlayer: newState.CurrentPlayer,
+                        activePlayerCardAmount: newState.PlayerDecks[newState.CurrentPlayer].Count,
+                        lastPlayer: _gameState.CurrentPlayer,
+                        lastPlayerCardAmount: _gameState.CurrentPlayer == id ? 0 : newState.PlayerDecks[_gameState.CurrentPlayer].Count
+                    )
+                };
+                Console.WriteLine(events);
+                SendEvents(events);
+            }
+            _gameState = newState;
         });
         #pragma warning restore CS4014
     }

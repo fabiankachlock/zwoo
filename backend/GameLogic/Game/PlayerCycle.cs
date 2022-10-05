@@ -67,8 +67,8 @@ internal class PlayerCycle
 
     public void RemovePlayer(long id)
     {
-        bool isCurrent = _players.IndexOf(id) == _currentIndex;
-        if (_players.Remove(id) && isCurrent)
+        int playerIndex = _players.IndexOf(id);
+        if (_players.Remove(id) && (_currentIndex > playerIndex || _currentIndex >= _players.Count()))
         {
             _currentIndex--;
         }

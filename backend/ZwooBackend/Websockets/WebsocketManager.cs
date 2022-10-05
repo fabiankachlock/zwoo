@@ -93,7 +93,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     private void InsertWs(long gameId, long playerId, WebSocket ws)
     {
-        WebSocketLogger.Warn($"storing websocket for {playerId}");
+        WebSocketLogger.Info($"storing websocket for {playerId}");
         if (!_websockets.ContainsKey(playerId))
         {
             _websockets[playerId] = ws;
@@ -133,6 +133,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     public async Task SendPlayer(long playerId, ArraySegment<byte> content, WebSocketMessageType messageType = WebSocketMessageType.Text, bool isEndOfMessage = true)
     {
+        // TODO: not thread save (_websockets should be locked)
         if (_websockets.ContainsKey(playerId))
         {
             WebSocketLogger.Info($"[Player] [{playerId}] sending message");
@@ -150,24 +151,32 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     public async Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType = WebSocketMessageType.Text, bool isEndOfMessage = true)
     {
+        // TODO: not thread save (_games should be locked)
         if (_games.ContainsKey(gameId))
         {
-            WebSocketLogger.Info($"[Game] [{gameId}] broadcasting");
-            WsLogger.Debug($"[Game] [{gameId}] sending: {Encoding.UTF8.GetString(content)}");
-            await Task.WhenAll(_games[gameId].Select(async player =>
+            try
             {
-                if (_websockets.ContainsKey(player) && _websockets[player].State == WebSocketState.Open)
+                WebSocketLogger.Info($"[Game] [{gameId}] broadcasting");
+                WsLogger.Debug($"[Game] [{gameId}] sending: {Encoding.UTF8.GetString(content)}");
+                await Task.WhenAll(_games[gameId].Select(async player =>
                 {
-                    try
+                    if (_websockets.ContainsKey(player) && _websockets[player].State == WebSocketState.Open)
                     {
-                        await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+                        try
+                        {
+                            await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+                        }
+                        catch (Exception e)
+                        {
+                            WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
-                    }
-                }
-            }));
+                }));
+            }
+            catch (Exception e)
+            {
+                WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
+            }
         }
     }
 
