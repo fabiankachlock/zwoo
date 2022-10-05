@@ -125,6 +125,7 @@ public sealed class GameStateManager
         {
             _logger.Warn($"player {id} left the running game");
             _playerCycle.RemovePlayer(id);
+            _gameState.PlayerDecks.Remove(id);
         });
         #pragma warning restore CS4014
     }

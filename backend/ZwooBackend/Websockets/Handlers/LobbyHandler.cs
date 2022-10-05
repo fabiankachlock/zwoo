@@ -136,6 +136,7 @@ public class LobbyHandler : MessageHandler
     {
         try
         {
+            // mutation of active game
             if (context.GameRecord.Game.IsRunning)
             {
                 context.GameRecord.Game.RemovePlayer(context.Id);
