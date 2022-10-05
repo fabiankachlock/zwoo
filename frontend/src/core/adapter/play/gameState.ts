@@ -1,6 +1,7 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { Card } from '@/core/services/game/card';
+import Logger from '@/core/services/logging/logImport';
 import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/core/services/zrp/zrpTypes';
 import router from '@/router';
 import { defineStore } from 'pinia';
@@ -22,7 +23,8 @@ const gameWatcher = new MonolithicEventWatcher(
   ZRPOPCode.StateUpdate,
   ZRPOPCode.GetPlayerCardAmount,
   ZRPOPCode.GetPileTop,
-  ZRPOPCode.PlayerWon
+  ZRPOPCode.PlayerWon,
+  ZRPOPCode.PlayerLeft
 );
 
 export const useGameState = defineStore('game-state', () => {
@@ -52,6 +54,8 @@ export const useGameState = defineStore('game-state', () => {
     } else if (msg.code == ZRPOPCode.PlayerWon) {
       router.replace('/game/summary');
       dispatchEvent(ZRPOPCode._ResetState, {});
+    } else if (msg.code == ZRPOPCode.PlayerLeft) {
+      removePlayer(msg.data.username);
     }
   };
 
@@ -115,10 +119,14 @@ export const useGameState = defineStore('game-state', () => {
     verifyDeck();
   };
 
+  const removePlayer = (playerToDelete: string) => {
+    players.value = players.value.filter(p => p.name !== playerToDelete);
+  };
+
   const verifyDeck = () => {
     // TODO: Optimize this
     if (useGameCardDeck().cards.length !== players.value.find(p => p.name === auth.username)?.cards) {
-      console.warn('local deck didnt match remote state:', JSON.stringify(useGameCardDeck().cards));
+      Logger.warn(`local deck didnt match remote state: ${JSON.stringify(useGameCardDeck().cards)}`);
       dispatchEvent(ZRPOPCode.RequestHand, {});
     }
   };
