@@ -14,6 +14,7 @@ export type GamePlayer = {
   name: string;
   cards: number;
   order: number;
+  state: 'disconnected' | 'connected';
 };
 
 const gameWatcher = new MonolithicEventWatcher(
@@ -105,7 +106,8 @@ export const useGameState = defineStore('game-state', () => {
         return {
           name: p.username,
           cards: p.cards,
-          order: p.order
+          order: p.order,
+          state: players.value.find(pp => pp.name === p.username)?.state ?? 'connected'
         };
       })
       .sort((a, b) => a.order - b.order);

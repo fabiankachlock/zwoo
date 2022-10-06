@@ -33,6 +33,8 @@ export enum ZRPOPCode {
   NewHost = 114, // receiver(player/spectator)
   KickPlayer = 115, // sender (host)
   PlayerChangedRole = 116, // receiver
+  PlayerDisconnected = 117, // receiver
+  PlayerReconnected = 118, // receiver
 
   KeepAlive = 198, // sender
   AckKeepAlive = 199, //  receiver
@@ -105,6 +107,8 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.NewHost]: ZRPNamePayload;
   [ZRPOPCode.KickPlayer]: ZRPNamePayload;
   [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
+  [ZRPOPCode.PlayerDisconnected]: ZRPNamePayload;
+  [ZRPOPCode.PlayerReconnected]: ZRPNamePayload;
   // Keep alive
   [ZRPOPCode.KeepAlive]: Record<string, never>;
   [ZRPOPCode.AckKeepAlive]: Record<string, never>;
