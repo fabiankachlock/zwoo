@@ -23,6 +23,8 @@ public enum ZRPCode
     HostChanged = 114, // send
     KickPlayer = 115, // receive
     PlayerChangedRole = 116, // send
+    PlayerDisconnected = 117, //send
+    PlayerReconnected = 118, // send
 
     KeepAlive = 198, // receive
     AckKeepAlive = 199, // send
