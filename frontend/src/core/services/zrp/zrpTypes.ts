@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type ZRPMessage<T extends {} | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
+export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
   ? {
       code: T;
       data: ZRPPayloadMap[T];
