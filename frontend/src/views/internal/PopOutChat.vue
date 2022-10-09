@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isActive" class="mx-auto px-2 max-w-xl">
-    <p class="text-xl tc-main text-center m-2">no active game</p>
+    <p class="text-xl tc-main text-center m-2">{{ t('popoutChat.noActiveGame') }}</p>
   </div>
   <div v-else>
     <div class="pop-out-grid">
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div v-else class="mx-auto px-2 max-w-xl">
-        <p class="text-xl tc-main text-center m-2">No messages to dispalay</p>
+        <p class="text-xl tc-main text-center m-2">{{ t('popoutChat.noMessages') }}</p>
       </div>
       <div>
         <div class="m-2 flex flex-row flex-nowrap justify-between items-stretch">
@@ -54,8 +54,10 @@ import { ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { computed, onMounted, ref, watch } from 'vue';
 import ChatMessage from '@/components/game/chat/ChatMessage.vue';
 import { Icon } from '@iconify/vue';
+import { useI18n } from 'vue-i18n';
 
 const chat = useChatBroadcast();
+const { t } = useI18n();
 const message = ref('');
 const messages = computed(() => chat.allMessages);
 const isActive = computed(() => chat.isActive);
