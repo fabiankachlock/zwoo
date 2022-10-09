@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 import { ZRPRole } from '@/core/services/zrp/zrpTypes';
-import { uniqueBy } from '@/core/services/utils';
 
-export type InGmePlayer = {
+export type InGamePlayer = {
   id: string;
   username: string;
   role: ZRPRole;
@@ -11,47 +10,43 @@ export type InGmePlayer = {
 
 export const usePlayerManager = defineStore('game-players', {
   state: () => ({
-    _allPlayers: [] as InGmePlayer[]
+    _allPlayers: {} as Record<string, InGamePlayer>
   }),
   getters: {
-    spectators: state => state._allPlayers.filter(p => p.role === ZRPRole.Spectator),
-    players: state => state._allPlayers.filter(p => p.role !== ZRPRole.Spectator),
-    host: state => state._allPlayers.filter(p => p.role !== ZRPRole.Host)[0],
+    spectators: state => Object.values(state._allPlayers).filter(p => p.role === ZRPRole.Spectator),
+    players: state => Object.values(state._allPlayers).filter(p => p.role !== ZRPRole.Spectator),
+    host: state => Object.values(state._allPlayers).filter(p => p.role !== ZRPRole.Host)[0],
     allPlayers: state => state._allPlayers,
-    getPlayer: state => (playerId: string) => state._allPlayers.find(p => p.id === playerId)
+    getPlayer: state => (playerId: string) => state._allPlayers[playerId],
+    isPlayerActive: state => (playerId: string) => state._allPlayers[playerId].state === 'connected',
+    getPlayerRole: state => (playerId: string) => state._allPlayers[playerId].role
   },
   actions: {
-    addPlayer(player: Omit<InGmePlayer, 'state'>) {
-      this._allPlayers = uniqueBy(
-        [
-          ...this._allPlayers,
-          {
-            id: player.id,
-            role: player.role,
-            username: player.username,
-            state: 'disconnected'
-          }
-        ],
-        p => p.id
-      );
+    addPlayer(player: Omit<InGamePlayer, 'state'>) {
+      this._allPlayers[player.id] = {
+        id: player.id,
+        role: player.role,
+        username: player.username,
+        state: 'disconnected'
+      };
     },
     removePlayer(playerId: string) {
-      this._allPlayers = this._allPlayers.filter(p => p.id !== playerId);
+      delete this._allPlayers[playerId];
     },
     setPlayerDisconnected(playerId: string) {
-      const player = this._allPlayers.find(p => p.id === playerId);
+      const player = this._allPlayers[playerId];
       if (player) {
         player.state = 'disconnected';
       }
     },
     setPlayerConnected(playerId: string) {
-      const player = this._allPlayers.find(p => p.id === playerId);
+      const player = this._allPlayers[playerId];
       if (player) {
         player.state = 'connected';
       }
     },
     reset() {
-      this._allPlayers = [];
+      this._allPlayers = {};
     }
   }
 });
