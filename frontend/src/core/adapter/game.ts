@@ -93,7 +93,6 @@ export const useGameConfig = defineStore('game-config', {
       return [];
     },
     async getGameMeta(id: number): Promise<GameMeta | undefined> {
-      return undefined;
       const game = this.allGames.find(game => game.id === id);
       if (game) {
         return game;
