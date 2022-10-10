@@ -61,6 +61,7 @@ import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import { onMounted, ref } from 'vue';
 import { useGameConfig } from '@/core/adapter/game';
+import { BackendError } from '@/core/services/api/errors';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -125,6 +126,9 @@ onMounted(async () => {
     gameName.value = game.name;
     needsValidation = !game.isPublic;
     tryJoin();
+  } else {
+    isLoading.value = false;
+    error.value = [t(`errors.backend.${BackendError.GameNotFound}`)];
   }
 });
 </script>
