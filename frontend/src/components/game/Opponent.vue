@@ -27,8 +27,10 @@
 import { toRefs, defineProps, watch, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useChatStore } from '@/core/adapter/play/chat';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
 
 const chat = useChatStore();
+const lobby = useLobbyStore();
 const props = defineProps<{
   isActive: boolean;
   isConnected: boolean;
@@ -45,7 +47,7 @@ const toggleMute = () => {
 };
 
 const kickPlayer = () => {
-  return;
+  lobby.kickPlayer(name.value);
 };
 
 watch(isActive, newValue => {
