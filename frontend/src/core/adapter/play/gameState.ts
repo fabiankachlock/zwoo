@@ -5,16 +5,17 @@ import Logger from '@/core/services/logging/logImport';
 import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/core/services/zrp/zrpTypes';
 import router from '@/router';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useAuth } from '../auth';
 import { useGameCardDeck } from './deck';
+import { usePlayerManager } from './playerManager';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GamePlayer = {
   name: string;
   cards: number;
   order: number;
-  state: 'disconnected' | 'connected';
+  isConnected: boolean;
 };
 
 const gameWatcher = new MonolithicEventWatcher(
@@ -25,14 +26,17 @@ const gameWatcher = new MonolithicEventWatcher(
   ZRPOPCode.GetPlayerCardAmount,
   ZRPOPCode.GetPileTop,
   ZRPOPCode.PlayerWon,
-  ZRPOPCode.PlayerLeft
+  ZRPOPCode.PlayerLeft,
+  ZRPOPCode.PlayerReconnected,
+  ZRPOPCode.PlayerDisconnected
 );
 
 export const useGameState = defineStore('game-state', () => {
   const isActivePlayer = ref(false);
+  const playerManager = usePlayerManager();
   const topCard = ref<Card | CardDescriptor>(CardDescriptor.BackUpright);
   const activePlayerName = ref('');
-  const players = ref<GamePlayer[]>([]);
+  const players = ref<Omit<GamePlayer, 'isConnected'>[]>([]);
   const dispatchEvent = useGameEventDispatch();
   const auth = useAuth();
 
@@ -57,6 +61,10 @@ export const useGameState = defineStore('game-state', () => {
       dispatchEvent(ZRPOPCode._ResetState, {});
     } else if (msg.code == ZRPOPCode.PlayerLeft) {
       removePlayer(msg.data.username);
+    } else if (msg.code === ZRPOPCode.PlayerDisconnected) {
+      playerManager.setPlayerDisconnected(msg.data.username);
+    } else if (msg.code === ZRPOPCode.PlayerReconnected) {
+      playerManager.setPlayerConnected(msg.data.username);
     }
   };
 
@@ -106,8 +114,7 @@ export const useGameState = defineStore('game-state', () => {
         return {
           name: p.username,
           cards: p.cards,
-          order: p.order,
-          state: players.value.find(pp => pp.name === p.username)?.state ?? 'connected'
+          order: p.order
         };
       })
       .sort((a, b) => a.order - b.order);
@@ -148,7 +155,12 @@ export const useGameState = defineStore('game-state', () => {
     topCard,
     isActivePlayer,
     activePlayerName,
-    players,
+    players: computed<GamePlayer[]>(() =>
+      players.value.map(p => ({
+        ...p,
+        isConnected: playerManager.isPlayerActive(p.name)
+      }))
+    ),
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };

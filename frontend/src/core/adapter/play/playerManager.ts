@@ -16,10 +16,10 @@ export const usePlayerManager = defineStore('game-players', {
     spectators: state => Object.values(state._allPlayers).filter(p => p.role === ZRPRole.Spectator),
     players: state => Object.values(state._allPlayers).filter(p => p.role !== ZRPRole.Spectator),
     host: state => Object.values(state._allPlayers).filter(p => p.role !== ZRPRole.Host)[0],
-    allPlayers: state => state._allPlayers,
+    allPlayers: state => Object.values(state._allPlayers),
     getPlayer: state => (playerId: string) => state._allPlayers[playerId],
-    isPlayerActive: state => (playerId: string) => state._allPlayers[playerId].state === 'connected',
-    getPlayerRole: state => (playerId: string) => state._allPlayers[playerId].role
+    isPlayerActive: state => (playerId: string) => state._allPlayers[playerId]?.state === 'connected',
+    getPlayerRole: state => (playerId: string) => state._allPlayers[playerId]?.role
   },
   actions: {
     addPlayer(player: Omit<InGamePlayer, 'state'>) {
