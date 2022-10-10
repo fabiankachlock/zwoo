@@ -15,7 +15,7 @@
           <Icon v-if="isMuted" icon="bi:mic-mute-fill" />
           <Icon v-else icon="bi:mic-fill" />
         </button>
-        <button v-else @click="kickPlayer" class="transition-transform hover:scale-110 tc-secondary">
+        <button v-if="isHost && !isConnected" @click="kickPlayer" class="transition-transform hover:scale-110 tc-secondary">
           <Icon icon="akar-icons:cross" />
         </button>
       </span>
@@ -28,9 +28,11 @@ import { toRefs, defineProps, watch, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useChatStore } from '@/core/adapter/play/chat';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { useIsHost } from '@/composables/userRoles';
 
 const chat = useChatStore();
 const lobby = useLobbyStore();
+const { isHost } = useIsHost();
 const props = defineProps<{
   isActive: boolean;
   isConnected: boolean;
