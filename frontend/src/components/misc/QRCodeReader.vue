@@ -25,6 +25,7 @@ import { defineEmits, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+// TODO: ts definitions
 declare var BarcodeDetector: {
   detect(src: Blob | HTMLCanvasElement | HTMLImageElement | HTMLVideoElement | ImageBitmap | ImageData | SVGImageElement): Promise<
     {
