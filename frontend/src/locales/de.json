@@ -361,5 +361,9 @@
   "changelog": {
     "title": "Update {0}",
     "close": "Schließen"
+  },
+  "popoutChat": {
+    "noActiveGame": "Es gitb zurzeit kein aktive Spiel.",
+    "noMessages": "Der Chat ist leer."
   }
 }
