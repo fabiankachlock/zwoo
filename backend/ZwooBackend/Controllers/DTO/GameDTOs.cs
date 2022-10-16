@@ -59,10 +59,15 @@ public class JoinGameResponse
     [JsonPropertyName("isRunning")]
     public bool IsRunning { set; get; }
 
-    public JoinGameResponse(long gameId, bool isRunning)
+    [JsonPropertyName("role")]
+    public ZRPRole Role { set; get; }
+
+
+    public JoinGameResponse(long gameId, bool isRunning, ZRPRole role)
     {
         GameId = gameId;
         IsRunning = isRunning;
+        Role = role;
     }
 }
 
