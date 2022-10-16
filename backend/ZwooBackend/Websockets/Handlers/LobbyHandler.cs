@@ -114,7 +114,28 @@ public class LobbyHandler : MessageHandler
             KickPlayerDTO payload = message.DecodePyload<KickPlayerDTO>();
             var player = context.GameRecord.Lobby.GetPlayer(payload.Username);
 
-            context.GameRecord.Lobby.RemovePlayer(payload.Username);
+            // mutation of active game
+            if (context.GameRecord.Game.IsRunning && player != null)
+            {
+                context.GameRecord.Game.RemovePlayer(player.Id);
+                if (context.GameRecord.Game.PlayerCount == 1)
+                {
+                    // close game
+                    _webSocketManager.QuitGame(context.GameId);
+                    GameManager.Global.RemoveGame(context.GameId);
+                    return;
+                }
+            }
+
+            LobbyResult result = context.GameRecord.Lobby.RemovePlayer(payload.Username);
+            if (context.GameRecord.Lobby.ActivePlayerCount() == 0)
+            {
+                // close game
+                _webSocketManager.QuitGame(context.GameId);
+                GameManager.Global.RemoveGame(context.GameId);
+                return;
+            }
+
             if (player != null && player.Role == ZRPRole.Spectator)
             {
                 _webSocketManager.Disconnect(player.Id);
@@ -150,7 +171,7 @@ public class LobbyHandler : MessageHandler
             }
 
             LobbyResult result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
-            if (context.GameRecord.Lobby.PlayerCount() == 0)
+            if (context.GameRecord.Lobby.ActivePlayerCount() == 0)
             {
                 // close game
                 _webSocketManager.QuitGame(context.GameId);

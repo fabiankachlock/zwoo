@@ -25,6 +25,7 @@ public class PlayerManager
             return (null, null);
         }
 
+        WebSocketLogger.Info($"[PlayerManager] {playerId} connected");
         game?.Lobby.PlayerConnected(playerId);
         if (player.Role == ZRPRole.Spectator)
         {
@@ -50,23 +51,28 @@ public class PlayerManager
    
         if (game != null)
         {
-            // player still in lobby --> disconnected
-            WebSocketLogger.Info($"{playerId} disconnected");
-            await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerDisconnected, new PlayerReconnectedDTO(player.Username)));
-            game?.Lobby.PlayerDisconnected(playerId);
+            if (game.Game.IsRunning) {
+                WebSocketLogger.Info($"[PlayerManager] {playerId} disconnected from running game");
+                await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerDisconnected, new PlayerDisconnectedDTO(player.Username)));
+                game?.Lobby.PlayerDisconnected(playerId);
+            } else {
+                WebSocketLogger.Info($"[PlayerManager] {playerId} removed from lobby");
+                game.Lobby.RemovePlayer(playerId);
 
-            // only send leave message when the player disconnects
-            if (player.Role == ZRPRole.Spectator)
-            {
-                // TODO: change player model to include wins
-                await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
-            }
-            else
-            {
-                await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
+                // only send leave message when the player leaves (NOT disconnects)
+                if (player.Role == ZRPRole.Spectator)
+                {
+                    // TODO: change player model to include wins
+                    await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
+                }
+                else
+                {
+                    await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
+                }
             }
 
-            if (game?.Lobby.PlayerCount() == 0)
+
+            if (game?.Lobby.ActivePlayerCount() == 0 || game?.Lobby.PlayerCount() < 2)
             {
                 WebSocketLogger.Info($"force closing game {gameId} due to a lack of players");
                 GameManager.Global.RemoveGame(game.Game.Id);

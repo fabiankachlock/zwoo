@@ -27,7 +27,7 @@ export const usePlayerManager = defineStore('game-players', {
         id: player.id,
         role: player.role,
         username: player.username,
-        state: 'disconnected'
+        state: 'connected' // default state is connected, since only connected players are allowed to go ingame
       };
     },
     removePlayer(playerId: string) {

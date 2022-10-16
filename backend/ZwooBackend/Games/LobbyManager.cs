@@ -59,6 +59,8 @@ public class LobbyManager
 
     public int PlayerCount() => PlayersNames().Count();
 
+    public int ActivePlayerCount() => _players.FindAll(p => p.Role != ZRPRole.Spectator && p.State == PlayerState.Connected).Select(p => p.Username).Count();
+
     public bool HasHost() => _players.Where(p => p.Role == ZRPRole.Host).Count() == 1;
 
     public bool HasPlayer(string name)
