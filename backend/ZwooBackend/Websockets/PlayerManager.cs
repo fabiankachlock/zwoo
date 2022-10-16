@@ -72,7 +72,7 @@ public class PlayerManager
             }
 
 
-            if (game?.Lobby.ActivePlayerCount() == 0 || game?.Lobby.PlayerCount() < 2)
+            if (game?.Lobby.ActivePlayerCount() == 0 || (game.Game.IsRunning && game?.Lobby.PlayerCount() < 2))
             {
                 WebSocketLogger.Info($"force closing game {gameId} due to a lack of players");
                 GameManager.Global.RemoveGame(game.Game.Id);
