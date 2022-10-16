@@ -1,4 +1,5 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { useWakeLock } from '@/composables/useWakeLock';
 import router from '@/router';
 import { defineStore } from 'pinia';
 import { Backend, Endpoint } from '../services/api/apiConfig';
@@ -20,7 +21,10 @@ export const useGameConfig = defineStore('game-config', {
     name: '',
     role: undefined as ZRPRole | undefined,
     inActiveGame: false,
-    _connection: undefined as ZRPWebsocketAdapter | undefined
+    _connection: undefined as ZRPWebsocketAdapter | undefined,
+    _wakeLock: () => {
+      return;
+    }
   }),
   getters: {
     // TODO: delete this?
@@ -73,6 +77,7 @@ export const useGameConfig = defineStore('game-config', {
       if (this.inActiveGame) {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
+        this._wakeLock(); // relief wakelock
         this.$patch({
           inActiveGame: false,
           gameId: undefined,
@@ -113,6 +118,7 @@ export const useGameConfig = defineStore('game-config', {
         (await import(/* webpackChunkName: "game-logic" */ './play/rules')).useRules().__init__();
         (await import(/* webpackChunkName: "game-logic" */ './play/summary')).useGameSummary().__init__();
         (await import(/* webpackChunkName: "game-logic" */ './play/util/keepAlive')).useKeepAlive().__init__();
+        (await import(/* webpackChunkName: "internal" */ './play/features/chatBroadcast')).useChatBroadcast().__init__();
         initializedGameModules = true;
       }
     },
@@ -125,6 +131,13 @@ export const useGameConfig = defineStore('game-config', {
         );
         const events = useGameEvents();
         this._connection.readMessages(events.handleIncomingEvent);
+        
+        useWakeLock().then(lock => {
+          if (lock) {
+            this._wakeLock = lock;
+          }
+        });
+        
         if (isRunning) {
           events.lastEvent = {
             code: ZRPOPCode.GameStarted,

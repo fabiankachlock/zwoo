@@ -5,10 +5,10 @@
       <div class="relative">
         <input
           :ref="
-        r => {
-          input = r as HTMLInputElement;
-        }
-      "
+            r => {
+              input = r as HTMLInputElement;
+            }
+          "
           autocomplete=""
           class="bg-dark shadow appearance-none border bc-main rounded w-full py-2 pl-3 pr-7 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
           :name="id"
@@ -17,6 +17,7 @@
           :placeholder="placeholder"
           :value="modelValue"
           @keyup.stop
+          @keydown.enter.prevent
           @input="updateInput"
         />
         <button

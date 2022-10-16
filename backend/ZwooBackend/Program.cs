@@ -18,10 +18,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
 {
-    o.ExpireTimeSpan = TimeSpan.FromDays(7);
-    o.SlidingExpiration = true;
+    o.ExpireTimeSpan = TimeSpan.FromDays(90);
+    // Dont use SlidingExpiration, because its an security issue!
     o.Cookie.Name = "auth";
     o.Cookie.HttpOnly = Globals.UseSsl;
+    o.Cookie.MaxAge = o.ExpireTimeSpan;
     if (Globals.UseSsl)
     {
         o.Cookie.SecurePolicy = CookieSecurePolicy.Always;

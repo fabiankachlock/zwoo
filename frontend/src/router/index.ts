@@ -16,6 +16,7 @@ import { DeveloperRoute } from './developer';
 import { ThemesRoute } from './themes';
 import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
 import { VersionGuard } from '@/core/services/security/VersionGuard';
+import { InternalRoute } from './internal';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,6 +42,7 @@ const routes: Array<RouteRecordRaw> = [
   GameRoute,
   ThemesRoute,
   DeveloperRoute,
+  InternalRoute,
   {
     path: '/invalid-version',
     component: Version
