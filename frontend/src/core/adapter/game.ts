@@ -41,7 +41,7 @@ export const useGameConfig = defineStore('game-config', {
       } else if (game) {
         this.$patch({
           inActiveGame: true,
-          role: ZRPRole.Host,
+          role: game.role,
           gameId: game.id,
           name: name
         });
@@ -62,7 +62,7 @@ export const useGameConfig = defineStore('game-config', {
       } else if (game) {
         this.$patch({
           inActiveGame: true,
-          role: asPlayer ? ZRPRole.Player : ZRPRole.Spectator,
+          role: game.role,
           gameId: game.id,
           name: data?.name ?? 'error'
         });
