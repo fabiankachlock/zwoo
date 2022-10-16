@@ -57,7 +57,7 @@ public class GameController : Controller
                 GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
 
                 Globals.Logger.Info($"{user.Id} created game {gameId}");
-                return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId)));
+                return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId, false)));
             }
             else if (body.Opcode == ZRPRole.Player || body.Opcode == ZRPRole.Spectator)
             {
@@ -90,7 +90,7 @@ public class GameController : Controller
                 }
 
                 Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
-                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id)));
+                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning)));
             }
 
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));
