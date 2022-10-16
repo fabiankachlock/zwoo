@@ -131,13 +131,13 @@ export const useGameConfig = defineStore('game-config', {
         );
         const events = useGameEvents();
         this._connection.readMessages(events.handleIncomingEvent);
-        
+
         useWakeLock().then(lock => {
           if (lock) {
             this._wakeLock = lock;
           }
         });
-        
+
         if (isRunning) {
           events.lastEvent = {
             code: ZRPOPCode.GameStarted,
