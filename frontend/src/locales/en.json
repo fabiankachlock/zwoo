@@ -106,7 +106,9 @@
     "reload": "Update",
     "nothingFound": "No game could be found.",
     "spectate": "Spectate",
-    "play": "Play"
+    "play": "Play",
+    "savedGame": "Saved Game",
+    "rejoin": "Rejoin"
   },
   "leaderboard": {
     "leaderboard": "Leaderboard",

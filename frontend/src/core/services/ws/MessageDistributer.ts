@@ -28,6 +28,10 @@ export class ZRPWebsocketAdapter implements BidirectionalMessageSource<ZRPMessag
   public writeMessage(message: ZRPMessage): void {
     Logger.Websocket.log('[distributer] scheduling send');
     this.messageQueue.execute(async () => {
+      while (this.ws.state === WebSocket.CONNECTING) {
+        Logger.Websocket.warn(`connection istn't opened yet, retrying in 100ms`);
+        await new Promise(res => setTimeout(() => res({}), 100));
+      }
       Logger.Websocket.log('[distributer] sending');
       this.ws.sendMessage(ZRPCoder.encode(message));
     });

@@ -37,7 +37,7 @@ public class WebSocketController : Controller
                     return;
                 }
 
-                LobbyResult result = game.Lobby.PlayerConnected((long)user.Id);
+                LobbyResult result = game.Lobby.PlayerWantsToConnect((long)user.Id);
                 if (result != LobbyResult.Success)
                 {
                     if (result == LobbyResult.ErrorLobbyFull)

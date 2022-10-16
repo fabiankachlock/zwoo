@@ -106,7 +106,9 @@
     "reload": "Aktualisieren",
     "nothingFound": "Es konnte kein Spiel gefunden werden.",
     "spectate": "Zuschauen",
-    "play": "Spielen"
+    "play": "Spielen",
+    "savedGame": "Gespeichertes Spiel",
+    "rejoin": "Wieder Beitreten"
   },
   "leaderboard": {
     "leaderboard": "Bestenliste",

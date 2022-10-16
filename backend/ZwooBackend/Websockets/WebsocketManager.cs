@@ -13,10 +13,12 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
     private Dictionary<long, WebSocket> _websockets = new Dictionary<long, WebSocket>();
     private Dictionary<long, HashSet<long>> _games = new Dictionary<long, HashSet<long>>();
     private WebSocketMessageDistributer _distributer;
+    private PlayerManager _playerManager;
 
     public WebSocketManager()
     {
         _distributer = new WebSocketMessageDistributer(this);
+        _playerManager = new PlayerManager(this);
     }
 
 
@@ -33,26 +35,14 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             return;
         }
 
-        GameRecord? game = GameManager.Global.GetGame(gameId);
-        var player = game?.Lobby.GetPlayer(playerId);
-        if (game == null || player == null)
+
+        var (player, game) = await _playerManager.ConnectPlayer(playerId, gameId);
+        if (player == null || game == null)
         {
             WebSocketLogger.Warn($"no game found for {playerId}");
             closed.SetResult();
             return;
-
         }
-
-        if (player.Role == ZRPRole.Spectator)
-        {
-            // TODO: change player model to include wins
-            await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorJoined, new SpectatorJoinedDTO(player.Username, 0)));
-        }
-        else
-        {
-            await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerJoined, new PlayerJoinedDTO(player.Username, 0)));
-        }
-
 
         try
         {
@@ -62,36 +52,18 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            WebSocketLogger.Error($"in websocket {playerId}", e);
         }
 
         RemoveWs(gameId, playerId, ws);
-        if (game != null)
-        {
-            LobbyResult result = game.Lobby.RemovePlayer(playerId);
-            // only send leave message when the player disconnects
-            if (player != null && player.Role == ZRPRole.Spectator && result == LobbyResult.Success)
-            {
-                // TODO: change player model to include wins
-                await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
-            }
-            else if (player != null && result == LobbyResult.Success)
-            {
-                await BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
-            }
-
-            if (game?.Lobby.PlayerCount() == 0)
-            {
-                GameManager.Global.RemoveGame(game.Game.Id);
-            }
-        }
+        await _playerManager.DisconnectPlayer(playerId, gameId);
         WebSocketLogger.Info($"{playerId} disconnected");
         closed.SetResult();
     }
 
     private void InsertWs(long gameId, long playerId, WebSocket ws)
     {
-        WebSocketLogger.Warn($"storing websocket for {playerId}");
+        WebSocketLogger.Info($"storing websocket for {playerId}");
         if (!_websockets.ContainsKey(playerId))
         {
             _websockets[playerId] = ws;
@@ -131,6 +103,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     public async Task SendPlayer(long playerId, ArraySegment<byte> content, WebSocketMessageType messageType = WebSocketMessageType.Text, bool isEndOfMessage = true)
     {
+        // TODO: not thread save (_websockets should be locked)
         if (_websockets.ContainsKey(playerId))
         {
             WebSocketLogger.Info($"[Player] [{playerId}] sending message");
@@ -148,24 +121,32 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
 
     public async Task BroadcastGame(long gameId, ArraySegment<byte> content, WebSocketMessageType messageType = WebSocketMessageType.Text, bool isEndOfMessage = true)
     {
+        // TODO: not thread save (_games should be locked)
         if (_games.ContainsKey(gameId))
         {
-            WebSocketLogger.Info($"[Game] [{gameId}] broadcasting");
-            WsLogger.Debug($"[Game] [{gameId}] sending: {Encoding.UTF8.GetString(content)}");
-            await Task.WhenAll(_games[gameId].Select(async player =>
+            try
             {
-                if (_websockets.ContainsKey(player) && _websockets[player].State == WebSocketState.Open)
+                WebSocketLogger.Info($"[Game] [{gameId}] broadcasting");
+                WsLogger.Debug($"[Game] [{gameId}] sending: {Encoding.UTF8.GetString(content)}");
+                await Task.WhenAll(_games[gameId].Select(async player =>
                 {
-                    try
+                    if (_websockets.ContainsKey(player) && _websockets[player].State == WebSocketState.Open)
                     {
-                        await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+                        try
+                        {
+                            await _websockets[player].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+                        }
+                        catch (Exception e)
+                        {
+                            WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
-                    }
-                }
-            }));
+                }));
+            }
+            catch (Exception e)
+            {
+                WebSocketLogger.Warn($"[Game] [{gameId}] error while sending a message {e}");
+            }
         }
     }
 
@@ -247,6 +228,7 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
     {
         if (_games.ContainsKey(gameId))
         {
+            WebSocketLogger.Info($"closing game {gameId}");
             HashSet<long> players = _games[gameId];
             foreach (long player in players)
             {

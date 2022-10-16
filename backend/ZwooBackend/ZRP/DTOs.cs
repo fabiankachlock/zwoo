@@ -53,6 +53,11 @@ public readonly record struct PlayerChangedRoleDTO(
     int Wins
 );
 
+public readonly record struct PlayerDisconnectedDTO(string Username);
+
+public readonly record struct PlayerReconnectedDTO(string Username);
+
+
 public readonly record struct KeepAliveDTO(); // empty
 
 public readonly record struct AckKeepAliveDTO(); // empty

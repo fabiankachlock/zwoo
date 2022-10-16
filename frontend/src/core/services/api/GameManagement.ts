@@ -3,8 +3,10 @@ import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './apiConfig';
 import { BackendErrorAble, parseBackendError } from './errors';
 
-export type GameStatusResponse = BackendErrorAble<{
+export type GameJoinResponse = BackendErrorAble<{
   id: number;
+  isRunning: boolean;
+  role: ZRPRole;
 }>;
 
 export type GameMeta = {
@@ -17,12 +19,14 @@ export type GameMeta = {
 export type GamesList = GameMeta[];
 
 export class GameManagementService {
-  static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameStatusResponse> => {
+  static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameJoinResponse> => {
     Logger.Api.log(`creating ${isPublic ? 'public' : 'non-public'} game ${name}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking create game response');
       return {
-        id: 1
+        id: 1,
+        isRunning: false,
+        role: ZRPRole.Host
       };
     }
 
@@ -50,7 +54,9 @@ export class GameManagementService {
     const result = (await req.json()) as { guid: number };
 
     return {
-      id: result.guid
+      id: result.guid,
+      isRunning: false,
+      role: ZRPRole.Host
     };
   };
 
@@ -104,12 +110,14 @@ export class GameManagementService {
     return result;
   };
 
-  static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameStatusResponse> => {
+  static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameJoinResponse> => {
     Logger.Api.log(`send join game ${gameId} request as ${role}`);
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking join game response');
       return {
-        id: gameId
+        id: gameId,
+        isRunning: false,
+        role: role
       };
     }
 
@@ -133,9 +141,11 @@ export class GameManagementService {
       };
     }
 
-    const result = (await req.json()) as { guid: number };
+    const result = (await req.json()) as { guid: number; isRunning: boolean; role: ZRPRole };
     return {
-      id: result.guid
+      id: result.guid,
+      isRunning: result.isRunning,
+      role: result.role
     };
   };
 }

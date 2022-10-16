@@ -8,6 +8,7 @@
         :card-amount="player.cards"
         :is-active="player.name === activePlayer"
         :is-muted="mutedState[player.name]"
+        :is-connected="player.isConnected"
       />
     </div>
   </div>
