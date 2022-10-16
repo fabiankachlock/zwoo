@@ -5,6 +5,7 @@ import { BackendErrorAble, parseBackendError } from './errors';
 
 export type GameStatusResponse = BackendErrorAble<{
   id: number;
+  isRunning: boolean;
 }>;
 
 export type GameMeta = {
@@ -22,7 +23,8 @@ export class GameManagementService {
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking create game response');
       return {
-        id: 1
+        id: 1,
+        isRunning: false
       };
     }
 
@@ -50,7 +52,8 @@ export class GameManagementService {
     const result = (await req.json()) as { guid: number };
 
     return {
-      id: result.guid
+      id: result.guid,
+      isRunning: false
     };
   };
 
@@ -109,7 +112,8 @@ export class GameManagementService {
     if (process.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking join game response');
       return {
-        id: gameId
+        id: gameId,
+        isRunning: false
       };
     }
 
@@ -133,9 +137,10 @@ export class GameManagementService {
       };
     }
 
-    const result = (await req.json()) as { guid: number };
+    const result = (await req.json()) as { guid: number; isRunning: boolean };
     return {
-      id: result.guid
+      id: result.guid,
+      isRunning: result.isRunning
     };
   };
 }

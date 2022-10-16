@@ -66,7 +66,7 @@ export const useGameConfig = defineStore('game-config', {
           gameId: game.id,
           name: data?.name ?? 'error'
         });
-        this.connect();
+        this.connect(game.isRunning);
       }
     },
     leave(): void {
@@ -116,7 +116,7 @@ export const useGameConfig = defineStore('game-config', {
         initializedGameModules = true;
       }
     },
-    async connect() {
+    async connect(isRunning = false) {
       await this._initGameModules();
       setTimeout(() => {
         this._connection = new ZRPWebsocketAdapter(
@@ -125,6 +125,12 @@ export const useGameConfig = defineStore('game-config', {
         );
         const events = useGameEvents();
         this._connection.readMessages(events.handleIncomingEvent);
+        if (isRunning) {
+          events.lastEvent = {
+            code: ZRPOPCode.GameStarted,
+            data: {}
+          };
+        }
       }, 0);
     },
     async tryLeave() {
