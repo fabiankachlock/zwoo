@@ -12,7 +12,13 @@ import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
 import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
+export type SavedGame = {
+  id: number;
+  role: ZRPRole;
+};
+
 let initializedGameModules = false;
+const lastGameKey = 'zwoo:lg';
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
@@ -33,6 +39,9 @@ export const useGameConfig = defineStore('game-config', {
   actions: {
     changeRole(newRole: ZRPRole | undefined) {
       this.role = newRole;
+      if (newRole && this.gameId) {
+        this._saveConfig({ id: this.gameId, role: newRole });
+      }
     },
     async create(name: string, isPublic: boolean, password: string) {
       const nameValid = new GameNameValidator().validate(name);
@@ -50,6 +59,7 @@ export const useGameConfig = defineStore('game-config', {
           name: name
         });
         this.connect();
+        this._saveConfig({ id: game.id, role: game.role });
       }
     },
     async join(id: number, password: string, asPlayer: boolean, asSpectator: boolean) {
@@ -71,6 +81,7 @@ export const useGameConfig = defineStore('game-config', {
           name: data?.name ?? 'error'
         });
         this.connect(game.isRunning);
+        this._saveConfig({ id: game.id, role: game.role });
       }
     },
     leave(): void {
@@ -78,6 +89,7 @@ export const useGameConfig = defineStore('game-config', {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
         this._wakeLock(); // relief wakelock
+        this.clearStoredConfig();
         this.$patch({
           inActiveGame: false,
           gameId: undefined,
@@ -158,6 +170,30 @@ export const useGameConfig = defineStore('game-config', {
         Logger.Zrp.log(`[outgoing] ${code} ${JSON.stringify(payload)}`);
         this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
       }
+    },
+    _saveConfig(config: SavedGame) {
+      localStorage.setItem(lastGameKey, JSON.stringify(config));
+    },
+    async tryRestoreStoredConfig(): Promise<(GameMeta & SavedGame) | undefined> {
+      const storedConfig = localStorage.getItem(lastGameKey);
+      if (storedConfig) {
+        try {
+          const config = JSON.parse(storedConfig) as SavedGame;
+          const meta = await this.getGameMeta(config.id);
+          if (meta)
+            return {
+              ...config,
+              ...meta
+            };
+          this.clearStoredConfig();
+        } catch {
+          return undefined;
+        }
+      }
+      return undefined;
+    },
+    clearStoredConfig() {
+      localStorage.removeItem(lastGameKey);
     }
   }
 });
