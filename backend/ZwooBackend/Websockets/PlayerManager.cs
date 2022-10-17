@@ -79,4 +79,26 @@ public class PlayerManager
             }
         }
     }
+
+    public async Task FinishGame(long gameId)
+    {
+        GameRecord? game = GameManager.Global.GetGame(gameId);
+        if (game == null)
+        {
+            return;
+        }
+
+        // transform all disconnected players into a spectator
+        var disconnectedPlayers = game.Lobby.Players()
+            .Select(p => game.Lobby.GetPlayer(p)!)
+            .Where(p => p != null && p.State == PlayerState.Disconnected);
+        
+        // TODO: make this parallel
+        foreach (var player in disconnectedPlayers)
+        {
+            // make them a spectator
+            var result = game.Lobby.ChangeRole(player.Username, ZRPRole.Spectator);
+            await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(player.Username, ZRPRole.Spectator, 0)));
+        }
+    }
 }

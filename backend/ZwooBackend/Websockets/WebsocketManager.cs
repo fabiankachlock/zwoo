@@ -236,4 +236,9 @@ public class WebSocketManager : SendableWebSocketManager, ManageableWebSocketMan
             }
         }
     }
+
+    public async Task FinishGame(long gameId)
+    {
+        await _playerManager.FinishGame(gameId);
+    }
 }
