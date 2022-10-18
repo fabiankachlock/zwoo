@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace ZwooBackend.Controllers.DTO;
 
 public class CreateAccount
@@ -17,4 +19,11 @@ public class Login
 public class Delete
 {
     public string password { get; set; } = "";
+}
+
+public class ChangePassword
+{
+    public string oldPassword { get; set; } = "";
+    
+    public string newPassword { get; set; } = "";
 }

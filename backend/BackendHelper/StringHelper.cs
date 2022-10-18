@@ -1,4 +1,6 @@
 using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace BackendHelper;
@@ -47,5 +49,23 @@ public static class StringHelper
             return false;
         else
             return true;
+    }
+
+    public static bool CheckPassword(string password, string hash)
+    {
+        var salt = Convert.FromBase64String(hash.Split(':')[1]);
+        var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
+        return Convert.ToBase64String(HashString(pw)) == hash.Split(':')[2];
+    }
+    
+    public static byte[] HashString(byte[] str)
+    {
+        var pw = str;
+        using (var sha = SHA512.Create())
+        {
+            pw = Enumerable.Range(0, 10000).Aggregate(pw, (current, i) => sha.ComputeHash(current));
+        }
+
+        return pw;
     }
 }
