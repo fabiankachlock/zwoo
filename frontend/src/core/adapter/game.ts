@@ -90,6 +90,7 @@ export const useGameConfig = defineStore('game-config', {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
         this._wakeLock(); // relief wakelock
+        useGameEvents().clear();
         this.clearStoredConfig();
         this.$patch({
           inActiveGame: false,
@@ -152,7 +153,7 @@ export const useGameConfig = defineStore('game-config', {
         });
 
         if (isRunning) {
-          events.pushEvennt(ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {}));
+          events.pushEvent(ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {}));
         }
       }, 0);
     },
@@ -169,7 +170,7 @@ export const useGameConfig = defineStore('game-config', {
         if (!ZRPCoder.isInternalMessage(code)) {
           this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
         } else {
-          useGameEvents().pushEvennt(ZRPMessageBuilder.build(code, payload));
+          useGameEvents().pushEvent(ZRPMessageBuilder.build(code, payload));
         }
       }
     },
