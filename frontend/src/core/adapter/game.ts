@@ -9,6 +9,7 @@ import Logger from '../services/logging/logImport';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
 import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
+import { ZRPCoder } from '../services/zrp/zrpCoding';
 import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
@@ -89,6 +90,7 @@ export const useGameConfig = defineStore('game-config', {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
         this._wakeLock(); // relief wakelock
+        useGameEvents().clear();
         this.clearStoredConfig();
         this.$patch({
           inActiveGame: false,
@@ -151,10 +153,7 @@ export const useGameConfig = defineStore('game-config', {
         });
 
         if (isRunning) {
-          events.lastEvent = {
-            code: ZRPOPCode.GameStarted,
-            data: {}
-          };
+          events.pushEvent(ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {}));
         }
       }, 0);
     },
@@ -168,7 +167,11 @@ export const useGameConfig = defineStore('game-config', {
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
       if (this._connection) {
         Logger.Zrp.log(`[outgoing] ${code} ${JSON.stringify(payload)}`);
-        this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
+        if (!ZRPCoder.isInternalMessage(code)) {
+          this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
+        } else {
+          useGameEvents().pushEvent(ZRPMessageBuilder.build(code, payload));
+        }
       }
     },
     _saveConfig(config: SavedGame) {

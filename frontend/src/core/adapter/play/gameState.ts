@@ -58,7 +58,6 @@ export const useGameState = defineStore('game-state', () => {
       updateGame(msg.data);
     } else if (msg.code == ZRPOPCode.PlayerWon) {
       router.replace('/game/summary');
-      dispatchEvent(ZRPOPCode._ResetState, {});
     } else if (msg.code == ZRPOPCode.PlayerLeft) {
       removePlayer(msg.data.username);
     } else if (msg.code === ZRPOPCode.PlayerDisconnected) {

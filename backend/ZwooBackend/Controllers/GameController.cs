@@ -96,8 +96,10 @@ public class GameController : Controller
                     }
                 }
 
+                var player = game.Lobby.GetPlayer((long)user.Id);
                 Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
-                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, body.Opcode)));
+                // the players opcode may changed based on rejoin
+                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, player == null ? body.Opcode : player.Role)));
             }
 
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));
