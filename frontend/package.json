@@ -5,6 +5,8 @@
   "scripts": {
     "serve": "cross-env VUE_APP_USE_BACKEND=false vite",
     "serve:prod": "cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=true vite",
+    "preview": "cross-env VUE_APP_USE_BACKEND=false vite preview",
+    "preview:prod": "cross-env VUE_APP_USE_BACKEND=true vite preview",
     "build": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false vite build",
     "build:tauri": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=true VUE_APP_DEVELOPMENT=false VUE_APP_IS_TAURI=true vite build --outDir dist-preview && cp -r dist-preview ./dist-tmp",
     "build:preview": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=false vite build --outDir dist-preview",
