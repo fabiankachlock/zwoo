@@ -37,7 +37,8 @@ export enum BackendError {
   OpcodeMissing = 143,
   InvalidOpcode = 144,
   InvalidGameId = 145,
-  AlreadyPlaying = 146
+  AlreadyPlaying = 146,
+  GameIsFull = 147
 }
 
 export const parseBackendError = (text: string): BackendErrorType => {
@@ -61,8 +62,7 @@ export const createEmptyBackendError = (): BackendErrorType => ({
 });
 
 export const unwrapBackendError = <T>(value: BackendErrorAble<T> | WithBackendError<T>): [T, undefined] | [undefined, BackendErrorType] => {
-  const hasError = 'error' in value;
-  if (hasError) {
+  if (typeof value === 'object' && value && 'error' in value) {
     return [undefined, value.error as BackendErrorType];
   }
   return [value as T, undefined];

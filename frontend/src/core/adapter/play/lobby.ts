@@ -10,13 +10,14 @@ import {
   ZRPNamePayload
 } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
-import { Ref, ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { arrayDiff, uniqueBy } from '@/core/services/utils';
+import { arrayDiff } from '@/core/services/utils';
 import { I18nInstance } from '@/i18n';
 import { useAuth } from '../auth';
 import { useGameConfig } from '../game';
 import router from '@/router';
+import { usePlayerManager } from './playerManager';
 
 export type LobbyPlayer = {
   id: string;
@@ -33,26 +34,21 @@ const lobbyWatcher = new MonolithicEventWatcher(
   ZRPOPCode.NewHost,
   ZRPOPCode.PlayerChangedRole,
   ZRPOPCode.PromoteToHost,
-  ZRPOPCode.GameStarted
+  ZRPOPCode.GameStarted,
+  ZRPOPCode.PlayerDisconnected,
+  ZRPOPCode.PlayerReconnected
 );
 
 export const useLobbyStore = defineStore('game-lobby', () => {
-  const players = ref<LobbyPlayer[]>([]);
-  const spectators = ref<LobbyPlayer[]>([]);
+  const playerManager = usePlayerManager();
+  const players = computed<LobbyPlayer[]>(() => playerManager.players);
+  const spectators = computed<LobbyPlayer[]>(() => playerManager.spectators);
   const gameHost = ref('');
   const dispatchEvent = useGameEventDispatch();
   const snackbar = useSnackbar();
   const translations = I18nInstance;
   const auth = useAuth();
   const gameConfig = useGameConfig();
-
-  const addPlayer = (list: Ref<LobbyPlayer[]>, player: LobbyPlayer) => {
-    list.value = uniqueBy([...list.value, player], p => p.id);
-  };
-
-  const removePlayer = (list: Ref<LobbyPlayer[]>, id: string) => {
-    list.value = list.value.filter(p => p.id !== id);
-  };
 
   const _receiveMessage: typeof lobbyWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerJoined) {
@@ -74,6 +70,10 @@ export const useLobbyStore = defineStore('game-lobby', () => {
       gameConfig.changeRole(ZRPRole.Host);
     } else if (msg.code == ZRPOPCode.GameStarted) {
       router.replace('/game/play');
+    } else if (msg.code === ZRPOPCode.PlayerDisconnected) {
+      playerManager.setPlayerDisconnected(msg.data.username);
+    } else if (msg.code === ZRPOPCode.PlayerReconnected) {
+      playerManager.setPlayerConnected(msg.data.username);
     }
   };
 
@@ -111,13 +111,13 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const joinPlayer = (data: ZRPJoinedGamePayload, role: ZRPRole, pushMessage = false) => {
     if (role === ZRPRole.Spectator) {
-      addPlayer(spectators, {
+      playerManager.addPlayer({
         username: data.username,
         id: data.username,
         role: role
       });
     } else {
-      addPlayer(players, {
+      playerManager.addPlayer({
         username: data.username,
         id: data.username,
         role: role
@@ -133,9 +133,9 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const leavePlayer = (data: ZRPLeftGamePayload, role: ZRPRole, pushMessage = false) => {
     if (role === ZRPRole.Spectator) {
-      removePlayer(spectators, data.username);
+      playerManager.removePlayer(data.username);
     } else {
-      removePlayer(players, data.username);
+      playerManager.removePlayer(data.username);
     }
     if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
@@ -163,8 +163,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     if (!user) return; // no user existing
     if (data.role === ZRPRole.Player) {
       // changed to player
-      removePlayer(spectators, data.username);
-      addPlayer(players, {
+      playerManager.removePlayer(data.username);
+      playerManager.addPlayer({
         username: data.username,
         id: data.username,
         role: data.role
@@ -177,8 +177,8 @@ export const useLobbyStore = defineStore('game-lobby', () => {
       }
     } else if (data.role === ZRPRole.Spectator) {
       // changed to spectator
-      removePlayer(players, data.username);
-      addPlayer(spectators, {
+      playerManager.removePlayer(data.username);
+      playerManager.addPlayer({
         username: data.username,
         id: data.username,
         role: data.role
@@ -200,8 +200,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const reset = () => {
-    players.value = [];
-    spectators.value = [];
+    playerManager.reset();
     gameHost.value = '';
   };
 

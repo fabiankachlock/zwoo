@@ -10,5 +10,6 @@ public enum GameSettingsKey
 {
     DEFAULT_RULE_SET = 0,
     MaxAmountOfPlayers = 1,
-    NumberOfCards = 2
+    NumberOfCards = 2,
+    AddUpDraw = 3,
 }

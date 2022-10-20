@@ -1,16 +1,22 @@
 <template>
   <div
-    :class="{ 'border-secondary': isActive }"
-    class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border border-transparent bg-darkest mouse:hover:bg-dark"
+    :class="{ 'border-secondary': isActive, 'bg-darkest z-0': isConnected, 'bg-main bc-primary sticky left-0 z-10': !isConnected }"
+    class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border border-transparent"
     :ref="r => (elmRef = r as HTMLDivElement)"
   >
-    <div class="flex flex-row flex-nowrap w-full h-full items-center tc-main cursor-default overflow-hidden whitespace-nowrap">
+    <div
+      :class="{ 'tc-main': isConnected, 'tc-main-secondary line-through': !isConnected }"
+      class="flex flex-row flex-nowrap w-full h-full items-center cursor-default overflow-hidden whitespace-nowrap"
+    >
       <span class="mr-3 opponent-name">{{ name }}</span>
       <span class="whitespace-nowrap">{{ cardAmount }}</span>
       <span class="ml-2 flex items-center">
-        <button @click="toggleMute" class="transition-transform hover:scale-125">
+        <button v-if="isConnected" @click="toggleMute" class="transition-transform hover:scale-125">
           <Icon v-if="isMuted" icon="bi:mic-mute-fill" />
           <Icon v-else icon="bi:mic-fill" />
+        </button>
+        <button v-if="isHost && !isConnected" @click="kickPlayer" class="transition-transform hover:scale-110 tc-secondary">
+          <Icon icon="akar-icons:cross" />
         </button>
       </span>
     </div>
@@ -21,10 +27,15 @@
 import { toRefs, defineProps, watch, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useChatStore } from '@/core/adapter/play/chat';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { useIsHost } from '@/composables/userRoles';
 
 const chat = useChatStore();
+const lobby = useLobbyStore();
+const { isHost } = useIsHost();
 const props = defineProps<{
   isActive: boolean;
+  isConnected: boolean;
   name: string;
   cardAmount: number;
   isMuted?: boolean;
@@ -35,6 +46,10 @@ const elmRef = ref<HTMLDivElement | null>(null);
 
 const toggleMute = () => {
   chat.mutePlayer(name.value, !isMuted?.value);
+};
+
+const kickPlayer = () => {
+  lobby.kickPlayer(name.value);
 };
 
 watch(isActive, newValue => {

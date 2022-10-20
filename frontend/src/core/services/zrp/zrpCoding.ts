@@ -29,4 +29,8 @@ export class ZRPCoder {
   static encode(msg: ZRPMessage): string {
     return `${msg.code.toString().padStart(3, '0')},${JSON.stringify(msg.data)}`;
   }
+
+  static isInternalMessage(code: ZRPOPCode): boolean {
+    return code >= 900 && code < 1000;
+  }
 }

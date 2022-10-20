@@ -41,7 +41,7 @@ internal class SkipCardRule : BaseCardRule
         List<GameEvent> events = new List<GameEvent>();
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        bool isAllowed = CanThrowCard(state.TopCard.Card, payload.Card) && !(CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated);
+        bool isAllowed = IsFittingCard(state.TopCard.Card, payload.Card) && !(CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated);
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);
@@ -54,6 +54,13 @@ internal class SkipCardRule : BaseCardRule
     }
 
     // Rule utilities
+    /// <summary>
+    /// change the current player by a certain amount of hops
+    /// </summary>
+    /// <param name="state">game state object</param>
+    /// <param name="playerOrder">cycle of players</param>
+    /// <param name="amount">amount of hops</param>
+    /// <returns>the updates game state and events for the client</returns>
     protected (GameState, List<GameEvent>) ChangeActivePlayerByAmount(GameState state, PlayerCycle playerOrder, int amount)
     {
         long nextPlayer = playerOrder.Next(state.Direction);

@@ -5,6 +5,15 @@
   </p>
   <div v-if="!canShare" class="">
     <div>
+      <div class="rsb__link cursor-pointer" @click="copyLink()">
+        <div class="rsb rsb--email rsb--large">
+          <div aria-hidden="true" class="rsb__icon rsb__icon--solid">
+            <Icon icon="akar-icons:copy" />
+          </div>
+          {{ t('share.link') }}
+        </div>
+      </div>
+
       <!-- https://sharingbuttons.io/ -->
       <!-- Sharingbutton Facebook -->
       <a class="rsb__link" :href="`https://facebook.com/sharer/sharer.php?u=${url}`" target="_blank" rel="noopener" :aria-label="t('share.facebook')">
@@ -128,6 +137,7 @@
 import { useShare } from '@/composables/Share';
 import { useGameConfig } from '@/core/adapter/game';
 import { Frontend } from '@/core/services/api/apiConfig';
+import { Icon } from '@iconify/vue';
 import Logger from '@/core/services/logging/logImport';
 import { onMounted, ref, defineEmits } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -163,11 +173,15 @@ onMounted(() => {
         .then(() => {
           emit('shouldClose');
         });
-    } catch (e: any) {
-      error.value = e.toString();
+    } catch (e: unknown) {
+      error.value = (e || {}).toString();
     }
   }
 });
+
+const copyLink = () => {
+  navigator.clipboard?.writeText(url.value);
+};
 </script>
 
 <style scoped>

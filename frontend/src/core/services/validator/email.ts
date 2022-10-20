@@ -7,7 +7,7 @@ export class EmailValidator implements Validator<string> {
     if (email.length > 50) {
       return new ValidationResult(false, 'errors.inputTooLong');
     }
-    const matches = EmailRegex.test(email.trim());
+    const matches = EmailRegex.test(email.trim().toLowerCase());
     return new ValidationResult(matches, 'errors.invalidEmail');
   };
 }

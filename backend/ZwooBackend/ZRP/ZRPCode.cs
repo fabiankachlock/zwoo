@@ -23,6 +23,8 @@ public enum ZRPCode
     HostChanged = 114, // send
     KickPlayer = 115, // receive
     PlayerChangedRole = 116, // send
+    PlayerDisconnected = 117, //send
+    PlayerReconnected = 118, // send
 
     KeepAlive = 198, // receive
     AckKeepAlive = 199, // send
@@ -55,6 +57,7 @@ public enum ZRPCode
     GeneralError = 400, // send
     MessagetoLongError = 401, // send
     AccessDeniedError = 420, // send
+    LobbyFullError = 421, // send
     EndTurnError = 433, // send
     PlaceCardError = 434, // send
 }

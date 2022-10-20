@@ -122,9 +122,14 @@ html {
 	}
 }
 
-.grecaptcha-badge.hidden {
+.grecaptcha-badge {
 	visibility: hidden;
 	display: none;
+}
+
+.grecaptcha-badge.visible {
+	visibility: visible !important;
+	display: block !important;
 }
 
 .max-height-ios {
@@ -161,4 +166,8 @@ html {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	@apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest;
+}
+
+::-ms-reveal {
+	display: none;
 }

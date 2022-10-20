@@ -1,18 +1,21 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { Card } from '@/core/services/game/card';
+import Logger from '@/core/services/logging/logImport';
 import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/core/services/zrp/zrpTypes';
 import router from '@/router';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useAuth } from '../auth';
 import { useGameCardDeck } from './deck';
+import { usePlayerManager } from './playerManager';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GamePlayer = {
   name: string;
   cards: number;
   order: number;
+  isConnected: boolean;
 };
 
 const gameWatcher = new MonolithicEventWatcher(
@@ -22,14 +25,18 @@ const gameWatcher = new MonolithicEventWatcher(
   ZRPOPCode.StateUpdate,
   ZRPOPCode.GetPlayerCardAmount,
   ZRPOPCode.GetPileTop,
-  ZRPOPCode.PlayerWon
+  ZRPOPCode.PlayerWon,
+  ZRPOPCode.PlayerLeft,
+  ZRPOPCode.PlayerReconnected,
+  ZRPOPCode.PlayerDisconnected
 );
 
 export const useGameState = defineStore('game-state', () => {
   const isActivePlayer = ref(false);
+  const playerManager = usePlayerManager();
   const topCard = ref<Card | CardDescriptor>(CardDescriptor.BackUpright);
   const activePlayerName = ref('');
-  const players = ref<GamePlayer[]>([]);
+  const players = ref<Omit<GamePlayer, 'isConnected'>[]>([]);
   const dispatchEvent = useGameEventDispatch();
   const auth = useAuth();
 
@@ -51,7 +58,12 @@ export const useGameState = defineStore('game-state', () => {
       updateGame(msg.data);
     } else if (msg.code == ZRPOPCode.PlayerWon) {
       router.replace('/game/summary');
-      dispatchEvent(ZRPOPCode._ResetState, {});
+    } else if (msg.code == ZRPOPCode.PlayerLeft) {
+      removePlayer(msg.data.username);
+    } else if (msg.code === ZRPOPCode.PlayerDisconnected) {
+      playerManager.setPlayerDisconnected(msg.data.username);
+    } else if (msg.code === ZRPOPCode.PlayerReconnected) {
+      playerManager.setPlayerConnected(msg.data.username);
     }
   };
 
@@ -115,10 +127,14 @@ export const useGameState = defineStore('game-state', () => {
     verifyDeck();
   };
 
+  const removePlayer = (playerToDelete: string) => {
+    players.value = players.value.filter(p => p.name !== playerToDelete);
+  };
+
   const verifyDeck = () => {
     // TODO: Optimize this
     if (useGameCardDeck().cards.length !== players.value.find(p => p.name === auth.username)?.cards) {
-      console.warn('local deck didnt match remote state:', JSON.stringify(useGameCardDeck().cards));
+      Logger.warn(`local deck didnt match remote state: ${JSON.stringify(useGameCardDeck().cards)}`);
       dispatchEvent(ZRPOPCode.RequestHand, {});
     }
   };
@@ -138,7 +154,12 @@ export const useGameState = defineStore('game-state', () => {
     topCard,
     isActivePlayer,
     activePlayerName,
-    players,
+    players: computed<GamePlayer[]>(() =>
+      players.value.map(p => ({
+        ...p,
+        isConnected: playerManager.isPlayerActive(p.name)
+      }))
+    ),
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };
