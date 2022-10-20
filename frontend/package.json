@@ -11,7 +11,7 @@
     "build:tauri:preview": "yarn build:assets && cross-env VUE_APP_USE_BACKEND=false VUE_APP_IS_TAURI=true  vite build --outDir dist-preview && cp -r dist-preview ./dist-tmp",
     "build:analyze": "yarn build:assets && cross-env ANALYZE=true vite build",
     "build:assets": "node ./scripts/buildCardAssets.js",
-    "//test:unit": "vue-cli-service test:unit",
+    "test:unit": "jest",
     "//test:e2e": "vue-cli-service test:e2e",
     "lint": "eslint \"src/**/*.{js,ts,vue,html}\" --fix",
     "lint:ci": "eslint \"src/**/*.{js,ts,vue,html}\" --max-warnings 50",
