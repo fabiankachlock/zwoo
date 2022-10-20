@@ -23,12 +23,13 @@
 </template>
 
 <script setup lang="ts">
-import { AuthenticationService } from '@/core/services/api/Authentication';
-import { unwrapBackendError } from '@/core/services/api/errors';
+import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { Icon } from '@iconify/vue';
+
+import { AuthenticationService } from '@/core/services/api/Authentication';
+import { unwrapBackendError } from '@/core/services/api/errors';
 
 const route = useRoute();
 const router = useRouter();

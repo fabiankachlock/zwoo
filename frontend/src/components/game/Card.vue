@@ -13,11 +13,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed, defineProps } from 'vue';
+
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { Card } from '@/core/services/game/card';
-import { computed, defineProps } from 'vue';
 
 const props = defineProps<{
   card:

@@ -1,22 +1,24 @@
-import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
-import Menu from '../views/Menu.vue';
-import Version from '../views/Version.vue';
-import Home from '../views/Home.vue';
-import Landing from '../views/Landing.vue';
-import CatchAll from '../views/404.vue';
-import Beta from '../views/Beta.vue';
-import { GameRoute } from './game';
-import { MenuRoutes } from './menu';
-import { RouterInterceptor } from './types';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+
+import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
 import { AuthGuard } from '@/core/services/security/AuthGuard';
-import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptchaTerms';
 import { CookieGuard } from '@/core/services/security/CookieGuard';
 import { InGameGuard } from '@/core/services/security/GameGuard';
-import { DeveloperRoute } from './developer';
-import { ThemesRoute } from './themes';
-import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
+import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptchaTerms';
 import { VersionGuard } from '@/core/services/security/VersionGuard';
+
+import CatchAll from '../views/404.vue';
+import Beta from '../views/Beta.vue';
+import Home from '../views/Home.vue';
+import Landing from '../views/Landing.vue';
+import Menu from '../views/Menu.vue';
+import Version from '../views/Version.vue';
+import { DeveloperRoute } from './developer';
+import { GameRoute } from './game';
 import { InternalRoute } from './internal';
+import { MenuRoutes } from './menu';
+import { ThemesRoute } from './themes';
+import { RouterInterceptor } from './types';
 
 const routes: Array<RouteRecordRaw> = [
   {

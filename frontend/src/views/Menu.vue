@@ -26,8 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from '@/components/menu/NavBar.vue';
 import FloatingMenu from '@/components/menu/FloatingMenu.vue';
+import NavBar from '@/components/menu/NavBar.vue';
 </script>
 
 <style scoped>

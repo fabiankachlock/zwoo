@@ -1,7 +1,9 @@
+import { defineStore } from 'pinia';
+
 import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { useWakeLock } from '@/composables/useWakeLock';
 import router from '@/router';
-import { defineStore } from 'pinia';
+
 import { Backend, Endpoint } from '../services/api/apiConfig';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
 import { GameManagementService, GameMeta, GamesList } from '../services/api/GameManagement';

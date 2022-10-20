@@ -23,9 +23,10 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { Icon } from '@iconify/vue';
+
 import { useConfig } from '@/core/adapter/config';
 
 const { t } = useI18n();

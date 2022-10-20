@@ -1,5 +1,6 @@
-import { ObjectDirective } from 'vue';
 import './Tooltip.css';
+
+import { ObjectDirective } from 'vue';
 
 export const Tooltip: ObjectDirective<HTMLElement, string> = {
   mounted(el, binding) {

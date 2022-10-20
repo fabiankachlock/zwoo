@@ -12,8 +12,8 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { defineEmits, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
-import { defineProps, defineEmits } from 'vue';
 
 defineProps<{
   showBackButton?: boolean;

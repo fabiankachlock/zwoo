@@ -125,15 +125,16 @@
 </template>
 
 <script setup lang="ts">
-import { GameMeta, GamesList } from '@/core/services/api/GameManagement';
-import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import QRCodeReader from '@/components/misc/QRCodeReader.vue';
-import FloatingDialog from '@/components/misc/FloatingDialog.vue';
-import { SavedGame, useGameConfig } from '@/core/adapter/game';
-import { ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { useRouter } from 'vue-router';
+
+import FloatingDialog from '@/components/misc/FloatingDialog.vue';
+import QRCodeReader from '@/components/misc/QRCodeReader.vue';
+import { SavedGame, useGameConfig } from '@/core/adapter/game';
+import { GameMeta, GamesList } from '@/core/services/api/GameManagement';
+import { ZRPRole } from '@/core/services/zrp/zrpTypes';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();

@@ -59,15 +59,17 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, ref, watch } from 'vue';
 import { Icon } from '@iconify/vue';
-import { CardThemeInformation, CARD_THEME_VARIANT_AUTO } from '@/core/services/cards/CardThemeConfig';
+import { defineProps, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import { useColorTheme } from '@/composables/colorTheme';
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
+import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';
-import { useColorTheme } from '@/composables/colorTheme';
+
 import Card from '../game/Card.vue';
-import { useI18n } from 'vue-i18n';
 const { setTheme } = useCardTheme();
 
 const props = defineProps<{

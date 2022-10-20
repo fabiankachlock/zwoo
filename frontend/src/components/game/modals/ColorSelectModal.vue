@@ -30,10 +30,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { useGameModal } from '@/core/adapter/play/modal';
 import { CardColor } from '@/core/services/game/card';
-import { computed } from 'vue';
+
 import BaseModal from './BaseModal.vue';
 
 const modalState = useGameModal();

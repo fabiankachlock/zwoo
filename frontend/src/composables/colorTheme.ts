@@ -1,5 +1,6 @@
-import { useConfig } from '@/core/adapter/config';
 import { computed } from 'vue';
+
+import { useConfig } from '@/core/adapter/config';
 
 export const useColorTheme = () => {
   const config = useConfig();

@@ -1,7 +1,9 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import { useGameConfig } from '@/core/adapter/game';
 import { GameRoute } from '@/router/game';
 import { RouterInterceptor } from '@/router/types';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import Logger from '../logging/logImport';
 
 export class InGameGuard implements RouterInterceptor {

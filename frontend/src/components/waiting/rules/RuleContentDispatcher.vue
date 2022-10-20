@@ -9,12 +9,13 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import { RuleType } from '@/core/services/game/rules';
-import { DisplayRule, useRules } from '@/core/adapter/play/rules';
 
-import RuleSwitch from './contentTypes/RuleSwitch.vue';
-import NumericRule from './contentTypes/NumericRule.vue';
 import { useIsHost } from '@/composables/userRoles';
+import { DisplayRule, useRules } from '@/core/adapter/play/rules';
+import { RuleType } from '@/core/services/game/rules';
+
+import NumericRule from './contentTypes/NumericRule.vue';
+import RuleSwitch from './contentTypes/RuleSwitch.vue';
 
 const rulesStore = useRules();
 const { isHost } = useIsHost();

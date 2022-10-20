@@ -1,22 +1,24 @@
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+
+import { useGameEventDispatch } from '@/composables/eventDispatch';
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
+import { arrayDiff } from '@/core/services/utils';
 import {
   ZRPAllLobbyPlayersPayload,
   ZRPJoinedGamePayload,
   ZRPLeftGamePayload,
+  ZRPNamePayload,
   ZRPOPCode,
   ZRPPlayerWithRolePayload,
-  ZRPRole,
-  ZRPNamePayload
+  ZRPRole
 } from '@/core/services/zrp/zrpTypes';
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { arrayDiff } from '@/core/services/utils';
 import { I18nInstance } from '@/i18n';
+import router from '@/router';
+
 import { useAuth } from '../auth';
 import { useGameConfig } from '../game';
-import router from '@/router';
 import { usePlayerManager } from './playerManager';
 
 export type LobbyPlayer = {

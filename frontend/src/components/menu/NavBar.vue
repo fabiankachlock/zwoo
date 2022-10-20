@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
+
 import NavBarLinks from './NavBarLinks.vue';
 
 const isMenuOpen = ref(false);

@@ -10,12 +10,13 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent, onMounted } from 'vue';
+
+import ConsentManager from './components/cookies/ConsentManager.vue';
+import Snackbar from './components/misc/Snackbar.vue';
 import { useAuth } from './core/adapter/auth';
 import { useConfig } from './core/adapter/config';
-import ConsentManager from './components/cookies/ConsentManager.vue';
 import { useCookies } from './core/adapter/cookies';
-import Snackbar from './components/misc/Snackbar.vue';
-import { defineAsyncComponent, onMounted } from 'vue';
 const ChangelogManager = defineAsyncComponent(() => import(/* webpackChunkName: "changelog" */ '././components/misc/changelog/ChangelogManager.vue'));
 
 useConfig().configure(); // load stored config from localStorage

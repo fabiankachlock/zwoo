@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia';
 import { Component, markRaw, ref, watch } from 'vue';
+
 import ColorSelectModal from '@/components/game/modals/ColorSelectModal.vue';
-import { CardColor } from '@/core/services/game/card';
-import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
-import { Awaiter } from '@/core/services/helper/Awaiter';
 import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { CardColor } from '@/core/services/game/card';
+import { Awaiter } from '@/core/services/helper/Awaiter';
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+
+import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export enum InGameModal {
   ColorPicker = 1

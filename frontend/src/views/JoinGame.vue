@@ -54,12 +54,13 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
 import { Icon } from '@iconify/vue';
-import FloatingDialog from '@/components/misc/FloatingDialog.vue';
-import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+
+import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
+import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { useGameConfig } from '@/core/adapter/game';
 import { BackendError } from '@/core/services/api/errors';
 

@@ -1,6 +1,8 @@
-import { RouterInterceptor } from '@/router/types';
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import { useCookies } from '@/core/adapter/cookies';
+import { RouterInterceptor } from '@/router/types';
+
 import Logger from '../logging/logImport';
 
 export class CookieGuard implements RouterInterceptor {

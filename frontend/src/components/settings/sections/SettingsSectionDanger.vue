@@ -9,12 +9,14 @@
 </template>
 
 <script setup lang="ts">
-import SettingsSection from '../SettingsSection.vue';
-import SettingsRow from '../SettingsRow.vue';
-import { useI18n } from 'vue-i18n';
-import DeleteAccount from '../DeleteAccount.vue';
-import { useAuth } from '@/core/adapter/auth';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import { useAuth } from '@/core/adapter/auth';
+
+import DeleteAccount from '../DeleteAccount.vue';
+import SettingsRow from '../SettingsRow.vue';
+import SettingsSection from '../SettingsSection.vue';
 
 const { t } = useI18n();
 const auth = useAuth();

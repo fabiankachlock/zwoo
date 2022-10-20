@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import { MigrationRunner } from '../services/migrations/MigrationRunner';
 import { useConfig } from './config';
 

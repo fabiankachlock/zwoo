@@ -5,9 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import Widget from '../Widget.vue';
 import Rules from '@/components/waiting/rules/Rules.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
+
+import Widget from '../Widget.vue';
 
 const isOpen = useUserDefaults('lobby:widgetRulesOpen', false);
 </script>

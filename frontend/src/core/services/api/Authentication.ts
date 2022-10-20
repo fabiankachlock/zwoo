@@ -1,6 +1,6 @@
 import { Logger } from '../logging/logImport';
 import { Backend, Endpoint } from './apiConfig';
-import { WithBackendError, parseBackendError, BackendErrorAble } from './errors';
+import { BackendErrorAble, parseBackendError, WithBackendError } from './errors';
 
 type UserInfo = {
   username: string;

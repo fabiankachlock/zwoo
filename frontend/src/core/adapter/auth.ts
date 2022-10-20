@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import { AuthenticationService } from '../services/api/Authentication';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
 import { ReCaptchaResponse } from '../services/api/reCAPTCHA';

@@ -1,6 +1,7 @@
+import { computed } from 'vue';
+
 import { useGameConfig } from '@/core/adapter/game';
 import { ZRPRole } from '@/core/services/zrp/zrpTypes';
-import { computed } from 'vue';
 
 export const useIsHost = () => {
   const gameConfig = useGameConfig();

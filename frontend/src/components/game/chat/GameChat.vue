@@ -17,10 +17,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
 import { useAuth } from '@/core/adapter/auth';
 import { useChatStore } from '@/core/adapter/play/chat';
 import { ZRPRole } from '@/core/services/zrp/zrpTypes';
-import { computed, ref, watch } from 'vue';
+
 import ChatMessage from './ChatMessage.vue';
 
 const chat = useChatStore();

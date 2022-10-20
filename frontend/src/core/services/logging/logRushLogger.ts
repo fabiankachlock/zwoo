@@ -1,5 +1,6 @@
-import { BaseLogger } from './logTypes';
 import { LogRushClient } from '@log-rush/client';
+
+import { BaseLogger } from './logTypes';
 
 export async function GetLogger(): Promise<() => BaseLogger> {
   const MAX_BUFFER_SIZE = 10;

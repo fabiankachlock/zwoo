@@ -1,11 +1,13 @@
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import App from './App.vue';
 import './registerServiceWorker';
-import router from './router';
-import i18n from './i18n';
 import './index.css';
+
+import { createPinia } from 'pinia';
+import { createApp } from 'vue';
+
+import App from './App.vue';
 import { Tooltip } from './custom/Tooltip';
+import i18n from './i18n';
+import router from './router';
 
 (() => {
   /* generate unique device id */

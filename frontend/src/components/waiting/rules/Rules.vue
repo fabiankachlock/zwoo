@@ -7,8 +7,10 @@
 </template>
 
 <script setup lang="ts">
-import { useRules } from '@/core/adapter/play/rules';
 import { computed } from 'vue';
+
+import { useRules } from '@/core/adapter/play/rules';
+
 import GameRule from './GameRule.vue';
 import RuleContentDispatcher from './RuleContentDispatcher.vue';
 

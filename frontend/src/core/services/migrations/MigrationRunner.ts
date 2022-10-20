@@ -1,4 +1,5 @@
 import semverCompare from 'semver/functions/compare';
+
 import Logger from '../logging/logImport';
 import { Migration } from './Migration';
 

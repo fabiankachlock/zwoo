@@ -1,4 +1,5 @@
 import { CacheTTL, useDebounce } from '@/composables/useDebounce';
+
 import { LeaderBoardPositionResponse, LeaderBoardResponse, LeaderBoardService } from '../services/api/LeaderBoard';
 
 export type LeaderBoardEntry = {

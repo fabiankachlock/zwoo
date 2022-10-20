@@ -51,11 +51,12 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/core/adapter/auth';
-import { LeaderBoardEntry, useLeaderBoard } from '@/core/adapter/leaderboard';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { useAuth } from '@/core/adapter/auth';
+import { LeaderBoardEntry, useLeaderBoard } from '@/core/adapter/leaderboard';
 
 const { t } = useI18n();
 const leaderBoardStore = useLeaderBoard();

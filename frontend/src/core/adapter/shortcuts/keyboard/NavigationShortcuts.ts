@@ -1,5 +1,6 @@
-import { Shortcut } from '../types';
 import Router from '@/router';
+
+import { Shortcut } from '../types';
 
 export const HomeShortcut: Shortcut<KeyboardEvent> = {
   id: 'navigate-home',

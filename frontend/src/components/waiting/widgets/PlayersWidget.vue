@@ -105,20 +105,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import { Icon } from '@iconify/vue';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useGameConfig } from '@/core/adapter/game';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Frontend } from '@/core/services/api/apiConfig';
-import Widget from '../Widget.vue';
+
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
-import ShareSheet from '@/components/waiting/ShareSheet.vue';
-import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import QRCode from '@/components/misc/QRCode.vue';
+import ReassureDialog from '@/components/misc/ReassureDialog.vue';
+import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useIsHost } from '@/composables/userRoles';
 import { useAuth } from '@/core/adapter/auth';
+import { useGameConfig } from '@/core/adapter/game';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { Frontend } from '@/core/services/api/apiConfig';
+
+import Widget from '../Widget.vue';
 
 const { t } = useI18n();
 const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);

@@ -49,12 +49,13 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import ChatMessage from '@/components/game/chat/ChatMessage.vue';
 import { useChatBroadcast } from '@/core/adapter/play/features/chatBroadcast';
 import { ZRPRole } from '@/core/services/zrp/zrpTypes';
-import { computed, onMounted, ref, watch } from 'vue';
-import ChatMessage from '@/components/game/chat/ChatMessage.vue';
-import { Icon } from '@iconify/vue';
-import { useI18n } from 'vue-i18n';
 
 const chat = useChatBroadcast();
 const { t } = useI18n();

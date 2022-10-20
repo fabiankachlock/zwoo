@@ -1,10 +1,12 @@
+import { defineStore } from 'pinia';
+
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 import router from '@/router';
-import { defineStore } from 'pinia';
-import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
+
 import { ConfigService } from '../services/api/Config';
-import { Awaiter } from '../services/helper/Awaiter';
+import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
+import { Awaiter } from '../services/helper/Awaiter';
 import { MigrationRunner } from '../services/migrations/MigrationRunner';
 
 const languageKey = 'zwoo:lng';

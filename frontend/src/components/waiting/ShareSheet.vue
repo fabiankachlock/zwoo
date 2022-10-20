@@ -134,13 +134,15 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+import { defineEmits, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import { useShare } from '@/composables/Share';
 import { useGameConfig } from '@/core/adapter/game';
 import { Frontend } from '@/core/services/api/apiConfig';
-import { Icon } from '@iconify/vue';
 import Logger from '@/core/services/logging/logImport';
-import { onMounted, ref, defineEmits } from 'vue';
-import { useI18n } from 'vue-i18n';
+
 import Error from '../misc/Error.vue';
 
 const emit = defineEmits<{

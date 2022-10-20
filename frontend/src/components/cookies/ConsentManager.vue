@@ -5,8 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import { useCookies } from '@/core/adapter/cookies';
 import { computed, defineAsyncComponent } from 'vue';
+
+import { useCookies } from '@/core/adapter/cookies';
 
 const cookies = useCookies();
 const showPopup = computed(() => cookies.popupOpen);

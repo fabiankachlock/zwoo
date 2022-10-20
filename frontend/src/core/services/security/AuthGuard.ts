@@ -1,6 +1,8 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import { useAuth } from '@/core/adapter/auth';
 import { RouterInterceptor } from '@/router/types';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import Logger from '../logging/logImport';
 
 export class AuthGuard implements RouterInterceptor {

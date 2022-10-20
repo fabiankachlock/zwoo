@@ -1,5 +1,7 @@
-import { RouterInterceptor } from '@/router/types';
 import { RouteLocationNormalized } from 'vue-router';
+
+import { RouterInterceptor } from '@/router/types';
+
 import {
   HomeShortcut,
   InfoShortcut,

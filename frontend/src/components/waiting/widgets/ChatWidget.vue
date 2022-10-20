@@ -8,10 +8,11 @@
 </template>
 
 <script setup lang="ts">
-import Widget from '../Widget.vue';
-import GameChat from '@/components/game/chat/GameChat.vue';
 import ChatInput from '@/components/game/chat/ChatInput.vue';
+import GameChat from '@/components/game/chat/GameChat.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
+
+import Widget from '../Widget.vue';
 
 const isOpen = useUserDefaults('lobby:widgetChatOpen', false);
 </script>

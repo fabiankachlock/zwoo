@@ -1,5 +1,6 @@
-import { RouterInterceptor } from '@/router/types';
 import { RouteLocationNormalized } from 'vue-router';
+
+import { RouterInterceptor } from '@/router/types';
 
 export class ReCaptchaTermsVisibilityManager {
   private static instance = new ReCaptchaTermsVisibilityManager();

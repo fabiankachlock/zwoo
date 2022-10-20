@@ -40,15 +40,17 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Icon } from '@iconify/vue';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
+
+import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useIsHost } from '@/composables/userRoles';
 import { useAuth } from '@/core/adapter/auth';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
+
 import Widget from '../Widget.vue';
-import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 
 const { t } = useI18n();
 const isOpen = useUserDefaults('lobby:widgetSpectatorsOpen', true);

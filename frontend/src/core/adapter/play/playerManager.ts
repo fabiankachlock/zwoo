@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import { ZRPRole } from '@/core/services/zrp/zrpTypes';
 
 export type InGamePlayer = {

@@ -40,15 +40,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import ChatWidget from '@/components/waiting/widgets/ChatWidget.vue';
 import PlayersWidget from '@/components/waiting/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/waiting/widgets/RulesWidget.vue';
 import SpectatorsWidget from '@/components/waiting/widgets/SpectatorsWidget.vue';
-import ChatWidget from '@/components/waiting/widgets/ChatWidget.vue';
 import { useIsHost } from '@/composables/userRoles';
 import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { computed } from 'vue';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
