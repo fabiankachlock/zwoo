@@ -6,6 +6,7 @@ using log4net.Core;
 using log4net.Appender;
 using log4net.Layout;
 using LogRushClient.Log4Net;
+using ZwooDatabaseClasses;
 
 
 namespace ZwooBackend;
@@ -90,6 +91,7 @@ public static class Globals
     public static readonly Database.Database ZwooDatabase;
 
     public static readonly ConcurrentQueue<EmailData> EmailQueue = new ConcurrentQueue<EmailData>();
+    public static readonly ConcurrentQueue<User> PasswordChangeRequestEmailQueue = new ConcurrentQueue<User>();
 
     public static readonly bool UseSsl;
     public static readonly bool IsBeta;

@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Mail;
 using ZwooBackend;
+using ZwooDatabaseClasses;
 
 namespace BackendHelper;
 
@@ -19,6 +20,22 @@ public class EmailData
         this.Email = email;
     }
 
+    public static void SendPasswordChangeRequest(User user)
+    {
+        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/reset-password?code={user.PasswordResetCode}";
+        string text = $"\r\nHello {user.Username},\r\nto reset your password click the link below.\r\n\r\n{link}\r\n\r\nⒸ ZWOO 2022\r\n";
+        
+        var mail = new MailMessage();
+        mail.From = new MailAddress(Globals.SmtpHostEmail);
+        mail.To.Add(new MailAddress(user.Email));
+        mail.Subject = "Change your ZWOO Account password";
+        mail.Body = text;
+        
+        var smtp = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort);
+        smtp.Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword);
+        smtp.Send(mail);
+    }
+    
     public static void SendMail(EmailData data)
     {
         string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/verify-account?id={data.Puid}&code={data.Code}";

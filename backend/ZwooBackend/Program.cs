@@ -6,6 +6,7 @@ using Quartz;
 using Quartz.Impl;
 using ZwooBackend;
 using ZwooBackend.Database;
+using ZwooDatabaseClasses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,14 +74,36 @@ var mail_thread = new Thread(() =>
     {
         if (!Globals.EmailQueue.IsEmpty)
         {
-            EmailData? data;
-            if (Globals.EmailQueue.TryDequeue(out data))
+            if (Globals.EmailQueue.TryDequeue(out var data))
             {
                 if (data.Puid == 0)
                     break;
                 try
                 {
                     EmailData.SendMail(data);
+                }
+                catch (Exception e)
+                {
+                    Globals.Logger.Error($"Could not send Email: {e.Message}");
+                }
+            }
+        }
+        else
+            Thread.Sleep(500);
+    }
+});
+
+var mail_thread2 = new Thread(() =>
+{
+    while (true)
+    {
+        if (!Globals.PasswordChangeRequestEmailQueue.IsEmpty)
+        {
+            if (Globals.PasswordChangeRequestEmailQueue.TryDequeue(out var data))
+            {
+                try
+                {
+                    EmailData.SendPasswordChangeRequest(data);
                 }
                 catch (Exception e)
                 {
@@ -100,9 +123,11 @@ scheduler.ScheduleJob(
     TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
 
 mail_thread.Start();
+mail_thread2.Start();
 
 app.Run();
 
 Globals.EmailQueue.Enqueue(new EmailData("", 0, "", ""));
 mail_thread.Join();
+mail_thread2.Join();
 scheduler.Shutdown();

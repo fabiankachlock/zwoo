@@ -1,6 +1,5 @@
 using System.Net.Mime;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using BackendHelper;
@@ -153,24 +152,5 @@ public class AuthenticationController : Controller
         }
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
             "Session ID not Matching"));
-    }
-    
-    [HttpPost("changePassword")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public IActionResult ChangePassword([FromBody] ChangePassword body)
-    {
-        if (!StringHelper.IsValidPassword(body.oldPassword))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Old Password Invalid!"));
-        if (!StringHelper.IsValidPassword(body.newPassword))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "New Password Invalid!"));
-
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
-        {
-            if (Globals.ZwooDatabase.ChangePassword(user, body.oldPassword, body.newPassword))
-                return Ok("Password changed");
-            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.PASSWORD_NOT_MATCHING, "Password did not match"));
-        }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
 }

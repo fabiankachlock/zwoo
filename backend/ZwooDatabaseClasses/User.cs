@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
-public partial class User
+public class User
 {
     public User() {}
     
@@ -58,6 +58,11 @@ public partial class User
     [JsonIgnore]
     [BsonIgnoreIfDefault]
     public string? BetaCode { set; get; }
+    
+    [BsonElement("password_reset_code")]
+    [JsonIgnore]
+    [BsonIgnoreIfDefault]
+    public string? PasswordResetCode { set; get; }
     
     [BsonIgnore] public int Position { set; get; } = -1;
 }

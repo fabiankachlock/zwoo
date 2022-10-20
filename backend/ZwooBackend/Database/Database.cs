@@ -238,8 +238,25 @@ public class Database
             var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
             return _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Password, $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}")).ModifiedCount != 0;
         }
-
         return false;
+    }
+
+    public User RequestChangePassword(string email)
+    {
+        var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email);
+        user.PasswordResetCode = Guid.NewGuid().ToString();
+        _userCollection.UpdateOne(x => x.Id == user.Id,
+            Builders<User>.Update.Set(u => u.PasswordResetCode, user.PasswordResetCode));
+        return user;
+    }
+    
+    public void ResetPassword(string code, string password)
+    {
+        var salt = RandomNumberGenerator.GetBytes(16);
+        var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
+        _userCollection.UpdateOne(x => x.PasswordResetCode == code,
+            Builders<User>.Update.Set(u => u.Password,
+                $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}"));
     }
     
     /// <summary>
