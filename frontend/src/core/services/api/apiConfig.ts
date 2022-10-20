@@ -33,9 +33,11 @@ export enum Endpoint {
 }
 
 export class Backend {
-  public static readonly isDev = process.env.VUE_APP_DEVELOPMENT === 'true';
-  public static readonly Url: string = Backend.isDev ? process.env.VUE_APP_DEV_BACKEND : process.env.VUE_APP_PROD_BACKEND;
-  public static readonly WsOverride: string | undefined = Backend.isDev ? process.env.VUE_APP_DEV_WS_OVERRIDE : process.env.VUE_APP_PROD_WS_OVERRIDE;
+  public static readonly isDev = import.meta.env.VUE_APP_DEVELOPMENT === 'true';
+  public static readonly Url: string = Backend.isDev ? import.meta.env.VUE_APP_DEV_BACKEND : import.meta.env.VUE_APP_PROD_BACKEND;
+  public static readonly WsOverride: string | undefined = Backend.isDev
+    ? import.meta.env.VUE_APP_DEV_WS_OVERRIDE
+    : import.meta.env.VUE_APP_PROD_WS_OVERRIDE;
 
   public static getUrl(endpoint: Endpoint): string {
     if (endpoint === Endpoint.Websocket) {
@@ -61,6 +63,6 @@ export class Backend {
 }
 
 export class Frontend {
-  public static domain = process.env.VUE_APP_DOMAIN ?? '';
+  public static domain = import.meta.env.VUE_APP_DOMAIN ?? '';
   public static url = `https://${Frontend.domain}`;
 }

@@ -5,7 +5,7 @@ export async function GetLogger(): Promise<() => BaseLogger> {
   const MAX_BUFFER_SIZE = 10;
 
   const client = new LogRushClient({
-    dataSourceUrl: process.env.VUE_APP_LOG_RUSH_SERVER ?? '',
+    dataSourceUrl: import.meta.env.VUE_APP_LOG_RUSH_SERVER ?? '',
     batchSize: MAX_BUFFER_SIZE
   });
 

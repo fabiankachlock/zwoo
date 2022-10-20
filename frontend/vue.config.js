@@ -1,19 +1,17 @@
-const path = require('path')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
-
+const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   pluginOptions: {
     i18n: {
-      locale: "en",
-      fallbackLocale: "en",
-      localeDir: "locales",
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
       enableLegacy: false,
       runtimeOnly: false,
       compositionOnly: false,
-      fullInstall: true,
-    },
+      fullInstall: true
+    }
   },
 
   chainWebpack: config => {
@@ -24,21 +22,19 @@ module.exports = {
       .end()
       .type('javascript/auto')
       .use('i18n-resource')
-      .loader('@intlify/vue-i18n-loader')
+      .loader('@intlify/vue-i18n-loader');
 
     config.module
       .rule('i18n')
       .resourceQuery(/blockType=i18n/)
       .type('javascript/auto')
       .use('i18n')
-      .loader('@intlify/vue-i18n-loader')
+      .loader('@intlify/vue-i18n-loader');
 
-    config
-      .plugin('html')
-      .tap(args => {
-        args[0].title = "zwoo";
-        return args;
-      })
+    config.plugin('html').tap(args => {
+      args[0].title = 'zwoo';
+      return args;
+    });
   },
 
   configureWebpack: {
@@ -53,7 +49,7 @@ module.exports = {
         {
           test: /\.mjs$/,
           include: /node_modules/,
-          type: "javascript/auto"
+          type: 'javascript/auto'
         }
       ]
     }

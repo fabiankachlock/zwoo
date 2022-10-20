@@ -63,7 +63,7 @@ import { useCookies } from '@/core/adapter/cookies';
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
-const isBeta = process.env.VUE_APP_BETA === 'true';
+const isBeta = import.meta.env.VUE_APP_BETA === 'true';
 
 onMounted(() => {
   useCookies().loadRecaptcha();

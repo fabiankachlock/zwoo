@@ -42,7 +42,7 @@ export class ReCaptchaService {
       const [result] = unwrapBackendError(await this.verify(token));
       return result;
     }
-    if (process.env.VUE_APP_USE_BACKEND === 'true') {
+    if (import.meta.env.VUE_APP_USE_BACKEND === 'true') {
       return Promise.resolve(undefined);
     }
     return Promise.resolve({
@@ -52,7 +52,7 @@ export class ReCaptchaService {
   };
 
   private verify = async (token: string): Promise<BackendErrorAble<ReCaptchaResponse>> => {
-    if (process.env.VUE_APP_USE_BACKEND === 'true') {
+    if (import.meta.env.VUE_APP_USE_BACKEND === 'true') {
       const req = await fetch(Backend.getUrl(Endpoint.Recaptcha), {
         method: 'POST',
         body: token

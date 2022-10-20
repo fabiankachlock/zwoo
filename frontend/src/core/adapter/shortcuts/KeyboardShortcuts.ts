@@ -8,7 +8,7 @@ export class KeyboardShortcuts {
 
   bind() {
     this.detach();
-    if (process.env.VUE_APP_IS_TAURI === 'true') {
+    if (import.meta.env.VUE_APP_IS_TAURI === 'true') {
       this.setupTauri();
     } else {
       window.addEventListener('keyup', this.eventHandler);
@@ -16,7 +16,7 @@ export class KeyboardShortcuts {
   }
 
   setShortcuts(shortcuts: Shortcut<KeyboardEvent>[]) {
-    if (process.env.VUE_APP_IS_TAURI === 'true') {
+    if (import.meta.env.VUE_APP_IS_TAURI === 'true') {
       this.setupTauri();
     } else {
       this.shortcuts = shortcuts;
@@ -31,7 +31,7 @@ export class KeyboardShortcuts {
   };
 
   detach() {
-    if (process.env.VUE_APP_IS_TAURI === 'true') {
+    if (import.meta.env.VUE_APP_IS_TAURI === 'true') {
       unregisterAll();
     } else {
       window.removeEventListener('keyup', this.eventHandler);

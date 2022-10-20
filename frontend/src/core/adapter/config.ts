@@ -15,9 +15,9 @@ const showCardDetailKey = 'zwoo:cd';
 const themeKey = 'zwoo:th';
 
 const versionInfo = {
-  override: process.env.VUE_APP_VERSION_OVERRIDE as string,
-  version: process.env.VUE_APP_VERSION as string,
-  hash: process.env.VUE_APP_VERSION_HASH as string
+  override: import.meta.env.VUE_APP_VERSION_OVERRIDE as string,
+  version: import.meta.env.VUE_APP_VERSION as string,
+  hash: import.meta.env.VUE_APP_VERSION_HASH as string
 };
 
 const changeLanguage = (lng: string) => {
@@ -54,7 +54,7 @@ export const useConfig = defineStore('config', {
       cardTheme: '__default__',
       cardThemeVariant: '@auto',
       serverVersion: new Awaiter() as string | Awaiter<string>,
-      clientVersion: process.env.VUE_APP_VERSION
+      clientVersion: import.meta.env.VUE_APP_VERSION
     };
   },
 
@@ -132,7 +132,7 @@ export const useConfig = defineStore('config', {
       }
 
       const version = await ConfigService.fetchVersion();
-      if (version !== process.env.VUE_APP_VERSION) {
+      if (version !== import.meta.env.VUE_APP_VERSION) {
         router.push('/invalid-version');
       }
       if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
