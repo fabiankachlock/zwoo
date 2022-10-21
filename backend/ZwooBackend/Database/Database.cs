@@ -257,17 +257,28 @@ public class Database
         _userCollection.UpdateOne(x => x.PasswordResetCode == code,
             Builders<User>.Update.Set(u => u.Password,
                 $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}"));
+        _userCollection.UpdateOne(x => x.PasswordResetCode == code,
+            Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
     }
     
     /// <summary>
-    /// Delete unverified users
+    /// Delete unverified users & unused password reset codes
     /// </summary>
     public void CleanDatabase()
     {
-        var users = _userCollection.AsQueryable().Where(x => !x.Verified);
-        DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} user(s).");
-        foreach (var user in users)
-            DeleteAttempt(user.Id, _userCollection.DeleteOne(x => x.Id == user.Id).DeletedCount == 1);
+        {
+            var users = _userCollection.AsQueryable().Where(x => !x.Verified);
+            DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} user(s).");
+            foreach (var user in users)
+                DeleteAttempt(user.Id, _userCollection.DeleteOne(x => x.Id == user.Id).DeletedCount == 1);
+        }
+        {
+            var users = _userCollection.AsQueryable().Where(x => String.IsNullOrEmpty(x.PasswordResetCode));
+            DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} password reset codes.");
+            foreach (var user in users)
+                _userCollection.UpdateOne(x => x.Id == user.Id,
+                    Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
+        }
     }
     
     public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version);
