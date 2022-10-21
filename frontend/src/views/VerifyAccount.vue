@@ -29,7 +29,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { AuthenticationService } from '@/core/services/api/Authentication';
-import { unwrapBackendError } from '@/core/services/api/errors';
+import { unwrapBackendError } from '@/core/services/api/Errors';
 
 const route = useRoute();
 const router = useRouter();

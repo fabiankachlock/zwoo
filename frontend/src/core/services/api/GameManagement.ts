@@ -1,7 +1,7 @@
 import Logger from '../logging/logImport';
 import { ZRPRole } from '../zrp/zrpTypes';
-import { Backend, Endpoint } from './apiConfig';
-import { BackendErrorAble, parseBackendError } from './errors';
+import { Backend, Endpoint } from './ApiConfig';
+import { BackendErrorAble, parseBackendError } from './Errors';
 
 export type GameJoinResponse = BackendErrorAble<{
   id: number;

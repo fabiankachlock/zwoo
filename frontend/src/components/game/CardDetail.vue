@@ -79,7 +79,7 @@ import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { CardChecker } from '@/core/services/api/CardCheck';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Card as CardTyping } from '@/core/services/game/card';
+import { Card as CardTyping } from '@/core/services/game/CardTypesTypes';
 
 import Card from './Card.vue';
 

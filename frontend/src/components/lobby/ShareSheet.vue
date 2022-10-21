@@ -140,7 +140,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useShare } from '@/composables/useShare';
 import { useGameConfig } from '@/core/adapter/game';
-import { Frontend } from '@/core/services/api/apiConfig';
+import { Frontend } from '@/core/services/api/ApiConfig';
 import Logger from '@/core/services/logging/logImport';
 
 import Error from '../misc/Error.vue';

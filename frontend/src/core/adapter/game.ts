@@ -4,8 +4,8 @@ import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
 import { useWakeLock } from '@/composables/useWakeLock';
 import router from '@/router';
 
-import { Backend, Endpoint } from '../services/api/apiConfig';
-import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
+import { Backend, Endpoint } from '../services/api/ApiConfig';
+import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
 import { GameManagementService, GameMeta, GamesList } from '../services/api/GameManagement';
 import Logger from '../services/logging/logImport';
 import { GameNameValidator } from '../services/validator/gameName';

@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 
 import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Card } from '@/core/services/game/card';
+import { Card } from '@/core/services/game/CardTypes';
 import Logger from '@/core/services/logging/logImport';
 import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/core/services/zrp/zrpTypes';
 import router from '@/router';

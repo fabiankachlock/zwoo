@@ -3,7 +3,7 @@ import { Component, markRaw, ref, watch } from 'vue';
 
 import ColorSelectModal from '@/components/game/modals/ColorSelectModal.vue';
 import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
-import { CardColor } from '@/core/services/game/card';
+import { CardColor } from '@/core/services/game/CardTypes';
 import { Awaiter } from '@/core/services/helper/Awaiter';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 

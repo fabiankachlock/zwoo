@@ -1,5 +1,5 @@
 import { CardSorter } from '../cards/sorting/CardSorter';
-import { Card, CardType } from './card';
+import { Card, CardType } from './CardTypes';
 
 export class CardDeck {
   private content: Card[];

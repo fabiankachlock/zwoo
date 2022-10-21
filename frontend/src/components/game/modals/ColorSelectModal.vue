@@ -34,7 +34,7 @@ import { computed } from 'vue';
 
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { useGameModal } from '@/core/adapter/play/modal';
-import { CardColor } from '@/core/services/game/card';
+import { CardColor } from '@/core/services/game/CardTypesTypes';
 
 import BaseModal from './BaseModal.vue';
 

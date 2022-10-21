@@ -1,4 +1,4 @@
-import { Card } from '../game/card';
+import { Card } from '../game/CardTypes';
 import Logger from '../logging/logImport';
 
 export class CardChecker {

@@ -2,10 +2,10 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
-import { Card } from '@/core/services/game/card';
+import { Card } from '@/core/services/game/CardTypes';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 
-import { CardDeck } from '../../services/game/deck';
+import { CardDeck } from '../../services/game/PlayerDeck';
 import { useConfig } from '../config';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 

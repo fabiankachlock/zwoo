@@ -1,6 +1,6 @@
 import Logger from '../logging/logImport';
-import { Backend, Endpoint } from './apiConfig';
-import { BackendErrorAble, parseBackendError } from './errors';
+import { Backend, Endpoint } from './ApiConfig';
+import { BackendErrorAble, parseBackendError } from './Errors';
 
 export type LeaderBoardResponse = {
   leaderboard: {

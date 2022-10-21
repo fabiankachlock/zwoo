@@ -22,7 +22,7 @@ import { defineEmits, defineProps, onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { ConfigService } from '@/core/services/api/Config';
-import { unwrapBackendError } from '@/core/services/api/errors';
+import { unwrapBackendError } from '@/core/services/api/Errors';
 
 import FloatingDialog from '../FloatingDialog.vue';
 

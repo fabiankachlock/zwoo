@@ -118,7 +118,7 @@ import { useIsHost } from '@/composables/userRoles';
 import { useAuth } from '@/core/adapter/auth';
 import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { Frontend } from '@/core/services/api/apiConfig';
+import { Frontend } from '@/core/services/api/ApiConfig';
 
 import Widget from '../Widget.vue';
 

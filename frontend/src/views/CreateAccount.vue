@@ -53,7 +53,7 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
-import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
+import { ReCaptchaResponse } from '@/core/services/api/Captcha';
 import { joinQuery } from '@/core/services/utils';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';

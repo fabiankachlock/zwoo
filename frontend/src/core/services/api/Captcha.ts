@@ -1,6 +1,6 @@
 import { ReCaptchaTermsVisibilityManager } from '../guards/ReCaptchaTerms';
-import { Backend, Endpoint } from './apiConfig';
-import { BackendErrorAble, parseBackendError, unwrapBackendError } from './errors';
+import { Backend, Endpoint } from './ApiConfig';
+import { BackendErrorAble, parseBackendError, unwrapBackendError } from './Errors';
 
 export type ReCaptchaResponse = {
   success: boolean;

@@ -62,7 +62,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { useGameConfig } from '@/core/adapter/game';
-import { BackendError } from '@/core/services/api/errors';
+import { BackendError } from '@/core/services/api/Errors';
 
 const { t } = useI18n();
 const route = useRoute();
