@@ -20,7 +20,7 @@ public class AccountController : Controller
         if (!StringHelper.IsValidPassword(body.newPassword))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "New Password Invalid!"));
 
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
             if (Globals.ZwooDatabase.ChangePassword(user, body.oldPassword, body.newPassword))
                 return Ok("Password changed");

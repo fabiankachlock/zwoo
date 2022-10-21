@@ -3,12 +3,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
-public class User
+public class UserLegacy
 {
-    public User() {}
+    public UserLegacy() {}
     
     [BsonConstructor]
-    public User(ulong id, List<string> sid, string username, string email, string password, uint wins, string validationCode, bool verified)
+    public UserLegacy(ulong id, string sid, string username, string email, string password, uint wins, string validationCode, bool verified)
     {
         Id = id;
         Sid = sid;
@@ -27,7 +27,7 @@ public class User
     [BsonElement("sid")]
     [JsonIgnore]
     [BsonIgnoreIfDefault]
-    public List<string> Sid { set; get; } = new();
+    public string Sid { set; get; } = "";
     
     [JsonPropertyName("username")]
     [BsonElement("username")]
