@@ -37,3 +37,5 @@ coverage
 /public/assets/**/*
 !/public/assets/meta.json
 !/public/assets/sourcemap.json
+
+dependency-graph.svg

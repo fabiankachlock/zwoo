@@ -23,7 +23,9 @@
     "format:ci": "prettier --check \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
     "prepare": "cd .. && husky install frontend/.husky",
     "postversion": "yarn setup:version && git add .env",
-    "setup:version": "node ./scripts/version.js"
+    "setup:version": "node ./scripts/version.js",
+    "deps:check": "depcruise -m --config .dependency-cruiser.js src",
+    "deps:viz": "depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg"
   },
   "dependencies": {
     "@log-rush/client": "^1.1.1",
@@ -54,6 +56,7 @@
     "autoprefixer": "^10",
     "cross-env": "^7.0.3",
     "cypress": "^10.9.0",
+    "dependency-cruiser": "^11.17.0",
     "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
