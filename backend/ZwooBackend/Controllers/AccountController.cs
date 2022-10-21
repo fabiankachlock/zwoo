@@ -43,11 +43,6 @@ public class AccountController : Controller
         return Ok("");
     }
 
-    private IActionResult BadRequest(string getErrorResponseMessage)
-    {
-        throw new NotImplementedException();
-    }
-
     [HttpPost("resetPassword")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
