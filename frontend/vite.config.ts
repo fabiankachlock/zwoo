@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueI18n from '@intlify/vite-plugin-vue-i18n';
 import path from 'path';
+import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,7 +11,8 @@ export default defineConfig({
     vueI18n({
       compositionOnly: true,
       include: path.resolve(__dirname, './src/locales/**')
-    })
+    }),
+    VitePWA({})
   ],
   envPrefix: 'VUE_APP',
   server: {
