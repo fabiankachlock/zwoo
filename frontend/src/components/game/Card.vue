@@ -18,7 +18,7 @@ import { computed, defineProps } from 'vue';
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Card } from '@/core/services/game/CardTypesTypes';
+import { Card } from '@/core/services/game/CardTypes';
 
 const props = defineProps<{
   card:
