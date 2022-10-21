@@ -1,0 +1,15 @@
+[
+  {
+    "_id": {
+      "$numberLong": "1"
+    },
+    "sid": "",
+    "username": "test",
+    "email": "test@example.com",
+    "password": "sha512:hILFq9N1n5KYwhXh4xoC9Q==:G8LrPcnN1LzKA3ADaOMaqY0EpccBpluGm8cdL+dwr0P9OBR77jkBFXckNbMUotKy2aIhzCW8dENl0ciZDSXzzQ==",
+    "wins": 0,
+    "validation_code": "776470",
+    "verified": true,
+    "beta_code": "ABC-123"
+  }
+]

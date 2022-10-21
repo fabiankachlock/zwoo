@@ -42,7 +42,6 @@ public static class Globals
         SmtpPassword = ReturnIfValidEnvVar("SMTP_PASSWORD");
 
         RecaptchaSideSecret = ReturnIfValidEnvVar("ZWOO_RECAPTCHA_SIDESECRET");
-
         UseLogRush = Convert.ToBoolean(Environment.GetEnvironmentVariable("ZWOO_USE_LOGRUSH"));
         LogRushUrl = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_URL") ?? "";
         LogRushAlias = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_ALIAS") ?? "";
