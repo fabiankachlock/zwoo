@@ -234,12 +234,13 @@ public class Database
     
     public long GetPosition(User user) => _userCollection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
 
-    public bool ChangePassword(User user, string oldPassword, string newPassword)
+    public bool ChangePassword(User user, string oldPassword, string newPassword, string sid)
     {
         if (StringHelper.CheckPassword(oldPassword, user.Password))
         {
             var salt = RandomNumberGenerator.GetBytes(16);
             var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
+            _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Sid, new List<string> { sid }));
             return _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Password, $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}")).ModifiedCount != 0;
         }
         return false;
