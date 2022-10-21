@@ -59,6 +59,8 @@ public class Database
             _changelogCollection.InsertOne(new Changelog(Globals.Version, ""));
     }
 
+    public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
+    
     /// <summary>
     /// Hash Password, Generate verification code and Creates user in Database
     /// </summary>
@@ -178,7 +180,9 @@ public class Database
             return true;
         return false;
     }
-    
+
+    public User? GetUserFromEmail(string email) => _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email);
+
     public void LogoutUser(User user)
     {
         DatabaseLogger.Debug($"[User] logout {user.Email}");
