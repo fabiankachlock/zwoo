@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
-import { AuthGuard } from '@/core/services/security/AuthGuard';
-import { CookieGuard } from '@/core/services/security/CookieGuard';
-import { InGameGuard } from '@/core/services/security/GameGuard';
-import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptchaTerms';
-import { VersionGuard } from '@/core/services/security/VersionGuard';
+import { AuthGuard } from '@/core/services/guards/AuthGuard';
+import { CookieGuard } from '@/core/services/guards/CookieGuard';
+import { InGameGuard } from '@/core/services/guards/GameGuard';
+import { ReCaptchaTermsRouteInterceptor } from '@/core/services/guards/ReCaptchaTerms';
+import { VersionGuard } from '@/core/services/guards/VersionGuard';
 
 import CatchAll from '../views/404.vue';
 import Beta from '../views/Beta.vue';
@@ -105,7 +105,7 @@ const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [
   ShortcutManager.global.afterEachAsync
 ];
 // (async () => ([
-//   new (await import(/* webpackChunkName: "recaptcha" */ '../core/services/security/ReCaptchaTerms')).default().afterEachAsync
+//   new (await import(/* webpackChunkName: "recaptcha" */ '../core/services/guards/ReCaptchaTerms')).default().afterEachAsync
 // ]));
 
 router.afterEach(async (to, from, failure) => {

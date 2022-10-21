@@ -73,8 +73,8 @@ import { Icon } from '@iconify/vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { Key, useKeyPress } from '@/composables/KeyPress';
-import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
+import { Key, useKeyPress } from '@/composables/useKeyPress';
+import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/useSwipeGesture';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { CardChecker } from '@/core/services/api/CardCheck';

@@ -109,10 +109,10 @@ import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import ShareSheet from '@/components/lobby/ShareSheet.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import QRCode from '@/components/misc/QRCode.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
-import ShareSheet from '@/components/waiting/ShareSheet.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useIsHost } from '@/composables/userRoles';
 import { useAuth } from '@/core/adapter/auth';

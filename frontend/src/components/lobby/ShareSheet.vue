@@ -138,7 +138,7 @@ import { Icon } from '@iconify/vue';
 import { defineEmits, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useShare } from '@/composables/Share';
+import { useShare } from '@/composables/useShare';
 import { useGameConfig } from '@/core/adapter/game';
 import { Frontend } from '@/core/services/api/apiConfig';
 import Logger from '@/core/services/logging/logImport';

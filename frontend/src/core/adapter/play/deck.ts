@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
 import { Card } from '@/core/services/game/card';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import Logger from '@/core/services/logging/logImport';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';

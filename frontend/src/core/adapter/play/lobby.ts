@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { arrayDiff } from '@/core/services/utils';

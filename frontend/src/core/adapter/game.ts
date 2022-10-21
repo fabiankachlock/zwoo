@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
 import { useWakeLock } from '@/composables/useWakeLock';
 import router from '@/router';
 

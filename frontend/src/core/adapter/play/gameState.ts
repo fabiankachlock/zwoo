@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { useGameEventDispatch } from '@/composables/useGameEventDispatch';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { Card } from '@/core/services/game/card';
 import Logger from '@/core/services/logging/logImport';

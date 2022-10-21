@@ -1,6 +1,6 @@
 import { reactive, ref, watch } from 'vue';
 
-import { useColorTheme } from '@/composables/colorTheme';
+import { useColorTheme } from '@/composables/useColorTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';

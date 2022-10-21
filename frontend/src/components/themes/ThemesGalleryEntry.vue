@@ -63,7 +63,7 @@ import { Icon } from '@iconify/vue';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useColorTheme } from '@/composables/colorTheme';
+import { useColorTheme } from '@/composables/useColorTheme';
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
