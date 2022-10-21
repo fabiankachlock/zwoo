@@ -54,6 +54,7 @@
     "@vue/test-utils": "^2.1.0",
     "@vue/vue3-jest": "^27.0.0-alpha.4",
     "autoprefixer": "^10",
+    "babel-jest": "^27",
     "cross-env": "^7.0.3",
     "cypress": "^10.9.0",
     "dependency-cruiser": "^11.17.0",
