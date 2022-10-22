@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BackendHelper\BackendHelper.csproj" />
     <ProjectReference Include="..\ZwooDatabaseClasses\ZwooDatabaseClasses.csproj" />
   </ItemGroup>
 

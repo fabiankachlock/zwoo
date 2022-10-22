@@ -6,6 +6,7 @@
 @using ZwooInfoDashBoard.Pages.Dialogs
 @using System.Security.Cryptography
 @using System.Text
+@using BackendHelper
 @using ZwooDatabaseClasses
 @inject DialogService DialogService
 
@@ -145,14 +146,13 @@
         var res = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "460px", Height = "210px", Resizable = true, Draggable = true });
         if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
         {
-            var salt = RandomNumberGenerator.GetBytes(16);
-            var pw = Encoding.ASCII.GetBytes(changePassword.Password).Concat(salt).ToArray();
-
-            using (var sha = SHA512.Create())
+            if (!StringHelper.IsValidPassword(changePassword.Password))
             {
-                foreach (int i in Enumerable.Range(0, 10000)) pw = sha.ComputeHash(pw);
+                await DialogService.Confirm("Invalid Password");
+                return;
             }
-            player.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
+            var salt = RandomNumberGenerator.GetBytes(16);
+            player.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(StringHelper.HashString(Encoding.ASCII.GetBytes(changePassword.Password).Concat(salt).ToArray()))}";
         }
     }
 
