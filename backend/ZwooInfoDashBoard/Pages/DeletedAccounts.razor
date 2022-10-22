@@ -1,6 +1,7 @@
 @page "/deleted-accounts"
 @using ZwooInfoDashBoard.Data
 @using ZwooDatabaseClasses
+@inject DialogService DialogService
 
 <PageTitle>Deleted Accounts</PageTitle>
 
@@ -19,9 +20,41 @@
                 @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
             </Template>
         </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="AccountEvent" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="ae">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="restore" Class="m-1" Click="@(args => RestoreAccount(ae))"  @onclick:stopPropagation="true" />
+            </Template>
+            <EditTemplate Context="ae">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="restore" Class="m-1" Click="@(args => RestoreAccount(ae))" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
 
 @code {
     readonly IQueryable<AccountEvent> _events = Globals.ZwooDatabase.GetAccountEventsAsQueryable().Where(x => x.EventType == "delete");
+
+    private async void RestoreAccount(AccountEvent player)
+    {
+        var r = await DialogService.Confirm($"Do you really want to restore {player.UserData!.Username}s account?");
+        if (r != null && r.Value)
+        {
+            if (Globals.ZwooDatabase.GetUsersAsQueryable().Any(x => x.Username == player.UserData!.Username))
+            {
+                await DialogService.Confirm($"Username already exists");
+                return;
+            }
+            if (Globals.ZwooDatabase.GetUsersAsQueryable().Any(x => x.Email == player.UserData!.Email))
+            {
+                await DialogService.Confirm($"Email already exists");
+                return;
+            }
+            Globals.ZwooDatabase.InsertUser(new User(Globals.ZwooDatabase.GetUsersAsQueryable().Max(x => x.Id) + 1,
+                "", player.UserData!.Username,
+                player.UserData!.Email, player.UserData!.Password,
+                player.UserData!.Wins, "", true
+            ));
+        }
+    }
+
 }
