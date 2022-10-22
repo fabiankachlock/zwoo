@@ -143,7 +143,7 @@
 
     private async Task ChangePlayerPassword(User player)
     {
-        var res = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "460px", Height = "210px", Resizable = true, Draggable = true });
+        var res = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "470px", Height = "220px", Resizable = true, Draggable = true });
         if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
         {
             if (!StringHelper.IsValidPassword(changePassword.Password))
