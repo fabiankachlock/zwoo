@@ -102,6 +102,8 @@ var mail_thread2 = new Thread(() =>
         {
             if (Globals.PasswordChangeRequestEmailQueue.TryDequeue(out var data))
             {
+                if (data.Id == 0)
+                    break;
                 try
                 {
                     EmailData.SendPasswordChangeRequest(data);
@@ -129,6 +131,7 @@ mail_thread2.Start();
 app.Run();
 
 Globals.EmailQueue.Enqueue(new EmailData("", 0, "", ""));
+Globals.PasswordChangeRequestEmailQueue.Enqueue(new User(0, "", "", "", "", 0, "", false));
 mail_thread.Join();
 mail_thread2.Join();
 scheduler.Shutdown();
