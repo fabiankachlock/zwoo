@@ -301,8 +301,8 @@
   },
   "dialogs": {
     "promotePlayer": {
-      "title": "{0} zum Host befördern?",
-      "body": "Bist du sicher, dass du {0} zum Host befördern willst? Du verlierst deinen Host Status dadurch. "
+      "title": "{0} zum Veranstalter befördern?",
+      "body": "Bist du sicher, dass du {0} zum Veranstalter befördern willst? Du verlierst deinen Veranstalter Status dadurch. "
     },
     "kickPlayer": {
       "title": "{0} rauswerfen?",
@@ -323,9 +323,10 @@
       "spectatorJoined": "Zuschauer {0} ist beigetreten",
       "playerLeft": "{0} hat das Spiel verlassen",
       "spectatorLeft": "{0} hat das Spiel verlassen",
-      "changedRoleToHost": "{0} ist nun Host",
+      "changedRoleToHost": "{0} ist nun Veranstalter",
       "changedRoleToPlayer": "{0} ist nun Spieler",
-      "changedRoleToSpectator": "{0} ist nun Zuschauer"
+      "changedRoleToSpectator": "{0} ist nun Zuschauer",
+      "selfGotHost": "Du bist nun Veranstalter"
     }
   },
   "logging": {

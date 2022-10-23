@@ -66,8 +66,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     } else if (msg.code === ZRPOPCode.PlayerChangedRole) {
       changePlayerRole(msg.data, true);
     } else if (msg.code === ZRPOPCode.PromoteToHost) {
-      gameHost.value = auth.username;
-      gameConfig.changeRole(ZRPRole.Host);
+      selfGotHost();
     } else if (msg.code == ZRPOPCode.GameStarted) {
       router.replace('/game/play');
     } else if (msg.code === ZRPOPCode.PlayerDisconnected) {
@@ -226,6 +225,15 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const startGame = () => {
     dispatchEvent(ZRPOPCode.StartGame, {});
+  };
+
+  const selfGotHost = () => {
+    gameHost.value = auth.username;
+    gameConfig.changeRole(ZRPRole.Host);
+    snackbar.pushMessage({
+      message: translations.t('snackbar.lobby.selfGotHost'),
+      position: SnackBarPosition.Top
+    });
   };
 
   lobbyWatcher.onOpen(setup);
