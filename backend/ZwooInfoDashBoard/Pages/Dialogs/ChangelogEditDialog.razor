@@ -5,6 +5,10 @@
 
 @inject DialogService DialogService
 
+<div class="w-100" style="padding: 5px;">
+    <RadzenButton Text="Save" Click="(() => Globals.ZwooDatabase.UpdateChangelog(changelog))"/>
+</div>
+
 <RadzenHtmlEditor @bind-Value="@changelog.ChangelogText" Style="flex-grow: 1">
     <RadzenHtmlEditorUndo />
     <RadzenHtmlEditorRedo />
@@ -34,7 +38,4 @@
 
 @code {
     [Parameter] public Changelog changelog { set; get; }
-
-    protected override void OnInitialized() => DialogService.OnClose += (o => Globals.ZwooDatabase.UpdateChangelog(changelog));
-
 }
