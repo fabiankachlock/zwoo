@@ -319,7 +319,8 @@
       "spectatorLeft": "{0} hat das Spiel verlassen",
       "changedRoleToHost": "{0} ist nun Host",
       "changedRoleToPlayer": "{0} ist nun Spieler",
-      "changedRoleToSpectator": "{0} ist nun Zuschauer"
+      "changedRoleToSpectator": "{0} ist nun Zuschauer",
+      "selfGotHost": "Du bist nun Host"
     }
   },
   "logging": {

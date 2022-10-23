@@ -320,7 +320,8 @@
       "spectatorLeft": "{0} left",
       "changedRoleToHost": "{0} is now Host",
       "changedRoleToPlayer": "{0} is now Player",
-      "changedRoleToSpectator": "{0} is now Spectator"
+      "changedRoleToSpectator": "{0} is now Spectator",
+      "selfGotHost": "You are host now"
     }
   },
   "logging": {
