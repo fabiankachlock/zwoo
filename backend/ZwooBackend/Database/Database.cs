@@ -267,7 +267,7 @@ public class Database
     }
     
     /// <summary>
-    /// Delete unverified users & unused password reset codes
+    /// Delete unverified users & unused password reset codes & delete expired delete account events
     /// </summary>
     public void CleanDatabase()
     {
@@ -275,14 +275,17 @@ public class Database
             var users = _userCollection.AsQueryable().Where(x => !x.Verified);
             DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} user(s).");
             foreach (var user in users)
-                DeleteAttempt(user.Id, _userCollection.DeleteOne(x => x.Id == user.Id).DeletedCount == 1);
+                DeleteAttempt(user.Id, _userCollection.DeleteOne(x => x.Id == user.Id).DeletedCount == 1, user);
         }
         {
-            var users = _userCollection.AsQueryable().Where(x => String.IsNullOrEmpty(x.PasswordResetCode));
+            var users = _userCollection.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
             DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} password reset codes.");
             foreach (var user in users)
                 _userCollection.UpdateOne(x => x.Id == user.Id,
                     Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
+        }
+        {
+            DatabaseLogger.Info($"[CleanUp] deleted {_accountEventCollection.DeleteMany(x => x.EventType == "delete" && x.TimeStamp > (ulong)((DateTimeOffset)(DateTime.Today - TimeSpan.FromDays(6))).ToUnixTimeSeconds()).DeletedCount} delete account events.");
         }
     }
     
