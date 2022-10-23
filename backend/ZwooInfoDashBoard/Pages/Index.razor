@@ -36,11 +36,17 @@
                         <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count(x=> !x.Verified)}")"/>
                         <div class="w-100"></div>
                         <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetAccountEventsAsQueryable().Count(x => x.EventType == "login" && !x.Success)}")"/>
-                                                <div class="w-100"></div>
+                        <div class="w-100"></div>
                         <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count(x => x.BetaCode != null)}")"/>
                         <div class="w-100"></div>
                         <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetBetaCodesAsQueryable().Count()}")"/>
                     </div>
+                    <div class="w-100"></div>
+                    <RadzenChart>
+                        <RadzenColumnSeries Data="_gamesPlayed" CategoryProperty="Day" ValueProperty="Amount" Title="Games">
+                            <RadzenSeriesDataLabels Visible="true"/>
+                        </RadzenColumnSeries>
+                    </RadzenChart>
                 </div>
             </RadzenCard>
             <RadzenCard class="w-100" Style="margin-top: 10px">
@@ -71,8 +77,37 @@
 </div>
 
 @code {
-    readonly List<User> _leaderboard = Globals.ZwooDatabase.GetLeaderboard();
+    class GamesPlayedData
+    {
+        public GamesPlayedData(string d, int a)
+        {
+            Day = d;
+            Amount = a;
+        }
+        
+        public string Day { get; set; }
+        public int Amount { get; set; }
+    }
     
+    readonly List<User> _leaderboard = Globals.ZwooDatabase.GetLeaderboard();
+    private List<GamesPlayedData> _gamesPlayed = new();
+
+    protected override void OnInitialized()
+    {
+        var s = DateTime.Today - TimeSpan.FromDays(6);
+        var e = s + TimeSpan.FromDays(1);
+        for (int i = 7; i != 0; i--)
+        {
+            var a = Globals.ZwooDatabase.GetPlayedGamesAsQueryable()
+                .Count(x => x.TimeStamp > (ulong)((DateTimeOffset)s).ToUnixTimeSeconds() && x.TimeStamp < (ulong)((DateTimeOffset)e).ToUnixTimeSeconds());
+            _gamesPlayed.Add(new GamesPlayedData(s.ToString("ddd"), a));
+
+            s += TimeSpan.FromDays(1);
+            e += TimeSpan.FromDays(1);
+        }
+        
+    }
+
     private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
 
     private async Task QuickFindPlayer()
