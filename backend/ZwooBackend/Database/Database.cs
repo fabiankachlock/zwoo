@@ -79,7 +79,7 @@ public class Database
         var user = new User
         {
             Id = id,
-            Sid = "",
+            Sid = new(),
             Username = username,
             Email = email,
             Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}",
@@ -152,7 +152,7 @@ public class Database
         {
             id = user.Id;
             sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
-            var res = _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Sid, sid)).ModifiedCount != 0;
+            var res = _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Push(u => u.Sid, sid)).ModifiedCount != 0;
             LoginAttempt(user.Id, res);
             return res;
         }
@@ -167,22 +167,26 @@ public class Database
     /// <param name="cookie">cookie from user</param>
     /// <param name="user">user</param>
     /// <returns>user found</returns>
-    public bool GetUser(string cookie, out User user)
+    public bool GetUser(string cookie, out User user, out string sid)
     {
         user = new User();
+        sid = "";
         var cookieData = cookie.Split(",");
         user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
         if (user == null)
             return false;
-        if (user.Sid == cookieData[1])
+        if (user.Sid.Contains(cookieData[1]))
+        {
+            sid = cookieData[1];
             return true;
+        }
         return false;
     }
     
-    public void LogoutUser(User user)
+    public void LogoutUser(User user, string sid)
     {
         DatabaseLogger.Debug($"[User] logout {user.Email}");
-        LogoutAttempt(user.Id, _userCollection.UpdateOne(u => u.Id == user.Id, Builders<User>.Update.Set(u => u.Sid, "")).ModifiedCount != 0);
+        LogoutAttempt(user.Id, _userCollection.UpdateOne(u => u.Id == user.Id, Builders<User>.Update.Pull(u => u.Sid, sid)).ModifiedCount != 0);
     }
 
     /// <summary>
@@ -230,12 +234,13 @@ public class Database
     
     public long GetPosition(User user) => _userCollection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
 
-    public bool ChangePassword(User user, string oldPassword, string newPassword)
+    public bool ChangePassword(User user, string oldPassword, string newPassword, string sid)
     {
         if (StringHelper.CheckPassword(oldPassword, user.Password))
         {
             var salt = RandomNumberGenerator.GetBytes(16);
             var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
+            _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Sid, new List<string> { sid }));
             return _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Password, $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}")).ModifiedCount != 0;
         }
         return false;

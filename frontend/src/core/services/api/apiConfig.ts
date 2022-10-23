@@ -29,7 +29,10 @@ export enum Endpoint {
   Games = 'game/games',
   Game = 'game/games/:id:',
   Version = 'version',
-  Changelog = 'changelog?version=:version:'
+  Changelog = 'changelog?version=:version:',
+  ChangePassword = 'account/changePassword',
+  RequestPasswordReset = 'account/requestPasswordReset',
+  ResetPassword = 'account/resetPassword'
 }
 
 export class Backend {

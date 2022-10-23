@@ -1,6 +1,7 @@
 @page "/player-info-dialog/{id}"
 @using ZwooInfoDashBoard.Data
 @using ZwooDatabaseClasses
+@inject DialogService DialogService
 
 <RadzenCard>
     <div class="d-flex flex-row">
@@ -23,28 +24,67 @@
         <p>@($"Betacode: {_player.BetaCode}")</p>
     }
 </RadzenCard>
-<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="20"
-                TItem="AccountEvent" Data="_events" AllowVirtualization="true">
-    <Columns>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Event"/>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success"/>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
-            <Template Context="aevent">
-                @DateTimeOffset.FromUnixTimeSeconds((long)aevent.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Account Events">
+            <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="20" 
+                            TItem="AccountEvent" Data="_events" AllowVirtualization="true">
+                <Columns>
+                    <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Event"/>
+                    <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success">
+                        <Template Context="info">
+                            @info.Success.ToString()
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
+                        <Template Context="aevent">
+                            @DateTimeOffset.FromUnixTimeSeconds((long)aevent.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Sessions">
+            <RadzenDataGrid AllowFiltering="false" AllowGrouping="false" AllowSorting="false" AllowPaging="true" PageSize="20"
+                            TItem="string" Data="_player.Sid" AllowVirtualization="true" @ref="_playerSidGrid">
+                <Columns>
+                    <RadzenDataGridColumn TItem="string" Property="this" Title="Session ID"/>
+                    <RadzenDataGridColumn TItem="string" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+                        <Template Context="sid">
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(sid))"  @onclick:stopPropagation="true" />
+                        </Template>
+                        <EditTemplate Context="sid">
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(sid))" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
 
 @code {
     [Parameter] public ulong Id { set; get; }
 
     private User _player = null!; 
     private IEnumerable<AccountEvent> _events = null!;
+    RadzenDataGrid<string> _playerSidGrid = new RadzenDataGrid<string>();
     
     protected override void OnInitialized()
     {
         _player = Globals.ZwooDatabase.GetUser(Id);
         _events = Globals.ZwooDatabase.GetUserAccountEvents(Id);
     }
+
+    private async void DeleteRow(string sid)
+    {
+        var res = await DialogService.Confirm($"Are you sure that you want to delete {_player.Username}s sid?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (res == null || (bool)!res)
+            return;
+        _player.Sid.Remove(sid);
+        Globals.ZwooDatabase.UpdateUser(_player);
+        await _playerSidGrid.Reload();
+    }
+
 }
