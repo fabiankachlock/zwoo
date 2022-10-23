@@ -41,12 +41,6 @@
                         <div class="w-100"></div>
                         <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetBetaCodesAsQueryable().Count()}")"/>
                     </div>
-                    <div class="w-100"></div>
-                    <RadzenChart>
-                        <RadzenColumnSeries Data="_gamesPlayed" CategoryProperty="Day" ValueProperty="Amount" Title="Games">
-                            <RadzenSeriesDataLabels Visible="true"/>
-                        </RadzenColumnSeries>
-                    </RadzenChart>
                 </div>
             </RadzenCard>
             <RadzenCard class="w-100" Style="margin-top: 10px">
@@ -54,6 +48,19 @@
                 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" class="w-100" Text="Add New Code" Click="@(async () => await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true }))"/>
                 <RadzenButton Icon="search" style="margin-bottom: 10px" class="w-100" Text="Quick Find Player" Click="QuickFindPlayer"/>
                 <RadzenButton Icon="add_circle_outline" class="w-100" Text="Add Version Changelog" Click="CreateVersion"/>
+            </RadzenCard>
+            <RadzenCard class="w-100" Style="margin-top: 10px">
+                <h2>Graphs</h2>
+                <RadzenChart>
+                    <RadzenColumnSeries Data="_gamesPlayed" CategoryProperty="Day" ValueProperty="Amount" Title="Games">
+                        <RadzenSeriesDataLabels Visible="true"/>
+                    </RadzenColumnSeries>
+                </RadzenChart>
+                <RadzenChart>
+                    <RadzenColumnSeries Data="_accountsCreated" CategoryProperty="Day" ValueProperty="Amount" Title="Created Accounts">
+                        <RadzenSeriesDataLabels Visible="true"/>
+                    </RadzenColumnSeries>
+                </RadzenChart>
             </RadzenCard>
         </div>
         <div class="col">
@@ -77,9 +84,9 @@
 </div>
 
 @code {
-    class GamesPlayedData
+    class DiagramData
     {
-        public GamesPlayedData(string d, int a)
+        public DiagramData(string d, int a)
         {
             Day = d;
             Amount = a;
@@ -90,7 +97,8 @@
     }
     
     readonly List<User> _leaderboard = Globals.ZwooDatabase.GetLeaderboard();
-    private List<GamesPlayedData> _gamesPlayed = new();
+    private List<DiagramData> _gamesPlayed = new();
+    private List<DiagramData> _accountsCreated = new();
 
     protected override void OnInitialized()
     {
@@ -98,14 +106,23 @@
         var e = s + TimeSpan.FromDays(1);
         for (int i = 7; i != 0; i--)
         {
-            var a = Globals.ZwooDatabase.GetPlayedGamesAsQueryable()
-                .Count(x => x.TimeStamp > (ulong)((DateTimeOffset)s).ToUnixTimeSeconds() && x.TimeStamp < (ulong)((DateTimeOffset)e).ToUnixTimeSeconds());
-            _gamesPlayed.Add(new GamesPlayedData(s.ToString("ddd"), a));
-
+            // Played Games
+            {
+                var a = Globals.ZwooDatabase.GetPlayedGamesAsQueryable()
+                    .Count(x => x.TimeStamp > (ulong)((DateTimeOffset)s).ToUnixTimeSeconds() && x.TimeStamp < (ulong)((DateTimeOffset)e).ToUnixTimeSeconds());
+                _gamesPlayed.Add(new DiagramData(s.ToString("ddd"), a));
+            }
+            // Accounts created
+            {
+                var a = Globals.ZwooDatabase.GetAccountEventsAsQueryable()
+                    .Where(x => x.EventType == "create" && x.Success)
+                    .Count(x => x.TimeStamp > (ulong)((DateTimeOffset)s).ToUnixTimeSeconds() && x.TimeStamp < (ulong)((DateTimeOffset)e).ToUnixTimeSeconds());
+                _accountsCreated.Add(new DiagramData(s.ToString("ddd"), a));
+            }
+            
             s += TimeSpan.FromDays(1);
             e += TimeSpan.FromDays(1);
         }
-        
     }
 
     private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });

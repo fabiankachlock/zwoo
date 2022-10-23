@@ -15,6 +15,16 @@
                 @info.Success.ToString()
             </Template>
         </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="UserData.Username" Title="Username">
+            <Template Context="ae">
+                @ae.UserData!.Username
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="AccountEvent" Property="UserData.Email" Title="Username">
+            <Template Context="ae">
+                @ae.UserData!.Email
+            </Template>
+        </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
             <Template Context="info">
                 @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
