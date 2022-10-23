@@ -37,7 +37,8 @@ export enum BackendError {
   OpcodeMissing = 143,
   InvalidOpcode = 144,
   InvalidGameId = 145,
-  AlreadyPlaying = 146
+  AlreadyPlaying = 146,
+  GameIsFull = 147
 }
 
 export const parseBackendError = (text: string): BackendErrorType => {

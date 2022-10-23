@@ -50,7 +50,7 @@ public class WebSocketNotificationManager : NotificationManager
     public void PlayerWon(PlayerWonDTO data, GameMeta gameMeta)
     {
         uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
-        Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta);
+        Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta); // TODO: should not be here
         _webSockets.BroadcastGame(
             _gameId,
             ZRPEncoder.EncodeToBytes(
@@ -62,6 +62,7 @@ public class WebSocketNotificationManager : NotificationManager
                 )
             )
         );
+        _webSockets.FinishGame(_gameId);
     }
 
     public void RemoveCard(ZwooGameLogic.Game.Events.RemoveCardDTO data)

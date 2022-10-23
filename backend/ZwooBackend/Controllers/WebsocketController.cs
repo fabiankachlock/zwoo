@@ -37,11 +37,22 @@ public class WebSocketController : Controller
                     return;
                 }
 
-                bool success = game.Lobby.PlayerConnected((long)user.Id);
-                if (!success)
+                LobbyResult result = game.Lobby.PlayerWantsToConnect((long)user.Id);
+                if (result != LobbyResult.Success)
                 {
+                    if (result == LobbyResult.ErrorLobbyFull)
+                    {
+                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_FULL, "lobby is full"));
+                    }
+                    else if (result == LobbyResult.ErrorWrongPassword)
+                    {
+                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                    }
+                    else
+                    {
+                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "not allowed to join"));
+                    }
                     HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "not allowed to join"));
                     await HttpContext.Response.Body.WriteAsync(response, 0, response.Length);
                     return;
                 }

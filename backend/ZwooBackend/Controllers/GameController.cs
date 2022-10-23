@@ -10,7 +10,7 @@ using ZwooBackend.Games;
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[EnableCors("Zwoo")] 
+[EnableCors("Zwoo")]
 [Route("game")]
 public class GameController : Controller
 {
@@ -57,7 +57,7 @@ public class GameController : Controller
                 GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
 
                 Globals.Logger.Info($"{user.Id} created game {gameId}");
-                return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId)));
+                return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId, false, ZRPRole.Host)));
             }
             else if (body.Opcode == ZRPRole.Player || body.Opcode == ZRPRole.Spectator)
             {
@@ -72,14 +72,34 @@ public class GameController : Controller
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
                 }
 
-                bool success = game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
-                if (!success)
+                if (game.Game.IsRunning && game.Lobby.GetPlayer(user.Username) == null)
                 {
-                    return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                    // join as spectator when game is already running and its an new player
+                    // don't make the player a spectator when he his already in the game, because then hes rejoining
+                    body.Opcode = ZRPRole.Spectator;
                 }
 
+                LobbyResult result = game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
+                if (LobbyResult.Success != result)
+                {
+                    if (result == LobbyResult.ErrorLobbyFull)
+                    {
+                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_FULL, "lobby is full"));
+                    }
+                    else if (result == LobbyResult.ErrorWrongPassword)
+                    {
+                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                    } 
+                    else
+                    {
+                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "cant join"));
+                    }
+                }
+
+                var player = game.Lobby.GetPlayer((long)user.Id);
                 Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
-                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id)));
+                // the players opcode may changed based on rejoin
+                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, player == null ? body.Opcode : player.Role)));
             }
 
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));

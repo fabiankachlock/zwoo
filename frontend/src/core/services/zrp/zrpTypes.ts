@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type ZRPMessage<T extends {} | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
+export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
   ? {
       code: T;
       data: ZRPPayloadMap[T];
@@ -33,6 +33,8 @@ export enum ZRPOPCode {
   NewHost = 114, // receiver(player/spectator)
   KickPlayer = 115, // sender (host)
   PlayerChangedRole = 116, // receiver
+  PlayerDisconnected = 117, // receiver
+  PlayerReconnected = 118, // receiver
 
   KeepAlive = 198, // sender
   AckKeepAlive = 199, //  receiver
@@ -64,6 +66,7 @@ export enum ZRPOPCode {
   // Errors
   GeneralError = 400, // receiver
   AccessDeniedError = 420, // receiver
+  LobbyFullError = 421, // receiver
   EndTurnError = 433, // receiver
   PlaceCardError = 434, // receiver
   // internal Errors
@@ -104,6 +107,8 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.NewHost]: ZRPNamePayload;
   [ZRPOPCode.KickPlayer]: ZRPNamePayload;
   [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
+  [ZRPOPCode.PlayerDisconnected]: ZRPNamePayload;
+  [ZRPOPCode.PlayerReconnected]: ZRPNamePayload;
   // Keep alive
   [ZRPOPCode.KeepAlive]: Record<string, never>;
   [ZRPOPCode.AckKeepAlive]: Record<string, never>;
@@ -135,6 +140,7 @@ export type ZRPPayloadMap = {
   // Errors
   [ZRPOPCode.GeneralError]: ZRPErrorPayload;
   [ZRPOPCode.AccessDeniedError]: ZRPErrorPayload;
+  [ZRPOPCode.LobbyFullError]: ZRPErrorPayload;
   [ZRPOPCode.EndTurnError]: ZRPErrorPayload;
   [ZRPOPCode.PlaceCardError]: ZRPErrorPayload;
   // internal Errors

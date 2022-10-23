@@ -22,6 +22,39 @@
         </FloatingDialog>
       </div>
       <div class="relative pt-6">
+        <!-- Saved game -->
+        <div v-if="savedGame" class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-default mb-3">
+          <div class="flex justify-between align-center mb-2">
+            <h3 class="tc-main text-xl">{{ t('list.savedGame') }}</h3>
+            <button @click="removeSavedGame()">
+              <Icon class="text-lg tc-main transition-transform hover:scale-110" icon="akar-icons:cross" />
+            </button>
+          </div>
+          <router-link :to="'/join/' + savedGame.id">
+            <div class="flex flex-row justify-between flex-wrap items-center">
+              <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">
+                <p class="text-md mr-2">
+                  {{ savedGame.name }}
+                </p>
+                <p
+                  v-if="!savedGame.isPublic"
+                  class="inline-flex align-baseline flex-row flex-nowrap items-center tc-main-secondary text-sm italic mx-1"
+                >
+                  <Icon icon="iconoir:lock-key" class="text-sm tc-secondary mx-0.5" /><span>{{ t('list.private') }}</span>
+                </p>
+                <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', savedGame.playerCount) }})</p>
+              </div>
+              <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
+                <div class="tc-primary">
+                  <button @click="joinSavedGame()" class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2">
+                    <span>{{ t('list.rejoin') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </div>
+        <!-- Games -->
         <div class="relative flex flex-col flex-nowrap">
           <div
             v-for="game of games"
@@ -92,27 +125,33 @@
 </template>
 
 <script setup lang="ts">
-import { GamesList } from '@/core/services/api/GameManagement';
+import { GameMeta, GamesList } from '@/core/services/api/GameManagement';
 import { onMounted, ref } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
 import QRCodeReader from '@/components/misc/QRCodeReader.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
-import { useGameConfig } from '@/core/adapter/game';
+import { SavedGame, useGameConfig } from '@/core/adapter/game';
+import { ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { useRouter } from 'vue-router';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();
+const router = useRouter();
 
 const games = ref<GamesList>([]);
 const refreshing = ref(false);
 const scanDialogOpen = ref(false);
+const savedGame = ref<(GameMeta & SavedGame) | undefined>(undefined);
 
 onMounted(async () => {
   games.value = await gameConfig.listGames();
+  savedGame.value = await gameConfig.tryRestoreStoredConfig();
 });
 
 const refresh = async () => {
   games.value = await gameConfig.listGames();
+  savedGame.value = await gameConfig.tryRestoreStoredConfig();
   refreshing.value = true;
   setTimeout(() => {
     refreshing.value = false;
@@ -125,6 +164,22 @@ const scanCode = () => {
 
 const onScanClose = () => {
   scanDialogOpen.value = false;
+};
+
+const joinSavedGame = () => {
+  if (!savedGame.value) return;
+  if (savedGame.value.role !== ZRPRole.Spectator) {
+    // play
+    router.push(`/join/${savedGame.value.id}?play`);
+  } else {
+    // spectate
+    router.push(`/join/${savedGame.value.id}?spectate`);
+  }
+};
+
+const removeSavedGame = () => {
+  gameConfig.clearStoredConfig();
+  savedGame.value = undefined;
 };
 </script>
 

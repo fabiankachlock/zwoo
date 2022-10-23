@@ -11,4 +11,7 @@ public interface SendableWebSocketManager
     public Task QuitGame(long gameId);
 
     public Task Disconnect(long playerdId);
+
+    // TODO: this is awful
+    public Task FinishGame(long gameId);
 }

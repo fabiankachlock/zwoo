@@ -1,4 +1,5 @@
 import { useGameEventDispatch } from '@/composables/eventDispatch';
+import { useWakeLock } from '@/composables/useWakeLock';
 import router from '@/router';
 import { defineStore } from 'pinia';
 import { Backend, Endpoint } from '../services/api/apiConfig';
@@ -8,10 +9,17 @@ import Logger from '../services/logging/logImport';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
 import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
+import { ZRPCoder } from '../services/zrp/zrpCoding';
 import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
+export type SavedGame = {
+  id: number;
+  role: ZRPRole;
+};
+
 let initializedGameModules = false;
+const lastGameKey = 'zwoo:lg';
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
@@ -20,7 +28,10 @@ export const useGameConfig = defineStore('game-config', {
     name: '',
     role: undefined as ZRPRole | undefined,
     inActiveGame: false,
-    _connection: undefined as ZRPWebsocketAdapter | undefined
+    _connection: undefined as ZRPWebsocketAdapter | undefined,
+    _wakeLock: () => {
+      return;
+    }
   }),
   getters: {
     // TODO: delete this?
@@ -29,6 +40,9 @@ export const useGameConfig = defineStore('game-config', {
   actions: {
     changeRole(newRole: ZRPRole | undefined) {
       this.role = newRole;
+      if (newRole && this.gameId) {
+        this._saveConfig({ id: this.gameId, role: newRole });
+      }
     },
     async create(name: string, isPublic: boolean, password: string) {
       const nameValid = new GameNameValidator().validate(name);
@@ -41,11 +55,12 @@ export const useGameConfig = defineStore('game-config', {
       } else if (game) {
         this.$patch({
           inActiveGame: true,
-          role: ZRPRole.Host,
+          role: game.role,
           gameId: game.id,
           name: name
         });
         this.connect();
+        this._saveConfig({ id: game.id, role: game.role });
       }
     },
     async join(id: number, password: string, asPlayer: boolean, asSpectator: boolean) {
@@ -62,17 +77,21 @@ export const useGameConfig = defineStore('game-config', {
       } else if (game) {
         this.$patch({
           inActiveGame: true,
-          role: asPlayer ? ZRPRole.Player : ZRPRole.Spectator,
+          role: game.role,
           gameId: game.id,
           name: data?.name ?? 'error'
         });
-        this.connect();
+        this.connect(game.isRunning);
+        this._saveConfig({ id: game.id, role: game.role });
       }
     },
     leave(): void {
       if (this.inActiveGame) {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
+        this._wakeLock(); // relief wakelock
+        useGameEvents().clear();
+        this.clearStoredConfig();
         this.$patch({
           inActiveGame: false,
           gameId: undefined,
@@ -113,10 +132,11 @@ export const useGameConfig = defineStore('game-config', {
         (await import(/* webpackChunkName: "game-logic" */ './play/rules')).useRules().__init__();
         (await import(/* webpackChunkName: "game-logic" */ './play/summary')).useGameSummary().__init__();
         (await import(/* webpackChunkName: "game-logic" */ './play/util/keepAlive')).useKeepAlive().__init__();
+        (await import(/* webpackChunkName: "internal" */ './play/features/chatBroadcast')).useChatBroadcast().__init__();
         initializedGameModules = true;
       }
     },
-    async connect() {
+    async connect(isRunning = false) {
       await this._initGameModules();
       setTimeout(() => {
         this._connection = new ZRPWebsocketAdapter(
@@ -125,6 +145,16 @@ export const useGameConfig = defineStore('game-config', {
         );
         const events = useGameEvents();
         this._connection.readMessages(events.handleIncomingEvent);
+
+        useWakeLock().then(lock => {
+          if (lock) {
+            this._wakeLock = lock;
+          }
+        });
+
+        if (isRunning) {
+          events.pushEvent(ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {}));
+        }
       }, 0);
     },
     async tryLeave() {
@@ -137,8 +167,36 @@ export const useGameConfig = defineStore('game-config', {
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {
       if (this._connection) {
         Logger.Zrp.log(`[outgoing] ${code} ${JSON.stringify(payload)}`);
-        this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
+        if (!ZRPCoder.isInternalMessage(code)) {
+          this._connection.writeMessage(ZRPMessageBuilder.build(code, payload));
+        } else {
+          useGameEvents().pushEvent(ZRPMessageBuilder.build(code, payload));
+        }
       }
+    },
+    _saveConfig(config: SavedGame) {
+      localStorage.setItem(lastGameKey, JSON.stringify(config));
+    },
+    async tryRestoreStoredConfig(): Promise<(GameMeta & SavedGame) | undefined> {
+      const storedConfig = localStorage.getItem(lastGameKey);
+      if (storedConfig) {
+        try {
+          const config = JSON.parse(storedConfig) as SavedGame;
+          const meta = await this.getGameMeta(config.id);
+          if (meta)
+            return {
+              ...config,
+              ...meta
+            };
+          this.clearStoredConfig();
+        } catch {
+          return undefined;
+        }
+      }
+      return undefined;
+    },
+    clearStoredConfig() {
+      localStorage.removeItem(lastGameKey);
     }
   }
 });

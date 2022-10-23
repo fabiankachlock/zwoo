@@ -10,8 +10,15 @@ export const useGameEvents = defineStore('game-events', {
   actions: {
     handleIncomingEvent(msg: ZRPMessage) {
       Logger.Zrp.log(`[incoming] ${msg.code} ${JSON.stringify(msg.data)}`);
-      this.lastEvent = msg;
-      this.stack.push(msg);
+      this.pushEvent(msg);
+    },
+    pushEvent(evt: ZRPMessage) {
+      this.stack.push(evt);
+      this.lastEvent = evt;
+    },
+    clear() {
+      this.lastEvent = undefined;
+      this.stack = [];
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}

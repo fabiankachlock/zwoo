@@ -5,6 +5,10 @@ import { ZRPMessage, ZRPOPCode } from '../zrp/zrpTypes';
 export class GameWebsocket {
   private connection: WebSocket;
 
+  get state(): number {
+    return this.connection.readyState;
+  }
+
   constructor(public readonly url: string) {
     this.connection = new WebSocket(url);
     this.connection.onmessage = this.handleMessage;

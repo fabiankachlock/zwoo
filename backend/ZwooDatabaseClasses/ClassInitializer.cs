@@ -27,13 +27,6 @@ public static class ClassInitializer
                 new Changelog(c.Id, c.Version, c.ChangelogText));
         });
         
-        BsonClassMap.RegisterClassMap<GameInfo>(cm =>
-        {
-            cm.AutoMap();
-            cm.MapCreator(p =>
-                new GameInfo(p.Id, p.GameName, p.GameId, p.IsPublic, p.Scores, p.TimeStamp));
-        });
-        
         BsonClassMap.RegisterClassMap<PlayerScore>(cm =>
         {
             cm.AutoMap();
@@ -41,6 +34,13 @@ public static class ClassInitializer
                 new PlayerScore(p.PlayerUsername, p.Score));
         });
         
+        BsonClassMap.RegisterClassMap<GameInfo>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new GameInfo(p.Id, p.GameName, p.GameId, p.IsPublic, p.Scores, p.TimeStamp));
+        });
+
         BsonClassMap.RegisterClassMap<AccountEvent>(cm =>
         {
             cm.AutoMap();
