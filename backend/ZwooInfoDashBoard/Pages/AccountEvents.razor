@@ -12,10 +12,10 @@
         <RadzenDataGridColumn TItem="AccountEvent" Property="PlayerID" Title="ID"/>
         <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Type"/>
         <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success">
-                    <Template Context="info">
-                        @info.Success.ToString()
-                    </Template>
-                </RadzenDataGridColumn>
+            <Template Context="info">
+                @info.Success.ToString()
+            </Template>
+        </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
             <Template Context="info">
                 @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
