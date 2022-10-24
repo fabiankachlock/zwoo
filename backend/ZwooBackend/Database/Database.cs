@@ -199,7 +199,7 @@ public class Database
     {
         DatabaseLogger.Debug($"[User] deleting {user.Email}");
 
-        if (StringHelper.CheckPassword(password, user.Password) || !user.Verified)
+        if (!StringHelper.CheckPassword(password, user.Password) || !user.Verified)
         {
             DeleteAttempt(user.Id, false);
             return false;
