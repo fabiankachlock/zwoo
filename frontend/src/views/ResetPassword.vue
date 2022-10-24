@@ -10,7 +10,7 @@
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create">
+        <FormSubmit @click="reset">
           {{ t('resetPassword.reset') }}
         </FormSubmit>
       </FormActions>
@@ -50,7 +50,7 @@ onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
-const code = route.params['code'] as string;
+const code = route.query['code'] as string;
 const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
@@ -72,7 +72,7 @@ watch([password, passwordRepeat, reCaptchaResponse], () => {
   error.value = [];
 });
 
-const create = async () => {
+const reset = async () => {
   error.value = [];
 
   try {
