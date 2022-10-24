@@ -8,7 +8,7 @@ export type ReCaptchaResponse = {
 };
 
 export class ReCaptchaService {
-  static SITE_KEY = '6LdVYE0dAAAAAPkDshZhPtnlqklX8fCH_2xMJvsm';
+  static SITE_KEY = '6LfI8qMiAAAAAJwiBu1sbNMVlujm5i0MAAMr6yEK';
 
   private static instance = new ReCaptchaService();
 

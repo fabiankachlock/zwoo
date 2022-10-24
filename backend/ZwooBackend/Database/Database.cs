@@ -262,6 +262,7 @@ public class Database
         _userCollection.UpdateOne(x => x.PasswordResetCode == code,
             Builders<User>.Update.Set(u => u.Password,
                 $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}"));
+        _userCollection.UpdateOne(x => x.PasswordResetCode == code, Builders<User>.Update.Set(u => u.Sid, new List<string>()));
         _userCollection.UpdateOne(x => x.PasswordResetCode == code,
             Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
     }
