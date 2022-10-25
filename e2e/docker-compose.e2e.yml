@@ -29,7 +29,7 @@ services:
       # Database Settings
       - ZWOO_DATABASE_CONNECTION_STRING=mongodb://db:27017
       # Backend Config
-      - ZWOO_RECAPTCHA_SIDESECRET=6LdVYE0dAAAAAA28RY3-_CUQ_VOxfGrDwlGcV8Fs
+      - ZWOO_RECAPTCHA_SIDESECRET=xxx
       # SSL Settings
       - USE_SSL=False
       - ZWOO_CORS=https://zwoo.igd20.de
