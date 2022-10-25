@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -23,15 +24,19 @@ public partial class Changelog
         Public = @public;
     }
 
+    [JsonIgnore]
     [BsonElement("_id")]
     public ObjectId Id { set; get; }
     
+    [JsonPropertyName("version")]
     [BsonElement("version")]
     public string Version { set; get; } = "";
 
+    [JsonPropertyName("changelog")]
     [BsonElement("changelog")]
     public string ChangelogText { set; get; } = "";
 
+    [JsonIgnore]
     [BsonElement("public")] 
     public bool Public { set; get; } = false;
 }

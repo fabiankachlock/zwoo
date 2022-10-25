@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using static ZwooBackend.Globals;
@@ -25,5 +26,13 @@ public class MiscController : Controller
         if (changelog == null)
             return NotFound("");
         return  Ok(changelog.ChangelogText);
+    }
+    
+    [HttpGet("versionHistory")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    public IActionResult GetChangelogs()
+    {
+        var changelogs = ZwooDatabase.GetChangelogs();
+        return  Ok($"{{ \"versions\": {JsonSerializer.Serialize(changelogs)} }}");
     }
 }

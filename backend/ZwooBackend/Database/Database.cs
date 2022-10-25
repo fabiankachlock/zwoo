@@ -289,7 +289,8 @@ public class Database
         }
     }
     
-    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version);
+    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version && c.Public);
+    public Changelog[] GetChangelogs() => _changelogCollection.AsQueryable().Where(x => x.Public).ToArray();
     
     public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
         _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(_userCollection.AsQueryable().First(y => y.Id == (ulong)x.Key).Username, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
@@ -318,7 +319,7 @@ public class Database
         };
         _accountEventCollection.InsertOne(u);
     }
-
+    
     private readonly IMongoDatabase _database;
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<GameInfo> _gameInfoCollection;
