@@ -56,7 +56,7 @@ public class Database
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
         
         if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == Globals.Version) == null)
-            _changelogCollection.InsertOne(new Changelog(Globals.Version, ""));
+            _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
     }
 
     /// <summary>

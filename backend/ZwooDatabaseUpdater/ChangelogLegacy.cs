@@ -3,24 +3,22 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
-public partial class Changelog
+public class ChangelogLegacy
 {
-    public Changelog() {}
+    public ChangelogLegacy() {}
 
-    public Changelog(string version, string changelogText, bool @public)
+    public ChangelogLegacy(string version, string changelogText)
     {
         Version = version;
         ChangelogText = changelogText;
-        Public = @public;
     }
     
     [BsonConstructor]
-    public Changelog(ObjectId id, string version, string changelogText, bool @public)
+    public ChangelogLegacy(ObjectId id, string version, string changelogText)
     {
         Id = id;
         Version = version;
         ChangelogText = changelogText;
-        Public = @public;
     }
 
     [BsonElement("_id")]
@@ -31,7 +29,4 @@ public partial class Changelog
 
     [BsonElement("changelog")]
     public string ChangelogText { set; get; } = "";
-
-    [BsonElement("public")] 
-    public bool Public { set; get; } = false;
 }
