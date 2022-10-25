@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+import { AccountService } from '../services/api/Account';
 import { AuthenticationService } from '../services/api/Authentication';
 import { ReCaptchaResponse } from '../services/api/Captcha';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
@@ -105,6 +106,48 @@ export const useAuth = defineStore('auth', {
         username: '',
         isLoggedIn: false
       });
+    },
+    async changePassword(oldPassword: string, newPassword: string, newPasswordRepeat: string) {
+      const passwordValid = new PasswordValidator().validate(newPassword);
+      if (!passwordValid.isValid) throw passwordValid.getErrors();
+
+      const passwordMatchValid = new PasswordMatchValidator().validate([newPassword, newPasswordRepeat]);
+      if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
+
+      const error = await AccountService.performChangePassword(oldPassword, newPassword);
+
+      if (error) {
+        throw getBackendErrorTranslation(error);
+      }
+    },
+    async requestPasswordReset(email: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+      const emailValid = new EmailValidator().validate(email);
+      if (!emailValid.isValid) throw emailValid.getErrors();
+
+      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
+      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+
+      const error = await AccountService.requestPasswordReset(email);
+
+      if (error) {
+        throw getBackendErrorTranslation(error);
+      }
+    },
+    async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+      const passwordValid = new PasswordValidator().validate(password);
+      if (!passwordValid.isValid) throw passwordValid.getErrors();
+
+      const passwordMatchValid = new PasswordMatchValidator().validate([password, passwordRepeat]);
+      if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
+
+      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
+      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+
+      const error = await AccountService.performResetPassword(code, password);
+
+      if (error) {
+        throw getBackendErrorTranslation(error);
+      }
     },
     async askStatus() {
       const response = await AuthenticationService.getUserInfo();

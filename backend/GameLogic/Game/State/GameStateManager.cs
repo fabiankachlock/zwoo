@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
-using ZwooGameLogic.Game.Events;
+﻿using log4net;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Helper;
@@ -125,7 +120,7 @@ public sealed class GameStateManager
         {
             _logger.Warn($"player {id} left the running game");
             long lastPlayer = _playerCycle.ActivePlayer;
-            _playerCycle.RemovePlayer(id);
+            _playerCycle.RemovePlayer(id, _gameState.Direction);
             long newPlayer = _playerCycle.ActivePlayer;
 
             GameState newState = _gameState.Clone();

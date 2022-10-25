@@ -25,7 +25,7 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult GetLeaderBoardPosition()
     {
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
             return Ok($"{{\"position\": {Globals.ZwooDatabase.GetPosition(user)}}}");
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
             "Missing Cookie"));
@@ -39,7 +39,7 @@ public class GameController : Controller
     public IActionResult JoinGame([FromBody] JoinGame body)
     {
         Globals.Logger.Info("POST /game/join");
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
             if (GameManager.Global.WebSocketManager.HasWebsocket((long)user.Id))
             {
@@ -113,7 +113,7 @@ public class GameController : Controller
     public IActionResult ListGames()
     {
         Globals.Logger.Info("GET /game/games");
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
             List<GameRecord> games = GameManager.Global.ListAll();
             GamesListResponse response = new GamesListResponse(games.Select(game => new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount())).ToArray());
@@ -130,7 +130,7 @@ public class GameController : Controller
     public IActionResult GetGames(long id)
     {
         Globals.Logger.Info($"GET /game/games/{id}");
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
             GameRecord? game = GameManager.Global.GetGame(id);
             if (game == null)

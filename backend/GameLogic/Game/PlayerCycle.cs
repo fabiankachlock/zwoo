@@ -65,13 +65,15 @@ internal class PlayerCycle
         return _players.FindIndex(id => playerId == id);
     }
 
-    public void RemovePlayer(long id)
+    public void RemovePlayer(long id, GameDirection direction)
     {
-        int playerIndex = _players.IndexOf(id);
-        if (_players.Remove(id) && (_currentIndex > playerIndex || _currentIndex >= _players.Count()))
+        if (id == ActivePlayer)
         {
-            _currentIndex--;
+            Next(direction);
         }
+        long activePlayer = ActivePlayer;
+        _players.Remove(id);
+        _currentIndex = _players.IndexOf(activePlayer);
     }
 
 }

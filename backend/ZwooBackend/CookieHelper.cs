@@ -11,11 +11,12 @@ namespace ZwooBackend;
 
 public static class CookieHelper
 {
-    public static bool CheckUserCookie( string? cookie, out User user )
+    public static bool CheckUserCookie( string? cookie, out User user, out string sid )
     {
         user = new User();
+        sid = "";
         if (cookie == null)
             return false;
-        return Globals.ZwooDatabase.GetUser(cookie, out user);
+        return Globals.ZwooDatabase.GetUser(cookie, out user, out sid);
     }
 }

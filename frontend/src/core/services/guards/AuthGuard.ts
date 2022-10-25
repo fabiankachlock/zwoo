@@ -11,14 +11,14 @@ export class AuthGuard implements RouterInterceptor {
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
     const auth = useAuth();
 
-    if (to.meta['requiresAuth'] === true) {
-      this.Logger.debug(`${to.fullPath} needs auth`);
+    if (to.meta['requiresAuth'] === true || to.meta['noAuth'] === true) {
+      this.Logger.debug(to.meta['requiresAuth'] === true ? `${to.fullPath} needs auth` : `${to.fullPath} only available without auth`);
       if (!auth.isInitialized) {
         this.Logger.debug('force auth init');
         await auth.askStatus();
       }
 
-      if (!auth.isLoggedIn) {
+      if ((to.meta['requiresAuth'] === true && !auth.isLoggedIn) || (to.meta['noAuth'] === true && auth.isLoggedIn)) {
         this.Logger.warn(`not allowed to access ${to.fullPath}`);
         const redirect = to.meta['redirect'] as string | boolean | undefined;
 

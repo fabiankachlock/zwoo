@@ -56,6 +56,8 @@ public class Database
         return _changelogCollection.AsQueryable().First(x => x.Version == changelog.Version);
     }
 
+    public void InsertUser(User user) => _userCollection.InsertOne(user);
+
     public List<User> GetLeaderboard()
     {
         var players = new List<User>();

@@ -15,6 +15,7 @@ namespace ZwooBackend.Database;
 
 public class DatabaseCleanupJob : IJob
 {
+    // Periodic Database Cleanup job
     public Task Execute(IJobExecutionContext context)
     {
         DatabaseLogger.Info("[CleanUp] starting db cleanup");
@@ -58,6 +59,14 @@ public class Database
             _changelogCollection.InsertOne(new Changelog(Globals.Version, ""));
     }
 
+    /// <summary>
+    /// Hash Password, Generate verification code and Creates user in Database
+    /// </summary>
+    /// <param name="username">Username</param>
+    /// <param name="email">Email</param>
+    /// <param name="password">Password to Hash</param>
+    /// <param name="betaCode">Betacode if needed</param>
+    /// <returns>Username, player-id, verification code, email-address</returns>
     public (string, ulong, string, string) CreateUser(string username, string email, string password, string? betaCode)
     {
         DatabaseLogger.Debug($"[User] creating {username}");
@@ -65,17 +74,12 @@ public class Database
         var id = _userCollection.AsQueryable().Max(x => x.Id) + 1;
 
         var salt = RandomNumberGenerator.GetBytes(16);
-        var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
-
-        using (var sha = SHA512.Create())
-        {
-            foreach (int i in Enumerable.Range(0, 10000)) pw = sha.ComputeHash(pw);
-        }
+        var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
 
         var user = new User
         {
             Id = id,
-            Sid = "",
+            Sid = new(),
             Username = username,
             Email = email,
             Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}",
@@ -89,27 +93,25 @@ public class Database
         CreateAttempt(id, true);
         return (username, id, code, email);
     }
-
-    public bool UsernameExists(string username) =>
-        _userCollection.AsQueryable().FirstOrDefault(x => x.Username == username) != null;
-
-    public bool EmailExists(string email) =>
-        _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email) != null;
-
+    
+    public bool UsernameExists(string username) => _userCollection.AsQueryable().FirstOrDefault(x => x.Username == username) != null;
+    
+    public bool EmailExists(string email) => _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email) != null;
+    
     public bool CheckBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
         DatabaseLogger.Debug($"[BetaCode] checking {betaCode}");
         return _betacodesCollection.AsQueryable().FirstOrDefault(x => x.Code == betaCode) != null;
     }
-
+    
     private bool RemoveBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
         DatabaseLogger.Debug($"[BetaCode] removing {betaCode}");
         return _betacodesCollection.DeleteOne(x => betaCode == x.Code).DeletedCount != 0;
     }
-
+    
     public bool VerifyUser(ulong id, string code)
     {
         DatabaseLogger.Debug($"[User] verifying {id}");
@@ -124,6 +126,15 @@ public class Database
         return res;
     }
 
+    /// <summary>
+    /// Logs a user in
+    /// </summary>
+    /// <param name="email">user-email</param>
+    /// <param name="password">entered password</param>
+    /// <param name="sid">session-id for Cookie</param>
+    /// <param name="id">player-id for Cookie</param>
+    /// <param name="error">login-error</param>
+    /// <returns>login successful</returns>
     public bool LoginUser(string email, string password, out string sid, out UInt64 id, out ErrorCodes.Errors error)
     {
         DatabaseLogger.Debug($"[User] login {email}");
@@ -136,19 +147,12 @@ public class Database
             error = ErrorCodes.Errors.USER_NOT_FOUND;
             return false;
         }
-        var salt = Convert.FromBase64String(user.Password.Split(':')[1]);
-        var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
-
-        using (var sha = SHA512.Create())
-        {
-            pw = Enumerable.Range(0, 10000).Aggregate(pw, (current, i) => sha.ComputeHash(current));
-        }
-
-        if (Convert.ToBase64String(pw) == user.Password.Split(':')[2] && user.Verified)
+        
+        if (StringHelper.CheckPassword(password, user.Password) && user.Verified)
         {
             id = user.Id;
             sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
-            var res = _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Sid, sid)).ModifiedCount != 0;
+            var res = _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Push(u => u.Sid, sid)).ModifiedCount != 0;
             LoginAttempt(user.Id, res);
             return res;
         }
@@ -157,36 +161,45 @@ public class Database
         return false;
     }
 
-    public bool GetUser(string cookie, out User user)
+    /// <summary>
+    /// Gets user from Cookie
+    /// </summary>
+    /// <param name="cookie">cookie from user</param>
+    /// <param name="user">user</param>
+    /// <returns>user found</returns>
+    public bool GetUser(string cookie, out User user, out string sid)
     {
         user = new User();
+        sid = "";
         var cookieData = cookie.Split(",");
         user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
         if (user == null)
             return false;
-        if (user.Sid == cookieData[1])
+        if (user.Sid.Contains(cookieData[1]))
+        {
+            sid = cookieData[1];
             return true;
+        }
         return false;
     }
-
-    public void LogoutUser(User user)
+    
+    public void LogoutUser(User user, string sid)
     {
         DatabaseLogger.Debug($"[User] logout {user.Email}");
-        LogoutAttempt(user.Id, _userCollection.UpdateOne(u => u.Id == user.Id, Builders<User>.Update.Set(u => u.Sid, "")).ModifiedCount != 0);
+        LogoutAttempt(user.Id, _userCollection.UpdateOne(u => u.Id == user.Id, Builders<User>.Update.Pull(u => u.Sid, sid)).ModifiedCount != 0);
     }
 
+    /// <summary>
+    /// Deletes user after password matches
+    /// </summary>
+    /// <param name="user">user to delete</param>
+    /// <param name="password">password of user</param>
+    /// <returns></returns>
     public bool DeleteUser(User user, string password)
     {
         DatabaseLogger.Debug($"[User] deleting {user.Email}");
-        var salt = Convert.FromBase64String(user.Password.Split(':')[1]);
-        var pw = Encoding.ASCII.GetBytes(password).Concat(salt).ToArray();
 
-        using (var sha = SHA512.Create())
-        {
-            pw = Enumerable.Range(0, 10000).Aggregate(pw, (current, i) => sha.ComputeHash(current));
-        }
-
-        if (Convert.ToBase64String(pw) != user.Password.Split(':')[2] || !user.Verified)
+        if (StringHelper.CheckPassword(password, user.Password) || !user.Verified)
         {
             DeleteAttempt(user.Id, false);
             return false;
@@ -195,7 +208,7 @@ public class Database
         DeleteAttempt(user.Id, true, user);
         return true;
     }
-
+    
     public LeaderBoard GetLeaderBoard()
     {
         var leaderboard = new LeaderBoard
@@ -210,7 +223,7 @@ public class Database
 
         return leaderboard;
     }
-
+    
     public uint IncrementWin(ulong puid)
     {
         DatabaseLogger.Info($"Incrementing win for user {puid}");
@@ -218,20 +231,66 @@ public class Database
             return _userCollection.AsQueryable().First(u => u.Id == puid).Wins;
         return 0;
     }
-
+    
     public long GetPosition(User user) => _userCollection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
 
-    public void CleanDatabase()
+    public bool ChangePassword(User user, string oldPassword, string newPassword, string sid)
     {
-        var users = _userCollection.AsQueryable().Where(x => !x.Verified);
-        DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} user(s).");
-        foreach (var user in users)
-            DeleteAttempt(user.Id, _userCollection.DeleteOne(x => x.Id == user.Id).DeletedCount == 1);
+        if (StringHelper.CheckPassword(oldPassword, user.Password))
+        {
+            var salt = RandomNumberGenerator.GetBytes(16);
+            var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
+            _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Sid, new List<string> { sid }));
+            return _userCollection.UpdateOne(x => x.Id == user.Id, Builders<User>.Update.Set(u => u.Password, $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}")).ModifiedCount != 0;
+        }
+        return false;
     }
 
-    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version);
+    public User RequestChangePassword(string email)
+    {
+        var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email);
+        user.PasswordResetCode = Guid.NewGuid().ToString();
+        _userCollection.UpdateOne(x => x.Id == user.Id,
+            Builders<User>.Update.Set(u => u.PasswordResetCode, user.PasswordResetCode));
+        return user;
+    }
     
-    // Info Stuff
+    public void ResetPassword(string code, string password)
+    {
+        var salt = RandomNumberGenerator.GetBytes(16);
+        var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
+        _userCollection.UpdateOne(x => x.PasswordResetCode == code,
+            Builders<User>.Update.Set(u => u.Password,
+                $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}"));
+        _userCollection.UpdateOne(x => x.PasswordResetCode == code, Builders<User>.Update.Set(u => u.Sid, new List<string>()));
+        _userCollection.UpdateOne(x => x.PasswordResetCode == code,
+            Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
+    }
+    
+    /// <summary>
+    /// Delete unverified users & unused password reset codes & delete expired delete account events
+    /// </summary>
+    public void CleanDatabase()
+    {
+        {
+            var users = _userCollection.AsQueryable().Where(x => !x.Verified);
+            DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} user(s).");
+            foreach (var user in users)
+                DeleteAttempt(user.Id, _userCollection.DeleteOne(x => x.Id == user.Id).DeletedCount == 1, user);
+        }
+        {
+            var users = _userCollection.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
+            DatabaseLogger.Info($"[CleanUp] deleted {users.Count()} password reset codes.");
+            foreach (var user in users)
+                _userCollection.UpdateOne(x => x.Id == user.Id,
+                    Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
+        }
+        {
+            DatabaseLogger.Info($"[CleanUp] deleted {_accountEventCollection.DeleteMany(x => x.EventType == "delete" && x.TimeStamp > (ulong)((DateTimeOffset)(DateTime.Today - TimeSpan.FromDays(6))).ToUnixTimeSeconds()).DeletedCount} delete account events.");
+        }
+    }
+    
+    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version);
     
     public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
         _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(_userCollection.AsQueryable().First(y => y.Id == (ulong)x.Key).Username, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
@@ -243,6 +302,7 @@ public class Database
     private void VerifyAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("verify", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    
     private void LoginAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("login", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));

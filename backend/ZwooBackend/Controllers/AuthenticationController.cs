@@ -1,6 +1,5 @@
 using System.Net.Mime;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using BackendHelper;
@@ -109,7 +108,7 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult GetUser()
     {
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
             return Ok(JsonSerializer.Serialize(user));
         }
@@ -122,9 +121,9 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult Logout()
     {
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
         {
-            Globals.ZwooDatabase.LogoutUser(user);
+            Globals.ZwooDatabase.LogoutUser(user, sid);
             var t = HttpContext.SignOutAsync();
             t.Wait();
             return Ok(JsonSerializer.Serialize(user));
@@ -142,7 +141,7 @@ public class AuthenticationController : Controller
         if (!StringHelper.IsValidPassword(body.password))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
         
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
             if (Globals.ZwooDatabase.DeleteUser(user, body.password))
             {

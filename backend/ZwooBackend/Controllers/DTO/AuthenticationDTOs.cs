@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace ZwooBackend.Controllers.DTO;
 
 public class CreateAccount
