@@ -1,6 +1,6 @@
 import { Logger } from '../logging/logImport';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorType, parseBackendError } from './errors';
+import { BackendErrorType, parseBackendError } from './Errors';
 
 export class AccountService {
   static performChangePassword = async (oldPassword: string, newPassword: string): Promise<BackendErrorType | undefined> => {
