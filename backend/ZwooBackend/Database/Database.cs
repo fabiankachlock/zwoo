@@ -147,7 +147,7 @@ public class Database
             error = ErrorCodes.Errors.USER_NOT_FOUND;
             return false;
         }
-        
+
         if (StringHelper.CheckPassword(password, user.Password) && user.Verified)
         {
             id = user.Id;
@@ -156,7 +156,7 @@ public class Database
             LoginAttempt(user.Id, res);
             return res;
         }
-        error = ErrorCodes.Errors.PASSWORD_NOT_MATCHING;
+        error = user.Verified ? ErrorCodes.Errors.PASSWORD_NOT_MATCHING : ErrorCodes.Errors.USER_NOT_VERIFIED;
         LoginAttempt(user.Id, false);
         return false;
     }
