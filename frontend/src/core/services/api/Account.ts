@@ -1,11 +1,11 @@
 import { Logger } from '../logging/logImport';
-import { Backend, Endpoint } from './apiConfig';
+import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorType, parseBackendError } from './errors';
 
 export class AccountService {
   static performChangePassword = async (oldPassword: string, newPassword: string): Promise<BackendErrorType | undefined> => {
     Logger.Api.log('performing change password action');
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking change password response');
       return undefined;
     }
@@ -32,7 +32,7 @@ export class AccountService {
 
   static requestPasswordReset = async (email: string): Promise<BackendErrorType | undefined> => {
     Logger.Api.log('performing request password reset action');
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking request password reset response');
       return undefined;
     }
@@ -58,7 +58,7 @@ export class AccountService {
 
   static performResetPassword = async (code: string, password: string): Promise<BackendErrorType | undefined> => {
     Logger.Api.log('performing reset password action');
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking reset password response');
       return undefined;
     }
