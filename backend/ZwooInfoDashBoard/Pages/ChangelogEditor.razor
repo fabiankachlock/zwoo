@@ -24,6 +24,11 @@
                 <RadzenButton Text="Publish" @bind-Enabled="@c.Private" Click="(() => { c.Public = true; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
             </Template>
         </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="" Filterable="false" Width="110px">
+            <Template Context="c">
+                <RadzenButton Text="Unpublish" @bind-Enabled="@c.Public" Click="(() => { c.Public = false; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
+            </Template>
+        </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Changelog" Property="Changelog" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="220px">
             <Template Context="changelog">
                 <RadzenButton Text="Edit Changelog" Icon="edit" Click="@(() => DialogService.Open<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true }))"/>
