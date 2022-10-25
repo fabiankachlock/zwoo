@@ -14,6 +14,16 @@
                                TItem="Changelog" Data="_changelogs" AllowVirtualization="true">
     <Columns>
         <RadzenDataGridColumn TItem="Changelog" Property="Version" Title="Version"/>
+        <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="Public" Width="60px" Filterable="false">
+            <Template Context="c">
+                <RadzenCheckBox Disabled="true" @bind-Value="c.Public"/>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="" Filterable="false" Width="100px">
+            <Template Context="c">
+                <RadzenButton Text="Publish" @bind-Enabled="@c.Private" Click="(() => { c.Public = true; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
+            </Template>
+        </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Changelog" Property="Changelog" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="220px">
             <Template Context="changelog">
                 <RadzenButton Text="Edit Changelog" Icon="edit" Click="@(() => DialogService.Open<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true }))"/>

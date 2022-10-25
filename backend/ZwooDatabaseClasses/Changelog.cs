@@ -39,4 +39,13 @@ public partial class Changelog
     [JsonIgnore]
     [BsonElement("public")] 
     public bool Public { set; get; } = false;
+
+    [BsonIgnore]
+    [JsonIgnore]
+    public bool Private
+    {
+        set => Public = !value;
+        get => !Public;
+    }
+
 }
