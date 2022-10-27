@@ -2,6 +2,7 @@ import './registerServiceWorker';
 import './index.css';
 
 import { createPinia } from 'pinia';
+import { registerSW } from 'virtual:pwa-register';
 import { createApp } from 'vue';
 
 import App from './App.vue';
@@ -36,3 +37,7 @@ app.use(router);
 app.directive('tooltip', Tooltip);
 
 app.mount('#app');
+
+router.isReady().then(() => {
+  registerSW({ immediate: true });
+});
