@@ -5,6 +5,7 @@ import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 
 import App from './App.vue';
+import { RouterService } from './core/services/global/Router';
 import { Tooltip } from './directives/tooltip/Tooltip';
 import i18n from './i18n';
 import router from './router';
@@ -24,6 +25,8 @@ import router from './router';
     window.DEVICE_ID = id;
   }
 })();
+
+RouterService.registerRouter(router);
 
 const app = createApp(App);
 app.use(createPinia());

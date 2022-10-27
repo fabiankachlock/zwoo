@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
-import router from '@/router';
 
 import { ConfigService } from '../services/api/Config';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
+import { RouterService } from '../services/global/Router';
 import { Awaiter } from '../services/helper/Awaiter';
 import { MigrationRunner } from './migrations/MigrationRunner';
 
@@ -135,7 +135,7 @@ export const useConfig = defineStore('config', {
 
       const version = await ConfigService.fetchVersion();
       if (version !== import.meta.env.VUE_APP_VERSION) {
-        router.push('/invalid-version');
+        RouterService.getRouter().push('/invalid-version');
       }
       if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
         this.serverVersion.callback(version);

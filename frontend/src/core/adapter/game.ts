@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 
 import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
-import router from '@/router';
 
 import { Backend, Endpoint } from '../services/api/ApiConfig';
 import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
 import { GameManagementService, GameMeta, GamesList } from '../services/api/GameManagement';
+import { RouterService } from '../services/global/Router';
 import Logger from '../services/logging/logImport';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
@@ -101,7 +101,7 @@ export const useGameConfig = defineStore('game-config', {
           role: undefined,
           _connection: undefined
         });
-        router.replace('/available-games');
+        RouterService.getRouter().replace('/available-games');
       }
     },
     async listGames(): Promise<GamesList> {

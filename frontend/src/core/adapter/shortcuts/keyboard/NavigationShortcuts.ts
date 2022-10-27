@@ -1,4 +1,4 @@
-import Router from '@/router';
+import { RouterService } from '@/core/services/global/Router';
 
 import { Shortcut } from '../types';
 
@@ -8,7 +8,7 @@ export const HomeShortcut: Shortcut<KeyboardEvent> = {
   keyCombination: 'h',
   execute(event) {
     if (event.key === 'h') {
-      Router.push('/home');
+      RouterService.getRouter().push('/home');
     }
   }
 };
@@ -19,7 +19,7 @@ export const NewGameShortcut: Shortcut<KeyboardEvent> = {
   keyCombination: 'n',
   execute(event) {
     if (event.key === 'n') {
-      Router.push('/create-game');
+      RouterService.getRouter().push('/create-game');
     }
   }
 };
@@ -30,7 +30,7 @@ export const ListGamesShortcut: Shortcut<KeyboardEvent> = {
   keyCombination: 'j',
   execute(event) {
     if (event.key === 'j') {
-      Router.push('/available-games');
+      RouterService.getRouter().push('/available-games');
     }
   }
 };
@@ -41,7 +41,7 @@ export const SettingsShortcut: Shortcut<KeyboardEvent> = {
   keyCombination: 's',
   execute(event) {
     if (event.key === 's') {
-      Router.push('/settings');
+      RouterService.getRouter().push('/settings');
     }
   }
 };
@@ -52,7 +52,7 @@ export const LeaderboardShortcut: Shortcut<KeyboardEvent> = {
   keyCombination: 'l',
   execute(event) {
     if (event.key === 'l') {
-      Router.push('/leaderboard');
+      RouterService.getRouter().push('/leaderboard');
     }
   }
 };
@@ -63,7 +63,7 @@ export const LoginShortcut: Shortcut<KeyboardEvent> = {
   keyCombination: 'a',
   execute(event) {
     if (event.key === 'a') {
-      Router.push('/login');
+      RouterService.getRouter().push('/login');
     }
   }
 };
@@ -74,7 +74,7 @@ export const InfoShortcut: Shortcut<KeyboardEvent> = {
   keyCombination: 'i',
   execute(event) {
     if (event.key === 'i' || event.key === '?') {
-      Router.push('/shortcut-info');
+      RouterService.getRouter().push('/shortcut-info');
     }
   }
 };

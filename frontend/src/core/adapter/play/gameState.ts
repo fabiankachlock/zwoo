@@ -4,9 +4,9 @@ import { computed, ref } from 'vue';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { Card } from '@/core/services/game/CardTypes';
+import { RouterService } from '@/core/services/global/Router';
 import Logger from '@/core/services/logging/logImport';
 import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/core/services/zrp/zrpTypes';
-import router from '@/router';
 
 import { useAuth } from '../auth';
 import { useGameCardDeck } from './deck';
@@ -59,7 +59,7 @@ export const useGameState = defineStore('game-state', () => {
     } else if (msg.code === ZRPOPCode.StateUpdate) {
       updateGame(msg.data);
     } else if (msg.code == ZRPOPCode.PlayerWon) {
-      router.replace('/game/summary');
+      RouterService.getRouter().replace('/game/summary');
     } else if (msg.code == ZRPOPCode.PlayerLeft) {
       removePlayer(msg.data.username);
     } else if (msg.code === ZRPOPCode.PlayerDisconnected) {

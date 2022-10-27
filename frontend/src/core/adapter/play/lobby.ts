@@ -4,6 +4,7 @@ import { computed, ref } from 'vue';
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
+import { RouterService } from '@/core/services/global/Router';
 import { arrayDiff } from '@/core/services/utils';
 import {
   ZRPAllLobbyPlayersPayload,
@@ -15,7 +16,6 @@ import {
   ZRPRole
 } from '@/core/services/zrp/zrpTypes';
 import { I18nInstance } from '@/i18n';
-import router from '@/router';
 
 import { useAuth } from '../auth';
 import { useGameConfig } from '../game';
@@ -70,7 +70,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     } else if (msg.code === ZRPOPCode.PromoteToHost) {
       selfGotHost();
     } else if (msg.code == ZRPOPCode.GameStarted) {
-      router.replace('/game/play');
+      RouterService.getRouter().replace('/game/play');
     } else if (msg.code === ZRPOPCode.PlayerDisconnected) {
       playerManager.setPlayerDisconnected(msg.data.username);
     } else if (msg.code === ZRPOPCode.PlayerReconnected) {
@@ -246,7 +246,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   });
   lobbyWatcher.onClose(() => {
     reset();
-    router.replace('/available-games');
+    RouterService.getRouter().replace('/available-games');
   });
 
   return {
