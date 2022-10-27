@@ -1,9 +1,8 @@
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 import { useConfig } from '@/core/adapter/config';
+import Logger from '@/core/services/logging/logImport';
 import { RouterInterceptor } from '@/router/types';
-
-import Logger from '../logging/logImport';
 
 export class VersionGuard implements RouterInterceptor {
   private Logger = Logger.RouterGuard.createOne('version');

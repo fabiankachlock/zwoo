@@ -1,4 +1,5 @@
-import { ReCaptchaTermsVisibilityManager } from '../guards/ReCaptchaTerms';
+import { ReCaptchaTermsVisibilityManager } from '@/router/guards/ReCaptchaTerms';
+
 import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorAble, parseBackendError, unwrapBackendError } from './Errors';
 

@@ -28,6 +28,7 @@
     "deps:viz": "depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg"
   },
   "dependencies": {
+    "@iconify/vue": "^4.0.0",
     "@log-rush/client": "^1.1.1",
     "@tauri-apps/api": "^1.1.0",
     "dexie": "^3.2.1",
@@ -39,7 +40,6 @@
     "vue-router": "^4.1.5"
   },
   "devDependencies": {
-    "@iconify/vue": "^4.0.0",
     "@intlify/vite-plugin-vue-i18n": "^6.0.3",
     "@intlify/vue-i18n-loader": "^4.2.0",
     "@tauri-apps/cli": "^1.1.1",

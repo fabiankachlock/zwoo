@@ -27,9 +27,9 @@
 import { Icon } from '@iconify/vue';
 import { defineProps, ref, toRefs, watch } from 'vue';
 
-import { useIsHost } from '@/composables/userRoles';
 import { useChatStore } from '@/core/adapter/play/chat';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { useIsHost } from '@/core/adapter/play/util/userRoles';
 
 const chat = useChatStore();
 const lobby = useLobbyStore();

@@ -46,9 +46,9 @@ import { useI18n } from 'vue-i18n';
 
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
-import { useIsHost } from '@/composables/userRoles';
 import { useAuth } from '@/core/adapter/auth';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { useIsHost } from '@/core/adapter/play/util/userRoles';
 
 import Widget from '../Widget.vue';
 

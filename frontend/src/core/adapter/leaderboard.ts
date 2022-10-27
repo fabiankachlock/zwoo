@@ -1,4 +1,4 @@
-import { CacheTTL, useDebounce } from '@/composables/useDebounce';
+import { CacheTTL, useDebounce } from '@/core/adapter/helper/useDebounce';
 
 import { LeaderBoardPositionResponse, LeaderBoardResponse, LeaderBoardService } from '../services/api/LeaderBoard';
 

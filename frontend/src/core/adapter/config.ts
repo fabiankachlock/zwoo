@@ -7,7 +7,7 @@ import { ConfigService } from '../services/api/Config';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
 import { Awaiter } from '../services/helper/Awaiter';
-import { MigrationRunner } from '../services/migrations/MigrationRunner';
+import { MigrationRunner } from './migrations/MigrationRunner';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';

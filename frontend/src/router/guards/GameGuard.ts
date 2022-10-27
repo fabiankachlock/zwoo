@@ -1,10 +1,9 @@
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 import { useGameConfig } from '@/core/adapter/game';
+import Logger from '@/core/services/logging/logImport';
 import { GameRoute } from '@/router/game';
 import { RouterInterceptor } from '@/router/types';
-
-import Logger from '../logging/logImport';
 
 export class InGameGuard implements RouterInterceptor {
   static InGameRoutes: string[] = GameRoute.children?.map(child => `${GameRoute.path ?? ''}/${child?.path ?? ''}`) ?? [];

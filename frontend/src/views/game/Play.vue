@@ -35,9 +35,9 @@ import InGameMenu from '@/components/game/InGameMenu.vue';
 import MainCard from '@/components/game/MainCard.vue';
 import Opponents from '@/components/game/OpponentsStrip.vue';
 import Pile from '@/components/game/Pile.vue';
-import { useIsSpectator } from '@/composables/userRoles';
 import { useConfig } from '@/core/adapter/config';
 import { useGameModal } from '@/core/adapter/play/modal';
+import { useIsSpectator } from '@/core/adapter/play/util/userRoles';
 
 const config = useConfig();
 const modalState = useGameModal();

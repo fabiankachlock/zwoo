@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
-import { AuthGuard } from '@/core/services/guards/AuthGuard';
-import { CookieGuard } from '@/core/services/guards/CookieGuard';
-import { InGameGuard } from '@/core/services/guards/GameGuard';
-import { ReCaptchaTermsRouteInterceptor } from '@/core/services/guards/ReCaptchaTerms';
-import { VersionGuard } from '@/core/services/guards/VersionGuard';
+import { AuthGuard } from '@/router/guards/AuthGuard';
+import { CookieGuard } from '@/router/guards/CookieGuard';
+import { InGameGuard } from '@/router/guards/GameGuard';
+import { ReCaptchaTermsRouteInterceptor } from '@/router/guards/ReCaptchaTerms';
+import { VersionGuard } from '@/router/guards/VersionGuard';
 
 import CatchAll from '../views/404.vue';
 import Beta from '../views/Beta.vue';

@@ -47,9 +47,9 @@ import ChatWidget from '@/components/lobby/widgets/ChatWidget.vue';
 import PlayersWidget from '@/components/lobby/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/lobby/widgets/RulesWidget.vue';
 import SpectatorsWidget from '@/components/lobby/widgets/SpectatorsWidget.vue';
-import { useIsHost } from '@/composables/userRoles';
 import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { useIsHost } from '@/core/adapter/play/util/userRoles';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();

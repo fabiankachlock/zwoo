@@ -10,8 +10,8 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 
-import { useIsHost } from '@/composables/userRoles';
 import { DisplayRule, useRules } from '@/core/adapter/play/rules';
+import { useIsHost } from '@/core/adapter/play/util/userRoles';
 import { RuleType } from '@/core/services/game/GameRules';
 
 import NumericRule from './contentTypes/NumericRule.vue';

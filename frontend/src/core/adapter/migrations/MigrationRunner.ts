@@ -1,6 +1,6 @@
 import semverCompare from 'semver/functions/compare';
 
-import Logger from '../logging/logImport';
+import Logger from '../../services/logging/logImport';
 import { Migration } from './Migration';
 
 const allMigrations: Migration[] = [
