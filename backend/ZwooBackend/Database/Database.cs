@@ -121,7 +121,7 @@ public class Database
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
         
-        var res = _userCollection.UpdateOne(x => x.Id == id && x.BetaCode == code, Builders<User>.Update.Set(u => u.Verified, true)).ModifiedCount != 0;
+        var res = _userCollection.UpdateOne(x => x.Id == id && x.ValidationCode == code, Builders<User>.Update.Set(u => u.Verified, true)).ModifiedCount != 0;
         VerifyAttempt(id, res);
         return res;
     }
