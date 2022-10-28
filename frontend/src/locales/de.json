@@ -383,7 +383,7 @@
     "email": "E-Mail",
     "request": "Zurücksetzung Anfordern",
     "login": "Gehe zum Login",
-    "info": "An die angegebene E-Mail Adresse wird eine E-Mail geschickt, in der sich ein Link, mit dem das Passwort zurückgesetzt werden kann, befindet."
+    "info": "An die angegebene E-Mail Adresse wird eine E-Mail geschickt. In dieser befindet sich ein Link, mit dem das Passwort zurückgesetzt werden kann."
   },
   "resetPassword": {
     "title": "Passwort zurücksetzten",

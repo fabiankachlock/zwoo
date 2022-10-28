@@ -14,11 +14,16 @@
           <router-link :to="'/login?' + joinQuery(route.query)">{{ t('requestPasswordReset.login') }}</router-link>
         </FormSecondaryAction>
       </FormActions>
+      <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
+        <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
+        <p class="tc-main-secondary">{{ t('requestPasswordReset.info') }}</p>
+      </div>
     </Form>
   </FlatDialog>
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
@@ -46,6 +51,7 @@ const reCaptchaValidator = new RecaptchaValidator();
 const email = ref('');
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
+const showInfo = ref(false);
 
 watch([email, reCaptchaResponse], () => {
   // clear error since there are changes
@@ -56,6 +62,7 @@ const requestReset = async () => {
   error.value = [];
   try {
     await auth.requestPasswordReset(email.value, reCaptchaResponse.value);
+    showInfo.value = true;
     const redirect = route.query['redirect'] as string;
 
     if (redirect) {
