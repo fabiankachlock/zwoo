@@ -107,8 +107,10 @@ const create = async () => {
     await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, reCaptchaResponse.value, betaCode.value);
     showInfo.value = true;
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
 };
 </script>

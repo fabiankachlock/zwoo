@@ -63,8 +63,10 @@ const requestReset = async () => {
       return;
     }
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
 };
 </script>

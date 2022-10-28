@@ -65,8 +65,10 @@ const logIn = async () => {
 
     router.push('/home');
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
 };
 </script>

@@ -80,8 +80,10 @@ const reset = async () => {
     await auth.resetPassword(code, password.value, passwordRepeat.value, reCaptchaResponse.value);
     showInfo.value = true;
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
 };
 </script>
