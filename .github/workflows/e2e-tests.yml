@@ -2,8 +2,13 @@
 name: E2E-Test Pipeline
 on:
   workflow_dispatch:
-  # todo remove on push to every thing and add pr
   push:
+    tags:        
+      - '**'  
+    branches:
+      - main
+  pull_request:
+    
 
 jobs:
   e2e-tests:
