@@ -8,7 +8,7 @@ ED_EXIT_CODE=1
 
 launch_app() {
     # start env
-    echo "\n\n"
+    echo ""
     echo "starting application..."
     docker compose -f ./e2e/docker-compose.e2e.yml up -d --wait
     echo "application started!"
@@ -19,54 +19,54 @@ shutdown_app() {
     echo "shutting down application..."
     docker compose -f ./e2e/docker-compose.e2e.yml down
     echo "application shut down!."
-    echo "\n\n"
+    echo ""
 }
 
 
 # run tests
-echo "\n\n"
+echo ""
 echo "===== ELECTRON ====="
-echo "\n\n"
+echo ""
 launch_app
 echo "running tests in electron..."
-docker run -i --name e2e-test-runner-electron --rm -v ./e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0
+docker run -i --name e2e-test-runner-electron --rm -v /app/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0
 EL_EXIT_CODE=$?
 echo "electron tests ran!"
 shutdown_app
 
-echo "\n\n"
+echo ""
 echo "===== CHROME ====="
-echo "\n\n"
+echo ""
 launch_app
 echo "running tests in chrome..."
-docker run -i --name e2e-test-runner-chrome --rm -v ./e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser chrome
+docker run -i --name e2e-test-runner-chrome --rm -v /app/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser chrome
 CH_EXIT_CODE=$?
 echo "chrome tests ran!"
 shutdown_app
 
-echo "\n\n"
+echo ""
 echo "===== FIREFOX ====="
-echo "\n\n"
+echo ""
 launch_app
 echo "running tests in firefox..."
-docker run -i --name e2e-test-runner-firefox --rm -v ./e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser firefox
+docker run -i --name e2e-test-runner-firefox --rm -v /app/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser firefox
 FI_EXIT_CODE=$?
 echo "firefox tests ran!"
 shutdown_app
 
-echo "\n\n"
+echo ""
 echo "===== EDGE ====="
-echo "\n\n"
+echo ""
 launch_app
 echo "running tests in edge..."
-docker run -i --name e2e-test-runner-edge --rm -v ./e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser edge
+docker run -i --name e2e-test-runner-edge --rm -v /app/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser edge
 ED_EXIT_CODE=$?
 echo "edge tests ran!"
 shutdown_app
 
-echo "\n\n"
+echo ""
 echo "===== SUMMARY ====="
-echo "\n\n"
+echo ""
 
 EXIT_CODE=0
 # print status
