@@ -8,7 +8,7 @@ ED_EXIT_CODE=1
 
 # start env
 echo "starting application..."
-docker compose -f ./docker-compose.e2e.yml up -d --wait
+docker compose -f ./e2e/docker-compose.e2e.yml up -d --wait
 echo "application started!"
 
 # run tests
@@ -34,7 +34,7 @@ echo "edge tests ran!"
 
 # shot down env
 echo "shutting down application..."
-docker compose -f ./docker-compose.e2e.yml down
+docker compose -f ./e2e/docker-compose.e2e.yml down
 echo "application shut down!."
 
 EXIT_CODE=0
