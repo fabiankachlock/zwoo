@@ -24,7 +24,7 @@
       <template v-if="isBeta">
         <TextInput id="beta-code" v-model="betaCode" labelKey="createAccount.beta" placeholder="xxx-xxx" />
       </template>
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
+      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="create">
@@ -108,6 +108,7 @@ const create = async () => {
     showInfo.value = true;
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    reCaptchaResponse.value = undefined;
   }
 };
 </script>

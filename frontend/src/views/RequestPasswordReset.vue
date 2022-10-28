@@ -4,7 +4,7 @@
       <FormTitle> {{ t('requestPasswordReset.title') }} </FormTitle>
       <p class="m-2 tc-main-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
       <TextInput id="email" v-model="email" labelKey="requestPasswordReset.email" :placeholder="t('requestPasswordReset.email')" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
+      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="requestReset">
@@ -64,6 +64,7 @@ const requestReset = async () => {
     }
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    reCaptchaResponse.value = undefined;
   }
 };
 </script>
