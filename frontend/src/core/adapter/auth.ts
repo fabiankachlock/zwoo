@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
+
 import { AccountService } from '../services/api/Account';
 import { AuthenticationService } from '../services/api/Authentication';
-import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
-import { ReCaptchaResponse } from '../services/api/reCAPTCHA';
+import { ReCaptchaResponse } from '../services/api/Captcha';
+import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';

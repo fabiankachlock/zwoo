@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
+
 import Error from '@/components/misc/Error.vue';
 
 defineProps<{

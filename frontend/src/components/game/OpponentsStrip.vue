@@ -15,9 +15,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import { useChatStore } from '@/core/adapter/play/chat';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { computed } from 'vue';
+
 import Opponent from './Opponent.vue';
 
 const game = useGameState();

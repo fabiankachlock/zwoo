@@ -44,26 +44,27 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
+import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
+import { useAuth } from '@/core/adapter/auth';
+import { useCookies } from '@/core/adapter/cookies';
+import { ReCaptchaResponse } from '@/core/services/api/Captcha';
+import { joinQuery } from '@/core/services/utils';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
-import { onMounted, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { UsernameValidator } from '@/core/services/validator/username';
-import { useRoute } from 'vue-router';
-import { joinQuery } from '@/core/services/utils';
-import { useAuth } from '@/core/adapter/auth';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
-import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
-import { useCookies } from '@/core/adapter/cookies';
+import { UsernameValidator } from '@/core/services/validator/username';
 
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
-const isBeta = process.env.VUE_APP_BETA === 'true';
+const isBeta = import.meta.env.VUE_APP_BETA === 'true';
 
 onMounted(() => {
   useCookies().loadRecaptcha();

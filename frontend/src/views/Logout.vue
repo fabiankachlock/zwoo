@@ -7,11 +7,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { Form, FormError } from '@/components/forms/index';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useAuth } from '@/core/adapter/auth';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const auth = useAuth();

@@ -26,10 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import { useSnackbar, SnackBarPositionClasses } from '@/core/adapter/snackbar';
-import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { SnackBarPositionClasses, useSnackbar } from '@/core/adapter/snackbar';
 
 const snackbar = useSnackbar();
 const msg = computed(() => snackbar.activeMessage);

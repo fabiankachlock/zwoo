@@ -20,10 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/reCAPTCHA';
-import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
 import { computed, defineEmits, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/Captcha';
+import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
 
 const emit = defineEmits<{
   (event: 'responseChanged', response: ReCaptchaResponse): void;

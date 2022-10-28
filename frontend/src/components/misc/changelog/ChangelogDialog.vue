@@ -18,10 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { ConfigService } from '@/core/services/api/Config';
-import { unwrapBackendError } from '@/core/services/api/errors';
-import { toRefs, defineProps, defineEmits, watch, onMounted, ref } from 'vue';
+import { defineEmits, defineProps, onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { ConfigService } from '@/core/services/api/Config';
+import { unwrapBackendError } from '@/core/services/api/Errors';
+
 import FloatingDialog from '../FloatingDialog.vue';
 
 const props = defineProps<{

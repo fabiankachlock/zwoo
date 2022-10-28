@@ -29,18 +29,19 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
-import { PasswordValidator } from '@/core/services/validator/password';
-import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useAuth } from '@/core/adapter/auth';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
-import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
-import { useCookies } from '@/core/adapter/cookies';
 import { useRoute } from 'vue-router';
+
+import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
+import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
+import FlatDialog from '@/components/misc/FlatDialog.vue';
+import { useAuth } from '@/core/adapter/auth';
+import { useCookies } from '@/core/adapter/cookies';
+import { ReCaptchaResponse } from '@/core/services/api/Captcha';
+import { PasswordValidator } from '@/core/services/validator/password';
+import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 
 const { t } = useI18n();
 const auth = useAuth();

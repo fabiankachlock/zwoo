@@ -1,4 +1,4 @@
-const colors = require('tailwindcss/colors')
+const colors = require('tailwindcss/colors');
 
 module.exports = {
   content: ['./public/index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
@@ -44,7 +44,7 @@ module.exports = {
           light: '#191936',
           DEFAULT: '#07071C',
           dark: '#050514',
-          secondary: '#49495E',
+          secondary: '#49495E'
         },
         error: {
           'light-bg': colors.red[500] + '80', // add alpha

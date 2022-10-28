@@ -45,16 +45,18 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+
 import { useAuth } from '@/core/adapter/auth';
-import FloatingDialog from '../misc/FloatingDialog.vue';
+import { PasswordValidator } from '@/core/services/validator/password';
+import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+
 import Form from '../forms/Form.vue';
-import FormTitle from '../forms/FormTitle.vue';
-import TextInput from '../forms/TextInput.vue';
 import FormActions from '../forms/FormActions.vue';
 import FormError from '../forms/FormError.vue';
 import FormSubmit from '../forms/FormSubmit.vue';
-import { PasswordValidator } from '@/core/services/validator/password';
-import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+import FormTitle from '../forms/FormTitle.vue';
+import TextInput from '../forms/TextInput.vue';
+import FloatingDialog from '../misc/FloatingDialog.vue';
 
 const auth = useAuth();
 const { t } = useI18n();

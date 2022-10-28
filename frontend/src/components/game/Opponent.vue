@@ -24,11 +24,12 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, defineProps, watch, ref } from 'vue';
 import { Icon } from '@iconify/vue';
+import { defineProps, ref, toRefs, watch } from 'vue';
+
 import { useChatStore } from '@/core/adapter/play/chat';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useIsHost } from '@/composables/userRoles';
+import { useIsHost } from '@/core/adapter/play/util/userRoles';
 
 const chat = useChatStore();
 const lobby = useLobbyStore();

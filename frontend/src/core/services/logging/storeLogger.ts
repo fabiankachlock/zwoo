@@ -1,4 +1,4 @@
-import { LogEntry, BaseLogger, LogStore } from './logTypes';
+import { BaseLogger, LogEntry, LogStore } from './logTypes';
 
 export async function GetLogger(store: LogStore): Promise<() => BaseLogger> {
   const MAX_BUFFER_SIZE = 10;

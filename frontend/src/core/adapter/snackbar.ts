@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+
 import Logger from '../services/logging/logImport';
 
 export enum SnackBarPosition {

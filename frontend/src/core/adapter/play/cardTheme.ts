@@ -1,10 +1,12 @@
-import { useColorTheme } from '@/composables/colorTheme';
+import { reactive, ref, watch } from 'vue';
+
+import { useColorTheme } from '@/core/adapter/helper/useColorTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
-import { CardThemeInformation, CARD_THEME_VARIANT_AUTO } from '@/core/services/cards/CardThemeConfig';
+import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';
 import { CreateUseHook } from '@/core/services/helper/CreateUseHook';
 import Logger from '@/core/services/logging/logImport';
-import { reactive, ref, watch } from 'vue';
+
 import { useConfig } from '../config';
 
 const DEBOUNCE_TIME = 1000;

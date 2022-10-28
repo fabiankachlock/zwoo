@@ -1,10 +1,12 @@
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
+
+import { useAuth } from '@/core/adapter/auth';
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+
+import { useGameConfig } from '../../game';
 import { ChatMessage, useChatStore } from '../chat';
 import { MonolithicEventWatcher } from '../util/MonolithicEventWatcher';
-import { useAuth } from '@/core/adapter/auth';
-import { useGameConfig } from '../../game';
 
 const BroadcastChannelID = 'zwoo:$gameChat';
 const ResetMessage = '$recv:reset';

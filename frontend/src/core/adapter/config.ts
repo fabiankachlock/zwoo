@@ -1,11 +1,13 @@
-import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
-import router from '@/router';
 import { defineStore } from 'pinia';
-import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
+
+import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
+
 import { ConfigService } from '../services/api/Config';
-import { Awaiter } from '../services/helper/Awaiter';
+import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
-import { MigrationRunner } from '../services/migrations/MigrationRunner';
+import { RouterService } from '../services/global/Router';
+import { Awaiter } from '../services/helper/Awaiter';
+import { MigrationRunner } from './migrations/MigrationRunner';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -15,9 +17,9 @@ const showCardDetailKey = 'zwoo:cd';
 const themeKey = 'zwoo:th';
 
 const versionInfo = {
-  override: process.env.VUE_APP_VERSION_OVERRIDE as string,
-  version: process.env.VUE_APP_VERSION as string,
-  hash: process.env.VUE_APP_VERSION_HASH as string
+  override: import.meta.env.VUE_APP_VERSION_OVERRIDE as string,
+  version: import.meta.env.VUE_APP_VERSION as string,
+  hash: import.meta.env.VUE_APP_VERSION_HASH as string
 };
 
 const changeLanguage = (lng: string) => {
@@ -54,7 +56,7 @@ export const useConfig = defineStore('config', {
       cardTheme: '__default__',
       cardThemeVariant: '@auto',
       serverVersion: new Awaiter() as string | Awaiter<string>,
-      clientVersion: process.env.VUE_APP_VERSION
+      clientVersion: import.meta.env.VUE_APP_VERSION
     };
   },
 
@@ -132,8 +134,8 @@ export const useConfig = defineStore('config', {
       }
 
       const version = await ConfigService.fetchVersion();
-      if (version !== process.env.VUE_APP_VERSION) {
-        router.push('/invalid-version');
+      if (version !== import.meta.env.VUE_APP_VERSION) {
+        RouterService.getRouter().push('/invalid-version');
       }
       if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
         this.serverVersion.callback(version);
