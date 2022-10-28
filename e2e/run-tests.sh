@@ -13,22 +13,22 @@ echo "application started!"
 
 # run tests
 echo "running tests in electron..."
-docker run -it --name e2e-test-runner-electron --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0
+docker run -i --name e2e-test-runner-electron --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0
 EL_EXIT_CODE=$?
 echo "electron tests ran!"
 
 echo "running tests in chrome..."
-docker run -it --name e2e-test-runner-chrome --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser chrome
+docker run -i --name e2e-test-runner-chrome --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser chrome
 CH_EXIT_CODE=$?
 echo "chrome tests ran!"
 
 echo "running tests in firefox..."
-docker run -it --name e2e-test-runner-firefox --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser firefox
+docker run -i --name e2e-test-runner-firefox --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser firefox
 FI_EXIT_CODE=$?
 echo "firefox tests ran!"
 
 echo "running tests in edge..."
-docker run -it --name e2e-test-runner-edge --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser edge
+docker run -i --name e2e-test-runner-edge --rm -v $PWD/e2e/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser edge
 ED_EXIT_CODE=$?
 echo "edge tests ran!"
 
