@@ -1,5 +1,5 @@
 <template>
-  <div class="imprint m-8 mb-20 tc-main-secondary lg:max-w-3xl lg:mx-auto">
+  <MaxWidthLayout size="normal" class="imprint tc-main-secondary">
     <h1 class="tc-main">Impressum</h1>
 
     <p>Angaben gemäß § 5 TMG</p>
@@ -78,10 +78,12 @@
       sämtliche Funktionen dieser Website voll umfänglich nutzen können. Durch die Nutzung dieser Website erklären Sie sich mit der Bearbeitung der
       über Sie erhobenen Daten durch Google in der zuvor beschriebenen Art und Weise und zu dem zuvor benannten Zweck einverstanden.
     </p>
-  </div>
+  </MaxWidthLayout>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
+</script>
 
 <style>
 .imprint p {

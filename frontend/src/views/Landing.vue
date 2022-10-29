@@ -1,7 +1,7 @@
 <template>
-  <div class="relative w-full p-5 py-10 max-w-lg mx-auto">
+  <MaxWidthLayout size="small" classes="pt-10">
     <div class="w-full flex justify-center">
-      <img style="width: 10rem; max-width: 80%" src="/img/logo/zwoo_logo_none.svg" alt="" />
+      <img style="width: 10rem; max-width: 80%" src="/img/logo/zwoo_logo_none.svg" alt="zwoo-logo" />
     </div>
     <h1 class="text-6xl tc-primary text-center">zwoo</h1>
     <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
@@ -31,12 +31,14 @@
         </router-link>
       </div> -->
     </div>
-  </div>
+  </MaxWidthLayout>
 </template>
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
+
+import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
 </script>

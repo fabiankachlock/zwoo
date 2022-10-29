@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-xl mx-auto m-4">
+  <MaxWidthLayout size="small">
     <h1 class="tc-main text-center text-4xl mb-2">{{ t('verifyAccount.title') }}</h1>
     <div v-if="isLoading" class="flex flex-row justify-center flex-nowrap items-center tc-main">
       <p class="tc-main-secondary text-center my-6 mr-4">
@@ -19,7 +19,7 @@
         <p class="tc-main-secondary text-center">{{ t('verifyAccount.login') }}</p>
       </button>
     </div>
-  </div>
+  </MaxWidthLayout>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +30,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { AuthenticationService } from '@/core/services/api/Authentication';
 import { unwrapBackendError } from '@/core/services/api/Errors';
+import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const route = useRoute();
 const router = useRouter();

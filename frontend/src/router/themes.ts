@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 
-import Menu from '../views/Menu.vue';
+import Menu from '../views/_Layout.vue';
 
 export const ThemesRoute: RouteRecordRaw = {
   path: '/themes',

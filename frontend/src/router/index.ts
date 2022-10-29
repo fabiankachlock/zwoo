@@ -7,11 +7,11 @@ import { InGameGuard } from '@/router/guards/GameGuard';
 import { ReCaptchaTermsRouteInterceptor } from '@/router/guards/ReCaptchaTerms';
 import { VersionGuard } from '@/router/guards/VersionGuard';
 
+import Menu from '../views/_Layout.vue';
 import CatchAll from '../views/404.vue';
 import Beta from '../views/Beta.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
-import Menu from '../views/Menu.vue';
 import Version from '../views/Version.vue';
 import { DeveloperRoute } from './developer';
 import { GameRoute } from './game';

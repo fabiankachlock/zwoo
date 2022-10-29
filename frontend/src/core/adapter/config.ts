@@ -30,9 +30,9 @@ const changeLanguage = (lng: string) => {
 const changeUIMode = (isDark: boolean) => {
   localStorage.setItem(uiKey, isDark ? 'dark' : 'light');
   if (isDark) {
-    document.body.classList.add('dark');
+    document.querySelector('html')?.classList.add('dark');
   } else {
-    document.body.classList.remove('dark');
+    document.querySelector('html')?.classList.remove('dark');
   }
 };
 

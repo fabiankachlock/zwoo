@@ -1,42 +1,40 @@
 <template>
-  <div class="max-w-lg sm:w-full mx-auto h-full">
-    <div class="mx-4 sm:mx-0 pb-2">
-      <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-0">
-        <h2 class="tc-main text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
-      </div>
-      <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center tc-main">
-        <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
-        <p class="text-xl tc-main">{{ t('util.loading') }}</p>
-      </div>
-      <div v-else class="flex flex-row flex-wrap items-center justify-center tc-main">
-        <button
-          @click="goBack()"
-          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
-        >
-          <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-1 tc-secondary transition-transform" />{{ t('join.goBack') }}
-        </button>
-        <button
-          @click="joinAsSpectator()"
-          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
-        >
-          <Icon icon="iconoir:eye-alt" class="icon text-xl mr-1 tc-secondary transition-transform" />
-          <span class="whitespace-nowrap">{{ t('join.asSpectator') }}</span>
-        </button>
-        <button
-          @click="joinAsPlayer()"
-          class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
-        >
-          <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 tc-secondary transition-transform" />
-          <span class="whitespace-nowrap">{{ t('join.asPlayer') }}</span>
-        </button>
-      </div>
-      <div>
-        <Form>
-          <FormError :error="error" />
-        </Form>
-      </div>
+  <MaxWidthLayout size="small">
+    <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-0">
+      <h2 class="tc-main text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
     </div>
-  </div>
+    <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center tc-main">
+      <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
+      <p class="text-xl tc-main">{{ t('util.loading') }}</p>
+    </div>
+    <div v-else class="flex flex-row flex-wrap items-center justify-center tc-main">
+      <button
+        @click="goBack()"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+      >
+        <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-1 tc-secondary transition-transform" />{{ t('join.goBack') }}
+      </button>
+      <button
+        @click="joinAsSpectator()"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+      >
+        <Icon icon="iconoir:eye-alt" class="icon text-xl mr-1 tc-secondary transition-transform" />
+        <span class="whitespace-nowrap">{{ t('join.asSpectator') }}</span>
+      </button>
+      <button
+        @click="joinAsPlayer()"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+      >
+        <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 tc-secondary transition-transform" />
+        <span class="whitespace-nowrap">{{ t('join.asPlayer') }}</span>
+      </button>
+    </div>
+    <div>
+      <Form>
+        <FormError :error="error" />
+      </Form>
+    </div>
+  </MaxWidthLayout>
   <FloatingDialog v-if="showDialog" content-class="max-w-md">
     <Form show-close-button @close="showDialog = false">
       <FormTitle>
@@ -63,6 +61,7 @@ import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { useGameConfig } from '@/core/adapter/game';
 import { BackendError } from '@/core/services/api/Errors';
+import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
 const route = useRoute();
