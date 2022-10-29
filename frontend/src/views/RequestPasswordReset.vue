@@ -1,5 +1,5 @@
 <template>
-  <FlatDialog>
+  <FormLayout>
     <Form show-back-button>
       <FormTitle> {{ t('requestPasswordReset.title') }} </FormTitle>
       <p class="m-2 tc-main-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
@@ -7,7 +7,7 @@
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="requestReset">
+        <FormSubmit @click="requestReset" :disabled="!isSubmitEnabled || showInfo">
           {{ t('requestPasswordReset.request') }}
         </FormSubmit>
         <FormSecondaryAction>
@@ -19,23 +19,24 @@
         <p class="tc-main-secondary">{{ t('requestPasswordReset.info') }}</p>
       </div>
     </Form>
-  </FlatDialog>
+  </FormLayout>
 </template>
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Form, FormActions, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
 import { joinQuery } from '@/core/services/utils';
+import { EmailValidator } from '@/core/services/validator/email';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
+import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
@@ -47,11 +48,13 @@ onMounted(() => {
 });
 
 const reCaptchaValidator = new RecaptchaValidator();
+const emailValidator = new EmailValidator();
 
 const email = ref('');
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
+const isSubmitEnabled = computed(() => emailValidator.validate(email.value).isValid && reCaptchaValidator.validate(reCaptchaResponse.value).isValid);
 
 watch([email, reCaptchaResponse], () => {
   // clear error since there are changes

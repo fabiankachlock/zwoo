@@ -1,5 +1,5 @@
 <template>
-  <FlatDialog>
+  <FormLayout>
     <Form show-back-button>
       <FormTitle>
         {{ t('createGame.title') }}
@@ -11,12 +11,12 @@
       <TextInput v-if="!isPublic" id="game-password" v-model="password" labelKey="createGame.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create">
+        <FormSubmit @click="create" :disabled="!nameValidator.validate(name).isValid">
           {{ t('createAccount.create') }}
         </FormSubmit>
       </FormActions>
     </Form>
-  </FlatDialog>
+  </FormLayout>
 </template>
 
 <script setup lang="ts">
@@ -25,9 +25,9 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 import { Checkbox, Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useGameConfig } from '@/core/adapter/game';
 import { GameNameValidator } from '@/core/services/validator/gameName';
+import FormLayout from '@/layouts/FormLayout.vue';
 
 const gameConfig = useGameConfig();
 const nameValidator = new GameNameValidator();

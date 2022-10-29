@@ -1,9 +1,19 @@
 <template>
-  <button v-if="showBackButton" @click="goBack" class="tc-main-secondary absolute left-3 top-3 text-xl transition-transform hover:-translate-x-1">
-    <Icon icon="mdi:chevron-left" />
+  <button
+    v-if="showBackButton"
+    @click="goBack"
+    id="back-button"
+    class="tc-main-secondary bg-light hover:bg-main absolute left-2 top-2 text-xl p-1 rounded-md cursor-pointer"
+  >
+    <Icon icon="mdi:chevron-left" class="text-1xl transition-transform scale-125" />
   </button>
-  <button v-if="showCloseButton" @click="emit('close')" class="tc-main-secondary absolute right-3 top-3 text-xl transition-transform hover:scale-110">
-    <Icon icon="gg:close" />
+  <button
+    v-if="showCloseButton"
+    @click="emit('close')"
+    id="close-button"
+    class="tc-main-secondary bg-light hover:bg-main absolute right-2 top-2 text-xl p-1 rounded-md cursor-pointer"
+  >
+    <Icon icon="gg:close" class="text-xl transition-transform" />
   </button>
   <form class="w-full h-full relative">
     <slot></slot>
@@ -28,3 +38,13 @@ const router = useRouter();
 
 const goBack = () => router.go(-1);
 </script>
+
+<styles scoped lang="css">
+#back-button:hover svg {
+  @apply -translate-x-[2px];
+}
+
+#close-button:hover svg {
+  @apply scale-110;
+}
+</styles>

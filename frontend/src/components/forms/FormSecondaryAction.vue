@@ -1,11 +1,11 @@
 <template>
-  <a
-    class="block align-baseline italic text-xs tc-main-secondary my-1 tc-main-dark hover:opacity-70 transition cursor-pointer"
+  <button
+    class="block text-xs tc-main-secondary mt-1 mb-2 tc-main-dark transition cursor-pointer hover:bg-light w-[80%] rounded-full py-1"
     :href="link"
     @click="emit('click')"
   >
     <slot></slot>
-  </a>
+  </button>
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,10 @@
 <template>
   <button
-    class="bg-dark tc-primary py-2 px-6 w-full rounded focus:outline-none focus:shadow-outline transition hover:bg-darkest border-2 border-transparent hover:border-primary relative"
+    class="py-2 px-6 w-full rounded focus:outline-none transition border-2 border-transparent relative"
+    :class="{
+      'tc-main-secondary bg-main cursor-not-allowed pointer-events-none': disabled,
+      'tc-primary bg-dark hover:bg-darkest hover:border-primary': !disabled
+    }"
     type="button"
     @click="emit('click')"
   >
@@ -10,6 +14,11 @@
 
 <script setup lang="ts">
 import { defineEmits } from 'vue';
+
+// eslint-disable-next-line no-undef
+defineProps<{
+  disabled?: boolean;
+}>();
 
 const emit = defineEmits<{
   (event: 'click'): void;

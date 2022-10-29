@@ -1,5 +1,5 @@
 <template>
-  <FlatDialog>
+  <FormLayout>
     <Form>
       <FormTitle>
         {{ t('resetPassword.title') }}
@@ -10,7 +10,7 @@
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="reset">
+        <FormSubmit @click="reset" :disabled="!isSubmitEnabled || showInfo">
           {{ t('resetPassword.reset') }}
         </FormSubmit>
       </FormActions>
@@ -24,24 +24,24 @@
         </router-link>
       </div>
     </Form>
-  </FlatDialog>
+  </FormLayout>
 </template>
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
+import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
@@ -58,6 +58,12 @@ const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
+const isSubmitEnabled = computed(
+  () =>
+    reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
+    passwordValidator.validate(password.value).isValid &&
+    passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid
+);
 
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();

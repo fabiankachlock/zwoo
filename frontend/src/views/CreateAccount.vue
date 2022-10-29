@@ -1,5 +1,5 @@
 <template>
-  <FlatDialog>
+  <FormLayout>
     <Form show-back-button>
       <FormTitle>
         {{ t('createAccount.title') }}
@@ -27,7 +27,7 @@
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create">
+        <FormSubmit @click="create" :disabled="!isSubmitEnabled || showInfo">
           {{ t('createAccount.create') }}
         </FormSubmit>
         <FormAlternativeAction>
@@ -39,18 +39,17 @@
         <p class="tc-main-secondary">{{ t('createAccount.info') }}</p>
       </div>
     </Form>
-  </FlatDialog>
+  </FormLayout>
 </template>
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
@@ -60,6 +59,7 @@ import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import { UsernameValidator } from '@/core/services/validator/username';
+import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
@@ -83,6 +83,14 @@ const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
+const isSubmitEnabled = computed(
+  () =>
+    reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
+    emailValidator.validate(email.value).isValid &&
+    passwordValidator.validate(password.value).isValid &&
+    passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid &&
+    usernameValidator.validate(username.value).isValid
+);
 
 const emailValidator = new EmailValidator();
 const usernameValidator = new UsernameValidator();

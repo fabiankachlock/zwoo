@@ -7,7 +7,7 @@
       <p class="text-error-dark-border dark:text-error-light-border text-center">{{ t('settings.deleteAccount') }}</p>
     </button>
     <div v-if="showDialog">
-      <FloatingDialog>
+      <FloatingDialog content-class="max-w-lg">
         <Form show-close-button @close="showDialog = false">
           <FormTitle>
             {{ t('deleteAccount.title') }}
@@ -15,7 +15,7 @@
           <TextInput id="password" v-model="password" labelKey="deleteAccount.password" is-password placeholder="******" />
           <FormError :error="error" />
           <FormActions>
-            <FormSubmit @click="reassureDecision">
+            <FormSubmit @click="reassureDecision" :disabled="!password.trim()">
               <span class="tc-secondary">
                 {{ t('deleteAccount.delete') }}
               </span>
