@@ -400,6 +400,9 @@
     "noMessages": "The chat is empty."
   },
   "versionHistory": {
-    "see": "Show version history"
+    "see": "Show version history",
+    "title": "Version history",
+    "versionTitle": "Version {0}",
+    "failure": "The version history could not be loaded."
   }
 }

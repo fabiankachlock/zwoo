@@ -399,6 +399,9 @@
     "noMessages": "Der Chat ist leer."
   },
   "versionHistory": {
-    "see": "Versionverlauf anzeigen"
+    "see": "Versionverlauf anzeigen",
+    "title": "Versionsverlauf",
+    "versionTitle": "Version {0}",
+    "failure": "Der Versionverlauf konnte nicht geladen werden."
   }
 }
