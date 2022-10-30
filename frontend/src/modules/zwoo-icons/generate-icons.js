@@ -47,7 +47,9 @@ const icons = [
   'mdi:logout-variant',
   'iconoir:eye-alt',
   'iconoir:play-outline',
-  'teenyicons:send-outline'
+  'teenyicons:send-outline',
+  'mdi:fullscreen',
+  'mdi:fullscreen-exit'
 ];
 
 const { SVG } = require('@iconify/json-tools');
