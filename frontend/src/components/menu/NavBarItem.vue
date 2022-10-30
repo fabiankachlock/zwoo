@@ -4,7 +4,7 @@
       {{ title }}
     </router-link>
     <a v-if="isExternal" :href="link" class="link tc-main-dark" target="_blank">
-      {{ title }} <Icon icon="bytesize-external" class="tc-main ml-2" />
+      {{ title }} <Icon icon="bytesize:external" class="tc-main ml-2" />
     </a>
   </li>
 </template>

@@ -10,9 +10,9 @@ export class IconCache {
     }
     console.log(icon);
     const iconContent = await import(`./icons/${icon}.js`);
-    IconCache.cache[icon] = iconContent;
+    IconCache.cache[icon] = iconContent.default;
     return {
-      icon: iconContent,
+      icon: iconContent.default,
       cacheHit: false
     };
   }

@@ -1,9 +1,8 @@
 <template>
-  <Icon v-if="icon" :icon="icon" inline />
+  <div v-html="icon"></div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue/offline';
 import { ref, watch } from 'vue';
 
 import { IconCache } from './IconCache';
@@ -23,6 +22,7 @@ watch(
     //  addIcon(result.icon);
     //}
     icon.value = result.icon;
+    console.log(result);
   },
   { immediate: true }
 );

@@ -1,2 +1,1 @@
-import icon from '@iconify/icons-icon-park-outline/sort-amount-down';
-export default icon;
+export default '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M23 8h20M14 41l-8-8m8-26v34m9-23h16M23 28h12M23 38h8"/></svg>'
