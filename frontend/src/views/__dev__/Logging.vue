@@ -56,11 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RuleSwitch from '@/components/lobby/rules/contentTypes/RuleSwitch.vue';
+import { Icon } from '@/components/misc/Icon';
 import { LogStore } from '@/core/services/logging/logImport';
 import { LogEntry } from '@/core/services/logging/logTypes';
 

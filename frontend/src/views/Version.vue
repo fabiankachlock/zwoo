@@ -21,10 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+import { Icon } from '@/components/misc/Icon';
 import { useConfig } from '@/core/adapter/config';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 

@@ -37,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { defineEmits, defineProps, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { Icon } from '@/components/misc/Icon';
 import { Validator } from '@/core/services/validator/_type';
 
 import Error from '../misc/Error.vue';

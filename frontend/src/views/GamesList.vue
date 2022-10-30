@@ -123,12 +123,12 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
+import { Icon } from '@/components/misc/Icon';
 import QRCodeReader from '@/components/misc/QRCodeReader.vue';
 import { SavedGame, useGameConfig } from '@/core/adapter/game';
 import { GameMeta, GamesList } from '@/core/services/api/GameManagement';

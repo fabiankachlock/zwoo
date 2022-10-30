@@ -52,13 +52,13 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
+import { Icon } from '@/components/misc/Icon';
 import { useGameConfig } from '@/core/adapter/game';
 import { BackendError } from '@/core/services/api/Errors';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';

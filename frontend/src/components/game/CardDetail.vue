@@ -69,10 +69,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { Icon } from '@/components/misc/Icon';
 import { Key, useKeyPress } from '@/composables/useKeyPress';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/useSwipeGesture';
 import { useGameCardDeck } from '@/core/adapter/play/deck';

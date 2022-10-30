@@ -23,11 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
+import { Icon } from '@/components/misc/Icon';
 import { AuthenticationService } from '@/core/services/api/Authentication';
 import { unwrapBackendError } from '@/core/services/api/Errors';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';

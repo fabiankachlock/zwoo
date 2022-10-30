@@ -59,10 +59,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { defineProps, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { Icon } from '@/components/misc/Icon';
 import { useColorTheme } from '@/core/adapter/helper/useColorTheme';
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
