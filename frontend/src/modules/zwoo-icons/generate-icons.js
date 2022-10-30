@@ -52,10 +52,9 @@ const icons = [
   'mdi:fullscreen-exit'
 ];
 
-const { SVG } = require('@iconify/json-tools');
+const { SVG, Collection } = require('@iconify/json-tools');
 const fs = require('fs');
 const path = require('path');
-const Collection = require('@iconify/json-tools').Collection;
 
 const reducedIcons = icons
   .map(fullIcon => fullIcon.split(':'))
