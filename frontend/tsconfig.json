@@ -12,6 +12,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": ["jest", "cypress", "vite/client", "vite-plugin-pwa/client"],
+    "typeRoots": ["@types"],
     "paths": {
       "@/*": ["src/*"]
     },
@@ -22,7 +23,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "src/modules/zwoo-icons/generate-icons.js"
   ],
   "exclude": ["node_modules"]
 }
