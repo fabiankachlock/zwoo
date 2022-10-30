@@ -22,6 +22,24 @@ export class ConfigService {
     return await req.text();
   }
 
+  static async fetchVersionHistory(): Promise<BackendErrorAble<string[]>> {
+    Logger.Api.log(`fetching version history`);
+    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking version history response');
+      return ['v1.0.0', 'v1.0.0-beta', 'v1.0.0-alpha'];
+    }
+
+    const req = await fetch(Backend.getUrl(Endpoint.VersionHistory));
+
+    if (req.status !== 200) {
+      Logger.Api.warn(`received erroneous response while fetching version history`);
+      return {
+        error: parseBackendError(await req.text())
+      };
+    }
+    return (await (req.json() as Promise<{ versions: string[] }>)).versions;
+  }
+
   static async fetchChangelog(version: string): Promise<BackendErrorAble<string>> {
     Logger.Api.log(`fetching changelog for ${version}`);
     if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {

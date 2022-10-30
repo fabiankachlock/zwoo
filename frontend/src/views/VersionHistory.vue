@@ -6,15 +6,20 @@
       </div>
       <div class="relative flex flex-col flex-nowrap">
         <div v-if="versions">
-          <div v-for="version in versions" :key="version" class="item my-2 rounded-xl border bc-darkest bg-light px-3 py-2">
+          <div
+            v-for="version in versions"
+            :key="version"
+            @click="toggleVersionOpen(version)"
+            class="item my-2 rounded-lg border bc-darkest bg-light px-3 py-2 cursor-pointer"
+          >
             <div class="version-card-header flex flex-row flex-nowrap justify-between items-center">
               <div class="version-card-title">
                 <p class="text-xl tc-main">{{ t('versionHistory.versionTitle', [version]) }}</p>
               </div>
               <div class="version-card-actions -mr-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
                 <button
-                  @click="toggleVersionOpen(version)"
-                  class="toggle text-2xl tc-main relative p-4 rounded overflow-hidden bg-main hover:bg-dark"
+                  @click.stop="toggleVersionOpen(version)"
+                  class="toggle text-2xl tc-main relative p-4 rounded-md overflow-hidden bg-main hover:bg-dark"
                 >
                   <Icon
                     icon="iconoir:nav-arrow-down"
@@ -33,7 +38,9 @@
               class="version-card-body transition duration-300"
               :class="{ open: openVersions[version], 'overflow-hidden': !openVersions[version] }"
             >
-              <div class="content p-2 pt-0 relative"># Changelog</div>
+              <div class="content relative border-t bc-darkest mt-2">
+                <Changelog :changelog="versionChangelogs[version]" />
+              </div>
             </div>
           </div>
         </div>
@@ -52,21 +59,40 @@ import { Icon } from '@iconify/vue';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import Changelog from '@/components/misc/changelog/Changelog.vue';
+import { ConfigService } from '@/core/services/api/Config';
+import { unwrapBackendError } from '@/core/services/api/Errors';
+
 const { t } = useI18n();
 const versions = ref<string[] | undefined>(['1', '2', '3']);
 const versionChangelogs = ref<Record<string, string>>({});
 const openVersions = ref<Record<string, boolean>>({});
 
+onMounted(async () => {
+  const res = await ConfigService.fetchVersionHistory();
+  const [data, error] = unwrapBackendError(res);
+  if (!error && data) {
+    versions.value = data;
+  }
+});
+
 const toggleVersionOpen = (version: string) => {
   openVersions.value[version] = !openVersions.value[version];
   if (openVersions.value[version] && !versionChangelogs.value[version]) {
-    // load version changelog
+    loadChangelog(version);
   }
 };
 
-onMounted(() => {
-  // load versions
-});
+const loadChangelog = async (version: string) => {
+  if (versionChangelogs.value[version]) {
+    return;
+  }
+  const changelogResponse = await ConfigService.fetchChangelog(version);
+  const [changelog] = unwrapBackendError(changelogResponse);
+  if (changelog) {
+    versionChangelogs.value[version] = changelog;
+  }
+};
 </script>
 
 <style scoped>
