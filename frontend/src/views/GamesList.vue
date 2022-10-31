@@ -1,7 +1,7 @@
 <template>
   <MaxWidthLayout size="small">
-    <div class="w-full flex flex-row justify-between items-center sticky -top-1 z-10 bg-main">
-      <h2 class="tc-main text-4xl mb-2 py-3">{{ t('list.title') }}</h2>
+    <div class="w-full flex flex-row justify-between items-center sticky top-10 z-10 bg-main">
+      <h2 class="tc-main text-4xl pt-3 pb-1">{{ t('list.title') }}</h2>
       <div class="flex flex-nowrap">
         <button class="scan-code btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="scanCode">
           <div class="icon-wrapper">

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-nowrap bg-dark rounded-lg w-full border-2 bc-darkest mouse:hover:bc-primary py-2 relative mb-2 overflow-hidden">
+  <div class="flex flex-col flex-nowrap bg-dark rounded-lg w-full border-2 bc-darkest py-2 relative mb-2 overflow-hidden">
     <div class="flex flex-row flex-wrap justify-between items-center mb-1">
       <h3 class="tc-main-dark text-xl mx-2">
         {{ props.theme.name }}
@@ -7,10 +7,7 @@
       </h3>
       <div class="mx-2">
         <ul class="tags flex flex-row justify-start items-center tc-main text-sm">
-          <li
-            v-if="props.theme.isMultiLayer"
-            class="inline-tag bg-light hover:bg-main bc-light hover:bc-darkest flex flex-row flex-nowrap items-center"
-          >
+          <li v-if="props.theme.isMultiLayer" class="inline-tag bg-light bc-light flex flex-row flex-nowrap items-center select-none">
             <Icon icon="fluent:layer-20-filled" class="mr-2 tc-primary text-xl" />
             {{ t('cardThemes.multiLayer') }}
           </li>
@@ -51,8 +48,8 @@
     </div>
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
     <div class="mx-2">
-      <div class="flex flex-row flex-nowrap justify-end items-center mt-2">
-        <button class="py-1 px-2 rounded ml-2 bg-light hover:bg-main tc-primary" @click="selectAsTheme()">{{ t('cardThemes.useTheme') }}</button>
+      <div class="flex flex-row flex-nowrap justify-end items-center">
+        <button class="py-1 px-2 rounded ml-2 bg-lightest hover:bg-light tc-primary" @click="selectAsTheme()">{{ t('cardThemes.useTheme') }}</button>
       </div>
     </div>
   </div>
@@ -116,7 +113,6 @@ const selectAsTheme = () => {
 
 .card-preview {
   position: relative;
-  height: min(20vh, 500px);
   width: calc(min(20vh, 500px) * (420 / 720));
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="_layout__main-menu" class="bg-main overflow-x-hidden">
+  <div id="_layout__main-menu" class="bg-main">
     <div class="header fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
       <header class="h-full">
         <div class="h-full mx-3 my-0 relative flex justify-between items-center flex-row">
@@ -17,7 +17,7 @@
     <div class="main-content">
       <div class="pt-2 mt-10 relative">
         <div class="w-full sticky z-10 bg-main top-10">
-          <slot name="stick-content"></slot>
+          <slot name="sticky-content"></slot>
         </div>
         <div class="z-0">
           <slot></slot>

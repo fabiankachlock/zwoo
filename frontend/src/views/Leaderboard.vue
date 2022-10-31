@@ -1,7 +1,7 @@
 <template>
   <MaxWidthLayout size="small">
     <div class="mx-4 sm:mx-0 pb-2 relative">
-      <div class="sticky z-10 bg-main -top-2">
+      <div class="sticky z-10 bg-main top-10">
         <h2 class="tc-main text-4xl py-2">{{ t('leaderboard.leaderboard') }}</h2>
       </div>
       <div class="relative flex flex-col flex-nowrap">

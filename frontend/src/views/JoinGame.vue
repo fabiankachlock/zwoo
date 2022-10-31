@@ -1,6 +1,6 @@
 <template>
   <MaxWidthLayout size="small">
-    <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-0">
+    <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-10">
       <h2 class="tc-main text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
     </div>
     <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center tc-main">
