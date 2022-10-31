@@ -183,9 +183,9 @@ public sealed class GameStateManager
 
         if (isFinishedEvent.HasValue)
         {
-            SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
             _actionsQueue.Clear();
             Stop();
+            SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
         }
         else
         {
