@@ -1,5 +1,6 @@
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
+import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import Logger from '@/core/services/logging/logImport';
 import { RouterInterceptor } from '@/router/types';
@@ -20,10 +21,11 @@ export class AuthGuard implements RouterInterceptor {
       if ((to.meta['requiresAuth'] === true && !auth.isLoggedIn) || (to.meta['noAuth'] === true && auth.isLoggedIn)) {
         this.Logger.warn(`not allowed to access ${to.fullPath}`);
         const redirect = to.meta['redirect'] as string | boolean | undefined;
+        const { createRedirect } = useRedirect();
 
         if (redirect === true) {
           this.Logger.log(`redirecting to login with loopback `);
-          next('/login?redirect=' + to.fullPath);
+          next(`/login?${createRedirect(to.fullPath)}`);
         } else {
           this.Logger.log(`redirecting to ${redirect}`);
           next(redirect || '/');

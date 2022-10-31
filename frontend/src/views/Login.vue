@@ -28,6 +28,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { Form, FormActions, FormAlternativeAction, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
+import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
@@ -39,6 +40,7 @@ const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
+const { applyRedirectReplace } = useRedirect();
 
 onMounted(() => {
   useCookies().loadRecaptcha();
@@ -57,14 +59,9 @@ const logIn = async () => {
 
   try {
     await auth.login(email.value, password.value, reCaptchaResponse.value);
-    const redirect = route.query['redirect'] as string;
-
-    if (redirect) {
-      router.replace(redirect);
-      return;
+    if (!applyRedirectReplace()) {
+      router.push('/home');
     }
-
-    router.push('/home');
   } catch (e: unknown) {
     reCaptchaResponse.value = undefined;
     setTimeout(() => {

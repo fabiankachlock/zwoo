@@ -25,11 +25,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 import { Form, FormActions, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
+import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
@@ -41,7 +42,7 @@ import FormLayout from '@/layouts/FormLayout.vue';
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
-const router = useRouter();
+const { applyRedirectReplace } = useRedirect();
 
 onMounted(() => {
   useCookies().loadRecaptcha();
@@ -66,12 +67,7 @@ const requestReset = async () => {
   try {
     await auth.requestPasswordReset(email.value, reCaptchaResponse.value);
     showInfo.value = true;
-    const redirect = route.query['redirect'] as string;
-
-    if (redirect) {
-      router.replace(redirect);
-      return;
-    }
+    applyRedirectReplace();
   } catch (e: unknown) {
     reCaptchaResponse.value = undefined;
     setTimeout(() => {
