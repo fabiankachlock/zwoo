@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 
-import Index from '../views/internal/Index.vue';
+import Index from '../views/internal/_Layout.vue';
 
 export const InternalRoute: RouteRecordRaw = {
   path: '/_internal_',
