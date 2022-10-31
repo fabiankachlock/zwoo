@@ -85,7 +85,7 @@
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 </script>
 
-<style>
+<style scoped>
 .imprint p {
   @apply my-2 text-lg;
 }

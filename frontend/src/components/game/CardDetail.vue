@@ -217,7 +217,7 @@ onUnmounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
 /* slightly transparent fallback */
 .backdrop {
   background-color: rgba(0, 0, 0, 0.7);

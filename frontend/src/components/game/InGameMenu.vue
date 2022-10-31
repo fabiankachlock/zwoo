@@ -74,7 +74,7 @@ const handleLeave = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .open-menu {
   height: 19rem;
 }

@@ -109,7 +109,7 @@ const selectAsTheme = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .inline-tag {
   @apply mr-2 py-1 px-2 rounded  border;
 }

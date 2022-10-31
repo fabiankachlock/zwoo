@@ -126,7 +126,7 @@ const selectCard = (card: CardTyping, index: number) => {
 };
 </script>
 
-<style>
+<style scoped>
 .deck {
   height: calc(0.5rem + 6vh);
 }

@@ -83,7 +83,7 @@ const acceptAll = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .list li {
   @apply flex flex-row flex-nowrap justify-between items-center my-1 border-b;
 }

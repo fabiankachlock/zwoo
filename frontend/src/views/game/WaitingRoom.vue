@@ -66,7 +66,7 @@ const startGame = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .actions button {
   @apply mx-1 px-2 py-1 rounded;
 }

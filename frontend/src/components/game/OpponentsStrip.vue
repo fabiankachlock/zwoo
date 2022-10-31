@@ -30,7 +30,7 @@ const activePlayer = computed(() => game.activePlayerName);
 const mutedState = computed(() => chat.muted);
 </script>
 
-<style>
+<style scoped>
 .opponents::-webkit-scrollbar {
   height: 0.4rem !important;
 }

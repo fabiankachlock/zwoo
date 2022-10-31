@@ -60,7 +60,7 @@ watch(isActive, newValue => {
 });
 </script>
 
-<style>
+<style scoped>
 .opponent-wrapper {
   max-width: max(10rem, 20vw);
 }

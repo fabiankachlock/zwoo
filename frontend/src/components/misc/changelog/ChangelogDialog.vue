@@ -77,7 +77,7 @@ const close = () => {
 };
 </script>
 
-<style>
+<style scoped>
 #changelog {
   @apply text-_text-dark-secondary dark:text-_text-light-secondary;
 }
