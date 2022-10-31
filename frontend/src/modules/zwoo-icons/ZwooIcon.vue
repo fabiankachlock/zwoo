@@ -12,17 +12,13 @@ const props = defineProps<{
   icon: string;
 }>();
 
-const icon = ref<any>(undefined);
+const icon = ref<string | undefined>(undefined);
 
 watch(
   () => props.icon,
   async newIcon => {
     const result = await IconCache.getIcon(newIcon);
-    //if (result.cacheHit) {
-    //  addIcon(result.icon);
-    //}
     icon.value = result.icon;
-    console.log(result);
   },
   { immediate: true }
 );
