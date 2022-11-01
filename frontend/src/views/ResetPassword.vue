@@ -7,7 +7,7 @@
       <TextInput id="password" v-model="password" labelKey="resetPassword.password" is-password placeholder="******" :validator="passwordValidator" />
       <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="resetPassword.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
+      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="reset">
@@ -80,7 +80,10 @@ const reset = async () => {
     await auth.resetPassword(code, password.value, passwordRepeat.value, reCaptchaResponse.value);
     showInfo.value = true;
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
 };
 </script>

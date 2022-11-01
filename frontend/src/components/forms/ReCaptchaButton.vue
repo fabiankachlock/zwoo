@@ -1,5 +1,5 @@
 <template>
-  <NotARobot @response-changed="changed" />
+  <NotARobot @response-changed="changed" :response="response" />
 </template>
 
 <script setup lang="ts">
@@ -12,6 +12,7 @@ import NotARobot from '../security/NotARobot.vue';
 
 const props = defineProps<{
   validator?: Validator<ReCaptchaResponse>;
+  response?: ReCaptchaResponse;
 }>();
 
 const { validator } = toRefs(props);

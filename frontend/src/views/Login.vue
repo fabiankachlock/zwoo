@@ -4,7 +4,7 @@
       <FormTitle> {{ t('login.title') }} </FormTitle>
       <TextInput id="email" v-model="email" labelKey="login.email" :placeholder="t('login.email')" />
       <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
+      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="logIn">
@@ -65,7 +65,10 @@ const logIn = async () => {
 
     router.push('/home');
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
 };
 </script>
