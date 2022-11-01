@@ -16,7 +16,7 @@ var changelogCollectionLegacy = database.GetCollection<ChangelogLegacy>("changel
 var changelogsList = new List<Changelog>();
 foreach (var u in changelogCollectionLegacy.AsQueryable())
 {
-    changelogsList.Add(new Changelog(u.Id, u.Version, u.ChangelogText, false));
+    changelogsList.Add(new Changelog(u.Id, u.Version, u.ChangelogText, false, 1));
 }
 
 database.DropCollection("changelogs");

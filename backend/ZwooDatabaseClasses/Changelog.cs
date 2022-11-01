@@ -16,12 +16,13 @@ public partial class Changelog
     }
     
     [BsonConstructor]
-    public Changelog(ObjectId id, string version, string changelogText, bool @public)
+    public Changelog(ObjectId id, string version, string changelogText, bool @public, ulong timestamp)
     {
         Id = id;
         Version = version;
         ChangelogText = changelogText;
         Public = @public;
+        Timestamp = timestamp;
     }
 
     [JsonIgnore]
@@ -39,6 +40,10 @@ public partial class Changelog
     [JsonIgnore]
     [BsonElement("public")] 
     public bool Public { set; get; } = false;
+
+    [JsonPropertyName("timestamp")]
+    [BsonElement("timestamp")]
+    public ulong Timestamp { set; get; } = 0;
 
     [BsonIgnore]
     [JsonIgnore]

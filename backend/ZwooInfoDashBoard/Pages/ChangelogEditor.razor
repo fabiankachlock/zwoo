@@ -21,12 +21,12 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="" Filterable="false" Width="100px">
             <Template Context="c">
-                <RadzenButton Text="Publish" @bind-Enabled="@c.Private" Click="(() => { c.Public = true; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
+                <RadzenButton Text="Publish" @bind-Enabled="@c.Private" Click="(() => { c.Public = true; c.Timestamp = (ulong)DateTimeOffset.Now.ToUnixTimeSeconds(); Globals.ZwooDatabase.UpdateChangelog(c); })"/>
             </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="" Filterable="false" Width="110px">
             <Template Context="c">
-                <RadzenButton Text="Unpublish" @bind-Enabled="@c.Public" Click="(() => { c.Public = false; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
+                <RadzenButton Text="Unpublish" @bind-Enabled="@c.Public" Click="(() => { c.Public = false; c.Timestamp = 1; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
             </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Changelog" Property="Changelog" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="220px">

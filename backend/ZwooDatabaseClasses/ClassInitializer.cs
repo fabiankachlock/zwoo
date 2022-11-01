@@ -24,7 +24,7 @@ public static class ClassInitializer
         {
             cm.AutoMap();
             cm.MapCreator(c =>
-                new Changelog(c.Id, c.Version, c.ChangelogText, c.Public));
+                new Changelog(c.Id, c.Version, c.ChangelogText, c.Public, c.Timestamp));
         });
         
         BsonClassMap.RegisterClassMap<PlayerScore>(cm =>
