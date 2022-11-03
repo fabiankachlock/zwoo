@@ -1,3 +1,5 @@
+import semverRCompare from 'semver/functions/rcompare';
+
 import Logger from '../logging/logImport';
 import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorAble, parseBackendError } from './Errors';
@@ -37,7 +39,7 @@ export class ConfigService {
         error: parseBackendError(await req.text())
       };
     }
-    return (await (req.json() as Promise<{ versions: string[] }>)).versions;
+    return ((await (req.json() as Promise<{ versions: string[] }>)).versions ?? []).sort(semverRCompare);
   }
 
   static async fetchChangelog(version: string): Promise<BackendErrorAble<string>> {
