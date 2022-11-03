@@ -64,7 +64,7 @@ import { ConfigService } from '@/core/services/api/Config';
 import { unwrapBackendError } from '@/core/services/api/Errors';
 
 const { t } = useI18n();
-const versions = ref<string[] | undefined>(['1', '2', '3']);
+const versions = ref<string[] | undefined>([]);
 const versionChangelogs = ref<Record<string, string>>({});
 const openVersions = ref<Record<string, boolean>>({});
 
