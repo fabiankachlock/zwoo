@@ -67,8 +67,12 @@ const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
 const error = ref<string[]>([]);
+const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
-  () => passwordValidator.validate(password.value).isValid && passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid
+  () =>
+    !isLoading.value &&
+    passwordValidator.validate(password.value).isValid &&
+    passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid
 );
 
 const passwordValidator = new PasswordValidator();
@@ -85,11 +89,13 @@ const openDialog = () => {
 
 const changePassword = async () => {
   error.value = [];
+  isLoading.value = true;
   try {
-    auth.changePassword(oldPassword.value, password.value, passwordRepeat.value);
+    await auth.changePassword(oldPassword.value, password.value, passwordRepeat.value);
     showDialog.value = false;
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
+  isLoading.value = false;
 };
 </script>

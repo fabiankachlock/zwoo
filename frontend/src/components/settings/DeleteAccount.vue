@@ -15,7 +15,7 @@
           <TextInput id="password" v-model="password" labelKey="deleteAccount.password" is-password placeholder="******" />
           <FormError :error="error" />
           <FormActions>
-            <FormSubmit @click="reassureDecision" :disabled="!password.trim()">
+            <FormSubmit @click="reassureDecision" :disabled="!password.trim() || isLoading">
               <span class="tc-secondary">
                 {{ t('deleteAccount.delete') }}
               </span>
@@ -56,6 +56,7 @@ const showDialog = ref(false);
 const reassureDialogOpen = ref(false);
 const password = ref('');
 const error = ref<string[]>([]);
+const isLoading = ref<boolean>(false);
 
 const openDialog = () => {
   showDialog.value = true;
@@ -77,11 +78,13 @@ const handleUserDecision = (accepted: boolean) => {
 
 const deleteAccount = async () => {
   error.value = [];
+  isLoading.value = true;
   try {
     await auth.deleteAccount(password.value);
     showDialog.value = false;
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
+  isLoading.value = false;
 };
 </script>

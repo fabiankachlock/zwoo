@@ -52,10 +52,14 @@ const email = ref('');
 const password = ref('');
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
-const isSubmitEnabled = computed(() => reCaptchaValidator.validate(reCaptchaResponse.value).isValid && email.value?.trim() && password.value?.trim());
+const isLoading = ref<boolean>(false);
+const isSubmitEnabled = computed(
+  () => !isLoading.value && reCaptchaValidator.validate(reCaptchaResponse.value).isValid && email.value?.trim() && password.value?.trim()
+);
 
 const logIn = async () => {
   error.value = [];
+  isLoading.value = true;
 
   try {
     await auth.login(email.value, password.value, reCaptchaResponse.value);
@@ -68,5 +72,6 @@ const logIn = async () => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });
   }
+  isLoading.value = false;
 };
 </script>

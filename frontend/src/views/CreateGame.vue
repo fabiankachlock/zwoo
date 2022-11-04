@@ -11,7 +11,7 @@
       <TextInput v-if="!isPublic" id="game-password" v-model="password" labelKey="createGame.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create" :disabled="!nameValidator.validate(name).isValid">
+        <FormSubmit @click="create" :disabled="!nameValidator.validate(name).isValid || isLoading">
           {{ t('createAccount.create') }}
         </FormSubmit>
       </FormActions>
@@ -39,6 +39,7 @@ const name = ref('');
 const isPublic = ref(true);
 const password = ref('');
 const error = ref<string[]>([]);
+const isLoading = ref<boolean>(false);
 
 watch([name, isPublic, password], () => {
   // clear error since there are changes
@@ -47,13 +48,14 @@ watch([name, isPublic, password], () => {
 
 const create = async () => {
   error.value = [];
+  isLoading.value = true;
 
   try {
     await gameConfig.create(name.value, isPublic.value, password.value);
-
     router.push('/game/wait');
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
+  isLoading.value = false;
 };
 </script>

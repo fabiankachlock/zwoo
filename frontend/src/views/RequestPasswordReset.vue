@@ -55,7 +55,10 @@ const email = ref('');
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
-const isSubmitEnabled = computed(() => emailValidator.validate(email.value).isValid && reCaptchaValidator.validate(reCaptchaResponse.value).isValid);
+const isLoading = ref<boolean>(false);
+const isSubmitEnabled = computed(
+  () => !isLoading.value && emailValidator.validate(email.value).isValid && reCaptchaValidator.validate(reCaptchaResponse.value).isValid
+);
 
 watch([email, reCaptchaResponse], () => {
   // clear error since there are changes
@@ -64,6 +67,8 @@ watch([email, reCaptchaResponse], () => {
 
 const requestReset = async () => {
   error.value = [];
+  isLoading.value = true;
+
   try {
     await auth.requestPasswordReset(email.value, reCaptchaResponse.value);
     showInfo.value = true;
@@ -74,5 +79,6 @@ const requestReset = async () => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });
   }
+  isLoading.value = false;
 };
 </script>

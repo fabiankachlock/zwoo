@@ -58,8 +58,10 @@ const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
+const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
   () =>
+    !isLoading.value &&
     reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
     passwordValidator.validate(password.value).isValid &&
     passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid
@@ -81,6 +83,7 @@ watch([password, passwordRepeat, reCaptchaResponse], () => {
 
 const reset = async () => {
   error.value = [];
+  isLoading.value = true;
 
   try {
     await auth.resetPassword(code, password.value, passwordRepeat.value, reCaptchaResponse.value);
@@ -91,5 +94,6 @@ const reset = async () => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });
   }
+  isLoading.value = false;
 };
 </script>

@@ -83,8 +83,10 @@ const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
+const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
   () =>
+    !isLoading.value &&
     reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
     emailValidator.validate(email.value).isValid &&
     passwordValidator.validate(password.value).isValid &&
@@ -110,7 +112,7 @@ watch([username, email, password, passwordRepeat], () => {
 
 const create = async () => {
   error.value = [];
-
+  isLoading.value = true;
   try {
     await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, reCaptchaResponse.value, betaCode.value);
     showInfo.value = true;
@@ -120,5 +122,6 @@ const create = async () => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });
   }
+  isLoading.value = false;
 };
 </script>

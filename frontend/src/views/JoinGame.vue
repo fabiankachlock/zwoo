@@ -43,7 +43,7 @@
       <TextInput id="password" @keyup.enter="performJoinRequest" v-model="password" labelKey="join.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="performJoinRequest">
+        <FormSubmit @click="performJoinRequest" :disabled="isLoading">
           {{ t('join.enter') }}
         </FormSubmit>
       </FormActions>
