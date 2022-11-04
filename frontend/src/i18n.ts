@@ -1,6 +1,8 @@
 import { nextTick } from 'vue';
 import { createI18n } from 'vue-i18n';
 
+import { AppConfig } from './config';
+
 export const supportedLanguages = ['en', 'de'];
 export const defaultLanguage = 'en';
 
@@ -8,8 +10,8 @@ const _i18n = createI18n({
   legacy: false,
   globalInjection: false,
   supportedLanguages: supportedLanguages,
-  locale: import.meta.env.VUE_APP_I18N_LOCALE || 'en',
-  fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en'
+  locale: AppConfig.I18nLocale || 'en',
+  fallbackLocale: AppConfig.I18nFallbackLocale || 'en'
 });
 
 export const setI18nLanguage = (locale: string): void => {

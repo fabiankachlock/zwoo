@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
+import { AppConfig } from '@/config';
 import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
 import { AuthGuard } from '@/router/guards/AuthGuard';
 import { CookieGuard } from '@/router/guards/CookieGuard';
@@ -49,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/invalid-version',
     component: Version
   },
-  import.meta.env.VUE_APP_BETA === 'true'
+  AppConfig.IsBeta
     ? {
         path: '/beta/:code',
         component: Beta

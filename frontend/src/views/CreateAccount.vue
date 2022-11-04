@@ -50,6 +50,7 @@ import { useRoute } from 'vue-router';
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
+import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
@@ -64,7 +65,7 @@ import FormLayout from '@/layouts/FormLayout.vue';
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
-const isBeta = import.meta.env.VUE_APP_BETA === 'true';
+const isBeta = AppConfig.IsBeta;
 
 onMounted(() => {
   useCookies().loadRecaptcha();

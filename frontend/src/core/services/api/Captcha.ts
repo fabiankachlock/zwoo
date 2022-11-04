@@ -1,3 +1,4 @@
+import { AppConfig } from '@/config';
 import { ReCaptchaTermsVisibilityManager } from '@/router/guards/ReCaptchaTerms';
 
 import { Backend, Endpoint } from './ApiConfig';
@@ -43,7 +44,7 @@ export class ReCaptchaService {
       const [result] = unwrapBackendError(await this.verify(token));
       return result;
     }
-    if (import.meta.env.VUE_APP_USE_BACKEND === 'true') {
+    if (!AppConfig.UseBackend) {
       return Promise.resolve(undefined);
     }
     return Promise.resolve({
@@ -53,7 +54,7 @@ export class ReCaptchaService {
   };
 
   private verify = async (token: string): Promise<BackendErrorAble<ReCaptchaResponse>> => {
-    if (import.meta.env.VUE_APP_USE_BACKEND === 'true') {
+    if (!AppConfig.UseBackend) {
       const req = await fetch(Backend.getUrl(Endpoint.Recaptcha), {
         method: 'POST',
         body: token
