@@ -106,7 +106,7 @@ const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [
   ShortcutManager.global.afterEachAsync
 ];
 // (async () => ([
-//   new (await import(/* webpackChunkName: "recaptcha" */ '../core/services/guards/ReCaptchaTerms')).default().afterEachAsync
+//   new (await import( '../core/services/guards/ReCaptchaTerms')).default().afterEachAsync
 // ]));
 
 router.afterEach(async (to, from, failure) => {

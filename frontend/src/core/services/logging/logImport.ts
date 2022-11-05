@@ -66,11 +66,11 @@ let StoreRef = {
 };
 
 const setupLogger = (mode: string | null) => {
-  import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule => {
-    const storeLoggerModule = await import(/* webpackChunkName: "logging" */ './storeLogger');
-    const logRushLoggerModule = await import(/* webpackChunkName: "logging" */ './logRushLogger');
-    const consoleLoggerModule = await import(/* webpackChunkName: "logging" */ './consoleLogger');
-    const multiLoggerModule = await import(/* webpackChunkName: "logging" */ './multiLogger');
+  import('./logStore').then(async storeModule => {
+    const storeLoggerModule = await import('./storeLogger');
+    const logRushLoggerModule = await import('./logRushLogger');
+    const consoleLoggerModule = await import('./consoleLogger');
+    const multiLoggerModule = await import('./multiLogger');
 
     const store = await storeModule.GetLogStore();
     StoreRef.resetStore = store.clear;

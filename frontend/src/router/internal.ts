@@ -8,7 +8,7 @@ export const InternalRoute: RouteRecordRaw = {
   children: [
     {
       path: 'pop-out-chat',
-      component: () => import(/* webpackChunkName: "internal" */ '../views/internal/PopOutChat.vue'),
+      component: () => import('../views/internal/PopOutChat.vue'),
       meta: {
         requiresAuth: false
       }
