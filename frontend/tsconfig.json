@@ -11,20 +11,12 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["jest", "cypress", "vite/client", "vite-plugin-pwa/client"],
-    "typeRoots": ["@types"],
+    "types": ["vite/client", "vite-plugin-pwa/client", "jest"],
     "paths": {
       "@/*": ["src/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "src/modules/zwoo-icons/generate-icons.js"
-  ],
-  "exclude": ["node_modules"]
+  "include": ["src"],
+  "exclude": ["node_modules", "__tests__", "*+/*.test.ts", "tests"]
 }
