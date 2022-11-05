@@ -6,15 +6,6 @@ EL_EXIT_CODE=1
 CH_EXIT_CODE=1
 FI_EXIT_CODE=1
 ED_EXIT_CODE=1
-COMMIT_INFO_BRANCH=$GITHUB_HEAD_REF
-COMMIT_INFO_MESSAGE=$2
-COMMIT_INFO_AUTHOR=$GITHUB_ACTOR
-COMMIT_INFO_SHA=$GITHUB_SHA
-
-echo "COMMIT_INFO_BRANCH=$COMMIT_INFO_BRANCH"
-echo "COMMIT_INFO_MESSAGE=$COMMIT_INFO_MESSAGE"
-echo "COMMIT_INFO_AUTHOR=$COMMIT_INFO_AUTHOR"
-echo "COMMIT_INFO_SHA=$COMMIT_INFO_SHA"
 
 launch_app() {
     # start env
@@ -39,11 +30,7 @@ echo "===== ELECTRON ====="
 echo ""
 launch_app
 echo "running tests in electron..."
-docker run -i --name e2e-test-runner-electron --rm \
-    -v /app/frontend:/e2e -w /e2e --network host \
-    -e COMMIT_INFO_BRANCH=$COMMIT_INFO_BRANCH -e COMMIT_INFO_MESSAGE=$COMMIT_INFO_MESSAGE \
-    -e COMMIT_INFO_AUTHOR=$COMMIT_INFO_AUTHOR -e COMMIT_INFO_SHA=$COMMIT_INFO_SHA \
-    cypress/included:10.9.0 --record --key $CY_KEY
+docker run -i --name e2e-test-runner-electron --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --record --key $CY_KEY
 EL_EXIT_CODE=$?
 echo "electron tests ran!"
 shutdown_app

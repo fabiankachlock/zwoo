@@ -22,7 +22,7 @@ jobs:
       - name: Wait some time
         run: sleep 10  
       - name: Run E2E-Tests
-        run: docker exec -i test-runner sh /app/e2e/run-tests.sh ${{ secrets.CYPRESS_KEY }} ${{ github.event.head_commit.message }}
+        run: docker exec -i test-runner sh /app/e2e/run-tests.sh ${{ secrets.CYPRESS_KEY }}
       - uses: actions/upload-artifact@v3
         with:
           name: e2e-artifacts
