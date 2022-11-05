@@ -1,6 +1,7 @@
 import vueI18n from '@intlify/vite-plugin-vue-i18n';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -119,7 +120,15 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // dont cache more than 10 mib
       }
-    })
+    }),
+    ...(process.env.ANALYZE !== undefined
+      ? [
+          visualizer({
+            open: true,
+            template: 'treemap'
+          })
+        ]
+      : [])
   ],
   envPrefix: 'VUE_APP',
   server: {

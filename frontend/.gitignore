@@ -41,3 +41,5 @@ coverage
 dependency-graph.svg
 
 src/modules/zwoo-icons/icons
+
+stats.html
