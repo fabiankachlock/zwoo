@@ -2,7 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 
 export const GameRoute: RouteRecordRaw = {
   path: '/game',
-  component: () => import(/* webpackChunkName: "in-game" */ '../views/game/Index.vue'),
+  component: () => import(/* webpackChunkName: "in-game" */ '../views/game/_Layout.vue'),
   children: [
     {
       path: 'play',

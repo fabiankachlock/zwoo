@@ -54,7 +54,7 @@ export class ReCaptchaService {
   };
 
   private verify = async (token: string): Promise<BackendErrorAble<ReCaptchaResponse>> => {
-    if (!AppConfig.UseBackend) {
+    if (AppConfig.UseBackend) {
       const req = await fetch(Backend.getUrl(Endpoint.Recaptcha), {
         method: 'POST',
         body: token

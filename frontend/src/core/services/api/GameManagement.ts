@@ -1,3 +1,5 @@
+import { AppConfig } from '@/config';
+
 import Logger from '../logging/logImport';
 import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './ApiConfig';

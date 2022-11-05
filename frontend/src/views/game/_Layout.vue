@@ -1,10 +1,12 @@
 <template>
-  <div class="play-main bg-main">
+  <GameLayout>
     <router-view></router-view>
-  </div>
+  </GameLayout>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import GameLayout from '@/layouts/GameLayout.vue';
+</script>
 
 <style scoped>
 .play-main {
