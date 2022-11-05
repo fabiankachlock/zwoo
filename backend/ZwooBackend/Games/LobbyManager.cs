@@ -181,10 +181,7 @@ public class LobbyManager
         if (player.Role == ZRPRole.Host)
         {
             PlayerEntry? newHost = SelectNewHost();
-            if (newHost != null)
-            {
-                return LobbyResult.Success;
-            }
+            if (newHost == null) return LobbyResult.Error;
         }
         _players.RemoveAll(p => p.Username == name);
         return LobbyResult.Success;
@@ -226,4 +223,12 @@ public class LobbyManager
     }
 
     public List<PlayerEntry> ListAll() => _players.ToList();
+
+    public void ResetDisconnectedStates()
+    {
+        foreach (PlayerEntry player in _players)
+        {
+            player.State = PlayerState.Connected;
+        }
+    }
 }
