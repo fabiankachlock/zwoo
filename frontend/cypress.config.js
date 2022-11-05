@@ -8,7 +8,6 @@ module.exports = defineConfig({
   env: {
     baseUrl: 'http://localhost:8080'
   },
-  video: false,
   screenshotOnRunFailure: true,
   e2e: {
     // We've imported your old cypress plugins here.
