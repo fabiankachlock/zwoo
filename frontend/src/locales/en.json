@@ -52,7 +52,9 @@
     "email": "E-Mail",
     "password": "Password",
     "login": "Login",
-    "resetPassword": "Reset Password"
+    "resetPassword": "Reset Password",
+    "notVerifiedInfo": "You account seems to be not verified. If you did not get an email, you can resend the verification email to verify your account.",
+    "resendVerifyEmail": "Resend email"
   },
   "createAccount": {
     "title": "Create Account",

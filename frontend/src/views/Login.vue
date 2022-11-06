@@ -10,6 +10,13 @@
         <FormSubmit @click="logIn">
           {{ t('login.login') }}
         </FormSubmit>
+        <div v-if="showNotVerifiedInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
+          <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
+          <p class="tc-main-secondary">{{ t('login.notVerifiedInfo') }}</p>
+          <button @click="resendVerifyEmail" class="tc-primary mt-2 bg-main rounded-sm px-2 py-1 text-center">
+            {{ t('login.resendVerifyEmail') }}
+          </button>
+        </div>
         <FormSecondaryAction>
           <router-link :to="'/request-password-reset?' + joinQuery(route.query)">{{ t('login.resetPassword') }}</router-link>
         </FormSecondaryAction>
@@ -31,7 +38,9 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
+import { AuthenticationService } from '@/core/services/api/Authentication';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
+import { BackendError, BackendErrorType, getBackendErrorTranslation } from '@/core/services/api/Errors';
 import { joinQuery } from '@/core/services/utils';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 
@@ -49,6 +58,7 @@ const reCaptchaValidator = new RecaptchaValidator();
 const email = ref('');
 const password = ref('');
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
+const showNotVerifiedInfo = ref(false);
 const error = ref<string[]>([]);
 
 const logIn = async () => {
@@ -67,8 +77,17 @@ const logIn = async () => {
   } catch (e: unknown) {
     reCaptchaResponse.value = undefined;
     setTimeout(() => {
-      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+      if ((e as BackendErrorType)?.code === BackendError.UserNotVerified) {
+        // show resend button
+        showNotVerifiedInfo.value = true;
+      }
+      error.value = Array.isArray(e) ? e : [getBackendErrorTranslation(e as BackendErrorType)];
     });
   }
+};
+
+const resendVerifyEmail = async () => {
+  showNotVerifiedInfo.value = false;
+  await AuthenticationService.resendVerificationEmail(email.value);
 };
 </script>
