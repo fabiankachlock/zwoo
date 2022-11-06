@@ -14,10 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { useCookies } from '@/core/adapter/cookies';
 import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+
+import { useCookies } from '@/core/adapter/cookies';
 
 const { t } = useI18n();
 const cookies = useCookies();

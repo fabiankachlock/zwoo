@@ -1,4 +1,4 @@
-import { ReCaptchaResponse } from '../api/reCAPTCHA';
+import { ReCaptchaResponse } from '../api/Captcha';
 import { ValidationResult, Validator } from './_type';
 
 export const MIN_RECAPTCHA_SCORE = 0.5;

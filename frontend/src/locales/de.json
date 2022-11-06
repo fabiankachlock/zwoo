@@ -4,7 +4,7 @@
     "sections": {
       "general": "Allgemein",
       "game": "Spiel",
-      "danger": "Gefahrenzone",
+      "account": "Account",
       "developers": "Entwickler"
     },
     "update": {
@@ -30,7 +30,8 @@
     "logging": "Loggen",
     "goToLogging": "Zu den Einstellungen",
     "cardTheme": "Karten Theme",
-    "deviceId": "Anonyme GeräteID"
+    "deviceId": "Anonyme GeräteID",
+    "changePassword": "Passwort ändern"
   },
   "lng": {
     "de": "Deutsch",
@@ -223,7 +224,12 @@
   "deleteAccount": {
     "title": "Account Löschen",
     "password": "Passwort",
-    "delete": "Jetzt Löschen!"
+    "delete": "Jetzt Löschen!",
+    "reassure": {
+      "title": "Account löschen",
+      "body": "Wenn der Account einmal gelöscht wurde, kann die Action nicht wieder Rückgängig gemacht werden.",
+      "accept": "Ja, ich möchte meinen Account löschen."
+    }
   },
   "cookies": {
     "title": "Cookie Zustimmungen",
@@ -295,8 +301,8 @@
   },
   "dialogs": {
     "promotePlayer": {
-      "title": "{0} zum Host befördern?",
-      "body": "Bist du sicher, dass du {0} zum Host befördern willst? Du verlierst deinen Host Status dadurch. "
+      "title": "{0} zum Veranstalter befördern?",
+      "body": "Bist du sicher, dass du {0} zum Veranstalter befördern willst? Du verlierst deinen Veranstalter Status dadurch. "
     },
     "kickPlayer": {
       "title": "{0} rauswerfen?",
@@ -317,9 +323,10 @@
       "spectatorJoined": "Zuschauer {0} ist beigetreten",
       "playerLeft": "{0} hat das Spiel verlassen",
       "spectatorLeft": "{0} hat das Spiel verlassen",
-      "changedRoleToHost": "{0} ist nun Host",
+      "changedRoleToHost": "{0} ist nun Veranstalter",
       "changedRoleToPlayer": "{0} ist nun Spieler",
-      "changedRoleToSpectator": "{0} ist nun Zuschauer"
+      "changedRoleToSpectator": "{0} ist nun Zuschauer",
+      "selfGotHost": "Du bist nun Veranstalter"
     }
   },
   "logging": {
@@ -363,6 +370,28 @@
   "changelog": {
     "title": "Update {0}",
     "close": "Schließen"
+  },
+  "changePassword": {
+    "title": "Passwort ändern",
+    "oldPassword": "Altes Passwort",
+    "newPassword": "Neues Passwort",
+    "newPasswordRepeat": "Neues Passwort Wiederholen",
+    "change": "Passwort jetzt ändern!"
+  },
+  "requestPasswordReset": {
+    "title": "Passwort vergessen",
+    "email": "E-Mail",
+    "request": "Zurücksetzung Anfordern",
+    "login": "Gehe zum Login",
+    "info": "An die angegebene E-Mail Adresse wird eine E-Mail geschickt. In dieser befindet sich ein Link, mit dem das Passwort zurückgesetzt werden kann."
+  },
+  "resetPassword": {
+    "title": "Passwort zurücksetzten",
+    "password": "Passwort",
+    "passwordRepeat": "Passwort Wiederholen",
+    "reset": "Passwort Zurücksetzten",
+    "info": "Das Passwort wurde erfolgreich zurückgesetzt, du kannst dich jetzt anmelden.",
+    "login": "Gehe zum Login"
   },
   "popoutChat": {
     "noActiveGame": "Es gitb zurzeit kein aktive Spiel.",

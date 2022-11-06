@@ -26,9 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/core/adapter/auth';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { useAuth } from '@/core/adapter/auth';
+
 import NavBarItem from './NavBarItem.vue';
 
 const { t } = useI18n();

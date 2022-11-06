@@ -1,11 +1,15 @@
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import App from './App.vue';
 import './registerServiceWorker';
-import router from './router';
-import i18n from './i18n';
 import './index.css';
-import { Tooltip } from './custom/Tooltip';
+
+import { createPinia } from 'pinia';
+import { registerSW } from 'virtual:pwa-register';
+import { createApp } from 'vue';
+
+import App from './App.vue';
+import { RouterService } from './core/services/global/Router';
+import { Tooltip } from './directives/tooltip/Tooltip';
+import i18n from './i18n';
+import router from './router';
 
 (() => {
   /* generate unique device id */
@@ -23,6 +27,8 @@ import { Tooltip } from './custom/Tooltip';
   }
 })();
 
+RouterService.registerRouter(router);
+
 const app = createApp(App);
 app.use(createPinia());
 app.use(i18n);
@@ -31,3 +37,7 @@ app.use(router);
 app.directive('tooltip', Tooltip);
 
 app.mount('#app');
+
+router.isReady().then(() => {
+  registerSW({ immediate: true });
+});

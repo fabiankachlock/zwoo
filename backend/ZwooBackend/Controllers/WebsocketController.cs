@@ -25,7 +25,7 @@ public class WebSocketController : Controller
         {
             byte[] response;
 
-            if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user))
+            if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
             {
                 GameRecord? game = GameManager.Global.GetGame(id);
 

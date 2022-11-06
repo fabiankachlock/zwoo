@@ -23,10 +23,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue';
+
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { computed, ref } from '@vue/reactivity';
+
 import Card from './Card.vue';
 
 const deckState = useGameCardDeck();

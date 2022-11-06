@@ -20,10 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import Logger from '@/core/services/logging/logImport';
 import { defineEmits, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+
+import Logger from '@/core/services/logging/logImport';
 
 // TODO: ts definitions
 declare var BarcodeDetector: {

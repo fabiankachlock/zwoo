@@ -51,10 +51,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/core/adapter/auth';
 import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { useAuth } from '@/core/adapter/auth';
 
 const { t } = useI18n();
 const auth = useAuth();

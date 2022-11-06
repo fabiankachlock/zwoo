@@ -1,13 +1,13 @@
 import Logger from '../logging/logImport';
-import { Backend, Endpoint } from './apiConfig';
-import { BackendErrorAble, parseBackendError } from './errors';
+import { Backend, Endpoint } from './ApiConfig';
+import { BackendErrorAble, parseBackendError } from './Errors';
 
 export class ConfigService {
   static async fetchVersion(): Promise<BackendErrorAble<string>> {
     Logger.Api.log(`fetching version`);
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking version response');
-      return process.env.VUE_APP_VERSION;
+      return import.meta.env.VUE_APP_VERSION;
     }
 
     const req = await fetch(`${Backend.getUrl(Endpoint.Version)}?t=${Date.now()}`);
@@ -24,7 +24,7 @@ export class ConfigService {
 
   static async fetchChangelog(version: string): Promise<BackendErrorAble<string>> {
     Logger.Api.log(`fetching changelog for ${version}`);
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
       Logger.Api.debug('mocking changelog response');
       return `<h2><i>No changes in version ${version}</i></h2>`;
     }

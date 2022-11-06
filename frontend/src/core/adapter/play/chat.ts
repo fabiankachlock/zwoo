@@ -1,8 +1,10 @@
-import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { ZRPMessage, ZRPOPCode, ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
-import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 import { computed, ref } from 'vue';
+
+import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { ZRPMessage, ZRPOPCode, ZRPRole } from '@/core/services/zrp/zrpTypes';
+
+import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type ChatMessage = {
   id: number;

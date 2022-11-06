@@ -1,4 +1,4 @@
-import { Card } from '../../game/card';
+import { Card } from '../../game/CardTypes';
 import { NodeBasedQueue } from '../../helper/NodeBasedQueue';
 
 export class CardSorter {

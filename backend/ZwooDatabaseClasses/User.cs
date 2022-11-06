@@ -8,7 +8,7 @@ public class User
     public User() {}
     
     [BsonConstructor]
-    public User(ulong id, string sid, string username, string email, string password, uint wins, string validationCode, bool verified)
+    public User(ulong id, List<string> sid, string username, string email, string password, uint wins, string validationCode, bool verified)
     {
         Id = id;
         Sid = sid;
@@ -27,7 +27,7 @@ public class User
     [BsonElement("sid")]
     [JsonIgnore]
     [BsonIgnoreIfDefault]
-    public string Sid { set; get; } = "";
+    public List<string> Sid { set; get; } = new();
     
     [JsonPropertyName("username")]
     [BsonElement("username")]

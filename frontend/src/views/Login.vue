@@ -4,14 +4,14 @@
       <FormTitle> {{ t('login.title') }} </FormTitle>
       <TextInput id="email" v-model="email" labelKey="login.email" :placeholder="t('login.email')" />
       <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
+      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit @click="logIn">
           {{ t('login.login') }}
         </FormSubmit>
         <FormSecondaryAction>
-          {{ t('login.resetPassword') }}
+          <router-link :to="'/request-password-reset?' + joinQuery(route.query)">{{ t('login.resetPassword') }}</router-link>
         </FormSecondaryAction>
         <FormAlternativeAction>
           <router-link :to="'/create-account?' + joinQuery(route.query)">{{ t('nav.createAccount') }}</router-link>
@@ -22,17 +22,18 @@
 </template>
 
 <script setup lang="ts">
-import { Form, FormActions, FormAlternativeAction, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { joinQuery } from '@/core/services/utils';
-import { useAuth } from '@/core/adapter/auth';
-import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
+
+import { Form, FormActions, FormAlternativeAction, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
+import FlatDialog from '@/components/misc/FlatDialog.vue';
+import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
+import { ReCaptchaResponse } from '@/core/services/api/Captcha';
+import { joinQuery } from '@/core/services/utils';
+import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 
 const { t } = useI18n();
 const auth = useAuth();
@@ -64,7 +65,10 @@ const logIn = async () => {
 
     router.push('/home');
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
 };
 </script>

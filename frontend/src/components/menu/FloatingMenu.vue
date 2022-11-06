@@ -23,10 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { useUserDefaults } from '@/composables/userDefaults';
-import { useConfig } from '@/core/adapter/config';
 import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
+
+import { useUserDefaults } from '@/composables/userDefaults';
+import { useConfig } from '@/core/adapter/config';
+
 import DarkModeSwitch from '../settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '../settings/FullScreenSwitch.vue';
 import HomeButton from '../settings/HomeButton.vue';

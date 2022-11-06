@@ -4,7 +4,7 @@
     <div class="mx-6 my-5">
       <SettingsSectionGeneral />
       <SettingsSectionGame />
-      <SettingsSectionDanger />
+      <SettingsSectionAccount />
       <SettingsSectionDevelopers v-if="showDevSettings" />
       <Version @click="clickVersion()" />
       <UpdateDaemon />
@@ -13,14 +13,15 @@
 </template>
 
 <script setup lang="ts">
-import SettingsSectionGeneral from '@/components/settings/sections/SettingsSectionGeneral.vue';
-import { useI18n } from 'vue-i18n';
-import Version from '@/components/misc/Version.vue';
-import SettingsSectionGame from '@/components/settings/sections/SettingsSectionGame.vue';
-import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
-import SettingsSectionDanger from '@/components/settings/sections/SettingsSectionDanger.vue';
-import SettingsSectionDevelopers from '@/components/settings/sections/SettingsSectionDevelopers.vue';
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
+import Version from '@/components/misc/Version.vue';
+import SettingsSectionAccount from '@/components/settings/sections/SettingsSectionAccount.vue';
+import SettingsSectionDevelopers from '@/components/settings/sections/SettingsSectionDevelopers.vue';
+import SettingsSectionGame from '@/components/settings/sections/SettingsSectionGame.vue';
+import SettingsSectionGeneral from '@/components/settings/sections/SettingsSectionGeneral.vue';
 
 const { t } = useI18n();
 const showDevSettings = ref(localStorage.getItem('zwoo:dev-settings') === 'true');

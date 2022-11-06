@@ -2,7 +2,7 @@ import { Awaiter } from '../helper/Awaiter';
 import { QueuedCache } from '../helper/QueuedCache';
 import Logger from '../logging/logImport';
 import { CardTheme } from './CardTheme';
-import { CardThemeInformation, CardThemesMeta, CardThemeIdentifier } from './CardThemeConfig';
+import { CardThemeIdentifier, CardThemeInformation, CardThemesMeta } from './CardThemeConfig';
 
 export class CardThemeManager {
   static global = new CardThemeManager();

@@ -10,12 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import SettingsSection from '../SettingsSection.vue';
-import SettingsRow from '../SettingsRow.vue';
-import ShowCardDetailSwitch from '../ShowCardDetailSwitch.vue';
-import { useI18n } from 'vue-i18n';
-import { useConfig } from '@/core/adapter/config';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import { useConfig } from '@/core/adapter/config';
+
+import SettingsRow from '../SettingsRow.vue';
+import SettingsSection from '../SettingsSection.vue';
+import ShowCardDetailSwitch from '../ShowCardDetailSwitch.vue';
 import SortCardsSwitch from '../SortCardsSwitch.vue';
 
 const { t } = useI18n();

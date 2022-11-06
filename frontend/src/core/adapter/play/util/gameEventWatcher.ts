@@ -1,5 +1,7 @@
-import { ZRPMessage } from '@/core/services/zrp/zrpTypes';
 import { watch } from 'vue';
+
+import { ZRPMessage } from '@/core/services/zrp/zrpTypes';
+
 import { useGameEvents } from '../events';
 import { ZRPMatcher } from './zrpMatcher';
 

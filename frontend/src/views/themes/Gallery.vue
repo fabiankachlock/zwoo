@@ -12,13 +12,14 @@
 </template>
 
 <script setup lang="ts">
-import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
-import { CardThemeManager } from '@/core/services/cards/ThemeManager';
+import { computed } from 'vue';
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import ThemesGalleryEntry from '@/components/themes/ThemesGalleryEntry.vue';
 import { useConfig } from '@/core/adapter/config';
-import { computed } from '@vue/reactivity';
-import { useI18n } from 'vue-i18n';
+import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
+import { CardThemeManager } from '@/core/services/cards/ThemeManager';
 
 const { t } = useI18n();
 const themes = ref<CardThemeInformation[]>([]);

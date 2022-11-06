@@ -8,8 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { useCookies } from '@/core/adapter/cookies';
 import { useI18n } from 'vue-i18n';
+
+import { useCookies } from '@/core/adapter/cookies';
 
 const { t } = useI18n();
 const cookies = useCookies();

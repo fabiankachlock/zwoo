@@ -1,6 +1,7 @@
 @page "/player-info-dialog/{id}"
 @using ZwooInfoDashBoard.Data
 @using ZwooDatabaseClasses
+@inject DialogService DialogService
 
 <RadzenCard>
     <div class="d-flex flex-row">
@@ -17,34 +18,107 @@
     </div>
     <p>@($"ID: {_player.Id}")</p>
     <p>@($"Email: {_player.Email}")</p>
+    <p>@($"Games: {_gamesPlayed.Count()}")</p>
     <p>@($"Wins: {_player.Wins}")</p>
     @if (_player.BetaCode != null)
     {
         <p>@($"Betacode: {_player.BetaCode}")</p>
     }
 </RadzenCard>
-<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="20"
-                TItem="AccountEvent" Data="_events" AllowVirtualization="true">
-    <Columns>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Event"/>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success"/>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
-            <Template Context="aevent">
-                @DateTimeOffset.FromUnixTimeSeconds((long)aevent.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Account Events">
+            <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="20" 
+                            TItem="AccountEvent" Data="_events" AllowVirtualization="true">
+                <Columns>
+                    <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Event"/>
+                    <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success">
+                        <Template Context="info">
+                            @info.Success.ToString()
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
+                        <Template Context="aevent">
+                            @DateTimeOffset.FromUnixTimeSeconds((long)aevent.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Sessions">
+            <RadzenDataGrid AllowFiltering="false" AllowGrouping="false" AllowSorting="false" AllowPaging="true" PageSize="20"
+                            TItem="string" Data="_player.Sid" AllowVirtualization="true" @ref="_playerSidGrid">
+                <Columns>
+                    <RadzenDataGridColumn TItem="string" Property="this" Title="Session ID"/>
+                    <RadzenDataGridColumn TItem="string" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+                        <Template Context="sid">
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(sid))"  @onclick:stopPropagation="true" />
+                        </Template>
+                        <EditTemplate Context="sid">
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(sid))" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Games Played">
+            <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
+                            ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
+                            TItem="GameInfo" Data="_gamesPlayed" AllowVirtualization="true">
+                <Template Context="info">
+                    <p>Scoreboard:</p>
+                    <RadzenDataGrid TItem="PlayerScore" Data="info.Scores">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="PlayerScore" Property="Score" Title="Score"/>
+                            <RadzenDataGridColumn TItem="PlayerScore" Property="PlayerUsername" Title="Name"/>
+                        </Columns>
+                    </RadzenDataGrid>
+                </Template>
+                <Columns>
+                    <RadzenDataGridColumn TItem="GameInfo" Property="GameId" Title="ID"/>
+                    <RadzenDataGridColumn TItem="GameInfo" Property="GameName" Title="Name"/>
+                    <RadzenDataGridColumn TItem="GameInfo" Property="TimeStamp" Title="Time">
+                        <Template Context="info">
+                            @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="GameInfo" Property="IsPublic" Title="Public">
+                        <Template Context="info">
+                            <RadzenCheckBox Disabled="true" Value="info.IsPublic"/>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="GameInfo" Property="Winner" Title="Winner" Sortable="false" Filterable="false"/>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
 
 @code {
     [Parameter] public ulong Id { set; get; }
 
     private User _player = null!; 
     private IEnumerable<AccountEvent> _events = null!;
+    private IEnumerable<GameInfo> _gamesPlayed = null!;
+    RadzenDataGrid<string> _playerSidGrid = new RadzenDataGrid<string>();
     
     protected override void OnInitialized()
     {
         _player = Globals.ZwooDatabase.GetUser(Id);
         _events = Globals.ZwooDatabase.GetUserAccountEvents(Id);
+        _gamesPlayed = Globals.ZwooDatabase.GetPlayedGamesAsQueryable().Where(x => x.Scores.Any(x => x.PlayerUsername == _player.Username));
     }
+
+    private async void DeleteRow(string sid)
+    {
+        var res = await DialogService.Confirm($"Are you sure that you want to delete {_player.Username}s sid?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (res == null || (bool)!res)
+            return;
+        _player.Sid.Remove(sid);
+        Globals.ZwooDatabase.UpdateUser(_player);
+        await _playerSidGrid.Reload();
+    }
+    
+    private void RenderRow(RowRenderEventArgs<GameInfo> args) => args.Expandable = true;
 }

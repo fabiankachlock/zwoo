@@ -1,4 +1,4 @@
-import { CardColor } from '../game/card';
+import { CardColor } from '../game/CardTypes';
 
 export interface CardThemesMeta {
   themes: string[];

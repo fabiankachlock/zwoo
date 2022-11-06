@@ -9,8 +9,10 @@
 </template>
 
 <script setup lang="ts">
-import { useGameState } from '@/core/adapter/play/gameState';
 import { computed } from 'vue';
+
+import { useGameState } from '@/core/adapter/play/gameState';
+
 import Card from './Card.vue';
 const gameState = useGameState();
 const mainCard = computed(() => gameState.topCard);
