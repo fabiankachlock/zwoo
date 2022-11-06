@@ -187,7 +187,7 @@ public class Database
 
     public User? GetUserFromEmail(string email) => _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email);
 
-    public void LogoutUser(User user)
+    public void LogoutUser(User user, string sid)
     {
         DatabaseLogger.Debug($"[User] logout {user.Email}");
         LogoutAttempt(user.Id, _userCollection.UpdateOne(u => u.Id == user.Id, Builders<User>.Update.Pull(u => u.Sid, sid)).ModifiedCount != 0);
