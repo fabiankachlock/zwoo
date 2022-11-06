@@ -65,7 +65,9 @@
     "create": "Erstellen",
     "passwordRepeat": "Passwort Wiederholen",
     "beta": "BETA Code",
-    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
+    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden.",
+    "resendVerifyEmail": "Email neu senden",
+    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen."
   },
   "createGame": {
     "title": "Spiel Erstellen",

@@ -40,7 +40,7 @@ import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { AuthenticationService } from '@/core/services/api/Authentication';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
-import { BackendError, BackendErrorType, getBackendErrorTranslation } from '@/core/services/api/Errors';
+import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/services/api/Errors';
 import { joinQuery } from '@/core/services/utils';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 
@@ -88,6 +88,10 @@ const logIn = async () => {
 
 const resendVerifyEmail = async () => {
   showNotVerifiedInfo.value = false;
-  await AuthenticationService.resendVerificationEmail(email.value);
+  const res = await AuthenticationService.resendVerificationEmail(email.value);
+  const [, err] = unwrapBackendError(res);
+  if (err !== undefined) {
+    error.value = [getBackendErrorTranslation(err)];
+  }
 };
 </script>

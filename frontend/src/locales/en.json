@@ -65,7 +65,9 @@
     "create": "Create",
     "passwordRepeat": "Repeat Password",
     "beta": "BETA Code",
-    "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account."
+    "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account.",
+    "resendVerifyEmail": "Resend email",
+    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account."
   },
   "createGame": {
     "title": "Create Game",
