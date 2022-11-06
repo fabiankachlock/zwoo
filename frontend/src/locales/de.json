@@ -131,6 +131,7 @@
     "backend": {
       "-1": "Unbekannter Fehler",
       "100": "Fehler im Backend.",
+      "110": "Der Account ist nicht verifiziert.",
       "111": "Der Cookie fehlt.",
       "112": "Der Nutzer konnte nicht gefunden werden.",
       "113": "Die Passwörter stimmen nicht überein.",

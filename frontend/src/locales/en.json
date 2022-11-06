@@ -131,6 +131,7 @@
     "backend": {
       "-1": "Unknown Error",
       "100": "An error occurred in the backend.",
+      "110": "The account is not verified.",
       "111": "The cookie is missing.",
       "112": "The user could not be found.",
       "113": "The passwords don't match.",
