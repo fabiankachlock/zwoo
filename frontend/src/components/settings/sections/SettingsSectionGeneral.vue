@@ -18,6 +18,9 @@
     <SettingsRow :title="t('settings.cookies')">
       <ManageCookies />
     </SettingsRow>
+    <SettingsRow :title="t('settings.versionHistory')">
+      <VersionHistory />
+    </SettingsRow>
   </SettingsSection>
 </template>
 
@@ -35,6 +38,7 @@ import { useConfig } from '@/core/adapter/config';
 import ManageCookies from '../ManageCookies.vue';
 import SelectTheme from '../SelectTheme.vue';
 import SettingsSection from '../SettingsSection.vue';
+import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();
 const config = useConfig();

@@ -3,7 +3,7 @@
     <div class="sticky top-0 z-10 px-5 pt-5 bg-lightest">
       <h2 class="tc-main text-xl text-center py-2 bc-darkest border-b">{{ t('changelog.title', [version]) }}</h2>
     </div>
-    <div id="changelog" :ref="r => changelogWrapper = (r as HTMLDivElement)" class="py-1 px-5"></div>
+    <Changelog :changelog="changelog" />
     <div class="sticky -bottom-[0.5px] bg-lightest px-5 pb-3">
       <div class="flex justify-end items-center bc-darkest border-t">
         <button
@@ -25,6 +25,7 @@ import { ConfigService } from '@/core/services/api/Config';
 import { unwrapBackendError } from '@/core/services/api/Errors';
 
 import FloatingDialog from '../FloatingDialog.vue';
+import Changelog from './Changelog.vue';
 
 const props = defineProps<{
   version: string;
@@ -36,7 +37,6 @@ const emit = defineEmits<{
 
 const { version } = toRefs(props);
 const { t } = useI18n();
-const changelogWrapper = ref<HTMLDivElement | null>(null);
 const changelog = ref<string | undefined>(undefined);
 
 onMounted(() => {
@@ -45,12 +45,6 @@ onMounted(() => {
 
 watch(version, newVersion => {
   loadVersion(newVersion);
-});
-
-watch(changelog, newChangelog => {
-  if (changelogWrapper.value && newChangelog) {
-    changelogWrapper.value.innerHTML = newChangelog;
-  }
 });
 
 const loadVersion = async (version: string) => {
@@ -76,42 +70,3 @@ const close = () => {
   emit('close');
 };
 </script>
-
-<style scoped>
-#changelog {
-  @apply text-_text-dark-secondary dark:text-_text-light-secondary;
-}
-
-#changelog h1 {
-  @apply text-4xl;
-  @apply text-primary-text-dark dark:text-primary-text-light;
-}
-
-#changelog h2 {
-  @apply text-3xl;
-}
-
-#changelog h3 {
-  @apply text-2xl;
-}
-
-#changelog h4 {
-  @apply text-xl;
-}
-
-#changelog h5 {
-  @apply text-lg;
-}
-
-#changelog h6 {
-  @apply text-sm;
-}
-
-#changelog ol {
-  @apply list-inside list-decimal;
-}
-
-#changelog ul {
-  @apply list-inside list-disc;
-}
-</style>

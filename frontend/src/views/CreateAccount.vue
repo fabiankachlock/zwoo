@@ -37,6 +37,10 @@
       <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
         <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
         <p class="tc-main-secondary">{{ t('createAccount.info') }}</p>
+        <p class="tc-main-secondary">{{ t('createAccount.emailInfo') }}</p>
+        <button @click="resendVerifyEmail" class="tc-primary mt-2 bg-main hover:bg-dark rounded-sm px-2 py-1 text-center">
+          {{ t('createAccount.resendVerifyEmail') }}
+        </button>
       </div>
     </Form>
   </FormLayout>
@@ -53,7 +57,9 @@ import { Icon } from '@/components/misc/Icon';
 import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
+import { AuthenticationService } from '@/core/services/api/Authentication';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
+import { getBackendErrorTranslation, unwrapBackendError } from '@/core/services/api/Errors';
 import { joinQuery } from '@/core/services/utils';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
@@ -85,6 +91,7 @@ const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
 const isLoading = ref<boolean>(false);
+const showResend = ref(true);
 const isSubmitEnabled = computed(
   () =>
     !isLoading.value &&
@@ -124,5 +131,15 @@ const create = async () => {
     });
   }
   isLoading.value = false;
+};
+
+const resendVerifyEmail = async () => {
+  if (!showResend.value) return;
+  showResend.value = false;
+  const res = await AuthenticationService.resendVerificationEmail(email.value);
+  const [, err] = unwrapBackendError(res);
+  if (err !== undefined) {
+    error.value = [getBackendErrorTranslation(err)];
+  }
 };
 </script>
