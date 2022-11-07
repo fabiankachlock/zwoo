@@ -211,4 +211,31 @@ export class AuthenticationService {
 
     return true;
   };
+
+  static resendVerificationEmail = async (email: string): Promise<BackendErrorAble<boolean>> => {
+    Logger.Api.log(`resending verification email of ${email}`);
+    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
+      Logger.Api.debug('mocking resend verify email response');
+      return true;
+    }
+
+    const response = await fetch(Backend.getUrl(Endpoint.ResendVerificationEmail), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email
+      })
+    });
+
+    if (response.status !== 200) {
+      Logger.Api.warn('cant resend verification email');
+      return {
+        error: parseBackendError(await response.text())
+      };
+    }
+
+    return true;
+  };
 }

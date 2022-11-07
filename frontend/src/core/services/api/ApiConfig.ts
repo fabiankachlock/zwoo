@@ -33,6 +33,7 @@ export enum Endpoint {
   ChangePassword = 'account/changePassword',
   RequestPasswordReset = 'account/requestPasswordReset',
   ResetPassword = 'account/resetPassword',
+  ResendVerificationEmail = 'auth/resendVerificationEmail',
   VersionHistory = 'versionHistory'
 }
 

@@ -35,7 +35,7 @@ export const useAuth = defineStore('auth', {
         this.isLoggedIn = false;
         const [, error] = unwrapBackendError(status);
         if (error) {
-          throw getBackendErrorTranslation(error);
+          throw error;
         }
       }
     },

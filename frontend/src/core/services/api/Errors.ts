@@ -17,6 +17,7 @@ export enum BackendError {
   _UnknownError = -1,
   BackendError = 100,
 
+  UserNotVerified = 110,
   MissingCookie = 111,
   UserNotFound = 112,
   PasswordDoNotMatch = 113,

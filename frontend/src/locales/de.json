@@ -53,7 +53,9 @@
     "email": "E-Mail",
     "password": "Passwort",
     "login": "Anmelden",
-    "resetPassword": "Passwort zurücksetzten"
+    "resetPassword": "Passwort zurücksetzten",
+    "notVerifiedInfo": "Dein Account ist nicht verifiziert. Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
+    "resendVerifyEmail": "Email neu senden"
   },
   "createAccount": {
     "title": "Account Erstellen",
@@ -64,7 +66,9 @@
     "create": "Erstellen",
     "passwordRepeat": "Passwort Wiederholen",
     "beta": "BETA Code",
-    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
+    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden.",
+    "resendVerifyEmail": "Email neu senden",
+    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -132,6 +136,7 @@
     "backend": {
       "-1": "Unbekannter Fehler",
       "100": "Fehler im Backend.",
+      "110": "Der Account ist nicht verifiziert.",
       "111": "Der Cookie fehlt.",
       "112": "Der Nutzer konnte nicht gefunden werden.",
       "113": "Die Passwörter stimmen nicht überein.",
