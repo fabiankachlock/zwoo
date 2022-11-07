@@ -165,6 +165,7 @@ public class AuthenticationController : Controller
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "User does not exist!"));
         
         var u = Globals.ZwooDatabase.GetUserFromEmail(body.email)!;
+        if (u.Verified) return BadRequest("already verified");
         u.ValidationCode = StringHelper.GenerateNDigitString(6);
         Globals.ZwooDatabase.UpdateUser(u);
         
