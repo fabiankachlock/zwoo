@@ -216,7 +216,7 @@ export class AuthenticationService {
 
   static resendVerificationEmail = async (email: string): Promise<BackendErrorAble<boolean>> => {
     Logger.Api.log(`resending verification email of ${email}`);
-    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking resend verify email response');
       return true;
     }
