@@ -119,7 +119,7 @@ public class Database
         DatabaseLogger.Debug($"[User] verifying {id}");
         var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == id && x.ValidationCode == code);
         
-        if (user != null) return false;
+        if (user == null) return false;
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
         
