@@ -10,6 +10,7 @@ public static class ErrorCodes
         
         BACKEND_ERROR = 100,
 
+        USER_NOT_VERIFIED = 110,
         COOKIE_MISSING = 111,
         USER_NOT_FOUND = 112,
         PASSWORD_NOT_MATCHING = 113,

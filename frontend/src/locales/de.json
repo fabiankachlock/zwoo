@@ -31,7 +31,8 @@
     "goToLogging": "Zu den Einstellungen",
     "cardTheme": "Karten Theme",
     "deviceId": "Anonyme GeräteID",
-    "changePassword": "Passwort ändern"
+    "changePassword": "Passwort ändern",
+    "versionHistory": "Versionverlauf"
   },
   "lng": {
     "de": "Deutsch",
@@ -401,5 +402,11 @@
   "popoutChat": {
     "noActiveGame": "Es gitb zurzeit kein aktive Spiel.",
     "noMessages": "Der Chat ist leer."
+  },
+  "versionHistory": {
+    "see": "Versionverlauf anzeigen",
+    "title": "Versionsverlauf",
+    "versionTitle": "Version {0}",
+    "failure": "Der Versionverlauf konnte nicht geladen werden."
   }
 }

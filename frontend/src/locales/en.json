@@ -31,7 +31,8 @@
     "goToLogging": "Go to Settings",
     "cardTheme": "Card Theme",
     "deviceId": "Anonymous DeviceID",
-    "changePassword": "Change Password"
+    "changePassword": "Change Password",
+    "versionHistory": "Version history"
   },
   "lng": {
     "de": "German",
@@ -402,5 +403,11 @@
   "popoutChat": {
     "noActiveGame": "There are no active games at the moment.",
     "noMessages": "The chat is empty."
+  },
+  "versionHistory": {
+    "see": "Show version history",
+    "title": "Version history",
+    "versionTitle": "Version {0}",
+    "failure": "The version history could not be loaded."
   }
 }

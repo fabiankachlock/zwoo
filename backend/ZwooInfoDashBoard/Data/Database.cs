@@ -37,7 +37,7 @@ public class Database
     public IQueryable<AccountEvent> GetAccountEventsAsQueryable() => _accountEventsCollection.AsQueryable();
     public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerID == id);
     public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
-    public void UpdateChangelog(Changelog changelog) => _changelogCollection.ReplaceOne(x => x.Id == changelog.Id, changelog);
+    public void UpdateChangelog(Changelog changelog) => _changelogCollection.ReplaceOne(x=> x.Id == changelog.Id, changelog);
     public User GetUser(ulong id) => _userCollection.Find(x => x.Id == id).First();
     public User GenerateUser()
     {
