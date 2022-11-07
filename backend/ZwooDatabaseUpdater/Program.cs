@@ -11,14 +11,14 @@ var database = client.GetDatabase("zwoo");
 
 // --------------------------------------------------------------------------------------------------------------------//
 
-var userCollectionLegacy = database.GetCollection<UserLegacy>("users");
+var changelogCollectionLegacy = database.GetCollection<ChangelogLegacy>("changelogs");
 
-var userInfos = new List<User>();
-foreach (var u in userCollectionLegacy.AsQueryable())
+var changelogsList = new List<Changelog>();
+foreach (var u in changelogCollectionLegacy.AsQueryable())
 {
-    userInfos.Add(new User(u.Id, new List<string> { u.Sid }, u.Username, u.Email, u.Password, u.Wins, u.ValidationCode, u.Verified));
+    changelogsList.Add(new Changelog(u.Id, u.Version, u.ChangelogText, false, 1));
 }
 
-database.DropCollection("users");
-var gameInfoCollection = database.GetCollection<User>("users");
-gameInfoCollection.InsertMany(userInfos);
+database.DropCollection("changelogs");
+var gameInfoCollection = database.GetCollection<Changelog>("changelogs");
+gameInfoCollection.InsertMany(changelogsList);

@@ -32,7 +32,8 @@ export enum Endpoint {
   Changelog = 'changelog?version=:version:',
   ChangePassword = 'account/changePassword',
   RequestPasswordReset = 'account/requestPasswordReset',
-  ResetPassword = 'account/resetPassword'
+  ResetPassword = 'account/resetPassword',
+  VersionHistory = 'versionHistory'
 }
 
 export class Backend {

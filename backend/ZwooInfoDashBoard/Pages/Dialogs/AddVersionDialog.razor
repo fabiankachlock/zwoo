@@ -15,8 +15,6 @@
 
 @code {
     string _version = "";
-
-
-    private void CreateVersion() => DialogService.Close(Globals.ZwooDatabase.InsertVersion(new Changelog(_version, $"<h1>{_version}<h1>")));
-
+    
+    private void CreateVersion() => DialogService.Close(Globals.ZwooDatabase.InsertVersion(new Changelog(_version, $"<h1>{_version}<h1>", false)));
 }
