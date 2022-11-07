@@ -56,7 +56,7 @@ public class Database
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
         
         if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == Globals.Version) == null)
-            _changelogCollection.InsertOne(new Changelog(Globals.Version, ""));
+            _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class Database
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
         
-        var res = _userCollection.UpdateOne(x => x.Id == id && x.BetaCode == code, Builders<User>.Update.Set(u => u.Verified, true)).ModifiedCount != 0;
+        var res = _userCollection.UpdateOne(x => x.Id == id && x.ValidationCode == code, Builders<User>.Update.Set(u => u.Verified, true)).ModifiedCount != 0;
         VerifyAttempt(id, res);
         return res;
     }
@@ -147,7 +147,7 @@ public class Database
             error = ErrorCodes.Errors.USER_NOT_FOUND;
             return false;
         }
-        
+
         if (StringHelper.CheckPassword(password, user.Password) && user.Verified)
         {
             id = user.Id;
@@ -156,7 +156,7 @@ public class Database
             LoginAttempt(user.Id, res);
             return res;
         }
-        error = ErrorCodes.Errors.PASSWORD_NOT_MATCHING;
+        error = user.Verified ? ErrorCodes.Errors.PASSWORD_NOT_MATCHING : ErrorCodes.Errors.USER_NOT_VERIFIED;
         LoginAttempt(user.Id, false);
         return false;
     }
@@ -199,7 +199,7 @@ public class Database
     {
         DatabaseLogger.Debug($"[User] deleting {user.Email}");
 
-        if (StringHelper.CheckPassword(password, user.Password) || !user.Verified)
+        if (!StringHelper.CheckPassword(password, user.Password) || !user.Verified)
         {
             DeleteAttempt(user.Id, false);
             return false;
@@ -290,7 +290,8 @@ public class Database
         }
     }
     
-    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version);
+    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version && c.Public);
+    public Changelog[] GetChangelogs() => _changelogCollection.AsQueryable().Where(x => x.Public).ToArray();
     
     public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
         _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(_userCollection.AsQueryable().First(y => y.Id == (ulong)x.Key).Username, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
@@ -319,7 +320,7 @@ public class Database
         };
         _accountEventCollection.InsertOne(u);
     }
-
+    
     private readonly IMongoDatabase _database;
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<GameInfo> _gameInfoCollection;
