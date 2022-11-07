@@ -83,5 +83,9 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   {
     path: 'shortcut-info',
     component: () => import(/* webpackChunkName: "menu" */ '../views/ShortcutInfo.vue')
+  },
+  {
+    path: 'version-history',
+    component: () => import(/* webpackChunkName: "menu" */ '../views/VersionHistory.vue')
   }
 ];
