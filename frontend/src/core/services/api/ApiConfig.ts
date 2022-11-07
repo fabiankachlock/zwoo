@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
+import { AppConfig } from '@/config';
+
 type ExtractRouteParams<str extends string> = str extends ''
   ? {}
   : str extends `/${infer rest}`
@@ -38,11 +40,9 @@ export enum Endpoint {
 }
 
 export class Backend {
-  public static readonly isDev = import.meta.env.VUE_APP_DEVELOPMENT === 'true';
-  public static readonly Url: string = Backend.isDev ? import.meta.env.VUE_APP_DEV_BACKEND : import.meta.env.VUE_APP_PROD_BACKEND;
-  public static readonly WsOverride: string | undefined = Backend.isDev
-    ? import.meta.env.VUE_APP_DEV_WS_OVERRIDE
-    : import.meta.env.VUE_APP_PROD_WS_OVERRIDE;
+  public static readonly isDev = AppConfig.IsDev;
+  public static readonly Url: string = AppConfig.ApiUrl;
+  public static readonly WsOverride: string | undefined = AppConfig.WsUrl;
 
   public static getUrl(endpoint: Endpoint): string {
     if (endpoint === Endpoint.Websocket) {
@@ -68,6 +68,6 @@ export class Backend {
 }
 
 export class Frontend {
-  public static domain = import.meta.env.VUE_APP_DOMAIN ?? '';
+  public static domain = AppConfig.Domain ?? '';
   public static url = `https://${Frontend.domain}`;
 }

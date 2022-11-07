@@ -11,5 +11,5 @@ import { useCookies } from '@/core/adapter/cookies';
 
 const cookies = useCookies();
 const showPopup = computed(() => cookies.popupOpen);
-const CookieDialog = defineAsyncComponent(() => import(/* webpackChunkName: "cookies" */ './CookieDialog.vue'));
+const CookieDialog = defineAsyncComponent(() => import('./CookieDialog.vue'));
 </script>

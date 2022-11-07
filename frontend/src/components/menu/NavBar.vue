@@ -19,8 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
+
+import { Icon } from '@/components/misc/Icon';
 
 import NavBarLinks from './NavBarLinks.vue';
 

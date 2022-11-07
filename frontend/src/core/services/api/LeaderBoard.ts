@@ -1,3 +1,5 @@
+import { AppConfig } from '@/config';
+
 import Logger from '../logging/logImport';
 import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorAble, parseBackendError } from './Errors';
@@ -16,7 +18,7 @@ export type LeaderBoardPositionResponse = {
 export class LeaderBoardService {
   static async fetchLeaderBoard(): Promise<BackendErrorAble<LeaderBoardResponse>> {
     Logger.Api.log(`fetching leaderboard`);
-    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking leaderboard response');
       return Promise.resolve({
         leaderboard: new Array(50).fill(null).map((_, index) => ({
@@ -41,7 +43,7 @@ export class LeaderBoardService {
 
   static async fetchOwnLeaderBoardPosition(): Promise<BackendErrorAble<LeaderBoardPositionResponse>> {
     Logger.Api.log(`fetching own leaderboard position`);
-    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking own leaderboard position response');
       return Promise.resolve({
         position: 1

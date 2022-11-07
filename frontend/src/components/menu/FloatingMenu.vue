@@ -23,9 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
 
+import { Icon } from '@/components/misc/Icon';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useConfig } from '@/core/adapter/config';
 

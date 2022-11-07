@@ -17,7 +17,7 @@ import Snackbar from './components/misc/Snackbar.vue';
 import { useAuth } from './core/adapter/auth';
 import { useConfig } from './core/adapter/config';
 import { useCookies } from './core/adapter/cookies';
-const ChangelogManager = defineAsyncComponent(() => import(/* webpackChunkName: "changelog" */ '././components/misc/changelog/ChangelogManager.vue'));
+const ChangelogManager = defineAsyncComponent(() => import('./components/misc/changelog/ChangelogManager.vue'));
 
 useConfig().configure(); // load stored config from localStorage
 useAuth().configure(); // 'read' from may existing session
@@ -32,7 +32,7 @@ const asyncSetup = async () => {
 };
 
 onMounted(() => {
-  import(/* webpackChunkName: "shortcuts" */ './core/adapter/shortcuts/ShortcutManager').then(module => {
+  import('./core/adapter/shortcuts/ShortcutManager').then(module => {
     module.ShortcutManager.global.activate();
   });
 });

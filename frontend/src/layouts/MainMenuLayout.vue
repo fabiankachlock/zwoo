@@ -1,6 +1,6 @@
 <template>
-  <div class="__menu bg-main">
-    <div class="menu fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
+  <div id="_layout__main-menu" class="bg-main">
+    <div class="header fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
       <header class="h-full">
         <div class="h-full mx-3 my-0 relative flex justify-between items-center flex-row">
           <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">
@@ -11,15 +11,19 @@
         </div>
       </header>
     </div>
-    <div class="relative z-40">
+    <div class="floating-menu relative z-40">
       <FloatingMenu />
     </div>
-    <div class="menu-main w-screen pt-10">
-      <div class="device-padding w-full h-full relative">
-        <div class="absolute inset-0 overflow-y-auto">
-          <router-view></router-view>
-          <div class="h-10"></div>
+    <div class="main-content">
+      <div class="pt-2 mt-10 relative">
+        <div class="w-full sticky z-10 bg-main top-10">
+          <slot name="sticky-content"></slot>
         </div>
+        <div class="z-0">
+          <slot></slot>
+        </div>
+        <!-- workaround for ios hidden content on the end of the side -->
+        <div class="h-14"></div>
       </div>
     </div>
   </div>
@@ -30,17 +34,16 @@ import FloatingMenu from '@/components/menu/FloatingMenu.vue';
 import NavBar from '@/components/menu/NavBar.vue';
 </script>
 
-<style scoped>
-.__menu {
-  @apply fixed top-0 left-0 right-0 bottom-0 overflow-hidden;
-  height: 100vh;
-  max-height: calc(100vh - calc(100vh - 100%));
-}
-.menu-main {
-  height: 100vh;
-  max-height: calc(100vh - calc(100vh - 100% - 2.5rem));
-}
-.menu {
+<style lang="css" scoped>
+/* notch phone things */
+.header {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+}
+
+.main-content {
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
 }
 </style>

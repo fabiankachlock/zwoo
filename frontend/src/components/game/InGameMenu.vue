@@ -48,10 +48,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { Icon } from '@/components/misc/Icon';
 import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import { useGameConfig } from '@/core/adapter/game';
@@ -74,7 +74,7 @@ const handleLeave = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .open-menu {
   height: 19rem;
 }

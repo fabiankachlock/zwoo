@@ -134,10 +134,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { defineEmits, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { Icon } from '@/components/misc/Icon';
 import { useShare } from '@/composables/useShare';
 import { useGameConfig } from '@/core/adapter/game';
 import { Frontend } from '@/core/services/api/ApiConfig';

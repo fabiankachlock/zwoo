@@ -46,7 +46,7 @@ const currentModal = computed(() => modalState.modalComponent);
 const { isSpectator } = useIsSpectator();
 </script>
 
-<style>
+<style scoped>
 #main {
   height: calc(100vh - calc(100vh - 100%));
 }

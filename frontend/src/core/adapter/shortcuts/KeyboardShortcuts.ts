@@ -1,5 +1,7 @@
 import { isRegistered, register, unregisterAll } from '@tauri-apps/api/globalShortcut';
 
+import { AppConfig } from '@/config';
+
 import { Shortcut } from './types';
 
 export class KeyboardShortcuts {
@@ -9,7 +11,7 @@ export class KeyboardShortcuts {
 
   bind() {
     this.detach();
-    if (import.meta.env.VUE_APP_IS_TAURI === 'true') {
+    if (AppConfig.IsTauri) {
       this.setupTauri();
     } else {
       window.addEventListener('keyup', this.eventHandler);
@@ -17,7 +19,7 @@ export class KeyboardShortcuts {
   }
 
   setShortcuts(shortcuts: Shortcut<KeyboardEvent>[]) {
-    if (import.meta.env.VUE_APP_IS_TAURI === 'true') {
+    if (AppConfig.IsTauri) {
       this.setupTauri();
     } else {
       this.shortcuts = shortcuts;
@@ -32,7 +34,7 @@ export class KeyboardShortcuts {
   };
 
   detach() {
-    if (import.meta.env.VUE_APP_IS_TAURI === 'true') {
+    if (AppConfig.IsTauri) {
       unregisterAll();
     } else {
       window.removeEventListener('keyup', this.eventHandler);

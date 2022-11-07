@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 
-import Index from '../views/internal/Index.vue';
+import Index from '../views/internal/_Layout.vue';
 
 export const InternalRoute: RouteRecordRaw = {
   path: '/_internal_',
@@ -8,7 +8,7 @@ export const InternalRoute: RouteRecordRaw = {
   children: [
     {
       path: 'pop-out-chat',
-      component: () => import(/* webpackChunkName: "internal" */ '../views/internal/PopOutChat.vue'),
+      component: () => import('../views/internal/PopOutChat.vue'),
       meta: {
         requiresAuth: false
       }

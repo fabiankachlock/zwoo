@@ -73,7 +73,7 @@ const handleClick = async (evt: Event) => {
 };
 </script>
 
-<style>
+<style scoped>
 .box {
   border-color: #1a73e8;
 }

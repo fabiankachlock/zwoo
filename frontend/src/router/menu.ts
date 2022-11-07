@@ -3,62 +3,62 @@ import { RouteRecordRaw } from 'vue-router';
 export const MenuRoutes: Array<RouteRecordRaw> = [
   {
     path: 'settings',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/Settings.vue')
+    component: () => import('../views/Settings.vue')
   },
   {
     path: 'imprint',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/Imprint.vue')
+    component: () => import('../views/Imprint.vue')
   },
   {
     path: 'login',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/Login.vue'),
+    component: () => import('../views/Login.vue'),
     meta: {
       noAuth: true
     }
   },
   {
     path: 'logout',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/Logout.vue')
+    component: () => import('../views/Logout.vue')
   },
   {
     path: 'create-account',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/CreateAccount.vue'),
+    component: () => import('../views/CreateAccount.vue'),
     meta: {
       noAuth: true
     }
   },
   {
     path: 'request-password-reset',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/RequestPasswordReset.vue'),
+    component: () => import('../views/RequestPasswordReset.vue'),
     meta: {
       noAuth: true
     }
   },
   {
     path: 'reset-password',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/ResetPassword.vue'),
+    component: () => import('../views/ResetPassword.vue'),
     meta: {
       noAuth: true
     }
   },
   {
     path: 'verify-account',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/VerifyAccount.vue')
+    component: () => import('../views/VerifyAccount.vue')
   },
   {
     path: 'tutorial',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/Tutorial.vue')
+    component: () => import('../views/Tutorial.vue')
   },
   {
     path: 'create-game',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/CreateGame.vue'),
+    component: () => import('../views/CreateGame.vue'),
     meta: {
       requiresAuth: true
     }
   },
   {
     path: 'join/:id',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/JoinGame.vue'),
+    component: () => import('../views/JoinGame.vue'),
     meta: {
       requiresAuth: true,
       redirect: true
@@ -66,7 +66,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: 'available-games',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/GamesList.vue'),
+    component: () => import('../views/GamesList.vue'),
     alias: ['available', 'list', 'games'],
     meta: {
       requiresAuth: true
@@ -74,18 +74,18 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: 'missing-cookies',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/MissingCookies.vue')
+    component: () => import('../views/MissingCookies.vue')
   },
   {
     path: 'leaderboard',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/Leaderboard.vue')
+    component: () => import('../views/Leaderboard.vue')
   },
   {
     path: 'shortcut-info',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/ShortcutInfo.vue')
+    component: () => import('../views/ShortcutInfo.vue')
   },
   {
     path: 'version-history',
-    component: () => import(/* webpackChunkName: "menu" */ '../views/VersionHistory.vue')
+    component: () => import('../views/VersionHistory.vue')
   }
 ];

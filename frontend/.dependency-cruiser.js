@@ -51,7 +51,8 @@ module.exports = {
           '(^|/)\\.[^/]+\\.(js|cjs|mjs|ts|json)$', // dot files
           '\\.d\\.ts$', // TypeScript declaration files
           '(^|/)tsconfig\\.json$', // TypeScript config
-          '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|json)$' // other configs
+          '(^|/)(babel|webpack)\\.config\\.(js|cjs|mjs|ts|json)$', // other configs
+          'src/modules/zwoo-icons/icons'
         ]
       },
       to: {}
@@ -122,7 +123,7 @@ module.exports = {
       from: {},
       to: {
         couldNotResolve: true,
-        pathNot: 'virtual:pwa-register'
+        pathNot: ['virtual:pwa-register', 'vite/client']
       }
     },
     {
@@ -166,7 +167,7 @@ module.exports = {
         'from.pathNot re of the not-to-dev-dep rule in the dependency-cruiser configuration',
       from: {
         path: '^(src)',
-        pathNot: ['\\.(spec|test)\\.(js|mjs|cjs|ts|ls|coffee|litcoffee|coffee\\.md)$', '__mocks__']
+        pathNot: ['\\.(spec|test)\\.(js|mjs|cjs|ts|ls|coffee|litcoffee|coffee\\.md)$', '__mocks__', '\\.js$']
       },
       to: {
         dependencyTypes: ['npm-dev']

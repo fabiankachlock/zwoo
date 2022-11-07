@@ -37,7 +37,7 @@ const props = defineProps<{
 const cardTheme = useCardTheme();
 const cardData = computed(() => (props.overrideTheme ?? cardTheme.theme).getCard(props.card));
 </script>
-<style>
+<style scoped>
 .zwoo-card:not(:first-of-type) {
   @apply absolute top-0 left-1/2 -translate-x-1/2;
 }

@@ -31,9 +31,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { defineEmits, defineProps, onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { Icon } from '@/components/misc/Icon';
 
 const { t } = useI18n();
 

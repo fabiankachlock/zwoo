@@ -1,13 +1,13 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
+  projectId: '1yq2ff',
   fixturesFolder: 'tests/e2e/fixtures',
   screenshotsFolder: 'tests/e2e/screenshots',
   videosFolder: 'tests/e2e/videos',
   env: {
     baseUrl: 'http://localhost:8080'
   },
-  video: false,
   screenshotOnRunFailure: true,
   e2e: {
     // We've imported your old cypress plugins here.

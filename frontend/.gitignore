@@ -39,3 +39,7 @@ coverage
 !/public/assets/sourcemap.json
 
 dependency-graph.svg
+
+src/modules/zwoo-icons/icons
+
+stats.html

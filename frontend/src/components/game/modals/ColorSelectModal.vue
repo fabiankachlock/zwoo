@@ -48,7 +48,7 @@ const close = (color: CardColor) => {
 };
 </script>
 
-<style>
+<style scoped>
 .color-select-modal-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

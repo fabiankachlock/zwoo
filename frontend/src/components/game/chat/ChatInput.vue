@@ -18,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 
+import { Icon } from '@/components/misc/Icon';
 import { useChatStore } from '@/core/adapter/play/chat';
 
 const message = ref('');

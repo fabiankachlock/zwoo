@@ -105,12 +105,12 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ShareSheet from '@/components/lobby/ShareSheet.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
+import { Icon } from '@/components/misc/Icon';
 import QRCode from '@/components/misc/QRCode.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useUserDefaults } from '@/composables/userDefaults';

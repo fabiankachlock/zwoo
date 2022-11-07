@@ -1,5 +1,5 @@
 <template>
-  <FlatDialog>
+  <FormLayout>
     <Form show-back-button>
       <FormTitle>
         {{ t('createAccount.title') }}
@@ -27,7 +27,7 @@
       <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create">
+        <FormSubmit @click="create" :disabled="!isSubmitEnabled || showInfo">
           {{ t('createAccount.create') }}
         </FormSubmit>
         <FormAlternativeAction>
@@ -43,18 +43,18 @@
         </button>
       </div>
     </Form>
-  </FlatDialog>
+  </FormLayout>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
+import { Icon } from '@/components/misc/Icon';
+import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
 import { AuthenticationService } from '@/core/services/api/Authentication';
@@ -66,11 +66,12 @@ import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import { UsernameValidator } from '@/core/services/validator/username';
+import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
 const route = useRoute();
-const isBeta = import.meta.env.VUE_APP_BETA === 'true';
+const isBeta = AppConfig.IsBeta;
 
 onMounted(() => {
   useCookies().loadRecaptcha();
@@ -89,7 +90,17 @@ const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
+const isLoading = ref<boolean>(false);
 const showResend = ref(true);
+const isSubmitEnabled = computed(
+  () =>
+    !isLoading.value &&
+    reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
+    emailValidator.validate(email.value).isValid &&
+    passwordValidator.validate(password.value).isValid &&
+    passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid &&
+    usernameValidator.validate(username.value).isValid
+);
 
 const emailValidator = new EmailValidator();
 const usernameValidator = new UsernameValidator();
@@ -109,7 +120,7 @@ watch([username, email, password, passwordRepeat], () => {
 
 const create = async () => {
   error.value = [];
-
+  isLoading.value = true;
   try {
     await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, reCaptchaResponse.value, betaCode.value);
     showInfo.value = true;
@@ -119,6 +130,7 @@ const create = async () => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });
   }
+  isLoading.value = false;
 };
 
 const resendVerifyEmail = async () => {

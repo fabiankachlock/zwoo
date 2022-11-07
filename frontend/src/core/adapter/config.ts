@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+import { AppConfig } from '@/config';
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 
 import { ConfigService } from '../services/api/Config';
@@ -17,9 +18,9 @@ const showCardDetailKey = 'zwoo:cd';
 const themeKey = 'zwoo:th';
 
 const versionInfo = {
-  override: import.meta.env.VUE_APP_VERSION_OVERRIDE as string,
-  version: import.meta.env.VUE_APP_VERSION as string,
-  hash: import.meta.env.VUE_APP_VERSION_HASH as string
+  override: AppConfig.VersionOverride,
+  version: AppConfig.Version,
+  hash: AppConfig.VersionHash
 };
 
 const changeLanguage = (lng: string) => {
@@ -30,9 +31,9 @@ const changeLanguage = (lng: string) => {
 const changeUIMode = (isDark: boolean) => {
   localStorage.setItem(uiKey, isDark ? 'dark' : 'light');
   if (isDark) {
-    document.body.classList.add('dark');
+    document.querySelector('html')?.classList.add('dark');
   } else {
-    document.body.classList.remove('dark');
+    document.querySelector('html')?.classList.remove('dark');
   }
 };
 
@@ -56,7 +57,7 @@ export const useConfig = defineStore('config', {
       cardTheme: '__default__',
       cardThemeVariant: '@auto',
       serverVersion: new Awaiter() as string | Awaiter<string>,
-      clientVersion: import.meta.env.VUE_APP_VERSION
+      clientVersion: AppConfig.Version
     };
   },
 
@@ -134,7 +135,7 @@ export const useConfig = defineStore('config', {
       }
 
       const version = await ConfigService.fetchVersion();
-      if (version !== import.meta.env.VUE_APP_VERSION) {
+      if (version !== AppConfig.Version) {
         RouterService.getRouter().push('/invalid-version');
       }
       if (typeof this.serverVersion !== 'string' && typeof version === 'string') {

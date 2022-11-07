@@ -4,14 +4,15 @@
       {{ title }}
     </router-link>
     <a v-if="isExternal" :href="link" class="link tc-main-dark" target="_blank">
-      {{ title }} <Icon icon="bytesize-external" class="tc-main ml-2" />
+      {{ title }} <Icon icon="bytesize:external" class="tc-main ml-2" />
     </a>
   </li>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { defineProps } from 'vue';
+
+import { Icon } from '@/components/misc/Icon';
 
 defineProps<{
   title: string;

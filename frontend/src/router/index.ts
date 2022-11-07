@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
+import { AppConfig } from '@/config';
 import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
 import { AuthGuard } from '@/router/guards/AuthGuard';
 import { CookieGuard } from '@/router/guards/CookieGuard';
@@ -7,11 +8,11 @@ import { InGameGuard } from '@/router/guards/GameGuard';
 import { ReCaptchaTermsRouteInterceptor } from '@/router/guards/ReCaptchaTerms';
 import { VersionGuard } from '@/router/guards/VersionGuard';
 
+import Menu from '../views/_Layout.vue';
 import CatchAll from '../views/404.vue';
 import Beta from '../views/Beta.vue';
 import Home from '../views/Home.vue';
 import Landing from '../views/Landing.vue';
-import Menu from '../views/Menu.vue';
 import Version from '../views/Version.vue';
 import { DeveloperRoute } from './developer';
 import { GameRoute } from './game';
@@ -49,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/invalid-version',
     component: Version
   },
-  import.meta.env.VUE_APP_BETA === 'true'
+  AppConfig.IsBeta
     ? {
         path: '/beta/:code',
         component: Beta
@@ -105,7 +106,7 @@ const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [
   ShortcutManager.global.afterEachAsync
 ];
 // (async () => ([
-//   new (await import(/* webpackChunkName: "recaptcha" */ '../core/services/guards/ReCaptchaTerms')).default().afterEachAsync
+//   new (await import( '../core/services/guards/ReCaptchaTerms')).default().afterEachAsync
 // ]));
 
 router.afterEach(async (to, from, failure) => {

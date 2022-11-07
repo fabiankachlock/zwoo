@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { AppConfig } from '@/config';
 import { BaseLogger, ExtendedLogger, LogEntry, LoggerInterface, ZwooLogger } from './logTypes';
 
 let _Logger: ExtendedLogger = {
@@ -65,11 +66,11 @@ let StoreRef = {
 };
 
 const setupLogger = (mode: string | null) => {
-  import(/* webpackChunkName: "logging" */ './logStore').then(async storeModule => {
-    const storeLoggerModule = await import(/* webpackChunkName: "logging" */ './storeLogger');
-    const logRushLoggerModule = await import(/* webpackChunkName: "logging" */ './logRushLogger');
-    const consoleLoggerModule = await import(/* webpackChunkName: "logging" */ './consoleLogger');
-    const multiLoggerModule = await import(/* webpackChunkName: "logging" */ './multiLogger');
+  import('./logStore').then(async storeModule => {
+    const storeLoggerModule = await import('./storeLogger');
+    const logRushLoggerModule = await import('./logRushLogger');
+    const consoleLoggerModule = await import('./consoleLogger');
+    const multiLoggerModule = await import('./multiLogger');
 
     const store = await storeModule.GetLogStore();
     StoreRef.resetStore = store.clear;
@@ -78,18 +79,9 @@ const setupLogger = (mode: string | null) => {
       _Logger.debug('log store ready');
       _Logger.debug('logger started');
       _Logger.debug('--start-config--');
-      _Logger.debug('VERSION: ' + import.meta.env.VUE_APP_VERSION);
-      _Logger.debug('VERSION_HASH: ' + import.meta.env.VUE_APP_VERSION_HASH);
-      _Logger.debug('DOMAIN: ' + import.meta.env.VUE_APP_DOMAIN);
-      _Logger.debug('USE_BACKEND: ' + import.meta.env.VUE_APP_USE_BACKEND);
-      _Logger.debug('DEVELOPMENT: ' + import.meta.env.VUE_APP_DEVELOPMENT);
-      _Logger.debug('PROD_BACKEND: ' + import.meta.env.VUE_APP_PROD_BACKEND);
-      _Logger.debug('PROD_WS_OVERRIDE: ' + import.meta.env.VUE_APP_PROD_WS_OVERRIDE);
-      _Logger.debug('DEV_BACKEND: ' + import.meta.env.VUE_APP_DEV_BACKEND);
-      _Logger.debug('DEV_WS_OVERRIDE: ' + import.meta.env.VUE_APP_DEV_WS_OVERRIDE);
-      _Logger.debug('I18N_LOCALE: ' + import.meta.env.VUE_APP_I18N_LOCALE);
-      _Logger.debug('BETA: ' + import.meta.env.VUE_APP_BETA);
-      _Logger.debug('LOG_RUSH_SERVER: ' + import.meta.env.VUE_APP_LOG_RUSH_SERVER);
+      for (const [key, value] of Object.entries(AppConfig)) {
+        _Logger.debug(`${key}=${value}`);
+      }
       _Logger.debug('DEVICE_ID: ' + window.DEVICE_ID);
       _Logger.debug('NAVIGATOR_LNG: ' + navigator.language);
       _Logger.debug('USER_AGENT: ' + navigator.userAgent);
