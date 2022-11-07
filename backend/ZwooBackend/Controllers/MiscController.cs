@@ -30,5 +30,5 @@ public class MiscController : Controller
     
     [HttpGet("versionHistory")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    public IActionResult GetChangelogs() => Ok($"{{ \"versions\": {JsonSerializer.Serialize(ZwooDatabase.GetChangelogs())} }}");
+    public IActionResult GetChangelogs() => Ok($"{{ \"versions\": {JsonSerializer.Serialize(ZwooDatabase.GetChangelogs().Select(c => c.Version))} }}");
 }
