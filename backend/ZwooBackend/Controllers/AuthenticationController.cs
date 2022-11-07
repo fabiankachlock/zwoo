@@ -154,7 +154,7 @@ public class AuthenticationController : Controller
             "Session ID not Matching"));
     }
     
-    [HttpGet("resendVerificationEmail")]
+    [HttpPost("resendVerificationEmail")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult ResendVerificationEmail([FromBody] VerificationEmail body)
