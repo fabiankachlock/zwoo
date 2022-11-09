@@ -85,7 +85,7 @@ for (const iconCollection in reducedIcons) {
 
   for (const icon of reducedIcons[iconCollection]) {
     count++;
-    const fileName = `${iconCollection}:${icon}.js`;
+    const fileName = `${iconCollection}__${icon}.js`;
     const svgData = collection.getIconData(icon);
     console.log(`building icon ${icon} of ${iconCollection} into ${fileName}`);
     const svg = new SVG(svgData);

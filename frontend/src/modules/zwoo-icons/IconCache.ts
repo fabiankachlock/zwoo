@@ -9,7 +9,7 @@ export class IconCache {
       };
     }
 
-    const iconContent = await import(`./icons/${icon}.js`);
+    const iconContent = await import(`./icons/${icon.replace(':', '__')}.js`);
     IconCache.cache[icon] = iconContent.default;
     return {
       icon: iconContent.default,
