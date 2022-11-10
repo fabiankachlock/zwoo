@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+// TODO: move client, server version here & version info
 export const useRootApp = defineStore('app', {
   state: () => {
     return {
@@ -18,6 +19,9 @@ export const useRootApp = defineStore('app', {
     },
     onNeedsRefresh() {
       this.updateAvailable = true;
+    },
+    updateApp() {
+      this._updateFunc(true);
     }
   }
 });
