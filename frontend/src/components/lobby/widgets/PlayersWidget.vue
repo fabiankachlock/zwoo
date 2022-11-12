@@ -52,14 +52,16 @@
           :key="player.id"
           class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest"
         >
-          <p class="text-lg tc-main-dark">
-            <span :class="{ 'tc-primary': username === player.username }">
-              {{ player.username }}
-            </span>
+          <div class="flex justify-start items-center">
+            <p class="text-lg tc-main-dark">
+              <span :class="{ 'tc-primary': username === player.username }">
+                {{ player.username }}
+              </span>
+            </p>
             <span v-if="gameHost === player.username" class="tc-primary text-lg">
-              <Icon icon="akar-icons:crown" class="inline ml-1" />
+              <Icon icon="akar-icons:crown" class="ml-2" />
             </span>
-          </p>
+          </div>
           <div class="flex items-center h-full justify-end">
             <template v-if="!isHost && username === player.username">
               <button v-tooltip="t('wait.spectate')" @click="handleChangeToSpectator()" class="tc-primary h-full bg-light hover:bg-main rounded p-1">

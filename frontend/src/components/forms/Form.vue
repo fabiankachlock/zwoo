@@ -41,11 +41,11 @@ const goBack = () => router.go(-1);
 </script>
 
 <styles scoped lang="css">
-#back-button:hover svg {
+#back-button:hover #icon {
   @apply -translate-x-[2px];
 }
 
-#close-button:hover svg {
+#close-button:hover #icon {
   @apply scale-110;
 }
 </styles>
