@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vite --mode preview",
     "serve:prod": "vite --mode dev",
-    "typecheck": "vue-tsc --noEmit",
+    "//": "echo is needed, so that vue-tsc dont picks up file path arguments passed by lint-staged, which breaks vue-tsc",
+    "typecheck": "vue-tsc --noEmit && echo \"\"",
     "preview": "vite preview --mode preview",
     "preview:prod": "vite preview --mode dev",
     "build": "yarn pre:build && vite build --mode production",

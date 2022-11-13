@@ -26,34 +26,6 @@ import { useRouter } from 'vue-router';
 
 import Logger from '@/core/services/logging/logImport';
 
-// TODO: ts definitions
-declare var BarcodeDetector: {
-  detect(src: Blob | HTMLCanvasElement | HTMLImageElement | HTMLVideoElement | ImageBitmap | ImageData | SVGImageElement): Promise<
-    {
-      boundingBox: {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-        top: number;
-        right: number;
-        bottom: number;
-        left: number;
-      };
-      cornerPoints: [
-        {
-          x: number;
-          y: number;
-        }
-      ];
-      format: string;
-      rawValue: string;
-    }[]
-  >;
-  getSupportedFormats(): Promise<string[]>;
-  new (): typeof BarcodeDetector;
-};
-
 const emit = defineEmits<{
   (event: 'close'): void;
 }>();
