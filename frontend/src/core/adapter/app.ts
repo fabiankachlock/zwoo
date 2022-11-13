@@ -17,7 +17,7 @@ export const useRootApp = defineStore('app', {
   state: () => {
     return {
       // global app state
-      //...
+      isOffline: false,
       // versions
       serverVersion: new Awaiter() as string | Awaiter<string>,
       clientVersion: AppConfig.Version,
