@@ -365,7 +365,8 @@
     "title": "Wrong Version",
     "info": "You need to upgrade zwoo to the latest version in order to play games. (Client: {0}, Server: {1})",
     "reload": "Reload page",
-    "toSettings": "Go to settings"
+    "toSettings": "Go to settings",
+    "loading": "Downloading update..."
   },
   "verifyAccount": {
     "title": "Account-Verification",

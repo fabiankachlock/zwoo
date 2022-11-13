@@ -6,6 +6,7 @@ import { registerSW } from 'virtual:pwa-register';
 import { createApp } from 'vue';
 
 import App from './App.vue';
+import { useRootApp } from './core/adapter/app';
 import { RouterService } from './core/services/global/Router';
 import { Tooltip } from './directives/tooltip/Tooltip';
 import i18n from './i18n';
@@ -39,5 +40,15 @@ app.directive('tooltip', Tooltip);
 app.mount('#app');
 
 router.isReady().then(() => {
-  registerSW({ immediate: true });
+  const app = useRootApp();
+  const updateSW = registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      app.onNeedsRefresh();
+    },
+    onOfflineReady() {
+      app.onOfflineReady();
+    }
+  });
+  app._setUpdateFunc(updateSW);
 });
