@@ -90,6 +90,9 @@
     ],
     "src/**/*.json": [
       "yarn i18n:check"
+    ],
+    "src/**/*.*": [
+      "yarn deps:check"
     ]
   }
 }

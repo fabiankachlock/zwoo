@@ -1,5 +1,5 @@
 <template>
-  <div v-html="icon"></div>
+  <div id="icon" v-html="icon" :ref="ref => (elementRef = ref as HTMLDivElement)"></div>
 </template>
 
 <script setup lang="ts">
@@ -10,15 +10,32 @@ import { IconCache } from './IconCache';
 // eslint-disable-next-line no-undef
 const props = defineProps<{
   icon: string;
+  svgClass?: string;
 }>();
 
 const icon = ref<string | undefined>(undefined);
+const elementRef = ref<HTMLDivElement | undefined>(undefined);
 
 watch(
   () => props.icon,
   async newIcon => {
     const result = await IconCache.getIcon(newIcon);
     icon.value = result.icon;
+    setTimeout(() => {
+      if (elementRef.value && elementRef.value.children.length > 0) {
+        elementRef.value.children[0].setAttribute('class', props.svgClass ?? '');
+      }
+    }, 0);
+  },
+  { immediate: true }
+);
+
+watch(
+  [elementRef, () => props.svgClass],
+  ([elm, childClass]) => {
+    if (elm && elm.children.length > 0) {
+      elm.children[0].setAttribute('class', childClass ?? '');
+    }
   },
   { immediate: true }
 );

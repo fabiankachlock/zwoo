@@ -37,15 +37,19 @@ export class ReCaptchaService {
   };
 
   private performCheck = async (): Promise<ReCaptchaResponse | undefined> => {
+    if (!AppConfig.UseBackend) {
+      return Promise.resolve({
+        success: true,
+        score: 1
+      });
+    }
+
     if (this.isReady) {
       const token = await grecaptcha.execute(ReCaptchaService.SITE_KEY, {
         action: 'login'
       });
       const [result] = unwrapBackendError(await this.verify(token));
       return result;
-    }
-    if (!AppConfig.UseBackend) {
-      return Promise.resolve(undefined);
     }
     return Promise.resolve({
       success: true,
