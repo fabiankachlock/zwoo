@@ -31,14 +31,13 @@ import { useRouter } from 'vue-router';
 
 import { Icon } from '@/components/misc/Icon';
 import { useRootApp } from '@/core/adapter/app';
-import { useConfig } from '@/core/adapter/config';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 import ZwooIcon from '@/modules/zwoo-icons/ZwooIcon.vue';
 
 const { t } = useI18n();
 const router = useRouter();
 const app = useRootApp();
-const config = useConfig();
+const config = useRootApp();
 const isReady = computed(() => app.updateAvailable);
 
 watch(

@@ -39,8 +39,9 @@ app.directive('tooltip', Tooltip);
 
 app.mount('#app');
 
-router.isReady().then(() => {
+router.isReady().then(async () => {
   const app = useRootApp();
+  await app.configure();
   const updateSW = registerSW({
     immediate: true,
     onNeedRefresh() {
