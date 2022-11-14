@@ -1,6 +1,6 @@
 <template>
-  <MaxWidthLayout size="small">
-    <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 text-error-light-border dark:text-error-dark-border"></Icon>
+  <MaxWidthLayout size="small" class="mt-8">
+    <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 w-fit text-error-light-border dark:text-error-dark-border"></Icon>
     <h1 class="tc-main text-center text-4xl mb-2">{{ t('wrongVersion.title') }}</h1>
     <p class="tc-main-secondary text-center">{{ t('wrongVersion.info', [config.clientVersion, config.serverVersion]) }}</p>
     <div v-if="!isReady" class="flex flex-row justify-center flex-nowrap items-center tc-main mt-4">

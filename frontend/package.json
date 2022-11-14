@@ -53,10 +53,10 @@
     "@types/vue-router": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.36.2",
-    "@vitejs/plugin-vue": "^3.1.2",
+    "@vitejs/plugin-vue": "^3.2.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
-    "@vue/test-utils": "^2.1.0",
+    "@vue/test-utils": "^2.2.1",
     "@vue/vue3-jest": "^27.0.0-alpha.4",
     "autoprefixer": "^10",
     "babel-jest": "^27",
@@ -95,6 +95,9 @@
     ],
     "src/**/*.json": [
       "yarn i18n:check"
+    ],
+    "src/**/*.*": [
+      "yarn deps:check"
     ]
   }
 }
