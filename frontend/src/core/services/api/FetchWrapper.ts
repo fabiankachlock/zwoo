@@ -14,7 +14,7 @@ export type FetchOptions<T> = {
   /**
    * configure how the request should be handled
    */
-  requestOptions: {
+  requestOptions?: {
     /**
      * the body content type (only applied at post)
      * use `null` to unset Content-Type header
@@ -55,7 +55,7 @@ export type FetchResponse<T> = {
 
 const defaultStatusValidator = (status: number) => status >= 200 && status < 300;
 
-export const WrappedFetch = async <T>(url: string, init: FetchOptions<T>): Promise<FetchResponse<T>> => {
+export const WrappedFetch = async <T>(url: string, init: FetchOptions<T> = {}): Promise<FetchResponse<T>> => {
   if (!init?.useBackend) {
     return {
       isFallback: true,
@@ -71,11 +71,11 @@ export const WrappedFetch = async <T>(url: string, init: FetchOptions<T>): Promi
   if (init.requestOptions?.contentType) {
     newHeader['Content-Type'] = init.requestOptions?.contentType;
   } else if (init.requestOptions?.contentType !== null) {
-    newHeader['Content-Type'] = 'applications/json';
+    newHeader['Content-Type'] = 'application/json';
   }
   init.headers = newHeader;
 
-  if (init.requestOptions.withCredentials) {
+  if (init.requestOptions?.withCredentials) {
     init.credentials = 'include';
   }
 

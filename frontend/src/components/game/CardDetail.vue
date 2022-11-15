@@ -77,7 +77,6 @@ import { Key, useKeyPress } from '@/composables/useKeyPress';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/useSwipeGesture';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { CardChecker } from '@/core/services/api/CardCheck';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { Card as CardTyping } from '@/core/services/game/CardTypes';
 
@@ -155,7 +154,8 @@ const updateView = async (card: CardTyping) => {
   };
   canPlayCard.value = CardState.none;
   if (selectedCard.value) {
-    canPlayCard.value = (await CardChecker.canPlayCard(card)) ? CardState.allowed : CardState.disallowed;
+    // canPlayCard.value = (await CardChecker.canPlayCard(card)) ? CardState.allowed : CardState.disallowed;
+    canPlayCard.value = CardState.allowed;
   }
 };
 

@@ -2,7 +2,8 @@ import { AppConfig } from '@/config';
 
 import { Logger } from '../logging/logImport';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble, parseBackendError, WithBackendError } from './Errors';
+import { BackendErrorAble, WithBackendError } from './Errors';
+import { WrappedFetch } from './FetchWrapper';
 
 type UserInfo = {
   username: string;
@@ -24,27 +25,29 @@ export type AuthenticationStatus =
 export class AuthenticationService {
   static getUserInfo = async (): Promise<AuthenticationStatus> => {
     Logger.Api.log('fetching user auth status');
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking auth status response');
-      return {
-        isLoggedIn: false
-      };
-    }
 
-    const response = await fetch(Backend.getUrl(Endpoint.UserInfo), {
+    const response = await WrappedFetch<UserInfo>(Backend.getUrl(Endpoint.UserInfo), {
+      useBackend: AppConfig.UseBackend,
       method: 'GET',
-      credentials: 'include'
+      fallbackValue: {
+        email: 'test@example.com',
+        username: 'test-user',
+        wins: 5
+      },
+      requestOptions: {
+        withCredentials: true
+      }
     });
 
-    if (response.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while fetching user auth status');
       return {
         isLoggedIn: false,
-        error: parseBackendError(await response.text())
+        error: response.error
       };
     }
 
-    const data = (await response.json()) as UserInfo;
+    const data = response.data!;
     return {
       isLoggedIn: true,
       username: data.username,
@@ -55,20 +58,15 @@ export class AuthenticationService {
 
   static performLogin = async (email: string, password: string): Promise<AuthenticationStatus> => {
     Logger.Api.log(`logging in as ${email}`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking login response');
-      return {
-        username: 'test-user',
-        email: 'test@test.com',
-        isLoggedIn: true
-      };
-    }
 
-    const response = await fetch(Backend.getUrl(Endpoint.AccountLogin), {
+    const response = await WrappedFetch(Backend.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
+      useBackend: AppConfig.UseBackend,
+      requestOptions: {
+        withCredentials: true
+      },
+      responseOptions: {
+        decodeJson: false
       },
       body: JSON.stringify({
         email: email,
@@ -76,11 +74,11 @@ export class AuthenticationService {
       })
     });
 
-    if (response.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while logging in');
       return {
         isLoggedIn: false,
-        error: parseBackendError(await response.text())
+        error: response.error
       };
     }
 
@@ -89,23 +87,23 @@ export class AuthenticationService {
 
   static performLogout = async (): Promise<AuthenticationStatus> => {
     Logger.Api.log('performing logout action');
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking logout response');
-      return {
-        isLoggedIn: false
-      };
-    }
 
-    const response = await fetch(Backend.getUrl(Endpoint.AccountLogout), {
+    const response = await WrappedFetch(Backend.getUrl(Endpoint.AccountLogout), {
       method: 'GET',
-      credentials: 'include'
+      useBackend: AppConfig.UseBackend,
+      requestOptions: {
+        withCredentials: true
+      },
+      responseOptions: {
+        decodeJson: false
+      }
     });
 
-    if (response.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while logging out');
       return {
         isLoggedIn: false,
-        error: parseBackendError(await response.text())
+        error: response.error
       };
     }
 
@@ -116,19 +114,15 @@ export class AuthenticationService {
 
   static performCreateAccount = async (username: string, email: string, password: string, beta?: string): Promise<AuthenticationStatus> => {
     Logger.Api.log(`performing create account action of ${username} with ${email}`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking create account response');
-      return {
-        username: 'test-user',
-        email: 'test@test.com',
-        isLoggedIn: true
-      };
-    }
 
-    const response = await fetch(Backend.getUrl(Endpoint.CreateAccount), {
+    const response = await WrappedFetch(Backend.getUrl(Endpoint.CreateAccount), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
+      useBackend: AppConfig.UseBackend,
+      requestOptions: {
+        withCredentials: true
+      },
+      responseOptions: {
+        decodeJson: false
       },
       body: JSON.stringify({
         username: username,
@@ -138,11 +132,11 @@ export class AuthenticationService {
       })
     });
 
-    if (response.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while creating an account');
       return {
         isLoggedIn: false,
-        error: parseBackendError(await response.text())
+        error: response.error
       };
     }
 
@@ -153,29 +147,26 @@ export class AuthenticationService {
 
   static performDeleteAccount = async (password: string): Promise<AuthenticationStatus> => {
     Logger.Api.log('performing delete account action');
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking delete account response');
-      return {
-        isLoggedIn: false
-      };
-    }
 
-    const response = await fetch(Backend.getUrl(Endpoint.DeleteAccount), {
+    const response = await WrappedFetch(Backend.getUrl(Endpoint.DeleteAccount), {
       method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
+      useBackend: AppConfig.UseBackend,
+      requestOptions: {
+        withCredentials: true
+      },
+      responseOptions: {
+        decodeJson: false
       },
       body: JSON.stringify({
         password: password
       })
     });
 
-    if (response.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while deleting account');
       return {
         isLoggedIn: false,
-        error: parseBackendError(await response.text())
+        error: response.error
       };
     }
 
@@ -186,28 +177,25 @@ export class AuthenticationService {
 
   static verifyAccount = async (id: string, code: string): Promise<BackendErrorAble<boolean>> => {
     Logger.Api.log(`verifying account ${id} with code ${code}`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking verify response');
-      await new Promise(r => {
-        setTimeout(() => r({}), 5000);
-      });
-      return Math.random() > 0.5;
-    }
 
-    const response = await fetch(
+    const response = await WrappedFetch(
       Backend.getDynamicUrl(Endpoint.AccountVerify, {
         code,
         id
       }),
       {
-        method: 'GET'
+        useBackend: AppConfig.UseBackend,
+        method: 'GET',
+        responseOptions: {
+          decodeJson: false
+        }
       }
     );
 
-    if (response.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('cant verify account');
       return {
-        error: parseBackendError(await response.text())
+        error: response.error
       };
     }
 
@@ -216,25 +204,22 @@ export class AuthenticationService {
 
   static resendVerificationEmail = async (email: string): Promise<BackendErrorAble<boolean>> => {
     Logger.Api.log(`resending verification email of ${email}`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking resend verify email response');
-      return true;
-    }
 
-    const response = await fetch(Backend.getUrl(Endpoint.ResendVerificationEmail), {
+    const response = await WrappedFetch(Backend.getUrl(Endpoint.ResendVerificationEmail), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
+      useBackend: AppConfig.UseBackend,
+      responseOptions: {
+        decodeJson: false
       },
       body: JSON.stringify({
         email: email
       })
     });
 
-    if (response.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('cant resend verification email');
       return {
-        error: parseBackendError(await response.text())
+        error: response.error
       };
     }
 

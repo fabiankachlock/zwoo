@@ -41,7 +41,6 @@ app.mount('#app');
 
 router.isReady().then(async () => {
   const app = useRootApp();
-  await app.configure();
   const updateSW = registerSW({
     immediate: true,
     onNeedRefresh() {

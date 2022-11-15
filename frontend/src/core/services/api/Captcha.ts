@@ -9,6 +9,10 @@ export type ReCaptchaResponse = {
   score: number;
 };
 
+/**
+ * The Captcha Service is the only API Service which is not offline safe.
+ * This is because in offline mode all activity which would require a captcha is disabled
+ */
 export class ReCaptchaService {
   static SITE_KEY = '6LfI8qMiAAAAAJwiBu1sbNMVlujm5i0MAAMr6yEK';
 
