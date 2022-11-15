@@ -365,7 +365,7 @@
     "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden. (Client: {0}, Server: {1})",
     "reload": "Seite neu laden",
     "toSettings": "Zu den Einstellungen",
-    "loading": "Update herunterladen..."
+    "loading": "Update wird herunterladen..."
   },
   "verifyAccount": {
     "title": "Account-Verifizierung",
