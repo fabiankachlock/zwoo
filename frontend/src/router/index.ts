@@ -16,6 +16,7 @@ import Landing from '../views/Landing.vue';
 import Version from '../views/Version.vue';
 import { DeveloperRoute } from './developer';
 import { GameRoute } from './game';
+import { OfflineGuard } from './guards/OfflineGuard';
 import { InternalRoute } from './internal';
 import { MenuRoutes } from './menu';
 import { ThemesRoute } from './themes';
@@ -71,6 +72,7 @@ const router = createRouter({
 });
 
 const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
+  new OfflineGuard().beforeEach,
   new VersionGuard().beforeEach,
   new AuthGuard().beforeEach,
   new CookieGuard().beforeEach,
@@ -84,6 +86,7 @@ router.beforeEach(async (to, from, next) => {
     if (guard) {
       const redirected = await guard(to, from, next);
       called ||= redirected;
+      if (called) break;
     }
   }
 

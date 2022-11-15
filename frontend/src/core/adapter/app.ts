@@ -5,6 +5,7 @@ import { ConfigService } from '@/core/services/api/Config';
 import { RouterService } from '@/core/services/global/Router';
 import { Awaiter } from '@/core/services/helper/Awaiter';
 
+import { unwrapBackendError } from '../services/api/Errors';
 import { MigrationRunner } from './migrations/MigrationRunner';
 
 const versionInfo = {
@@ -35,13 +36,19 @@ export const useRootApp = defineStore('app', {
   },
   actions: {
     async configure() {
-      const version = await ConfigService.fetchVersion();
-      if (version !== AppConfig.Version) {
+      const response = await ConfigService.fetchVersion();
+      const [version, err] = unwrapBackendError(response);
+      if (err && AppConfig.UseBackend) {
+        // enable offline mode
+        this.isOffline = true;
+        console.warn('### zwoo entered offline mode');
+        RouterService.getRouter().push('/offline');
+      } else if (version !== AppConfig.Version) {
         RouterService.getRouter().push('/invalid-version');
       }
 
-      if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
-        this.serverVersion.callback(version);
+      if (typeof this.serverVersion !== 'string' && typeof response === 'string') {
+        this.serverVersion.callback(response);
       }
 
       MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
