@@ -102,8 +102,8 @@ export const useConfig = defineStore('config', {
       this.useFullScreen = enabled;
       changeFullscreen(enabled);
     },
-    loadProfile(key: string) {
-      Logger.info(`loading config for ${key}`);
+    loadProfile() {
+      Logger.info(`loading config for the current user`);
       // fetch config
       // deserialize config
       // apply
@@ -118,7 +118,7 @@ export const useConfig = defineStore('config', {
     deleteLocalChanges() {
       Logger.info(`cleared local config`);
       localStorage.removeItem(configKey);
-      this.applyConfig(DefaultConfig);
+      this._loadDefaultConfig();
     },
     _serializeConfig(config: ZwooConfig): string {
       return JSON.stringify(config);
@@ -131,18 +131,21 @@ export const useConfig = defineStore('config', {
         return undefined;
       }
     },
+    _loadDefaultConfig() {
+      const settingsToApply = DefaultConfig;
+      const userLng = navigator.language.split('-')[0]?.toLowerCase();
+      settingsToApply.lng = supportedLanguages.includes(userLng) ? userLng : defaultLanguage;
+      settingsToApply.ui = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      settingsToApply.cd = 'ontouchstart' in document.documentElement;
+      this.applyConfig(settingsToApply);
+    },
     configure() {
       const storedConfig = localStorage.getItem(configKey) ?? '';
       const parsedConfig = this._deserializeConfig(storedConfig);
       if (parsedConfig) {
         this.applyConfig(parsedConfig);
       } else {
-        const settingsToApply = DefaultConfig;
-        const userLng = navigator.language.split('-')[0]?.toLowerCase();
-        settingsToApply.lng = supportedLanguages.includes(userLng) ? userLng : defaultLanguage;
-        settingsToApply.ui = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        settingsToApply.cd = 'ontouchstart' in document.documentElement;
-        this.applyConfig(settingsToApply);
+        this._loadDefaultConfig();
       }
       this.asyncSetup();
     },

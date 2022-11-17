@@ -9,6 +9,7 @@ import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
 import { RecaptchaValidator } from '../services/validator/recaptcha';
 import { UsernameValidator } from '../services/validator/username';
+import { useConfig } from './config';
 
 export const useAuth = defineStore('auth', {
   state: () => {
@@ -31,6 +32,7 @@ export const useAuth = defineStore('auth', {
           username: status.username,
           isLoggedIn: status.isLoggedIn
         });
+        useConfig().loadProfile();
       } else {
         this.isLoggedIn = false;
         const [, error] = unwrapBackendError(status);
@@ -47,7 +49,7 @@ export const useAuth = defineStore('auth', {
           throw getBackendErrorTranslation(error);
         }
       }
-
+      useConfig().deleteLocalChanges();
       this.$patch({
         username: '',
         isLoggedIn: status.isLoggedIn,
@@ -167,6 +169,8 @@ export const useAuth = defineStore('auth', {
     },
     async configure() {
       this.askStatus();
+      // setup initial config
+      useConfig().loadProfile();
     }
   }
 });
