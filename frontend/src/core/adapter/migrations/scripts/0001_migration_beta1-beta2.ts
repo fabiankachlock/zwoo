@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useConfig } from '@/core/adapter/config';
 import { defaultLanguage, supportedLanguages } from '@/i18n';
 

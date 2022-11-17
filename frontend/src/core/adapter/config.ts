@@ -1,24 +1,59 @@
 import { defineStore } from 'pinia';
 
+import { Logger as _Logger } from '@/core/services/logging/logImport';
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
 
-const languageKey = 'zwoo:lng';
-const uiKey = 'zwoo:ui';
-const quickMenuKey = 'zwoo:qm';
-const sortCardsKey = 'zwoo:sc';
-const showCardDetailKey = 'zwoo:cd';
-const themeKey = 'zwoo:th';
+const Logger = _Logger.createOne('config');
+const configKey = 'zwoo:config';
+
+export enum ZwooConfigKey {
+  Language = 'lng',
+  UiMode = 'ui',
+  QuickMenu = 'qm',
+  SortCards = 'sc',
+  ShowCardsDetail = 'cd',
+  CardsTheme = 'th',
+  UserDefaults = 'ud',
+  DevSettings = 'dev-settings',
+  Logging = 'logging'
+}
+
+export type ZwooConfig = {
+  [ZwooConfigKey.Language]: string;
+  [ZwooConfigKey.UiMode]: string;
+  [ZwooConfigKey.QuickMenu]: boolean;
+  [ZwooConfigKey.SortCards]: boolean;
+  [ZwooConfigKey.ShowCardsDetail]: boolean;
+  [ZwooConfigKey.CardsTheme]: CardThemeIdentifier;
+  [ZwooConfigKey.UserDefaults]: string;
+  [ZwooConfigKey.DevSettings]: boolean;
+  [ZwooConfigKey.Logging]: string;
+};
+
+const DefaultConfig: ZwooConfig = {
+  ui: 'dark',
+  lng: 'en',
+  qm: false,
+  sc: false,
+  cd: false,
+  th: {
+    name: '__default__',
+    variant: '@auto'
+  },
+  'dev-settings': false,
+  logging: '',
+  ud: ''
+};
 
 const changeLanguage = (lng: string) => {
   setI18nLanguage(lng);
-  localStorage.setItem(languageKey, lng);
 };
 
-const changeUIMode = (isDark: boolean) => {
-  localStorage.setItem(uiKey, isDark ? 'dark' : 'light');
+const changeUIMode = (mode: string) => {
+  const isDark = mode === 'dark';
   if (isDark) {
     document.querySelector('html')?.classList.add('dark');
   } else {
@@ -37,91 +72,86 @@ const changeFullscreen = (enabled: boolean) => {
 export const useConfig = defineStore('config', {
   state: () => {
     return {
-      useDarkMode: false,
-      language: 'en',
-      useFullScreen: false,
-      showQuickMenu: false,
-      sortCards: false,
-      showCardDetail: false,
-      cardTheme: '__default__',
-      cardThemeVariant: '@auto'
+      _config: {} as ZwooConfig,
+      useFullScreen: false
     };
   },
 
+  getters: {
+    get:
+      state =>
+      <K extends ZwooConfigKey>(key: K) =>
+        state._config[key]
+  },
+
   actions: {
-    setDarkMode(isEnabled: boolean) {
-      this.useDarkMode = isEnabled;
-      changeUIMode(isEnabled);
-    },
-    setLanguage(lng: string) {
-      this.language = lng;
-      changeLanguage(lng);
+    set<K extends ZwooConfigKey>(key: K, value: ZwooConfig[K], save = true) {
+      this._config[key] = value;
+
+      if (ZwooConfigKey.UiMode === key) {
+        changeUIMode(value as string);
+      } else if (ZwooConfigKey.Language === key) {
+        changeLanguage(value as string);
+      }
+
+      if (save) {
+        localStorage.setItem(configKey, this._serializeConfig(this._config));
+      }
     },
     setFullScreen(enabled: boolean) {
       this.useFullScreen = enabled;
       changeFullscreen(enabled);
     },
-    setQuickMenu(visible: boolean) {
-      this.showQuickMenu = visible;
-      localStorage.setItem(quickMenuKey, visible ? 'on' : 'off');
+    loadProfile(key: string) {
+      Logger.info(`loading config for ${key}`);
+      // fetch config
+      // deserialize config
+      // apply
+      this.applyConfig(DefaultConfig);
     },
-    setSortCards(sort: boolean) {
-      this.sortCards = sort;
-      localStorage.setItem(sortCardsKey, sort ? 'on' : 'off');
+    applyConfig(config: Partial<ZwooConfig>) {
+      for (const [key, value] of Object.entries(config)) {
+        this.set(key as ZwooConfigKey, value, false);
+      }
+      localStorage.setItem(configKey, this._serializeConfig(this._config));
     },
-    setShowCardDetail(show: boolean) {
-      this.showCardDetail = show;
-      localStorage.setItem(showCardDetailKey, show ? 'on' : 'off');
+    deleteLocalChanges() {
+      Logger.info(`cleared local config`);
+      localStorage.removeItem(configKey);
+      this.applyConfig(DefaultConfig);
     },
-    setTheme(theme: CardThemeIdentifier) {
-      this.cardTheme = theme.name;
-      this.cardThemeVariant = theme.variant;
-      localStorage.setItem(themeKey, JSON.stringify(theme));
+    _serializeConfig(config: ZwooConfig): string {
+      return JSON.stringify(config);
+    },
+    _deserializeConfig(config: string): Partial<ZwooConfig> | undefined {
+      try {
+        return JSON.parse(config) as ZwooConfig;
+      } catch (err: unknown) {
+        Logger.warn(`cant parse config: ${err}`);
+        return undefined;
+      }
     },
     configure() {
-      let storedLng = localStorage.getItem(languageKey);
-      if (!storedLng) {
+      const storedConfig = localStorage.getItem(configKey) ?? '';
+      const parsedConfig = this._deserializeConfig(storedConfig);
+      if (parsedConfig) {
+        this.applyConfig(parsedConfig);
+      } else {
+        const settingsToApply = DefaultConfig;
         const userLng = navigator.language.split('-')[0]?.toLowerCase();
-        storedLng = supportedLanguages.includes(userLng) ? userLng : defaultLanguage;
+        settingsToApply.lng = supportedLanguages.includes(userLng) ? userLng : defaultLanguage;
+        settingsToApply.ui = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        settingsToApply.cd = 'ontouchstart' in document.documentElement;
+        this.applyConfig(settingsToApply);
       }
-      setI18nLanguage(storedLng);
-
-      const rawStoredDarkMode = localStorage.getItem(uiKey);
-      const storedDarkMode = rawStoredDarkMode
-        ? rawStoredDarkMode === 'dark'
-        : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      changeUIMode(storedDarkMode);
-
-      this.$patch({
-        useDarkMode: storedDarkMode,
-        language: storedLng
-      });
-      setTimeout(() => this.asyncSetup());
+      this.asyncSetup();
     },
     async asyncSetup() {
-      let storedShowCardDetail = localStorage.getItem(showCardDetailKey);
-      if (!storedShowCardDetail) {
-        const hoverNotAvailable = 'ontouchstart' in document.documentElement;
-        storedShowCardDetail = hoverNotAvailable ? 'on' : 'off';
-        this.setShowCardDetail(hoverNotAvailable);
+      const storedTheme = this._config.th;
+      if (!storedTheme) {
+        const theme = await CardThemeManager.global.getDefaultTheme();
+        this.set(ZwooConfigKey.CardsTheme, theme);
       }
-
-      const storedTheme = localStorage.getItem(themeKey);
-      let parsedTheme = {} as CardThemeIdentifier;
-      if (storedTheme) {
-        parsedTheme = JSON.parse(storedTheme);
-      }
-      if (!parsedTheme.name || !parsedTheme.variant) {
-        parsedTheme = await CardThemeManager.global.getDefaultTheme();
-      }
-
-      this.$patch({
-        showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
-        sortCards: localStorage.getItem(sortCardsKey) === 'on',
-        showCardDetail: storedShowCardDetail === 'on',
-        cardTheme: parsedTheme.name ?? null,
-        cardThemeVariant: parsedTheme.variant ?? null
-      });
     }
   }
 });

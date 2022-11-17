@@ -13,7 +13,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 import SettingsRow from '../SettingsRow.vue';
 import SettingsSection from '../SettingsSection.vue';
@@ -22,6 +22,6 @@ import SortCardsSwitch from '../SortCardsSwitch.vue';
 
 const { t } = useI18n();
 const config = useConfig();
-const sortCards = computed(() => config.sortCards);
-const showCardDetail = computed(() => config.showCardDetail);
+const sortCards = computed(() => config.get(ZwooConfigKey.SortCards));
+const showCardDetail = computed(() => config.get(ZwooConfigKey.ShowCardsDetail));
 </script>

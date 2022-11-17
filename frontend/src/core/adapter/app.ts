@@ -47,8 +47,8 @@ export const useRootApp = defineStore('app', {
         RouterService.getRouter().push('/invalid-version');
       }
 
-      if (typeof this.serverVersion !== 'string' && typeof response === 'string') {
-        this.serverVersion.callback(response);
+      if (typeof response === 'string') {
+        this.serverVersion = response;
       }
 
       MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);

@@ -33,7 +33,7 @@ import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import LanguageSelection from '@/components/settings/LanguageSelection.vue';
 import QuickMenuSwitch from '@/components/settings/QuickMenuSwitch.vue';
 import SettingsRow from '@/components/settings/SettingsRow.vue';
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 import ManageCookies from '../ManageCookies.vue';
 import SelectTheme from '../SelectTheme.vue';
@@ -42,7 +42,7 @@ import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();
 const config = useConfig();
-const darkModeOn = computed(() => config.useDarkMode);
+const darkModeOn = computed(() => config.get(ZwooConfigKey.UiMode) === 'dark');
 const fullScreenOn = computed(() => config.useFullScreen);
-const quickMenuOn = computed(() => config.showQuickMenu);
+const quickMenuOn = computed(() => config.get(ZwooConfigKey.QuickMenu));
 </script>

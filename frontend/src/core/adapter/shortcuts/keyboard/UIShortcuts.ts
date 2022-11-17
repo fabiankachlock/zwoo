@@ -1,4 +1,4 @@
-import { useConfig } from '../../config';
+import { useConfig, ZwooConfigKey } from '../../config';
 import { Shortcut } from '../types';
 
 export const ToggleDarkModeShortcut: Shortcut<KeyboardEvent> = {
@@ -8,7 +8,7 @@ export const ToggleDarkModeShortcut: Shortcut<KeyboardEvent> = {
   execute(event) {
     if (event.key === 'd') {
       const config = useConfig();
-      config.setDarkMode(!config.useDarkMode);
+      config.set(ZwooConfigKey.UiMode, config.get(ZwooConfigKey.UiMode) === 'dark' ? 'light' : 'dark');
     }
   }
 };
@@ -32,7 +32,7 @@ export const QuickMenuShortcut: Shortcut<KeyboardEvent> = {
   execute(event) {
     if (event.key === 'q') {
       const config = useConfig();
-      config.setQuickMenu(!config.showQuickMenu);
+      config.set(ZwooConfigKey.QuickMenu, !config.get(ZwooConfigKey.QuickMenu));
     }
   }
 };
