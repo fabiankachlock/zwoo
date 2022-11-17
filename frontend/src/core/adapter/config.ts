@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { Logger as _Logger } from '@/core/services/logging/logImport';
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 
+import { AppConfig } from '../../config';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
 
@@ -18,7 +19,8 @@ export enum ZwooConfigKey {
   CardsTheme = 'th',
   UserDefaults = 'ud',
   DevSettings = 'dev-settings',
-  Logging = 'logging'
+  Logging = 'logging',
+  _Version = '#v'
 }
 
 export type ZwooConfig = {
@@ -31,6 +33,7 @@ export type ZwooConfig = {
   [ZwooConfigKey.UserDefaults]: string;
   [ZwooConfigKey.DevSettings]: boolean;
   [ZwooConfigKey.Logging]: string;
+  [ZwooConfigKey._Version]: string;
 };
 
 const DefaultConfig: ZwooConfig = {
@@ -45,7 +48,8 @@ const DefaultConfig: ZwooConfig = {
   },
   'dev-settings': false,
   logging: '',
-  ud: ''
+  ud: '',
+  '#v': '0.0.0'
 };
 
 const changeLanguage = (lng: string) => {
@@ -107,7 +111,7 @@ export const useConfig = defineStore('config', {
       // fetch config
       // deserialize config
       // apply
-      this.applyConfig(DefaultConfig);
+      //this.applyConfig(DefaultConfig);
     },
     applyConfig(config: Partial<ZwooConfig>) {
       for (const [key, value] of Object.entries(config)) {
@@ -118,7 +122,7 @@ export const useConfig = defineStore('config', {
     deleteLocalChanges() {
       Logger.info(`cleared local config`);
       localStorage.removeItem(configKey);
-      this._loadDefaultConfig();
+      this.applyConfig(this._createDefaultConfig());
     },
     _serializeConfig(config: ZwooConfig): string {
       return JSON.stringify(config);
@@ -131,21 +135,29 @@ export const useConfig = defineStore('config', {
         return undefined;
       }
     },
-    _loadDefaultConfig() {
+    _createDefaultConfig(): ZwooConfig {
       const settingsToApply = DefaultConfig;
       const userLng = navigator.language.split('-')[0]?.toLowerCase();
       settingsToApply.lng = supportedLanguages.includes(userLng) ? userLng : defaultLanguage;
       settingsToApply.ui = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       settingsToApply.cd = 'ontouchstart' in document.documentElement;
-      this.applyConfig(settingsToApply);
+      return settingsToApply;
+    },
+    _migrateConfig(config: Partial<ZwooConfig>) {
+      if (!config[ZwooConfigKey._Version]) {
+        return this._createDefaultConfig();
+      }
+      // do migrations
+      config['#v'] = AppConfig.Version;
+      return config;
     },
     configure() {
       const storedConfig = localStorage.getItem(configKey) ?? '';
       const parsedConfig = this._deserializeConfig(storedConfig);
       if (parsedConfig) {
-        this.applyConfig(parsedConfig);
+        this.applyConfig(this._migrateConfig(parsedConfig));
       } else {
-        this._loadDefaultConfig();
+        this.applyConfig(this._createDefaultConfig());
       }
       this.asyncSetup();
     },
