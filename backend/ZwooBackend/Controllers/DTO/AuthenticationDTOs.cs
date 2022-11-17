@@ -20,3 +20,8 @@ public class Delete
 {
     public string password { get; set; } = "";
 }
+
+public class VerificationEmail
+{
+    public string email { get; set; } = "";
+}

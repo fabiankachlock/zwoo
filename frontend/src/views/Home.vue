@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full p-5 py-10 max-w-lg mx-auto">
+  <MaxWidthLayout size="small" class="pt-10">
     <div class="w-full flex justify-center">
       <img style="max-width: 10rem" src="/img/logo/zwoo_logo_none.svg" alt="" />
     </div>
@@ -47,14 +47,16 @@
         </router-link>
       </div> -->
     </div>
-  </div>
+  </MaxWidthLayout>
 </template>
 
 <script setup lang="ts">
-import { useAuth } from '@/core/adapter/auth';
-import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { Icon } from '@/components/misc/Icon';
+import { useAuth } from '@/core/adapter/auth';
+import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
 const auth = useAuth();

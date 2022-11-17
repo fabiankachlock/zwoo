@@ -61,7 +61,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Icon } from '@iconify/vue';
+
+import { Icon } from '@/components/misc/Icon';
 import { useGameSummary } from '@/core/adapter/play/summary';
 
 const { t } = useI18n();

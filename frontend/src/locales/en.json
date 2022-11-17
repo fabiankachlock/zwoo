@@ -31,7 +31,8 @@
     "goToLogging": "Go to Settings",
     "cardTheme": "Card Theme",
     "deviceId": "Anonymous DeviceID",
-    "changePassword": "Change Password"
+    "changePassword": "Change Password",
+    "versionHistory": "Version history"
   },
   "lng": {
     "de": "German",
@@ -52,7 +53,9 @@
     "email": "E-Mail",
     "password": "Password",
     "login": "Login",
-    "resetPassword": "Reset Password"
+    "resetPassword": "Reset Password",
+    "notVerifiedInfo": "You account seems to be not verified. If you did not get an email, you can resend the verification email to verify your account.",
+    "resendVerifyEmail": "Resend email"
   },
   "createAccount": {
     "title": "Create Account",
@@ -63,7 +66,9 @@
     "create": "Create",
     "passwordRepeat": "Repeat Password",
     "beta": "BETA Code",
-    "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account."
+    "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account.",
+    "resendVerifyEmail": "Resend email",
+    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account."
   },
   "createGame": {
     "title": "Create Game",
@@ -131,6 +136,7 @@
     "backend": {
       "-1": "Unknown Error",
       "100": "An error occurred in the backend.",
+      "110": "The account is not verified.",
       "111": "The cookie is missing.",
       "112": "The user could not be found.",
       "113": "The passwords don't match.",
@@ -326,7 +332,8 @@
       "spectatorLeft": "{0} left",
       "changedRoleToHost": "{0} is now Host",
       "changedRoleToPlayer": "{0} is now Player",
-      "changedRoleToSpectator": "{0} is now Spectator"
+      "changedRoleToSpectator": "{0} is now Spectator",
+      "selfGotHost": "You are host now"
     }
   },
   "logging": {
@@ -396,5 +403,11 @@
   "popoutChat": {
     "noActiveGame": "There are no active games at the moment.",
     "noMessages": "The chat is empty."
+  },
+  "versionHistory": {
+    "see": "Show version history",
+    "title": "Version history",
+    "versionTitle": "Version {0}",
+    "failure": "The version history could not be loaded."
   }
 }

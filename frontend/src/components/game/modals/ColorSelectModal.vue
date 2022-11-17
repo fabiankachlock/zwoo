@@ -30,10 +30,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { useGameModal } from '@/core/adapter/play/modal';
-import { CardColor } from '@/core/services/game/card';
-import { computed } from 'vue';
+import { CardColor } from '@/core/services/game/CardTypes';
+
 import BaseModal from './BaseModal.vue';
 
 const modalState = useGameModal();
@@ -46,7 +48,7 @@ const close = (color: CardColor) => {
 };
 </script>
 
-<style>
+<style scoped>
 .color-select-modal-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

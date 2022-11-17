@@ -1,24 +1,30 @@
 <template>
-  <h2 class="text-4xl tc-main text-center my-6">{{ t('cardThemes.galleryTitle') }}</h2>
-  <div class="flex flex-col mx-2 sm:mx-8 my-2">
-    <ThemesGalleryEntry
-      v-for="theme in themes"
-      :key="theme.name"
-      :theme="theme"
-      :is-selected="selectedCardTheme === theme.name"
-      :selected-variant="selectedCardTheme === theme.name ? selectedCardThemeVariant : ''"
-    />
-  </div>
+  <MaxWidthLayout size="normal">
+    <div class="sticky z-10 bg-main top-10">
+      <h2 class="tc-main text-4xl py-2 text-center">{{ t('cardThemes.galleryTitle') }}</h2>
+    </div>
+    <div class="flex flex-col my-2">
+      <ThemesGalleryEntry
+        v-for="theme in themes"
+        :key="theme.name"
+        :theme="theme"
+        :is-selected="selectedCardTheme === theme.name"
+        :selected-variant="selectedCardTheme === theme.name ? selectedCardThemeVariant : ''"
+      />
+    </div>
+  </MaxWidthLayout>
 </template>
 
 <script setup lang="ts">
-import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
-import { CardThemeManager } from '@/core/services/cards/ThemeManager';
+import { computed } from 'vue';
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import ThemesGalleryEntry from '@/components/themes/ThemesGalleryEntry.vue';
 import { useConfig } from '@/core/adapter/config';
-import { computed } from '@vue/reactivity';
-import { useI18n } from 'vue-i18n';
+import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
+import { CardThemeManager } from '@/core/services/cards/ThemeManager';
+import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
 const themes = ref<CardThemeInformation[]>([]);

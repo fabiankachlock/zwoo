@@ -1,22 +1,24 @@
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
+import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
+import { RouterService } from '@/core/services/global/Router';
+import { arrayDiff } from '@/core/services/utils';
 import {
   ZRPAllLobbyPlayersPayload,
   ZRPJoinedGamePayload,
   ZRPLeftGamePayload,
+  ZRPNamePayload,
   ZRPOPCode,
   ZRPPlayerWithRolePayload,
-  ZRPRole,
-  ZRPNamePayload
+  ZRPRole
 } from '@/core/services/zrp/zrpTypes';
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { arrayDiff } from '@/core/services/utils';
 import { I18nInstance } from '@/i18n';
+
 import { useAuth } from '../auth';
 import { useGameConfig } from '../game';
-import router from '@/router';
 import { usePlayerManager } from './playerManager';
 
 export type LobbyPlayer = {
@@ -66,10 +68,9 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     } else if (msg.code === ZRPOPCode.PlayerChangedRole) {
       changePlayerRole(msg.data, true);
     } else if (msg.code === ZRPOPCode.PromoteToHost) {
-      gameHost.value = auth.username;
-      gameConfig.changeRole(ZRPRole.Host);
+      selfGotHost();
     } else if (msg.code == ZRPOPCode.GameStarted) {
-      router.replace('/game/play');
+      RouterService.getRouter().replace('/game/play');
     } else if (msg.code === ZRPOPCode.PlayerDisconnected) {
       playerManager.setPlayerDisconnected(msg.data.username);
     } else if (msg.code === ZRPOPCode.PlayerReconnected) {
@@ -228,6 +229,15 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     dispatchEvent(ZRPOPCode.StartGame, {});
   };
 
+  const selfGotHost = () => {
+    gameHost.value = auth.username;
+    gameConfig.changeRole(ZRPRole.Host);
+    snackbar.pushMessage({
+      message: translations.t('snackbar.lobby.selfGotHost'),
+      position: SnackBarPosition.Top
+    });
+  };
+
   lobbyWatcher.onOpen(setup);
   lobbyWatcher.onMessage(_receiveMessage);
   lobbyWatcher.onReset(() => {
@@ -236,7 +246,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   });
   lobbyWatcher.onClose(() => {
     reset();
-    router.replace('/available-games');
+    RouterService.getRouter().replace('/available-games');
   });
 
   return {

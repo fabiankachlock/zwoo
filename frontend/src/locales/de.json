@@ -31,7 +31,8 @@
     "goToLogging": "Zu den Einstellungen",
     "cardTheme": "Karten Theme",
     "deviceId": "Anonyme GeräteID",
-    "changePassword": "Passwort ändern"
+    "changePassword": "Passwort ändern",
+    "versionHistory": "Versionverlauf"
   },
   "lng": {
     "de": "Deutsch",
@@ -52,7 +53,9 @@
     "email": "E-Mail",
     "password": "Passwort",
     "login": "Anmelden",
-    "resetPassword": "Passwort zurücksetzten"
+    "resetPassword": "Passwort zurücksetzten",
+    "notVerifiedInfo": "Dein Account ist nicht verifiziert. Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
+    "resendVerifyEmail": "Email neu senden"
   },
   "createAccount": {
     "title": "Account Erstellen",
@@ -63,7 +66,9 @@
     "create": "Erstellen",
     "passwordRepeat": "Passwort Wiederholen",
     "beta": "BETA Code",
-    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden."
+    "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden.",
+    "resendVerifyEmail": "Email neu senden",
+    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -131,6 +136,7 @@
     "backend": {
       "-1": "Unbekannter Fehler",
       "100": "Fehler im Backend.",
+      "110": "Der Account ist nicht verifiziert.",
       "111": "Der Cookie fehlt.",
       "112": "Der Nutzer konnte nicht gefunden werden.",
       "113": "Die Passwörter stimmen nicht überein.",
@@ -143,9 +149,9 @@
       "121": "Der Benutzername wird bereits genutzt.",
       "122": "Der Account konnte nicht verifiziert werden.",
       "135": "Der Benutzer konnte nicht gelöscht werden.",
-      "140": "Das Spiel konnt nicht gefunden werden.",
+      "140": "Das Spiel konnte nicht gefunden werden.",
       "141": "Der Name des Spiels fehlt.",
-      "142": "Dem Spiel konnt nicht begetreten werden.",
+      "142": "Dem Spiel konnte nicht begetreten werden.",
       "143": "Der OPCode fehlt (dies ist ein interner fehler).",
       "144": "Der OPCode is ungültig (dies ist ein interner fehler).",
       "145": "Die Spiele ID ist ungültig.",
@@ -301,8 +307,8 @@
   },
   "dialogs": {
     "promotePlayer": {
-      "title": "{0} zum Host befördern?",
-      "body": "Bist du sicher, dass du {0} zum Host befördern willst? Du verlierst deinen Host Status dadurch. "
+      "title": "{0} zum Veranstalter befördern?",
+      "body": "Bist du sicher, dass du {0} zum Veranstalter befördern willst? Du verlierst deinen Veranstalter Status dadurch. "
     },
     "kickPlayer": {
       "title": "{0} rauswerfen?",
@@ -323,9 +329,10 @@
       "spectatorJoined": "Zuschauer {0} ist beigetreten",
       "playerLeft": "{0} hat das Spiel verlassen",
       "spectatorLeft": "{0} hat das Spiel verlassen",
-      "changedRoleToHost": "{0} ist nun Host",
+      "changedRoleToHost": "{0} ist nun Veranstalter",
       "changedRoleToPlayer": "{0} ist nun Spieler",
-      "changedRoleToSpectator": "{0} ist nun Zuschauer"
+      "changedRoleToSpectator": "{0} ist nun Zuschauer",
+      "selfGotHost": "Du bist nun Veranstalter"
     }
   },
   "logging": {
@@ -382,7 +389,7 @@
     "email": "E-Mail",
     "request": "Zurücksetzung Anfordern",
     "login": "Gehe zum Login",
-    "info": "An die angegebene E-Mail Adresse wird eine E-Mail geschickt, in der sich ein Link, mit dem das Passwort zurückgesetzt werden kann, befindet."
+    "info": "An die angegebene E-Mail Adresse wird eine E-Mail geschickt. In dieser befindet sich ein Link, mit dem das Passwort zurückgesetzt werden kann."
   },
   "resetPassword": {
     "title": "Passwort zurücksetzten",
@@ -395,5 +402,11 @@
   "popoutChat": {
     "noActiveGame": "Es gitb zurzeit kein aktive Spiel.",
     "noMessages": "Der Chat ist leer."
+  },
+  "versionHistory": {
+    "see": "Versionverlauf anzeigen",
+    "title": "Versionsverlauf",
+    "versionTitle": "Version {0}",
+    "failure": "Der Versionverlauf konnte nicht geladen werden."
   }
 }

@@ -20,10 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/reCAPTCHA';
-import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
-import { computed, defineEmits, ref } from 'vue';
+import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/Captcha';
+import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
+
+const props = defineProps<{
+  response?: ReCaptchaResponse;
+}>();
 
 const emit = defineEmits<{
   (event: 'responseChanged', response: ReCaptchaResponse): void;
@@ -31,8 +36,19 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const verifyState = ref<'none' | 'verifying' | 'done' | 'error'>('none');
-const humanRate = ref<number>(0);
-const success = ref<boolean>(false);
+const success = computed(() => props.response?.success ?? false);
+const humanRate = computed(() => props.response?.score ?? 0);
+
+watch(
+  () => props.response,
+  newResponse => {
+    if (!newResponse) {
+      verifyState.value = 'none';
+    } else {
+      verifyState.value = 'done';
+    }
+  }
+);
 
 const enableButtonPointerEvents = computed(() => {
   if (verifyState.value === 'verifying' || verifyState.value === 'error' || (verifyState.value === 'done' && success.value)) {
@@ -48,12 +64,8 @@ const handleClick = async (evt: Event) => {
 
   try {
     const response = await ReCaptchaService.checkUser();
-    verifyState.value = 'done';
-
     if (response) {
       emit('responseChanged', response);
-      success.value = response.success;
-      humanRate.value = response.score;
     }
   } catch {
     verifyState.value = 'error';
@@ -61,7 +73,7 @@ const handleClick = async (evt: Event) => {
 };
 </script>
 
-<style>
+<style scoped>
 .box {
   border-color: #1a73e8;
 }

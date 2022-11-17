@@ -1,7 +1,9 @@
+import { AppConfig } from '@/config';
+
 import Logger from '../logging/logImport';
 import { ZRPRole } from '../zrp/zrpTypes';
-import { Backend, Endpoint } from './apiConfig';
-import { BackendErrorAble, parseBackendError } from './errors';
+import { Backend, Endpoint } from './ApiConfig';
+import { BackendErrorAble, parseBackendError } from './Errors';
 
 export type GameJoinResponse = BackendErrorAble<{
   id: number;
@@ -21,7 +23,7 @@ export type GamesList = GameMeta[];
 export class GameManagementService {
   static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameJoinResponse> => {
     Logger.Api.log(`creating ${isPublic ? 'public' : 'non-public'} game ${name}`);
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking create game response');
       return {
         id: 1,
@@ -63,7 +65,7 @@ export class GameManagementService {
   static listAll = async (): Promise<BackendErrorAble<GamesList>> => {
     // make api call
     Logger.Api.log('fetching all games');
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking get games response');
       return [];
     }
@@ -85,7 +87,7 @@ export class GameManagementService {
 
   static getJoinMeta = async (gameId: number): Promise<BackendErrorAble<GameMeta>> => {
     Logger.Api.log(`fetching game ${gameId} meta`);
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking get games response');
       return {
         id: 1,
@@ -112,7 +114,7 @@ export class GameManagementService {
 
   static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameJoinResponse> => {
     Logger.Api.log(`send join game ${gameId} request as ${role}`);
-    if (process.env.VUE_APP_USE_BACKEND !== 'true') {
+    if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking join game response');
       return {
         id: gameId,

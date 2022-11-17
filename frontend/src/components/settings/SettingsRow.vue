@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
+
 import Tooltip from '@/components/misc/Tooltip.vue';
 
 defineProps<{

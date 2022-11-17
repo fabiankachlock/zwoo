@@ -1,8 +1,10 @@
-import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
-import router from '@/router';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+
+import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { RouterService } from '@/core/services/global/Router';
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GameSummaryEntry = {
@@ -31,12 +33,12 @@ export const useGameSummary = defineStore('game-summary', () => {
 
   const playAgain = () => {
     dispatchEvent(ZRPOPCode._ResetState, {});
-    router.replace('/game/wait');
+    RouterService.getRouter().replace('/game/wait');
   };
 
   const leave = () => {
     dispatchEvent(ZRPOPCode.LeaveGame, {});
-    router.replace('/home');
+    RouterService.getRouter().replace('/home');
   };
 
   const reset = () => {

@@ -1,5 +1,5 @@
 <template>
-  <FlatDialog>
+  <FormLayout>
     <Form>
       <FormTitle>
         {{ t('resetPassword.title') }}
@@ -7,10 +7,10 @@
       <TextInput id="password" v-model="password" labelKey="resetPassword.password" is-password placeholder="******" :validator="passwordValidator" />
       <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="resetPassword.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" />
+      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create">
+        <FormSubmit @click="reset" :disabled="!isSubmitEnabled || showInfo">
           {{ t('resetPassword.reset') }}
         </FormSubmit>
       </FormActions>
@@ -24,23 +24,24 @@
         </router-link>
       </div>
     </Form>
-  </FlatDialog>
+  </FormLayout>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import FlatDialog from '@/components/misc/FlatDialog.vue';
+import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
+import { Icon } from '@/components/misc/Icon';
+import { useAuth } from '@/core/adapter/auth';
+import { useCookies } from '@/core/adapter/cookies';
+import { ReCaptchaResponse } from '@/core/services/api/Captcha';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
-import { onMounted, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useAuth } from '@/core/adapter/auth';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
-import { ReCaptchaResponse } from '@/core/services/api/reCAPTCHA';
-import { useCookies } from '@/core/adapter/cookies';
-import { useRoute } from 'vue-router';
+import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
@@ -50,13 +51,21 @@ onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
-const code = route.params['code'] as string;
+const code = route.query['code'] as string;
 const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
 const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
+const isLoading = ref<boolean>(false);
+const isSubmitEnabled = computed(
+  () =>
+    !isLoading.value &&
+    reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
+    passwordValidator.validate(password.value).isValid &&
+    passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid
+);
 
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();
@@ -72,14 +81,19 @@ watch([password, passwordRepeat, reCaptchaResponse], () => {
   error.value = [];
 });
 
-const create = async () => {
+const reset = async () => {
   error.value = [];
+  isLoading.value = true;
 
   try {
     await auth.resetPassword(code, password.value, passwordRepeat.value, reCaptchaResponse.value);
     showInfo.value = true;
   } catch (e: unknown) {
-    error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    reCaptchaResponse.value = undefined;
+    setTimeout(() => {
+      error.value = Array.isArray(e) ? e : [(e as Error).toString()];
+    });
   }
+  isLoading.value = false;
 };
 </script>

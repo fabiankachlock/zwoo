@@ -1,7 +1,7 @@
 import { DexieConstructor, LogEntry, LogStore } from './logTypes';
 
 export async function GetLogStore(): Promise<LogStore> {
-  const { Dexie } = (await import(/* webpackChunkName: "logging" */ 'dexie')) as unknown as { Dexie: DexieConstructor };
+  const { Dexie } = (await import('dexie')) as unknown as { Dexie: DexieConstructor };
 
   const DBName = 'zwoo';
   const TableName = 'logs';

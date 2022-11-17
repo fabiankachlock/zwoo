@@ -7,7 +7,7 @@
       <p class="tc-primary text-center">{{ t('settings.changePassword') }}</p>
     </button>
     <div v-if="showDialog">
-      <FloatingDialog>
+      <FloatingDialog content-class="max-w-lg">
         <Form show-close-button @close="showDialog = false">
           <FormTitle>
             {{ t('changePassword.title') }}
@@ -32,7 +32,7 @@
           <FormError :error="matchError" />
           <FormError :error="error" />
           <FormActions>
-            <FormSubmit @click="changePassword">
+            <FormSubmit @click="changePassword" :disabled="!isSubmitEnabled">
               {{ t('changePassword.change') }}
             </FormSubmit>
           </FormActions>
@@ -43,18 +43,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+
 import { useAuth } from '@/core/adapter/auth';
-import FloatingDialog from '../misc/FloatingDialog.vue';
+import { PasswordValidator } from '@/core/services/validator/password';
+import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+
 import Form from '../forms/Form.vue';
-import FormTitle from '../forms/FormTitle.vue';
-import TextInput from '../forms/TextInput.vue';
 import FormActions from '../forms/FormActions.vue';
 import FormError from '../forms/FormError.vue';
 import FormSubmit from '../forms/FormSubmit.vue';
-import { PasswordValidator } from '@/core/services/validator/password';
-import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+import FormTitle from '../forms/FormTitle.vue';
+import TextInput from '../forms/TextInput.vue';
+import FloatingDialog from '../misc/FloatingDialog.vue';
 
 const auth = useAuth();
 const { t } = useI18n();
@@ -65,6 +67,13 @@ const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
 const error = ref<string[]>([]);
+const isLoading = ref<boolean>(false);
+const isSubmitEnabled = computed(
+  () =>
+    !isLoading.value &&
+    passwordValidator.validate(password.value).isValid &&
+    passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid
+);
 
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();
@@ -80,11 +89,13 @@ const openDialog = () => {
 
 const changePassword = async () => {
   error.value = [];
+  isLoading.value = true;
   try {
-    auth.changePassword(oldPassword.value, password.value, passwordRepeat.value);
+    await auth.changePassword(oldPassword.value, password.value, passwordRepeat.value);
     showDialog.value = false;
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
+  isLoading.value = false;
 };
 </script>

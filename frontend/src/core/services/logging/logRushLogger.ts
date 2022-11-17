@@ -1,11 +1,14 @@
-import { BaseLogger } from './logTypes';
 import { LogRushClient } from '@log-rush/client';
+
+import { AppConfig } from '@/config';
+
+import { BaseLogger } from './logTypes';
 
 export async function GetLogger(): Promise<() => BaseLogger> {
   const MAX_BUFFER_SIZE = 10;
 
   const client = new LogRushClient({
-    dataSourceUrl: process.env.VUE_APP_LOG_RUSH_SERVER ?? '',
+    dataSourceUrl: AppConfig.LogRushServer ?? '',
     batchSize: MAX_BUFFER_SIZE
   });
 

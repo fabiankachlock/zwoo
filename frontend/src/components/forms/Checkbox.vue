@@ -11,8 +11,9 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { defineEmits, defineProps, ref, toRefs, watch } from 'vue';
+
+import { Icon } from '@/components/misc/Icon';
 
 const checked = ref(false);
 

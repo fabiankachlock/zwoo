@@ -1,4 +1,5 @@
-﻿using ZwooBackend.Games;
+﻿using Microsoft.AspNetCore;
+using ZwooBackend.Games;
 using ZwooBackend.Websockets.Interfaces;
 using ZwooBackend.ZRP;
 using ZwooGameLogic.Game;
@@ -51,13 +52,31 @@ public class PlayerManager
    
         if (game != null)
         {
+            LobbyResult playerRemoveResult = LobbyResult.Success;
+
             if (game.Game.IsRunning) {
                 WebSocketLogger.Info($"[PlayerManager] {playerId} disconnected from running game");
                 await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerDisconnected, new PlayerDisconnectedDTO(player.Username)));
                 game?.Lobby.PlayerDisconnected(playerId);
-            } else {
+
+                if (player.Role == ZRPRole.Host)
+                {
+                    var newHost = game!.Lobby.SelectNewHost();
+                    if (newHost != null)
+                    {
+                        await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(newHost.Username, ZRPRole.Host, 0)));
+                        await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.HostChanged, new HostChangedDTO(newHost.Username)));
+                        await _webSocketManager.SendPlayer(newHost.Id, ZRPEncoder.EncodeToBytes(ZRPCode.PromotedToHost, new PromotedToHostDTO()));
+                    } else
+                    {
+                        playerRemoveResult = LobbyResult.Error;
+                    }
+                }
+
+            }
+            else {
                 WebSocketLogger.Info($"[PlayerManager] {playerId} removed from lobby");
-                game.Lobby.RemovePlayer(playerId);
+                playerRemoveResult = game.Lobby.RemovePlayer(playerId);
 
                 // only send leave message when the player leaves (NOT disconnects)
                 if (player.Role == ZRPRole.Spectator)
@@ -72,10 +91,12 @@ public class PlayerManager
             }
 
 
-            if (game?.Lobby.ActivePlayerCount() == 0 || (game.Game.IsRunning && game?.Lobby.PlayerCount() < 2))
+            WebSocketLogger.Info(game.Lobby.ListAll());
+            if (game?.Lobby.ActivePlayerCount() == 0 || (game.Game.IsRunning && game?.Lobby.PlayerCount() < 2) || playerRemoveResult == LobbyResult.Error)
             {
                 WebSocketLogger.Info($"force closing game {gameId} due to a lack of players");
-                GameManager.Global.RemoveGame(game.Game.Id);
+                await _webSocketManager.QuitGame(gameId);
+                GameManager.Global.RemoveGame(gameId);
             }
         }
     }
@@ -100,5 +121,7 @@ public class PlayerManager
             var result = game.Lobby.ChangeRole(player.Username, ZRPRole.Spectator);
             await _webSocketManager.BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(player.Username, ZRPRole.Spectator, 0)));
         }
+
+        game.Lobby.ResetDisconnectedStates();
     }
 }

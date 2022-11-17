@@ -24,9 +24,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { Card as CardTyping } from '@/core/services/game/card';
+import { Card as CardTyping } from '@/core/services/game/CardTypes';
+
 import Card from './Card.vue';
 const CARD_ASPECT_RATIO = 420 / 720;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
@@ -124,7 +126,7 @@ const selectCard = (card: CardTyping, index: number) => {
 };
 </script>
 
-<style>
+<style scoped>
 .deck {
   height: calc(0.5rem + 6vh);
 }

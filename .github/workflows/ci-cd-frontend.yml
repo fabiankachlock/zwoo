@@ -21,6 +21,9 @@ jobs:
       - name: Lint
         working-directory: ./frontend
         run: 'yarn lint:ci'
+      - name: Dependency Check
+        working-directory: ./frontend
+        run: 'yarn deps:check'
       - name: Check i18n
         working-directory: ./frontend
         run: 'yarn i18n:check'

@@ -149,25 +149,34 @@ html {
 }
 
 /* width */
-::-webkit-scrollbar {
-	width: 0.5rem;
-}
+/* ::-webkit-scrollbar {
+	width: 16px;
+} */
 
 /* Track */
-::-webkit-scrollbar-track {
-	@apply bg-_bg-light dark:bg-_bg-dark;
-}
+/* ::-webkit-scrollbar-track {
+	@apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest;
+} */
 
 /* Handle */
-::-webkit-scrollbar-thumb {
-	@apply bg-_bg-light-dark dark:bg-_bg-dark-dark rounded-sm;
-}
+/* ::-webkit-scrollbar-thumb {
+	@apply bg-_bg-light dark:bg-_bg-dark;
+	@apply border-_bg-light-darkest dark:border-_bg-dark-darkest;
+	border: 2px solid;
+	border-radius: 8px;
+} */
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-	@apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest;
-}
+/* ::-webkit-scrollbar-thumb:hover {
+	@apply bg-_bg-light-dark dark:bg-_bg-dark-dark rounded-sm;
+	@apply border-_bg-light-darkest dark:border-_bg-dark-darkest;
+	border-radius: 8px;
+} */
 
 ::-ms-reveal {
 	display: none;
+}
+
+button {
+	user-select: none;
 }

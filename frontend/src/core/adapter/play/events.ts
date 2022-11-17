@@ -1,6 +1,7 @@
+import { defineStore } from 'pinia';
+
 import Logger from '@/core/services/logging/logImport';
 import { ZRPMessage } from '@/core/services/zrp/zrpTypes';
-import { defineStore } from 'pinia';
 
 export const useGameEvents = defineStore('game-events', {
   state: () => ({

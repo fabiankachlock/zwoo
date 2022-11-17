@@ -1,10 +1,12 @@
-import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { useWakeLock } from '@/composables/useWakeLock';
-import router from '@/router';
 import { defineStore } from 'pinia';
-import { Backend, Endpoint } from '../services/api/apiConfig';
-import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/errors';
+
+import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
+import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+
+import { Backend, Endpoint } from '../services/api/ApiConfig';
+import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
 import { GameManagementService, GameMeta, GamesList } from '../services/api/GameManagement';
+import { RouterService } from '../services/global/Router';
 import Logger from '../services/logging/logImport';
 import { GameNameValidator } from '../services/validator/gameName';
 import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
@@ -99,7 +101,7 @@ export const useGameConfig = defineStore('game-config', {
           role: undefined,
           _connection: undefined
         });
-        router.replace('/available-games');
+        RouterService.getRouter().replace('/available-games');
       }
     },
     async listGames(): Promise<GamesList> {
@@ -122,17 +124,17 @@ export const useGameConfig = defineStore('game-config', {
     },
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {
-        (await import(/* webpackChunkName: "game-logic" */ './play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/cardTheme')).useCardTheme().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/chat')).useChatStore().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/deck')).useGameCardDeck().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/events')).useGameEvents().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/gameState')).useGameState().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/lobby')).useLobbyStore().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/rules')).useRules().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/summary')).useGameSummary().__init__();
-        (await import(/* webpackChunkName: "game-logic" */ './play/util/keepAlive')).useKeepAlive().__init__();
-        (await import(/* webpackChunkName: "internal" */ './play/features/chatBroadcast')).useChatBroadcast().__init__();
+        (await import('./play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
+        (await import('./play/cardTheme')).useCardTheme().__init__();
+        (await import('./play/chat')).useChatStore().__init__();
+        (await import('./play/deck')).useGameCardDeck().__init__();
+        (await import('./play/events')).useGameEvents().__init__();
+        (await import('./play/gameState')).useGameState().__init__();
+        (await import('./play/lobby')).useLobbyStore().__init__();
+        (await import('./play/rules')).useRules().__init__();
+        (await import('./play/summary')).useGameSummary().__init__();
+        (await import('./play/util/keepAlive')).useKeepAlive().__init__();
+        (await import('./play/features/chatBroadcast')).useChatBroadcast().__init__();
         initializedGameModules = true;
       }
     },

@@ -1,5 +1,8 @@
+import { isRegistered, register, unregisterAll } from '@tauri-apps/api/globalShortcut';
+
+import { AppConfig } from '@/config';
+
 import { Shortcut } from './types';
-import { register, unregisterAll, isRegistered } from '@tauri-apps/api/globalShortcut';
 
 export class KeyboardShortcuts {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -8,7 +11,7 @@ export class KeyboardShortcuts {
 
   bind() {
     this.detach();
-    if (process.env.VUE_APP_IS_TAURI === 'true') {
+    if (AppConfig.IsTauri) {
       this.setupTauri();
     } else {
       window.addEventListener('keyup', this.eventHandler);
@@ -16,7 +19,7 @@ export class KeyboardShortcuts {
   }
 
   setShortcuts(shortcuts: Shortcut<KeyboardEvent>[]) {
-    if (process.env.VUE_APP_IS_TAURI === 'true') {
+    if (AppConfig.IsTauri) {
       this.setupTauri();
     } else {
       this.shortcuts = shortcuts;
@@ -31,7 +34,7 @@ export class KeyboardShortcuts {
   };
 
   detach() {
-    if (process.env.VUE_APP_IS_TAURI === 'true') {
+    if (AppConfig.IsTauri) {
       unregisterAll();
     } else {
       window.removeEventListener('keyup', this.eventHandler);

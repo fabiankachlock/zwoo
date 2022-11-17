@@ -1,5 +1,5 @@
 <template>
-  <div class="info m-8 mb-20 tc-main-secondary lg:max-w-3xl lg:mx-auto">
+  <MaxWidthLayout size="small" classes="info tc-main-secondary">
     <h1 class="tc-main">{{ t('shortcuts.title') }}</h1>
 
     <h2 class="tc-main">{{ t('shortcuts.ui') }}</h2>
@@ -15,16 +15,18 @@
     <p><kbd>l</kbd>: {{ t('shortcuts.leaderboard') }}</p>
     <p><kbd>a</kbd>: {{ t('shortcuts.login') }}</p>
     <p><kbd>i</kbd>, <kbd>?</kbd>: {{ t('shortcuts.info') }}</p>
-  </div>
+  </MaxWidthLayout>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
+import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
+
 const { t } = useI18n();
 </script>
 
-<style>
+<style scoped lang="css">
 .info p {
   @apply my-2 text-lg;
 }

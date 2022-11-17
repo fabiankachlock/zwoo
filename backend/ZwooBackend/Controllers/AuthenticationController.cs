@@ -153,4 +153,23 @@ public class AuthenticationController : Controller
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
             "Session ID not Matching"));
     }
+    
+    [HttpPost("resendVerificationEmail")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult ResendVerificationEmail([FromBody] VerificationEmail body)
+    {
+        if (!StringHelper.IsValidEmail(body.email))
+            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
+        if (!Globals.ZwooDatabase.EmailExists(body.email))
+            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "User does not exist!"));
+        
+        var u = Globals.ZwooDatabase.GetUserFromEmail(body.email)!;
+        if (u.Verified) return BadRequest("already verified");
+        u.ValidationCode = StringHelper.GenerateNDigitString(6);
+        Globals.ZwooDatabase.UpdateUser(u);
+        
+        Globals.EmailQueue.Enqueue(new EmailData(u.Username, u.Id, u.ValidationCode, u.Email));
+        return Ok("Email resend!");
+    }
 }

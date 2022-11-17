@@ -178,10 +178,10 @@ public class LobbyManager
     {
         PlayerEntry? player = GetPlayer(name);
         if (player == null) return LobbyResult.ErrorInvalidPlayer;
-        if (player.Role == ZRPRole.Host && PlayersNames().Count > 1)
+        if (player.Role == ZRPRole.Host)
         {
-            PlayerEntry newHost = _players.First(p => p.Role == ZRPRole.Player);
-            newHost.Role = ZRPRole.Host;
+            PlayerEntry? newHost = SelectNewHost();
+            if (newHost == null) return LobbyResult.Error;
         }
         _players.RemoveAll(p => p.Username == name);
         return LobbyResult.Success;
@@ -209,5 +209,26 @@ public class LobbyManager
         return LobbyResult.Success;
     }
 
+    public PlayerEntry? SelectNewHost()
+    {
+        PlayerEntry host = GetPlayer(Host())!;
+        if (PlayersNames().Count > 1)
+        {
+            PlayerEntry newHost = _players.First(p => p.Role == ZRPRole.Player && p.State == PlayerState.Connected);
+            newHost.Role = ZRPRole.Host;
+            host.Role = ZRPRole.Player;
+            return newHost;
+        }
+        return null;
+    }
+
     public List<PlayerEntry> ListAll() => _players.ToList();
+
+    public void ResetDisconnectedStates()
+    {
+        foreach (PlayerEntry player in _players)
+        {
+            player.State = PlayerState.Connected;
+        }
+    }
 }

@@ -1,6 +1,7 @@
+import { defineStore } from 'pinia';
+
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
-import { defineStore } from 'pinia';
 import { ZRPOPCode, ZRPRole } from '@/core/services/zrp/zrpTypes';
 
 export type LobbyPlayer = {

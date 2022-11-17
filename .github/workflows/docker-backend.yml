@@ -33,3 +33,15 @@ jobs:
         run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
       - name: Push Image
         run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:swagger'
+  
+  backend-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Admin Dashboard Image
+        working-directory: ./backend
+        run: 'docker build . -f ./DebugDockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:nightly'
+      - name: Log into JFrog
+        run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
+      - name: Push Image
+        run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:nightly'

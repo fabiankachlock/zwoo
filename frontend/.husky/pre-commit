@@ -3,4 +3,5 @@
 
 echo "[HUSKY] pre-commit"
 cd frontend
+
 yarn lint-staged

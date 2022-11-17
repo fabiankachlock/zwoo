@@ -27,16 +27,17 @@
 </template>
 
 <script setup lang="ts">
-import InGameMenu from '@/components/game/InGameMenu.vue';
+import { computed } from 'vue';
+
 import CardDeck from '@/components/game/CardDeck.vue';
 import CardDetail from '@/components/game/CardDetail.vue';
-import { useConfig } from '@/core/adapter/config';
-import { computed } from 'vue';
-import Opponents from '@/components/game/OpponentsStrip.vue';
-import { useIsSpectator } from '@/composables/userRoles';
-import Pile from '@/components/game/Pile.vue';
+import InGameMenu from '@/components/game/InGameMenu.vue';
 import MainCard from '@/components/game/MainCard.vue';
+import Opponents from '@/components/game/OpponentsStrip.vue';
+import Pile from '@/components/game/Pile.vue';
+import { useConfig } from '@/core/adapter/config';
 import { useGameModal } from '@/core/adapter/play/modal';
+import { useIsSpectator } from '@/core/adapter/play/util/userRoles';
 
 const config = useConfig();
 const modalState = useGameModal();
@@ -45,7 +46,7 @@ const currentModal = computed(() => modalState.modalComponent);
 const { isSpectator } = useIsSpectator();
 </script>
 
-<style>
+<style scoped>
 #main {
   height: calc(100vh - calc(100vh - 100%));
 }

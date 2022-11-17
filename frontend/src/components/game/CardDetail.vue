@@ -69,17 +69,19 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
-import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/SwipeGesture';
-import { CardChecker } from '@/core/services/api/CardCheck';
-import { Card as CardTyping } from '@/core/services/game/card';
-import Card from './Card.vue';
-import { useGameState } from '@/core/adapter/play/gameState';
-import { Key, useKeyPress } from '@/composables/KeyPress';
-import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
 import { useI18n } from 'vue-i18n';
+
+import { Icon } from '@/components/misc/Icon';
+import { Key, useKeyPress } from '@/composables/useKeyPress';
+import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/useSwipeGesture';
+import { useGameCardDeck } from '@/core/adapter/play/deck';
+import { useGameState } from '@/core/adapter/play/gameState';
+import { CardChecker } from '@/core/services/api/CardCheck';
+import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
+import { Card as CardTyping } from '@/core/services/game/CardTypes';
+
+import Card from './Card.vue';
 
 enum CardState {
   allowed,
@@ -215,7 +217,7 @@ onUnmounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
 /* slightly transparent fallback */
 .backdrop {
   background-color: rgba(0, 0, 0, 0.7);

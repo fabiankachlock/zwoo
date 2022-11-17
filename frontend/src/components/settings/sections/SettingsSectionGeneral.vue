@@ -18,21 +18,27 @@
     <SettingsRow :title="t('settings.cookies')">
       <ManageCookies />
     </SettingsRow>
+    <SettingsRow :title="t('settings.versionHistory')">
+      <VersionHistory />
+    </SettingsRow>
   </SettingsSection>
 </template>
 
 <script setup lang="ts">
-import SettingsSection from '../SettingsSection.vue';
-import SettingsRow from '@/components/settings/SettingsRow.vue';
-import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
-import LanguageSelection from '@/components/settings/LanguageSelection.vue';
-import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
-import QuickMenuSwitch from '@/components/settings/QuickMenuSwitch.vue';
-import { useI18n } from 'vue-i18n';
-import { useConfig } from '@/core/adapter/config';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
+import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
+import LanguageSelection from '@/components/settings/LanguageSelection.vue';
+import QuickMenuSwitch from '@/components/settings/QuickMenuSwitch.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import { useConfig } from '@/core/adapter/config';
+
 import ManageCookies from '../ManageCookies.vue';
 import SelectTheme from '../SelectTheme.vue';
+import SettingsSection from '../SettingsSection.vue';
+import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();
 const config = useConfig();

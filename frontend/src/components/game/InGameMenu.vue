@@ -48,15 +48,17 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import { Icon } from '@/components/misc/Icon';
 import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
-import GameChat from './chat/GameChat.vue';
-import ChatInput from './chat/ChatInput.vue';
-import EndTurnButton from './EndTurnButton.vue';
 import { useGameConfig } from '@/core/adapter/game';
-import { useI18n } from 'vue-i18n';
+
+import ChatInput from './chat/ChatInput.vue';
+import GameChat from './chat/GameChat.vue';
+import EndTurnButton from './EndTurnButton.vue';
 
 const game = useGameConfig();
 const { t } = useI18n();
@@ -72,7 +74,7 @@ const handleLeave = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .open-menu {
   height: 19rem;
 }

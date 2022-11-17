@@ -13,11 +13,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed, defineProps } from 'vue';
+
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Card } from '@/core/services/game/card';
-import { computed, defineProps } from 'vue';
+import { Card } from '@/core/services/game/CardTypes';
 
 const props = defineProps<{
   card:
@@ -36,7 +37,7 @@ const props = defineProps<{
 const cardTheme = useCardTheme();
 const cardData = computed(() => (props.overrideTheme ?? cardTheme.theme).getCard(props.card));
 </script>
-<style>
+<style scoped>
 .zwoo-card:not(:first-of-type) {
   @apply absolute top-0 left-1/2 -translate-x-1/2;
 }

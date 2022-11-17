@@ -1,4 +1,4 @@
-import { Card, CardColor } from '../game/card';
+import { Card, CardColor } from '../game/CardTypes';
 import {
   CardDescriptor,
   CardImageData,

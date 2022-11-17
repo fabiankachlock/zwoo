@@ -1,22 +1,25 @@
-import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
-import Menu from '../views/Menu.vue';
-import Version from '../views/Version.vue';
-import Home from '../views/Home.vue';
-import Landing from '../views/Landing.vue';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+
+import { AppConfig } from '@/config';
+import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
+import { AuthGuard } from '@/router/guards/AuthGuard';
+import { CookieGuard } from '@/router/guards/CookieGuard';
+import { InGameGuard } from '@/router/guards/GameGuard';
+import { ReCaptchaTermsRouteInterceptor } from '@/router/guards/ReCaptchaTerms';
+import { VersionGuard } from '@/router/guards/VersionGuard';
+
+import Menu from '../views/_Layout.vue';
 import CatchAll from '../views/404.vue';
 import Beta from '../views/Beta.vue';
-import { GameRoute } from './game';
-import { MenuRoutes } from './menu';
-import { RouterInterceptor } from './types';
-import { AuthGuard } from '@/core/services/security/AuthGuard';
-import { ReCaptchaTermsRouteInterceptor } from '@/core/services/security/ReCaptchaTerms';
-import { CookieGuard } from '@/core/services/security/CookieGuard';
-import { InGameGuard } from '@/core/services/security/GameGuard';
+import Home from '../views/Home.vue';
+import Landing from '../views/Landing.vue';
+import Version from '../views/Version.vue';
 import { DeveloperRoute } from './developer';
-import { ThemesRoute } from './themes';
-import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
-import { VersionGuard } from '@/core/services/security/VersionGuard';
+import { GameRoute } from './game';
 import { InternalRoute } from './internal';
+import { MenuRoutes } from './menu';
+import { ThemesRoute } from './themes';
+import { RouterInterceptor } from './types';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -47,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/invalid-version',
     component: Version
   },
-  process.env.VUE_APP_BETA === 'true'
+  AppConfig.IsBeta
     ? {
         path: '/beta/:code',
         component: Beta
@@ -63,7 +66,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 });
 
@@ -103,7 +106,7 @@ const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [
   ShortcutManager.global.afterEachAsync
 ];
 // (async () => ([
-//   new (await import(/* webpackChunkName: "recaptcha" */ '../core/services/security/ReCaptchaTerms')).default().afterEachAsync
+//   new (await import( '../core/services/guards/ReCaptchaTerms')).default().afterEachAsync
 // ]));
 
 router.afterEach(async (to, from, failure) => {

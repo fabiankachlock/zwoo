@@ -1,8 +1,10 @@
-import { useGameEventDispatch } from '@/composables/eventDispatch';
-import { AllRules, EditableRules, RuleType, RuleTypeDefinitions } from '@/core/services/game/rules';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+
+import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { AllRules, EditableRules, RuleType, RuleTypeDefinitions } from '@/core/services/game/GameRules';
+import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type DisplayRule = {

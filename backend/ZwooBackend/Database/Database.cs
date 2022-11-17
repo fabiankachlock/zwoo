@@ -59,6 +59,8 @@ public class Database
             _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
     }
 
+    public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
+    
     /// <summary>
     /// Hash Password, Generate verification code and Creates user in Database
     /// </summary>
@@ -117,7 +119,7 @@ public class Database
         DatabaseLogger.Debug($"[User] verifying {id}");
         var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == id && x.ValidationCode == code);
         
-        if (user != null) return false;
+        if (user == null) return false;
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
         
@@ -182,7 +184,9 @@ public class Database
         }
         return false;
     }
-    
+
+    public User? GetUserFromEmail(string email) => _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email);
+
     public void LogoutUser(User user, string sid)
     {
         DatabaseLogger.Debug($"[User] logout {user.Email}");
@@ -262,6 +266,7 @@ public class Database
         _userCollection.UpdateOne(x => x.PasswordResetCode == code,
             Builders<User>.Update.Set(u => u.Password,
                 $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}"));
+        _userCollection.UpdateOne(x => x.PasswordResetCode == code, Builders<User>.Update.Set(u => u.Sid, new List<string>()));
         _userCollection.UpdateOne(x => x.PasswordResetCode == code,
             Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
     }

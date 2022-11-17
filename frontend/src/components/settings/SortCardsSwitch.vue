@@ -6,9 +6,10 @@
 </template>
 
 <script setup lang="ts">
-import { useConfig } from '@/core/adapter/config';
-import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
+
+import { Icon } from '@/components/misc/Icon';
+import { useConfig } from '@/core/adapter/config';
 
 const config = useConfig();
 const shouldSortCards = computed(() => config.sortCards);
