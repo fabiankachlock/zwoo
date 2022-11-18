@@ -1,25 +1,31 @@
 using System.Text.Json.Serialization;
+using Mongo.Migration;
+using Mongo.Migration.Documents;
+using Mongo.Migration.Documents.Attributes;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
-public partial class Changelog
+[RuntimeVersion("1.0.0-beta.7")]
+[StartUpVersion("1.0.0-beta.7")]
+[CollectionLocation("changelogs", "zwoo")]
+public partial class Changelog : IDocument
 {
     public Changelog() {}
 
-    public Changelog(string version, string changelogText, bool @public)
+    public Changelog(string changelogVersion, string changelogText, bool @public)
     {
-        Version = version;
+        ChangelogVersion = changelogVersion;
         ChangelogText = changelogText;
         Public = @public;
     }
     
     [BsonConstructor]
-    public Changelog(ObjectId id, string version, string changelogText, bool @public, ulong timestamp)
+    public Changelog(ObjectId id, string changelogVersion, string changelogText, bool @public, ulong timestamp)
     {
         Id = id;
-        Version = version;
+        ChangelogVersion = changelogVersion;
         ChangelogText = changelogText;
         Public = @public;
         Timestamp = timestamp;
@@ -30,8 +36,8 @@ public partial class Changelog
     public ObjectId Id { set; get; }
     
     [JsonPropertyName("version")]
-    [BsonElement("version")]
-    public string Version { set; get; } = "";
+    [BsonElement("changelog_version")]
+    public string ChangelogVersion { set; get; } = "";
 
     [JsonPropertyName("changelog")]
     [BsonElement("changelog")]
@@ -53,4 +59,8 @@ public partial class Changelog
         get => !Public;
     }
 
+    [JsonIgnore]
+    [BsonElement("version")]
+    [BsonSerializer(typeof(DocumentVersionSerializer))]
+    public DocumentVersion Version { get; set; }
 }

@@ -1,9 +1,16 @@
+using System.Text.Json.Serialization;
+using Mongo.Migration;
+using Mongo.Migration.Documents;
+using Mongo.Migration.Documents.Attributes;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
-public partial class GameInfo
+[RuntimeVersion("1.0.0-beta.7")]
+[StartUpVersion("1.0.0-beta.7")]
+[CollectionLocation("changelogs", "zwoo")]
+public class GameInfo : IDocument
 {
     public GameInfo() {}
     
@@ -43,6 +50,11 @@ public partial class GameInfo
     
     [BsonIgnore]
     public string Winner => Scores.First(x => x.Score == 0).PlayerUsername;
+
+    [JsonIgnore]
+    [BsonElement("version")]
+    [BsonSerializer(typeof(DocumentVersionSerializer))]
+    public DocumentVersion Version { get; set; }
 }
 
 public class PlayerScore

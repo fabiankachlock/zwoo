@@ -9,6 +9,11 @@
 
     <ItemGroup>
       <PackageReference Include="MongoDB.Bson" Version="2.17.1" />
+      <PackageReference Include="Semver" Version="2.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj" />
     </ItemGroup>
 
 </Project>

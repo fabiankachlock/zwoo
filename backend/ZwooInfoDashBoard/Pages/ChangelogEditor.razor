@@ -13,7 +13,7 @@
 <RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25"
                                TItem="Changelog" Data="_changelogs" AllowVirtualization="true">
     <Columns>
-        <RadzenDataGridColumn TItem="Changelog" Property="Version" Title="Version"/>
+        <RadzenDataGridColumn TItem="Changelog" Property="ChangelogVersion" Title="Version"/>
         <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="Public" Width="60px" Filterable="false">
             <Template Context="c">
                 <RadzenCheckBox Disabled="true" @bind-Value="c.Public"/>

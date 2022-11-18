@@ -10,7 +10,7 @@ public static class ClassInitializer
         {
             cm.AutoMap();
             cm.MapCreator(p =>
-                new User(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.ValidationCode, p.Verified));
+                new User(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified));
         });
         
         BsonClassMap.RegisterClassMap<BetaCode>(cm =>
@@ -24,7 +24,7 @@ public static class ClassInitializer
         {
             cm.AutoMap();
             cm.MapCreator(c =>
-                new Changelog(c.Id, c.Version, c.ChangelogText, c.Public, c.Timestamp));
+                new Changelog(c.Id, c.ChangelogVersion, c.ChangelogText, c.Public, c.Timestamp));
         });
         
         BsonClassMap.RegisterClassMap<PlayerScore>(cm =>
