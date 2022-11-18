@@ -20,14 +20,12 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useRootApp } from '@/core/adapter/app';
-import { useConfig } from '@/core/adapter/config';
 import ZwooIcon from '@/modules/zwoo-icons/ZwooIcon.vue';
 
 const app = useRootApp();
-const config = useConfig();
 const { t } = useI18n();
 
-const updateExists = computed(() => config.clientVersion !== config.serverVersion);
+const updateExists = computed(() => app.clientVersion !== app.serverVersion);
 const isReady = computed(() => app.updateAvailable);
 
 const reload = () => {

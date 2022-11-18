@@ -1,14 +1,9 @@
 import { defineStore } from 'pinia';
 
-import { AppConfig } from '@/config';
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 
-import { ConfigService } from '../services/api/Config';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
-import { RouterService } from '../services/global/Router';
-import { Awaiter } from '../services/helper/Awaiter';
-import { MigrationRunner } from './migrations/MigrationRunner';
 
 const languageKey = 'zwoo:lng';
 const uiKey = 'zwoo:ui';
@@ -16,12 +11,6 @@ const quickMenuKey = 'zwoo:qm';
 const sortCardsKey = 'zwoo:sc';
 const showCardDetailKey = 'zwoo:cd';
 const themeKey = 'zwoo:th';
-
-const versionInfo = {
-  override: AppConfig.VersionOverride,
-  version: AppConfig.Version,
-  hash: AppConfig.VersionHash
-};
 
 const changeLanguage = (lng: string) => {
   setI18nLanguage(lng);
@@ -55,16 +44,8 @@ export const useConfig = defineStore('config', {
       sortCards: false,
       showCardDetail: false,
       cardTheme: '__default__',
-      cardThemeVariant: '@auto',
-      serverVersion: new Awaiter() as string | Awaiter<string>,
-      clientVersion: AppConfig.Version
+      cardThemeVariant: '@auto'
     };
-  },
-
-  getters: {
-    versionInfo() {
-      return versionInfo;
-    }
   },
 
   actions: {
@@ -134,23 +115,12 @@ export const useConfig = defineStore('config', {
         parsedTheme = await CardThemeManager.global.getDefaultTheme();
       }
 
-      const version = await ConfigService.fetchVersion();
-      if (version !== AppConfig.Version) {
-        RouterService.getRouter().push('/invalid-version');
-      }
-      if (typeof this.serverVersion !== 'string' && typeof version === 'string') {
-        this.serverVersion.callback(version);
-      }
-
-      MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
-
       this.$patch({
         showQuickMenu: localStorage.getItem(quickMenuKey) === 'on',
         sortCards: localStorage.getItem(sortCardsKey) === 'on',
         showCardDetail: storedShowCardDetail === 'on',
         cardTheme: parsedTheme.name ?? null,
-        cardThemeVariant: parsedTheme.variant ?? null,
-        serverVersion: version as string
+        cardThemeVariant: parsedTheme.variant ?? null
       });
     }
   }

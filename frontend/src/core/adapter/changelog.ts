@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { useConfig } from './config';
+import { useRootApp } from './app';
 import { MigrationRunner } from './migrations/MigrationRunner';
 
 export const useChangelog = defineStore('changelog', {
@@ -12,7 +12,7 @@ export const useChangelog = defineStore('changelog', {
   actions: {
     setup() {
       const lastVersion = MigrationRunner.lastVersion;
-      const version = useConfig().clientVersion;
+      const version = useRootApp().clientVersion;
 
       if (lastVersion) {
         this.popupOpen = lastVersion !== version;

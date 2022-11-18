@@ -5,14 +5,17 @@
   "scripts": {
     "serve": "vite --mode preview",
     "serve:prod": "vite --mode dev",
+    "//": "echo is needed, so that vue-tsc dont picks up file path arguments passed by lint-staged, which breaks vue-tsc",
+    "typecheck": "vue-tsc --noEmit && echo \"\"",
     "preview": "vite preview --mode preview",
     "preview:prod": "vite preview --mode dev",
-    "build": "yarn build:assets && vite build --mode production",
-    "build:tauri": "yarn build:assets && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
-    "build:preview": "yarn build:assets && vite build --mode preview --outDir dist-preview",
-    "build:analyze": "yarn build:assets && cross-env ANALYZE=true vite build",
+    "build": "yarn pre:build && vite build --mode production",
+    "build:tauri": "yarn pre:build && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
+    "build:preview": "yarn pre:build && vite build --mode preview --outDir dist-preview",
+    "build:analyze": "pre:build && cross-env ANALYZE=true vite build",
     "build:assets": "node ./scripts/buildCardAssets.js && yarn build:icons",
     "build:icons": "node ./src/modules/zwoo-icons/generate-icons.js",
+    "pre:build": "yarn typecheck && yarn build:assets",
     "test:unit": "jest",
     "test:e2e": "cypress run",
     "test:e2e:ui": "cypress open",
@@ -78,12 +81,14 @@
     "vite": "^3.1.8",
     "vite-plugin-pwa": "^0.13.1",
     "vue-jest": "^5.0.0-0",
+    "vue-tsc": "^1.0.9",
     "workbox-precaching": "^6.5.4",
     "ws": "^8.9.0"
   },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [
-      "yarn lint"
+      "yarn lint",
+      "yarn typecheck"
     ],
     "src/**/*.(ts|vue|css|html)": [
       "yarn format"

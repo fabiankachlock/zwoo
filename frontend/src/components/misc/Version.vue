@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useConfig } from '@/core/adapter/config';
+import { useRootApp } from '@/core/adapter/app';
 
-const info = useConfig().versionInfo;
+const info = useRootApp().versionInfo;
 </script>
