@@ -4,6 +4,7 @@ import { Logger as _Logger } from '@/core/services/logging/logImport';
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
 
 import { AppConfig } from '../../config';
+import { AccountService } from '../services/api/Account';
 import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
 import { CardThemeManager } from '../services/cards/ThemeManager';
 
@@ -99,19 +100,20 @@ export const useConfig = defineStore('config', {
       }
 
       if (save) {
-        localStorage.setItem(configKey, this._serializeConfig(this._config));
+        this._saveConfig();
       }
     },
     setFullScreen(enabled: boolean) {
       this.useFullScreen = enabled;
       changeFullscreen(enabled);
     },
-    loadProfile() {
+    async loadProfile() {
       Logger.info(`loading config for the current user`);
-      // fetch config
-      // deserialize config
-      // apply
-      //this.applyConfig(DefaultConfig);
+      const config = await AccountService.loadSettings();
+      if (config) {
+        const parsedConfig = this._deserializeConfig(config);
+        this.applyConfig(parsedConfig ?? {});
+      }
     },
     applyConfig(config: Partial<ZwooConfig>) {
       for (const [key, value] of Object.entries(config)) {
@@ -123,6 +125,11 @@ export const useConfig = defineStore('config', {
       Logger.info(`cleared local config`);
       localStorage.removeItem(configKey);
       this.applyConfig(this._createDefaultConfig());
+    },
+    async _saveConfig() {
+      const config = this._serializeConfig(this._config);
+      localStorage.setItem(configKey, config);
+      await AccountService.storeSettings(config);
     },
     _serializeConfig(config: ZwooConfig): string {
       return JSON.stringify(config);
