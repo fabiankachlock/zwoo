@@ -1,14 +1,22 @@
 using System.Text.Json.Serialization;
+using Mongo.Migration.Documents;
+using Mongo.Migration.Documents.Attributes;
+using Mongo.Migration.Documents.Serializers;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
-public class User
+
+[RuntimeVersion("1.0.0-beta.7")]
+[StartUpVersion("1.0.0-beta.7")]
+[CollectionLocation("users", "zwoo")]
+public class User : IDocument
 {
     public User() {}
     
     [BsonConstructor]
-    public User(ulong id, List<string> sid, string username, string email, string password, uint wins, string validationCode, bool verified)
+    public User(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified)
     {
         Id = id;
         Sid = sid;
@@ -16,6 +24,7 @@ public class User
         Email = email;
         Password = password;
         Wins = wins;
+        Settings = settings;
         ValidationCode = validationCode;
         Verified = verified;
     }
@@ -45,6 +54,11 @@ public class User
     [BsonElement("wins")]
     public UInt32 Wins { set; get; } = 0;
     
+    [BsonElement("settings")]
+    [JsonIgnore]
+    [BsonIgnoreIfDefault]
+    public string Settings { set; get; }
+    
     [BsonElement("validation_code")]
     [JsonIgnore]
     [BsonIgnoreIfDefault]
@@ -65,4 +79,9 @@ public class User
     public string? PasswordResetCode { set; get; }
     
     [BsonIgnore] public int Position { set; get; } = -1;
+    
+    [JsonIgnore]
+    [BsonElement("version")]
+    [BsonSerializer(typeof(DocumentVersionSerializer))]
+    public DocumentVersion Version { get; set; }
 }

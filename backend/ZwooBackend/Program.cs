@@ -2,6 +2,11 @@ using System.Net;
 using System.Text;
 using BackendHelper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Mongo.Migration.Documents;
+using Mongo.Migration.Startup;
+using Mongo.Migration.Startup.DotNetCore;
+using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
 using Quartz;
 using Quartz.Impl;
 using ZwooBackend;
@@ -31,6 +36,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     }
     o.Cookie.Domain = Globals.ZwooCookieDomain;
 });
+
+// Database
+builder.Services.AddSingleton(Globals.ZwooDatabase._client);
+builder.Services.Configure<MongoMigrationSettings>(options =>
+{
+    options.ConnectionString = Globals.ConnectionString;
+    options.Database = "zwoo";
+    options.DatabaseMigrationVersion = new DocumentVersion(Globals.Version);
+});
+builder.Services.AddMigration(new MongoMigrationSettings
+    {
+        ConnectionString = Globals.ConnectionString,
+        Database = "zwoo",
+        DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
+    }
+);
 
 var app = builder.Build();
 
@@ -131,7 +152,7 @@ mail_thread2.Start();
 app.Run();
 
 Globals.EmailQueue.Enqueue(new EmailData("", 0, "", ""));
-Globals.PasswordChangeRequestEmailQueue.Enqueue(new User(0, new List<string>(), "", "", "", 0, "", false));
+Globals.PasswordChangeRequestEmailQueue.Enqueue(new User(0, new List<string>(), "", "", "", 0, "", "", false));
 mail_thread.Join();
 mail_thread2.Join();
 scheduler.Shutdown();

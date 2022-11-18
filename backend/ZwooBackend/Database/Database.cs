@@ -36,17 +36,16 @@ public class Database
 
     public Database()
     {
-        var client = new MongoClient(ConnectionString);
+        _client = new MongoClient(ConnectionString);
         DatabaseLogger.Info($"connected to {ConnectionString}");
 
-        _database = client.GetDatabase("zwoo");
+        _database = _client.GetDatabase("zwoo");
 
         if (_database == null)
         {
             DatabaseLogger.Error("cant connect to database");
             Environment.Exit(1);
         }
-
         DatabaseLogger.Info($"established connection with database");
 
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
@@ -55,7 +54,7 @@ public class Database
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
         
-        if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == Globals.Version) == null)
+        if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == Globals.Version) == null)
             _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
     }
 
@@ -294,7 +293,7 @@ public class Database
         }
     }
     
-    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.Version == version && c.Public);
+    public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == version && c.Public);
     public Changelog[] GetChangelogs() => _changelogCollection.AsQueryable().Where(x => x.Public).ToArray();
     
     public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
@@ -324,7 +323,8 @@ public class Database
         };
         _accountEventCollection.InsertOne(u);
     }
-    
+
+    public readonly IMongoClient _client;
     private readonly IMongoDatabase _database;
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<GameInfo> _gameInfoCollection;

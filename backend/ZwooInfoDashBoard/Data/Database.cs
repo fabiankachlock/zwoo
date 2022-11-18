@@ -51,9 +51,9 @@ public class Database
     public void InsertBetacode(BetaCode code) => _betacodesCollection.InsertOne(code);
     public Changelog InsertVersion(Changelog changelog)
     {
-        if (_changelogCollection.AsQueryable().FirstOrDefault(x => x.Version == changelog.Version) == null )
+        if (_changelogCollection.AsQueryable().FirstOrDefault(x => x.ChangelogVersion == changelog.ChangelogVersion) == null )
             _changelogCollection.InsertOne(changelog);
-        return _changelogCollection.AsQueryable().First(x => x.Version == changelog.Version);
+        return _changelogCollection.AsQueryable().First(x => x.ChangelogVersion == changelog.ChangelogVersion);
     }
 
     public void InsertUser(User user) => _userCollection.InsertOne(user);

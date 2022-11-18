@@ -1,5 +1,10 @@
 namespace ZwooBackend.Controllers.DTO;
 
+public class SetSettings
+{
+    public string settings { get; set; } = "";
+}
+
 public class ChangePassword
 {
     public string oldPassword { get; set; } = "";
