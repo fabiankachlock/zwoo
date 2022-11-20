@@ -48,7 +48,12 @@ export const useRootApp = defineStore('app', {
       }
 
       if (typeof response === 'string') {
-        this.serverVersion = response;
+        if (typeof this.serverVersion === 'string') {
+          this.serverVersion = response;
+        } else {
+          this.serverVersion.callback(response);
+          this.serverVersion = response;
+        }
       }
 
       MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);

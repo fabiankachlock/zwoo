@@ -1,10 +1,13 @@
 using Mongo.Migration;
 using Mongo.Migration.Documents;
+using Mongo.Migration.Documents.Attributes;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
+[RuntimeVersion("1.0.0-beta.7")]
+[StartUpVersion("1.0.0-beta.7")]
 public class AccountEvent : IDocument
 {
     public AccountEvent() {}

@@ -78,6 +78,7 @@ export const useConfig = defineStore('config', {
   state: () => {
     return {
       _config: {} as ZwooConfig,
+      _isLoggedIn: false,
       useFullScreen: false
     };
   },
@@ -129,7 +130,9 @@ export const useConfig = defineStore('config', {
     async _saveConfig() {
       const config = this._serializeConfig(this._config);
       localStorage.setItem(configKey, config);
-      await AccountService.storeSettings(config);
+      if (this._isLoggedIn) {
+        await AccountService.storeSettings(config);
+      }
     },
     _serializeConfig(config: ZwooConfig): string {
       return JSON.stringify(config);
@@ -157,6 +160,16 @@ export const useConfig = defineStore('config', {
       // do migrations
       config['#v'] = AppConfig.Version;
       return config;
+    },
+    login() {
+      if (!this._isLoggedIn) {
+        this.loadProfile();
+      }
+      this._isLoggedIn = true;
+    },
+    logout() {
+      this._isLoggedIn = false;
+      this.deleteLocalChanges();
     },
     configure() {
       const storedConfig = localStorage.getItem(configKey) ?? '';

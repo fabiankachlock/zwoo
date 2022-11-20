@@ -32,7 +32,7 @@ export const useAuth = defineStore('auth', {
           username: status.username,
           isLoggedIn: status.isLoggedIn
         });
-        useConfig().loadProfile();
+        useConfig().login();
       } else {
         this.isLoggedIn = false;
         const [, error] = unwrapBackendError(status);
@@ -49,7 +49,7 @@ export const useAuth = defineStore('auth', {
           throw getBackendErrorTranslation(error);
         }
       }
-      useConfig().deleteLocalChanges();
+      useConfig().logout();
       this.$patch({
         username: '',
         isLoggedIn: status.isLoggedIn,
@@ -103,6 +103,7 @@ export const useAuth = defineStore('auth', {
           throw getBackendErrorTranslation(error);
         }
       }
+      useConfig().logout();
 
       this.$patch({
         username: '',
@@ -168,9 +169,11 @@ export const useAuth = defineStore('auth', {
       }
     },
     async configure() {
-      this.askStatus();
+      await this.askStatus();
       // setup initial config
-      useConfig().loadProfile();
+      if (this.isLoggedIn) {
+        useConfig().login();
+      }
     }
   }
 });

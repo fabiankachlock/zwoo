@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Migrations.Document;
 using Mongo.Migration.Services.Interceptors;
