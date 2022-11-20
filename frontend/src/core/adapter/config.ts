@@ -25,6 +25,7 @@ export enum ZwooConfigKey {
 }
 
 export type ZwooConfig = {
+  _ignore: Partial<Record<ZwooConfigKey, boolean>>;
   [ZwooConfigKey.Language]: string;
   [ZwooConfigKey.UiMode]: string;
   [ZwooConfigKey.QuickMenu]: boolean;
@@ -38,6 +39,7 @@ export type ZwooConfig = {
 };
 
 const DefaultConfig: ZwooConfig = {
+  _ignore: {},
   ui: 'dark',
   lng: 'en',
   qm: false,
@@ -50,7 +52,7 @@ const DefaultConfig: ZwooConfig = {
   'dev-settings': false,
   logging: '',
   ud: '',
-  '#v': '0.0.0'
+  '#v': AppConfig.Version
 };
 
 const changeLanguage = (lng: string) => {
@@ -87,7 +89,11 @@ export const useConfig = defineStore('config', {
     get:
       state =>
       <K extends ZwooConfigKey>(key: K) =>
-        state._config[key]
+        state._config[key],
+    ignore:
+      state =>
+      <K extends ZwooConfigKey>(key: K) =>
+        state._config._ignore[key]
   },
 
   actions: {
@@ -104,6 +110,13 @@ export const useConfig = defineStore('config', {
         this._saveConfig();
       }
     },
+    toggleIgnore(key: ZwooConfigKey) {
+      this._config._ignore[key] = !this._config._ignore[key];
+      if (!this._config._ignore[key]) {
+        delete this._config._ignore[key];
+      }
+      this._saveConfig();
+    },
     setFullScreen(enabled: boolean) {
       this.useFullScreen = enabled;
       changeFullscreen(enabled);
@@ -116,26 +129,29 @@ export const useConfig = defineStore('config', {
         this.applyConfig(parsedConfig ?? {});
       }
     },
-    applyConfig(config: Partial<ZwooConfig>) {
+    applyConfig(config: Omit<Partial<ZwooConfig>, '_ignore'>) {
       for (const [key, value] of Object.entries(config)) {
         this.set(key as ZwooConfigKey, value, false);
       }
-      localStorage.setItem(configKey, this._serializeConfig(this._config));
+      this._saveConfig(true);
     },
     deleteLocalChanges() {
       Logger.info(`cleared local config`);
       localStorage.removeItem(configKey);
       this.applyConfig(this._createDefaultConfig());
     },
-    async _saveConfig() {
-      const config = this._serializeConfig(this._config);
-      localStorage.setItem(configKey, config);
-      if (this._isLoggedIn) {
-        await AccountService.storeSettings(config);
+    async _saveConfig(onlyLocal?: boolean) {
+      // dont ignore stuff on local config
+      localStorage.setItem(configKey, this._serializeConfig(this._config, true));
+      if (this._isLoggedIn && !onlyLocal) {
+        // save full config remote
+        await AccountService.storeSettings(this._serializeConfig(this._config, false));
       }
     },
-    _serializeConfig(config: ZwooConfig): string {
-      return JSON.stringify(config);
+    _serializeConfig(config: ZwooConfig, ignore: boolean): string {
+      return JSON.stringify(
+        (Object.keys(config) as ZwooConfigKey[]).reduce((all, key) => (config._ignore[key] && !ignore ? all : { ...all, [key]: config[key] }), {})
+      );
     },
     _deserializeConfig(config: string): Partial<ZwooConfig> | undefined {
       try {

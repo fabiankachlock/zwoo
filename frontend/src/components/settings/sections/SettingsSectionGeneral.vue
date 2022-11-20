@@ -1,18 +1,26 @@
 <template>
   <SettingsSection :title="t('settings.sections.general')">
-    <SettingsRow :title="t('settings.darkmode')" :status="t('settings.status.boolean.' + (darkModeOn ? 'on' : 'off'))">
+    <SettingsRow
+      :title="t('settings.darkmode')"
+      :settings-key="ZwooConfigKey.UiMode"
+      :status="t('settings.status.boolean.' + (darkModeOn ? 'on' : 'off'))"
+    >
       <DarkModeSwitch />
     </SettingsRow>
     <SettingsRow :title="t('settings.fullscreen')" :status="t('settings.status.boolean.' + (fullScreenOn ? 'on' : 'off'))">
       <FullScreenSwitch />
     </SettingsRow>
-    <SettingsRow :title="t('settings.quickMenu')" :status="t('settings.status.boolean.' + (quickMenuOn ? 'on' : 'off'))">
+    <SettingsRow
+      :title="t('settings.quickMenu')"
+      :settings-key="ZwooConfigKey.QuickMenu"
+      :status="t('settings.status.boolean.' + (quickMenuOn ? 'on' : 'off'))"
+    >
       <QuickMenuSwitch />
     </SettingsRow>
-    <SettingsRow :title="t('settings.language')">
+    <SettingsRow :title="t('settings.language')" :settings-key="ZwooConfigKey.Language">
       <LanguageSelection />
     </SettingsRow>
-    <SettingsRow :title="t('settings.cardTheme')">
+    <SettingsRow :title="t('settings.cardTheme')" :settings-key="ZwooConfigKey.CardsTheme">
       <SelectTheme />
     </SettingsRow>
     <SettingsRow :title="t('settings.cookies')">

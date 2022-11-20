@@ -1,9 +1,17 @@
 <template>
   <SettingsSection :title="t('settings.sections.game')">
-    <SettingsRow :title="t('settings.showCardDetail')" :status="t('settings.status.boolean.' + (showCardDetail ? 'on' : 'off'))">
+    <SettingsRow
+      :title="t('settings.showCardDetail')"
+      :settings-key="ZwooConfigKey.ShowCardsDetail"
+      :status="t('settings.status.boolean.' + (showCardDetail ? 'on' : 'off'))"
+    >
       <ShowCardDetailSwitch />
     </SettingsRow>
-    <SettingsRow :title="t('settings.sortCards')" :status="t('settings.status.boolean.' + (sortCards ? 'on' : 'off'))">
+    <SettingsRow
+      :title="t('settings.sortCards')"
+      :settings-key="ZwooConfigKey.SortCards"
+      :status="t('settings.status.boolean.' + (sortCards ? 'on' : 'off'))"
+    >
       <SortCardsSwitch />
     </SettingsRow>
   </SettingsSection>
