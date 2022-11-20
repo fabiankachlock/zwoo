@@ -12,6 +12,7 @@ const Logger = _Logger.createOne('config');
 const configKey = 'zwoo:config';
 
 export enum ZwooConfigKey {
+  Sync = 'sync',
   Language = 'lng',
   UiMode = 'ui',
   QuickMenu = 'qm',
@@ -26,6 +27,7 @@ export enum ZwooConfigKey {
 
 export type ZwooConfig = {
   _ignore: Partial<Record<ZwooConfigKey, boolean>>;
+  [ZwooConfigKey.Sync]: boolean;
   [ZwooConfigKey.Language]: string;
   [ZwooConfigKey.UiMode]: string;
   [ZwooConfigKey.QuickMenu]: boolean;
@@ -40,6 +42,7 @@ export type ZwooConfig = {
 
 const DefaultConfig: ZwooConfig = {
   _ignore: {},
+  sync: true,
   ui: 'dark',
   lng: 'en',
   qm: false,
@@ -90,10 +93,10 @@ export const useConfig = defineStore('config', {
       state =>
       <K extends ZwooConfigKey>(key: K) =>
         state._config[key],
-    ignore:
+    isSynced:
       state =>
       <K extends ZwooConfigKey>(key: K) =>
-        state._config._ignore[key]
+        !state._config._ignore[key] && state._config.sync
   },
 
   actions: {
@@ -149,9 +152,11 @@ export const useConfig = defineStore('config', {
       }
     },
     _serializeConfig(config: ZwooConfig, ignore: boolean): string {
-      return JSON.stringify(
-        (Object.keys(config) as ZwooConfigKey[]).reduce((all, key) => (config._ignore[key] && !ignore ? all : { ...all, [key]: config[key] }), {})
-      );
+      return config[ZwooConfigKey.Sync]
+        ? JSON.stringify(
+            (Object.keys(config) as ZwooConfigKey[]).reduce((all, key) => (config._ignore[key] && !ignore ? all : { ...all, [key]: config[key] }), {})
+          )
+        : JSON.stringify({ [ZwooConfigKey.Sync]: false });
     },
     _deserializeConfig(config: string): Partial<ZwooConfig> | undefined {
       try {

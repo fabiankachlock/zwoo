@@ -1,7 +1,7 @@
 <template>
-  <button class="tc-primary mx-3 bg-lightest hover:bg-main p-0.5 rounded border border-transparent hover:bc-light" @click.prevent="toggle">
-    <Icon v-show="synced" icon="mdi:cloud-off-outline" class="text-lg" />
-    <Icon v-show="!synced" icon="mdi:cloud-sync-outline" class="text-lg" />
+  <button class="tc-primary ml-3 bg-lightest hover:bg-main p-0.5 rounded border border-transparent hover:bc-light" @click.prevent="toggle">
+    <Icon v-show="!synced" icon="mdi:cloud-off-outline" class="text-lg" />
+    <Icon v-show="synced" icon="mdi:cloud-sync-outline" class="text-lg" />
   </button>
 </template>
 
@@ -18,7 +18,7 @@ const props = defineProps<{
 }>();
 
 const config = useConfig();
-const synced = computed(() => config.ignore(props.settingsKey));
+const synced = computed(() => config.isSynced(props.settingsKey));
 
 const toggle = () => {
   config.toggleIgnore(props.settingsKey);

@@ -1,6 +1,9 @@
 <template>
   <template v-if="isLoggedIn">
     <SettingsSection :title="t('settings.sections.account')">
+      <SettingsRow :title="t('settings.settingsSync')" v-if="isLoggedIn">
+        <SettingsSync />
+      </SettingsRow>
       <SettingsRow :title="t('settings.changePassword')" v-if="isLoggedIn">
         <ChangePassword />
       </SettingsRow>
@@ -21,6 +24,7 @@ import ChangePassword from '../ChangePassword.vue';
 import DeleteAccount from '../DeleteAccount.vue';
 import SettingsRow from '../SettingsRow.vue';
 import SettingsSection from '../SettingsSection.vue';
+import SettingsSync from '../SettingsSync.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
