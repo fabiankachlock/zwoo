@@ -1,9 +1,11 @@
+using Mongo.Migration;
+using Mongo.Migration.Documents;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
 
-public class AccountEvent
+public class AccountEvent : IDocument
 {
     public AccountEvent() {}
 
@@ -42,6 +44,10 @@ public class AccountEvent
 
     [BsonElement("user_data")] 
     public DeletedUserData? UserData;
+
+    [BsonElement("version")]
+    [BsonSerializer(typeof(DocumentVersionSerializer))]
+    public DocumentVersion Version { get; set; }
 }
 
 public class DeletedUserData

@@ -10,6 +10,26 @@ namespace ZwooBackend.Controllers;
 [Route("account")]
 public class AccountController : Controller
 {
+    [HttpGet("settings")]
+    public IActionResult GetSettings()
+    {
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
+            return Ok($"{{\"settings\": \"{user.Settings}\"}}");
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+    }
+    
+    [HttpPost("settings")]
+    public IActionResult PostSettings([FromBody] SetSettings body)
+    {
+        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
+        {
+            user.Settings = body.settings;
+            Globals.ZwooDatabase.UpdateUser(user);
+            return Ok("");
+        }
+        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+    }
+    
     [HttpPost("changePassword")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

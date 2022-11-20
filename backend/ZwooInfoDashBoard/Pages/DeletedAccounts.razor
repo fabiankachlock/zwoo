@@ -62,7 +62,7 @@
             Globals.ZwooDatabase.InsertUser(new User(Globals.ZwooDatabase.GetUsersAsQueryable().Max(x => x.Id) + 1,
                 new List<string> { "" }, player.UserData!.Username,
                 player.UserData!.Email, player.UserData!.Password,
-                player.UserData!.Wins, "", true
+                player.UserData!.Wins, "", "", true
             ));
         }
     }

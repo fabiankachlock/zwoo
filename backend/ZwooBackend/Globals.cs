@@ -114,5 +114,5 @@ public static class Globals
 
     public static readonly string RecaptchaSideSecret;
 
-    public static readonly string Version = "1.0.0-beta.6";
+    public static readonly string Version = "1.0.0-beta.7";
 }
