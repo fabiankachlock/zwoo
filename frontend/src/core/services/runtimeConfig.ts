@@ -44,19 +44,19 @@ export const useRuntimeConfig = defineStore('runtime-config', {
       }
     },
     async configure() {
-      const storedConfig = localStorage.getItem(configKey);
-      if (storedConfig) {
-        this._loadConfig(storedConfig);
-      } else {
-        const config = await WrappedFetch<string>('config.json', {
-          useBackend: true,
-          responseOptions: {
-            decodeJson: false
-          }
-        });
-        if (config.data) {
-          this._loadConfig(config.data);
-          localStorage.setItem(configKey, config.data);
+      const config = await WrappedFetch<string>('config.json', {
+        useBackend: true,
+        responseOptions: {
+          decodeJson: false
+        }
+      });
+      if (config.data) {
+        this._loadConfig(config.data);
+        localStorage.setItem(configKey, config.data);
+      } else if (config.error) {
+        const storedConfig = localStorage.getItem(configKey);
+        if (storedConfig) {
+          this._loadConfig(storedConfig);
         }
       }
     }
