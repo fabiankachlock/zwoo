@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using BackendHelper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Mongo.Migration;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
@@ -12,6 +13,7 @@ using Quartz.Impl;
 using ZwooBackend;
 using ZwooBackend.Database;
 using ZwooDatabaseClasses;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,11 +48,11 @@ builder.Services.Configure<MongoMigrationSettings>(options =>
     options.DatabaseMigrationVersion = new DocumentVersion(Globals.Version);
 });
 builder.Services.AddMigration(new MongoMigrationSettings
-    {
-        ConnectionString = Globals.ConnectionString,
-        Database = "zwoo",
-        DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
-    }
+{
+    ConnectionString = Globals.ConnectionString,
+    Database = "zwoo",
+    DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
+}
 );
 
 var app = builder.Build();

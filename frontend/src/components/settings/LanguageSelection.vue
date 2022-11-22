@@ -18,18 +18,18 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { supportedLanguages } from '@/i18n';
 
 const { t } = useI18n();
 const config = useConfig();
 const selection = ref<HTMLSelectElement>();
-const selectedLng = computed(() => config.language);
+const selectedLng = computed(() => config.get(ZwooConfigKey.Language));
 
 onMounted(() => {
   selection.value?.addEventListener('change', () => {
     const lng = selection.value?.value || 'en';
-    config.setLanguage(lng);
+    config.set(ZwooConfigKey.Language, lng);
   });
 });
 </script>

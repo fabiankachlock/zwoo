@@ -9,12 +9,12 @@
 import { computed } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 const config = useConfig();
-const shouldSortCards = computed(() => config.sortCards);
+const shouldSortCards = computed(() => config.get(ZwooConfigKey.SortCards));
 
 const toggleSortCards = () => {
-  config.setSortCards(!shouldSortCards.value);
+  config.set(ZwooConfigKey.SortCards, !shouldSortCards.value);
 };
 </script>

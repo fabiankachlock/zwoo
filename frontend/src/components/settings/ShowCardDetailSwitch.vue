@@ -9,12 +9,12 @@
 import { computed } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 const config = useConfig();
-const shouldShowDetail = computed(() => config.showCardDetail);
+const shouldShowDetail = computed(() => config.get(ZwooConfigKey.ShowCardsDetail));
 
 const toggleShouldShowDetail = () => {
-  config.setShowCardDetail(!shouldShowDetail.value);
+  config.set(ZwooConfigKey.ShowCardsDetail, !shouldShowDetail.value);
 };
 </script>

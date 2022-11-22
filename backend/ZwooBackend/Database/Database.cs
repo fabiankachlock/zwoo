@@ -53,13 +53,13 @@ public class Database
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
-        
+
         if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == Globals.Version) == null)
             _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
     }
 
-    public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
-    
+    public void UpdateUser(User user) => _userCollection.ReplaceOne(x => x.Id == user.Id, user);
+
     /// <summary>
     /// Hash Password, Generate verification code and Creates user in Database
     /// </summary>
@@ -94,34 +94,34 @@ public class Database
         CreateAttempt(id, true);
         return (username, id, code, email);
     }
-    
+
     public bool UsernameExists(string username) => _userCollection.AsQueryable().FirstOrDefault(x => x.Username == username) != null;
-    
+
     public bool EmailExists(string email) => _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email) != null;
-    
+
     public bool CheckBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
         DatabaseLogger.Debug($"[BetaCode] checking {betaCode}");
         return _betacodesCollection.AsQueryable().FirstOrDefault(x => x.Code == betaCode) != null;
     }
-    
+
     private bool RemoveBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
         DatabaseLogger.Debug($"[BetaCode] removing {betaCode}");
         return _betacodesCollection.DeleteOne(x => betaCode == x.Code).DeletedCount != 0;
     }
-    
+
     public bool VerifyUser(ulong id, string code)
     {
         DatabaseLogger.Debug($"[User] verifying {id}");
         var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == id && x.ValidationCode == code);
-        
+
         if (user == null) return false;
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
-        
+
         var res = _userCollection.UpdateOne(x => x.Id == id && x.ValidationCode == code, Builders<User>.Update.Set(u => u.Verified, true)).ModifiedCount != 0;
         VerifyAttempt(id, res);
         return res;
@@ -211,7 +211,7 @@ public class Database
         DeleteAttempt(user.Id, true, user);
         return true;
     }
-    
+
     public LeaderBoard GetLeaderBoard()
     {
         var leaderboard = new LeaderBoard
@@ -226,7 +226,7 @@ public class Database
 
         return leaderboard;
     }
-    
+
     public uint IncrementWin(ulong puid)
     {
         DatabaseLogger.Info($"Incrementing win for user {puid}");
@@ -234,7 +234,7 @@ public class Database
             return _userCollection.AsQueryable().First(u => u.Id == puid).Wins;
         return 0;
     }
-    
+
     public long GetPosition(User user) => _userCollection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
 
     public bool ChangePassword(User user, string oldPassword, string newPassword, string sid)
@@ -257,7 +257,7 @@ public class Database
             Builders<User>.Update.Set(u => u.PasswordResetCode, user.PasswordResetCode));
         return user;
     }
-    
+
     public void ResetPassword(string code, string password)
     {
         var salt = RandomNumberGenerator.GetBytes(16);
@@ -269,7 +269,7 @@ public class Database
         _userCollection.UpdateOne(x => x.PasswordResetCode == code,
             Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
     }
-    
+
     /// <summary>
     /// Delete unverified users & unused password reset codes & delete expired delete account events
     /// </summary>
@@ -292,29 +292,29 @@ public class Database
             DatabaseLogger.Info($"[CleanUp] deleted {_accountEventCollection.DeleteMany(x => x.EventType == "delete" && x.TimeStamp > (ulong)((DateTimeOffset)(DateTime.Today - TimeSpan.FromDays(6))).ToUnixTimeSeconds()).DeletedCount} delete account events.");
         }
     }
-    
+
     public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == version && c.Public);
     public Changelog[] GetChangelogs() => _changelogCollection.AsQueryable().Where(x => x.Public).ToArray();
-    
-    public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
+
+    public void SaveGame(Dictionary<long, int> scores, GameMeta meta) =>
         _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(_userCollection.AsQueryable().First(y => y.Id == (ulong)x.Key).Username, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void CreateAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("create", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void VerifyAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("verify", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void LoginAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("login", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void LogoutAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("logout", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void DeleteAttempt(ulong puid, bool success, User? user = null)
     {
         var u = new AccountEvent("delete", puid, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds())
