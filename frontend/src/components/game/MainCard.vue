@@ -2,20 +2,33 @@
   <div class="main-card-wrapper absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full" style="max-height: 70%">
     <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 h-full w-full max-h-full" style="min-width: 0">
       <template v-if="mainCard">
-        <Card :card="mainCard" image-class="max-h-full mx-auto" />
+        <Card :card="mainCard" image-class="max-h-full mx-auto" :forward-ref="r => (elementRef = r as HTMLElement)" />
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
+import { useAnimationState } from '@/core/adapter/play/animationState';
 import { useGameState } from '@/core/adapter/play/gameState';
 
 import Card from './Card.vue';
+
 const gameState = useGameState();
+const animationState = useAnimationState();
 const mainCard = computed(() => gameState.topCard);
+const elementRef = ref<HTMLElement | undefined>();
+
+watch(
+  elementRef,
+  elm => {
+    console.log(elm);
+    animationState.mainCard = elm;
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped>

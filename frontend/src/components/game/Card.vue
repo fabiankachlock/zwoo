@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full select-none pointer-events-none">
+  <div class="relative w-full h-full select-none pointer-events-none" :ref="forwardRef">
     <img
       v-for="(layer, i) in cardData.layers"
       :src="layer"
@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { ComponentPublicInstance, computed, defineProps, Ref } from 'vue';
 
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
@@ -32,6 +32,7 @@ const props = defineProps<{
   imageStyle?: string;
   imageClass?: string;
   overrideTheme?: CardTheme;
+  forwardRef?: string | Ref | ((ref: Element | ComponentPublicInstance | null) => void);
 }>();
 
 const cardTheme = useCardTheme();

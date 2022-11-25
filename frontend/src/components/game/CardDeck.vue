@@ -25,17 +25,22 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 
+import { useAnimate } from '@/composables/useAnimate';
+import { useAnimationState } from '@/core/adapter/play/animationState';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
 import { Card as CardTyping } from '@/core/services/game/CardTypes';
 
 import Card from './Card.vue';
+
 const CARD_ASPECT_RATIO = 420 / 720;
 const CARD_BASE_WIDTH_MULTIPLIER = 0.25;
 const CARD_BASE_HEIGHT_MULTIPLIER = 0.3;
 
 const deckStore = useGameCardDeck();
 const stateStore = useGameState();
+const animate = useAnimate();
+const animationStore = useAnimationState();
 
 const cardsActive = computed(() => stateStore.isActivePlayer);
 const cards = computed(() => deckStore.cards);
@@ -121,7 +126,18 @@ const getComputedCardStyle = computed((): { [key: string]: string } => {
   };
 });
 
-const selectCard = (card: CardTyping, index: number) => {
+const selectCard = async (card: CardTyping, index: number) => {
+  const key = `${index}-${card.color}-${card.type}`;
+  const cardElm = document.querySelector(`[data-x="${key}"] > div`);
+  if (cardElm && animationStore.mainCard) {
+    await animate({
+      element: cardElm as HTMLElement,
+      target: animationStore.mainCard,
+      transitionProperties: ['left', 'top', 'width'],
+      duration: 700,
+      unsetProperties: ['transform']
+    });
+  }
   deckStore.selectCard(card, index);
 };
 </script>
