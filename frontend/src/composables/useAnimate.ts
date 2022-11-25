@@ -8,6 +8,7 @@ export type AnimateFunc = (options: {
   duration: number;
   timingFunction?: string;
   unsetProperties?: string[];
+  unmount?: boolean;
 }) => Promise<void>;
 
 const animationContainerId = '__animation_container';
@@ -28,7 +29,6 @@ const buildStyleString = (
   unset: string[]
 ): string => {
   let styles = `${inherited} ${baseStyles}`;
-  console.log(values, properties);
   for (const prop of properties) {
     styles += `${prop}: ${values[prop as TransitionProperty]}px; `;
   }
@@ -40,9 +40,7 @@ const buildStyleString = (
   return styles;
 };
 
-const animate: AnimateFunc = async ({ element, target, duration, transitionProperties, initialState, timingFunction, unsetProperties }) => {
-  console.log(target, element);
-
+const animate: AnimateFunc = async ({ element, target, duration, transitionProperties, initialState, timingFunction, unsetProperties, unmount }) => {
   const targetRect = target.getBoundingClientRect();
   const sourceRect = element.getBoundingClientRect();
   const animationContainer = document.getElementById(animationContainerId);
@@ -54,8 +52,10 @@ const animate: AnimateFunc = async ({ element, target, duration, transitionPrope
   const rightOffset = getNumber(computedSourceStyle.marginRight) + getNumber(computedSourceStyle.paddingRight);
   const bottomOffset = getNumber(computedSourceStyle.marginBottom) + getNumber(computedSourceStyle.paddingBottom);
 
-  element.parentNode?.removeChild(element);
-  animationContainer?.appendChild(element);
+  if (unmount) {
+    element.parentNode?.removeChild(element);
+    animationContainer?.appendChild(element);
+  }
 
   if (initialState) {
     element.setAttribute(
@@ -104,7 +104,9 @@ const animate: AnimateFunc = async ({ element, target, duration, transitionPrope
   }, 10);
 
   await new Promise(res => setTimeout(() => res({}), duration));
-  animationContainer?.removeChild(element);
+  if (unmount) {
+    animationContainer?.removeChild(element);
+  }
 };
 
 export const useAnimate = (): AnimateFunc => animate;

@@ -15,7 +15,7 @@
         class="card-wrapper relative overflow-visible"
       >
         <div class="card relative" :style="getComputedCardStyle">
-          <Card :card="card" image-class="transition-all" />
+          <Card :card="card" image-class="transition-all max-h-full mx-auto" />
         </div>
       </div>
     </div>
@@ -133,9 +133,10 @@ const selectCard = async (card: CardTyping, index: number) => {
     await animate({
       element: cardElm as HTMLElement,
       target: animationStore.mainCard,
-      transitionProperties: ['left', 'top', 'width'],
+      transitionProperties: ['left', 'top', 'width', 'height'],
       duration: 700,
-      unsetProperties: ['transform']
+      unsetProperties: ['transform'],
+      unmount: true
     });
   }
   deckStore.selectCard(card, index);
