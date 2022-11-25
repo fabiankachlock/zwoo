@@ -4,8 +4,11 @@
       <div class="flex justify-between items-center">
         <p class="tc-main">{{ t('settings.update.available') }}</p>
         <div class="bg-light hover:bg-main rounded px-2 py-1 tc-main">
-          <p v-if="refreshing">{{ t('settings.update.downloading') }}</p>
-          <button v-else @click="runUpdate">{{ t('settings.update.updateNow') }}</button>
+          <div v-if="!isReady" class="flex flex-row justify-center flex-nowrap items-center tc-main">
+            <ZwooIcon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-2" />
+            <p class="text-lg tc-main-secondary">{{ t('settings.update.downloading') }}</p>
+          </div>
+          <button v-else @click="reload">{{ t('settings.update.updateNow') }}</button>
         </div>
       </div>
     </div>
@@ -13,35 +16,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { useRootApp } from '@/core/adapter/app';
+import { useConfig } from '@/core/adapter/config';
+import ZwooIcon from '@/modules/zwoo-icons/ZwooIcon.vue';
+
+const app = useRootApp();
+const config = useConfig();
 const { t } = useI18n();
 
-const registration = ref<ServiceWorkerRegistration | null>(null);
-const updateExists = ref<boolean>(false);
-const refreshing = ref<boolean>(false);
+const updateExists = computed(() => config.clientVersion !== config.serverVersion);
+const isReady = computed(() => app.updateAvailable);
 
-onMounted(() => {
-  // Listen for our custom event from the SW registration
-  document.addEventListener('swUpdated', evt => updateAvailable(evt as unknown as { detail: ServiceWorkerRegistration }), { once: true });
-
-  // Prevent multiple refreshes
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing.value) {
-      window.location.reload();
-    }
-  });
-});
-
-const updateAvailable = (event: { detail: ServiceWorkerRegistration }) => {
-  registration.value = event.detail;
-  updateExists.value = true;
-};
-
-const runUpdate = () => {
-  refreshing.value = true;
-  if (!registration.value || !registration.value.waiting) return;
-  registration.value.waiting.postMessage({ type: 'SKIP_WAITING' });
+const reload = () => {
+  if (app.updateAvailable) {
+    app.updateApp();
+  }
 };
 </script>
