@@ -115,6 +115,7 @@ export default defineConfig({
         icons: manifestIcons
       },
       workbox: {
+        globIgnores: ['**/config.json'], // dont cache config.json, since it should be dynamic
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // dont cache more than 10 mib

@@ -49,7 +49,9 @@ const icons = [
   'iconoir:play-outline',
   'teenyicons:send-outline',
   'mdi:fullscreen',
-  'mdi:fullscreen-exit'
+  'mdi:fullscreen-exit',
+  'mdi:cloud-sync-outline',
+  'mdi:cloud-off-outline'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

@@ -27,7 +27,7 @@ import { computed } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
 import { useUserDefaults } from '@/composables/userDefaults';
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 import DarkModeSwitch from '../settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '../settings/FullScreenSwitch.vue';
@@ -36,7 +36,7 @@ import HomeButton from '../settings/HomeButton.vue';
 const config = useConfig();
 const isOpen = useUserDefaults('floatingMenu:open', false);
 const toggleOpen = () => (isOpen.value = !isOpen.value);
-const visible = computed(() => config.showQuickMenu);
+const visible = computed(() => config.get(ZwooConfigKey.QuickMenu));
 </script>
 
 <style scoped>

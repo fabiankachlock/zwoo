@@ -9,12 +9,12 @@
 import { computed } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 const config = useConfig();
-const isDarkMode = computed(() => config.useDarkMode);
+const isDarkMode = computed(() => config.get(ZwooConfigKey.UiMode) === 'dark');
 
 const toggleDarkMode = () => {
-  config.setDarkMode(!isDarkMode.value);
+  config.set(ZwooConfigKey.UiMode, !isDarkMode.value ? 'dark' : 'light');
 };
 </script>

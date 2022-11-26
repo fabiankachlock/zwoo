@@ -78,4 +78,44 @@ export class AccountService {
 
     return response;
   };
+
+  static loadSettings = async (): Promise<string | undefined> => {
+    Logger.Api.log('loading user settings');
+
+    const response = await WrappedFetch<{ settings: string }>(Backend.getUrl(Endpoint.UserSettings), {
+      method: 'GET',
+      useBackend: AppConfig.UseBackend,
+      requestOptions: {
+        withCredentials: true
+      }
+    });
+
+    if (response.error) {
+      Logger.Api.warn('received erroneous response while loading settings');
+      return undefined;
+    }
+    return response.data?.settings;
+  };
+
+  static storeSettings = async (settings: string): Promise<FetchResponse<undefined>> => {
+    Logger.Api.log('storing user settings');
+
+    const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.UserSettings), {
+      method: 'POST',
+      useBackend: AppConfig.UseBackend,
+      requestOptions: {
+        withCredentials: true
+      },
+      responseOptions: {
+        decodeJson: false
+      },
+      body: JSON.stringify({ settings: settings })
+    });
+
+    if (response.error) {
+      Logger.Api.warn('received erroneous response while loading settings');
+    }
+
+    return response;
+  };
 }

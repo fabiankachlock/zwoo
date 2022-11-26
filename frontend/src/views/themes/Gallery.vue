@@ -8,8 +8,8 @@
         v-for="theme in themes"
         :key="theme.name"
         :theme="theme"
-        :is-selected="selectedCardTheme === theme.name"
-        :selected-variant="selectedCardTheme === theme.name ? selectedCardThemeVariant : ''"
+        :is-selected="selectedCardTheme.name === theme.name"
+        :selected-variant="selectedCardTheme.name === theme.name ? selectedCardTheme.variant : ''"
       />
     </div>
   </MaxWidthLayout>
@@ -21,7 +21,7 @@ import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ThemesGalleryEntry from '@/components/themes/ThemesGalleryEntry.vue';
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
 import { CardThemeManager } from '@/core/services/cards/ThemeManager';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
@@ -29,8 +29,7 @@ import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 const { t } = useI18n();
 const themes = ref<CardThemeInformation[]>([]);
 const config = useConfig();
-const selectedCardTheme = computed(() => config.cardTheme);
-const selectedCardThemeVariant = computed(() => config.cardThemeVariant);
+const selectedCardTheme = computed(() => config.get(ZwooConfigKey.CardsTheme));
 
 onMounted(async () => {
   const loadedThemes = await CardThemeManager.global.getAllThemesInformation();

@@ -18,6 +18,7 @@ import { useRootApp } from './core/adapter/app';
 import { useAuth } from './core/adapter/auth';
 import { useConfig } from './core/adapter/config';
 import { useCookies } from './core/adapter/cookies';
+import { useRuntimeConfig } from './core/services/runtimeConfig';
 const ChangelogManager = defineAsyncComponent(() => import('./components/misc/changelog/ChangelogManager.vue'));
 
 useRootApp().configure(); // init app
@@ -26,6 +27,7 @@ const cookies = useCookies();
 cookies.setup();
 const asyncSetup = async () => {
   useConfig().configure(); // load stored config from localStorage
+  useRuntimeConfig().configure();
   if (cookies.recaptchaCookie) {
     setTimeout(() => {
       cookies.loadRecaptcha();

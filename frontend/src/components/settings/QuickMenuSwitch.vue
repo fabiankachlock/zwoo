@@ -9,12 +9,12 @@
 import { computed } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 const config = useConfig();
-const showQuickMenu = computed(() => config.showQuickMenu);
+const showQuickMenu = computed(() => config.get(ZwooConfigKey.QuickMenu));
 
 const toggleQuickMenu = () => {
-  config.setQuickMenu(!showQuickMenu.value);
+  config.set(ZwooConfigKey.QuickMenu, !showQuickMenu.value);
 };
 </script>
