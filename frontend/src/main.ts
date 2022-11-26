@@ -1,6 +1,7 @@
 import './registerServiceWorker';
 import './index.css';
 
+import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
 import { createPinia } from 'pinia';
 import { registerSW } from 'virtual:pwa-register';
 import { createApp } from 'vue';
@@ -34,6 +35,7 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(i18n);
 app.use(router);
+app.use(autoAnimatePlugin);
 
 app.directive('tooltip', Tooltip);
 

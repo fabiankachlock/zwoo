@@ -4,51 +4,47 @@
       <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-0">
         <h2 class="tc-main text-4xl mb-1 pt-3">{{ t('versionHistory.title') }}</h2>
       </div>
-      <div class="relative flex flex-col flex-nowrap">
-        <div v-if="versions">
-          <div
-            v-for="version in versions"
-            :key="version"
-            @click="toggleVersionOpen(version)"
-            class="item my-2 rounded-lg border bc-darkest bg-light px-3 py-2 cursor-pointer"
-          >
-            <div class="version-card-header flex flex-row flex-nowrap justify-between items-center">
-              <div class="version-card-title">
-                <p class="text-xl tc-main">{{ t('versionHistory.versionTitle', [version]) }}</p>
-              </div>
-              <div class="version-card-actions -mr-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
-                <button
-                  @click.stop="toggleVersionOpen(version)"
-                  class="toggle text-2xl tc-main relative p-4 rounded-md overflow-hidden bg-main hover:bg-dark"
-                >
-                  <Icon
-                    icon="iconoir:nav-arrow-down"
-                    class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
-                    :class="{ 'opacity-0 translate-y-2': openVersions[version], '-translate-y-1/2': !openVersions[version] }"
-                  />
-                  <Icon
-                    icon="iconoir:nav-arrow-up"
-                    class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
-                    :class="{ 'opacity-0 translate-y-2': !openVersions[version], '-translate-y-1/2': openVersions[version] }"
-                  />
-                </button>
-              </div>
+      <div v-if="versions" class="relative flex flex-col flex-nowrap" v-auto-animate>
+        <div
+          v-auto-animate="{ duration: 100 }"
+          v-for="version in versions"
+          :key="version"
+          @click="toggleVersionOpen(version)"
+          class="item my-2 rounded-lg border bc-darkest bg-light px-3 py-2 cursor-pointer"
+        >
+          <div class="version-card-header flex flex-row flex-nowrap justify-between items-center">
+            <div class="version-card-title">
+              <p class="text-xl tc-main">{{ t('versionHistory.versionTitle', [version]) }}</p>
             </div>
-            <div
-              class="version-card-body transition duration-300"
-              :class="{ open: openVersions[version], 'overflow-hidden': !openVersions[version] }"
-            >
-              <div class="content relative border-t bc-darkest mt-2">
-                <Changelog :changelog="versionChangelogs[version]" />
-              </div>
+            <div class="version-card-actions -mr-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
+              <button
+                @click.stop="toggleVersionOpen(version)"
+                class="toggle text-2xl tc-main relative p-4 rounded-md overflow-hidden bg-main hover:bg-dark"
+              >
+                <Icon
+                  icon="iconoir:nav-arrow-down"
+                  class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
+                  :class="{ 'opacity-0 translate-y-2': openVersions[version], '-translate-y-1/2': !openVersions[version] }"
+                />
+                <Icon
+                  icon="iconoir:nav-arrow-up"
+                  class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
+                  :class="{ 'opacity-0 translate-y-2': !openVersions[version], '-translate-y-1/2': openVersions[version] }"
+                />
+              </button>
+            </div>
+          </div>
+          <div v-if="openVersions[version]">
+            <div class="content relative border-t bc-darkest mt-2">
+              <Changelog :changelog="versionChangelogs[version]" />
             </div>
           </div>
         </div>
-        <div v-else>
-          <p class="tc-main">
-            {{ t('versionHistory.failure') }}
-          </p>
-        </div>
+      </div>
+      <div v-else class="relative flex flex-col flex-nowrap">
+        <p class="tc-main">
+          {{ t('versionHistory.failure') }}
+        </p>
       </div>
     </div>
   </div>
@@ -96,15 +92,6 @@ const loadChangelog = async (version: string) => {
 </script>
 
 <style scoped>
-.version-card-body {
-  transition-property: max-height;
-  max-height: 0;
-}
-.version-card-body.open {
-  transition-property: max-height;
-  max-height: 5000px;
-}
-
 .toggle:hover .icon {
   @apply scale-110;
 }
