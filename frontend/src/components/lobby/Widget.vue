@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-lg" :class="widgetClass">
+  <div class="rounded-lg" :class="widgetClass" v-auto-animate>
     <div class="widget-header flex flex-row flex-nowrap justify-between items-center m-1">
       <div class="widget-title mx-1">
         <p class="text-xl tc-main my-2">{{ t(title) }}</p>
@@ -20,7 +20,7 @@
         </button>
       </div>
     </div>
-    <div class="widget-body transition duration-300" :class="{ open: isOpen, 'overflow-hidden': !isOpen }">
+    <div v-auto-animate v-if="isOpen">
       <div class="content p-2 pt-0">
         <div class="relative">
           <slot></slot>
@@ -76,15 +76,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.widget-body {
-  transition-property: max-height;
-  max-height: 0;
-}
-.widget-body.open {
-  transition-property: max-height;
-  max-height: 5000px;
-}
-
 .toggle:hover .icon {
   @apply scale-110;
 }
