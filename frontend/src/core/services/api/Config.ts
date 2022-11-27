@@ -34,7 +34,7 @@ export class ConfigService {
 
     const response = await WrappedFetch<{ versions: string[] }>(Backend.getUrl(Endpoint.VersionHistory), {
       useBackend: AppConfig.UseBackend,
-      fallbackValue: { versions: ['v1.0.0'] }
+      fallbackValue: { versions: ['v1.0.0', 'v2.0.0', 'v3.0.0'] }
     });
 
     if (response.error) {

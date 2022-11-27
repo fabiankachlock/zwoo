@@ -12,10 +12,10 @@ const props = defineProps<{
 const changelogWrapper = ref<HTMLDivElement | null>(null);
 
 watch(
-  () => props.changelog,
-  changelog => {
-    if (changelogWrapper.value && changelog) {
-      changelogWrapper.value.innerHTML = changelog;
+  [() => props.changelog, changelogWrapper],
+  ([changelog, wrapper]) => {
+    if (wrapper && changelog) {
+      wrapper.innerHTML = changelog;
     }
   },
   { immediate: true }

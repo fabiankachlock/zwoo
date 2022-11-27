@@ -15,7 +15,7 @@
       </div>
     </header>
     <main class="m-2 relative">
-      <div class="main-content md:hidden grid grid-cols-1 gap-2 mx-auto max-w-5xl">
+      <div class="main-content md:hidden mx-auto max-w-5xl">
         <ChatWidget />
         <PlayersWidget />
         <SpectatorsWidget />

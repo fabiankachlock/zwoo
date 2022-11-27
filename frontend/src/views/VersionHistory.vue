@@ -4,7 +4,7 @@
       <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-0">
         <h2 class="tc-main text-4xl mb-1 pt-3">{{ t('versionHistory.title') }}</h2>
       </div>
-      <div v-if="versions" class="relative flex flex-col flex-nowrap" v-auto-animate>
+      <div v-if="versions" class="relative flex flex-col flex-nowrap">
         <div
           v-auto-animate="{ duration: 100 }"
           v-for="version in versions"
@@ -34,7 +34,7 @@
               </button>
             </div>
           </div>
-          <div v-if="openVersions[version]">
+          <div v-if="openVersions[version] && versionChangelogs[version]">
             <div class="content relative border-t bc-darkest mt-2">
               <Changelog :changelog="versionChangelogs[version]" />
             </div>
