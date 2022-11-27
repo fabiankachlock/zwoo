@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-lg" :class="widgetClass">
+  <div class="rounded-lg" :class="widgetClass" v-auto-animate>
     <div class="widget-header flex flex-row flex-nowrap justify-between items-center m-1">
       <div class="widget-title mx-1">
         <p class="text-xl tc-main my-2">{{ t(title) }}</p>
@@ -20,8 +20,8 @@
         </button>
       </div>
     </div>
-    <div v-auto-animate>
-      <div v-if="isOpen" class="content p-2 pt-0">
+    <div v-if="isOpen">
+      <div class="content p-2 pt-0">
         <div class="relative">
           <slot></slot>
         </div>
