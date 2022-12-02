@@ -3,12 +3,13 @@ export type TransitionProperty = 'left' | 'top' | 'right' | 'bottom' | 'width' |
 export type AnimateFunc = (options: {
   element: HTMLElement;
   target: HTMLElement;
-  initialState?: Record<TransitionProperty, number>;
+  initialState?: Partial<Record<TransitionProperty, number>>;
   transitionProperties: TransitionProperty[];
   duration: number;
   timingFunction?: string;
   unsetProperties?: string[];
   unmount?: boolean;
+  remount?: boolean;
 }) => Promise<void>;
 
 const animationContainerId = '__animation_container';
@@ -22,7 +23,7 @@ const baseStyles = 'position: fixed; pointer-events: none; cursor: not-allowed; 
 
 const buildStyleString = (
   properties: TransitionProperty[],
-  values: Record<TransitionProperty, number>,
+  values: Partial<Record<TransitionProperty, number>>,
   inherited: string,
   duration: number,
   timingFunction: string,
@@ -30,7 +31,9 @@ const buildStyleString = (
 ): string => {
   let styles = `${inherited} ${baseStyles}`;
   for (const prop of properties) {
-    styles += `${prop}: ${values[prop as TransitionProperty]}px; `;
+    if (values[prop as TransitionProperty]) {
+      styles += `${prop}: ${values[prop as TransitionProperty]}px; `;
+    }
   }
   styles += `transition: all ${duration}ms ${timingFunction}; `;
   styles += `transition-property: ${properties.join(', ')}; `;
@@ -40,7 +43,17 @@ const buildStyleString = (
   return styles;
 };
 
-const animate: AnimateFunc = async ({ element, target, duration, transitionProperties, initialState, timingFunction, unsetProperties, unmount }) => {
+const animate: AnimateFunc = async ({
+  element,
+  target,
+  duration,
+  transitionProperties,
+  initialState,
+  timingFunction,
+  unsetProperties,
+  unmount,
+  remount
+}) => {
   const targetRect = target.getBoundingClientRect();
   const sourceRect = element.getBoundingClientRect();
   const animationContainer = document.getElementById(animationContainerId);
@@ -51,6 +64,7 @@ const animate: AnimateFunc = async ({ element, target, duration, transitionPrope
   const topOffset = getNumber(computedSourceStyle.marginTop) + getNumber(computedSourceStyle.paddingTop);
   const rightOffset = getNumber(computedSourceStyle.marginRight) + getNumber(computedSourceStyle.paddingRight);
   const bottomOffset = getNumber(computedSourceStyle.marginBottom) + getNumber(computedSourceStyle.paddingBottom);
+  const oldParent = element.parentNode;
 
   if (unmount) {
     element.parentNode?.removeChild(element);
@@ -106,6 +120,9 @@ const animate: AnimateFunc = async ({ element, target, duration, transitionPrope
   await new Promise(res => setTimeout(() => res({}), duration));
   if (unmount) {
     animationContainer?.removeChild(element);
+  }
+  if (remount) {
+    oldParent?.appendChild(element);
   }
 };
 
