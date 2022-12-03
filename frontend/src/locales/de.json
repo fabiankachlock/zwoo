@@ -32,7 +32,8 @@
     "cardTheme": "Karten Theme",
     "deviceId": "Anonyme GeräteID",
     "changePassword": "Passwort ändern",
-    "versionHistory": "Versionverlauf"
+    "versionHistory": "Versionverlauf",
+    "settingsSync": "Einstellungen synchronisieren"
   },
   "lng": {
     "de": "Deutsch",
