@@ -39,7 +39,7 @@ public readonly record struct ErrorDto(
     string Message
 );
 
-
+// TODO: rewrite to raw zrp messages
 public interface NotificationManager
 {
     void StopGame();

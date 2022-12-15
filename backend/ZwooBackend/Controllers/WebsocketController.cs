@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 using ZwooBackend.Websockets;
 using System.Net.WebSockets;
-using System.Net.Http;
 using System.Text;
 using ZwooBackend.Games;
 
@@ -12,22 +10,31 @@ namespace ZwooBackend.Controllers;
 [ApiController]
 public class WebSocketController : Controller
 {
+    private IWebSocketManager _wsManager;
+    private IWebSocketHandler _wsHandler;
+
+    public WebSocketController(IWebSocketManager wsManager, IWebSocketHandler wsHandler)
+    {
+        _wsHandler = wsHandler;
+        _wsManager = wsManager;
+    }
+
 
     [HttpGet]
-    [Route("/game/join/{id}")]
+    [Route("/game/join/{gameId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task ConnectWebsocket(int id)
+    public async Task ConnectWebsocket(int gameId)
     {
-        Globals.Logger.Info($"GET /game/join/{id}");
+        Globals.Logger.Info($"GET /game/join/{gameId}");
         if (HttpContext.WebSockets.IsWebSocketRequest)
         {
             byte[] response;
 
             if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
             {
-                GameRecord? game = GameManager.Global.GetGame(id);
+                GameRecord? game = GameManager.Global.GetGame(gameId);
 
                 if (game == null)
                 {
@@ -58,10 +65,18 @@ public class WebSocketController : Controller
                 }
 
                 WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                TaskCompletionSource finished = new TaskCompletionSource();
 
-                GameManager.Global.WebSocketManager.AddWebsocket(id, (long)user.Id, webSocket, finished);
-                await finished.Task;
+                bool success = _wsManager.AddConnection(gameId, (long)user.Id, webSocket);
+                if (!success) return; // TODO: logging
+
+                // TODO: player: connect
+
+                await _wsHandler.Handle(gameId, (long)user.Id, webSocket);
+
+                success = _wsManager.RemoveConnection(gameId, (long)user.Id);
+                if (!success) return; // TODO: logging
+                // TODO: player: disconnect
+
                 return;
             }
             HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
