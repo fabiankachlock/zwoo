@@ -2,7 +2,7 @@
 
 namespace ZwooBackend.Games;
 
-public class GameManager
+public class XGameManager
 {
     public readonly Websockets.WebSocketManager WebSocketManager;
 
@@ -10,9 +10,9 @@ public class GameManager
 
     private readonly Dictionary<long, GameRecord> _games;
 
-    public static GameManager Global = new GameManager();
+    public static XGameManager Global = new XGameManager();
 
-    private GameManager()
+    private XGameManager()
     {
         WebSocketManager = new Websockets.WebSocketManager();
         _gameManager = new ZwooGameLogic.GameManager(id => WebSocketManager.GetNotificationManager(id));

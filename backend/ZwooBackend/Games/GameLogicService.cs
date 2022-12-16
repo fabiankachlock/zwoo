@@ -1,24 +1,14 @@
 ﻿using ZwooBackend.ZRP;
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic;
 
 namespace ZwooBackend.Games;
-
-// TODO: move to game logic
-public class ZwooRoom { }
-
-
-public struct GameEvent
-{
-    public int UserId;
-    public int GameId;
-    public ZRPMessage Payload;
-}
 
 public interface IGameLogicService
 {
     public bool HasGame(long gameId);
 
-    public long CreateGame(long gameId);
+    public long CreateGame(string name, bool isPublic);
 
     public bool RemoveGame(long gameId);
 
@@ -26,39 +16,60 @@ public interface IGameLogicService
 
     public IEnumerable<ZwooRoom> ListAll();
 
+    public IEnumerable<ZwooRoom> FindGames(string searchTerm);
+
     public void DistributeEvent(long gameId, IZRPMessage msg);
 
 }
 
 public class GameLogicService : IGameLogicService
 {
-    public long CreateGame(long gameId)
-    {
-        throw new NotImplementedException();
-    }
+    // globally used GameLogic instance
+    private GameManager _gameManager;
 
-    public void DistributeEvent(IZRPMessage msg)
+    public GameLogicService()
     {
-        throw new NotImplementedException();
-    }
-
-    public ZwooRoom? GetGame(long gameId)
-    {
-        throw new NotImplementedException();
+        // TODO: update Notification Manager Interface
+        // TODO: forward IWebSocketManager
+        _gameManager = new GameManager();
     }
 
     public bool HasGame(long gameId)
     {
-        throw new NotImplementedException();
+        return _gameManager.GetGame(gameId) != null;
     }
 
-    public IEnumerable<ZwooRoom> ListAll()
+    public long CreateGame(string name, bool isPublic)
     {
-        throw new NotImplementedException();
+        ZwooRoom game = _gameManager.CreateGame(name, isPublic);
+        return game.Game.Id;
     }
 
     public bool RemoveGame(long gameId)
     {
+        return _gameManager.RemoveGame(gameId);
+    }
+
+
+    public ZwooRoom? GetGame(long gameId)
+    {
+        return _gameManager.GetGame(gameId);
+    }
+
+    public IEnumerable<ZwooRoom> ListAll()
+    {
+        return _gameManager.GetAllGames();
+    }
+
+    public IEnumerable<ZwooRoom> FindGames(string searchTerm)
+    {
+        return _gameManager.FindGames(searchTerm);
+    }
+
+    public void DistributeEvent(long gameId, IZRPMessage msg)
+    {
+        // TODO: needs GameLogic implementation
         throw new NotImplementedException();
     }
+
 }
