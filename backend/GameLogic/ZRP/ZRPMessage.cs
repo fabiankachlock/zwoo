@@ -1,6 +1,6 @@
 ﻿namespace ZwooGameLogic.ZRP;
 
-public interface IZRPMessage
+public interface IIncomingZRPMessage
 {
     /// <summary>
     /// the operation code of a message
@@ -31,6 +31,6 @@ public interface IZRPMessage
     /// </summary>
     /// <typeparam name="T">the type to decode into</typeparam>
     /// <returns>the decoded payload</returns>
-    public T? DecodePyload<T>();
+    public T? DecodePayload<T>();
 }
 

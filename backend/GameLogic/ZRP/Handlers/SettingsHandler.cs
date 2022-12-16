@@ -1,20 +1,17 @@
-﻿using System.Net.WebSockets;
-using ZwooBackend.Websockets.Interfaces;
-using ZwooBackend.ZRP;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Settings;
 
-namespace ZwooBackend.Websockets.Handlers;
+namespace ZwooGameLogic.ZRP.Handlers;
 
-public class SettingsHandler : MessageHandler
+public class SettingsHandler : IMessageHandler
 {
-    private SendableWebSocketManager _webSocketManager;
+    private INotificationAdapter _webSocketManager;
 
-    public SettingsHandler(SendableWebSocketManager websocketManager)
+    public SettingsHandler(INotificationAdapter websocketManager)
     {
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, ZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
     {
         if (message.Code == ZRPCode.GetAllSettings)
         {
@@ -30,39 +27,39 @@ public class SettingsHandler : MessageHandler
     }
 
 
-    private void GetSettings(UserContext context, ZRPMessage message)
+    private void GetSettings(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            AllSettingsDTO payload = new AllSettingsDTO(context.GameRecord.Game.Settings.GetSettings().Select(setting => new AllSettings_SettingDTO(SettingsKeyMapper.ToString(setting.Key), setting.Value)).ToArray());
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.AllSettings, payload));
+            AllSettingsDTO payload = new AllSettingsDTO(context.Game.Settings.GetSettings().Select(setting => new AllSettings_SettingDTO(SettingsKeyMapper.ToString(setting.Key), setting.Value)).ToArray());
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.AllSettings, payload);
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void UpdateSettings(UserContext context, ZRPMessage message)
+    private void UpdateSettings(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            UpdateSettingDTO payload = message.DecodePyload<UpdateSettingDTO>();
+            UpdateSettingDTO payload = message.DecodePayload<UpdateSettingDTO>();
 
             if (context.Role != ZRPRole.Host)
             {
-                _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.AccessDeniedError, new ErrorDTO((int)ZRPCode.AccessDeniedError, "you are not the host")));
+                _webSocketManager.SendPlayer(context.Id, ZRPCode.AccessDeniedError, new ErrorDTO((int)ZRPCode.AccessDeniedError, "you are not the host"));
                 return;
             }
 
-            if (context.GameRecord.Game.Settings.Set(payload.Setting, payload.Value))
+            if (context.Game.Settings.Set(payload.Setting, payload.Value))
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.ChangedSettings, new ChangedSettingsDTO(payload.Setting, payload.Value)));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.ChangedSettings, new ChangedSettingsDTO(payload.Setting, payload.Value));
             }
         }
-        catch (Exception e) 
-        { 
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()))); 
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 }

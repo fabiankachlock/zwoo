@@ -1,9 +1,8 @@
-﻿using ZwooBackend.ZRP;
-using ZwooBackend.Websockets.Interfaces;
+﻿using ZwooGameLogic.ZRP;
 
-namespace ZwooBackend.Websockets.Handlers;
+namespace ZwooGameLogic.ZRP.Handlers;
 
-public interface MessageHandler
+public interface IMessageHandler
 {
-    bool HandleMessage(UserContext context, ZRPMessage message);
+    bool HandleMessage(UserContext context, IIncomingZRPMessage message);
 }

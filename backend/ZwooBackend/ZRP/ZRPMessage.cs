@@ -2,7 +2,7 @@
 
 namespace ZwooBackend.ZRP;
 
-public struct ZRPMessage : IZRPMessage
+public struct ZRPMessage : IIncomingZRPMessage
 {
     public ZRPCode Code { get; private set; }
     public object? Payload { get; private set; }
@@ -30,7 +30,7 @@ public struct ZRPMessage : IZRPMessage
         }
     }
 
-    public T? DecodePyload<T>()
+    public T? DecodePayload<T>()
     {
         try
         {

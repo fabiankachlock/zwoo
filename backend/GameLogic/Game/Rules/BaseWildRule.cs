@@ -36,7 +36,7 @@ internal class BaseWildCardRule : BaseCardRule
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
         return (gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card))
-            || (gameEvent.Type == ClientEventType.SendPlayerDecission && gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>().Decission == PlayerDecission.SelectColor);
+            || (gameEvent.Type == ClientEventType.SendPlayerDecission && gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>().Decission == PlayerDecision.SelectColor);
     }
 
 
@@ -72,8 +72,8 @@ internal class BaseWildCardRule : BaseCardRule
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
 
         _storedEvent = new StoredEvent(payload.Player, payload.Card);
-        events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecission.SelectColor));
-        
+        events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecision.SelectColor));
+
         return new GameStateUpdate(state, events);
     }
 
@@ -88,7 +88,7 @@ internal class BaseWildCardRule : BaseCardRule
     {
         List<GameEvent> events = new List<GameEvent>();
         ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();
-        
+
         if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
         {
             Card newCard = new Card((CardColor)payload.Value, _storedEvent.Value.Card.Type);

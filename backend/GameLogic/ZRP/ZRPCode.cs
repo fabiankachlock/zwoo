@@ -2,7 +2,6 @@
 
 public enum ZRPCode
 {
-{
     // General
     // - players
     PlayerJoined = 100, // send

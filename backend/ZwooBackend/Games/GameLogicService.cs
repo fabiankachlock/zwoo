@@ -18,7 +18,7 @@ public interface IGameLogicService
 
     public IEnumerable<ZwooRoom> FindGames(string searchTerm);
 
-    public void DistributeEvent(long gameId, IZRPMessage msg);
+    public void DistributeEvent(long gameId, IIncomingZRPMessage msg);
 
 }
 
@@ -65,7 +65,7 @@ public class GameLogicService : IGameLogicService
         return _gameManager.FindGames(searchTerm);
     }
 
-    public void DistributeEvent(long gameId, IZRPMessage msg)
+    public void DistributeEvent(long gameId, IIncomingZRPMessage msg)
     {
         // TODO: needs GameLogic implementation
         throw new NotImplementedException();

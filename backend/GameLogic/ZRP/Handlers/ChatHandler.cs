@@ -1,20 +1,19 @@
-﻿using System.Net.WebSockets;
-using ZwooBackend.Websockets.Interfaces;
-using ZwooBackend.ZRP;
+﻿using ZwooGameLogic.ZRP;
+using ZwooGameLogic;
 
-namespace ZwooBackend.Websockets.Handlers;
+namespace ZwooGameLogic.ZRP.Handlers;
 
-public class ChatHandler : MessageHandler
+public class ChatHandler : IMessageHandler
 {
 
-    private SendableWebSocketManager _webSocketManager;
+    private INotificationAdapter _webSocketManager;
 
-    public ChatHandler(SendableWebSocketManager websocketManager)
+    public ChatHandler(INotificationAdapter websocketManager)
     {
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, ZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
     {
         if (message.Code != ZRPCode.PushMessage)
         {
@@ -23,13 +22,13 @@ public class ChatHandler : MessageHandler
 
         try
         {
-            PushMessageDTO payload = message.DecodePyload<PushMessageDTO>();
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.DistributeMessage, new DistributeMessageDTO(payload.Message, context.UserName, context.Role)));
+            PushMessageDTO payload = message.DecodePayload<PushMessageDTO>();
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.DistributeMessage, new DistributeMessageDTO(payload.Message, context.UserName, context.Role));
             return false;
         }
         catch (Exception e)
         {
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
             return true;
         }
     }

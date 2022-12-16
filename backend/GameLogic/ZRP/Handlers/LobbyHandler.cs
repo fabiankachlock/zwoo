@@ -1,25 +1,23 @@
-﻿using System.Net.WebSockets;
-using ZwooBackend.Websockets.Interfaces;
-using ZwooBackend.Games;
-using ZwooBackend.ZRP;
-using ZwooGameLogic.Game;
+﻿using ZwooGameLogic.Lobby;
 
-namespace ZwooBackend.Websockets.Handlers;
+namespace ZwooGameLogic.ZRP.Handlers;
 
-public class LobbyHandler : MessageHandler
+public class LobbyHandler : IMessageHandler
 {
-    private SendableWebSocketManager _webSocketManager;
+    private INotificationAdapter _webSocketManager;
+    private GameManager _gameManager;
 
-    public LobbyHandler(SendableWebSocketManager websocketManager)
+    public LobbyHandler(INotificationAdapter websocketManager, GameManager gameManager)
     {
         _webSocketManager = websocketManager;
+        _gameManager = gameManager;
     }
 
-    public bool HandleMessage(UserContext context, ZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
     {
         if (message.Code == ZRPCode.KeepAlive)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.AckKeepAlive, new AckKeepAliveDTO()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.AckKeepAlive, new AckKeepAliveDTO());
             return true;
         }
         else if (message.Code == ZRPCode.PlayerLeftGame)
@@ -56,164 +54,164 @@ public class LobbyHandler : MessageHandler
     }
 
     // TODO wins
-    private void SpectatorToPlayer(UserContext context, ZRPMessage message)
+    private void SpectatorToPlayer(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            LobbyResult result = context.GameRecord.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
+            LobbyResult result = context.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
             if (result == LobbyResult.Success)
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0));
             }
             else if (result == LobbyResult.ErrorLobbyFull)
             {
-                _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.LobbyFullError, new ErrorDTO((int)ZRPCode.LobbyFullError, "max amount of players reached")));
+                _webSocketManager.SendPlayer(context.Id, ZRPCode.LobbyFullError, new ErrorDTO((int)ZRPCode.LobbyFullError, "max amount of players reached"));
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int) ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void PlayerToSpectator(UserContext context, ZRPMessage message)
+    private void PlayerToSpectator(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            PlayerWantsToSpectateDTO payload = message.DecodePyload<PlayerWantsToSpectateDTO>();
-            context.GameRecord.Lobby.ChangeRole(payload.Username, ZRPRole.Spectator);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Spectator, 0)));
+            PlayerWantsToSpectateDTO payload = message.DecodePayload<PlayerWantsToSpectateDTO>();
+            context.Lobby.ChangeRole(payload.Username, ZRPRole.Spectator);
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Spectator, 0));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void PlayerToHost(UserContext context, ZRPMessage message)
+    private void PlayerToHost(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            PromotePlayerToHostDTO payload = message.DecodePyload<PromotePlayerToHostDTO>();
-            context.GameRecord.Lobby.ChangeRole(payload.Username, ZRPRole.Host);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Host, 0)));
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0)));
-            _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.HostChanged, new HostChangedDTO(payload.Username)));
-            _webSocketManager.SendPlayer(context.GameRecord.Lobby.ResolvePlayer(payload.Username), ZRPEncoder.EncodeToBytes(ZRPCode.PromotedToHost, new PromotedToHostDTO()));
+            PromotePlayerToHostDTO payload = message.DecodePayload<PromotePlayerToHostDTO>();
+            context.Lobby.ChangeRole(payload.Username, ZRPRole.Host);
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Host, 0));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new HostChangedDTO(payload.Username));
+            _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(payload.Username), ZRPCode.PromotedToHost, new PromotedToHostDTO());
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void KickPlayer(UserContext context, ZRPMessage message)
+    private void KickPlayer(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            KickPlayerDTO payload = message.DecodePyload<KickPlayerDTO>();
-            var player = context.GameRecord.Lobby.GetPlayer(payload.Username);
+            KickPlayerDTO payload = message.DecodePayload<KickPlayerDTO>();
+            var player = context.Lobby.GetPlayer(payload.Username);
 
             // mutation of active game
-            if (context.GameRecord.Game.IsRunning && player != null)
+            if (context.Game.IsRunning && player != null)
             {
-                context.GameRecord.Game.RemovePlayer(player.Id);
-                if (context.GameRecord.Game.PlayerCount == 1)
+                context.Game.RemovePlayer(player.Id);
+                if (context.Game.PlayerCount == 1)
                 {
                     // close game
-                    _webSocketManager.QuitGame(context.GameId);
-                    GameManager.Global.RemoveGame(context.GameId);
+                    _webSocketManager.DisconnectGame(context.GameId);
+                    _gameManager.RemoveGame(context.GameId);
                     return;
                 }
             }
 
-            LobbyResult result = context.GameRecord.Lobby.RemovePlayer(payload.Username);
-            if (context.GameRecord.Lobby.ActivePlayerCount() == 0)
+            LobbyResult result = context.Lobby.RemovePlayer(payload.Username);
+            if (context.Lobby.ActivePlayerCount() == 0)
             {
                 // close game
-                _webSocketManager.QuitGame(context.GameId);
-                GameManager.Global.RemoveGame(context.GameId);
+                _webSocketManager.DisconnectGame(context.GameId);
+                _gameManager.RemoveGame(context.GameId);
                 return;
             }
 
             if (player != null && player.Role == ZRPRole.Spectator)
             {
-                _webSocketManager.Disconnect(player.Id);
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username)));
+                _webSocketManager.DisconnectPlayer(player.Id);
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username));
             }
             else if (player != null)
             {
-                _webSocketManager.Disconnect(player.Id);
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username)));
+                _webSocketManager.DisconnectPlayer(player.Id);
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username));
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void LeavePlayer(UserContext context, ZRPMessage message)
+    private void LeavePlayer(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
             // mutation of active game
-            if (context.GameRecord.Game.IsRunning)
+            if (context.Game.IsRunning)
             {
-                context.GameRecord.Game.RemovePlayer(context.Id);
-                if (context.GameRecord.Game.PlayerCount == 1)
+                context.Game.RemovePlayer(context.Id);
+                if (context.Game.PlayerCount == 1)
                 {
                     // close game
-                    _webSocketManager.QuitGame(context.GameId);
-                    GameManager.Global.RemoveGame(context.GameId);
+                    _webSocketManager.DisconnectGame(context.GameId);
+                    _gameManager.RemoveGame(context.GameId);
                     return;
                 }
             }
 
-            LobbyResult result = context.GameRecord.Lobby.RemovePlayer(context.UserName);
-            if (context.GameRecord.Lobby.ActivePlayerCount() == 0)
+            LobbyResult result = context.Lobby.RemovePlayer(context.UserName);
+            if (context.Lobby.ActivePlayerCount() == 0)
             {
                 // close game
-                _webSocketManager.QuitGame(context.GameId);
-                GameManager.Global.RemoveGame(context.GameId);
+                _webSocketManager.DisconnectGame(context.GameId);
+                _gameManager.RemoveGame(context.GameId);
                 return;
             }
 
             if (context.Role == ZRPRole.Host)
             {
-                string newHost = context.GameRecord.Lobby.Host();
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(newHost, ZRPRole.Host, 0)));
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.HostChanged, new HostChangedDTO(newHost)));
-                _webSocketManager.SendPlayer(context.GameRecord.Lobby.ResolvePlayer(newHost), ZRPEncoder.EncodeToBytes(ZRPCode.PromotedToHost, new PromotedToHostDTO()));
+                string newHost = context.Lobby.Host();
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(newHost, ZRPRole.Host, 0));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new HostChangedDTO(newHost));
+                _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(newHost), ZRPCode.PromotedToHost, new PromotedToHostDTO());
             }
 
             if (result != LobbyResult.Success) return;
             if (context.Role == ZRPRole.Spectator)
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.SpectatorLeft, new SpectatorLeftDTO(context.UserName)));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftDTO(context.UserName));
             }
             else
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPEncoder.EncodeToBytes(ZRPCode.PlayerLeft, new PlayerLeftDTO(context.UserName)));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftDTO(context.UserName));
             }
 
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void GetPlayers(UserContext context, ZRPMessage message)
+    private void GetPlayers(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            ListPlayersDTO payload = new ListPlayersDTO(context.GameRecord.Lobby.ListAll().Select(p => new ListPlayers_PlayerDTO(p.Username, p.Role, 0)).ToArray());
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.ListAllPlayers, payload));
+            ListPlayersDTO payload = new ListPlayersDTO(context.Lobby.ListAll().Select(p => new ListPlayers_PlayerDTO(p.Username, p.Role, 0)).ToArray());
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.ListAllPlayers, payload);
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPEncoder.EncodeToBytes(ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString())));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 }

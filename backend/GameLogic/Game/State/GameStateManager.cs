@@ -115,7 +115,7 @@ public sealed class GameStateManager
 
     private void HandlePlayerLeave(long id)
     {
-        #pragma warning disable CS4014
+#pragma warning disable CS4014
         _actionsQueue.Intercept(() =>
         {
             _logger.Warn($"player {id} left the running game");
@@ -146,15 +146,15 @@ public sealed class GameStateManager
             }
             _gameState = newState;
         });
-        #pragma warning restore CS4014
+#pragma warning restore CS4014
     }
 
     internal void HandleEvent(ClientEvent clientEvent)
     {
         // these calls don't need to be awaited, because the caller doesn't care when the event is executed
-        #pragma warning disable CS4014
+#pragma warning disable CS4014
         _actionsQueue.Enqueue(() => ExecuteEvent(clientEvent));
-        #pragma warning restore CS4014
+#pragma warning restore CS4014
     }
 
     private void ExecuteEvent(ClientEvent clientEvent)
@@ -240,7 +240,7 @@ public sealed class GameStateManager
                     break;
                 case GameEventType.GetPlayerDecission:
                     GameEvent.PlayerDecissionEvent playerDecissionEvent = evt.CastPayload<GameEvent.PlayerDecissionEvent>();
-                    _notificationManager.GetPlayerDecission(new PlayerDecissionDTO(playerDecissionEvent.Player, playerDecissionEvent.Decission));
+                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecissionEvent.Player, playerDecissionEvent.Decission));
                     break;
                 case GameEventType.PlayerWon:
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();
