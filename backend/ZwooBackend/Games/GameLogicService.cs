@@ -8,7 +8,7 @@ public interface IGameLogicService
 {
     public bool HasGame(long gameId);
 
-    public long CreateGame(string name, bool isPublic);
+    public ZwooRoom CreateGame(string name, bool isPublic);
 
     public bool RemoveGame(long gameId);
 
@@ -39,10 +39,9 @@ public class GameLogicService : IGameLogicService
         return _gameManager.GetGame(gameId) != null;
     }
 
-    public long CreateGame(string name, bool isPublic)
+    public ZwooRoom CreateGame(string name, bool isPublic)
     {
-        ZwooRoom game = _gameManager.CreateGame(name, isPublic);
-        return game.Game.Id;
+        return _gameManager.CreateGame(name, isPublic);
     }
 
     public bool RemoveGame(long gameId)

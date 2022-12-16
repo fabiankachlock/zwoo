@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Websockets;
+using ZwooBackend.Games;
 using System.Net.WebSockets;
 using System.Text;
-using ZwooBackend.Games;
+using ZwooGameLogic;
+using ZwooGameLogic.Lobby;
 
 
 namespace ZwooBackend.Controllers;
@@ -12,11 +14,13 @@ public class WebSocketController : Controller
 {
     private IWebSocketManager _wsManager;
     private IWebSocketHandler _wsHandler;
+    private IGameLogicService _gamesService;
 
-    public WebSocketController(IWebSocketManager wsManager, IWebSocketHandler wsHandler)
+    public WebSocketController(IWebSocketManager wsManager, IWebSocketHandler wsHandler, IGameLogicService gamesService)
     {
         _wsHandler = wsHandler;
         _wsManager = wsManager;
+        _gamesService = gamesService;
     }
 
 
@@ -34,7 +38,7 @@ public class WebSocketController : Controller
 
             if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
             {
-                GameRecord? game = GameManager.Global.GetGame(gameId);
+                ZwooRoom? game = _gamesService.GetGame(gameId);
 
                 if (game == null)
                 {
