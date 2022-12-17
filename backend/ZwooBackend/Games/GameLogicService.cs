@@ -1,4 +1,4 @@
-﻿using ZwooBackend.ZRP;
+﻿using ZwooBackend.Websockets;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic;
 
@@ -26,12 +26,12 @@ public class GameLogicService : IGameLogicService
 {
     // globally used GameLogic instance
     private GameManager _gameManager;
+    private IWebSocketManager _wsManager;
 
-    public GameLogicService()
+    public GameLogicService(IWebSocketManager wsManager)
     {
-        // TODO: update Notification Manager Interface
-        // TODO: forward IWebSocketManager
-        _gameManager = new GameManager();
+        _wsManager = wsManager;
+        _gameManager = new GameManager(wsManager);
     }
 
     public bool HasGame(long gameId)

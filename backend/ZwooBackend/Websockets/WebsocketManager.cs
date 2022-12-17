@@ -1,10 +1,13 @@
 ﻿using log4net;
 using System.Net.WebSockets;
 using System.Text;
+using ZwooGameLogic;
+using ZwooGameLogic.ZRP;
+using ZwooBackend.ZRP;
 
 namespace ZwooBackend.Websockets;
 
-public interface IWebSocketManager : IDisposable
+public interface IWebSocketManager : IDisposable, INotificationAdapter
 {
     /// <summary>
     /// register a new active connection
@@ -65,20 +68,6 @@ public interface IWebSocketManager : IDisposable
         ArraySegment<byte> content,
         WebSocketMessageType messageType = WebSocketMessageType.Text,
         bool isEndOfMessage = true);
-
-    /// <summary>
-    /// disconnect the connection of a player
-    /// </summary>
-    /// <param name="playerId">the players id</param>
-    /// <returns>whether a player could be kicked</returns>
-    public Task<bool> DisconnectPlayer(long playerId);
-
-    /// <summary>
-    /// disconnect all players of a game
-    /// </summary>
-    /// <param name="gameId">the games id</param>
-    /// <returns>whether a game could be disconnected</returns>
-    public Task<bool> DisconnectGame(long gameId);
 }
 
 public class WebSocketManager : IWebSocketManager
@@ -92,34 +81,6 @@ public class WebSocketManager : IWebSocketManager
     public WebSocketManager()
     {
         _logger = LogManager.GetLogger("WebSocketManager");
-    }
-
-    public void __old(long gameId, long playerId, WebSocket ws)
-    {
-
-        // var (player, game) = await _playerManager.ConnectPlayer(gameId, playerId);
-        // if (player == null || game == null)
-        // {
-        //     _logger.Warn($"no game found for {playerId}");
-        //     entry.Closed.SetResult();
-        //     return;
-        // }
-
-        // try
-        // {
-        //     _logger.Info($"{playerId} connected");
-        //     await Handle(ws, player, game);
-        //     _logger.Info($"{playerId} closing socket");
-        // }
-        // catch (Exception e)
-        // {
-        //     _logger.Error($"in websocket {playerId}", e);
-        // }
-
-        // RemoveWs(gameId, playerId, ws);
-        // await _playerManager.DisconnectPlayer(gameId, playerId);
-        // _logger.Info($"{playerId} disconnected");
-        // closed.SetResult();
     }
 
     public bool AddConnection(long gameId, long playerId, WebSocket ws)
@@ -319,4 +280,13 @@ public class WebSocketManager : IWebSocketManager
         GC.SuppressFinalize(this);
     }
 
+    public Task<bool> SendPlayer<T>(long playerId, ZRPCode code, T payload)
+    {
+        return SendPlayer(playerId, ZRPEncoder.EncodeToBytes(code, payload), WebSocketMessageType.Text, true);
+    }
+
+    public Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)
+    {
+        return BroadcastGame(gameId, ZRPEncoder.EncodeToBytes(code, payload), WebSocketMessageType.Text, true);
+    }
 }
