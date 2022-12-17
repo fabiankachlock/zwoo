@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "private": true,
   "scripts": {
     "serve": "vite --mode preview",
@@ -46,7 +46,7 @@
     "@iconify/json-tools": "^1.0.10",
     "@intlify/vite-plugin-vue-i18n": "^6.0.3",
     "@intlify/vue-i18n-loader": "^4.2.0",
-    "@tauri-apps/cli": "^1.1.1",
+    "@tauri-apps/cli": "^1.2.1",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.7",
     "@types/semver": "^7.3.12",
@@ -83,7 +83,7 @@
     "vue-jest": "^5.0.0-0",
     "vue-tsc": "^1.0.9",
     "workbox-precaching": "^6.5.4",
-    "ws": "^8.9.0"
+    "ws": "^8.11.0"
   },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [
