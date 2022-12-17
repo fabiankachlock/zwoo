@@ -15,7 +15,6 @@ public interface IWebSocketManager : IDisposable, INotificationAdapter
     /// <param name="gameId">the id of the game</param> 
     /// <param name="playerId">the id of the player</param>
     /// <param name="ws">a websocket object</param>
-    /// <param name="whenClosed">a websocket closed signal</param>
     /// <returns></returns>
     public bool AddConnection(long gameId, long playerId, WebSocket ws);
 
