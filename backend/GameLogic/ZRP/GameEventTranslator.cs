@@ -11,19 +11,13 @@ public class GameEventTranslator : NotificationManager
 {
 
     private INotificationAdapter _wsAdapter;
-    private ZwooRoom _game;
+    private ZwooRoom? _game;
 
 
-    public GameEventTranslator(INotificationAdapter wsAdapter, ZwooRoom game)
+    public GameEventTranslator(INotificationAdapter wsAdapter, ZwooRoom? game = null)
     {
         _wsAdapter = wsAdapter;
         _game = game;
-    }
-
-    public GameEventTranslator(INotificationAdapter wsAdapter)
-    {
-        _wsAdapter = wsAdapter;
-        _game = new ZwooRoom(new Game.Game(0, "", true, this), new LobbyManager(0, new GameSettings()));
     }
 
     public void SetGame(ZwooRoom game)
@@ -45,7 +39,7 @@ public class GameEventTranslator : NotificationManager
         }
         else
         {
-            _wsAdapter.BroadcastGame(this._game.Id, ErrorToZRPCode(data.Error), new ErrorDTO((int)data.Error, data.Message));
+            _wsAdapter.BroadcastGame(this._game!.Id, ErrorToZRPCode(data.Error), new ErrorDTO((int)data.Error, data.Message));
         }
     }
 
@@ -59,7 +53,7 @@ public class GameEventTranslator : NotificationManager
         // uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
         // Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta); // TODO: should not be here
         _wsAdapter.BroadcastGame(
-            _game.Id,
+            _game!.Id,
             ZRPCode.PlayerWon,
             new PlayerWonDTO(
                 _game.Lobby.ResolvePlayer(data.Winner),
@@ -88,7 +82,7 @@ public class GameEventTranslator : NotificationManager
     public void StateUpdate(ZwooGameLogic.Game.Events.StateUpdateDTO data)
     {
         _wsAdapter.BroadcastGame(
-            _game.Id,
+            _game!.Id,
             ZRPCode.StateUpdated,
             new ZRP.StateUpdatedDTO(new StateUpdated_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _game.Lobby.ResolvePlayer(data.ActivePlayer), data.ActivePlayerCardAmount, _game.Lobby.ResolvePlayer(data.LastPlayer), data.LastPlayerCardAmount)
         );

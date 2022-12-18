@@ -73,13 +73,13 @@ public class WebSocketController : Controller
                 bool success = _wsManager.AddConnection(gameId, (long)user.Id, webSocket);
                 if (!success) return; // TODO: logging
 
-                // TODO: player: connect
-
+                await game.PlayerManager.ConnectPlayer((long)user.Id);
                 await _wsHandler.Handle(gameId, (long)user.Id, webSocket);
 
+                await game.PlayerManager.DisconnectPlayer((long)user.Id);
                 success = _wsManager.RemoveConnection(gameId, (long)user.Id);
                 if (!success) return; // TODO: logging
-                // TODO: player: disconnect
+
 
                 return;
             }

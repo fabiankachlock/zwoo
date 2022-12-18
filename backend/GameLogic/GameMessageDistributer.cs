@@ -5,7 +5,6 @@ using ZwooGameLogic.Lobby;
 
 namespace ZwooGameLogic;
 
-// should this be handled in ZwooRoom? - would make more sense
 public class GameMessageDistributer
 {
 
@@ -13,12 +12,12 @@ public class GameMessageDistributer
 
     private IMessageHandler[] _handlers;
 
-    public GameMessageDistributer(INotificationAdapter webSocketManager, GameManager gameManager)
+    public GameMessageDistributer(INotificationAdapter webSocketManager)
     {
         _webSocketManager = webSocketManager;
         _handlers = new IMessageHandler[] {
             new ChatHandler(_webSocketManager),
-            new LobbyHandler(_webSocketManager, gameManager),
+            new LobbyHandler(_webSocketManager),
             new SettingsHandler(_webSocketManager),
             new GameHandler(_webSocketManager),
         };

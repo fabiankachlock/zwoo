@@ -10,7 +10,6 @@ public sealed class GameManager
     private long _gameId;
     private Dictionary<long, ZwooRoom> _activeGames;
     private INotificationAdapter _notificationAdapter;
-    private GameMessageDistributer _messageDistributer;
 
 
     public GameManager(INotificationAdapter notificationAdapter)
@@ -19,18 +18,23 @@ public sealed class GameManager
         _activeGames = new Dictionary<long, ZwooRoom>();
         _notificationAdapter = notificationAdapter;
         _logger = LogManager.GetLogger("GameManager");
-        _messageDistributer = new GameMessageDistributer(_notificationAdapter, this);
     }
 
     public ZwooRoom CreateGame(string name, bool isPublic)
     {
         long id = nextGameId();
-        GameEventTranslator notificationManager = new GameEventTranslator(this._notificationAdapter);
 
+        GameEventTranslator notificationManager = new GameEventTranslator(this._notificationAdapter);
         Game.Game newGame = new Game.Game(id, name, isPublic, notificationManager);
         LobbyManager lobby = new LobbyManager(newGame.Id, newGame.Settings);
-        ZwooRoom room = new ZwooRoom(newGame, lobby);
+        ZwooRoom room = new ZwooRoom(newGame, lobby, _notificationAdapter);
+
         notificationManager.SetGame(room);
+        room.OnClosed += () =>
+        {
+            RemoveGame(room.Id);
+            _notificationAdapter.DisconnectGame(room.Id);
+        };
 
         _activeGames.Add(newGame.Id, room);
         _logger.Info($"created game {newGame.Id}");
@@ -72,7 +76,7 @@ public sealed class GameManager
     {
         ZwooRoom? room = GetGame(gameId);
         if (room == null) return;
-        _messageDistributer.Distribute(room, msg);
+        room.EventDistributer.Distribute(room, msg);
     }
 
     private long nextGameId()

@@ -5,12 +5,10 @@ namespace ZwooGameLogic.ZRP.Handlers;
 public class LobbyHandler : IMessageHandler
 {
     private INotificationAdapter _webSocketManager;
-    private GameManager _gameManager;
 
-    public LobbyHandler(INotificationAdapter websocketManager, GameManager gameManager)
+    public LobbyHandler(INotificationAdapter websocketManager)
     {
         _webSocketManager = websocketManager;
-        _gameManager = gameManager;
     }
 
     public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
@@ -118,9 +116,7 @@ public class LobbyHandler : IMessageHandler
                 context.Game.RemovePlayer(player.Id);
                 if (context.Game.PlayerCount == 1)
                 {
-                    // close game
-                    _webSocketManager.DisconnectGame(context.GameId);
-                    _gameManager.RemoveGame(context.GameId);
+                    context.Room.Close();
                     return;
                 }
             }
@@ -128,9 +124,7 @@ public class LobbyHandler : IMessageHandler
             LobbyResult result = context.Lobby.RemovePlayer(payload.Username);
             if (context.Lobby.ActivePlayerCount() == 0)
             {
-                // close game
-                _webSocketManager.DisconnectGame(context.GameId);
-                _gameManager.RemoveGame(context.GameId);
+                context.Room.Close();
                 return;
             }
 
@@ -161,9 +155,7 @@ public class LobbyHandler : IMessageHandler
                 context.Game.RemovePlayer(context.Id);
                 if (context.Game.PlayerCount == 1)
                 {
-                    // close game
-                    _webSocketManager.DisconnectGame(context.GameId);
-                    _gameManager.RemoveGame(context.GameId);
+                    context.Room.Close();
                     return;
                 }
             }
@@ -171,9 +163,7 @@ public class LobbyHandler : IMessageHandler
             LobbyResult result = context.Lobby.RemovePlayer(context.UserName);
             if (context.Lobby.ActivePlayerCount() == 0)
             {
-                // close game
-                _webSocketManager.DisconnectGame(context.GameId);
-                _gameManager.RemoveGame(context.GameId);
+                context.Room.Close();
                 return;
             }
 
