@@ -1,4 +1,5 @@
 ﻿using ZwooGameLogic.Lobby;
+using ZwooGameLogic.ZRP;
 
 namespace ZwooGameLogic;
 
@@ -25,12 +26,17 @@ public class ZwooRoom
         EventDistributer = new GameMessageDistributer(notificationAdapter);
         PlayerManager = new ZRPPlayerManager(notificationAdapter, this);
 
-        Game.OnFinished += async () => await PlayerManager.FinishGame();
+        Game.OnFinished += async (data, meta) => await PlayerManager.FinishGame();
     }
 
     public void Close()
     {
         OnClosed.Invoke();
+    }
+
+    public void DistributeEvent(IIncomingZRPMessage msg)
+    {
+        EventDistributer.Distribute(this, msg);
     }
 }
 

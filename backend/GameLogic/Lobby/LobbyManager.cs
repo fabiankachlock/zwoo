@@ -181,6 +181,7 @@ public class LobbyManager
         if (player.Role == ZRPRole.Host)
         {
             PlayerEntry? newHost = SelectNewHost();
+            _players.RemoveAll(p => p.Username == name);
             if (newHost == null) return LobbyResult.Error;
         }
         _players.RemoveAll(p => p.Username == name);

@@ -16,7 +16,7 @@ public interface IWebSocketManager : IDisposable, INotificationAdapter
     /// <param name="playerId">the id of the player</param>
     /// <param name="ws">a websocket object</param>
     /// <returns></returns>
-    public bool AddConnection(long gameId, long playerId, WebSocket ws);
+    public bool AddConnection(long gameId, long playerId, WebSocket ws, CancellationTokenSource tokenSource);
 
     /// <summary>
     /// remove an active websocket connection
@@ -72,8 +72,14 @@ public interface IWebSocketManager : IDisposable, INotificationAdapter
 public class WebSocketManager : IWebSocketManager
 {
 
+    private struct Entry
+    {
+        public WebSocket WebSocket;
+        public CancellationTokenSource CancellationToken;
+    }
+
     private ILog _logger;
-    private Dictionary<long, WebSocket> _websockets = new Dictionary<long, WebSocket>();
+    private Dictionary<long, Entry> _websockets = new Dictionary<long, Entry>();
     private Dictionary<long, HashSet<long>> _games = new Dictionary<long, HashSet<long>>();
     private bool disposedValue;
 
@@ -82,7 +88,7 @@ public class WebSocketManager : IWebSocketManager
         _logger = LogManager.GetLogger("WebSocketManager");
     }
 
-    public bool AddConnection(long gameId, long playerId, WebSocket ws)
+    public bool AddConnection(long gameId, long playerId, WebSocket ws, CancellationTokenSource tokenSource)
     {
         _logger.Info($"storing websocket for {playerId}");
         lock (_websockets)
@@ -90,7 +96,11 @@ public class WebSocketManager : IWebSocketManager
             // store websocket
             if (!_websockets.ContainsKey(playerId))
             {
-                _websockets[playerId] = ws;
+                _websockets[playerId] = new Entry()
+                {
+                    WebSocket = ws,
+                    CancellationToken = tokenSource,
+                };
             }
             else
             {
@@ -165,9 +175,15 @@ public class WebSocketManager : IWebSocketManager
                 return false;
             }
 
+            if (_websockets[playerId].WebSocket.State != WebSocketState.Open)
+            {
+                _logger.Warn($"[Player] [{playerId}] send message since it is not open");
+                return false;
+            }
+
             _logger.Info($"[Player] [{playerId}] sending message");
             _logger.Debug($"[Player] [{playerId}] sending: {Encoding.UTF8.GetString(content)}");
-            sendingTask = _websockets[playerId].SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
+            sendingTask = _websockets[playerId].WebSocket.SendAsync(content, messageType, isEndOfMessage, CancellationToken.None);
         }
 
         try
@@ -214,7 +230,15 @@ public class WebSocketManager : IWebSocketManager
         {
             _logger.Info($"forcing disconnect for {playerId}");
             if (!_websockets.ContainsKey(playerId)) return false;
-            WebSocket webSocket = _websockets[playerId];
+            // stop handler
+            _websockets[playerId].CancellationToken.Cancel();
+            WebSocket webSocket = _websockets[playerId].WebSocket;
+            if (webSocket.State != WebSocketState.Open)
+            {
+                _logger.Warn($"[Player] [{playerId}] cant close websocket since it is not open");
+                return false;
+            }
+
             messageTask = webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "forced closing", CancellationToken.None);
         }
 
@@ -263,7 +287,7 @@ public class WebSocketManager : IWebSocketManager
             {
                 foreach (var websocketPair in _websockets)
                 {
-                    websocketPair.Value.Dispose();
+                    websocketPair.Value.WebSocket.Dispose();
                 }
             }
             _websockets.Clear();

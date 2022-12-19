@@ -10,7 +10,7 @@ namespace ZwooBackend.Websockets;
 
 public interface IWebSocketHandler : IDisposable
 {
-    public Task Handle(long gameId, long userId, WebSocket ws);
+    public Task Handle(long gameId, long userId, WebSocket ws, CancellationToken token);
 }
 
 
@@ -27,7 +27,7 @@ public class WebSocketHandler : IWebSocketHandler
         _logger = LogManager.GetLogger("WebSocketHandler");
     }
 
-    private async Task Handle(long gameId, long userId, WebSocket webSocket)
+    public async Task Handle(long gameId, long userId, WebSocket webSocket, CancellationToken token)
     {
 
         var buffer = new byte[1024 * 4];
@@ -36,7 +36,7 @@ public class WebSocketHandler : IWebSocketHandler
 
         bool hasTooLongMessage = false;
 
-        while (!receiveResult.CloseStatus.HasValue)
+        while (!receiveResult.CloseStatus.HasValue && !token.IsCancellationRequested)
         {
             // received message
             if (!receiveResult.EndOfMessage)
@@ -54,9 +54,11 @@ public class WebSocketHandler : IWebSocketHandler
                 _distributeMessage(buffer, receiveResult.Count, gameId, userId);
             }
 
-            receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            _logger.Debug($"[{userId}] waiting for message");
+            receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), token);
         }
 
+        _logger.Debug($"[{userId}] handler stopping");
         if (webSocket.CloseStatus == null)
         {
             await webSocket.CloseAsync(
@@ -64,11 +66,7 @@ public class WebSocketHandler : IWebSocketHandler
                 receiveResult.CloseStatusDescription,
                 CancellationToken.None);
         }
-    }
-
-    Task IWebSocketHandler.Handle(long gameId, long userId, WebSocket ws)
-    {
-        throw new NotImplementedException();
+        _logger.Debug($"[{userId}] handler closed");
     }
 
     private void _distributeMessage(byte[] message, int length, long gameId, long userId)

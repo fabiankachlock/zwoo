@@ -153,7 +153,7 @@ public class LobbyHandler : IMessageHandler
             if (context.Game.IsRunning)
             {
                 context.Game.RemovePlayer(context.Id);
-                if (context.Game.PlayerCount == 1)
+                if (context.Game.PlayerCount <= 1)
                 {
                     context.Room.Close();
                     return;

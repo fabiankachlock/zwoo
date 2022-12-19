@@ -73,8 +73,7 @@ public class GameLogicService : IGameLogicService
 
     public void DistributeEvent(long gameId, IIncomingZRPMessage msg)
     {
-        // TODO: needs GameLogic implementation
-        throw new NotImplementedException();
+        _gameManager.GetGame(gameId)?.DistributeEvent(msg);
     }
 
 }

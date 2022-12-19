@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using log4net;
+using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Websockets;
 using ZwooBackend.Games;
 using System.Net.WebSockets;
@@ -16,11 +17,14 @@ public class WebSocketController : Controller
     private IWebSocketHandler _wsHandler;
     private IGameLogicService _gamesService;
 
+    private ILog _logger;
+
     public WebSocketController(IWebSocketManager wsManager, IWebSocketHandler wsHandler, IGameLogicService gamesService)
     {
         _wsHandler = wsHandler;
         _wsManager = wsManager;
         _gamesService = gamesService;
+        _logger = LogManager.GetLogger("PlayerLifetime");
     }
 
 
@@ -68,18 +72,26 @@ public class WebSocketController : Controller
                     return;
                 }
 
+                _logger.Info($"[{user.Id}] accepting websocket");
                 WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                CancellationTokenSource shouldStop = new CancellationTokenSource();
 
-                bool success = _wsManager.AddConnection(gameId, (long)user.Id, webSocket);
+                _logger.Info($"[{user.Id}] adding connection");
+                bool success = _wsManager.AddConnection(gameId, (long)user.Id, webSocket, shouldStop);
+                _logger.Info($"[{user.Id}] success: {success}");
                 if (!success) return; // TODO: logging
 
+                _logger.Info($"[{user.Id}] notify playermanager");
                 await game.PlayerManager.ConnectPlayer((long)user.Id);
-                await _wsHandler.Handle(gameId, (long)user.Id, webSocket);
+                _logger.Info($"[{user.Id}] handle");
+                await _wsHandler.Handle(gameId, (long)user.Id, webSocket, shouldStop.Token);
 
-                await game.PlayerManager.DisconnectPlayer((long)user.Id);
+                _logger.Info($"[{user.Id}] remove connection");
                 success = _wsManager.RemoveConnection(gameId, (long)user.Id);
-                if (!success) return; // TODO: logging
+                _logger.Info($"[{user.Id}] success: {success}");
 
+                _logger.Info($"[{user.Id}] disconnect");
+                await game.PlayerManager.DisconnectPlayer((long)user.Id);
 
                 return;
             }
