@@ -41,7 +41,13 @@ public class GameLogicService : IGameLogicService
 
     public ZwooRoom CreateGame(string name, bool isPublic)
     {
-        return _gameManager.CreateGame(name, isPublic);
+        ZwooRoom room = _gameManager.CreateGame(name, isPublic);
+        room.Game.OnFinished += (data, gameMeta) =>
+        {
+            uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
+            Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta);
+        };
+        return room;
     }
 
     public bool RemoveGame(long gameId)

@@ -50,8 +50,6 @@ public class GameEventTranslator : NotificationManager
 
     public void PlayerWon(GamePlayerWonDTO data, GameMeta gameMeta)
     {
-        // uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
-        // Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta); // TODO: should not be here
         _wsAdapter.BroadcastGame(
             _game!.Id,
             ZRPCode.PlayerWon,
@@ -61,7 +59,6 @@ public class GameEventTranslator : NotificationManager
                 data.Scores.Select(score => new PlayerWon_SummaryDTO(_game.Lobby.ResolvePlayer(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).OrderBy(s => s.Position).ToArray()
             )
         );
-        // _webSockets.FinishGame(_gameId);
     }
 
     public void RemoveCard(ZwooGameLogic.Game.Events.RemoveCardDTO data)

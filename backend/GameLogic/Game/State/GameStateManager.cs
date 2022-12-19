@@ -28,7 +28,7 @@ public sealed class GameStateManager
         get => _isRunning;
     }
 
-    public delegate void FinishedHandler();
+    public delegate void FinishedHandler(GameEvent.PlayerWonEvent data, GameMeta gameMeta);
     public event FinishedHandler OnFinished = delegate { };
 
     internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
@@ -189,7 +189,8 @@ public sealed class GameStateManager
             _actionsQueue.Clear();
             Stop();
             SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
-            OnFinished.Invoke();
+            GameEvent.PlayerWonEvent playerWonEvent = isFinishedEvent.Value.CastPayload<GameEvent.PlayerWonEvent>();
+            OnFinished.Invoke(playerWonEvent, Meta);
         }
         else
         {
