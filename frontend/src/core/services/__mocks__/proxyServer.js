@@ -5,49 +5,51 @@ const httpProxy = require('http-proxy');
 
 var proxy = new httpProxy.createProxyServer({
   target: 'http://zwoo.igd20.de:8000/',
-  changeOrigin: true
+  followRedirects: true,
+  ws: true
 });
 
-//var proxyServer = http.createServer((req, res) => {
-//  proxy.web(req, res);
-//});
-//
-//proxyServer.on('upgrade', (req, socket, head) => {
-//  console.log('WS: ' + req.method + ' ' + req.url);
-//  socket.on('close', d => console.log('ws-close: error:', d));
-//  socket.on('connect', () => console.log('ws-connect'));
-//  socket.on('data', d => console.log('ws-data: ', d));
-//  socket.on('drain', () => console.log('ws-drain'));
-//  socket.on('end', () => console.log('ws-end'));
-//  socket.on('error', d => console.log('ws-error: ', d));
-//  socket.on('lookup', (err, addr, fam, host) => console.log('ws-lookup: ', { err, addr, fam, host }));
-//  socket.on('ready', () => console.log('ws-ready'));
-//  socket.on('timeout', () => console.log('ws-timeout'));
-//  proxy.ws(req, socket, head);
-//});
+var proxyServer = http.createServer((req, res) => {
+  // fix origin
+  req.headers['origin'] = 'https://zwoo.igd20.de';
 
-//proxy.on('open', proxySocket => {
-//  console.log('WS: OPEN');
-//  proxySocket.on('close', d => console.log('ws-proxy-close: error:', d));
-//  proxySocket.on('connect', () => console.log('ws-proxy-connect'));
-//  proxySocket.on('data', d => console.log('ws-proxy-data: ', d));
-//  proxySocket.on('drain', () => console.log('ws-proxy-drain'));
-//  proxySocket.on('end', () => console.log('ws-proxy-end'));
-//  proxySocket.on('error', d => console.log('ws-proxy-error: ', d));
-//  proxySocket.on('lookup', (err, addr, fam, host) => console.log('ws-proxy-lookup: ', { err, addr, fam, host }));
-//  proxySocket.on('ready', () => console.log('ws-proxy-ready'));
-//  proxySocket.on('timeout', () => console.log('ws-proxy-timeout'));
-//});
+  proxy.web(req, res);
+});
 
-proxy.on('error', (err, req, res) => {
+proxyServer.on('upgrade', (req, socket, head) => {
+  // fix origin or connections will be rejected with 403
+  req.headers['origin'] = 'https://zwoo.igd20.de';
+
+  console.log('WS: ' + req.method + ' ' + req.url);
+  proxy.ws(req, socket, head);
+});
+
+proxy.on('open', proxySocket => {
+  console.log('WS: OPEN');
+  proxySocket.on('close', d => console.log('ws-proxy-close: error:', d));
+  proxySocket.on('connect', () => console.log('ws-proxy-connect'));
+  proxySocket.on('data', d => console.log('ws-proxy-data: ', d.toString()));
+  proxySocket.on('drain', () => console.log('ws-proxy-drain'));
+  proxySocket.on('end', () => console.log('ws-proxy-end'));
+  proxySocket.on('error', d => console.log('ws-proxy-error: ', d));
+  proxySocket.on('lookup', (err, addr, fam, host) => console.log('ws-proxy-lookup: ', { err, addr, fam, host }));
+  proxySocket.on('ready', () => console.log('ws-proxy-ready'));
+  proxySocket.on('timeout', () => console.log('ws-proxy-timeout'));
+});
+
+proxy.on('error', (err, req) => {
   console.log('ERR: ' + req.method + ' ' + req.url + ' ' + err);
 });
 
-proxy.on('proxyReq', (proxyReq, req, res) => {
+proxy.on('close', () => {
+  console.log('WS: CLOSE');
+});
+
+proxy.on('proxyReq', (_proxyReq, req) => {
   console.log('PROXY: ' + req.method + ' ' + req.url);
 });
 
-proxy.on('proxyRes', (proxyRes, req, res) => {
+proxy.on('proxyRes', (proxyRes, req) => {
   console.log('RESP: ' + req.method + ' ' + req.url + ' ' + proxyRes.statusCode);
   console.log('proxyRes', JSON.stringify(proxyRes.headers, true, 2));
   proxyRes.headers['Access-Control-Allow-Origin'] = 'http://localhost:8080';
@@ -74,4 +76,4 @@ proxy.on('proxyRes', (proxyRes, req, res) => {
 });
 
 console.log('started!');
-proxy.listen(8005);
+proxyServer.listen(8005);
