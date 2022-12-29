@@ -29,6 +29,10 @@ RUN dotnet restore "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
 # copy all backend projects into /src/backend (/src/backend/<project>)
 COPY ./backend .
 
+# install python
+RUN sudo apt-get update -y
+RUN sudo apt-get install -y python
+
 # build wasm project
 RUN dotnet publish -c Release -p:RunAOTCompilation=true ./ZwooWasmAdapter/ZwooWasmAdapter.csproj
 
