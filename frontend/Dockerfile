@@ -18,6 +18,9 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dotnet-builder
 COPY --from=base /src ./src
 WORKDIR /src/backend
 
+# install wasm tools
+RUN dotnet workload install wasm-tools
+
 # copy project configs into /src/backend/<project>/<config>.csproj
 COPY ["./backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj", "./ZwooWasmAdapter/"]
 COPY ["./backend/GameLogic/GameLogic.csproj", "./GameLogic/"]
