@@ -31,7 +31,7 @@ COPY ./backend .
 
 # install python
 RUN apt-get update -y
-RUN apt-get install -y python
+RUN apt-get install -y python3
 
 # build wasm project
 RUN dotnet publish -c Release -p:RunAOTCompilation=true ./ZwooWasmAdapter/ZwooWasmAdapter.csproj
