@@ -1,3 +1,3 @@
 export interface CSharpExport {
-  Test(): Promise<number>;
+  Test(callback: (n: number) => number): Promise<number>;
 }

@@ -25,7 +25,7 @@ export class WasmLoader {
 
   public getInstance(): CSharpExport {
     return {
-      Test: this.exports.HelloWorld.Test
+      Test: this.exports.ZwooWasm.GameManager.Test
     };
   }
 }
