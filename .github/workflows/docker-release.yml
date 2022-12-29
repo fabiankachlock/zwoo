@@ -16,8 +16,7 @@ jobs:
         - name: Show ref
           run: echo "$GITHUB_REF"
         - name: Build Image
-          working-directory: ./frontend
-          run: 'docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }}'
+          run: 'docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }} .'
         - name: Log into JFrog
           run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
         - name: Push Image (version latest)
