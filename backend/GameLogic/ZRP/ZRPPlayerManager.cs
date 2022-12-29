@@ -63,28 +63,28 @@ public class ZRPPlayerManager
                     playerRemoveResult = LobbyResult.Error;
                 }
             }
+        }
+        else
+        {
+            _logger.Info($"{playerId} removed from lobby");
+            playerRemoveResult = _game.Lobby.RemovePlayer(playerId);
+
+            // only send leave message when the player leaves (NOT disconnects)
+            if (player.Role == ZRPRole.Spectator)
+            {
+                // TODO: change player model to include wins
+                await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username));
+            }
             else
             {
-                _logger.Info($"{playerId} removed from lobby");
-                playerRemoveResult = _game.Lobby.RemovePlayer(playerId);
-
-                // only send leave message when the player leaves (NOT disconnects)
-                if (player.Role == ZRPRole.Spectator)
-                {
-                    // TODO: change player model to include wins
-                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username));
-                }
-                else
-                {
-                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username));
-                }
+                await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username));
             }
+        }
 
-            if (_game.Lobby.ActivePlayerCount() == 0 || _game.Game.IsRunning && _game.Lobby.PlayerCount() < 2 || playerRemoveResult == LobbyResult.Error)
-            {
-                _logger.Info($"force closing game {_game.Id} due to a lack of players");
-                _game.Close();
-            }
+        if (_game.Lobby.ActivePlayerCount() == 0 || _game.Game.IsRunning && _game.Lobby.PlayerCount() < 2 || playerRemoveResult == LobbyResult.Error)
+        {
+            _logger.Info($"force closing game {_game.Id} due to a lack of players");
+            _game.Close();
         }
     }
 
@@ -95,7 +95,6 @@ public class ZRPPlayerManager
             .Select(p => _game.Lobby.GetPlayer(p)!)
             .Where(p => p != null && p.State == PlayerState.Disconnected);
 
-        // TODO: make this parallel
         foreach (var player in disconnectedPlayers)
         {
             // make them a spectator
@@ -103,6 +102,9 @@ public class ZRPPlayerManager
             await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(player.Username, ZRPRole.Spectator, 0));
         }
 
-        _game.Lobby.ResetDisconnectedStates();
+        // TODO: what was the intention on this??? this makes it impossible for player to rejoin after the game finished
+        // TODO: rethink disconnected state - spectators should be excluded
+        // TODO: this whole state & role model should be documented
+        // game.Lobby.ResetDisconnectedStates();
     }
 }

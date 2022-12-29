@@ -215,7 +215,8 @@ public class LobbyManager
         PlayerEntry host = GetPlayer(Host())!;
         if (PlayersNames().Count > 1)
         {
-            PlayerEntry newHost = _players.First(p => p.Role == ZRPRole.Player && p.State == PlayerState.Connected);
+            PlayerEntry? newHost = _players.FirstOrDefault(p => p.Role == ZRPRole.Player && p.State == PlayerState.Connected);
+            if (newHost == null) return null;
             newHost.Role = ZRPRole.Host;
             host.Role = ZRPRole.Player;
             return newHost;
