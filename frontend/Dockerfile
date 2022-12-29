@@ -18,6 +18,10 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dotnet-builder
 COPY --from=base /src ./src
 WORKDIR /src/backend
 
+# install python
+RUN apt-get update -y
+RUN apt-get install -y python3
+
 # install wasm tools
 RUN dotnet workload install wasm-tools
 
@@ -28,10 +32,6 @@ RUN dotnet restore "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
 
 # copy all backend projects into /src/backend (/src/backend/<project>)
 COPY ./backend .
-
-# install python
-RUN apt-get update -y
-RUN apt-get install -y python3
 
 # build wasm project
 RUN dotnet publish -c Release -p:RunAOTCompilation=true ./ZwooWasmAdapter/ZwooWasmAdapter.csproj
@@ -44,7 +44,7 @@ COPY --from=dotnet-builder /src ./src
 WORKDIR /src/frontend
 
 # build frontend
-RUN yarn build
+RUN yarn build-fe-only
 
 ### Production Stage
 FROM nginx:stable-alpine as prod
