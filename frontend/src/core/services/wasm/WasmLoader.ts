@@ -1,5 +1,6 @@
 import { AppConfig } from '@/config.js';
 
+import Logger from '../logging/logImport.js';
 import { CSharpExport } from './Interpop.js';
 
 export class WasmLoader {
@@ -7,31 +8,19 @@ export class WasmLoader {
   private exports: any;
 
   public async load() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    //
-    // const awaiter = new Awaiter();
-    // const scriptTag = document.createElement('script');
-    // //scriptTag.setAttribute('type', 'module');
-    // scriptTag.setAttribute('src', './wasm/dotnet.js');
-    // document.body.appendChild(scriptTag);
-    // scriptTag.onload = ev => {
-    //   console.log(ev);
-    //   awaiter.callback({});
-    // };
-    // await awaiter.promise;
+    Logger.Wasm.info('loading webassembly');
     let path = '/wasm/dotnet.js';
     if (AppConfig.IsDev) {
       path = '../../../../public' + path;
     }
-    console.log('importing:', path);
+    Logger.Wasm.info(`import path: ${path}`);
     const { dotnet } = await import(/* @vite-ignore */ path);
 
     const { getAssemblyExports, getConfig } = await dotnet.withDiagnosticTracing(false).withApplicationArgumentsFromQuery().create();
     const config = getConfig();
-    console.log(config);
+    Logger.Wasm.info(`config loaded - assembly: ${config.mainAssemblyName}`);
     this.exports = await getAssemblyExports(config.mainAssemblyName);
-    console.log(this.exports);
+    Logger.Wasm.info(`loaded webassembly ${config.mainAssemblyName}`);
   }
 
   public getInstance(): CSharpExport {

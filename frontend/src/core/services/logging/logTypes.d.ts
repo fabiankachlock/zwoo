@@ -32,4 +32,5 @@ export type ZwooLogger = ExtendedLogger & {
 	Zrp: ExtendedLogger;
 	RouterGuard: ExtendedLogger;
 	Theme: ExtendedLogger;
+	Wasm: ExtendedLogger;
 };
