@@ -3,6 +3,8 @@ name: Frontend Docker Pipeline
 
 'on':
   push:
+    branches:
+      - main
     paths:
       - 'frontend/**'
       - '.github/workflows/**'
