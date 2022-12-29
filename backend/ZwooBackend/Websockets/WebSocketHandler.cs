@@ -10,7 +10,7 @@ namespace ZwooBackend.Websockets;
 
 public interface IWebSocketHandler : IDisposable
 {
-    public Task Handle(long gameId, long userId, WebSocket ws, CancellationToken token);
+    public void Handle(long gameId, long userId, WebSocket ws, CancellationToken token, TaskCompletionSource source);
 }
 
 
@@ -27,7 +27,7 @@ public class WebSocketHandler : IWebSocketHandler
         _logger = LogManager.GetLogger("WebSocketHandler");
     }
 
-    public async Task Handle(long gameId, long userId, WebSocket webSocket, CancellationToken token)
+    public async void Handle(long gameId, long userId, WebSocket webSocket, CancellationToken token, TaskCompletionSource source)
     {
 
         var buffer = new byte[1024 * 4];
@@ -54,18 +54,36 @@ public class WebSocketHandler : IWebSocketHandler
                 _distributeMessage(buffer, receiveResult.Count, gameId, userId);
             }
 
-            _logger.Debug($"[{userId}] waiting for message");
-            receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), token);
+            try
+            {
+                receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), token);
+            }
+            catch (Exception ex)
+            {
+                if (webSocket.State != WebSocketState.Closed)
+                {
+                    _logger.Error($"[{userId}] error while receiving message:", ex);
+                }
+            }
         }
 
         _logger.Debug($"[{userId}] handler stopping");
-        if (webSocket.CloseStatus == null)
+        try
         {
-            await webSocket.CloseAsync(
-                receiveResult.CloseStatus.Value,
-                receiveResult.CloseStatusDescription,
-                CancellationToken.None);
+            if (webSocket.CloseStatus == null && webSocket.State == WebSocketState.Open)
+            {
+                await webSocket.CloseAsync(
+                    receiveResult.CloseStatus ?? WebSocketCloseStatus.NormalClosure,
+                    receiveResult.CloseStatusDescription,
+                    CancellationToken.None);
+            }
         }
+        catch (Exception ex)
+        {
+            _logger.Error($"[{userId}] error while closing websocket:", ex);
+        }
+
+        source.SetResult();
         _logger.Debug($"[{userId}] handler closed");
     }
 

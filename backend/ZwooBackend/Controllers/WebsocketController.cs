@@ -75,20 +75,29 @@ public class WebSocketController : Controller
                 _logger.Info($"[{user.Id}] accepting websocket");
                 WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
                 CancellationTokenSource shouldStop = new CancellationTokenSource();
+                TaskCompletionSource finished = new TaskCompletionSource();
 
                 _logger.Info($"[{user.Id}] adding connection");
                 bool success = _wsManager.AddConnection(gameId, (long)user.Id, webSocket, shouldStop);
-                _logger.Info($"[{user.Id}] success: {success}");
-                if (!success) return; // TODO: logging
+                if (!success)
+                {
+                    _logger.Error($"[{user.Id}] cant add connection");
+                    return;
+                }
 
                 _logger.Info($"[{user.Id}] notify playermanager");
                 await game.PlayerManager.ConnectPlayer((long)user.Id);
+
                 _logger.Info($"[{user.Id}] handle");
-                await _wsHandler.Handle(gameId, (long)user.Id, webSocket, shouldStop.Token);
+                _wsHandler.Handle(gameId, (long)user.Id, webSocket, shouldStop.Token, finished);
+                await finished.Task;
 
                 _logger.Info($"[{user.Id}] remove connection");
                 success = _wsManager.RemoveConnection(gameId, (long)user.Id);
-                _logger.Info($"[{user.Id}] success: {success}");
+                if (!success)
+                {
+                    _logger.Error($"[{user.Id}] cant remove connection");
+                }
 
                 _logger.Info($"[{user.Id}] disconnect");
                 await game.PlayerManager.DisconnectPlayer((long)user.Id);

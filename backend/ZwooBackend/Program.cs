@@ -77,7 +77,7 @@ if (app.Environment.IsDevelopment())
     Globals.Logger.Debug("adding swagger");
     app.UseSwagger();
     app.UseSwaggerUI();
-    // app.UseDeveloperExceptionPage();
+    app.UseDeveloperExceptionPage();
     app.UseHttpsRedirection();
 }
 
