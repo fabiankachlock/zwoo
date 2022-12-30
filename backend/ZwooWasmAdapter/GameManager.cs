@@ -18,6 +18,10 @@ public partial class GameManager
     {
         // TODO: init log4net?
         _gameManager = new ZwooGameLogic.GameManager(LocalNotificationAdapter.Instance);
+
+        Console.WriteLine("init wasm app");
+
+
     }
 
     [JSExport]

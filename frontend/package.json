@@ -23,6 +23,8 @@
     "build:cards": "node ./scripts/buildCardAssets.js",
     "build:icons": "node ./src/modules/zwoo-icons/generate-icons.js",
     "build:wasm": "dotnet publish -c Release -p:RunAOTCompilation=true ../backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj",
+    "build:wasm-dev": "dotnet publish ../backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj",
+    "build:wasm-watch": "dotnet watch publish --project ../backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj",
     "test:unit": "jest",
     "test:e2e": "cypress run",
     "test:e2e:ui": "cypress open",

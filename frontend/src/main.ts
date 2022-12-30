@@ -16,7 +16,7 @@ import router from './router';
 const l = new WasmLoader();
 l.load().then(async () => {
   const i = await l.getInstance();
-  i.Test(n => n + 5);
+  i.GameManager.CreateGame('test', true);
 });
 
 (() => {

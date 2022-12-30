@@ -1,12 +1,9 @@
-using ZwooGameLogic;
 using ZwooGameLogic.ZRP;
-using System;
-using System.Runtime.InteropServices.JavaScript;
 
 namespace ZwooWasm;
 
 
-public partial class LocalEvent : IIncomingZRPMessage
+public class LocalEvent : IIncomingZRPMessage
 {
 
     public ZRPCode Code { get; private set; }

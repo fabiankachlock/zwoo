@@ -39,7 +39,6 @@ public partial class LocalNotificationAdapter : INotificationAdapter
 
     #region Javascript Adaptation
 
-    // TODO: need these messages filtering by user id?
     private static Action<int, object> _messageHandler = (int code, object payload) => { };
 
     [JSExport]

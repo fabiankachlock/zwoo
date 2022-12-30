@@ -21,11 +21,15 @@ export class WasmLoader {
     Logger.Wasm.info(`config loaded - assembly: ${config.mainAssemblyName}`);
     this.exports = await getAssemblyExports(config.mainAssemblyName);
     Logger.Wasm.info(`loaded webassembly ${config.mainAssemblyName}`);
+    if (AppConfig.IsDev) {
+      Logger.Wasm.debug(`provided interface: ${JSON.stringify(this.exports, null, 2)}`);
+      console.log(this.exports);
+    }
   }
 
   public getInstance(): CSharpExport {
     return {
-      Test: this.exports.ZwooWasm.GameManager.Test
+      ...this.exports.ZwooWasm
     };
   }
 }
