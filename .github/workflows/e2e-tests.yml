@@ -14,7 +14,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build Test Runner Image
         run:  docker build -f ./e2e/Dockerfile -t zwoo-e2e .
       - name: Prepare Container
