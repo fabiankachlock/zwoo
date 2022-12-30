@@ -1,6 +1,6 @@
 .DS_Store
 *.log
-.vscode/
+.vscode/settings.json
 .idea/
 .vs/
 
@@ -10,5 +10,4 @@ tmp/
 docker-compose.local.yml
 docker-compose.prod.yml
 backend/ZwooBackend.sln.DotSettings.user
-backend/ZwooBackend/Properties/launchSettings.json
 backend/ZwooBackend/Properties/launchSettings.json
