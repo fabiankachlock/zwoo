@@ -8,7 +8,6 @@ name: Backend Docker Pipeline
     paths:
       - 'backend/**'
       - '.github/workflows/**'
-  pull_request:
   workflow_dispatch:
 
 jobs:
