@@ -1,0 +1,58 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "BE Launch",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "backend build",
+      "program": "${workspaceFolder}/backend/ZwooBackend/bin/Debug/net7.0/ZwooBackend.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/backend/ZwooBackend",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
+      "name": "BE Attach",
+      "type": "coreclr",
+      "request": "attach"
+    },
+    {
+      "name": "FE Launch Debug Preview",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/frontend/src",
+      "preLaunchTask": "frontend preview",
+      "serverReadyAction": {
+        "pattern": "Local: http://localhost:([0-9]+)",
+        "action": "openExternally",
+        "killOnServerStop": true
+      }
+    },
+    {
+      "name": "FE Launch Debug",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/frontend/src",
+      "preLaunchTask": "frontend serve",
+      "serverReadyAction": {
+        "pattern": "Local: http://localhost:([0-9]+)",
+        "action": "openExternally",
+        "killOnServerStop": true
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Start Zwoo",
+      "configurations": ["FE Launch Debug", "BE Launch"]
+    }
+  ]
+}

@@ -25,9 +25,9 @@ public readonly record struct StateUpdateDTO(
     int LastPlayerCardAmount
 );
 
-public readonly record struct PlayerDecissionDTO(
+public readonly record struct PlayerDecisionDTO(
     long Player,
-    PlayerDecission Decission
+    PlayerDecision Decision
 );
 
 public readonly record struct PlayerWonDTO(long Winner,
@@ -38,7 +38,6 @@ public readonly record struct ErrorDto(
     GameError Error,
     string Message
 );
-
 
 public interface NotificationManager
 {
@@ -54,7 +53,7 @@ public interface NotificationManager
 
     void StateUpdate(StateUpdateDTO data);
 
-    void GetPlayerDecission(PlayerDecissionDTO data);
+    void GetPlayerDecision(PlayerDecisionDTO data);
 
     void PlayerWon(PlayerWonDTO data, GameMeta gameMeta);
 

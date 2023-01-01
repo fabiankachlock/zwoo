@@ -132,16 +132,16 @@ public struct GameEvent
     public struct PlayerDecissionEvent
     {
         public readonly long Player;
-        public readonly PlayerDecission Decission;
+        public readonly PlayerDecision Decission;
 
-        public PlayerDecissionEvent(long player, PlayerDecission decission)
+        public PlayerDecissionEvent(long player, PlayerDecision decission)
         {
             Player = player;
             Decission = decission;
         }
     }
 
-    public static GameEvent GetPlayerDecission(long player, PlayerDecission decission)
+    public static GameEvent GetPlayerDecission(long player, PlayerDecision decission)
     {
         return new GameEvent(GameEventType.GetPlayerDecission, new PlayerDecissionEvent(player, decission));
     }
