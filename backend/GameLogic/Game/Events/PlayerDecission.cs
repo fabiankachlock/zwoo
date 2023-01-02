@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZwooGameLogic.Game.Events;
 
-public enum PlayerDecission
+public enum PlayerDecision
 {
     SelectColor = 1,
 }

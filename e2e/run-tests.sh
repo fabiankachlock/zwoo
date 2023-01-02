@@ -23,6 +23,14 @@ shutdown_app() {
     echo ""
 }
 
+echo "waiting for docker..."
+# wait for docker
+until docker ps > /dev/null 2>&1
+do
+  sleep 1
+done
+echo "docker ready!"
+
 
 # run tests
 echo ""

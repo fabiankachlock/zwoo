@@ -81,10 +81,10 @@ public struct ClientEvent
     public struct PlayerDecissionEvent
     {
         public readonly long Player;
-        public readonly PlayerDecission Decission;
+        public readonly PlayerDecision Decission;
         public readonly int Value;
 
-        public PlayerDecissionEvent(long player, PlayerDecission decission, int value)
+        public PlayerDecissionEvent(long player, PlayerDecision decission, int value)
         {
             Player = player;
             Decission = decission;
@@ -92,7 +92,7 @@ public struct ClientEvent
         }
     }
 
-    public static ClientEvent PlayerDecission(long player, PlayerDecission decission, int value)
+    public static ClientEvent PlayerDecision(long player, PlayerDecision decission, int value)
     {
         return new ClientEvent(ClientEventType.SendPlayerDecission, new PlayerDecissionEvent(player, decission, value));
     }

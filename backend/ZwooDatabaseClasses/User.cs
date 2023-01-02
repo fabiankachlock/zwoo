@@ -57,7 +57,7 @@ public class User : IDocument
     [BsonElement("settings")]
     [JsonIgnore]
     [BsonIgnoreIfDefault]
-    public string Settings { set; get; }
+    public string Settings { set; get; } = "";
 
     [BsonElement("validation_code")]
     [JsonIgnore]

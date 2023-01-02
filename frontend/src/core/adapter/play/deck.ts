@@ -79,7 +79,7 @@ export const useGameCardDeck = defineStore('game-cards', () => {
   };
 
   const selectCard = (card: Card, at: number) => {
-    if (config.get(ZwooConfigKey.SortCards)) {
+    if (config.get(ZwooConfigKey.ShowCardsDetail)) {
       selectedCard.value = {
         color: card.color,
         type: card.type,

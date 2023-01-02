@@ -7,7 +7,9 @@ services:
       - 27017:27017
 
   frontend:
-    build: ../frontend
+    build:
+      context: ..
+      dockerfile: ./frontend/Dockerfile
     depends_on:
       - backend
     ports:
