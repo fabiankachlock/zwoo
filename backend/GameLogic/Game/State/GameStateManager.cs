@@ -1,9 +1,9 @@
-﻿using log4net;
-using ZwooGameLogic.Game.Cards;
+﻿using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Helper;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game.State;
 
@@ -21,7 +21,7 @@ public sealed class GameStateManager
     private AsyncExecutionQueue _actionsQueue;
     private bool _isRunning;
 
-    private ILog _logger;
+    private ILogger _logger;
 
     public bool IsRunning
     {
@@ -31,7 +31,7 @@ public sealed class GameStateManager
     public delegate void FinishedHandler(GameEvent.PlayerWonEvent data, GameMeta gameMeta);
     public event FinishedHandler OnFinished = delegate { };
 
-    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
+    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification, ILoggerFactory loggerFactory)
     {
         Meta = meta;
         _gameSettings = settings;
@@ -42,9 +42,9 @@ public sealed class GameStateManager
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
         _playerOrder = new Dictionary<long, int>();
-        _ruleManager = new RuleManager(meta.Id, _gameSettings);
+        _ruleManager = new RuleManager(meta.Id, _gameSettings, loggerFactory);
         _actionsQueue = new AsyncExecutionQueue();
-        _logger = LogManager.GetLogger($"GameState-{Meta.Id}");
+        _logger = loggerFactory.CreateLogger($"GameState-{meta.Id}");
         _playerManager.OnPlayerLeave(HandlePlayerLeave);
     }
 

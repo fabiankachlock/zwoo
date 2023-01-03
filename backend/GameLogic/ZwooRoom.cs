@@ -1,5 +1,6 @@
 ﻿using ZwooGameLogic.Lobby;
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic;
 
@@ -19,12 +20,12 @@ public class ZwooRoom
         get => Game.Id;
     }
 
-    public ZwooRoom(Game.Game game, LobbyManager lobby, INotificationAdapter notificationAdapter)
+    public ZwooRoom(Game.Game game, LobbyManager lobby, INotificationAdapter notificationAdapter, ILoggerFactory loggerFactory)
     {
         Game = game;
         Lobby = lobby;
         EventDistributer = new GameMessageDistributer(notificationAdapter);
-        PlayerManager = new ZRPPlayerManager(notificationAdapter, this);
+        PlayerManager = new ZRPPlayerManager(notificationAdapter, this, loggerFactory.CreateLogger("PlayerManager"));
 
         Game.OnFinished += async (data, meta) => await PlayerManager.FinishGame();
     }

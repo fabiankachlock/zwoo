@@ -1,23 +1,26 @@
-﻿using log4net;
-using ZwooGameLogic.ZRP;
+﻿using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Logging;
 using ZwooGameLogic.Lobby;
 
 namespace ZwooGameLogic;
 
 public sealed class GameManager
 {
-    private readonly ILog _logger;
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly ILogger _logger;
+
     private long _gameId;
     private Dictionary<long, ZwooRoom> _activeGames;
     private INotificationAdapter _notificationAdapter;
 
 
-    public GameManager(INotificationAdapter notificationAdapter)
+    public GameManager(INotificationAdapter notificationAdapter, ILoggerFactory loggerFactory)
     {
         _gameId = 0;
         _activeGames = new Dictionary<long, ZwooRoom>();
         _notificationAdapter = notificationAdapter;
-        _logger = LogManager.GetLogger("GameManager");
+        _loggerFactory = loggerFactory;
+        _logger = _loggerFactory.CreateLogger("GameManager");
     }
 
     public ZwooRoom CreateGame(string name, bool isPublic)
@@ -25,9 +28,9 @@ public sealed class GameManager
         long id = nextGameId();
 
         GameEventTranslator notificationManager = new GameEventTranslator(this._notificationAdapter);
-        Game.Game newGame = new Game.Game(id, name, isPublic, notificationManager);
+        Game.Game newGame = new Game.Game(id, name, isPublic, notificationManager, _loggerFactory);
         LobbyManager lobby = new LobbyManager(newGame.Id, newGame.Settings);
-        ZwooRoom room = new ZwooRoom(newGame, lobby, _notificationAdapter);
+        ZwooRoom room = new ZwooRoom(newGame, lobby, _notificationAdapter, _loggerFactory);
 
         notificationManager.SetGame(room);
         room.OnClosed += () =>

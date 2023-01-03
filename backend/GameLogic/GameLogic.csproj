@@ -7,8 +7,4 @@
     <LangVersion>11</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
-  </ItemGroup>
-
 </Project>
