@@ -18,6 +18,7 @@ export class WasmLoader {
 
     const { getAssemblyExports, getConfig } = await dotnet.withDiagnosticTracing(false).withApplicationArgumentsFromQuery().create();
     const config = getConfig();
+    console.log(config);
     Logger.Wasm.info(`config loaded - assembly: ${config.mainAssemblyName}`);
     this.exports = await getAssemblyExports(config.mainAssemblyName);
     Logger.Wasm.info(`loaded webassembly ${config.mainAssemblyName}`);
