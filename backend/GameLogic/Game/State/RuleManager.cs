@@ -41,7 +41,6 @@ internal class RuleManager
 
         foreach (var rule in _activeRules)
         {
-            // TODO: Fix log management
             rule.SetLogger(_loggerFactory.CreateLogger($"[Game-{GameId}]"));
         }
     }
@@ -51,13 +50,13 @@ internal class RuleManager
         return _activeRules.Where(rule => rule.IsResponsible(clientEvent, state)).ToList();
     }
 
-    public BaseRule GetPrioritiesedRule(List<BaseRule> rules)
+    public BaseRule GetPrioritizedRule(List<BaseRule> rules)
     {
         return rules.OrderByDescending(rule => rule.Priority).First();
     }
 
     public BaseRule? getRule(ClientEvent clientEvent, GameState state)
     {
-        return GetPrioritiesedRule(GetResponsibleRules(clientEvent, state));
+        return GetPrioritizedRule(GetResponsibleRules(clientEvent, state));
     }
 }

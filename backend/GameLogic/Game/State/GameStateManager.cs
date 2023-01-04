@@ -243,9 +243,9 @@ public sealed class GameStateManager
                         stateUpdateEvent.LastPlayerCardAmount
                     ));
                     break;
-                case GameEventType.GetPlayerDecission:
-                    GameEvent.PlayerDecissionEvent playerDecissionEvent = evt.CastPayload<GameEvent.PlayerDecissionEvent>();
-                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecissionEvent.Player, playerDecissionEvent.Decission));
+                case GameEventType.GetPlayerDecision:
+                    GameEvent.PlayerDecisionEvent playerDecisionEvent = evt.CastPayload<GameEvent.PlayerDecisionEvent>();
+                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecisionEvent.Player, playerDecisionEvent.Decision));
                     break;
                 case GameEventType.PlayerWon:
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();
