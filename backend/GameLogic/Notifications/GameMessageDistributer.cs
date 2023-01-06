@@ -3,11 +3,10 @@ using ZwooGameLogic.ZRP;
 using ZwooGameLogic.ZRP.Handlers;
 using ZwooGameLogic.Lobby;
 
-namespace ZwooGameLogic;
+namespace ZwooGameLogic.Notifications;
 
 public class GameMessageDistributer
 {
-
     private INotificationAdapter _webSocketManager;
 
     private IMessageHandler[] _handlers;
