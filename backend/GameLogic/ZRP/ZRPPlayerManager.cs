@@ -16,6 +16,8 @@ public class ZRPPlayerManager
         _webSocketManager = webSocketManager;
         _game = game;
         _logger = LogManager.GetLogger("PlayerManager");
+
+        _game.Game.OnFinished += async (data, meta) => await this.FinishGame();
     }
 
     public async Task ConnectPlayer(long playerId)

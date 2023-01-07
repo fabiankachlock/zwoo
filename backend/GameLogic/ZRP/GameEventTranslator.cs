@@ -5,7 +5,7 @@ using GamePlayerWonDTO = ZwooGameLogic.Game.Events.PlayerWonDTO;
 
 namespace ZwooGameLogic.ZRP;
 
-public class GameEventTranslator : NotificationManager
+public class GameEventTranslator : IGameEventManager
 {
 
     private INotificationAdapter _wsAdapter;

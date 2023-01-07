@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Cards;
+﻿using ZwooGameLogic.Game.Cards;
 
 namespace ZwooGameLogic.Game.Events;
 
@@ -39,7 +34,7 @@ public readonly record struct ErrorDto(
     string Message
 );
 
-public interface NotificationManager
+public interface IGameEventManager
 {
     void StopGame();
 

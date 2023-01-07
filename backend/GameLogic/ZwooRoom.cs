@@ -1,6 +1,7 @@
 ﻿using ZwooGameLogic.Lobby;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic.Notifications;
+using ZwooGameLogic.Bots;
 
 namespace ZwooGameLogic;
 
@@ -8,8 +9,9 @@ public class ZwooRoom
 {
     public readonly Game.Game Game;
     public readonly LobbyManager Lobby;
-    public readonly GameMessageDistributer EventDistributer;
+    public readonly UserEventDistributer EventDistributer;
     public readonly ZRPPlayerManager PlayerManager;
+    public readonly BotManager BotManager;
 
     private readonly INotificationAdapter _notificationDistributer;
 
@@ -25,12 +27,11 @@ public class ZwooRoom
     {
         Game = game;
         Lobby = lobby;
+        BotManager = new BotManager(Game);
 
-        _notificationDistributer = new SimpleNotificationDistributer(notificationAdapter);
-        EventDistributer = new GameMessageDistributer(_notificationDistributer);
+        _notificationDistributer = new NotificationDistributer(notificationAdapter, BotManager);
+        EventDistributer = new UserEventDistributer(_notificationDistributer);
         PlayerManager = new ZRPPlayerManager(_notificationDistributer, this);
-
-        Game.OnFinished += async (data, meta) => await PlayerManager.FinishGame();
     }
 
     public void Close()

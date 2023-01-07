@@ -1,7 +1,7 @@
 using ZwooGameLogic.Lobby;
 using ZwooGameLogic.ZRP;
 
-namespace ZwooGameLogic;
+namespace ZwooGameLogic.ZRP;
 
 public class UserContext
 {

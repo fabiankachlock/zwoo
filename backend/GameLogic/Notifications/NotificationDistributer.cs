@@ -5,12 +5,12 @@ namespace ZwooGameLogic.Notifications;
 /// <summary>
 /// a notification adapter which distributes a notification to a number of other notification adapters
 /// </summary>
-public class SimpleNotificationDistributer : INotificationAdapter
+public class NotificationDistributer : INotificationAdapter
 {
 
     private List<INotificationAdapter> _targets;
 
-    public SimpleNotificationDistributer(params INotificationAdapter[] targets)
+    public NotificationDistributer(params INotificationAdapter[] targets)
     {
         _targets = new List<INotificationAdapter>(targets);
     }

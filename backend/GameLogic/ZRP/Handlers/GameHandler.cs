@@ -5,7 +5,7 @@ using ZwooGameLogic.Notifications;
 namespace ZwooGameLogic.ZRP.Handlers;
 
 
-public class GameHandler : IMessageHandler
+public class GameHandler : IEventHandler
 {
     private INotificationAdapter _webSocketManager;
 

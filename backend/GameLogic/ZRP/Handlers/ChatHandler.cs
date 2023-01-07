@@ -2,7 +2,7 @@
 
 namespace ZwooGameLogic.ZRP.Handlers;
 
-public class ChatHandler : IMessageHandler
+public class ChatHandler : IEventHandler
 {
 
     private INotificationAdapter _webSocketManager;

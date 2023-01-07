@@ -11,7 +11,7 @@ public sealed class Game
     private GameSettings _gameSettings;
     private PlayerManager _playerManager;
     private GameStateManager _stateManager;
-    private readonly NotificationManager _notificationManager;
+    private readonly IGameEventManager _notificationManager;
     private readonly ILog _logger;
 
     public long Id { get => _meta.Id; }
@@ -42,7 +42,7 @@ public sealed class Game
         long id,
         string name,
         bool isPublic,
-        NotificationManager notificationManager
+        IGameEventManager notificationManager
     )
     {
         _meta = new GameMeta();

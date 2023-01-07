@@ -10,7 +10,7 @@ namespace ZwooGameLogic.Game.State;
 public sealed class GameStateManager
 {
     public readonly GameMeta Meta;
-    private readonly NotificationManager _notificationManager;
+    private readonly IGameEventManager _notificationManager;
     private readonly RuleManager _ruleManager;
     private PlayerManager _playerManager;
     private GameSettings _gameSettings;
@@ -31,7 +31,7 @@ public sealed class GameStateManager
     public delegate void FinishedHandler(GameEvent.PlayerWonEvent data, GameMeta gameMeta);
     public event FinishedHandler OnFinished = delegate { };
 
-    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
+    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, IGameEventManager notification)
     {
         Meta = meta;
         _gameSettings = settings;

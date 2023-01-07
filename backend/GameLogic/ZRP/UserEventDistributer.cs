@@ -1,20 +1,19 @@
-﻿using System.Text;
-using ZwooGameLogic.ZRP;
-using ZwooGameLogic.ZRP.Handlers;
+﻿using ZwooGameLogic.ZRP.Handlers;
 using ZwooGameLogic.Lobby;
+using ZwooGameLogic.Notifications;
 
-namespace ZwooGameLogic.Notifications;
+namespace ZwooGameLogic.ZRP;
 
-public class GameMessageDistributer
+public class UserEventDistributer
 {
     private INotificationAdapter _webSocketManager;
 
-    private IMessageHandler[] _handlers;
+    private IEventHandler[] _handlers;
 
-    public GameMessageDistributer(INotificationAdapter webSocketManager)
+    public UserEventDistributer(INotificationAdapter webSocketManager)
     {
         _webSocketManager = webSocketManager;
-        _handlers = new IMessageHandler[] {
+        _handlers = new IEventHandler[] {
             new ChatHandler(_webSocketManager),
             new LobbyHandler(_webSocketManager),
             new SettingsHandler(_webSocketManager),
@@ -28,7 +27,7 @@ public class GameMessageDistributer
         if (player == null) return;
 
         UserContext context = new UserContext(player.Id, player.Username, player.Role, 0, room.Id, room);
-        foreach (IMessageHandler handler in _handlers)
+        foreach (IEventHandler handler in _handlers)
         {
             if (handler.HandleMessage(context, msg))
             {

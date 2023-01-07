@@ -23,10 +23,10 @@ public interface INotificationTarget
     /// <param name="code">zrp code of the notification</param>
     /// <param name="payload">zrp payload of the notification</param>
     /// <typeparam name="T">type of the zrp payload</typeparam>
-    public Task<bool> ReceiveMessage<T>(ZRPCode code, T payload);
+    public void ReceiveMessage<T>(ZRPCode code, T payload);
 
     /// <summary>
     /// disconnect the target from a game
     /// </summary>
-    public Task<bool> ReceiveDisconnect();
+    public void ReceiveDisconnect();
 }

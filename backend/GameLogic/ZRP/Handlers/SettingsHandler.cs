@@ -3,7 +3,7 @@ using ZwooGameLogic.Notifications;
 
 namespace ZwooGameLogic.ZRP.Handlers;
 
-public class SettingsHandler : IMessageHandler
+public class SettingsHandler : IEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
