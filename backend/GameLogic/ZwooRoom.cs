@@ -32,6 +32,8 @@ public class ZwooRoom
         _notificationDistributer = new NotificationDistributer(notificationAdapter, BotManager);
         EventDistributer = new UserEventDistributer(_notificationDistributer);
         PlayerManager = new ZRPPlayerManager(_notificationDistributer, this);
+
+        BotManager.OnEvent += DistributeEvent;
     }
 
     public void Close()

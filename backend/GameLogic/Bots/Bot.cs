@@ -1,6 +1,6 @@
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
-using ZwooGameLogic.Bots.State;
+using ZwooGameLogic.Bots.Decisions;
 
 namespace ZwooGameLogic.Bots;
 
@@ -12,30 +12,36 @@ public class Bot : INotificationTarget
 
     public long PlayerId { get; private set; }
 
-    private BotStateManager _stateManager;
+    private IBotDecisionHandler _handler;
+
+    private Action<long, BotZRPNotification<object>> _sendMessage;
 
 
-    public Bot(long gameId)
+    public Bot(long gameId, IBotDecisionHandler handler, Action<long, BotZRPNotification<object>> sendMessage)
     {
         GameId = gameId;
-        _stateManager = new BotStateManager();
+        _handler = handler;
+        _sendMessage = sendMessage;
     }
 
     public void PrepareForGame(long assignedId)
     {
         PlayerId = assignedId;
-        _stateManager.Reset();
+        _handler.Reset();
     }
 
     public void ReceiveMessage<T>(ZRPCode code, T payload)
     {
-        // detect if update or not
-        // send to state manager
-        // or make decision
+        BotZRPNotification<T> msg = new BotZRPNotification<T>(code, payload);
+        var botEvent = _handler.AggregateNotification<T, object>(msg);
+        if (botEvent != null)
+        {
+            _sendMessage(PlayerId, botEvent.Value);
+        }
     }
 
     public void ReceiveDisconnect()
     {
-        // EOL
+        _handler.Reset();
     }
 }

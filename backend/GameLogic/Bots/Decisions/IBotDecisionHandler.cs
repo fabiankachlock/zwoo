@@ -1,4 +1,9 @@
 namespace ZwooGameLogic.Bots.Decisions;
 
 
-internal interface IBotDecisionHandler { }
+public interface IBotDecisionHandler
+{
+    BotZRPNotification<TOut>? AggregateNotification<TIn, TOut>(BotZRPNotification<TIn> message);
+
+    void Reset();
+}

@@ -1,5 +1,6 @@
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Bots.Decisions;
 
 namespace ZwooGameLogic.Bots;
 
@@ -7,12 +8,14 @@ namespace ZwooGameLogic.Bots;
 /// <summary>
 /// an object managing multiple bot instances within a game
 /// </summary>
-public class BotManager : INotificationAdapter
+public class BotManager : INotificationAdapter, IUserEventEmitter
 {
 
     private readonly Game.Game _game;
 
     private readonly INotificationAdapter _notificationManager;
+
+    public event IUserEventEmitter.EventHandler OnEvent = delegate { };
 
     public BotManager(Game.Game game)
     {
@@ -20,9 +23,13 @@ public class BotManager : INotificationAdapter
         _notificationManager = new NotificationManager();
     }
 
-    public void CreateBot()
+    public Bot CreateBot()
     {
-
+        Bot bot = new Bot(_game.Id, BotBrainFactory.CreateDecisionHandler(), (long botId, BotZRPNotification<object> msg) =>
+        {
+            OnEvent.Invoke(new BotZRPEvent(botId, msg.Code, msg.Payload));
+        });
+        return bot;
     }
 
     public void RemoveBot()
