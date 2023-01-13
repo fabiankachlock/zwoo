@@ -17,12 +17,19 @@ internal class BasicBotStateManager
         /// <summary>
         /// a list of all cards the bot has currently
         /// </summary>
-        internal List<Card> Deck;
+        internal List<Card> Deck = new List<Card>();
 
         /// <summary>
         /// the card thats on top of the current stack
         /// </summary>
-        internal Card StackTop;
+        internal Card StackTop = new Card();
+
+        /// <summary>
+        /// whether the bot is the active player or not
+        /// </summary>
+        internal bool IsActive = false;
+
+        public BotState() { }
     }
 
     /// <summary>
@@ -67,6 +74,12 @@ internal class BasicBotStateManager
             case ZRPCode.SendPileTop:
                 aggregatePileTop((SendPileTopDTO)message.Payload);
                 break;
+            case ZRPCode.StartTurn:
+                setActive();
+                break;
+            case ZRPCode.EndTurn:
+                setInactive();
+                break;
         }
     }
 
@@ -105,5 +118,15 @@ internal class BasicBotStateManager
     private void aggregateStateUpdate(StateUpdatedDTO data)
     {
         _state.StackTop = new Card(data.PileTop.Type, data.PileTop.Symbol);
+    }
+
+    private void setActive()
+    {
+        _state.IsActive = true;
+    }
+
+    private void setInactive()
+    {
+        _state.IsActive = false;
     }
 }

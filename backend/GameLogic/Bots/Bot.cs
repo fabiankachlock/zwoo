@@ -32,8 +32,8 @@ public class Bot : INotificationTarget
 
     public void ReceiveMessage<T>(ZRPCode code, T payload)
     {
-        BotZRPNotification<T> msg = new BotZRPNotification<T>(code, payload);
-        var botEvent = _handler.AggregateNotification<T, object>(msg);
+        BotZRPNotification<object> msg = new BotZRPNotification<object>(code, payload != null ? (object)payload : new object());
+        var botEvent = _handler.AggregateNotification(msg);
         if (botEvent != null)
         {
             _sendMessage(PlayerId, botEvent.Value);
