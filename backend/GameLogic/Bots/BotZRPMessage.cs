@@ -14,7 +14,6 @@ public struct BotZRPNotification<T>
         Code = code;
         Payload = payload;
     }
-
 }
 
 public class BotZRPEvent : IIncomingZRPMessage
