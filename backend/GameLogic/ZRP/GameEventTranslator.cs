@@ -25,7 +25,7 @@ public class GameEventTranslator : IGameEventManager
 
     public void EndTurn(long player)
     {
-        _wsAdapter.SendPlayer(player, ZRPCode.EndTurn, new EndTurnDTO());
+        _wsAdapter.SendPlayer(player, ZRPCode.EndTurn, new EndTurnNotification());
     }
 
     public void Error(ErrorDto data)
@@ -33,17 +33,17 @@ public class GameEventTranslator : IGameEventManager
         // TODO: Use zrp errors or remove them from zrp
         if (data.Player != null)
         {
-            _wsAdapter.SendPlayer((long)data.Player, ErrorToZRPCode(data.Error), new ErrorDTO((int)data.Error, data.Message));
+            _wsAdapter.SendPlayer((long)data.Player, ErrorToZRPCode(data.Error), new Error((int)data.Error, data.Message));
         }
         else
         {
-            _wsAdapter.BroadcastGame(this._game!.Id, ErrorToZRPCode(data.Error), new ErrorDTO((int)data.Error, data.Message));
+            _wsAdapter.BroadcastGame(this._game!.Id, ErrorToZRPCode(data.Error), new Error((int)data.Error, data.Message));
         }
     }
 
     public void GetPlayerDecision(ZwooGameLogic.Game.Events.PlayerDecisionDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionDTO((int)data.Decision));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision));
     }
 
     public void PlayerWon(GamePlayerWonDTO data, GameMeta gameMeta)
@@ -51,27 +51,28 @@ public class GameEventTranslator : IGameEventManager
         _wsAdapter.BroadcastGame(
             _game!.Id,
             ZRPCode.PlayerWon,
-            new PlayerWonDTO(
+            new PlayerWonNotification(
                 _game.Lobby.ResolvePlayer(data.Winner),
                 0, // TODO: (int)winnerWins,
-                data.Scores.Select(score => new PlayerWon_SummaryDTO(_game.Lobby.ResolvePlayer(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).OrderBy(s => s.Position).ToArray()
+                data.Scores.Select(score => new PlayerWon_PlayerSummaryDTO(_game.Lobby.ResolvePlayer(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).OrderBy(s => s.Position).ToArray()
             )
         );
     }
 
     public void RemoveCard(ZwooGameLogic.Game.Events.RemoveCardDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCard, new ZRP.RemoveCardDTO(data.Card.Color, data.Card.Type));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCard, new ZRP.RemoveCardNotification(data.Card.Color, data.Card.Type));
     }
 
+    // TODO: utilize, that multiple cards can be sent at once
     public void SendCard(ZwooGameLogic.Game.Events.SendCardDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.SendCard, new ZRP.SendCardDTO(data.Card.Color, data.Card.Type));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.SendCard, new ZRP.SendCardsNotification(new SendCard_CardDTO[] { new SendCard_CardDTO(data.Card.Color, data.Card.Type) }));
     }
 
     public void StartTurn(long player)
     {
-        _wsAdapter.SendPlayer(player, ZRPCode.StartTurn, new StartTurnDTO());
+        _wsAdapter.SendPlayer(player, ZRPCode.StartTurn, new StartTurnNotification());
     }
 
     public void StateUpdate(ZwooGameLogic.Game.Events.StateUpdateDTO data)
@@ -79,7 +80,7 @@ public class GameEventTranslator : IGameEventManager
         _wsAdapter.BroadcastGame(
             _game!.Id,
             ZRPCode.StateUpdated,
-            new ZRP.StateUpdatedDTO(new StateUpdated_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _game.Lobby.ResolvePlayer(data.ActivePlayer), data.ActivePlayerCardAmount, _game.Lobby.ResolvePlayer(data.LastPlayer), data.LastPlayerCardAmount)
+            new ZRP.StateUpdateNotification(new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _game.Lobby.ResolvePlayer(data.ActivePlayer), data.ActivePlayerCardAmount, _game.Lobby.ResolvePlayer(data.LastPlayer), data.LastPlayerCardAmount)
         );
     }
 

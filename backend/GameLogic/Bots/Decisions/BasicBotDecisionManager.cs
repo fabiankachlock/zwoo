@@ -22,7 +22,7 @@ public class BasicBotDecisionManager : IBotDecisionHandler
         switch (message.Code)
         {
             case ZRPCode.GetPlayerDecision:
-                return makeDecision((GetPlayerDecisionDTO)message.Payload);
+                return makeDecision((GetPlayerDecisionNotification)message.Payload);
             case ZRPCode.PlaceCardError:
                 return placeCard();
             default:
@@ -44,23 +44,23 @@ public class BasicBotDecisionManager : IBotDecisionHandler
     {
         if (placedCard == _stateManager.GetState().Deck.Count)
         {
-            return new BotZRPNotification<object>(ZRPCode.DrawCard, new DrawCardDTO());
+            return new BotZRPNotification<object>(ZRPCode.DrawCard, new DrawCardEvent());
         }
 
         placedCard = placedCard + 1;
         var state = _stateManager.GetState();
-        return new BotZRPNotification<object>(ZRPCode.PlaceCard, new PlaceCardDTO(
+        return new BotZRPNotification<object>(ZRPCode.PlaceCard, new PlaceCardEvent(
             (int)state.Deck[placedCard].Color,
             (int)state.Deck[placedCard].Type
         ));
     }
 
-    private BotZRPNotification<object> makeDecision(GetPlayerDecisionDTO data)
+    private BotZRPNotification<object> makeDecision(GetPlayerDecisionNotification data)
     {
         switch (data.Type)
         {
             case (int)PlayerDecision.SelectColor:
-                return new BotZRPNotification<object>(ZRPCode.ReceiveDecision, new ReceiveDecisionDTO((int)PlayerDecision.SelectColor, (int)CardColorHelper.Random()));
+                return new BotZRPNotification<object>(ZRPCode.ReceiveDecision, new PlayerDecisionEvent((int)PlayerDecision.SelectColor, (int)CardColorHelper.Random()));
             default:
                 // do at least something
                 return placeCard();

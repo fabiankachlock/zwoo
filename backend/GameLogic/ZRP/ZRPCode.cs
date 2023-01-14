@@ -4,55 +4,111 @@ public enum ZRPCode
 {
     // General
     // - players
-    PlayerJoined = 100, // send
-    SpectatorJoined = 101, // send
-    PlayerLeft = 102, // send
-    SpectatorLeft = 103, // send
-    PlayerLeftGame = 106, // receive
+    /// <summary>send</summary>
+    PlayerJoined = 100,
+    /// <summary>send</summary>
+    SpectatorJoined = 101,
+    /// <summary>send</summary>
+    PlayerLeft = 102,
+    /// <summary>send</summary>
+    SpectatorLeft = 103,
+    /// <summary>receive</summary>
+    PlayerLeaves = 106,
     // - chat
-    PushMessage = 104, // receive
-    DistributeMessage = 105, // send
+    /// <summary>receive</summary>
+    CreateChatMessage = 104,
+    /// <summary>send</summary>
+    SendChatMessage = 105,
     // - all players
-    GetAllPlayers = 108, // receive
-    ListAllPlayers = 109, // send
+    /// <summary>receive</summary>
+    GetLobby = 108,
+    /// <summary>send</summary>
+    SendLobby = 109,
     // - player role
-    SpectatorWantsToPlay = 110, // receive
-    PlayerWantsToSpectate = 111, // receive
-    PromotePlayerToHost = 112, // receive
-    PromotedToHost = 113, // send
-    HostChanged = 114, // send
-    KickPlayer = 115, // receive
-    PlayerChangedRole = 116, // send
-    PlayerDisconnected = 117, //send
-    PlayerReconnected = 118, // send
-
-    KeepAlive = 198, // receive
-    AckKeepAlive = 199, // send
+    ///<summary>receive</summary>
+    SpectatorToPlayer = 110,
+    ///<summary>receive</summary>
+    PlayerToSpectator = 111,
+    ///<summary>receive</summary>
+    PlayerToHost = 112,
+    ///<summary>send</summary>
+    PromotedToHost = 113,
+    ///<summary>send</summary>
+    HostChanged = 114,
+    ///<summary>receive</summary>
+    KickPlayer = 115,
+    ///<summary>send</summary>
+    PlayerChangedRole = 116,
+    ///<summary>send</summary>
+    PlayerDisconnected = 117,
+    ///<summary>send</summary>
+    PlayerReconnected = 118,
+    ///<summary>receive</summary>
+    KeepAlive = 198,
+    ///<summary>send</summary>
+    AckKeepAlive = 199,
     // Lobby
-    UpdateSetting = 200, // receive
-    ChangedSettings = 201, // send
-    GetAllSettings = 202, // receive
-    AllSettings = 203, // send
-    StartGame = 210, // receive
+    /// <summary>receive</summary>
+    UpdateSetting = 200,
+    /// <summary>send</summary>
+    SettingChanged = 201,
+    /// <summary>receive</summary>
+    GetAllSettings = 202,
+    /// <summary>send</summary>
+    SendAllSettings = 203,
+    /// <summary>receive</summary>
+    StartGame = 210,
+    /// <summary>receive</summary>
+    CreateBot = 230,
+    /// <summary>send</summary>
+    BotJoined = 231,
+    /// <summary>send</summary>
+    BotLeft = 232,
+    /// <summary>receive</summary>
+    UpdateBot = 233,
+    /// <summary>receive</summary>
+    DeleteBot = 235,
+    /// <summary>receive</summary>
+    GetBots = 236,
+    /// <summary>send</summary>
+    SendBots = 237,
     // Game
-    GameStarted = 300, // send
-    StartTurn = 301, // send
-    EndTurn = 302, // send
-    RequestEndTurn = 303, // receive
-    PlaceCard = 304, // receive
-    DrawCard = 305, // receive
-    SendCard = 306, // send
-    RemoveCard = 307, // send
-    StateUpdated = 308, // send
-    GetHand = 310, // receive
-    SendHand = 311, // send
-    GetCardAmount = 312, // receive
-    SendCardAmount = 313, // send
-    GetPileTop = 314, // receive
-    SendPileTop = 315, // send
-    GetPlayerDecision = 316, // send
-    ReceiveDecision = 317, // receive
-    PlayerWon = 399, // send
+    /// <summary>send</summary>
+    GameStarted = 300,
+    /// <summary>send</summary>
+    StartTurn = 301,
+    /// <summary>send</summary>
+    EndTurn = 302,
+    /// <summary>receive</summary>
+    RequestEndTurn = 303,
+    /// <summary>receive</summary>
+    PlaceCard = 304,
+    /// <summary>receive</summary>
+    DrawCard = 305,
+    /// <summary>send</summary>
+    SendCard = 306,
+    /// <summary>send</summary>
+    RemoveCard = 307,
+    /// <summary>send</summary>
+    StateUpdated = 308,
+    /// <summary>receive</summary>
+    GetHand = 310,
+    /// <summary>send</summary>
+    SendHand = 311,
+    /// <summary>receive</summary>
+    GetCardAmount = 312,
+    /// <summary>send</summary>
+    SendCardAmount = 313,
+    /// <summary>receive</summary>
+    GetPileTop = 314,
+    /// <summary>send</summary>
+    SendPileTop = 315,
+    /// <summary>send</summary>
+    GetPlayerDecision = 316,
+    /// <summary>receive</summary>
+    ReceiveDecision = 317,
+    /// <summary>send</summary>
+    PlayerWon = 399,
     // Errors
     GeneralError = 400, // send
     MessageToLongError = 401, // send

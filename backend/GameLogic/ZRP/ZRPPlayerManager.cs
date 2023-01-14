@@ -30,12 +30,12 @@ public class ZRPPlayerManager
         if (player.Role == ZRPRole.Spectator)
         {
             // TODO: change player model to include wins
-            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorJoined, new SpectatorJoinedDTO(player.Username, 0));
+            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorJoined, new SpectatorJoinedNotification(player.Username));
         }
         else
         {
-            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerReconnected, new PlayerReconnectedDTO(player.Username));
-            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerJoined, new PlayerJoinedDTO(player.Username, 0));
+            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerReconnected, new PlayerReconnectedNotification(player.Username));
+            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerJoined, new PlayerJoinedNotification(player.Username));
         }
     }
 
@@ -50,7 +50,7 @@ public class ZRPPlayerManager
         if (_game.Game.IsRunning)
         {
             _logger.Info($"{playerId} disconnected from running game");
-            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerDisconnected, new PlayerDisconnectedDTO(player.Username));
+            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerDisconnected, new PlayerDisconnectedNotification(player.Username));
             _game.Lobby.PlayerDisconnected(playerId);
 
             if (player.Role == ZRPRole.Host)
@@ -58,9 +58,9 @@ public class ZRPPlayerManager
                 var newHost = _game.Lobby.SelectNewHost();
                 if (newHost != null)
                 {
-                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(newHost.Username, ZRPRole.Host, 0));
-                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.HostChanged, new HostChangedDTO(newHost.Username));
-                    await _webSocketManager.SendPlayer(newHost.Id, ZRPCode.PromotedToHost, new PromotedToHostDTO());
+                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.Username, ZRPRole.Host));
+                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.HostChanged, new NewHostNotification(newHost.Username));
+                    await _webSocketManager.SendPlayer(newHost.Id, ZRPCode.PromotedToHost, new YouAreHostNotification());
                 }
                 else
                 {
@@ -77,11 +77,11 @@ public class ZRPPlayerManager
             if (player.Role == ZRPRole.Spectator)
             {
                 // TODO: change player model to include wins
-                await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username));
+                await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.Username));
             }
             else
             {
-                await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username));
+                await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.Username));
             }
         }
 
@@ -97,13 +97,13 @@ public class ZRPPlayerManager
         // transform all disconnected players into a spectator
         var disconnectedPlayers = _game.Lobby.Players()
             .Select(p => _game.Lobby.GetPlayer(p)!)
-            .Where(p => p != null && p.State == PlayerState.Disconnected);
+            .Where(p => p != null && p.State == ZRPPlayerState.Disconnected);
 
         foreach (var player in disconnectedPlayers)
         {
             // make them a spectator
             var result = _game.Lobby.ChangeRole(player.Username, ZRPRole.Spectator);
-            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(player.Username, ZRPRole.Spectator, 0));
+            await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(player.Username, ZRPRole.Spectator));
         }
 
         // TODO: what was the intention on this??? this makes it impossible for player to rejoin after the game finished

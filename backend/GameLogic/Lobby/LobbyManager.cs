@@ -3,13 +3,6 @@ using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Lobby;
 
-public enum PlayerState
-{
-    Connected,
-    Disconnected
-}
-
-
 public class LobbyManager
 {
 
@@ -18,9 +11,9 @@ public class LobbyManager
         public long Id;
         public string Username;
         public ZRPRole Role;
-        public PlayerState State;
+        public ZRPPlayerState State;
 
-        public PlayerEntry(long id, string username, ZRPRole role, PlayerState state)
+        public PlayerEntry(long id, string username, ZRPRole role, ZRPPlayerState state)
         {
             Id = id;
             Username = username;
@@ -59,7 +52,7 @@ public class LobbyManager
 
     public int PlayerCount() => PlayersNames().Count();
 
-    public int ActivePlayerCount() => _players.FindAll(p => p.Role != ZRPRole.Spectator && p.State == PlayerState.Connected).Select(p => p.Username).Count();
+    public int ActivePlayerCount() => _players.FindAll(p => p.Role != ZRPRole.Spectator && p.State == ZRPPlayerState.Connected).Select(p => p.Username).Count();
 
     public bool HasHost() => _players.Where(p => p.Role == ZRPRole.Host).Count() == 1;
 
@@ -120,7 +113,7 @@ public class LobbyManager
     public LobbyResult Initialize(long hostId, string host, string password, bool usePassword)
     {
         if (HasHost()) return LobbyResult.ErrorAlredyInitialized;
-        _preparedPlayers.Add(new PlayerEntry(hostId, host, ZRPRole.Host, PlayerState.Disconnected));
+        _preparedPlayers.Add(new PlayerEntry(hostId, host, ZRPRole.Host, ZRPPlayerState.Disconnected));
         _password = password;
         _usePassword = usePassword;
         return LobbyResult.Success;
@@ -129,11 +122,11 @@ public class LobbyManager
     public LobbyResult AddPlayer(long id, string name, ZRPRole role, string password)
     {
         if (_usePassword && password != _password) return LobbyResult.ErrorWrongPassword;
-        if (GetPlayer(id)?.State == PlayerState.Disconnected) return LobbyResult.Success; // handle reconnect after disconnect
+        if (GetPlayer(id)?.State == ZRPPlayerState.Disconnected) return LobbyResult.Success; // handle reconnect after disconnect
         if (HasPlayer(name) || role == ZRPRole.Host) return LobbyResult.ErrorAlredyInGame;
         if (PlayerCount() >= _settings.MaxAmountOfPlayers && role != ZRPRole.Spectator) return LobbyResult.ErrorLobbyFull;
 
-        _preparedPlayers.Add(new PlayerEntry(id, name, role, PlayerState.Disconnected));
+        _preparedPlayers.Add(new PlayerEntry(id, name, role, ZRPPlayerState.Disconnected));
         return LobbyResult.Success;
     }
 
@@ -148,7 +141,7 @@ public class LobbyManager
         }
         catch
         {
-            if (GetPlayer(id)?.State == PlayerState.Disconnected)
+            if (GetPlayer(id)?.State == ZRPPlayerState.Disconnected)
             {
                 return LobbyResult.Success;
             }
@@ -161,7 +154,7 @@ public class LobbyManager
         PlayerEntry? player = GetPlayer(id);
         if (player != null)
         {
-            player.State = PlayerState.Connected;
+            player.State = ZRPPlayerState.Connected;
         }
     }
 
@@ -170,7 +163,7 @@ public class LobbyManager
         PlayerEntry? player = GetPlayer(id);
         if (player != null)
         {
-            player.State = PlayerState.Disconnected;
+            player.State = ZRPPlayerState.Disconnected;
         }
     }
 
@@ -215,7 +208,7 @@ public class LobbyManager
         PlayerEntry host = GetPlayer(Host())!;
         if (PlayersNames().Count > 1)
         {
-            PlayerEntry? newHost = _players.FirstOrDefault(p => p.Role == ZRPRole.Player && p.State == PlayerState.Connected);
+            PlayerEntry? newHost = _players.FirstOrDefault(p => p.Role == ZRPRole.Player && p.State == ZRPPlayerState.Connected);
             if (newHost == null) return null;
             newHost.Role = ZRPRole.Host;
             host.Role = ZRPRole.Player;
@@ -230,7 +223,7 @@ public class LobbyManager
     {
         foreach (PlayerEntry player in _players)
         {
-            player.State = PlayerState.Connected;
+            player.State = ZRPPlayerState.Connected;
         }
     }
 }

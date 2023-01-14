@@ -60,19 +60,19 @@ internal class BasicBotStateManager
         switch (message.Code)
         {
             case ZRPCode.SendCard:
-                aggregateNewCard((SendCardDTO)message.Payload);
+                aggregateNewCards((SendCardsNotification)message.Payload);
                 break;
             case ZRPCode.StateUpdated:
-                aggregateStateUpdate((StateUpdatedDTO)message.Payload);
+                aggregateStateUpdate((StateUpdateNotification)message.Payload);
                 break;
             case ZRPCode.RemoveCard:
-                aggregateRemoveCard((RemoveCardDTO)message.Payload);
+                aggregateRemoveCard((RemoveCardNotification)message.Payload);
                 break;
             case ZRPCode.SendHand:
-                aggregateSendHand((SendHandDTO)message.Payload);
+                aggregateSendHand((SendDeckNotification)message.Payload);
                 break;
             case ZRPCode.SendPileTop:
-                aggregatePileTop((SendPileTopDTO)message.Payload);
+                aggregatePileTop((SendPileTopNotification)message.Payload);
                 break;
             case ZRPCode.StartTurn:
                 setActive();
@@ -91,12 +91,15 @@ internal class BasicBotStateManager
         _state = new BotState();
     }
 
-    private void aggregateNewCard(SendCardDTO data)
+    private void aggregateNewCards(SendCardsNotification data)
     {
-        _state.Deck.Add(new Card(data.Type, data.Symbol));
+        foreach (var card in data.Cards)
+        {
+            _state.Deck.Add(new Card(card.Type, card.Symbol));
+        }
     }
 
-    private void aggregateRemoveCard(RemoveCardDTO data)
+    private void aggregateRemoveCard(RemoveCardNotification data)
     {
         int index = _state.Deck.FindIndex(c => c.Color == data.Type && c.Type == data.Symbol);
         if (index >= 0)
@@ -105,17 +108,17 @@ internal class BasicBotStateManager
         }
     }
 
-    private void aggregateSendHand(SendHandDTO data)
+    private void aggregateSendHand(SendDeckNotification data)
     {
         _state.Deck = data.Hand.Select(card => new Card(card.Type, card.Symbol)).ToList();
     }
 
-    private void aggregatePileTop(SendPileTopDTO data)
+    private void aggregatePileTop(SendPileTopNotification data)
     {
         _state.StackTop = new Card(data.Type, data.Symbol);
     }
 
-    private void aggregateStateUpdate(StateUpdatedDTO data)
+    private void aggregateStateUpdate(StateUpdateNotification data)
     {
         _state.StackTop = new Card(data.PileTop.Type, data.PileTop.Symbol);
     }

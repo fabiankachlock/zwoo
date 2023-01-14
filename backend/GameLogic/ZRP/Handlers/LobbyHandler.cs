@@ -17,25 +17,25 @@ public class LobbyHandler : IEventHandler
     {
         if (message.Code == ZRPCode.KeepAlive)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.AckKeepAlive, new AckKeepAliveDTO());
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.AckKeepAlive, new AckKeepAliveNotification());
             return true;
         }
-        else if (message.Code == ZRPCode.PlayerLeftGame)
+        else if (message.Code == ZRPCode.PlayerLeaves)
         {
             LeavePlayer(context, message);
             return true;
         }
-        else if (message.Code == ZRPCode.SpectatorWantsToPlay)
+        else if (message.Code == ZRPCode.SpectatorToPlayer)
         {
             SpectatorToPlayer(context, message);
             return true;
         }
-        else if (message.Code == ZRPCode.PlayerWantsToSpectate)
+        else if (message.Code == ZRPCode.PlayerToSpectator)
         {
             PlayerToSpectator(context, message);
             return true;
         }
-        else if (message.Code == ZRPCode.PromotePlayerToHost)
+        else if (message.Code == ZRPCode.PlayerToHost)
         {
             PlayerToHost(context, message);
             return true;
@@ -45,7 +45,7 @@ public class LobbyHandler : IEventHandler
             KickPlayer(context, message);
             return true;
         }
-        else if (message.Code == ZRPCode.GetAllPlayers)
+        else if (message.Code == ZRPCode.GetLobby)
         {
             GetPlayers(context, message);
             return true;
@@ -61,16 +61,16 @@ public class LobbyHandler : IEventHandler
             LobbyResult result = context.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
             if (result == LobbyResult.Success)
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(context.UserName, ZRPRole.Player));
             }
             else if (result == LobbyResult.ErrorLobbyFull)
             {
-                _webSocketManager.SendPlayer(context.Id, ZRPCode.LobbyFullError, new ErrorDTO((int)ZRPCode.LobbyFullError, "max amount of players reached"));
+                _webSocketManager.SendPlayer(context.Id, ZRPCode.LobbyFullError, new LobbyFullError((int)ZRPCode.LobbyFullError, "max amount of players reached"));
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -78,13 +78,13 @@ public class LobbyHandler : IEventHandler
     {
         try
         {
-            PlayerWantsToSpectateDTO payload = message.DecodePayload<PlayerWantsToSpectateDTO>();
+            PlayerToSpectatorEvent payload = message.DecodePayload<PlayerToSpectatorEvent>();
             context.Lobby.ChangeRole(payload.Username, ZRPRole.Spectator);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Spectator, 0));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(payload.Username, ZRPRole.Spectator));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -92,16 +92,16 @@ public class LobbyHandler : IEventHandler
     {
         try
         {
-            PromotePlayerToHostDTO payload = message.DecodePayload<PromotePlayerToHostDTO>();
+            PlayerToHostEvent payload = message.DecodePayload<PlayerToHostEvent>();
             context.Lobby.ChangeRole(payload.Username, ZRPRole.Host);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(payload.Username, ZRPRole.Host, 0));
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(context.UserName, ZRPRole.Player, 0));
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new HostChangedDTO(payload.Username));
-            _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(payload.Username), ZRPCode.PromotedToHost, new PromotedToHostDTO());
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(payload.Username, ZRPRole.Host));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(context.UserName, ZRPRole.Player));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(payload.Username));
+            _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(payload.Username), ZRPCode.PromotedToHost, new YouAreHostNotification());
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -109,7 +109,7 @@ public class LobbyHandler : IEventHandler
     {
         try
         {
-            KickPlayerDTO payload = message.DecodePayload<KickPlayerDTO>();
+            KickPlayerEvent payload = message.DecodePayload<KickPlayerEvent>();
             var player = context.Lobby.GetPlayer(payload.Username);
 
             // mutation of active game
@@ -133,17 +133,17 @@ public class LobbyHandler : IEventHandler
             if (player != null && player.Role == ZRPRole.Spectator)
             {
                 _webSocketManager.DisconnectPlayer(player.Id);
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftDTO(player.Username));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.Username));
             }
             else if (player != null)
             {
                 _webSocketManager.DisconnectPlayer(player.Id);
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftDTO(player.Username));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.Username));
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -172,25 +172,25 @@ public class LobbyHandler : IEventHandler
             if (context.Role == ZRPRole.Host)
             {
                 string newHost = context.Lobby.Host();
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleDTO(newHost, ZRPRole.Host, 0));
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new HostChangedDTO(newHost));
-                _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(newHost), ZRPCode.PromotedToHost, new PromotedToHostDTO());
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost, ZRPRole.Host));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(newHost));
+                _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(newHost), ZRPCode.PromotedToHost, new YouAreHostNotification());
             }
 
             if (result != LobbyResult.Success) return;
             if (context.Role == ZRPRole.Spectator)
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftDTO(context.UserName));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(context.UserName));
             }
             else
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftDTO(context.UserName));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(context.UserName));
             }
 
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -198,12 +198,12 @@ public class LobbyHandler : IEventHandler
     {
         try
         {
-            ListPlayersDTO payload = new ListPlayersDTO(context.Lobby.ListAll().Select(p => new ListPlayers_PlayerDTO(p.Username, p.Role, 0)).ToArray());
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.ListAllPlayers, payload);
+            GetLobbyNotification payload = new GetLobbyNotification(context.Lobby.ListAll().Select(p => new GetLobby_PlayerDTO(p.Username, p.Role, p.State)).ToArray());
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendLobby, payload);
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 }

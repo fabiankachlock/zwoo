@@ -2,188 +2,318 @@
 
 namespace ZwooGameLogic.ZRP;
 
-public readonly record struct PlayerJoinedDTO(
-    string Username,
-    int Wins
-);
+/// <summary>
+/// ZRPCode: 100 
+/// </summary>
+public readonly record struct PlayerJoinedNotification(string Username);
 
-public readonly record struct SpectatorJoinedDTO(
-    string Username,
-    int Wins
-);
+/// <summary>
+/// ZRPCode: 101
+/// </summary>
+public readonly record struct SpectatorJoinedNotification(string Username);
 
-public readonly record struct PlayerLeftDTO(string Username);
+/// <summary>
+/// ZRPCode: 102
+/// </summary>
+public readonly record struct PlayerLeftNotification(string Username);
 
-public readonly record struct LeaveGameDTO(); // empty
+/// <summary>
+/// ZRPCode: 103 
+/// </summary>
+public readonly record struct SpectatorLeftNotification(string Username);
 
-public readonly record struct SpectatorLeftDTO(string Username);
+/// <summary>
+/// ZRPCode: 104
+/// </summary>
+public readonly record struct ChatMessageEvent(string Message);
 
-public readonly record struct PushMessageDTO(string Message);
+/// <summary>
+/// ZRPCode: 105
+/// </summary>
+public readonly record struct ChatMessageNotification(string Message, string Username, ZRPRole Role);
 
-public readonly record struct DistributeMessageDTO(
-    string Message,
-    string Username,
-    ZRPRole Role
-);
+/// <summary>
+/// ZRPCode: 106
+/// </summary>
+public readonly record struct LeaveEvent(); // empty
 
-public readonly record struct GetAllPlayersDTO(); // empty
+/// <summary>
+/// ZRPCode: 108
+/// @link 109
+/// </summary>
+public readonly record struct GetLobbyEvent(); // empty
 
-public readonly record struct ListPlayers_PlayerDTO(
-    string Username,
-    ZRPRole Role,
-    int Wins
-);
-public readonly record struct ListPlayersDTO(ListPlayers_PlayerDTO[] Players);
+/// <see cref="GetLobbyNotification"/>
+public readonly record struct GetLobby_PlayerDTO(string Username, ZRPRole Role, ZRPPlayerState State);
 
-public readonly record struct SpectatorWantsToPlayDTO(); // empty
+/// <summary>
+/// ZRPCode: 109
+/// </summary>
+public readonly record struct GetLobbyNotification(GetLobby_PlayerDTO[] Players);
 
-public readonly record struct PlayerWantsToSpectateDTO(string Username);
+/// <summary>
+/// ZRPCode: 110
+/// </summary>
+public readonly record struct SpectatorToPlayerEvent(); // empty
 
-public readonly record struct PromotePlayerToHostDTO(string Username);
+/// <summary>
+/// ZRPCode: 111
+/// </summary>
+public readonly record struct PlayerToSpectatorEvent(string Username);
 
-public readonly record struct PromotedToHostDTO(); // empty
+/// <summary>
+/// ZRPCode: 112
+/// </summary>
+public readonly record struct PlayerToHostEvent(string Username);
 
-public readonly record struct HostChangedDTO(string Username);
+/// <summary>
+/// ZRPCode: 113
+/// </summary>
+public readonly record struct YouAreHostNotification(); // empty
 
-public readonly record struct KickPlayerDTO(string Username);
+/// <summary>
+/// ZRPCode: 114
+/// </summary>
+public readonly record struct NewHostNotification(string Username);
 
-public readonly record struct PlayerChangedRoleDTO(
-    string Username,
-    ZRPRole Role,
-    int Wins
-);
+/// <summary>
+/// ZRPCode: 115
+/// </summary>
+public readonly record struct KickPlayerEvent(string Username);
 
-public readonly record struct PlayerDisconnectedDTO(string Username);
+/// <summary>
+/// ZRPCode: 116
+/// </summary>
+public readonly record struct PlayerChangedRoleNotification(string Username, ZRPRole Role);
 
-public readonly record struct PlayerReconnectedDTO(string Username);
+/// <summary>
+/// ZRPCode: 117
+/// </summary>
+public readonly record struct PlayerDisconnectedNotification(string Username);
+
+/// <summary>
+/// ZRPCode: 118
+/// </summary>
+public readonly record struct PlayerReconnectedNotification(string Username);
+
+/// <summary>
+/// ZRPCode: 198
+/// </summary>
+public readonly record struct KeepAliveEvent(); // empty
+
+/// <summary>
+/// ZRPCode: 199
+/// @link 198
+/// </summary>
+public readonly record struct AckKeepAliveNotification(); // empty
+
+/// <summary>
+/// ZRPCode: 200
+/// </summary>
+public readonly record struct UpdateSettingEvent(string Setting, int Value);
+
+/// <summary>
+/// ZRPCode: 201
+/// </summary>
+public readonly record struct SettingChangedNotification(string Setting, int Value);
+
+/// <summary>
+/// ZRPCode: 202
+/// </summary>
+public readonly record struct GetSettingsEvent(); // empty
+
+/// <see cref="AllSettingsNotification" />
+public readonly record struct AllSettings_SettingDTO(string Setting, int Value);
+
+/// <summary>
+/// ZRPCode: 203
+/// </summary>
+public readonly record struct AllSettingsNotification(AllSettings_SettingDTO[] Settings);
+
+/// <summary>
+/// ZRPCode: 210
+/// </summary>
+public readonly record struct StartGameEvent(); // empty
+
+/// <see cref="CreateBotEvent" />
+/// <see cref="UpdateBotEvent" />
+/// <see cref="AllBots_BotDTO" />
+public readonly record struct BotConfigDTO(int Strength);
+
+/// <summary>
+/// ZRPCode: 230
+/// </summary>
+public readonly record struct CreateBotEvent(string Username, BotConfigDTO Config);
+
+/// <summary>
+/// ZRPCode: 231
+/// </summary>
+public readonly record struct BotJoinedNotification(string Username);
+
+/// <summary>
+/// ZRPCode: 232
+/// </summary>
+public readonly record struct BotLeftNotification(string Username);
+
+/// <summary>
+/// ZRPCode: 233
+/// </summary>
+public readonly record struct UpdateBotEvent(string Username, BotConfigDTO Config);
+
+/// <summary>
+/// ZRPCode: 235
+/// </summary>
+public readonly record struct DeleteBotEvent(string Username);
+
+/// <summary>
+/// ZRPCode: 236
+/// </summary>
+public readonly record struct GetBotsEvent();
+
+/// <see cref="AllBotsNotification" />
+public readonly record struct AllBots_BotDTO(string Username, BotConfigDTO Config);
+
+/// <summary>
+/// ZRPCode: 237
+/// </summary>
+public readonly record struct AllBotsNotification(AllBots_BotDTO[] Bots);
+
+/// <summary>
+/// ZRPCode: 300
+/// </summary>
+public readonly record struct GameStartedNotification(); // empty
+
+/// <summary>
+/// ZRPCode: 301
+/// </summary>
+public readonly record struct StartTurnNotification(); // empty
+
+/// <summary>
+/// ZRPCode: 302
+/// </summary>
+public readonly record struct EndTurnNotification(); // empty
+
+/// <summary>
+/// ZRPCode: 304
+/// </summary>
+public readonly record struct PlaceCardEvent(int Type, int Symbol);
+
+/// <summary>
+/// ZRPCode: 305
+/// </summary>
+public readonly record struct DrawCardEvent(); // empty
+
+/// <see cref="SendCardsNotification" />
+public readonly record struct SendCard_CardDTO(CardColor Type, CardType Symbol);
+
+/// <summary>
+/// ZRPCode: 306
+/// </summary>
+public readonly record struct SendCardsNotification(SendCard_CardDTO[] Cards);
+
+/// <summary>
+/// ZRPCode: 307
+/// </summary>
+public readonly record struct RemoveCardNotification(CardColor Type, CardType Symbol);
 
 
-public readonly record struct KeepAliveDTO(); // empty
+/// <see cref="StateUpdateNotification" />
+public readonly record struct StateUpdate_PileTopDTO(CardColor Type, CardType Symbol);
 
-public readonly record struct AckKeepAliveDTO(); // empty
-
-
-public readonly record struct UpdateSettingDTO(
-    string Setting,
-    int Value
-);
-
-public readonly record struct ChangedSettingsDTO(
-    string Setting,
-    int Value
-);
-
-public readonly record struct GetAllSettingsDTO(); // empty
-
-public readonly record struct AllSettings_SettingDTO(
-    string Setting,
-    int Value
-);
-
-public readonly record struct AllSettingsDTO(AllSettings_SettingDTO[] Settings);
-
-public readonly record struct StartGameDTO(); // empty
-
-public readonly record struct GameStartedDTO(); // empty
-
-public readonly record struct StartTurnDTO(); // empty
-
-public readonly record struct EndTurnDTO(); // empty
-
-public readonly record struct RequestEndTurnDTO(); // empty
-
-public readonly record struct PlaceCardDTO(
-    int Type,
-    int Symbol
-);
-
-public readonly record struct DrawCardDTO(); // empty
-
-public readonly record struct SendCardDTO(
-    CardColor Type,
-    CardType Symbol
-);
-
-public readonly record struct RemoveCardDTO(
-    CardColor Type,
-    CardType Symbol
-);
-
-public readonly record struct StateUpdated_PileTopDTO(
-    CardColor Type,
-    CardType Symbol
-);
-
-public readonly record struct StateUpdatedDTO(
-    StateUpdated_PileTopDTO PileTop,
+/// <summary>
+/// ZRPCode: 306
+/// </summary>
+public readonly record struct StateUpdateNotification(
+    StateUpdate_PileTopDTO PileTop,
     string ActivePlayer,
     int ActivePlayerCardAmount,
     string LastPlayer,
     int LastPlayerCardAmount
 );
 
-public readonly record struct GetHandDTO(); // empty
+/// <summary>
+/// ZRPCode: 310
+/// </summary>
+public readonly record struct GetDeckEvent(); // empty
 
-public readonly record struct SendHand_HandDTO(
-    CardColor Type,
-    CardType Symbol
-);
+/// <see cref="SendDeckNotification" />
+public readonly record struct SendDeck_CardDTO(CardColor Type, CardType Symbol);
 
-public readonly record struct SendHandDTO(SendHand_HandDTO[] Hand);
+/// <summary>
+/// ZRPCode: 311
+/// </summary>
+public readonly record struct SendDeckNotification(SendDeck_CardDTO[] Hand);
 
-public readonly record struct GetCardAmountDTO(); // empty
+/// <summary>
+/// ZRPCode: 312
+/// </summary>
+public readonly record struct GetPlayerStateEvent(); // empty
 
-public readonly record struct SendCardAmount_PlayersDTO(
+/// <see cref="SendPlayerStateNotification" />
+public readonly record struct SendPlayerState_PlayerDTO(
     string Username,
     int Cards,
     int Order,
     bool IsActivePlayer
 );
 
-public readonly record struct SendCardAmountDTO(SendCardAmount_PlayersDTO[] Players);
+/// <summary>
+/// ZRPCode: 313
+/// </summary>
+public readonly record struct SendPlayerStateNotification(SendPlayerState_PlayerDTO[] Players);
 
-public readonly record struct GetPileTopDTO(); // empty
+/// <summary>
+/// ZRPCode: 314
+/// </summary>
+public readonly record struct GetPileTopEvent(); // empty
 
-public readonly record struct SendPileTopDTO(
-    CardColor Type,
-    CardType Symbol
-);
+/// <summary>
+/// ZRPCode: 315
+/// </summary>
+public readonly record struct SendPileTopNotification(CardColor Type, CardType Symbol);
 
-public readonly record struct GetPlayerDecisionDTO(int Type);
+/// <summary>
+/// ZRPCode: 316
+/// </summary>
+public readonly record struct GetPlayerDecisionNotification(int Type);
 
-public readonly record struct ReceiveDecisionDTO(
-    int Type,
-    int Decision
-);
+/// <summary>
+/// ZRPCode: 317
+/// </summary>
+public readonly record struct PlayerDecisionEvent(int Type, int Decision);
 
-public readonly record struct PlayerWon_SummaryDTO(
+/// <see cref="PlayerWonNotification" />
+public readonly record struct PlayerWon_PlayerSummaryDTO(
     string Username,
     int Position,
     int Score
 );
 
-public readonly record struct PlayerWonDTO(
+/// <summary>
+/// ZRPCode: 399
+/// </summary>
+public readonly record struct PlayerWonNotification(
     string Username,
     int Wins,
-    PlayerWon_SummaryDTO[] Summary
+    PlayerWon_PlayerSummaryDTO[] Summary
 );
 
-public readonly record struct ErrorDTO(
-    int Code,
-    string Message
-);
+/// <summary>
+/// ZRPCode: 400
+/// </summary>
+public readonly record struct Error(int Code, string Message);
 
-public readonly record struct AccessDeniedErrorDTO(
-    int Code,
-    string Message
-);
+/// <summary>
+/// ZRPCode: 420
+/// </summary>
+public readonly record struct AccessDeniedError(int Code, string Message);
 
-public readonly record struct EndTurnErrorDTO(
-    int Code,
-    string Message
-);
+/// <summary>
+/// ZRPCode: 421
+/// </summary>
+public readonly record struct LobbyFullError(int Code, string Message);
 
-public readonly record struct PlaceCardErrorDTO(
-    int Code,
-    string Message
-);
+/// <summary>
+/// ZRPCode: 434
+/// </summary>
+public readonly record struct PlaceCardError(int Code, string Message);
