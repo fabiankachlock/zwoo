@@ -1,5 +1,6 @@
 using ZwooGameLogic.Lobby;
 using ZwooGameLogic.Notifications;
+using ZwooGameLogic.Bots;
 
 
 namespace ZwooGameLogic.ZRP.Handlers;
@@ -15,58 +16,38 @@ public class BotsHandler : IEventHandler
 
     public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
     {
-        if (message.Code == ZRPCode.KeepAlive)
+        if (message.Code == ZRPCode.CreateBot)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.AckKeepAlive, new AckKeepAliveNotification());
+            CreateBot(context, message);
             return true;
         }
-        else if (message.Code == ZRPCode.PlayerLeaves)
+        else if (message.Code == ZRPCode.UpdateBot)
         {
-            LeavePlayer(context, message);
+            UpdateBot(context, message);
             return true;
         }
-        else if (message.Code == ZRPCode.SpectatorToPlayer)
+        else if (message.Code == ZRPCode.DeleteBot)
         {
-            SpectatorToPlayer(context, message);
+            DeleteBot(context, message);
             return true;
         }
-        else if (message.Code == ZRPCode.PlayerToSpectator)
+        else if (message.Code == ZRPCode.GetBots)
         {
-            PlayerToSpectator(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.PlayerToHost)
-        {
-            PlayerToHost(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.KickPlayer)
-        {
-            KickPlayer(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.GetLobby)
-        {
-            GetPlayers(context, message);
+            GetBots(context, message);
             return true;
         }
         return false;
     }
 
-    // TODO wins
-    private void SpectatorToPlayer(UserContext context, IIncomingZRPMessage message)
+    private void CreateBot(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            LobbyResult result = context.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
-            if (result == LobbyResult.Success)
+            CreateBotEvent data = message.DecodePayload<CreateBotEvent>();
+            Bot newBot = context.BotManager.CreateBot(data.Username, new BotConfig()
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(context.UserName, ZRPRole.Player));
-            }
-            else if (result == LobbyResult.ErrorLobbyFull)
-            {
-                _webSocketManager.SendPlayer(context.Id, ZRPCode.LobbyFullError, new LobbyFullError((int)ZRPCode.LobbyFullError, "max amount of players reached"));
-            }
+                Strength = data.Config.Strength
+            });
         }
         catch (Exception e)
         {
@@ -74,71 +55,18 @@ public class BotsHandler : IEventHandler
         }
     }
 
-    private void PlayerToSpectator(UserContext context, IIncomingZRPMessage message)
+    private void UpdateBot(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            PlayerToSpectatorEvent payload = message.DecodePayload<PlayerToSpectatorEvent>();
-            context.Lobby.ChangeRole(payload.Username, ZRPRole.Spectator);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(payload.Username, ZRPRole.Spectator));
-        }
-        catch (Exception e)
-        {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
-    }
-
-    private void PlayerToHost(UserContext context, IIncomingZRPMessage message)
-    {
-        try
-        {
-            PlayerToHostEvent payload = message.DecodePayload<PlayerToHostEvent>();
-            context.Lobby.ChangeRole(payload.Username, ZRPRole.Host);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(payload.Username, ZRPRole.Host));
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(context.UserName, ZRPRole.Player));
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(payload.Username));
-            _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(payload.Username), ZRPCode.PromotedToHost, new YouAreHostNotification());
-        }
-        catch (Exception e)
-        {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
-    }
-
-    private void KickPlayer(UserContext context, IIncomingZRPMessage message)
-    {
-        try
-        {
-            KickPlayerEvent payload = message.DecodePayload<KickPlayerEvent>();
-            var player = context.Lobby.GetPlayer(payload.Username);
-
-            // mutation of active game
-            if (context.Game.IsRunning && player != null)
+            UpdateBotEvent data = message.DecodePayload<UpdateBotEvent>();
+            Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.Username == data.Username);
+            if (botToUpdate != null)
             {
-                context.Game.RemovePlayer(player.Id);
-                if (context.Game.PlayerCount == 1)
+                botToUpdate.SetConfig(new BotConfig()
                 {
-                    context.Room.Close();
-                    return;
-                }
-            }
-
-            LobbyResult result = context.Lobby.RemovePlayer(payload.Username);
-            if (context.Lobby.ActivePlayerCount() == 0)
-            {
-                context.Room.Close();
-                return;
-            }
-
-            if (player != null && player.Role == ZRPRole.Spectator)
-            {
-                _webSocketManager.DisconnectPlayer(player.Id);
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.Username));
-            }
-            else if (player != null)
-            {
-                _webSocketManager.DisconnectPlayer(player.Id);
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.Username));
+                    Strength = data.Config.Strength
+                });
             }
         }
         catch (Exception e)
@@ -147,46 +75,12 @@ public class BotsHandler : IEventHandler
         }
     }
 
-    private void LeavePlayer(UserContext context, IIncomingZRPMessage message)
+    private void DeleteBot(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            // mutation of active game
-            if (context.Game.IsRunning)
-            {
-                context.Game.RemovePlayer(context.Id);
-                if (context.Game.PlayerCount <= 1)
-                {
-                    context.Room.Close();
-                    return;
-                }
-            }
-
-            LobbyResult result = context.Lobby.RemovePlayer(context.UserName);
-            if (context.Lobby.ActivePlayerCount() == 0)
-            {
-                context.Room.Close();
-                return;
-            }
-
-            if (context.Role == ZRPRole.Host)
-            {
-                string newHost = context.Lobby.Host();
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost, ZRPRole.Host));
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(newHost));
-                _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(newHost), ZRPCode.PromotedToHost, new YouAreHostNotification());
-            }
-
-            if (result != LobbyResult.Success) return;
-            if (context.Role == ZRPRole.Spectator)
-            {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(context.UserName));
-            }
-            else
-            {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(context.UserName));
-            }
-
+            DeleteBotEvent data = message.DecodePayload<DeleteBotEvent>();
+            context.BotManager.RemoveBot(data.Username);
         }
         catch (Exception e)
         {
@@ -194,18 +88,17 @@ public class BotsHandler : IEventHandler
         }
     }
 
-    private void GetPlayers(UserContext context, IIncomingZRPMessage message)
+    private void GetBots(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            var players = context.Lobby.ListAll().Select(p => new GetLobby_PlayerDTO(p.Username, p.Role, p.State));
-            var bots = context.BotManager.ListBots().Select(b => new GetLobby_PlayerDTO(b.Username, ZRPRole.Bot, ZRPPlayerState.Connected));
-            GetLobbyNotification payload = new GetLobbyNotification(players.Concat(bots).ToArray());
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendLobby, payload);
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.Username, new BotConfigDTO(bot.Config.Strength))).ToArray()));
         }
         catch (Exception e)
         {
             _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
+
+
 }

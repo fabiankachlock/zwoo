@@ -18,6 +18,7 @@ public class UserEventDistributer
             new LobbyHandler(_webSocketManager),
             new SettingsHandler(_webSocketManager),
             new GameHandler(_webSocketManager),
+            new BotsHandler(_webSocketManager),
         };
     }
 
