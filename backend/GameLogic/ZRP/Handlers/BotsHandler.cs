@@ -1,14 +1,14 @@
-﻿using ZwooGameLogic.Lobby;
+using ZwooGameLogic.Lobby;
 using ZwooGameLogic.Notifications;
 
 
 namespace ZwooGameLogic.ZRP.Handlers;
 
-public class LobbyHandler : IEventHandler
+public class BotsHandler : IEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
-    public LobbyHandler(INotificationAdapter websocketManager)
+    public BotsHandler(INotificationAdapter websocketManager)
     {
         _webSocketManager = websocketManager;
     }

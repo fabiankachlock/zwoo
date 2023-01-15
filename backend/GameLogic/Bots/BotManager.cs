@@ -15,26 +15,41 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
     private readonly INotificationAdapter _notificationManager;
 
+    private List<Bot> _bots;
+
+
     public event IUserEventEmitter.EventHandler OnEvent = delegate { };
 
     public BotManager(Game.Game game)
     {
         _game = game;
         _notificationManager = new NotificationManager();
+        _bots = new List<Bot>();
     }
 
-    public Bot CreateBot()
+    public List<Bot> ListBots()
     {
-        Bot bot = new Bot(_game.Id, BotBrainFactory.CreateDecisionHandler(), (long botId, BotZRPNotification<object> msg) =>
+        return _bots;
+    }
+
+    public Bot CreateBot(string username, BotConfig config)
+    {
+        Bot bot = new Bot(_game.Id, username, config, (long botId, BotZRPNotification<object> msg) =>
         {
             OnEvent.Invoke(new BotZRPEvent(botId, msg.Code, msg.Payload));
         });
+        _bots.Add(bot);
+
         return bot;
     }
 
-    public void RemoveBot()
+    public void RemoveBot(string username)
     {
-
+        Bot? botToRemove = _bots.Find(bot => bot.Username == username);
+        if (botToRemove != null)
+        {
+            _bots.Remove(botToRemove);
+        }
     }
 
     /// <summary>

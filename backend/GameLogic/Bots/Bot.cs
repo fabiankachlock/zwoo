@@ -12,22 +12,34 @@ public class Bot : INotificationTarget
 
     public long PlayerId { get; private set; }
 
+    public string Username { get; private set; }
+
+    public BotConfig Config { get; private set; }
+
     private IBotDecisionHandler _handler;
 
     private Action<long, BotZRPNotification<object>> _sendMessage;
 
 
-    public Bot(long gameId, IBotDecisionHandler handler, Action<long, BotZRPNotification<object>> sendMessage)
+    public Bot(long gameId, string username, BotConfig config, Action<long, BotZRPNotification<object>> sendMessage)
     {
         GameId = gameId;
-        _handler = handler;
+        Username = username;
+        Config = config;
         _sendMessage = sendMessage;
+        _handler = BotBrainFactory.CreateDecisionHandler(config);
     }
 
     public void PrepareForGame(long assignedId)
     {
         PlayerId = assignedId;
         _handler.Reset();
+    }
+
+    public void SetConfig(BotConfig config)
+    {
+        Config = config;
+        _handler = BotBrainFactory.CreateDecisionHandler(config);
     }
 
     public void ReceiveMessage<T>(ZRPCode code, T payload)

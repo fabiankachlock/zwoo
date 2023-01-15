@@ -1,5 +1,5 @@
 using ZwooGameLogic.Lobby;
-using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Bots;
 
 namespace ZwooGameLogic.ZRP;
 
@@ -20,6 +20,11 @@ public class UserContext
     public LobbyManager Lobby
     {
         get => Room.Lobby;
+    }
+
+    public BotManager BotManager
+    {
+        get => Room.BotManager;
     }
 
     public UserContext(long id, string userName, ZRPRole role, int wins, long gameId, ZwooRoom room)
