@@ -53,7 +53,6 @@ public class LobbyHandler : IEventHandler
         return false;
     }
 
-    // TODO wins
     private void SpectatorToPlayer(UserContext context, IIncomingZRPMessage message)
     {
         try

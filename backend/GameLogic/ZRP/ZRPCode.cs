@@ -86,7 +86,7 @@ public enum ZRPCode
     /// <summary>receive</summary>
     DrawCard = 305,
     /// <summary>send</summary>
-    SendCard = 306,
+    SendCards = 306,
     /// <summary>send</summary>
     RemoveCard = 307,
     /// <summary>send</summary>

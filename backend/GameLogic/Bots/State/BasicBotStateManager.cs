@@ -59,7 +59,7 @@ internal class BasicBotStateManager
     {
         switch (message.Code)
         {
-            case ZRPCode.SendCard:
+            case ZRPCode.SendCards:
                 aggregateNewCards((SendCardsNotification)message.Payload);
                 break;
             case ZRPCode.StateUpdated:

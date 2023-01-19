@@ -26,10 +26,10 @@ export enum ZRPOPCode {
   GetAllPlayers = 108, // sender
   ListAllPlayers = 109, // receiver
   // - player role
-  SpectatorWantsToPlay = 110, // sender (spectator)
-  PlayerWantsToSpectate = 111, // sender (player)
+  SpectatorToPlayer = 110, // sender (spectator)
+  PlayerToSpectator = 111, // sender (player)
   PromotePlayerToHost = 112, // sender (host)
-  PromoteToHost = 113, // receiver(host)
+  PromotedToHost = 113, // receiver(host)
   NewHost = 114, // receiver(player/spectator)
   KickPlayer = 115, // sender (host)
   PlayerChangedRole = 116, // receiver
@@ -39,11 +39,19 @@ export enum ZRPOPCode {
   KeepAlive = 198, // sender
   AckKeepAlive = 199, //  receiver
   // Lobby
-  ChangeSettings = 200, // sender (host)
-  SettingsUpdated = 201, // receiver
+  UpdateSetting = 200, // sender (host)
+  SettingChanged = 201, // receiver
   GetAllSettings = 202, // sender
   AllSettings = 203, // receiver
   StartGame = 210, // sender (host)
+  // Bots
+  CreateBot = 230, // sender(host)
+  BotJoined = 231, // receiver
+  BotLeft = 232, // receiver
+  UpdateBot = 233, // sender(host)
+  DeleteBot = 235, // sender(host)
+  GetBots = 236, // sender(host)
+  ListBots = 237, // receiver
   // Game
   GameStarted = 300, // receiver
   StartTurn = 301, // receiver
@@ -51,7 +59,7 @@ export enum ZRPOPCode {
   RequestEndTurn = 303, // sender
   PlaceCard = 304, // sender
   DrawCard = 305, // sender
-  GetCard = 306, // receiver
+  GetCards = 306, // receiver
   RemoveCard = 307, // receiver
   StateUpdate = 308, // receiver
   RequestHand = 310, //sender
@@ -65,6 +73,7 @@ export enum ZRPOPCode {
   PlayerWon = 399, // receiver
   // Errors
   GeneralError = 400, // receiver
+  MessageTooLongError = 401, // receiver
   AccessDeniedError = 420, // receiver
   LobbyFullError = 421, // receiver
   EndTurnError = 433, // receiver
@@ -83,15 +92,18 @@ export enum ZRPOPCode {
 export enum ZRPRole {
   Host = 1,
   Player = 2,
-  Spectator = 3
+  Spectator = 3,
+  Bot = 4
 }
+
+export type ZRPPlayerState = 'disconnected' | 'connected';
 
 export type ZRPPayloadMap = {
   // General
-  [ZRPOPCode.PlayerJoined]: ZRPJoinedGamePayload;
-  [ZRPOPCode.SpectatorJoined]: ZRPJoinedGamePayload;
-  [ZRPOPCode.PlayerLeft]: ZRPLeftGamePayload;
-  [ZRPOPCode.SpectatorLeft]: ZRPLeftGamePayload;
+  [ZRPOPCode.PlayerJoined]: ZRPNamePayload;
+  [ZRPOPCode.SpectatorJoined]: ZRPNamePayload;
+  [ZRPOPCode.PlayerLeft]: ZRPNamePayload;
+  [ZRPOPCode.SpectatorLeft]: ZRPNamePayload;
   [ZRPOPCode.LeaveGame]: Record<string, never>;
   // Chat
   [ZRPOPCode.SendMessage]: ZRPSendChatMessagePayload;
@@ -100,10 +112,10 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.GetAllPlayers]: Record<string, never>;
   [ZRPOPCode.ListAllPlayers]: ZRPAllLobbyPlayersPayload;
   // Roles
-  [ZRPOPCode.SpectatorWantsToPlay]: Record<string, never>;
-  [ZRPOPCode.PlayerWantsToSpectate]: ZRPNamePayload;
+  [ZRPOPCode.SpectatorToPlayer]: Record<string, never>;
+  [ZRPOPCode.PlayerToSpectator]: ZRPNamePayload;
   [ZRPOPCode.PromotePlayerToHost]: ZRPNamePayload;
-  [ZRPOPCode.PromoteToHost]: Record<string, never>;
+  [ZRPOPCode.PromotedToHost]: Record<string, never>;
   [ZRPOPCode.NewHost]: ZRPNamePayload;
   [ZRPOPCode.KickPlayer]: ZRPNamePayload;
   [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
@@ -113,11 +125,19 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.KeepAlive]: Record<string, never>;
   [ZRPOPCode.AckKeepAlive]: Record<string, never>;
   // Lobby
-  [ZRPOPCode.ChangeSettings]: ZRPSettingsChangePayload;
-  [ZRPOPCode.SettingsUpdated]: ZRPSettingsChangePayload;
+  [ZRPOPCode.UpdateSetting]: ZRPSettingsChangePayload;
+  [ZRPOPCode.SettingChanged]: ZRPSettingsChangePayload;
   [ZRPOPCode.GetAllSettings]: Record<string, never>;
   [ZRPOPCode.AllSettings]: ZRPSettingsPayload;
   [ZRPOPCode.StartGame]: Record<string, never>;
+  // Bots
+  [ZRPOPCode.CreateBot]: ZRPBotPayload;
+  [ZRPOPCode.BotJoined]: ZRPNamePayload;
+  [ZRPOPCode.BotLeft]: ZRPNamePayload;
+  [ZRPOPCode.UpdateBot]: ZRPBotPayload;
+  [ZRPOPCode.DeleteBot]: ZRPNamePayload;
+  [ZRPOPCode.GetBots]: Record<string, never>;
+  [ZRPOPCode.ListBots]: ZRPListBotsPayload;
   // Game
   [ZRPOPCode.GameStarted]: Record<string, never>;
   [ZRPOPCode.StartTurn]: Record<string, never>;
@@ -125,7 +145,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.RequestEndTurn]: Record<string, never>;
   [ZRPOPCode.PlaceCard]: ZRPCardPayload;
   [ZRPOPCode.DrawCard]: Record<string, never>;
-  [ZRPOPCode.GetCard]: ZRPCardPayload;
+  [ZRPOPCode.GetCards]: ZRPCardListPayload;
   [ZRPOPCode.RemoveCard]: ZRPCardPayload;
   [ZRPOPCode.StateUpdate]: ZRPStateUpdatePayload;
   [ZRPOPCode.RequestHand]: Record<string, never>;
@@ -139,6 +159,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.PlayerWon]: ZRPGameWinnerPayload;
   // Errors
   [ZRPOPCode.GeneralError]: ZRPErrorPayload;
+  [ZRPOPCode.MessageTooLongError]: ZRPErrorPayload;
   [ZRPOPCode.AccessDeniedError]: ZRPErrorPayload;
   [ZRPOPCode.LobbyFullError]: ZRPErrorPayload;
   [ZRPOPCode.EndTurnError]: ZRPErrorPayload;
@@ -158,14 +179,7 @@ export type ZRPNamePayload = {
   username: string;
 };
 
-export type ZRPJoinedGamePayload = ZRPNamePayload & {
-  wins: number;
-};
-
-export type ZRPLeftGamePayload = ZRPNamePayload;
-
 export type ZRPPlayerWithRolePayload = ZRPNamePayload & {
-  wins: number;
   role: ZRPRole;
 };
 
@@ -179,7 +193,11 @@ export type ZRPChatMessagePayload = ZRPSendChatMessagePayload & {
 };
 
 export type ZRPAllLobbyPlayersPayload = {
-  players: ZRPPlayerWithRolePayload[];
+  players: {
+    username: string;
+    role: ZRPRole;
+    state: ZRPPlayerState;
+  }[];
 };
 
 export type ZRPSettingsChangePayload = {
@@ -194,9 +212,26 @@ export type ZRPSettingsPayload = {
   }[];
 };
 
+export type ZRPBotConfig = {
+  strength: number;
+};
+
+export type ZRPBotPayload = {
+  username: string;
+  config: ZRPBotConfig;
+};
+
+export type ZRPListBotsPayload = {
+  bots: ZRPBotPayload[];
+};
+
 export type ZRPCardPayload = {
   type: number;
   symbol: number;
+};
+
+export type ZRPCardListPayload = {
+  cards: ZRPCardPayload[];
 };
 
 export type ZRPStateUpdatePayload = {

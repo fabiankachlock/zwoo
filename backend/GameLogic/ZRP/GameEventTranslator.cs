@@ -67,7 +67,7 @@ public class GameEventTranslator : IGameEventManager
     // TODO: utilize, that multiple cards can be sent at once
     public void SendCard(ZwooGameLogic.Game.Events.SendCardDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.SendCard, new ZRP.SendCardsNotification(new SendCard_CardDTO[] { new SendCard_CardDTO(data.Card.Color, data.Card.Type) }));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.SendCards, new ZRP.SendCardsNotification(new SendCard_CardDTO[] { new SendCard_CardDTO(data.Card.Color, data.Card.Type) }));
     }
 
     public void StartTurn(long player)

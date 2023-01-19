@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 
-import { ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { ZRPPlayerState, ZRPRole } from '@/core/services/zrp/zrpTypes';
 
 export type InGamePlayer = {
   id: string;
   username: string;
   role: ZRPRole;
-  state: 'disconnected' | 'connected';
+  state: ZRPPlayerState;
 };
 
 export const usePlayerManager = defineStore('game-players', {

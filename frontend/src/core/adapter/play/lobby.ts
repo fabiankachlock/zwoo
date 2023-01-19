@@ -6,15 +6,7 @@ import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispa
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { RouterService } from '@/core/services/global/Router';
 import { arrayDiff } from '@/core/services/utils';
-import {
-  ZRPAllLobbyPlayersPayload,
-  ZRPJoinedGamePayload,
-  ZRPLeftGamePayload,
-  ZRPNamePayload,
-  ZRPOPCode,
-  ZRPPlayerWithRolePayload,
-  ZRPRole
-} from '@/core/services/zrp/zrpTypes';
+import { ZRPAllLobbyPlayersPayload, ZRPNamePayload, ZRPOPCode, ZRPPlayerWithRolePayload, ZRPRole } from '@/core/services/zrp/zrpTypes';
 import { I18nInstance } from '@/i18n';
 
 import { useAuth } from '../auth';
@@ -35,7 +27,7 @@ const lobbyWatcher = new MonolithicEventWatcher(
   ZRPOPCode.ListAllPlayers,
   ZRPOPCode.NewHost,
   ZRPOPCode.PlayerChangedRole,
-  ZRPOPCode.PromoteToHost,
+  ZRPOPCode.PromotedToHost,
   ZRPOPCode.GameStarted,
   ZRPOPCode.PlayerDisconnected,
   ZRPOPCode.PlayerReconnected
@@ -67,7 +59,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
       newHost(msg.data, true);
     } else if (msg.code === ZRPOPCode.PlayerChangedRole) {
       changePlayerRole(msg.data, true);
-    } else if (msg.code === ZRPOPCode.PromoteToHost) {
+    } else if (msg.code === ZRPOPCode.PromotedToHost) {
       selfGotHost();
     } else if (msg.code == ZRPOPCode.GameStarted) {
       RouterService.getRouter().replace('/game/play');
@@ -103,14 +95,14 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     const spectatorDiff = arrayDiff(spectators.value, newSpectators, (a, b) => a.id === b.id);
 
     for (const deletion of [...playerDiff.removed, ...spectatorDiff.removed]) {
-      leavePlayer(deletion as unknown as ZRPJoinedGamePayload, deletion.role);
+      leavePlayer(deletion as unknown as ZRPNamePayload, deletion.role);
     }
     for (const addition of [...playerDiff.added, ...spectatorDiff.added]) {
-      joinPlayer(addition as unknown as ZRPJoinedGamePayload, addition.role);
+      joinPlayer(addition as unknown as ZRPNamePayload, addition.role);
     }
   };
 
-  const joinPlayer = (data: ZRPJoinedGamePayload, role: ZRPRole, pushMessage = false) => {
+  const joinPlayer = (data: ZRPNamePayload, role: ZRPRole, pushMessage = false) => {
     if (role === ZRPRole.Spectator) {
       playerManager.addPlayer({
         username: data.username,
@@ -132,7 +124,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     }
   };
 
-  const leavePlayer = (data: ZRPLeftGamePayload, role: ZRPRole, pushMessage = false) => {
+  const leavePlayer = (data: ZRPNamePayload, role: ZRPRole, pushMessage = false) => {
     if (role === ZRPRole.Spectator) {
       playerManager.removePlayer(data.username);
     } else {
@@ -214,11 +206,11 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const changeToSpectator = (id: string) => {
-    dispatchEvent(ZRPOPCode.PlayerWantsToSpectate, { username: id });
+    dispatchEvent(ZRPOPCode.PlayerToSpectator, { username: id });
   };
 
   const changeToPlayer = () => {
-    dispatchEvent(ZRPOPCode.SpectatorWantsToPlay, {});
+    dispatchEvent(ZRPOPCode.SpectatorToPlayer, {});
   };
 
   const leaveSelf = () => {
