@@ -227,7 +227,7 @@ public sealed class GameStateManager
                     break;
                 case GameEventType.GetCard:
                     GameEvent.GetCardEvent getCardEvent = evt.CastPayload<GameEvent.GetCardEvent>();
-                    _notificationManager.SendCard(new SendCardDTO(getCardEvent.Player, getCardEvent.Card));
+                    _notificationManager.SendCard(new SendCardDTO(getCardEvent.Player, getCardEvent.Cards));
                     break;
                 case GameEventType.RemoveCard:
                     GameEvent.RemoveCardEvent removeCardEvent = evt.CastPayload<GameEvent.RemoveCardEvent>();

@@ -4,7 +4,7 @@ namespace ZwooGameLogic.Game.Events;
 
 public readonly record struct SendCardDTO(
     long Player,
-    Card Card
+    List<Card> Cards
 );
 
 public readonly record struct RemoveCardDTO(
