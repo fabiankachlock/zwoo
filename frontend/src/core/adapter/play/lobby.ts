@@ -24,6 +24,8 @@ const lobbyWatcher = new MonolithicEventWatcher(
   ZRPOPCode.PlayerLeft,
   ZRPOPCode.SpectatorJoined,
   ZRPOPCode.SpectatorLeft,
+  ZRPOPCode.BotJoined,
+  ZRPOPCode.BotLeft,
   ZRPOPCode.ListAllPlayers,
   ZRPOPCode.NewHost,
   ZRPOPCode.PlayerChangedRole,
@@ -37,6 +39,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const playerManager = usePlayerManager();
   const players = computed<LobbyPlayer[]>(() => playerManager.players);
   const spectators = computed<LobbyPlayer[]>(() => playerManager.spectators);
+  const bots = computed<LobbyPlayer[]>(() => playerManager.bots);
   const gameHost = ref('');
   const dispatchEvent = useGameEventDispatch();
   const snackbar = useSnackbar();
@@ -49,6 +52,10 @@ export const useLobbyStore = defineStore('game-lobby', () => {
       joinPlayer(msg.data, ZRPRole.Player, true);
     } else if (msg.code === ZRPOPCode.PlayerLeft) {
       leavePlayer(msg.data, ZRPRole.Player, true);
+    } else if (msg.code === ZRPOPCode.BotJoined) {
+      joinPlayer(msg.data, ZRPRole.Bot, true);
+    } else if (msg.code === ZRPOPCode.BotLeft) {
+      leavePlayer(msg.data, ZRPRole.Bot, true);
     } else if (msg.code === ZRPOPCode.SpectatorJoined) {
       joinPlayer(msg.data, ZRPRole.Spectator, true);
     } else if (msg.code === ZRPOPCode.SpectatorLeft) {
@@ -103,19 +110,12 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const joinPlayer = (data: ZRPNamePayload, role: ZRPRole, pushMessage = false) => {
-    if (role === ZRPRole.Spectator) {
-      playerManager.addPlayer({
-        username: data.username,
-        id: data.username,
-        role: role
-      });
-    } else {
-      playerManager.addPlayer({
-        username: data.username,
-        id: data.username,
-        role: role
-      });
-    }
+    playerManager.addPlayer({
+      username: data.username,
+      id: data.username,
+      role: role
+    });
+
     if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Joined`, [data.username]),
@@ -125,11 +125,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const leavePlayer = (data: ZRPNamePayload, role: ZRPRole, pushMessage = false) => {
-    if (role === ZRPRole.Spectator) {
-      playerManager.removePlayer(data.username);
-    } else {
-      playerManager.removePlayer(data.username);
-    }
+    playerManager.removePlayer(data.username);
     if (pushMessage && data.username !== auth.username) {
       snackbar.pushMessage({
         message: translations.t(`snackbar.lobby.${role === ZRPRole.Spectator ? 'spectator' : 'player'}Left`, [data.username]),
@@ -242,6 +238,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   });
 
   return {
+    bots: bots,
     players: players,
     spectators: spectators,
     host: gameHost,

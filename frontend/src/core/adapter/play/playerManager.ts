@@ -16,6 +16,7 @@ export const usePlayerManager = defineStore('game-players', {
   getters: {
     spectators: state => Object.values(state._allPlayers).filter(p => p.role === ZRPRole.Spectator),
     players: state => Object.values(state._allPlayers).filter(p => p.role !== ZRPRole.Spectator),
+    bots: state => Object.values(state._allPlayers).filter(p => p.role === ZRPRole.Bot),
     host: state => Object.values(state._allPlayers).filter(p => p.role !== ZRPRole.Host)[0],
     allPlayers: state => Object.values(state._allPlayers),
     getPlayer: state => (playerId: string) => state._allPlayers[playerId],

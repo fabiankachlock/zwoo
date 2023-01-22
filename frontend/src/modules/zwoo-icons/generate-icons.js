@@ -52,7 +52,8 @@ const icons = [
   'mdi:fullscreen',
   'mdi:fullscreen-exit',
   'mdi:cloud-sync-outline',
-  'mdi:cloud-off-outline'
+  'mdi:cloud-off-outline',
+  'akar-icons:person-add'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');
@@ -144,4 +145,4 @@ for (const iconCollection in reducedIcons) {
   collections.push(createIconCollection(iconCollection, rows.join('')));
 }
 
-fs.writeFileSync('icons.html', html.replace('{body}', collections.join('')));
+fs.writeFileSync(path.join(__dirname, 'icons.html'), html.replace('{body}', collections.join('')));

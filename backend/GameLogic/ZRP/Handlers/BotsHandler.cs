@@ -48,6 +48,7 @@ public class BotsHandler : IEventHandler
             {
                 Strength = data.Config.Strength
             });
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.Username));
         }
         catch (Exception e)
         {
@@ -81,6 +82,7 @@ public class BotsHandler : IEventHandler
         {
             DeleteBotEvent data = message.DecodePayload<DeleteBotEvent>();
             context.BotManager.RemoveBot(data.Username);
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotLeft, new BotLeftNotification(data.Username));
         }
         catch (Exception e)
         {
