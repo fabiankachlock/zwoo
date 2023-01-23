@@ -76,8 +76,6 @@ public static class Globals
 
         hierarchy.Configured = true;
 
-        Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
-
         ZwooDatabase = new Database.Database();
     }
 
