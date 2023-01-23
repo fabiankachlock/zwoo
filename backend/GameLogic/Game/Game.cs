@@ -63,6 +63,11 @@ public sealed class Game
         return _playerManager.AddPlayer(id);
     }
 
+    public bool HasPlayer(long id)
+    {
+        return _playerManager.HasPlayer(id);
+    }
+
     public bool RemovePlayer(long id)
     {
         _logger.Debug($"removing player {id}");

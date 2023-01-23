@@ -61,6 +61,11 @@ public class LobbyManager
         return _players.Where(p => p.Username == name).Count() == 1 || _preparedPlayers.Where(p => p.Username == name).Count() == 1;
     }
 
+    public bool HasPlayer(long id)
+    {
+        return _players.Where(p => p.Id == id).Count() == 1 || _preparedPlayers.Where(p => p.Id == id).Count() == 1;
+    }
+
     public PlayerEntry? GetPlayer(string name)
     {
         try

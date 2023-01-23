@@ -34,6 +34,11 @@ internal sealed class PlayerManager
         return _preparedPlayers.Remove(id);
     }
 
+    public bool HasPlayer(long id)
+    {
+        return _preparedPlayers.Contains(id);
+    }
+
     public void Reset()
     {
         _preparedPlayers.Clear();

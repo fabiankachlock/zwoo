@@ -13,7 +13,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
     private readonly Game.Game _game;
 
-    private readonly INotificationAdapter _notificationManager;
+    private readonly NotificationManager _notificationManager;
 
     private List<Bot> _bots;
 
@@ -32,6 +32,11 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
         return _bots;
     }
 
+    public Bot? GetBot(long id)
+    {
+        return _bots.Where(bot => bot.PlayerId == id).FirstOrDefault();
+    }
+
     public Bot CreateBot(string username, BotConfig config)
     {
         Bot bot = new Bot(_game.Id, username, config, (long botId, BotZRPNotification<object> msg) =>
@@ -39,7 +44,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
             OnEvent.Invoke(new BotZRPEvent(botId, msg.Code, msg.Payload));
         });
         _bots.Add(bot);
-
+        _notificationManager.AddTarget(bot);
         return bot;
     }
 
@@ -49,6 +54,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
         if (botToRemove != null)
         {
             _bots.Remove(botToRemove);
+            _notificationManager.RemoveTarget(botToRemove);
         }
     }
 
@@ -60,7 +66,16 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
     /// </summary>
     public void PrepareBotsForGame()
     {
-
+        long i = 1;
+        foreach (Bot bot in _bots)
+        {
+            while (_game.HasPlayer(i))
+            {
+                i++;
+            }
+            bot.PrepareForGame(i);
+            i++;
+        }
     }
 
     #region Interface Implementation
