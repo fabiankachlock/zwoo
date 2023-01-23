@@ -31,7 +31,7 @@ public class GameLogicService : IGameLogicService
     public GameLogicService(IWebSocketManager wsManager)
     {
         _wsManager = wsManager;
-        _gameManager = new GameManager(wsManager);
+        _gameManager = new GameManager(wsManager, new Log4NetFactory());
     }
 
     public bool HasGame(long gameId)

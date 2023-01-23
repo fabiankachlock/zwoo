@@ -1,5 +1,5 @@
 ﻿using ZwooGameLogic.ZRP;
-using log4net;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Lobby;
 
@@ -7,13 +7,13 @@ public class ZRPPlayerManager
 {
     private INotificationAdapter _webSocketManager;
     private ZwooRoom _game;
-    private ILog _logger;
+    private ILogger _logger;
 
-    public ZRPPlayerManager(INotificationAdapter webSocketManager, ZwooRoom game)
+    public ZRPPlayerManager(INotificationAdapter webSocketManager, ZwooRoom game, ILogger logger)
     {
         _webSocketManager = webSocketManager;
         _game = game;
-        _logger = LogManager.GetLogger("PlayerManager");
+        _logger = logger;
     }
 
     public async Task ConnectPlayer(long playerId)
