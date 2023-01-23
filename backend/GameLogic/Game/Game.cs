@@ -1,7 +1,7 @@
-﻿using log4net;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.State;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game;
 
@@ -12,7 +12,7 @@ public sealed class Game
     private PlayerManager _playerManager;
     private GameStateManager _stateManager;
     private readonly IGameEventManager _notificationManager;
-    private readonly ILog _logger;
+    private readonly ILogger _logger;
 
     public long Id { get => _meta.Id; }
     public string Name { get => _meta.Name; }
@@ -42,7 +42,8 @@ public sealed class Game
         long id,
         string name,
         bool isPublic,
-        IGameEventManager notificationManager
+        IGameEventManager notificationManager,
+        ILoggerFactory loggerFactory
     )
     {
         _meta = new GameMeta();
@@ -52,8 +53,8 @@ public sealed class Game
         _notificationManager = notificationManager;
         _gameSettings = GameSettings.FromDefaults();
         _playerManager = new PlayerManager();
-        _stateManager = new GameStateManager(_meta, _playerManager, _gameSettings, _notificationManager);
-        _logger = LogManager.GetLogger($"Game-{id}");
+        _stateManager = new GameStateManager(_meta, _playerManager, _gameSettings, _notificationManager, loggerFactory);
+        _logger = loggerFactory.CreateLogger($"Game-{id}");
     }
 
 

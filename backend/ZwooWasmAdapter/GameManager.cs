@@ -1,5 +1,6 @@
 using ZwooGameLogic;
 using ZwooGameLogic.ZRP;
+using ZwooWasm.Logging;
 using System;
 using System.Runtime.InteropServices.JavaScript;
 
@@ -16,12 +17,7 @@ public partial class GameManager
 
     public GameManager()
     {
-        // TODO: init log4net?
-        _gameManager = new ZwooGameLogic.GameManager(LocalNotificationAdapter.Instance);
-
-        Console.WriteLine("init wasm app");
-
-
+        _gameManager = new ZwooGameLogic.GameManager(LocalNotificationAdapter.Instance, WasmLoggerFactory.Instance);
     }
 
     [JSExport]

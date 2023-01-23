@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game;
 using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.State;
 
-namespace GameLogic.Game.Rules;
+namespace ZwooGameLogic.Game.Rules;
 
 internal class AddUpDrawRule : BaseRule
 {

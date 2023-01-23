@@ -11,4 +11,12 @@ export type CSharpExport = {
     OnMessage: (callback: (code: number, payload: unknown) => void) => void;
     OnDisconnect: (callback: () => void) => void;
   };
+  Logging: {
+    WasmLoggerFactory: {
+      OnDebug: (callback: (msg: string) => void) => void;
+      OnInfo: (callback: (msg: string) => void) => void;
+      OnWarn: (callback: (msg: string) => void) => void;
+      OnError: (callback: (msg: string) => void) => void;
+    };
+  };
 };

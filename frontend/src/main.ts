@@ -8,15 +8,13 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { useRootApp } from './core/adapter/app';
 import { RouterService } from './core/services/global/Router';
-// import { WasmLoader } from './core/services/wasm/WasmLoader';
+// import { WasmManger } from './core/services/wasm/WasmManager';
 import { Tooltip } from './directives/tooltip/Tooltip';
 import i18n from './i18n';
 import router from './router';
 
-// const l = new WasmLoader();
-// l.load().then(async () => {
-//   const i = await l.getInstance();
-//   i.GameManager.CreateGame('test', true);
+// WasmManger.global.initialize().then(async instance => {
+//   instance.GameManager.CreateGame('test', true);
 // });
 
 (() => {

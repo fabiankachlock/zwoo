@@ -2,6 +2,7 @@
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.Bots;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic;
 
@@ -23,15 +24,16 @@ public class ZwooRoom
         get => Game.Id;
     }
 
-    public ZwooRoom(Game.Game game, LobbyManager lobby, INotificationAdapter notificationAdapter)
+    public ZwooRoom(Game.Game game, LobbyManager lobby, INotificationAdapter notificationAdapter, ILoggerFactory loggerFactory)
     {
         Game = game;
         Lobby = lobby;
         BotManager = new BotManager(Game);
+        EventDistributer = new UserEventDistributer(notificationAdapter);
+        PlayerManager = new ZRPPlayerManager(notificationAdapter, this, loggerFactory.CreateLogger("PlayerManager"));
 
         _notificationDistributer = new NotificationDistributer(notificationAdapter, BotManager);
         EventDistributer = new UserEventDistributer(_notificationDistributer);
-        PlayerManager = new ZRPPlayerManager(_notificationDistributer, this);
 
         BotManager.OnEvent += DistributeEvent;
     }
