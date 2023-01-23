@@ -19,7 +19,7 @@ public static class Globals
         {
             if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(s)))
             {
-                Logger.Error($"{s} is required! please set it as Environment variable");
+                Console.WriteLine($"{s} is required! please set it as Environment variable");
                 Environment.Exit(1);
             }
             return Environment.GetEnvironmentVariable(s)!;
@@ -75,6 +75,8 @@ public static class Globals
         }
 
         hierarchy.Configured = true;
+
+        Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
 
         ZwooDatabase = new Database.Database();
     }

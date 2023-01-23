@@ -141,10 +141,12 @@ var mail_thread2 = new Thread(() =>
 });
 
 var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+#pragma warning disable 4014
 scheduler.Start();
 scheduler.ScheduleJob(
     JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
     TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
+#pragma warning restore 4014
 
 mail_thread.Start();
 mail_thread2.Start();
@@ -155,4 +157,4 @@ Globals.EmailQueue.Enqueue(new EmailData("", 0, "", ""));
 Globals.PasswordChangeRequestEmailQueue.Enqueue(new User(0, new List<string>(), "", "", "", 0, "", "", false));
 mail_thread.Join();
 mail_thread2.Join();
-scheduler.Shutdown();
+await scheduler.Shutdown();

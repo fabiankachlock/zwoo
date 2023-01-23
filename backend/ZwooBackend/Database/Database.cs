@@ -3,7 +3,6 @@ using System.Text;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using BackendHelper;
-using MongoDB.Bson.Serialization;
 using Quartz;
 using ZwooBackend.Controllers;
 using ZwooBackend.Controllers.DTO;
@@ -30,15 +29,14 @@ public class Database
     [Serializable]
     private class DatabaseException : Exception
     {
-        public DatabaseException() : base() { }
+        public DatabaseException() { }
         public DatabaseException(string message) : base(message) { }
     }
 
     public Database()
     {
         _client = new MongoClient(ConnectionString);
-        DatabaseLogger.Info($"connected to {ConnectionString}");
-
+        DatabaseLogger.Info($"trying to connect to db ({ConnectionString})");
         _database = _client.GetDatabase("zwoo");
 
         if (_database == null)
@@ -46,6 +44,18 @@ public class Database
             DatabaseLogger.Error("cant connect to database");
             Environment.Exit(1);
         }
+
+        try
+        {
+            _database.ListCollectionNames();
+        }
+        catch (Exception e)
+        {
+            DatabaseLogger.Error(e);
+            DatabaseLogger.Fatal("closing! failed to connect to database");
+            Environment.Exit(1);
+        }
+        
         DatabaseLogger.Info($"established connection with database");
 
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
@@ -53,13 +63,13 @@ public class Database
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
-        
+
         if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == Globals.Version) == null)
             _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
     }
 
     public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
-    
+
     /// <summary>
     /// Hash Password, Generate verification code and Creates user in Database
     /// </summary>
@@ -72,7 +82,12 @@ public class Database
     {
         DatabaseLogger.Debug($"[User] creating {username}");
         var code = StringHelper.GenerateNDigitString(6);
-        var id = _userCollection.AsQueryable().Max(x => x.Id) + 1;
+        
+        ulong id;
+        if (_userCollection.AsQueryable().Any())
+            id = _userCollection.AsQueryable().Max(x => x.Id) + 1;
+        else
+            id = 1;
 
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
@@ -94,6 +109,7 @@ public class Database
         CreateAttempt(id, true);
         return (username, id, code, email);
     }
+
     
     public bool UsernameExists(string username) => _userCollection.AsQueryable().FirstOrDefault(x => x.Username == username) != null;
     
@@ -105,14 +121,14 @@ public class Database
         DatabaseLogger.Debug($"[BetaCode] checking {betaCode}");
         return _betacodesCollection.AsQueryable().FirstOrDefault(x => x.Code == betaCode) != null;
     }
-    
+
     private bool RemoveBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
         DatabaseLogger.Debug($"[BetaCode] removing {betaCode}");
         return _betacodesCollection.DeleteOne(x => betaCode == x.Code).DeletedCount != 0;
     }
-    
+
     public bool VerifyUser(ulong id, string code)
     {
         DatabaseLogger.Debug($"[User] verifying {id}");
@@ -167,17 +183,19 @@ public class Database
     /// </summary>
     /// <param name="cookie">cookie from user</param>
     /// <param name="user">user</param>
+    /// <param name="sid">session id of the user</param>
     /// <returns>user found</returns>
     public bool GetUser(string cookie, out User user, out string sid)
     {
         user = new User();
         sid = "";
         var cookieData = cookie.Split(",");
-        user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
-        if (user == null)
+        var u = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
+        if (u == null)
             return false;
         if (user.Sid.Contains(cookieData[1]))
         {
+            user = u;
             sid = cookieData[1];
             return true;
         }
@@ -211,7 +229,7 @@ public class Database
         DeleteAttempt(user.Id, true, user);
         return true;
     }
-    
+
     public LeaderBoard GetLeaderBoard()
     {
         var leaderboard = new LeaderBoard
@@ -226,7 +244,7 @@ public class Database
 
         return leaderboard;
     }
-    
+
     public uint IncrementWin(ulong puid)
     {
         DatabaseLogger.Info($"Incrementing win for user {puid}");
@@ -234,7 +252,7 @@ public class Database
             return _userCollection.AsQueryable().First(u => u.Id == puid).Wins;
         return 0;
     }
-    
+
     public long GetPosition(User user) => _userCollection.Aggregate().Match(Builders<User>.Filter.Gte(u => u.Wins, user.Wins)).ToList().Count;
 
     public bool ChangePassword(User user, string oldPassword, string newPassword, string sid)
@@ -251,13 +269,13 @@ public class Database
 
     public User RequestChangePassword(string email)
     {
-        var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email);
+        var user = _userCollection.AsQueryable().First(x => x.Email == email);
         user.PasswordResetCode = Guid.NewGuid().ToString();
         _userCollection.UpdateOne(x => x.Id == user.Id,
             Builders<User>.Update.Set(u => u.PasswordResetCode, user.PasswordResetCode));
         return user;
     }
-    
+
     public void ResetPassword(string code, string password)
     {
         var salt = RandomNumberGenerator.GetBytes(16);
@@ -269,7 +287,7 @@ public class Database
         _userCollection.UpdateOne(x => x.PasswordResetCode == code,
             Builders<User>.Update.Set(u => u.PasswordResetCode, ""));
     }
-    
+
     /// <summary>
     /// Delete unverified users & unused password reset codes & delete expired delete account events
     /// </summary>
@@ -315,6 +333,7 @@ public class Database
         _accountEventCollection.InsertOne(new AccountEvent("logout", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
     
+
     private void DeleteAttempt(ulong puid, bool success, User? user = null)
     {
         var u = new AccountEvent("delete", puid, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds())
