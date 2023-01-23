@@ -1,12 +1,13 @@
-namespace ZwooGameLogic.Bots.Decisions;
+using ZwooGameLogic.Logging;
 
+namespace ZwooGameLogic.Bots.Decisions;
 
 internal class BotBrainFactory
 {
     // TODO: evaluate based on strength and co
-    internal static IBotDecisionHandler CreateDecisionHandler(BotConfig config)
+    internal static IBotDecisionHandler CreateDecisionHandler(BotConfig config, ILogger logger)
     {
-        return new BasicBotDecisionManager();
+        return new BasicBotDecisionManager(logger);
     }
 
 }

@@ -2,6 +2,7 @@ using ZwooGameLogic.ZRP;
 using ZwooGameLogic.Bots.State;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Logging;
 
 
 namespace ZwooGameLogic.Bots.Decisions;
@@ -9,61 +10,83 @@ namespace ZwooGameLogic.Bots.Decisions;
 
 public class BasicBotDecisionManager : IBotDecisionHandler
 {
+
+    public event IBotDecisionHandler.EventHandler OnEvent = delegate { };
+
     private BasicBotStateManager _stateManager;
     private int placedCard = -1;
+    private ILogger _logger;
 
-    public BasicBotDecisionManager()
+    public BasicBotDecisionManager(ILogger logger)
     {
         _stateManager = new BasicBotStateManager();
+        _logger = logger;
     }
 
-    public BotZRPNotification<object>? AggregateNotification(BotZRPNotification<object> message)
+    public void AggregateNotification(BotZRPNotification<object> message)
     {
         switch (message.Code)
         {
+            case ZRPCode.GameStarted:
+                OnEvent.Invoke(ZRPCode.GetHand, new GetDeckEvent());
+                break;
             case ZRPCode.GetPlayerDecision:
-                return makeDecision((GetPlayerDecisionNotification)message.Payload);
+                _logger.Info("making decision");
+                makeDecision((GetPlayerDecisionNotification)message.Payload);
+                return;
             case ZRPCode.PlaceCardError:
-                return placeCard();
+                placeCard();
+                return;
             default:
                 _stateManager.AggregateNotification((BotZRPNotification<object>)message);
                 break;
         }
 
         var currentState = _stateManager.GetState();
-        if (currentState.IsActive)
+        if (currentState.IsActive && message.Code != ZRPCode.StateUpdated)
         {
+            _logger.Info("starting turn");
             placedCard = -1;
-            return placeCard();
+            placeCard();
         }
-
-        return null;
     }
 
-    private BotZRPNotification<object> placeCard()
+    private void placeCard()
     {
-        if (placedCard == _stateManager.GetState().Deck.Count)
+        var state = _stateManager.GetState();
+        placedCard = placedCard + 1;
+
+        if (placedCard >= state.Deck.Count)
         {
-            return new BotZRPNotification<object>(ZRPCode.DrawCard, new DrawCardEvent());
+            _logger.Info("bailing with draw");
+            OnEvent.Invoke(ZRPCode.DrawCard, new DrawCardEvent());
+            return;
         }
 
-        placedCard = placedCard + 1;
-        var state = _stateManager.GetState();
-        return new BotZRPNotification<object>(ZRPCode.PlaceCard, new PlaceCardEvent(
-            (int)state.Deck[placedCard].Color,
-            (int)state.Deck[placedCard].Type
-        ));
+        try
+        {
+            OnEvent.Invoke(ZRPCode.PlaceCard, new PlaceCardEvent(
+                (int)state.Deck[placedCard].Color,
+                (int)state.Deck[placedCard].Type
+            ));
+        }
+        catch (Exception ex)
+        {
+            _logger.Error($"cant place card [{placedCard}]: {ex}");
+        }
     }
 
-    private BotZRPNotification<object> makeDecision(GetPlayerDecisionNotification data)
+    private void makeDecision(GetPlayerDecisionNotification data)
     {
         switch (data.Type)
         {
             case (int)PlayerDecision.SelectColor:
-                return new BotZRPNotification<object>(ZRPCode.ReceiveDecision, new PlayerDecisionEvent((int)PlayerDecision.SelectColor, (int)CardColorHelper.Random()));
+                OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent((int)PlayerDecision.SelectColor, (int)CardColorHelper.Random()));
+                break;
             default:
                 // do at least something
-                return placeCard();
+                placeCard();
+                break;
         }
     }
 

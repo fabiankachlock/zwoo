@@ -143,7 +143,7 @@ public class GameHandler : IEventHandler
             foreach (long player in context.Game.AllPlayers)
             {
                 amounts.Add(new SendPlayerState_PlayerDTO(
-                    context.Lobby.HasPlayer(player) ? context.Lobby.GetPlayer(player)!.Username : context.BotManager.GetBot(player)!.Username,
+                    context.Room.ResolvePlayerName(player) ?? "",
                     context.Game.State.GetPlayerCardAmount(player)!.Value,
                     context.Game.State.GetPlayerOrder(player)!.Value,
                     context.Game.State.ActivePlayer() == player

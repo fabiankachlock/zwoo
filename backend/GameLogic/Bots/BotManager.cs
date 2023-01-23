@@ -1,6 +1,6 @@
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
-using ZwooGameLogic.Bots.Decisions;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Bots;
 
@@ -15,16 +15,22 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
     private readonly NotificationManager _notificationManager;
 
+    private readonly ILoggerFactory _loggerFactory;
+
+    private readonly ILogger _logger;
+
     private List<Bot> _bots;
 
 
     public event IUserEventEmitter.EventHandler OnEvent = delegate { };
 
-    public BotManager(Game.Game game)
+    public BotManager(Game.Game game, ILoggerFactory loggerFactory)
     {
         _game = game;
-        _notificationManager = new NotificationManager();
+        _notificationManager = new NotificationManager(loggerFactory.CreateLogger("NotificationManager"));
         _bots = new List<Bot>();
+        _loggerFactory = loggerFactory;
+        _logger = loggerFactory.CreateLogger("BotManager");
     }
 
     public List<Bot> ListBots()
@@ -39,9 +45,12 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
     public Bot CreateBot(string username, BotConfig config)
     {
-        Bot bot = new Bot(_game.Id, username, config, (long botId, BotZRPNotification<object> msg) =>
+        _logger.Info($"creating bot {username}");
+        var botLogger = _loggerFactory.CreateLogger($"Bot-{username}");
+        Bot bot = new Bot(_game.Id, username, config, botLogger, (BotZRPEvent evt) =>
         {
-            OnEvent.Invoke(new BotZRPEvent(botId, msg.Code, msg.Payload));
+            botLogger.Debug($"sending event {evt.Code} {evt.Payload}");
+            OnEvent.Invoke(evt);
         });
         _bots.Add(bot);
         _notificationManager.AddTarget(bot);
@@ -50,6 +59,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
     public void RemoveBot(string username)
     {
+        _logger.Info($"removing bot {username}");
         Bot? botToRemove = _bots.Find(bot => bot.Username == username);
         if (botToRemove != null)
         {
@@ -66,6 +76,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
     /// </summary>
     public void PrepareBotsForGame()
     {
+        _logger.Info($"preparing bots for game");
         long i = 1;
         foreach (Bot bot in _bots)
         {
@@ -73,6 +84,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
             {
                 i++;
             }
+            _logger.Info($"assigning id {i} to bot {bot.Username}");
             bot.PrepareForGame(i);
             i++;
         }

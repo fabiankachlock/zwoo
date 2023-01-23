@@ -1,5 +1,6 @@
 
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Notifications;
 
@@ -10,10 +11,12 @@ public class NotificationManager : INotificationAdapter
 {
 
     private List<INotificationTarget> _targets;
+    private ILogger _logger;
 
-    public NotificationManager(params INotificationTarget[] targets)
+    public NotificationManager(ILogger logger)
     {
-        _targets = new List<INotificationTarget>(targets);
+        _targets = new List<INotificationTarget>();
+        _logger = logger;
     }
 
     public void AddTarget(INotificationTarget target)
@@ -30,6 +33,7 @@ public class NotificationManager : INotificationAdapter
 
     public Task<bool> SendPlayer<T>(long playerId, ZRPCode code, T payload)
     {
+        _logger.Debug($"[Player] [{playerId}] sending {code} {payload}");
         var target = _targets.Find(target => target.PlayerId == playerId);
         if (target != null)
         {
@@ -41,6 +45,7 @@ public class NotificationManager : INotificationAdapter
 
     public Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)
     {
+        _logger.Debug($"[Game] [{gameId}] broadcasting");
         var targets = _targets.FindAll(target => target.GameId == gameId);
         if (targets != null)
         {
@@ -52,6 +57,7 @@ public class NotificationManager : INotificationAdapter
 
     public Task<bool> DisconnectPlayer(long playerId)
     {
+        _logger.Debug($"[Player] [{playerId}] disconnecting");
         var target = _targets.Find(target => target.PlayerId == playerId);
         if (target != null)
         {
@@ -63,6 +69,7 @@ public class NotificationManager : INotificationAdapter
 
     public Task<bool> DisconnectGame(long gameId)
     {
+        _logger.Debug($"[Game] [{gameId}] disconnecting");
         var targets = _targets.FindAll(target => target.GameId == gameId);
         if (targets != null)
         {

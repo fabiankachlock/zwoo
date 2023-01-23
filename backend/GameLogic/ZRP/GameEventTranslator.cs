@@ -48,11 +48,12 @@ public class GameEventTranslator : IGameEventManager
 
     public void PlayerWon(GamePlayerWonDTO data, GameMeta gameMeta)
     {
+
         _wsAdapter.BroadcastGame(
             _game!.Id,
             ZRPCode.PlayerWon,
             new PlayerWonNotification(
-                _game.Lobby.ResolvePlayer(data.Winner),
+                _game.ResolvePlayerName(data.Winner) ?? "",
                 0, // TODO: (int)winnerWins,
                 data.Scores.Select(score => new PlayerWon_PlayerSummaryDTO(_game.Lobby.ResolvePlayer(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).OrderBy(s => s.Position).ToArray()
             )
@@ -80,7 +81,7 @@ public class GameEventTranslator : IGameEventManager
         _wsAdapter.BroadcastGame(
             _game!.Id,
             ZRPCode.StateUpdated,
-            new ZRP.StateUpdateNotification(new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _game.Lobby.ResolvePlayer(data.ActivePlayer), data.ActivePlayerCardAmount, _game.Lobby.ResolvePlayer(data.LastPlayer), data.LastPlayerCardAmount)
+            new ZRP.StateUpdateNotification(new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _game.ResolvePlayerName(data.ActivePlayer) ?? "", data.ActivePlayerCardAmount, _game.ResolvePlayerName(data.LastPlayer) ?? "", data.LastPlayerCardAmount)
         );
     }
 

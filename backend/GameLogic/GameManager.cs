@@ -28,10 +28,11 @@ public sealed class GameManager
     {
         long id = nextGameId();
 
-        GameEventTranslator notificationManager = new GameEventTranslator(this._notificationAdapter);
+        NotificationDistributer notificationDistributer = new NotificationDistributer(this._notificationAdapter);
+        GameEventTranslator notificationManager = new GameEventTranslator(notificationDistributer);
         Game.Game newGame = new Game.Game(id, name, isPublic, notificationManager, _loggerFactory);
         LobbyManager lobby = new LobbyManager(newGame.Id, newGame.Settings);
-        ZwooRoom room = new ZwooRoom(newGame, lobby, _notificationAdapter, _loggerFactory);
+        ZwooRoom room = new ZwooRoom(newGame, lobby, notificationDistributer, _loggerFactory);
 
         notificationManager.SetGame(room);
         room.OnClosed += () =>
