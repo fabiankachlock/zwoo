@@ -24,15 +24,7 @@ public class UserEventDistributer
 
     public void Distribute(ZwooRoom room, IIncomingZRPMessage msg)
     {
-        LobbyManager.PlayerEntry? player = room.Lobby.GetPlayer(msg.UserId);
-        if (player == null)
-        {
-            var bot = room.BotManager.GetBot(msg.UserId);
-            if (bot != null)
-            {
-                player = new LobbyManager.PlayerEntry(bot.PlayerId, bot.Username, ZRPRole.Bot, ZRPPlayerState.Connected);
-            }
-        }
+        LobbyManager.PlayerEntry? player = room.GetPlayer(msg.UserId);
         if (player == null) return;
 
         UserContext context = new UserContext(player.Id, player.Username, player.Role, 0, room.Id, room);

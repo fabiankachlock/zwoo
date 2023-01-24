@@ -2,6 +2,7 @@ using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic.Bots.Decisions;
 using ZwooGameLogic.Logging;
+using ZwooGameLogic.Lobby;
 
 namespace ZwooGameLogic.Bots;
 
@@ -47,6 +48,11 @@ public class Bot : INotificationTarget
         _handler.OnEvent -= forwardMessage;
         _handler = BotBrainFactory.CreateDecisionHandler(config, _logger);
         _handler.OnEvent += forwardMessage;
+    }
+
+    public LobbyManager.PlayerEntry AsPlayer()
+    {
+        return new LobbyManager.PlayerEntry(PlayerId, Username, ZRPRole.Bot, ZRPPlayerState.Connected);
     }
 
     public void ReceiveMessage<T>(ZRPCode code, T payload)
