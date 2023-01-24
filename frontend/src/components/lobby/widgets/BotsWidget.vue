@@ -109,11 +109,11 @@ const deleteBot = (name: string) => {
 const submitBot = () => {
   if (isBotUpdate.value) {
     botManager.updateBot(botName.value, {
-      strength: 1
+      type: 1
     });
   } else {
     botManager.addBot(botName.value, {
-      strength: 1
+      type: 1
     });
   }
   botDialogOpen.value = false;

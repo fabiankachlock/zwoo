@@ -54,7 +54,6 @@ public class GameEventTranslator : IGameEventManager
             ZRPCode.PlayerWon,
             new PlayerWonNotification(
                 _game.ResolvePlayerName(data.Winner) ?? "",
-                0, // TODO: (int)winnerWins,
                 data.Scores.Select(score => new PlayerWon_PlayerSummaryDTO(_game.Lobby.ResolvePlayer(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).OrderBy(s => s.Position).ToArray()
             )
         );

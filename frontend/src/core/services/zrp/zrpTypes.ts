@@ -213,7 +213,7 @@ export type ZRPSettingsPayload = {
 };
 
 export type ZRPBotConfig = {
-  strength: number;
+  type: number;
 };
 
 export type ZRPBotPayload = {
@@ -272,7 +272,6 @@ export type ZRPDecisionResponsePayload = {
 
 export type ZRPGameWinnerPayload = {
   username: string;
-  wins: number;
   summary: {
     username: string;
     position: number;

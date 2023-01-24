@@ -4,6 +4,6 @@ namespace ZwooGameLogic.Bots;
 public struct BotConfig
 {
 
-    public int Strength;
+    public int Type;
 
 }

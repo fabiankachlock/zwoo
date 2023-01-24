@@ -138,7 +138,7 @@ public readonly record struct StartGameEvent(); // empty
 /// <see cref="CreateBotEvent" />
 /// <see cref="UpdateBotEvent" />
 /// <see cref="AllBots_BotDTO" />
-public readonly record struct BotConfigDTO(int Strength);
+public readonly record struct BotConfigDTO(int Type);
 
 /// <summary>
 /// ZRPCode: 230
@@ -294,7 +294,6 @@ public readonly record struct PlayerWon_PlayerSummaryDTO(
 /// </summary>
 public readonly record struct PlayerWonNotification(
     string Username,
-    int Wins,
     PlayerWon_PlayerSummaryDTO[] Summary
 );
 

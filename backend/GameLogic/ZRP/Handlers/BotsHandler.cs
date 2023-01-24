@@ -46,7 +46,7 @@ public class BotsHandler : IEventHandler
             CreateBotEvent data = message.DecodePayload<CreateBotEvent>();
             Bot newBot = context.BotManager.CreateBot(data.Username, new BotConfig()
             {
-                Strength = data.Config.Strength
+                Type = data.Config.Type
             });
             _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.Username));
         }
@@ -66,7 +66,7 @@ public class BotsHandler : IEventHandler
             {
                 botToUpdate.SetConfig(new BotConfig()
                 {
-                    Strength = data.Config.Strength
+                    Type = data.Config.Type
                 });
             }
         }
@@ -94,7 +94,7 @@ public class BotsHandler : IEventHandler
     {
         try
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.Username, new BotConfigDTO(bot.Config.Strength))).ToArray()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.Username, new BotConfigDTO(bot.Config.Type))).ToArray()));
         }
         catch (Exception e)
         {
