@@ -4,7 +4,7 @@
       <div class="flex flex-row">
         <button @click="createBot()" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
           <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="akar-icons:person-add" class="icon text-2xl"></Icon>
+            <Icon icon="fluent:bot-add-20-regular" class="icon text-2xl"></Icon>
           </div>
         </button>
       </div>

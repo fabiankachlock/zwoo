@@ -53,7 +53,8 @@ const icons = [
   'mdi:fullscreen-exit',
   'mdi:cloud-sync-outline',
   'mdi:cloud-off-outline',
-  'akar-icons:person-add'
+  'fluent:bot-add-20-regular',
+  'fluent:bot-24-regular'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

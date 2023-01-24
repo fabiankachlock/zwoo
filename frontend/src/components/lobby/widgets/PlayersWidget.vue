@@ -58,17 +58,28 @@
                 {{ player.username }}
               </span>
             </p>
-            <span v-if="gameHost === player.username" class="tc-primary text-lg">
-              <Icon icon="akar-icons:crown" class="ml-2" />
-            </span>
+            <!-- display bot badge -->
+            <template v-if="player.role === ZRPRole.Bot">
+              <span class="tc-primary text-lg ml-2">
+                <Icon icon="fluent:bot-24-regular" />
+              </span>
+            </template>
+            <!-- display host badge -->
+            <template v-else-if="gameHost === player.username">
+              <span class="tc-primary text-lg ml-2">
+                <Icon icon="akar-icons:crown" />
+              </span>
+            </template>
           </div>
           <div class="flex items-center h-full justify-end">
-            <template v-if="!isHost && username === player.username">
+            <!-- display player actions for player -->
+            <template v-if="!isHost && username === player.username && player.role !== ZRPRole.Bot">
               <button v-tooltip="t('wait.spectate')" @click="handleChangeToSpectator()" class="tc-primary h-full bg-light hover:bg-main rounded p-1">
                 <Icon icon="iconoir:eye-alt" />
               </button>
             </template>
-            <template v-if="isHost && username !== player.username">
+            <!-- display player actions for host -->
+            <template v-else-if="isHost && username !== player.username && player.role !== ZRPRole.Bot">
               <button
                 v-tooltip="t('wait.spectate')"
                 @click="handlePlayerToSpectator(player.id)"
@@ -121,6 +132,7 @@ import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
 import { useIsHost } from '@/core/adapter/play/util/userRoles';
 import { Frontend } from '@/core/services/api/ApiConfig';
+import { ZRPRole } from '@/core/services/zrp/zrpTypes';
 
 import Widget from '../Widget.vue';
 
