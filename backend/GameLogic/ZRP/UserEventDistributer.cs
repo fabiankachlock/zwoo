@@ -24,10 +24,10 @@ public class UserEventDistributer
 
     public void Distribute(ZwooRoom room, IIncomingZRPMessage msg)
     {
-        LobbyManager.PlayerEntry? player = room.GetPlayer(msg.UserId);
+        IPlayer? player = room.GetPlayer(msg.UserId);
         if (player == null) return;
 
-        UserContext context = new UserContext(player.Id, player.Username, player.Role, 0, room.Id, room);
+        UserContext context = new UserContext(player.Id, player.PublicId, player.Username, player.Role, room.Id, room);
         foreach (IEventHandler handler in _handlers)
         {
             if (handler.HandleMessage(context, msg))

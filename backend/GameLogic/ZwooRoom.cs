@@ -41,7 +41,7 @@ public class ZwooRoom
         return Lobby.HasPlayer(id) ? Lobby.GetPlayer(id)?.Username : BotManager.GetBot(id)?.Username;
     }
 
-    public LobbyManager.PlayerEntry? GetPlayer(long id)
+    public IPlayer? GetPlayer(long id)
     {
         return Lobby.HasPlayer(id) ? Lobby.GetPlayer(id) : BotManager.GetBot(id)?.AsPlayer();
     }

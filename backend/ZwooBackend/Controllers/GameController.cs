@@ -64,7 +64,7 @@ public class GameController : Controller
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NAME_MISSING, "Insufficient create game data"));
                 }
 
-                user.Username = "u" + user.Username;
+                user.Username = user.Username;
                 ZwooRoom game = _gamesService.CreateGame(body.Name, !body.UsePassword.Value);
                 game.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
 

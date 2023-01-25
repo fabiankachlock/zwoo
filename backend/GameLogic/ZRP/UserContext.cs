@@ -6,9 +6,9 @@ namespace ZwooGameLogic.ZRP;
 public class UserContext
 {
     public readonly long Id;
+    public readonly string PublicId;
     public readonly string UserName;
     public readonly ZRPRole Role;
-    public readonly int Wins;
     public readonly long GameId;
     public readonly ZwooRoom Room;
 
@@ -27,11 +27,11 @@ public class UserContext
         get => Room.BotManager;
     }
 
-    public UserContext(long id, string userName, ZRPRole role, int wins, long gameId, ZwooRoom room)
+    public UserContext(long id, string publicId, string userName, ZRPRole role, long gameId, ZwooRoom room)
     {
         Id = id;
+        PublicId = publicId;
         UserName = userName;
-        Wins = wins;
         Role = role;
         GameId = gameId;
         Room = room;

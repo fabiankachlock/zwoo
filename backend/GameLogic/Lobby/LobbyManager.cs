@@ -5,27 +5,9 @@ namespace ZwooGameLogic.Lobby;
 
 public class LobbyManager
 {
-
-    public class PlayerEntry
-    {
-        public long Id;
-        public string Username;
-        public ZRPRole Role;
-        public ZRPPlayerState State;
-
-        public PlayerEntry(long id, string username, ZRPRole role, ZRPPlayerState state)
-        {
-            Id = id;
-            Username = username;
-            Role = role;
-            State = state;
-        }
-    }
-
-
     public readonly long GameId;
-    private List<PlayerEntry> _players;
-    private List<PlayerEntry> _preparedPlayers;
+    private List<LobbyEntry> _players;
+    private List<LobbyEntry> _preparedPlayers;
     private string _password;
     private bool _usePassword = false;
     private GameSettings _settings;
@@ -33,8 +15,8 @@ public class LobbyManager
     public LobbyManager(long gameId, GameSettings settings)
     {
         GameId = gameId;
-        _players = new List<PlayerEntry>();
-        _preparedPlayers = new List<PlayerEntry>();
+        _players = new List<LobbyEntry>();
+        _preparedPlayers = new List<LobbyEntry>();
         _password = "";
         _settings = settings;
     }
@@ -66,7 +48,7 @@ public class LobbyManager
         return _players.Where(p => p.Id == id).Count() == 1 || _preparedPlayers.Where(p => p.Id == id).Count() == 1;
     }
 
-    public PlayerEntry? GetPlayer(string name)
+    public LobbyEntry? GetPlayer(string name)
     {
         try
         {
@@ -78,7 +60,7 @@ public class LobbyManager
         }
     }
 
-    public PlayerEntry? GetPlayer(long id)
+    public LobbyEntry? GetPlayer(long id)
     {
         try
         {
@@ -118,7 +100,7 @@ public class LobbyManager
     public LobbyResult Initialize(long hostId, string host, string password, bool usePassword)
     {
         if (HasHost()) return LobbyResult.ErrorAlredyInitialized;
-        _preparedPlayers.Add(new PlayerEntry(hostId, host, ZRPRole.Host, ZRPPlayerState.Disconnected));
+        _preparedPlayers.Add(new LobbyEntry(hostId, PlayerPublicId.ForUser(host, ZRPRole.Host), host, ZRPRole.Host, ZRPPlayerState.Disconnected));
         _password = password;
         _usePassword = usePassword;
         return LobbyResult.Success;
@@ -131,7 +113,7 @@ public class LobbyManager
         if (HasPlayer(name) || role == ZRPRole.Host) return LobbyResult.ErrorAlredyInGame;
         if (PlayerCount() >= _settings.MaxAmountOfPlayers && role != ZRPRole.Spectator) return LobbyResult.ErrorLobbyFull;
 
-        _preparedPlayers.Add(new PlayerEntry(id, name, role, ZRPPlayerState.Disconnected));
+        _preparedPlayers.Add(new LobbyEntry(id, PlayerPublicId.ForUser(name, role), name, role, ZRPPlayerState.Disconnected));
         return LobbyResult.Success;
     }
 
@@ -139,7 +121,7 @@ public class LobbyManager
     {
         try
         {
-            PlayerEntry preparedPlayer = _preparedPlayers.First(p => p.Id == id);
+            LobbyEntry preparedPlayer = _preparedPlayers.First(p => p.Id == id);
             _preparedPlayers.Remove(preparedPlayer);
             _players.Add(preparedPlayer);
             return LobbyResult.Success;
@@ -156,7 +138,7 @@ public class LobbyManager
 
     public void PlayerConnected(long id)
     {
-        PlayerEntry? player = GetPlayer(id);
+        LobbyEntry? player = GetPlayer(id);
         if (player != null)
         {
             player.State = ZRPPlayerState.Connected;
@@ -165,7 +147,7 @@ public class LobbyManager
 
     public void PlayerDisconnected(long id)
     {
-        PlayerEntry? player = GetPlayer(id);
+        LobbyEntry? player = GetPlayer(id);
         if (player != null)
         {
             player.State = ZRPPlayerState.Disconnected;
@@ -174,11 +156,11 @@ public class LobbyManager
 
     public LobbyResult RemovePlayer(string name)
     {
-        PlayerEntry? player = GetPlayer(name);
+        LobbyEntry? player = GetPlayer(name);
         if (player == null) return LobbyResult.ErrorInvalidPlayer;
         if (player.Role == ZRPRole.Host)
         {
-            PlayerEntry? newHost = SelectNewHost();
+            LobbyEntry? newHost = SelectNewHost();
             _players.RemoveAll(p => p.Username == name);
             if (newHost == null) return LobbyResult.Error;
         }
@@ -192,15 +174,15 @@ public class LobbyManager
     {
         if (newRole == ZRPRole.Host)
         {
-            PlayerEntry? currentHost = GetPlayer(Host());
-            PlayerEntry? newHost = GetPlayer(name);
+            LobbyEntry? currentHost = GetPlayer(Host());
+            LobbyEntry? newHost = GetPlayer(name);
             if (newHost == null || currentHost == null) return LobbyResult.ErrorInvalidPlayer;
             newHost.Role = ZRPRole.Host;
             currentHost.Role = ZRPRole.Player;
         }
         else
         {
-            PlayerEntry? player = GetPlayer(name);
+            LobbyEntry? player = GetPlayer(name);
             if (player == null) return LobbyResult.ErrorInvalidPlayer;
             if (newRole == ZRPRole.Player && PlayerCount() >= _settings.MaxAmountOfPlayers) return LobbyResult.ErrorLobbyFull;
             player.Role = newRole;
@@ -208,12 +190,12 @@ public class LobbyManager
         return LobbyResult.Success;
     }
 
-    public PlayerEntry? SelectNewHost()
+    public LobbyEntry? SelectNewHost()
     {
-        PlayerEntry host = GetPlayer(Host())!;
+        LobbyEntry host = GetPlayer(Host())!;
         if (PlayersNames().Count > 1)
         {
-            PlayerEntry? newHost = _players.FirstOrDefault(p => p.Role == ZRPRole.Player && p.State == ZRPPlayerState.Connected);
+            LobbyEntry? newHost = _players.FirstOrDefault(p => p.Role == ZRPRole.Player && p.State == ZRPPlayerState.Connected);
             if (newHost == null) return null;
             newHost.Role = ZRPRole.Host;
             host.Role = ZRPRole.Player;
@@ -222,11 +204,11 @@ public class LobbyManager
         return null;
     }
 
-    public List<PlayerEntry> ListAll() => _players.ToList();
+    public List<LobbyEntry> ListAll() => _players.ToList();
 
     public void ResetDisconnectedStates()
     {
-        foreach (PlayerEntry player in _players)
+        foreach (LobbyEntry player in _players)
         {
             player.State = ZRPPlayerState.Connected;
         }

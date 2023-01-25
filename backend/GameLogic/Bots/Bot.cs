@@ -50,9 +50,9 @@ public class Bot : INotificationTarget
         _handler.OnEvent += forwardMessage;
     }
 
-    public LobbyManager.PlayerEntry AsPlayer()
+    public IPlayer AsPlayer()
     {
-        return new LobbyManager.PlayerEntry(PlayerId, Username, ZRPRole.Bot, ZRPPlayerState.Connected);
+        return new LobbyEntry(PlayerId, PlayerPublicId.ForUser(Username, ZRPRole.Host), Username, ZRPRole.Bot, ZRPPlayerState.Connected);
     }
 
     public void ReceiveMessage<T>(ZRPCode code, T payload)

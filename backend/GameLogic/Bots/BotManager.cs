@@ -47,7 +47,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
     {
         _logger.Info($"creating bot {username}");
         var botLogger = _loggerFactory.CreateLogger($"Bot-{username}");
-        Bot bot = new Bot(_game.Id, "b" + username, config, botLogger, (BotZRPEvent evt) =>
+        Bot bot = new Bot(_game.Id, username, config, botLogger, (BotZRPEvent evt) =>
         {
             botLogger.Debug($"sending event {evt.Code} {evt.Payload}");
             OnEvent.Invoke(evt);
