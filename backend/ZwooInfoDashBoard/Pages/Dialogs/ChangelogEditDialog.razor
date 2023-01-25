@@ -6,10 +6,10 @@
 @inject DialogService DialogService
 
 <div class="w-100" style="padding: 5px;">
-    <RadzenButton Text="Save" Click="(() => Globals.ZwooDatabase.UpdateChangelog(changelog))"/>
+    <RadzenButton Text="Save" Click="(() => Globals.ZwooDatabase.UpdateChangelog(changelog!))"/>
 </div>
 
-<RadzenHtmlEditor @bind-Value="@changelog.ChangelogText" Style="flex-grow: 1">
+<RadzenHtmlEditor @bind-Value="@changelog!.ChangelogText" Style="flex-grow: 1">
     <RadzenHtmlEditorUndo />
     <RadzenHtmlEditorRedo />
     <RadzenHtmlEditorSeparator />
@@ -37,5 +37,5 @@
 </RadzenHtmlEditor>
 
 @code {
-    [Parameter] public Changelog changelog { set; get; }
+    [Parameter] public Changelog? changelog { set; get; }
 }
