@@ -2,9 +2,10 @@
   <div
     class="w-full flex flex-row justify-between items-center bg-dark px-1 py-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
   >
-    <div class="h-full flex-1 mx-2 tc-main-light">
+    <div class="h-full flex-1 mx-2 tc-main-light flex justify-start items-center">
       <span>{{ title }}</span>
       <span v-if="status" class="text-sm mx-1 tc-main-secondary">({{ status }})</span>
+      <SettingsSyncToggle v-if="settingsKey && isLoggedIn" :settingsKey="settingsKey"></SettingsSyncToggle>
     </div>
     <div class="mx-2 h-full flex items-center justify-end">
       <Tooltip v-if="tooltip" :title="tooltip">
@@ -16,13 +17,21 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 
 import Tooltip from '@/components/misc/Tooltip.vue';
+import { useAuth } from '@/core/adapter/auth';
+import { ZwooConfigKey } from '@/core/adapter/config';
+
+import SettingsSyncToggle from './SettingsSyncToggle.vue';
 
 defineProps<{
   title: string;
   status?: string;
   tooltip?: string;
+  settingsKey?: ZwooConfigKey;
 }>();
+
+const auth = useAuth();
+const isLoggedIn = computed(() => auth.isLoggedIn);
 </script>

@@ -1,11 +1,12 @@
-using ZwooBackend.ZRP;
 using System.Text.Json;
-using System.Text;
-using BackendHelper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
+using ZwooBackend.Websockets;
 using ZwooBackend.Games;
+using ZwooGameLogic;
+using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Lobby;
 
 namespace ZwooBackend.Controllers;
 
@@ -14,6 +15,16 @@ namespace ZwooBackend.Controllers;
 [Route("game")]
 public class GameController : Controller
 {
+
+    private IGameLogicService _gamesService;
+    private IWebSocketManager _wsManager;
+
+    public GameController(IGameLogicService gamesService, IWebSocketManager wsManager)
+    {
+        _gamesService = gamesService;
+        _wsManager = wsManager;
+    }
+
     [HttpGet("leaderboard")]
     public LeaderBoard GetLeaderBoard()
     {
@@ -41,7 +52,7 @@ public class GameController : Controller
         Globals.Logger.Info("POST /game/join");
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
-            if (GameManager.Global.WebSocketManager.HasWebsocket((long)user.Id))
+            if (_wsManager.HasConnection((long)user.Id))
             {
                 return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.ALREADY_INGAME, ""));
             }
@@ -53,11 +64,11 @@ public class GameController : Controller
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NAME_MISSING, "Insufficient create game data"));
                 }
 
-                long gameId = GameManager.Global.CreateGame(body.Name, !body.UsePassword.Value);
-                GameManager.Global.GetGame(gameId)?.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
+                ZwooRoom game = _gamesService.CreateGame(body.Name, !body.UsePassword.Value);
+                game.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
 
-                Globals.Logger.Info($"{user.Id} created game {gameId}");
-                return Ok(JsonSerializer.Serialize(new JoinGameResponse(gameId, false, ZRPRole.Host)));
+                Globals.Logger.Info($"{user.Id} created game {game.Id}");
+                return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Id, false, ZRPRole.Host)));
             }
             else if (body.Opcode == ZRPRole.Player || body.Opcode == ZRPRole.Spectator)
             {
@@ -66,7 +77,7 @@ public class GameController : Controller
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_GAMEID, "gameid is null"));
                 }
 
-                GameRecord? game = GameManager.Global.GetGame(body.GameId.Value);
+                ZwooRoom? game = _gamesService.GetGame(body.GameId.Value);
                 if (game == null)
                 {
                     return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
@@ -89,7 +100,7 @@ public class GameController : Controller
                     else if (result == LobbyResult.ErrorWrongPassword)
                     {
                         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
-                    } 
+                    }
                     else
                     {
                         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "cant join"));
@@ -115,7 +126,7 @@ public class GameController : Controller
         Globals.Logger.Info("GET /game/games");
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
-            List<GameRecord> games = GameManager.Global.ListAll();
+            IEnumerable<ZwooRoom> games = _gamesService.ListAll();
             GamesListResponse response = new GamesListResponse(games.Select(game => new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount())).ToArray());
 
             return Ok(JsonSerializer.Serialize(response));
@@ -132,7 +143,7 @@ public class GameController : Controller
         Globals.Logger.Info($"GET /game/games/{id}");
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
-            GameRecord? game = GameManager.Global.GetGame(id);
+            ZwooRoom? game = _gamesService.GetGame(id);
             if (game == null)
             {
                 return NotFound(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "game Not found"));

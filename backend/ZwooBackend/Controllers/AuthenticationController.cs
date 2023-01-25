@@ -12,7 +12,7 @@ using ZwooBackend.Controllers.DTO;
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[EnableCors("Zwoo")] 
+[EnableCors("Zwoo")]
 [Route("auth")]
 public class AuthenticationController : Controller
 {
@@ -22,9 +22,9 @@ public class AuthenticationController : Controller
     public IActionResult reCaptcha()
     {
         HttpClient client = new HttpClient();
-       
+
         using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-        {  
+        {
             var s = reader.ReadToEndAsync();
             s.Wait();
             var res = client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={Globals.RecaptchaSideSecret}&response={s.Result}", null);
@@ -34,7 +34,7 @@ public class AuthenticationController : Controller
             return Ok(body.Result);
         }
     }
-    
+
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -52,15 +52,15 @@ public class AuthenticationController : Controller
         if (Globals.ZwooDatabase.EmailExists(body.email))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.EMAIL_ALREADY_TAKEN,
                 "Email already Exists!"));
-        
+
         if (Globals.IsBeta)
             if (!Globals.ZwooDatabase.CheckBetaCode(body.code))
                 return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_BETACODE,
                     "Invalid or Missing Beta-code!"));
-        
+
         var data = Globals.ZwooDatabase.CreateUser(body.username, body.email, body.password, body.code);
-        
-        Globals.EmailQueue.Enqueue(new EmailData(data.Item1, data.Item2,data.Item3, data.Item4));        
+
+        Globals.EmailQueue.Enqueue(new EmailData(data.Item1, data.Item2, data.Item3, data.Item4));
         return Ok("{\"message\": \"Account create\"}");
     }
 
@@ -86,7 +86,7 @@ public class AuthenticationController : Controller
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
         if (!StringHelper.IsValidPassword(body.password))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
-        
+
         if (Globals.ZwooDatabase.LoginUser(body.email, body.password, out var sid, out var id, out var error))
         {
             var claims = new List<Claim>
@@ -102,7 +102,7 @@ public class AuthenticationController : Controller
         }
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(error, "could not log in"));
     }
-    
+
     [HttpGet("user")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -140,7 +140,7 @@ public class AuthenticationController : Controller
     {
         if (!StringHelper.IsValidPassword(body.password))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
-        
+
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
         {
             if (Globals.ZwooDatabase.DeleteUser(user, body.password))
@@ -153,7 +153,7 @@ public class AuthenticationController : Controller
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING,
             "Session ID not Matching"));
     }
-    
+
     [HttpPost("resendVerificationEmail")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -163,12 +163,12 @@ public class AuthenticationController : Controller
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
         if (!Globals.ZwooDatabase.EmailExists(body.email))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "User does not exist!"));
-        
+
         var u = Globals.ZwooDatabase.GetUserFromEmail(body.email)!;
         if (u.Verified) return BadRequest("already verified");
         u.ValidationCode = StringHelper.GenerateNDigitString(6);
         Globals.ZwooDatabase.UpdateUser(u);
-        
+
         Globals.EmailQueue.Enqueue(new EmailData(u.Username, u.Id, u.ValidationCode, u.Email));
         return Ok("Email resend!");
     }

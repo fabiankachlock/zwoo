@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.State;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game;
 
@@ -18,7 +12,7 @@ public sealed class Game
     private PlayerManager _playerManager;
     private GameStateManager _stateManager;
     private readonly NotificationManager _notificationManager;
-    private readonly ILog _logger;
+    private readonly ILogger _logger;
 
     public long Id { get => _meta.Id; }
     public string Name { get => _meta.Name; }
@@ -33,6 +27,12 @@ public sealed class Game
     public List<long> AllPlayers { get => _playerManager.Players; }
     public int PlayerCount { get => _playerManager.PlayerCount; }
 
+    public event GameStateManager.FinishedHandler OnFinished
+    {
+        add => _stateManager.OnFinished += value;
+        remove => _stateManager.OnFinished -= value;
+    }
+
     public GameStateManager State
     {
         get => _stateManager;
@@ -42,7 +42,8 @@ public sealed class Game
         long id,
         string name,
         bool isPublic,
-        NotificationManager notificationManager
+        NotificationManager notificationManager,
+        ILoggerFactory loggerFactory
     )
     {
         _meta = new GameMeta();
@@ -52,8 +53,8 @@ public sealed class Game
         _notificationManager = notificationManager;
         _gameSettings = GameSettings.FromDefaults();
         _playerManager = new PlayerManager();
-        _stateManager = new GameStateManager(_meta, _playerManager, _gameSettings, _notificationManager);
-        _logger = LogManager.GetLogger($"Game-{id}");
+        _stateManager = new GameStateManager(_meta, _playerManager, _gameSettings, _notificationManager, loggerFactory);
+        _logger = loggerFactory.CreateLogger($"Game-{id}");
     }
 
 
@@ -98,7 +99,6 @@ public sealed class Game
         _logger.Info($"received event: {clientEvent.Type}");
         _stateManager.HandleEvent(clientEvent);
     }
-
 }
 
 

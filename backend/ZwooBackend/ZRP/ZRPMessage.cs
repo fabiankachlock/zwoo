@@ -1,13 +1,18 @@
-﻿namespace ZwooBackend.ZRP;
+﻿using ZwooGameLogic.ZRP;
 
-public readonly struct ZRPMessage
+namespace ZwooBackend.ZRP;
+
+public struct ZRPMessage : IIncomingZRPMessage
 {
-    public readonly ZRPCode Code;
-    public readonly object? Payload;
+    public ZRPCode Code { get; private set; }
+    public object? Payload { get; private set; }
+    public long UserId { get; private set; }
     public readonly string RawMessage;
 
-    public ZRPMessage(ZRPCode code, string raw, object? payload = null)
+
+    public ZRPMessage(long userId, ZRPCode code, string raw, object? payload = null)
     {
+        UserId = userId;
         Code = code;
         Payload = payload;
         RawMessage = raw;
@@ -15,11 +20,25 @@ public readonly struct ZRPMessage
 
     public T? CastPayload<T>()
     {
-        return (T?)Payload;
+        try
+        {
+            return (T?)Payload;
+        }
+        catch
+        {
+            return default(T?);
+        }
     }
 
-    public T? DecodePyload<T>()
+    public T? DecodePayload<T>()
     {
-        return ZRPDecoder.DecodePayload<T>(RawMessage);
+        try
+        {
+            return ZRPDecoder.DecodePayload<T>(RawMessage);
+        }
+        catch
+        {
+            return default(T?);
+        }
     }
 }

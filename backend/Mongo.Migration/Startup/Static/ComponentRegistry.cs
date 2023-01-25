@@ -1,6 +1,5 @@
 ﻿using LightInject;
 using Mongo.Migration.Documents.Locators;
-using Mongo.Migration.Documents.Serializers;
 using Mongo.Migration.Migrations.Adapters;
 using Mongo.Migration.Migrations.Database;
 using Mongo.Migration.Migrations.Document;
@@ -20,7 +19,7 @@ namespace Mongo.Migration.Startup.Static
         {
             _settings = settings;
 
-            if(containerAdapter == null)
+            if (containerAdapter == null)
                 containerAdapter = new LightInjectAdapter(new ServiceContainer());
 
             _containerAdapter = containerAdapter;
@@ -37,7 +36,7 @@ namespace Mongo.Migration.Startup.Static
 
         public TComponent Get<TComponent>() where TComponent : class
         {
-            return (TComponent) _containerAdapter.GetInstance(typeof(TComponent));
+            return (TComponent)_containerAdapter.GetInstance(typeof(TComponent));
         }
 
         private void RegisterDefaults()

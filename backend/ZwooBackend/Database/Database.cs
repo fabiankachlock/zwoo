@@ -55,7 +55,7 @@ public class Database
             DatabaseLogger.Fatal("closing! failed to connect to database");
             Environment.Exit(1);
         }
-        
+
         DatabaseLogger.Info($"established connection with database");
 
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
@@ -68,7 +68,7 @@ public class Database
             _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
     }
 
-    public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
+    public void UpdateUser(User user) => _userCollection.ReplaceOne(x => x.Id == user.Id, user);
 
     /// <summary>
     /// Hash Password, Generate verification code and Creates user in Database
@@ -82,7 +82,7 @@ public class Database
     {
         DatabaseLogger.Debug($"[User] creating {username}");
         var code = StringHelper.GenerateNDigitString(6);
-        
+
         ulong id;
         if (_userCollection.AsQueryable().Any())
             id = _userCollection.AsQueryable().Max(x => x.Id) + 1;
@@ -110,11 +110,11 @@ public class Database
         return (username, id, code, email);
     }
 
-    
+
     public bool UsernameExists(string username) => _userCollection.AsQueryable().FirstOrDefault(x => x.Username == username) != null;
-    
+
     public bool EmailExists(string email) => _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email) != null;
-    
+
     public bool CheckBetaCode(string? betaCode)
     {
         if (betaCode == null) return false;
@@ -133,11 +133,11 @@ public class Database
     {
         DatabaseLogger.Debug($"[User] verifying {id}");
         var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == id && x.ValidationCode == code);
-        
+
         if (user == null) return false;
         if (Globals.IsBeta && !RemoveBetaCode(user.BetaCode))
             return false;
-        
+
         var res = _userCollection.UpdateOne(x => x.Id == id && x.ValidationCode == code, Builders<User>.Update.Set(u => u.Verified, true)).ModifiedCount != 0;
         VerifyAttempt(id, res);
         return res;
@@ -310,29 +310,29 @@ public class Database
             DatabaseLogger.Info($"[CleanUp] deleted {_accountEventCollection.DeleteMany(x => x.EventType == "delete" && x.TimeStamp > (ulong)((DateTimeOffset)(DateTime.Today - TimeSpan.FromDays(6))).ToUnixTimeSeconds()).DeletedCount} delete account events.");
         }
     }
-    
+
     public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == version && c.Public);
     public Changelog[] GetChangelogs() => _changelogCollection.AsQueryable().Where(x => x.Public).ToArray();
-    
-    public void SaveGame(Dictionary<long, int> scores, GameMeta meta) => 
+
+    public void SaveGame(Dictionary<long, int> scores, GameMeta meta) =>
         _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(_userCollection.AsQueryable().First(y => y.Id == (ulong)x.Key).Username, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void CreateAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("create", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void VerifyAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("verify", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void LoginAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("login", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
     private void LogoutAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("logout", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-    
+
 
     private void DeleteAttempt(ulong puid, bool success, User? user = null)
     {

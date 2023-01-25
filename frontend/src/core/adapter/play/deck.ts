@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+import { ZwooConfigKey } from '@/core/adapter/config';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
 import { Card } from '@/core/services/game/CardTypes';
 import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
@@ -44,7 +45,7 @@ export const useGameCardDeck = defineStore('game-cards', () => {
   const setState = (newCards: Card[]) => {
     const config = useConfig();
     deck = new CardDeck(newCards);
-    if (config.sortCards) {
+    if (config.get(ZwooConfigKey.SortCards)) {
       cards.value = deck.sorted;
       return;
     }
@@ -54,7 +55,7 @@ export const useGameCardDeck = defineStore('game-cards', () => {
   const addCard = (card: Card) => {
     const config = useConfig();
     deck.pushCard(card);
-    if (config.sortCards) {
+    if (config.get(ZwooConfigKey.SortCards)) {
       cards.value = deck.sorted;
       return;
     }
@@ -63,7 +64,7 @@ export const useGameCardDeck = defineStore('game-cards', () => {
 
   const hasNext = (direction: 'before' | 'after'): boolean => {
     const nextIndex = (selectedCard.value?.index ?? 0) + (direction === 'after' ? 1 : -1);
-    if (config.sortCards) {
+    if (config.get(ZwooConfigKey.SortCards)) {
       return deck.sortedCardAt(nextIndex) !== undefined;
     }
     return deck.cardAt(nextIndex) !== undefined;
@@ -71,14 +72,14 @@ export const useGameCardDeck = defineStore('game-cards', () => {
 
   const getNext = (direction: 'before' | 'after'): [Card | undefined, number] => {
     const nextIndex = (selectedCard.value?.index ?? 0) + (direction === 'after' ? 1 : -1);
-    if (config.sortCards) {
+    if (config.get(ZwooConfigKey.SortCards)) {
       return [deck.sortedCardAt(nextIndex), nextIndex];
     }
     return [deck.cardAt(nextIndex), nextIndex];
   };
 
   const selectCard = (card: Card, at: number) => {
-    if (config.showCardDetail) {
+    if (config.get(ZwooConfigKey.ShowCardsDetail)) {
       selectedCard.value = {
         color: card.color,
         type: card.type,
@@ -98,7 +99,7 @@ export const useGameCardDeck = defineStore('game-cards', () => {
 
   const removeCard = async (card: Card) => {
     deck.playCard(card);
-    if (config.sortCards) {
+    if (config.get(ZwooConfigKey.SortCards)) {
       cards.value = deck.sorted;
       return;
     }

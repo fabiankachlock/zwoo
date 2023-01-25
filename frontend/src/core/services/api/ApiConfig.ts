@@ -36,7 +36,8 @@ export enum Endpoint {
   RequestPasswordReset = 'account/requestPasswordReset',
   ResetPassword = 'account/resetPassword',
   ResendVerificationEmail = 'auth/resendVerificationEmail',
-  VersionHistory = 'versionHistory'
+  VersionHistory = 'versionHistory',
+  UserSettings = 'account/settings'
 }
 
 export class Backend {

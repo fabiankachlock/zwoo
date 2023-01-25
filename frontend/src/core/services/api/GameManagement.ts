@@ -3,7 +3,8 @@ import { AppConfig } from '@/config';
 import Logger from '../logging/logImport';
 import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble, parseBackendError } from './Errors';
+import { BackendErrorAble } from './Errors';
+import { WrappedFetch } from './FetchWrapper';
 
 export type GameJoinResponse = BackendErrorAble<{
   id: number;
@@ -25,18 +26,14 @@ export class GameManagementService {
     Logger.Api.log(`creating ${isPublic ? 'public' : 'non-public'} game ${name}`);
     if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking create game response');
-      return {
-        id: 1,
-        isRunning: false,
-        role: ZRPRole.Host
-      };
     }
 
-    const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
+    const response = await WrappedFetch<{ guid: number }>(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
+      useBackend: AppConfig.UseBackend,
+      fallbackValue: { guid: 1 },
+      requestOptions: {
+        withCredentials: true
       },
       body: JSON.stringify({
         name: name,
@@ -46,88 +43,91 @@ export class GameManagementService {
       })
     });
 
-    if (req.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while creating game');
       return {
-        error: parseBackendError(await req.text())
+        error: response.error
       };
     }
 
-    const result = (await req.json()) as { guid: number };
-
     return {
-      id: result.guid,
+      id: response.data!.guid,
       isRunning: false,
       role: ZRPRole.Host
     };
   };
 
   static listAll = async (): Promise<BackendErrorAble<GamesList>> => {
-    // make api call
     Logger.Api.log('fetching all games');
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking get games response');
-      return [];
-    }
 
-    const req = await fetch(Backend.getUrl(Endpoint.Games), {
+    const response = await WrappedFetch<{ games: GamesList }>(Backend.getUrl(Endpoint.Games), {
       method: 'GET',
-      credentials: 'include'
+      useBackend: AppConfig.UseBackend,
+      fallbackValue: {
+        games: [
+          {
+            id: 1,
+            isPublic: true,
+            name: 'DEV',
+            playerCount: -1
+          }
+        ]
+      },
+      requestOptions: {
+        withCredentials: true
+      }
     });
 
-    if (req.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while getting games');
       return {
-        error: parseBackendError(await req.text())
+        error: response.error
       };
     }
-    const result = (await req.json()) as { games: GamesList };
-    return result.games;
+
+    return response.data!.games;
   };
 
   static getJoinMeta = async (gameId: number): Promise<BackendErrorAble<GameMeta>> => {
     Logger.Api.log(`fetching game ${gameId} meta`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking get games response');
-      return {
-        id: 1,
-        name: 'DEV',
-        isPublic: true,
-        playerCount: -1
-      };
-    }
 
-    const req = await fetch(Backend.getDynamicUrl(Endpoint.Game, { id: gameId.toString(10) }), {
+    const response = await WrappedFetch<GameMeta>(Backend.getDynamicUrl(Endpoint.Game, { id: gameId.toString(10) }), {
       method: 'GET',
-      credentials: 'include'
+      useBackend: AppConfig.UseBackend,
+      fallbackValue: {
+        id: 1,
+        isPublic: true,
+        name: 'DEV',
+        playerCount: -1
+      },
+      requestOptions: {
+        withCredentials: true
+      }
     });
 
-    if (req.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while getting game info');
       return {
-        error: parseBackendError(await req.text())
+        error: response.error
       };
     }
-    const result = (await req.json()) as GameMeta;
-    return result;
+
+    return response.data!;
   };
 
   static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameJoinResponse> => {
     Logger.Api.log(`send join game ${gameId} request as ${role}`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking join game response');
-      return {
-        id: gameId,
+
+    const response = await WrappedFetch<{ guid: number; isRunning: boolean; role: ZRPRole }>(Backend.getUrl(Endpoint.JoinGame), {
+      method: 'POST',
+      useBackend: AppConfig.UseBackend,
+      fallbackValue: {
+        guid: gameId,
         isRunning: false,
         role: role
-      };
-    }
-
-    const req = await fetch(Backend.getUrl(Endpoint.JoinGame), {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
+      },
+      requestOptions: {
+        withCredentials: true
       },
       body: JSON.stringify({
         guid: gameId,
@@ -136,18 +136,17 @@ export class GameManagementService {
       })
     });
 
-    if (req.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while joining game');
       return {
-        error: parseBackendError(await req.text())
+        error: response.error
       };
     }
 
-    const result = (await req.json()) as { guid: number; isRunning: boolean; role: ZRPRole };
     return {
-      id: result.guid,
-      isRunning: result.isRunning,
-      role: result.role
+      id: response.data!.guid,
+      isRunning: response.data!.isRunning,
+      role: response.data!.role
     };
   };
 }

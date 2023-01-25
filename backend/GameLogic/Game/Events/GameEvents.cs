@@ -14,7 +14,7 @@ public enum GameEventType
     GetCard = 306,
     RemoveCard = 307,
     StateUpdate = 308,
-    GetPlayerDecission = 316,
+    GetPlayerDecision = 316,
     PlayerWon = 399,
     Error = 400
 }
@@ -129,21 +129,21 @@ public struct GameEvent
     }
 
     // PlayerDecissionEvent
-    public struct PlayerDecissionEvent
+    public struct PlayerDecisionEvent
     {
         public readonly long Player;
-        public readonly PlayerDecission Decission;
+        public readonly PlayerDecision Decision;
 
-        public PlayerDecissionEvent(long player, PlayerDecission decission)
+        public PlayerDecisionEvent(long player, PlayerDecision decission)
         {
             Player = player;
-            Decission = decission;
+            Decision = decission;
         }
     }
 
-    public static GameEvent GetPlayerDecission(long player, PlayerDecission decission)
+    public static GameEvent GetPlayerDecission(long player, PlayerDecision decission)
     {
-        return new GameEvent(GameEventType.GetPlayerDecission, new PlayerDecissionEvent(player, decission));
+        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decission));
     }
 
     // PlayerWonEvent

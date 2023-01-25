@@ -14,7 +14,7 @@ public class AccountController : Controller
     public IActionResult GetSettings()
     {
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
-            return Ok($"{{\"settings\": \"{user.Settings}\"}}");
+            return Ok($"{{\"settings\": \"{user.Settings.Replace("\"", "\\\"")}\"}}");
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
     

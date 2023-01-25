@@ -1,6 +1,7 @@
 import { AppConfig } from '@/config';
 import { ReCaptchaTermsVisibilityManager } from '@/router/guards/ReCaptchaTerms';
 
+import { useRuntimeConfig } from '../runtimeConfig';
 import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorAble, parseBackendError, unwrapBackendError } from './Errors';
 
@@ -9,9 +10,11 @@ export type ReCaptchaResponse = {
   score: number;
 };
 
+/**
+ * The Captcha Service is the only API Service which is not offline safe.
+ * This is because in offline mode all activity which would require a captcha is disabled
+ */
 export class ReCaptchaService {
-  static SITE_KEY = '6LfI8qMiAAAAAJwiBu1sbNMVlujm5i0MAAMr6yEK';
-
   private static instance = new ReCaptchaService();
 
   private isReady = false;
@@ -24,11 +27,12 @@ export class ReCaptchaService {
     this.isReady = true;
   };
 
-  private loadScript = () => {
+  private loadScript = async () => {
     if (this.loaded) return;
     this.loaded = true;
+    const siteKey = await useRuntimeConfig().recaptchaKey;
     const scriptTag = document.createElement('script');
-    scriptTag.setAttribute('src', 'https://www.google.com/recaptcha/api.js?render=' + ReCaptchaService.SITE_KEY);
+    scriptTag.setAttribute('src', 'https://www.google.com/recaptcha/api.js?render=' + siteKey);
     document.body.appendChild(scriptTag);
 
     scriptTag.onload = () => {
@@ -45,7 +49,8 @@ export class ReCaptchaService {
     }
 
     if (this.isReady) {
-      const token = await grecaptcha.execute(ReCaptchaService.SITE_KEY, {
+      const siteKey = await useRuntimeConfig().recaptchaKey;
+      const token = await grecaptcha.execute(siteKey, {
         action: 'login'
       });
       const [result] = unwrapBackendError(await this.verify(token));

@@ -1,9 +1,9 @@
-﻿using log4net;
-using ZwooGameLogic.Game.Cards;
+﻿using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Helper;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game.State;
 
@@ -21,14 +21,17 @@ public sealed class GameStateManager
     private AsyncExecutionQueue _actionsQueue;
     private bool _isRunning;
 
-    private ILog _logger;
+    private ILogger _logger;
 
     public bool IsRunning
     {
         get => _isRunning;
     }
 
-    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
+    public delegate void FinishedHandler(GameEvent.PlayerWonEvent data, GameMeta gameMeta);
+    public event FinishedHandler OnFinished = delegate { };
+
+    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification, ILoggerFactory loggerFactory)
     {
         Meta = meta;
         _gameSettings = settings;
@@ -39,9 +42,9 @@ public sealed class GameStateManager
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
         _playerOrder = new Dictionary<long, int>();
-        _ruleManager = new RuleManager(meta.Id, _gameSettings);
+        _ruleManager = new RuleManager(meta.Id, _gameSettings, loggerFactory);
         _actionsQueue = new AsyncExecutionQueue();
-        _logger = LogManager.GetLogger($"GameState-{Meta.Id}");
+        _logger = loggerFactory.CreateLogger($"GameState-{meta.Id}");
         _playerManager.OnPlayerLeave(HandlePlayerLeave);
     }
 
@@ -115,7 +118,7 @@ public sealed class GameStateManager
 
     private void HandlePlayerLeave(long id)
     {
-        #pragma warning disable CS4014
+#pragma warning disable CS4014
         _actionsQueue.Intercept(() =>
         {
             _logger.Warn($"player {id} left the running game");
@@ -146,15 +149,15 @@ public sealed class GameStateManager
             }
             _gameState = newState;
         });
-        #pragma warning restore CS4014
+#pragma warning restore CS4014
     }
 
     internal void HandleEvent(ClientEvent clientEvent)
     {
         // these calls don't need to be awaited, because the caller doesn't care when the event is executed
-        #pragma warning disable CS4014
+#pragma warning disable CS4014
         _actionsQueue.Enqueue(() => ExecuteEvent(clientEvent));
-        #pragma warning restore CS4014
+#pragma warning restore CS4014
     }
 
     private void ExecuteEvent(ClientEvent clientEvent)
@@ -186,6 +189,8 @@ public sealed class GameStateManager
             _actionsQueue.Clear();
             Stop();
             SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
+            GameEvent.PlayerWonEvent playerWonEvent = isFinishedEvent.Value.CastPayload<GameEvent.PlayerWonEvent>();
+            OnFinished.Invoke(playerWonEvent, Meta);
         }
         else
         {
@@ -238,9 +243,9 @@ public sealed class GameStateManager
                         stateUpdateEvent.LastPlayerCardAmount
                     ));
                     break;
-                case GameEventType.GetPlayerDecission:
-                    GameEvent.PlayerDecissionEvent playerDecissionEvent = evt.CastPayload<GameEvent.PlayerDecissionEvent>();
-                    _notificationManager.GetPlayerDecission(new PlayerDecissionDTO(playerDecissionEvent.Player, playerDecissionEvent.Decission));
+                case GameEventType.GetPlayerDecision:
+                    GameEvent.PlayerDecisionEvent playerDecisionEvent = evt.CastPayload<GameEvent.PlayerDecisionEvent>();
+                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecisionEvent.Player, playerDecisionEvent.Decision));
                     break;
                 case GameEventType.PlayerWon:
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();

@@ -32,7 +32,8 @@
     "cardTheme": "Card Theme",
     "deviceId": "Anonymous DeviceID",
     "changePassword": "Change Password",
-    "versionHistory": "Version history"
+    "versionHistory": "Version history",
+    "settingsSync": "Sync settings"
   },
   "lng": {
     "de": "German",
@@ -410,5 +411,9 @@
     "title": "Version history",
     "versionTitle": "Version {0}",
     "failure": "The version history could not be loaded."
+  },
+  "offline": {
+    "title": "Ooops, you're offline!",
+    "info": "The zwoo servers can't be reached. As long as zwoo dosn't support offline games, you need to be online to play zwoo."
   }
 }

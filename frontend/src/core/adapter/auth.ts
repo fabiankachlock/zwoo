@@ -9,6 +9,7 @@ import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
 import { RecaptchaValidator } from '../services/validator/recaptcha';
 import { UsernameValidator } from '../services/validator/username';
+import { useConfig } from './config';
 
 export const useAuth = defineStore('auth', {
   state: () => {
@@ -31,6 +32,7 @@ export const useAuth = defineStore('auth', {
           username: status.username,
           isLoggedIn: status.isLoggedIn
         });
+        useConfig().login();
       } else {
         this.isLoggedIn = false;
         const [, error] = unwrapBackendError(status);
@@ -47,7 +49,7 @@ export const useAuth = defineStore('auth', {
           throw getBackendErrorTranslation(error);
         }
       }
-
+      useConfig().logout();
       this.$patch({
         username: '',
         isLoggedIn: status.isLoggedIn,
@@ -101,6 +103,7 @@ export const useAuth = defineStore('auth', {
           throw getBackendErrorTranslation(error);
         }
       }
+      useConfig().logout();
 
       this.$patch({
         username: '',
@@ -114,10 +117,10 @@ export const useAuth = defineStore('auth', {
       const passwordMatchValid = new PasswordMatchValidator().validate([newPassword, newPasswordRepeat]);
       if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
 
-      const error = await AccountService.performChangePassword(oldPassword, newPassword);
+      const response = await AccountService.performChangePassword(oldPassword, newPassword);
 
-      if (error) {
-        throw getBackendErrorTranslation(error);
+      if (response.error) {
+        throw getBackendErrorTranslation(response.error);
       }
     },
     async requestPasswordReset(email: string, recaptchaResponse: ReCaptchaResponse | undefined) {
@@ -127,10 +130,10 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const error = await AccountService.requestPasswordReset(email);
+      const response = await AccountService.requestPasswordReset(email);
 
-      if (error) {
-        throw getBackendErrorTranslation(error);
+      if (response.error) {
+        throw getBackendErrorTranslation(response.error);
       }
     },
     async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: ReCaptchaResponse | undefined) {
@@ -143,10 +146,10 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const error = await AccountService.performResetPassword(code, password);
+      const response = await AccountService.performResetPassword(code, password);
 
-      if (error) {
-        throw getBackendErrorTranslation(error);
+      if (response.error) {
+        throw getBackendErrorTranslation(response.error);
       }
     },
     async askStatus() {
@@ -166,7 +169,11 @@ export const useAuth = defineStore('auth', {
       }
     },
     async configure() {
-      this.askStatus();
+      await this.askStatus();
+      // setup initial config
+      if (this.isLoggedIn) {
+        useConfig().login();
+      }
     }
   }
 });

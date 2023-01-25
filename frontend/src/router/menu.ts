@@ -87,5 +87,9 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   {
     path: 'version-history',
     component: () => import('../views/VersionHistory.vue')
+  },
+  {
+    path: 'offline',
+    component: () => import('../views/Offline.vue')
   }
 ];

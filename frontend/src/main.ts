@@ -8,9 +8,14 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { useRootApp } from './core/adapter/app';
 import { RouterService } from './core/services/global/Router';
+// import { WasmManger } from './core/services/wasm/WasmManager';
 import { Tooltip } from './directives/tooltip/Tooltip';
 import i18n from './i18n';
 import router from './router';
+
+// WasmManger.global.initialize().then(async instance => {
+//   instance.GameManager.CreateGame('test', true);
+// });
 
 (() => {
   /* generate unique device id */
@@ -39,7 +44,7 @@ app.directive('tooltip', Tooltip);
 
 app.mount('#app');
 
-router.isReady().then(() => {
+router.isReady().then(async () => {
   const app = useRootApp();
   const updateSW = registerSW({
     immediate: true,

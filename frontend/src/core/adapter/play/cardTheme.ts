@@ -1,5 +1,6 @@
 import { reactive, ref, watch } from 'vue';
 
+import { ZwooConfigKey } from '@/core/adapter/config';
 import { useColorTheme } from '@/core/adapter/helper/useColorTheme';
 import { CardTheme } from '@/core/services/cards/CardTheme';
 import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
@@ -18,10 +19,10 @@ export const useCardTheme = CreateUseHook(() => {
   const theme = ref<CardTheme>(new CardTheme('', '', {}, {} as CardThemeInformation));
   let debounceTimeout: number | undefined = undefined;
 
-  watch([colorMode, () => config.cardTheme, () => config.cardThemeVariant], ([colorMode, cardTheme, themeVariant]) => {
+  watch([colorMode, () => config.get(ZwooConfigKey.CardsTheme)], ([colorMode, cardTheme]) => {
     Logger.Theme.debug('changed user settings');
-    const newTheme = cardTheme;
-    const newVariant = themeVariant === CARD_THEME_VARIANT_AUTO ? colorMode : themeVariant;
+    const newTheme = cardTheme?.name;
+    const newVariant = cardTheme?.variant === CARD_THEME_VARIANT_AUTO ? colorMode : cardTheme?.variant;
 
     // load new Theme
     if (debounceTimeout) {
@@ -38,9 +39,10 @@ export const useCardTheme = CreateUseHook(() => {
 
   const applyTheme = () => {
     Logger.Theme.debug('applying theme changes ');
-    const newVariant = config.cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : config.cardThemeVariant;
-    if (theme.value.variant !== newVariant || theme.value.name !== config.cardTheme) {
-      loadTheme(config.cardTheme, newVariant);
+    const currentTheme = config.get(ZwooConfigKey.CardsTheme);
+    const newVariant = currentTheme.variant === CARD_THEME_VARIANT_AUTO ? colorMode.value : currentTheme.variant;
+    if (theme.value.variant !== newVariant || theme.value.name !== currentTheme.name) {
+      loadTheme(currentTheme.name, newVariant);
     } else {
       Logger.Theme.debug('no changes to apply');
     }
@@ -55,7 +57,7 @@ export const useCardTheme = CreateUseHook(() => {
 
   const setTheme = (name: string, variant: string) => {
     const newVariant = variant === CARD_THEME_VARIANT_AUTO ? colorMode.value : variant;
-    config.setTheme({
+    config.set(ZwooConfigKey.CardsTheme, {
       name,
       variant
     });
@@ -63,7 +65,8 @@ export const useCardTheme = CreateUseHook(() => {
   };
 
   Logger.Theme.debug('initial setup theme load');
-  loadTheme(config.cardTheme, config.cardThemeVariant === CARD_THEME_VARIANT_AUTO ? colorMode.value : config.cardThemeVariant);
+  const currentTheme = config.get(ZwooConfigKey.CardsTheme);
+  loadTheme(currentTheme.name, currentTheme.variant === CARD_THEME_VARIANT_AUTO ? colorMode.value : currentTheme.variant);
 
   return reactive({
     theme,

@@ -4,61 +4,65 @@ import { AppConfig } from '@/config';
 
 import Logger from '../logging/logImport';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble, parseBackendError } from './Errors';
+import { BackendErrorAble } from './Errors';
+import { WrappedFetch } from './FetchWrapper';
 
 export class ConfigService {
   static async fetchVersion(): Promise<BackendErrorAble<string>> {
     Logger.Api.log(`fetching version`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking version response');
-      return AppConfig.Version;
-    }
 
-    const req = await fetch(`${Backend.getUrl(Endpoint.Version)}?t=${Date.now()}`);
+    const response = await WrappedFetch<string>(`${Backend.getUrl(Endpoint.Version)}?t=${Date.now()}`, {
+      useBackend: AppConfig.UseBackend,
+      fallbackValue: AppConfig.Version,
+      responseOptions: {
+        decodeJson: false
+      }
+    });
 
-    if (req.status !== 200) {
+    if (response.error) {
       Logger.Api.warn('received erroneous response while fetching version');
       return {
-        error: parseBackendError(await req.text())
+        error: response.error
       };
     }
 
-    return await req.text();
+    return response.data!;
   }
 
   static async fetchVersionHistory(): Promise<BackendErrorAble<string[]>> {
     Logger.Api.log(`fetching version history`);
-    if (import.meta.env.VUE_APP_USE_BACKEND !== 'true') {
-      Logger.Api.debug('mocking version history response');
-      return ['v1.0.0', 'v1.0.0-beta', 'v1.0.0-alpha'];
-    }
 
-    const req = await fetch(Backend.getUrl(Endpoint.VersionHistory));
+    const response = await WrappedFetch<{ versions: string[] }>(Backend.getUrl(Endpoint.VersionHistory), {
+      useBackend: AppConfig.UseBackend,
+      fallbackValue: { versions: ['v1.0.0'] }
+    });
 
-    if (req.status !== 200) {
+    if (response.error) {
       Logger.Api.warn(`received erroneous response while fetching version history`);
       return {
-        error: parseBackendError(await req.text())
+        error: response.error
       };
     }
-    return ((await (req.json() as Promise<{ versions: string[] }>)).versions ?? []).sort(semverRCompare);
+    return (response.data?.versions ?? []).sort(semverRCompare);
   }
 
   static async fetchChangelog(version: string): Promise<BackendErrorAble<string>> {
     Logger.Api.log(`fetching changelog for ${version}`);
-    if (!AppConfig.UseBackend) {
-      Logger.Api.debug('mocking changelog response');
-      return `<h2><i>No changes in version ${version}</i></h2>`;
-    }
 
-    const req = await fetch(Backend.getDynamicUrl(Endpoint.Changelog, { version: version }));
+    const response = await WrappedFetch<string>(Backend.getDynamicUrl(Endpoint.Changelog, { version: version }), {
+      useBackend: AppConfig.UseBackend,
+      fallbackValue: '<h1>Dev Build</h1>',
+      responseOptions: {
+        decodeJson: false
+      }
+    });
 
-    if (req.status !== 200) {
+    if (response.error) {
       Logger.Api.warn(`received erroneous response while fetching changelog ${version}`);
       return {
-        error: parseBackendError(await req.text())
+        error: response.error
       };
     }
-    return await req.text();
+    return response.data ?? `<h2><i>No changes in version ${version}</i></h2>`;
   }
 }

@@ -1,18 +1,11 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game;
-using ZwooGameLogic.Game.Cards;
+﻿using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.State;
 
-namespace GameLogic.Game.Rules;
+namespace ZwooGameLogic.Game.Rules;
 
-internal class AddUpDrawRule: BaseRule
+internal class AddUpDrawRule : BaseRule
 {
     public override int Priority
     {
@@ -32,7 +25,7 @@ internal class AddUpDrawRule: BaseRule
     private BaseRule _placeCardRule;
     private BaseRule _drawRule;
 
-    public AddUpDrawRule() : base() 
+    public AddUpDrawRule() : base()
     {
         _placeCardRule = new AddUpDrawRule_PlaceCard();
         _drawRule = new AddUpDrawRule_Draw();
@@ -57,7 +50,7 @@ internal class AddUpDrawRule: BaseRule
     }
 }
 
-internal class AddUpDrawRule_PlaceCard: BaseWildCardRule
+internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
 {
     public override string Name
     {
@@ -68,7 +61,7 @@ internal class AddUpDrawRule_PlaceCard: BaseWildCardRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return (gameEvent.Type == ClientEventType.PlaceCard 
+        return (gameEvent.Type == ClientEventType.PlaceCard
             && CardUtilities.IsDraw(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card)
         ) || base.IsResponsible(gameEvent, state);
     }
@@ -162,7 +155,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
     protected int GetRecursiveDrawAmount(List<StackCard> stack)
     {
         int amount = 0;
-        for (int i = stack.Count-1; i >= 0; i--) 
+        for (int i = stack.Count - 1; i >= 0; i--)
         {
             if (stack[i].EventActivated || !CardUtilities.IsDraw(stack[i].Card))
             {
@@ -175,8 +168,8 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
 
     protected List<StackCard> ActiveCardsRecursive(List<StackCard> stack)
     {
-        for (int i = stack.Count-1; i >= 0; i--)
-        {   
+        for (int i = stack.Count - 1; i >= 0; i--)
+        {
             if (stack[i].EventActivated || !CardUtilities.IsDraw(stack[i].Card))
             {
                 break;

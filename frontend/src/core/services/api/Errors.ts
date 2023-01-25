@@ -14,6 +14,7 @@ export type WithBackendError<T> = {
 } & T;
 
 export enum BackendError {
+  _InternalError = -2,
   _UnknownError = -1,
   BackendError = 100,
 

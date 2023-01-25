@@ -1,6 +1,6 @@
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
-import { useConfig } from '@/core/adapter/config';
+import { useRootApp } from '@/core/adapter/app';
 import Logger from '@/core/services/logging/logImport';
 import { RouterInterceptor } from '@/router/types';
 
@@ -24,16 +24,16 @@ export class VersionGuard implements RouterInterceptor {
       return true;
     }
 
-    const config = useConfig();
+    const app = useRootApp();
     let version: string;
 
-    if (typeof config.serverVersion !== 'string') {
-      version = await config.serverVersion.promise;
+    if (typeof app.serverVersion !== 'string') {
+      version = await app.serverVersion.promise;
     } else {
-      version = config.serverVersion;
+      version = app.serverVersion;
     }
-    this.Logger.debug(`version lock initialized; client: ${config.clientVersion}, server: ${version}`);
-    this.versionMatches = config.clientVersion === version;
+    this.Logger.debug(`version lock initialized; client: ${app.clientVersion}, server: ${version}`);
+    this.versionMatches = app.clientVersion === version;
     this.Logger.debug(`version match: ${this.versionMatches}`);
     return this.beforeEach(to, _from, next);
   };
