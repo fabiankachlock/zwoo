@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
-    <PackageReference Include="Radzen.Blazor" Version="4.1.12" />
+    <PackageReference Include="Radzen.Blazor" Version="4.6.2" />
   </ItemGroup>
 
   <ItemGroup>
