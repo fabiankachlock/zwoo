@@ -24,7 +24,7 @@ public class ZRPPlayerManager
         if (player == null) return;
 
         _logger.Info($"{playerId} connected");
-        _game.Lobby.PlayerConnected(playerId);
+        _game.Lobby.MarkPlayerConnected(playerId);
         if (player.Role == ZRPRole.Spectator)
         {
             // TODO: change player model to include wins
@@ -49,7 +49,7 @@ public class ZRPPlayerManager
         {
             _logger.Info($"{playerId} disconnected from running game");
             await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerDisconnected, new PlayerDisconnectedNotification(player.Username));
-            _game.Lobby.PlayerDisconnected(playerId);
+            _game.Lobby.MarkPlayerDisconnected(playerId);
 
             if (player.Role == ZRPRole.Host)
             {

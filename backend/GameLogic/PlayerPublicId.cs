@@ -4,7 +4,6 @@ namespace ZwooGameLogic;
 
 public class PlayerPublicId
 {
-
     private static string _prefixForRole(ZRPRole role)
     {
         switch (role)

@@ -59,9 +59,9 @@ public class GameHandler : IEventHandler
         try
         {
             context.Game.Reset();
-            foreach (long player in context.Lobby.Players())
+            foreach (IPlayer player in context.Lobby.GetPlayers())
             {
-                context.Game.AddPlayer(player);
+                context.Game.AddPlayer(player.Id);
             }
             context.BotManager.PrepareBotsForGame();
             foreach (var bot in context.BotManager.ListBots())

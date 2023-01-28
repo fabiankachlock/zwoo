@@ -36,14 +36,14 @@ public class ZwooRoom
         BotManager.OnEvent += DistributeEvent;
     }
 
-    public string? ResolvePlayerName(long id)
+    public string ResolvePlayerName(long id)
     {
-        return Lobby.HasPlayer(id) ? Lobby.GetPlayer(id)?.Username : BotManager.GetBot(id)?.Username;
+        return (Lobby.HasPlayerId(id) ? Lobby.GetPlayer(id)?.Username : BotManager.GetBot(id)?.Username) ?? "unknown player";
     }
 
     public IPlayer? GetPlayer(long id)
     {
-        return Lobby.HasPlayer(id) ? Lobby.GetPlayer(id) : BotManager.GetBot(id)?.AsPlayer();
+        return Lobby.HasPlayerId(id) ? Lobby.GetPlayer(id) : BotManager.GetBot(id)?.AsPlayer();
     }
 
     public void Close()

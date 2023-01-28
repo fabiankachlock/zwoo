@@ -53,11 +53,14 @@ public class LobbyHandler : IEventHandler
         return false;
     }
 
+    /// <summary>
+    /// handle ZRP 110
+    /// </summary>
     private void SpectatorToPlayer(UserContext context, IIncomingZRPMessage message)
     {
         try
         {
-            LobbyResult result = context.Lobby.ChangeRole(context.UserName, ZRPRole.Player);
+            LobbyResult result = context.Lobby.ChangeRole(context.PublicId, ZRPRole.Player);
             if (result == LobbyResult.Success)
             {
                 _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(context.UserName, ZRPRole.Player));
@@ -170,7 +173,7 @@ public class LobbyHandler : IEventHandler
 
             if (context.Role == ZRPRole.Host)
             {
-                string newHost = context.Lobby.Host();
+                string newHost = context.Lobby.GetHost();
                 _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost, ZRPRole.Host));
                 _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(newHost));
                 _webSocketManager.SendPlayer(context.Lobby.ResolvePlayer(newHost), ZRPCode.PromotedToHost, new YouAreHostNotification());
