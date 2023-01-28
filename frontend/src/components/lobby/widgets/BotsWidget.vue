@@ -12,7 +12,7 @@
     <template #default>
       <div class="w-full flex flex-col">
         <div v-if="Object.keys(bots).length === 0">
-          <p class="tc-main-dark italic">{{ t('wait.notBots') }}</p>
+          <p class="tc-main-dark italic">{{ t('wait.noBots') }}</p>
         </div>
         <div v-if="botDialogOpen">
           <FloatingDialog content-class="sm:max-w-lg">
@@ -54,9 +54,11 @@
             </p>
           </div>
           <div class="flex items-center h-full justify-end">
-            <button @click="updateBot(bot.id)" v-tooltip="t('wait.edit')" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
-              <Icon icon="carbon:settings" />
-            </button>
+            <!--  TODO: add back when there is something to edit
+              <button @click="updateBot(bot.id)" v-tooltip="t('wait.edit')" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+                <Icon icon="carbon:settings" />
+              </button>
+            -->
             <button v-tooltip="t('wait.kick')" @click="deleteBot(bot.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
               <Icon icon="iconoir:delete-circled-outline" />
             </button>
@@ -87,20 +89,23 @@ const bots = computed(() => botManager.botConfigs);
 const botDialogOpen = ref(false);
 const isBotUpdate = ref(false);
 const botName = ref('');
+const botId = ref('');
 
 const createBot = () => {
   botName.value = '';
+  botId.value = '';
   botDialogOpen.value = true;
   isBotUpdate.value = false;
 };
 
-const updateBot = (id: string) => {
-  botName.value = id;
-  // const config = botManager.botConfigs[name];
-  // set config
-  botDialogOpen.value = true;
-  isBotUpdate.value = true;
-};
+// const updateBot = (id: string) => {
+//   botName.value = botManager.botConfigs[id].name;
+//   botId.value = id;
+//   // const config = botManager.botConfigs[name];
+//   // set config
+//   botDialogOpen.value = true;
+//   isBotUpdate.value = true;
+// };
 
 const deleteBot = (id: string) => {
   botManager.deleteBot(id);
@@ -108,7 +113,7 @@ const deleteBot = (id: string) => {
 
 const submitBot = () => {
   if (isBotUpdate.value) {
-    botManager.updateBot(botName.value, {
+    botManager.updateBot(botId.value, {
       type: 1
     });
   } else {
@@ -117,5 +122,7 @@ const submitBot = () => {
     });
   }
   botDialogOpen.value = false;
+  botName.value = '';
+  botId.value = '';
 };
 </script>
