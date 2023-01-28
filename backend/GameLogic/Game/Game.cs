@@ -72,7 +72,13 @@ public sealed class Game
     public bool RemovePlayer(long id)
     {
         _logger.Debug($"removing player {id}");
-        return _playerManager.RemovePlayer(id);
+        bool result = _playerManager.RemovePlayer(id);
+
+        if (PlayerCount <= 1)
+        {
+            Stop();
+        }
+        return result;
     }
 
     public void SetSetting(string key, int value)
@@ -102,7 +108,10 @@ public sealed class Game
     public void HandleEvent(ClientEvent clientEvent)
     {
         _logger.Info($"received event: {clientEvent.Type}");
-        _stateManager.HandleEvent(clientEvent);
+        if (IsRunning)
+        {
+            _stateManager.HandleEvent(clientEvent);
+        }
     }
 }
 

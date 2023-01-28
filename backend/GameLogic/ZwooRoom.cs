@@ -48,6 +48,7 @@ public class ZwooRoom
 
     public void Close()
     {
+        Game.Stop();
         OnClosed.Invoke();
     }
 

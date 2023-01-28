@@ -95,6 +95,8 @@ public sealed class GameStateManager
         if (!_isRunning)
         {
             _logger.Warn("game not started");
+            _actionsQueue.Stop();
+            _actionsQueue.Clear();
             return;
         }
         _isRunning = false;
@@ -106,9 +108,10 @@ public sealed class GameStateManager
     /// </summary>
     internal void Reset()
     {
-        if (!_isRunning)
+        if (_isRunning)
         {
             _logger.Warn("resetting running game");
+            Stop();
         }
         _isRunning = false;
         _gameState = new GameState();
@@ -124,6 +127,8 @@ public sealed class GameStateManager
             _logger.Warn($"player {id} left the running game");
             long lastPlayer = _playerCycle.ActivePlayer;
             _playerCycle.RemovePlayer(id, _gameState.Direction);
+            if (_playerCycle.Order.Count() <= 1) return;
+
             long newPlayer = _playerCycle.ActivePlayer;
 
             GameState newState = _gameState.Clone();
