@@ -37,12 +37,13 @@ const { isHost } = useIsHost();
 const props = defineProps<{
   isActive: boolean;
   isConnected: boolean;
+  id: string;
   name: string;
   cardAmount: number;
   isMuted?: boolean;
 }>();
 
-const { name, cardAmount, isActive, isMuted } = toRefs(props);
+const { name, id, cardAmount, isActive, isMuted } = toRefs(props);
 const elmRef = ref<HTMLDivElement | null>(null);
 
 const toggleMute = () => {
@@ -50,7 +51,7 @@ const toggleMute = () => {
 };
 
 const kickPlayer = () => {
-  lobby.kickPlayer(name.value);
+  lobby.kickPlayer(id.value);
 };
 
 watch(isActive, newValue => {

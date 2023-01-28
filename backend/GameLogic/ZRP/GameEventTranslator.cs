@@ -80,7 +80,7 @@ public class GameEventTranslator : IGameEventManager
         _wsAdapter.BroadcastGame(
             _game!.Id,
             ZRPCode.StateUpdated,
-            new ZRP.StateUpdateNotification(new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _game.ResolvePlayerName(data.ActivePlayer) ?? "", data.ActivePlayerCardAmount, _game.ResolvePlayerName(data.LastPlayer) ?? "", data.LastPlayerCardAmount)
+            new ZRP.StateUpdateNotification(new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type), _game.GetPlayer(data.ActivePlayer)?.PublicId ?? "", data.ActivePlayerCardAmount, _game.GetPlayer(data.LastPlayer)?.PublicId ?? "", data.LastPlayerCardAmount)
         );
     }
 

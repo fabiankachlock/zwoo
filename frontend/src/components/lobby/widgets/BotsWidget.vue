@@ -43,7 +43,7 @@
         </div>
         <div
           v-for="bot of bots"
-          :key="bot.name"
+          :key="bot.id"
           class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest"
         >
           <div class="flex justify-start items-center">
@@ -54,10 +54,10 @@
             </p>
           </div>
           <div class="flex items-center h-full justify-end">
-            <button @click="updateBot(bot.name)" v-tooltip="t('wait.edit')" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
+            <button @click="updateBot(bot.id)" v-tooltip="t('wait.edit')" class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2">
               <Icon icon="carbon:settings" />
             </button>
-            <button v-tooltip="t('wait.kick')" @click="deleteBot(bot.name)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+            <button v-tooltip="t('wait.kick')" @click="deleteBot(bot.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
               <Icon icon="iconoir:delete-circled-outline" />
             </button>
           </div>
@@ -94,16 +94,16 @@ const createBot = () => {
   isBotUpdate.value = false;
 };
 
-const updateBot = (name: string) => {
-  botName.value = name;
+const updateBot = (id: string) => {
+  botName.value = id;
   // const config = botManager.botConfigs[name];
   // set config
   botDialogOpen.value = true;
   isBotUpdate.value = true;
 };
 
-const deleteBot = (name: string) => {
-  botManager.deleteBot(name);
+const deleteBot = (id: string) => {
+  botManager.deleteBot(id);
 };
 
 const submitBot = () => {

@@ -184,13 +184,17 @@ public class LobbyManager
         LobbyEntry? player = GetPlayer(publicId);
         if (player == null) return LobbyResult.ErrorInvalidPlayer; // check if the player is present
 
-        _players.RemoveAll(p => p.PublicId == publicId); // remove the player
         if (player.Role == ZRPRole.Host)
         {
             // if the host gets removed, a new host must be chosen
             LobbyEntry? newHost = SelectNewHost();
-            if (newHost == null) return LobbyResult.Error;
+            if (newHost == null)
+            {
+                _players.RemoveAll(p => p.PublicId == publicId); // remove the player
+                return LobbyResult.Error;
+            }
         }
+        _players.RemoveAll(p => p.PublicId == publicId); // remove the player
         return LobbyResult.Success;
     }
 

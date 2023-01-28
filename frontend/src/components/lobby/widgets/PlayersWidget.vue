@@ -54,7 +54,7 @@
         >
           <div class="flex justify-start items-center">
             <p class="text-lg tc-main-dark">
-              <span :class="{ 'tc-primary': username === player.username }">
+              <span :class="{ 'tc-primary': publicId === player.id }">
                 {{ player.username }}
               </span>
             </p>
@@ -65,7 +65,7 @@
               </span>
             </template>
             <!-- display host badge -->
-            <template v-else-if="gameHost === player.username">
+            <template v-else-if="gameHost === player.id">
               <span class="tc-primary text-lg ml-2">
                 <Icon icon="akar-icons:crown" />
               </span>
@@ -73,13 +73,13 @@
           </div>
           <div class="flex items-center h-full justify-end">
             <!-- display player actions for player -->
-            <template v-if="!isHost && username === player.username && player.role !== ZRPRole.Bot">
+            <template v-if="!isHost && publicId === player.id && player.role !== ZRPRole.Bot">
               <button v-tooltip="t('wait.spectate')" @click="handleChangeToSpectator()" class="tc-primary h-full bg-light hover:bg-main rounded p-1">
                 <Icon icon="iconoir:eye-alt" />
               </button>
             </template>
             <!-- display player actions for host -->
-            <template v-else-if="isHost && username !== player.username && player.role !== ZRPRole.Bot">
+            <template v-else-if="isHost && publicId !== player.id && player.role !== ZRPRole.Bot">
               <button
                 v-tooltip="t('wait.spectate')"
                 @click="handlePlayerToSpectator(player.id)"
@@ -143,7 +143,7 @@ const gameConfig = useGameConfig();
 const auth = useAuth();
 const gameId = computed(() => gameConfig.gameId);
 const { isHost } = useIsHost();
-const username = computed(() => auth.username);
+const publicId = computed(() => auth.publicId);
 const gameHost = computed(() => lobby.host);
 const playerToPromote = ref<string | undefined>(undefined);
 const playerToKick = ref<string | undefined>(undefined);
@@ -174,7 +174,7 @@ const askKickPlayer = (id: string) => {
 };
 
 const handleChangeToSpectator = () => {
-  lobby.changeToSpectator(username.value);
+  lobby.changeToSpectator(publicId.value);
 };
 
 const handlePlayerToSpectator = (id: string) => {
