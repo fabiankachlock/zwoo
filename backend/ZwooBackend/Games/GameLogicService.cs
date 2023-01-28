@@ -45,7 +45,10 @@ public class GameLogicService : IGameLogicService
         ZwooRoom room = _gameManager.CreateGame(name, isPublic);
         room.Game.OnFinished += (data, gameMeta) =>
         {
-            uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
+            if (room.GetPlayer(data.Winner)?.Role != ZRPRole.Bot)
+            {
+                uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
+            }
             Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta);
         };
         return room;
