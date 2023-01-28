@@ -22,7 +22,7 @@
               </button>
             </div>
             <Form>
-              <FormTitle> {{ t('wait.createBot') }}</FormTitle>
+              <FormTitle> {{ t('wait.editBot') }}</FormTitle>
               <TextInput
                 v-if="!isBotUpdate"
                 id="bot-name"

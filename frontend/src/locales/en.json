@@ -135,6 +135,7 @@
     "recaptcha": "The Bot-Challenge must be passed.",
     "inputTooLong": "Your input is too long.",
     "backend": {
+      "-2": "Internal Error",
       "-1": "Unknown Error",
       "100": "An error occurred in the backend.",
       "110": "The account is not verified.",
@@ -163,6 +164,7 @@
       "400": "An Error occurred",
       "420": "Missing Authorization",
       "421": "Game full",
+      "425": "Bot with this name already exists",
       "434": "Card not allowed",
       "900": "Error occurred",
       "901": "Connection error",
@@ -188,8 +190,16 @@
     "play": "Play",
     "kick": "Kick",
     "chat": "Chat",
+    "bots": "Bots",
+    "botName": "Bot name",
+    "exampleBotName": "MyBot",
+    "editBot": "Edit bot",
+    "updateBot": "Save Bot",
+    "createBot": "Create Bot",
+    "edit": "edit",
     "noPlayers": "no players available...",
     "noSpectators": "no spectators available...",
+    "noBots": "no bots available...",
     "sharesheet": {
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."
