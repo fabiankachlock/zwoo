@@ -314,6 +314,11 @@ public readonly record struct AccessDeniedError(int Code, string Message);
 public readonly record struct LobbyFullError(int Code, string Message);
 
 /// <summary>
+/// ZRPCode: 425
+/// </summary>
+public readonly record struct BotNameExistsError(int Code, string Message);
+
+/// <summary>
 /// ZRPCode: 434
 /// </summary>
 public readonly record struct PlaceCardError(int Code, string Message);

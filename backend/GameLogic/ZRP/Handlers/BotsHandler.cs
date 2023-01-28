@@ -44,6 +44,12 @@ public class BotsHandler : IEventHandler
         try
         {
             CreateBotEvent data = message.DecodePayload<CreateBotEvent>();
+            if (context.BotManager.HasBotWithName(data.Username))
+            {
+                _webSocketManager.SendPlayer(context.Id, ZRPCode.BotNameExistsError, new Error((int)ZRPCode.BotNameExistsError, "bot name already exists"));
+                return;
+            }
+
             Bot newBot = context.BotManager.CreateBot(data.Username, new BotConfig()
             {
                 Type = data.Config.Type

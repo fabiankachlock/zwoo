@@ -76,6 +76,7 @@ export enum ZRPOPCode {
   MessageTooLongError = 401, // receiver
   AccessDeniedError = 420, // receiver
   LobbyFullError = 421, // receiver
+  BotNameExistsError = 425, // receiver
   EndTurnError = 433, // receiver
   PlaceCardError = 434, // receiver
   // internal Errors
@@ -162,6 +163,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.MessageTooLongError]: ZRPErrorPayload;
   [ZRPOPCode.AccessDeniedError]: ZRPErrorPayload;
   [ZRPOPCode.LobbyFullError]: ZRPErrorPayload;
+  [ZRPOPCode.BotNameExistsError]: ZRPErrorPayload;
   [ZRPOPCode.EndTurnError]: ZRPErrorPayload;
   [ZRPOPCode.PlaceCardError]: ZRPErrorPayload;
   // internal Errors

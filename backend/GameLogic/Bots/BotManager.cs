@@ -43,6 +43,11 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
         return _bots.Where(bot => bot.PlayerId == id).FirstOrDefault();
     }
 
+    public bool HasBotWithName(string name)
+    {
+        return _bots.Where(bot => bot.Username == name).Count() > 0;
+    }
+
     public Bot CreateBot(string username, BotConfig config)
     {
         _logger.Info($"creating bot {username}");
