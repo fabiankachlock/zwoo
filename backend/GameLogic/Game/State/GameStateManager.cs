@@ -95,10 +95,10 @@ public sealed class GameStateManager
         if (!_isRunning)
         {
             _logger.Warn("game not started");
-            _actionsQueue.Stop();
-            _actionsQueue.Clear();
             return;
         }
+        _actionsQueue.Clear();
+        _actionsQueue.Stop();
         _isRunning = false;
     }
 
