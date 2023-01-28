@@ -55,7 +55,11 @@ public class GameEventTranslator : IGameEventManager
             new PlayerWonNotification(
                 _game.GetPlayer(data.Winner)?.PublicId ?? "",
                 _game.ResolvePlayerName(data.Winner) ?? "",
-                data.Scores.Select(score => new PlayerWon_PlayerSummaryDTO(_game.ResolvePlayerName(score.Key), data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value)).OrderBy(s => s.Position).ToArray()
+                data.Scores.Select(score => new PlayerWon_PlayerSummaryDTO(
+                    _game.GetPlayer(score.Key)?.PublicId ?? "",
+                    _game.ResolvePlayerName(score.Key),
+                    data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value
+                )).OrderBy(s => s.Position).ToArray()
             )
         );
     }

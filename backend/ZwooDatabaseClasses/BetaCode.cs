@@ -5,10 +5,10 @@ namespace ZwooDatabaseClasses;
 
 public partial class BetaCode
 {
-    BetaCode() {}
+    BetaCode() { }
 
     public BetaCode(string code) => Code = code;
-    
+
     [BsonConstructor]
     public BetaCode(ObjectId id, string code)
     {
@@ -18,7 +18,15 @@ public partial class BetaCode
 
     [BsonElement("_id")]
     public ObjectId Id { set; get; }
-    
+
     [BsonElement("code")]
     public string Code { set; get; } = null!;
+}
+
+public partial class User
+{
+
+
+    [BsonElement("")]
+    public string Name { get; set; }
 }

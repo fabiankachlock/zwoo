@@ -49,6 +49,7 @@ public class Database
         DatabaseLogger.Info($"established connection with database");
 
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
+
         _userCollection = _database.GetCollection<User>("users");
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");

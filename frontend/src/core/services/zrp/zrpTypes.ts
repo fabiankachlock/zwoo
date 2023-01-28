@@ -291,6 +291,7 @@ export type ZRPGameWinnerPayload = {
   id: string;
   username: string;
   summary: {
+    id: string;
     username: string;
     position: number;
     score: number;

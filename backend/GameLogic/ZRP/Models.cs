@@ -285,6 +285,7 @@ public readonly record struct PlayerDecisionEvent(int Type, int Decision);
 
 /// <see cref="PlayerWonNotification" />
 public readonly record struct PlayerWon_PlayerSummaryDTO(
+    string Id,
     string Username,
     int Position,
     int Score
