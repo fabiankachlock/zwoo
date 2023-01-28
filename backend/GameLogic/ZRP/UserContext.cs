@@ -7,7 +7,7 @@ public class UserContext
 {
     public readonly long Id;
     public readonly string PublicId;
-    public readonly string UserName;
+    public readonly string Username;
     public readonly ZRPRole Role;
     public readonly long GameId;
     public readonly ZwooRoom Room;
@@ -31,7 +31,7 @@ public class UserContext
     {
         Id = id;
         PublicId = publicId;
-        UserName = userName;
+        Username = userName;
         Role = role;
         GameId = gameId;
         Room = room;

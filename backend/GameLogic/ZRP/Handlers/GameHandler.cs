@@ -140,14 +140,19 @@ public class GameHandler : IEventHandler
         {
             List<SendPlayerState_PlayerDTO> amounts = new List<SendPlayerState_PlayerDTO>();
 
-            foreach (long player in context.Game.AllPlayers)
+            foreach (long playerId in context.Game.AllPlayers)
             {
-                amounts.Add(new SendPlayerState_PlayerDTO(
-                    context.Room.ResolvePlayerName(player) ?? "",
-                    context.Game.State.GetPlayerCardAmount(player)!.Value,
-                    context.Game.State.GetPlayerOrder(player)!.Value,
-                    context.Game.State.ActivePlayer() == player
-                ));
+                var player = context.Room.GetPlayer(playerId);
+                if (player != null)
+                {
+                    amounts.Add(new SendPlayerState_PlayerDTO(
+                        player.PublicId,
+                        player.Username,
+                        context.Game.State.GetPlayerCardAmount(player.Id)!.Value,
+                        context.Game.State.GetPlayerOrder(player.Id)!.Value,
+                        context.Game.State.ActivePlayer() == player.Id
+                    ));
+                }
             }
 
             _webSocketManager.SendPlayer(context.Id, ZRPCode.SendCardAmount, new SendPlayerStateNotification(amounts.ToArray()));

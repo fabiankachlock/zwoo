@@ -57,10 +57,10 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
         return bot;
     }
 
-    public void RemoveBot(string username)
+    public void RemoveBot(string publicId)
     {
-        _logger.Info($"removing bot {username}");
-        Bot? botToRemove = _bots.Find(bot => bot.Username == username);
+        _logger.Info($"removing bot {publicId}");
+        Bot? botToRemove = _bots.Find(bot => bot.AsPlayer().PublicId == publicId);
         if (botToRemove != null)
         {
             _bots.Remove(botToRemove);

@@ -318,5 +318,3 @@ public readonly record struct LobbyFullError(int Code, string Message);
 /// </summary>
 public readonly record struct PlaceCardError(int Code, string Message);
 
-
-// TODO: fix zrp 399,308

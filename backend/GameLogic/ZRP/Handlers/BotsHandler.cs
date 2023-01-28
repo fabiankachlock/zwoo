@@ -48,7 +48,7 @@ public class BotsHandler : IEventHandler
             {
                 Type = data.Config.Type
             });
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.Username));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.AsPlayer().PublicId, newBot.Username));
         }
         catch (Exception e)
         {
@@ -61,7 +61,7 @@ public class BotsHandler : IEventHandler
         try
         {
             UpdateBotEvent data = message.DecodePayload<UpdateBotEvent>();
-            Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.Username == data.Username);
+            Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.AsPlayer().PublicId == data.Id);
             if (botToUpdate != null)
             {
                 botToUpdate.SetConfig(new BotConfig()
@@ -81,8 +81,8 @@ public class BotsHandler : IEventHandler
         try
         {
             DeleteBotEvent data = message.DecodePayload<DeleteBotEvent>();
-            context.BotManager.RemoveBot(data.Username);
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotLeft, new BotLeftNotification(data.Username));
+            context.BotManager.RemoveBot(data.Id);
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotLeft, new BotLeftNotification(data.Id));
         }
         catch (Exception e)
         {
@@ -94,7 +94,7 @@ public class BotsHandler : IEventHandler
     {
         try
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.Username, new BotConfigDTO(bot.Config.Type))).ToArray()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().PublicId, bot.Username, new BotConfigDTO(bot.Config.Type))).ToArray()));
         }
         catch (Exception e)
         {

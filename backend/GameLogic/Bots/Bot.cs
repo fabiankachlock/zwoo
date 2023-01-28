@@ -52,7 +52,7 @@ public class Bot : INotificationTarget
 
     public IPlayer AsPlayer()
     {
-        return new LobbyEntry(PlayerId, PlayerPublicId.ForUser(Username, ZRPRole.Host), Username, ZRPRole.Bot, ZRPPlayerState.Connected);
+        return new LobbyEntry(PlayerId, PlayerPublicId.ForUser(Username, ZRPRole.Bot), Username, ZRPRole.Bot, ZRPPlayerState.Connected);
     }
 
     public void ReceiveMessage<T>(ZRPCode code, T payload)
