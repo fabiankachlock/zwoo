@@ -6,18 +6,31 @@
       >
         <div class="h-full flex flex-nowrap items-center justify-start">
           <img src="/img/logo/zwoo_logo_simple_none.png" alt="" class="max-h-full mr-3" />
-          <p class="tc-main text-xl">{{ winner.username }} - {{ t('summary.winner') }}</p>
+          <p class="tc-main text-xl">{{ winner.username }}</p>
+          <template v-if="winner.id.startsWith('b_')">
+            <span class="tc-primary text-2xl ml-2">
+              <Icon icon="fluent:bot-24-regular" />
+            </span>
+          </template>
+          <p class="tc-main text-xl ml-1">- {{ t('summary.winner') }}</p>
         </div>
         <p class="tc-main text-xl italic">{{ winner.score }}</p>
       </div>
       <div
         v-for="player in notWinners"
         :key="player.username"
-        class="player flex justify-between items-center flex-nowrap m-1 bg-lightest mouse:hover:bg-light rounded px-3 py-2 border bc-dark"
+        class="player flex justify-start items-center flex-nowrap m-1 bg-lightest mouse:hover:bg-light rounded px-3 py-2 border bc-dark"
       >
         <p class="tc-main-dark">
-          <span class="mr-2">{{ player.position }}.</span> {{ player.username }}
+          <span class="mr-2">{{ player.position }}.</span>
+          {{ player.username }}
         </p>
+        <template v-if="player.id.startsWith('b_')">
+          <span class="tc-primary text-lg ml-2">
+            <Icon icon="fluent:bot-24-regular" />
+          </span>
+        </template>
+        <div class="flex-1"></div>
         <p class="tc-main-dark italic">{{ player.score }}</p>
       </div>
       <div class="bottom-spacer h-8"></div>

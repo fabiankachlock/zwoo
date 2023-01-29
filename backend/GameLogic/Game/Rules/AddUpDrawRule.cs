@@ -1,4 +1,4 @@
-﻿using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.State;
@@ -143,11 +143,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
         List<Card> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
-        foreach (Card card in newCards)
-        {
-            events.Add(GameEvent.SendCard(payload.Player, card));
-        }
-
+        events.Add(GameEvent.SendCards(payload.Player, newCards));
 
         return new GameStateUpdate(state, events);
     }

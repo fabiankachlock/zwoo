@@ -8,8 +8,8 @@ namespace ZwooGameLogic.Game.Cards;
 
 public struct Card
 {
-    public CardColor Color;
-    public CardType Type;
+    public CardColor Color = CardColor.None;
+    public CardType Type = CardType.None;
 
     public Card(CardColor cardColor, CardType cardType)
     {

@@ -8,6 +8,7 @@ import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GameSummaryEntry = {
+  id: string;
   username: string;
   score: number;
   position: number;
@@ -23,6 +24,7 @@ export const useGameSummary = defineStore('game-summary', () => {
     if (msg.code === ZRPOPCode.PlayerWon) {
       summary.value = msg.data.summary
         .map(e => ({
+          id: e.id,
           username: e.username,
           position: e.position,
           score: e.score

@@ -1,10 +1,11 @@
 ﻿using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Notifications;
 
 namespace ZwooGameLogic.ZRP.Handlers;
 
 
-public class GameHandler : IMessageHandler
+public class GameHandler : IEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
@@ -58,18 +59,23 @@ public class GameHandler : IMessageHandler
         try
         {
             context.Game.Reset();
-            foreach (long player in context.Lobby.Players())
+            foreach (IPlayer player in context.Lobby.GetPlayers())
             {
-                context.Game.AddPlayer(player);
+                context.Game.AddPlayer(player.Id);
+            }
+            context.BotManager.PrepareBotsForGame();
+            foreach (var bot in context.BotManager.ListBots())
+            {
+                context.Game.AddPlayer(bot.PlayerId);
             }
             context.Game.Start();
 
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.GameStarted, new GameStartedDTO());
-            _webSocketManager.SendPlayer(context.Game.State.ActivePlayer(), ZRPCode.StartTurn, new StartTurnDTO());
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.GameStarted, new GameStartedNotification());
+            _webSocketManager.SendPlayer(context.Game.State.ActivePlayer(), ZRPCode.StartTurn, new StartTurnNotification());
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -78,12 +84,12 @@ public class GameHandler : IMessageHandler
         if (context.Role == ZRPRole.Spectator) return;
         try
         {
-            PlaceCardDTO payload = message.DecodePayload<PlaceCardDTO>();
+            PlaceCardEvent payload = message.DecodePayload<PlaceCardEvent>();
             context.Game.HandleEvent(ClientEvent.PlaceCard(context.Id, new Card(payload.Type, payload.Symbol)));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -92,12 +98,12 @@ public class GameHandler : IMessageHandler
         if (context.Role == ZRPRole.Spectator) return;
         try
         {
-            DrawCardDTO payload = message.DecodePayload<DrawCardDTO>();
+            DrawCardEvent payload = message.DecodePayload<DrawCardEvent>();
             context.Game.HandleEvent(ClientEvent.DrawCard(context.Id));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -106,12 +112,12 @@ public class GameHandler : IMessageHandler
         if (context.Role == ZRPRole.Spectator) return;
         try
         {
-            ReceiveDecisionDTO payload = message.DecodePayload<ReceiveDecisionDTO>();
+            PlayerDecisionEvent payload = message.DecodePayload<PlayerDecisionEvent>();
             context.Game.HandleEvent(ClientEvent.PlayerDecision(context.Id, (PlayerDecision)payload.Type, payload.Decision));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -120,11 +126,11 @@ public class GameHandler : IMessageHandler
         try
         {
             if (context.Role == ZRPRole.Spectator) return;
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendHand, new SendHandDTO(context.Game.State.GetPlayerDeck(context.Id)!.Select(card => new SendHand_HandDTO(card.Color, card.Type)).ToArray()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendHand, new SendDeckNotification(context.Game.State.GetPlayerDeck(context.Id)!.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray()));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -132,23 +138,28 @@ public class GameHandler : IMessageHandler
     {
         try
         {
-            List<SendCardAmount_PlayersDTO> amounts = new List<SendCardAmount_PlayersDTO>();
+            List<SendPlayerState_PlayerDTO> amounts = new List<SendPlayerState_PlayerDTO>();
 
-            foreach (long player in context.Game.AllPlayers)
+            foreach (long playerId in context.Game.AllPlayers)
             {
-                amounts.Add(new SendCardAmount_PlayersDTO(
-                    context.Lobby.GetPlayer(player)!.Username,
-                    context.Game.State.GetPlayerCardAmount(player)!.Value,
-                    context.Game.State.GetPlayerOrder(player)!.Value,
-                    context.Game.State.ActivePlayer() == player
-                ));
+                var player = context.Room.GetPlayer(playerId);
+                if (player != null)
+                {
+                    amounts.Add(new SendPlayerState_PlayerDTO(
+                        player.PublicId,
+                        player.Username,
+                        context.Game.State.GetPlayerCardAmount(player.Id)!.Value,
+                        context.Game.State.GetPlayerOrder(player.Id)!.Value,
+                        context.Game.State.ActivePlayer() == player.Id
+                    ));
+                }
             }
 
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendCardAmount, new SendCardAmountDTO(amounts.ToArray()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendCardAmount, new SendPlayerStateNotification(amounts.ToArray()));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -157,11 +168,11 @@ public class GameHandler : IMessageHandler
         try
         {
             var top = context.Game.State.GetPileTop();
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendPileTop, new SendPileTopDTO(top.Color, top.Type));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendPileTop, new SendPileTopNotification(top.Color, top.Type));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 }
