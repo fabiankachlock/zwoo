@@ -49,6 +49,12 @@ public static class Globals
         LogRushId = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_ID") ?? "";
         LogRushKey = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_Key") ?? "";
 
+        var versionOverride = Environment.GetEnvironmentVariable("ZWOO_VERSION_OVERRIDE");
+        if (versionOverride != null && versionOverride != "")
+        {
+            ApiVersion = versionOverride;
+        }
+
         Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
         hierarchy.Root.Level = Level.Debug;
 
@@ -116,4 +122,5 @@ public static class Globals
     public static readonly string RecaptchaSideSecret;
 
     public static readonly string Version = "1.0.0-beta.7";
+    public static readonly string ApiVersion = Version;
 }
