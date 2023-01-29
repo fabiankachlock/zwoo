@@ -93,13 +93,13 @@ export const useRedirect = () => {
      * set a new redirect manually
      * @param to the location to redirect
      */
-    setRedirect,
-
-    /**
-     * create a query parameter thats understood by useRedirect
-     */
-    createRedirect: (to: string): string => {
-      return `${redirectKey}=${to}`;
-    }
+    setRedirect
   };
+};
+
+/**
+ * create a query parameter thats understood by useRedirect
+ */
+export const createRedirect = (to: string): string => {
+  return `${redirectKey}=${to}`;
 };

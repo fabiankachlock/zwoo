@@ -61,10 +61,7 @@ internal class BaseDrawRule : BaseRule
         List<Card> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
-        foreach (Card card in newCards)
-        {
-            events.Add(GameEvent.SendCard(payload.Player, card));
-        }
+        events.Add(GameEvent.SendCards(payload.Player, newCards));
 
 
         return new GameStateUpdate(state, events);

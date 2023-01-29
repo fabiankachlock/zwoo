@@ -43,8 +43,14 @@ FROM node:16-alpine as builder
 COPY --from=dotnet-builder /src ./src
 WORKDIR /src/frontend
 
+# version override
+ARG version_override
+
+# configure command for building the frontend
+ARG build_command=build-fe-only
+
 # build frontend
-RUN yarn build-fe-only
+RUN VUE_APP_VERSION_OVERRIDE=$version_override yarn "$build_command"
 
 ### Production Stage
 FROM nginx:stable-alpine as prod

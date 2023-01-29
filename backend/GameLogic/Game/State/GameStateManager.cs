@@ -10,7 +10,7 @@ namespace ZwooGameLogic.Game.State;
 public sealed class GameStateManager
 {
     public readonly GameMeta Meta;
-    private readonly NotificationManager _notificationManager;
+    private readonly IGameEventManager _notificationManager;
     private readonly RuleManager _ruleManager;
     private PlayerManager _playerManager;
     private GameSettings _gameSettings;
@@ -31,7 +31,7 @@ public sealed class GameStateManager
     public delegate void FinishedHandler(GameEvent.PlayerWonEvent data, GameMeta gameMeta);
     public event FinishedHandler OnFinished = delegate { };
 
-    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification, ILoggerFactory loggerFactory)
+    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, IGameEventManager notification, ILoggerFactory loggerFactory)
     {
         Meta = meta;
         _gameSettings = settings;
@@ -97,6 +97,8 @@ public sealed class GameStateManager
             _logger.Warn("game not started");
             return;
         }
+        _actionsQueue.Clear();
+        _actionsQueue.Stop();
         _isRunning = false;
     }
 
@@ -106,9 +108,10 @@ public sealed class GameStateManager
     /// </summary>
     internal void Reset()
     {
-        if (!_isRunning)
+        if (_isRunning)
         {
             _logger.Warn("resetting running game");
+            Stop();
         }
         _isRunning = false;
         _gameState = new GameState();
@@ -124,6 +127,8 @@ public sealed class GameStateManager
             _logger.Warn($"player {id} left the running game");
             long lastPlayer = _playerCycle.ActivePlayer;
             _playerCycle.RemovePlayer(id, _gameState.Direction);
+            if (_playerCycle.Order.Count() <= 1) return;
+
             long newPlayer = _playerCycle.ActivePlayer;
 
             GameState newState = _gameState.Clone();
@@ -227,7 +232,7 @@ public sealed class GameStateManager
                     break;
                 case GameEventType.GetCard:
                     GameEvent.GetCardEvent getCardEvent = evt.CastPayload<GameEvent.GetCardEvent>();
-                    _notificationManager.SendCard(new SendCardDTO(getCardEvent.Player, getCardEvent.Card));
+                    _notificationManager.SendCard(new SendCardDTO(getCardEvent.Player, getCardEvent.Cards));
                     break;
                 case GameEventType.RemoveCard:
                     GameEvent.RemoveCardEvent removeCardEvent = evt.CastPayload<GameEvent.RemoveCardEvent>();

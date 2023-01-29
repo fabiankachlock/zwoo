@@ -8,8 +8,15 @@
       :class="{ 'tc-main': isConnected, 'tc-main-secondary line-through': !isConnected }"
       class="flex flex-row flex-nowrap w-full h-full items-center cursor-default overflow-hidden whitespace-nowrap"
     >
-      <span class="mr-3 opponent-name">{{ name }}</span>
-      <span class="whitespace-nowrap">{{ cardAmount }}</span>
+      <span class="opponent-name">
+        {{ name }}
+      </span>
+      <template v-if="id.startsWith('b_')">
+        <span class="tc-primary text-lg ml-1">
+          <Icon icon="fluent:bot-24-regular" />
+        </span>
+      </template>
+      <span class="whitespace-nowrap ml-3">{{ cardAmount }}</span>
       <span class="ml-2 flex items-center">
         <button v-if="isConnected" @click="toggleMute" class="transition-transform hover:scale-125">
           <Icon v-if="isMuted" icon="bi:mic-mute-fill" />
@@ -37,12 +44,13 @@ const { isHost } = useIsHost();
 const props = defineProps<{
   isActive: boolean;
   isConnected: boolean;
+  id: string;
   name: string;
   cardAmount: number;
   isMuted?: boolean;
 }>();
 
-const { name, cardAmount, isActive, isMuted } = toRefs(props);
+const { name, id, cardAmount, isActive, isMuted } = toRefs(props);
 const elmRef = ref<HTMLDivElement | null>(null);
 
 const toggleMute = () => {
@@ -50,7 +58,7 @@ const toggleMute = () => {
 };
 
 const kickPlayer = () => {
-  lobby.kickPlayer(name.value);
+  lobby.kickPlayer(id.value);
 };
 
 watch(isActive, newValue => {

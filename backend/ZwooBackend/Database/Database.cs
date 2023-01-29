@@ -59,6 +59,7 @@ public class Database
         DatabaseLogger.Info($"established connection with database");
 
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
+
         _userCollection = _database.GetCollection<User>("users");
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
@@ -109,7 +110,6 @@ public class Database
         CreateAttempt(id, true);
         return (username, id, code, email);
     }
-
 
     public bool UsernameExists(string username) => _userCollection.AsQueryable().FirstOrDefault(x => x.Username == username) != null;
 
@@ -332,7 +332,6 @@ public class Database
     private void LogoutAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("logout", puid, success,
             (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
-
 
     private void DeleteAttempt(ulong puid, bool success, User? user = null)
     {
