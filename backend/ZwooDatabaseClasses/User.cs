@@ -11,7 +11,7 @@ namespace ZwooDatabaseClasses;
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]
 [CollectionLocation("users", "zwoo")]
-public partial class User : IDocument
+public class User : IDocument
 {
     public User() { }
 

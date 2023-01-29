@@ -22,11 +22,3 @@ public partial class BetaCode
     [BsonElement("code")]
     public string Code { set; get; } = null!;
 }
-
-public partial class User
-{
-
-
-    [BsonElement("")]
-    public string Name { get; set; }
-}
