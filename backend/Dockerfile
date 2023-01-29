@@ -25,6 +25,11 @@ FROM build AS publish
 RUN dotnet publish "./ZwooBackend/ZwooBackend.csproj" -c Release -o /app/publish
 
 FROM base AS final
+
+# version override
+ARG version_override
+ENV ZWOO_VERSION_OVERRIDE=${version_override}
+
 # run project
 WORKDIR /app
 COPY --from=publish /app/publish .

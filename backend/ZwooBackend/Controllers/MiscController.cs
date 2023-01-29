@@ -6,7 +6,7 @@ using static ZwooBackend.Globals;
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[EnableCors("Zwoo")] 
+[EnableCors("Zwoo")]
 [Route("")]
 public class MiscController : Controller
 {
@@ -14,9 +14,9 @@ public class MiscController : Controller
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetVersion()
     {
-        return Ok(Globals.Version);
+        return Ok(Globals.ApiVersion);
     }
-    
+
     [HttpGet("changelog")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
@@ -25,9 +25,9 @@ public class MiscController : Controller
         var changelog = ZwooDatabase.GetChangelog(version);
         if (changelog == null)
             return NotFound("");
-        return  Ok(changelog.ChangelogText);
+        return Ok(changelog.ChangelogText);
     }
-    
+
     [HttpGet("versionHistory")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetChangelogs() => Ok($"{{ \"versions\": {JsonSerializer.Serialize(ZwooDatabase.GetChangelogs().Select(c => c.ChangelogVersion))} }}");

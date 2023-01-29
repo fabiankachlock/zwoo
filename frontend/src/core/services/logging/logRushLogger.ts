@@ -2,13 +2,15 @@ import { LogRushClient } from '@log-rush/client';
 
 import { AppConfig } from '@/config';
 
+import { useRuntimeConfig } from '../runtimeConfig';
 import { BaseLogger } from './logTypes';
 
 export async function GetLogger(): Promise<() => BaseLogger> {
   const MAX_BUFFER_SIZE = 10;
+  const ip = await useRuntimeConfig().logrushServer;
 
   const client = new LogRushClient({
-    dataSourceUrl: AppConfig.LogRushServer ?? '',
+    dataSourceUrl: ip ?? AppConfig.LogRushServer ?? '',
     batchSize: MAX_BUFFER_SIZE
   });
 
