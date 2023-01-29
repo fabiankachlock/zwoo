@@ -12,6 +12,8 @@
     "preview:prod": "vite preview --mode dev",
     "build": "yarn pre:build && vite build --mode production",
     "build-fe-only": "yarn pre:build-fe-only && vite build --mode production",
+    "build:dev-instance": "yarn pre:build && vite build --mode dev-instance",
+    "build-fe-only:dev-instance": "yarn pre:build-fe-only && vite build --mode dev-instance",
     "build:tauri": "yarn pre:build && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
     "build-fe-only:tauri": "yarn pre:build-fe-only && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
     "build:preview": "yarn pre:build && vite build --mode preview --outDir dist-preview",
