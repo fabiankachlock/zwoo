@@ -9,6 +9,7 @@ using ZwooBackend;
 using ZwooBackend.Websockets;
 using ZwooBackend.Games;
 using ZwooBackend.Database;
+using ZwooBackend.Services;
 using ZwooDatabaseClasses;
 
 
@@ -55,6 +56,9 @@ builder.Services.AddMigration(new MongoMigrationSettings
 builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
 builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+
+builder.Services.AddHostedService<EmailService>();
 
 var app = builder.Build();
 
