@@ -97,55 +97,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-var mail_thread = new Thread(() =>
-{
-    while (true)
-    {
-        if (!Globals.EmailQueue.IsEmpty)
-        {
-            if (Globals.EmailQueue.TryDequeue(out var data))
-            {
-                if (data.Puid == 0)
-                    break;
-                try
-                {
-                    EmailData.SendMail(data);
-                }
-                catch (Exception e)
-                {
-                    Globals.Logger.Error($"Could not send Email: {e.Message}");
-                }
-            }
-        }
-        else
-            Thread.Sleep(500);
-    }
-});
-
-var mail_thread2 = new Thread(() =>
-{
-    while (true)
-    {
-        if (!Globals.PasswordChangeRequestEmailQueue.IsEmpty)
-        {
-            if (Globals.PasswordChangeRequestEmailQueue.TryDequeue(out var data))
-            {
-                if (data.Id == 0)
-                    break;
-                try
-                {
-                    EmailData.SendPasswordChangeRequest(data);
-                }
-                catch (Exception e)
-                {
-                    Globals.Logger.Error($"Could not send Email: {e.Message}");
-                }
-            }
-        }
-        else
-            Thread.Sleep(500);
-    }
-});
 
 var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 scheduler.Start();
@@ -153,13 +104,7 @@ scheduler.ScheduleJob(
     JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
     TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
 
-mail_thread.Start();
-mail_thread2.Start();
 
 app.Run();
 
-Globals.EmailQueue.Enqueue(new EmailData("", 0, "", ""));
-Globals.PasswordChangeRequestEmailQueue.Enqueue(new User(0, new List<string>(), "", "", "", 0, "", "", false));
-mail_thread.Join();
-mail_thread2.Join();
 scheduler.Shutdown();

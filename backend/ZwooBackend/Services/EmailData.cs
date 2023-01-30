@@ -1,45 +1,25 @@
 using System.Net;
 using System.Net.Mail;
-using ZwooBackend;
-using ZwooDatabaseClasses;
 
-namespace BackendHelper;
+namespace ZwooBackend.Services;
 
 public class EmailData
 {
-    public string Username;
-    public UInt64 Puid;
-    public string Code;
-    public string Email;
-
-    public EmailData(string username, UInt64 puid, string code, string email)
+    public static MailMessage PasswordChangeRequestEmail(string username, string resetCode)
     {
-        this.Username = username;
-        this.Puid = puid;
-        this.Code = code;
-        this.Email = email;
-    }
+        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/reset-password?code={resetCode}";
+        string text = $"\r\nHello {username},\r\nto reset your password click the link below.\r\n\r\n{link}\r\n\r\nⒸ ZWOO 2023\r\n";
 
-    public static void SendPasswordChangeRequest(User user)
-    {
-        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/reset-password?code={user.PasswordResetCode}";
-        string text = $"\r\nHello {user.Username},\r\nto reset your password click the link below.\r\n\r\n{link}\r\n\r\nⒸ ZWOO 2022\r\n";
-        
         var mail = new MailMessage();
-        mail.From = new MailAddress(Globals.SmtpHostEmail);
-        mail.To.Add(new MailAddress(user.Email));
         mail.Subject = "Change your ZWOO Account password";
         mail.Body = text;
-        
-        var smtp = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort);
-        smtp.Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword);
-        smtp.Send(mail);
+        return mail;
     }
-    
-    public static void SendMail(EmailData data)
+
+    public static MailMessage VerifyEmail(string username, string puid, string code)
     {
-        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/verify-account?id={data.Puid}&code={data.Code}";
-        string text = $"\r\nHello {data.Username},\r\nplease click the link to verify your zwoo account.\r\n{link}\r\n\r\nThe confirmation expires with the end of this day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by accident or don't want to\r\nregister, please ignore it.\r\n\r\nⒸ ZWOO 2022\r\n";
+        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/verify-account?id={puid}&code={code}";
+        string text = $"\r\nHello {username},\r\nplease click the link to verify your zwoo account.\r\n{link}\r\n\r\nThe confirmation expires with the end of this day\r\n(UTC + 01:00).\r\n\r\nIf you've got this E-Mail by accident or don't want to\r\nregister, please ignore it.\r\n\r\nⒸ ZWOO 2023\r\n";
         string html =
             "<!DOCTYPE html>" +
             "<html lang=\"en\" " +
@@ -133,7 +113,7 @@ public class EmailData
             "Neue,Helvetica,sans-serif;line-height:120%;text-align:left;" +
             "direction:ltr;font-weight:700;letter-spacing:normal;margin-top:0;" +
             "margin-bottom:0;\">Hello " +
-            data.Username +
+            username +
             ",</h3></td></tr></table><table border=\"0\" cellpadding=\"10\" " +
             "cellspacing=\"0\" class=\"paragraph_block\" role=\"presentation\" " +
             "style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;word-break:" +
@@ -184,23 +164,14 @@ public class EmailData
             "this E-Mail by accident or don't want to register, please ignore " +
             "it.</p><p style=\"margin:0;margin-bottom:16px;\"></p><p " +
             "style=\"margin:0;\">Ⓒ ZWOO " +
-            "2022</p></div></td></tr></table></td></tr></tbody></table></td></" +
+            "2023</p></div></td></tr></table></td></tr></tbody></table></td></" +
             "tr></tbody></table></td></tr></tbody></table><!-- End " +
             "--></body></html>\r\n";
 
         var mail = new MailMessage();
-        mail.From = new MailAddress(Globals.SmtpHostEmail);
-        mail.To.Add(new MailAddress(data.Email));
-
         mail.Subject = "Verify your ZWOO Account";
-
-        var plain = AlternateView.CreateAlternateViewFromString(text, null, "text/plain");
-        var htmlview = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
-        mail.AlternateViews.Add(plain);
-        mail.AlternateViews.Add(htmlview);
-
-        var smtp = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort);
-        smtp.Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword);
-        smtp.Send(mail);
+        mail.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, "text/plain"));
+        mail.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(html, null, "text/html"));
+        return mail;
     }
 }

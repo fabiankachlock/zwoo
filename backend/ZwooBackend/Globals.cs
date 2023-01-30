@@ -96,9 +96,6 @@ public static class Globals
 
     public static readonly Database.Database ZwooDatabase;
 
-    public static readonly ConcurrentQueue<EmailData> EmailQueue = new ConcurrentQueue<EmailData>();
-    public static readonly ConcurrentQueue<User> PasswordChangeRequestEmailQueue = new ConcurrentQueue<User>();
-
     public static readonly bool UseSsl;
     public static readonly bool IsBeta;
     public static readonly string Cors;
