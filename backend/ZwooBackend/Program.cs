@@ -57,6 +57,7 @@ builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
 builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<ILanguageService, LanguageService>();
 
 builder.Services.AddHostedService<EmailService>();
 
