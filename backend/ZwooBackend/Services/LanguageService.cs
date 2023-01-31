@@ -18,7 +18,7 @@ public class LanguageService : ILanguageService
 {
     public LanguageCode ResolveFormQuery(string query)
     {
-        string code = query.ToLower().Substring(0, 2);
+        string code = query.ToLower().PadLeft(2, ' ').Substring(0, 2);
         switch (code)
         {
             case "de": return LanguageCode.German;

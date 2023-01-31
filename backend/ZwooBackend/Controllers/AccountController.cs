@@ -12,10 +12,12 @@ namespace ZwooBackend.Controllers;
 public class AccountController : Controller
 {
     private readonly IEmailService _emailService;
+    private readonly ILanguageService _languageService;
 
-    public AccountController(IEmailService emailService)
+    public AccountController(IEmailService emailService, ILanguageService languageService)
     {
         _emailService = emailService;
+        _languageService = languageService;
     }
 
     [HttpGet("settings")]
@@ -69,7 +71,7 @@ public class AccountController : Controller
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "no User with this Email"));
 
         var user = Globals.ZwooDatabase.RequestChangePassword(body.email);
-        var recipient = _emailService.CreateRecipient(user.Email, user.Username, LanguageCode.English);
+        var recipient = _emailService.CreateRecipient(user.Email, user.Username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
         _emailService.SendPasswordResetMail(recipient, user.PasswordResetCode ?? "");
         return Ok("");
     }
