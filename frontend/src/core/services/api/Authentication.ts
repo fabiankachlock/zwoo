@@ -112,10 +112,16 @@ export class AuthenticationService {
     };
   };
 
-  static performCreateAccount = async (username: string, email: string, password: string, beta?: string): Promise<AuthenticationStatus> => {
+  static performCreateAccount = async (
+    username: string,
+    email: string,
+    password: string,
+    beta?: string,
+    lng: string | null = null
+  ): Promise<AuthenticationStatus> => {
     Logger.Api.log(`performing create account action of ${username} with ${email}`);
 
-    const response = await WrappedFetch(Backend.getUrl(Endpoint.CreateAccount), {
+    const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.CreateAccount, { lng: lng }), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -202,10 +208,10 @@ export class AuthenticationService {
     return true;
   };
 
-  static resendVerificationEmail = async (email: string): Promise<BackendErrorAble<boolean>> => {
+  static resendVerificationEmail = async (email: string, lng: string | null = null): Promise<BackendErrorAble<boolean>> => {
     Logger.Api.log(`resending verification email of ${email}`);
 
-    const response = await WrappedFetch(Backend.getUrl(Endpoint.ResendVerificationEmail), {
+    const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.ResendVerificationEmail, { lng: lng }), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       responseOptions: {
