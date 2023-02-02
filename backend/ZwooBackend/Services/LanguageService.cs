@@ -12,6 +12,13 @@ public interface ILanguageService
     /// <param name="query">the url query</param>
     /// <returns></returns>
     public LanguageCode ResolveFormQuery(string query);
+
+    /// <summary>
+    /// convert a language code into a string
+    /// </summary>
+    /// <param name="lng">the language code</param>
+    /// <returns></returns>
+    public string CodeToString(LanguageCode lng);
 }
 
 public class LanguageService : ILanguageService
@@ -26,11 +33,21 @@ public class LanguageService : ILanguageService
             default: return LanguageCode.English;
         }
     }
+
+    public string CodeToString(LanguageCode lng)
+    {
+        switch (lng)
+        {
+            case LanguageCode.German: return "de";
+            case LanguageCode.English: return "en";
+            default: return "en";
+        }
+    }
 }
 
 
 public enum LanguageCode
 {
     English,
-    German,
+    German
 }

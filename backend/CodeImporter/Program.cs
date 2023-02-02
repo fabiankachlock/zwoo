@@ -11,7 +11,7 @@ using (TextFieldParser reader = new TextFieldParser(file_path))
     reader.Delimiters = new string[] { "," };
     reader.ReadFields();
     while (!reader.EndOfData)
-        codes.Add(reader.ReadFields()?[1]);
+        codes.Add(reader.ReadFields()?[1]!);
 }
 
 var client = new MongoClient(Environment.GetCommandLineArgs()[2]);

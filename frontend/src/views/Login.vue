@@ -38,6 +38,7 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
 import { AuthenticationService } from '@/core/services/api/Authentication';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
@@ -47,6 +48,7 @@ import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
+const config = useConfig();
 const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
@@ -92,7 +94,7 @@ const logIn = async () => {
 
 const resendVerifyEmail = async () => {
   showNotVerifiedInfo.value = false;
-  const res = await AuthenticationService.resendVerificationEmail(email.value);
+  const res = await AuthenticationService.resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
   const [, err] = unwrapBackendError(res);
   if (err !== undefined) {
     error.value = [getBackendErrorTranslation(err)];
