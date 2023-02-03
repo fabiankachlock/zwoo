@@ -1,0 +1,11 @@
+Hello {{username}},
+
+please verify your account using the link below:
+
+{{link}}
+
+The link expires with the end of this day (UTC + 01:00).
+If you don't want to register, please ignore it.
+
+
+Ⓒ ZWOO {{year}}

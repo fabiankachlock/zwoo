@@ -11,6 +11,7 @@ using ZwooBackend.Games;
 using ZwooBackend.Database;
 using ZwooBackend.Services;
 using ZwooDatabaseClasses;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -98,14 +99,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-
 var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+#pragma warning disable 4014
 scheduler.Start();
 scheduler.ScheduleJob(
     JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
     TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
+#pragma warning restore 4014
 
 
 app.Run();
 
-scheduler.Shutdown();
+await scheduler.Shutdown();

@@ -49,10 +49,12 @@ public class EmailService : IHostedService, IEmailService
     private Thread? _activeEmailThread = null;
     private object _threadLock = new Object();
     private ILog _logger = LogManager.GetLogger("EmailService");
+    private ILanguageService _languageService;
 
-    public EmailService()
+    public EmailService(ILanguageService languageService)
     {
         _emailQueue = new ConcurrentQueue<MailMessage>();
+        _languageService = languageService;
     }
 
     private struct Recipient : IRecipient
@@ -74,7 +76,7 @@ public class EmailService : IHostedService, IEmailService
 
     public void SendPasswordResetMail(IRecipient recipient, string resetCode)
     {
-        MailMessage mail = EmailData.PasswordChangeRequestEmail(recipient.Username, resetCode);
+        MailMessage mail = EmailData.PasswordChangeRequestEmail(_languageService.CodeToString(recipient.PreferredLanguage), recipient.Username, resetCode);
         mail.From = new MailAddress(Globals.SmtpHostEmail);
         mail.To.Add(new MailAddress(recipient.Email));
         _emailQueue.Enqueue(mail);
@@ -83,7 +85,7 @@ public class EmailService : IHostedService, IEmailService
 
     public void SendVerifyMail(IRecipient recipient, ulong userId, string code)
     {
-        MailMessage mail = EmailData.VerifyEmail(recipient.Username, $"{userId}", code);
+        MailMessage mail = EmailData.VerifyEmail(_languageService.CodeToString(recipient.PreferredLanguage), recipient.Username, $"{userId}", code);
         mail.From = new MailAddress(Globals.SmtpHostEmail);
         mail.To.Add(new MailAddress(recipient.Email));
         _emailQueue.Enqueue(mail);

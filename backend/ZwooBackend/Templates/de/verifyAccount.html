@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      p,
+      a {
+        color: #e6e5e1;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+          Geneva, Verdana, sans-serif;
+        margin: 0;
+      }
+      h1 {
+        margin: 0;
+        text-align: center;
+        font-size: 2em;
+        color: #679df5;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+          Geneva, Verdana, sans-serif;
+      }
+    </style>
+  </head>
+  <body style="background-color: #363847; padding: 2rem">
+    <div>
+      <img
+        src="https://zwoo.igd20.de/img/logo/zwoo_logo_none.svg"
+        alt="ZWOO Logo"
+        style="display: block; width: 200px; margin: 0 auto"
+      />
+    </div>
+    <h1>ZWOO</h1>
+    <p style="font-style: italic; text-align: center">The Second Challenge</p>
+    <p style="font-weight: bold; margin-top: 2em">Hallo {{username}},</p>
+    <p style="margin-top: 1em">
+      bitte verifiziere deinen Account über den Button oder den Link darunter:
+    </p>
+    <div>
+      <button
+        style="
+          display: block;
+          padding: 0.5em 2em;
+          background-color: #2d2e3b;
+          border-radius: 0.5em;
+          border: none;
+          margin: 1em auto;
+        "
+      >
+        <a style="font-size: 1.5em; color: #679df5" href="{{link}}">
+          Verifizieren
+        </a>
+      </button>
+    </div>
+    <a href="{{link}}">{{link}}</a>
+    <p style="margin-top: 2em">
+      Der Verifizierungslink läuft am Ende diesen Tages ab (UTC + 01:00).<br />
+      Falls du dich nicht registrieren möchtest, kannst du diese E-Mail
+      ignorieren.
+    </p>
+    <p>Ⓒ ZWOO {{year}}</p>
+  </body>
+</html>
