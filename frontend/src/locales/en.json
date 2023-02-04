@@ -44,9 +44,11 @@
     "createAccount": "Create Account",
     "idea": "New Idea?",
     "imprint": "Imprint",
+    "privacy": "Privacy",
     "logout": "Logout",
     "settings": "Settings",
-    "home": "Home"
+    "home": "Home",
+    "help": "Help"
   },
   "login": {
     "title": "Login",

@@ -44,9 +44,11 @@
     "createAccount": "Account erstellen",
     "idea": "Neue Idee?",
     "imprint": "Impressum",
+    "privacy": "Datenschutz",
     "logout": "Abmelden",
     "settings": "Einstellungen",
-    "home": "Home"
+    "home": "Home",
+    "help": "Hilfe"
   },
   "login": {
     "title": "Anmeldung",
