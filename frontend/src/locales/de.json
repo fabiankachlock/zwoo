@@ -255,7 +255,7 @@
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
-        "name": "Authetifizierungs Cookies",
+        "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
       },
       "recaptcha": {
@@ -265,7 +265,7 @@
     },
     "active": "Aktiviert",
     "inactive": "Deaktiviert",
-    "acceptAll": "Alle Akzeptieren",
+    "rejectAll": "Alle Ablehnen",
     "acceptSelection": "Auswahl Akzeptieren",
     "manage": "Cookies Verwalten",
     "disallowed": {
