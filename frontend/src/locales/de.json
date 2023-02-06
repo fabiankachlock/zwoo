@@ -426,5 +426,14 @@
   "offline": {
     "title": "Ooops, du bist offline!",
     "info": "Die zwoo Server können nicht erreicht werden. Solange zwoo nicht offline gespielt werden kann, wird eine aktive Internetverbindung benötigt um zwoo zu spielen."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "info": "xxx get in touch idk",
+    "sender": "Name",
+    "namePlaceholder": "Dein Name",
+    "message": "Nachricht",
+    "messagePlaceholder": "Deine Nachricht",
+    "send": "Absenden!"
   }
 }

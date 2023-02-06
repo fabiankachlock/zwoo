@@ -426,5 +426,14 @@
   "offline": {
     "title": "Ooops, you're offline!",
     "info": "The zwoo servers can't be reached. As long as zwoo dosn't support offline games, you need to be online to play zwoo."
+  },
+  "contact": {
+    "title": "Contact",
+    "info": "xxx get in touch idk",
+    "sender": "Name",
+    "namePlaceholder": "Your name",
+    "message": "Message",
+    "messagePlaceholder": "Your message",
+    "send": "Send!"
   }
 }
