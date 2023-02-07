@@ -4,11 +4,16 @@
 
     <p>Angaben gemäß § 5 TMG</p>
 
-    <p>Timo Stockhausen<br />irgendwo Dresden</p>
+    <p>Timo Stockhausen</p>
 
     <p><span class="text-base">Vertreten durch:</span><br />Timo Stockhausen</p>
 
-    <p><span class="text-base">Kontakt: E-Mail:</span><br />stockhausen.timo@igd20.de</p>
+    <p>
+      <span class="text-base">Kontakt:</span><br />
+      <a href="mailto:info@igd20.de"> Email: <span style="text-decoration: underline">info@igd20.de</span> </a>
+      <br />
+      <a style="text-decoration: underline" href="/contact">Kontakt-Formular</a>
+    </p>
 
     <h2 class="tc-main">Haftungsausschluss:</h2>
 
