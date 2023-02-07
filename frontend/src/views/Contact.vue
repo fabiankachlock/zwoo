@@ -46,7 +46,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <MaxWidthLayout>
+  <MaxWidthLayout size="small">
     <h1 class="text-4xl tc-main mt-5 mb-3">{{ t('contact.title') }}</h1>
     <p class="tc-main-secondary mb-5">{{ t('contact.info') }}</p>
     <FlatDialog>

@@ -48,7 +48,8 @@
     "logout": "Abmelden",
     "settings": "Einstellungen",
     "home": "Home",
-    "help": "Hilfe"
+    "help": "Hilfe",
+    "contact": "Kontakt"
   },
   "login": {
     "title": "Anmeldung",
@@ -429,7 +430,7 @@
   },
   "contact": {
     "title": "Kontakt",
-    "info": "xxx get in touch idk",
+    "info": "Setzen Sie sich mit uns in Verbindung!",
     "sender": "Name",
     "namePlaceholder": "Dein Name",
     "message": "Nachricht",

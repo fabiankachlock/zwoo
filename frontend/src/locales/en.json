@@ -48,7 +48,8 @@
     "logout": "Logout",
     "settings": "Settings",
     "home": "Home",
-    "help": "Help"
+    "help": "Help",
+    "contact": "Contact"
   },
   "login": {
     "title": "Login",
@@ -429,7 +430,7 @@
   },
   "contact": {
     "title": "Contact",
-    "info": "xxx get in touch idk",
+    "info": "Get in touch!",
     "sender": "Name",
     "namePlaceholder": "Your name",
     "message": "Message",

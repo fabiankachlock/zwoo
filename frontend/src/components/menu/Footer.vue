@@ -5,14 +5,17 @@
         <Icon icon="mi:home" class="text-xl tc-main hover:scale-110 transition-transform" />
       </router-link>
       <div class="flex py-1">
-        <span class="footer-item">© IGD20 {{ year }}</span>
+        <!-- <span class="footer-item">© {{ year }}</span> -->
         <router-link to="/imprint" class="footer-item">{{ t('nav.imprint') }}</router-link>
-        <router-link to="/privacy" class="footer-item">{{ t('nav.privacy') }}</router-link>
+        <router-link to="/contact" class="footer-item">{{ t('nav.contact') }}</router-link>
+        <!-- <router-link to="/privacy" class="footer-item">{{ t('nav.privacy') }}</router-link> -->
       </div>
-      <button class="help flex items-center">
+      <!-- TODO: implement
+        <button class="help flex items-center">
         <Icon icon="material-symbols:help-outline-rounded" class="text-xl tc-main mr-1 transition-transform" />
         <span class="tc-main"> {{ t('nav.help') }} </span>
-      </button>
+      </button> -->
+      <div></div>
     </div>
   </footer>
 </template>
@@ -23,7 +26,7 @@ import { useI18n } from 'vue-i18n';
 import { Icon } from '@/components/misc/Icon';
 
 const { t } = useI18n();
-const year = new Date().getFullYear();
+// const year = new Date().getFullYear();
 </script>
 
 <style lang="css" scoped>

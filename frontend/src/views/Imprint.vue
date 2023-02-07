@@ -6,7 +6,7 @@
 
     <p>Timo Stockhausen</p>
 
-    <p><span class="text-base">Vertreten durch:</span><br />Timo Stockhausen</p>
+    <!-- <p><span class="text-base">Vertreten durch:</span><br />Timo Stockhausen</p> -->
 
     <p>
       <span class="text-base">Kontakt:</span><br />
