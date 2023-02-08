@@ -30,10 +30,10 @@ export class AccountService {
     return response;
   };
 
-  static requestPasswordReset = async (email: string): Promise<FetchResponse<undefined>> => {
+  static requestPasswordReset = async (email: string, lng: string | null = null): Promise<FetchResponse<undefined>> => {
     Logger.Api.log('performing request password reset action');
 
-    const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.RequestPasswordReset), {
+    const response = await WrappedFetch<undefined>(Backend.getUrlWithQuery(Endpoint.RequestPasswordReset, { lng: lng }), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
