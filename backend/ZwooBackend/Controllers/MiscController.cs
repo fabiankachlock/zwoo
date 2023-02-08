@@ -1,6 +1,8 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using ZwooBackend.Controllers.DTO;
+using ZwooBackend.Services;
 using static ZwooBackend.Globals;
 
 namespace ZwooBackend.Controllers;
@@ -10,6 +12,13 @@ namespace ZwooBackend.Controllers;
 [Route("")]
 public class MiscController : Controller
 {
+    private IEmailService _emailService;
+
+    public MiscController(IEmailService emailService)
+    {
+        _emailService = emailService;
+    }
+
     [HttpGet("version")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetVersion()
@@ -31,4 +40,12 @@ public class MiscController : Controller
     [HttpGet("versionHistory")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetChangelogs() => Ok($"{{ \"versions\": {JsonSerializer.Serialize(ZwooDatabase.GetChangelogs().Select(c => c.ChangelogVersion))} }}");
+
+    [HttpPost("contactForm")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    public IActionResult SubmitContactForm([FromBody] ContactForm body)
+    {
+        _emailService.SendContactFormEmail(_emailService.CreateRecipient(Globals.SmtpHostEmail, Globals.SmtpUsername, LanguageCode.English), body.Sender, body.Message);
+        return Ok("sent!");
+    }
 }
