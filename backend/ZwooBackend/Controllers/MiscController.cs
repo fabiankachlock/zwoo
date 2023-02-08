@@ -45,7 +45,7 @@ public class MiscController : Controller
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult SubmitContactForm([FromBody] ContactForm body)
     {
-        _emailService.SendContactFormEmail(_emailService.CreateRecipient(Globals.SmtpHostEmail, Globals.SmtpUsername, LanguageCode.English), body.Sender, body.Message);
+        _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), body.Sender, body.Message);
         return Ok("sent!");
     }
 }

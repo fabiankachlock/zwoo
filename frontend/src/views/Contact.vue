@@ -10,6 +10,7 @@ import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
 import { BackendErrorType, getBackendErrorTranslation } from '@/core/services/api/Errors';
+import { MiscApiService } from '@/core/services/api/Misc';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
@@ -29,12 +30,12 @@ onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
-const submitForm = () => {
+const submitForm = async () => {
   error.value = [];
   isLoading.value = true;
 
   try {
-    // do http request
+    await MiscApiService.submitContactForm(senderName.value, message.value);
   } catch (e: unknown) {
     reCaptchaResponse.value = undefined;
     setTimeout(() => {
