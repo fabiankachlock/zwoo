@@ -9,7 +9,7 @@ import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
 import { RecaptchaValidator } from '../services/validator/recaptcha';
 import { UsernameValidator } from '../services/validator/username';
-import { useConfig } from './config';
+import { useConfig, ZwooConfigKey } from './config';
 
 export const useAuth = defineStore('auth', {
   state: () => {
@@ -82,7 +82,7 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performCreateAccount(username, email, password, beta);
+      const status = await AuthenticationService.performCreateAccount(username, email, password, beta, useConfig().get(ZwooConfigKey.Language));
 
       if (status.isLoggedIn) {
         this.$patch({
@@ -134,7 +134,7 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const response = await AccountService.requestPasswordReset(email);
+      const response = await AccountService.requestPasswordReset(email, useConfig().get(ZwooConfigKey.Language));
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);

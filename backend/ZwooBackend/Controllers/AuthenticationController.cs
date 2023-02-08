@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
+using ZwooBackend.Services;
 
 namespace ZwooBackend.Controllers;
 
@@ -16,6 +17,15 @@ namespace ZwooBackend.Controllers;
 [Route("auth")]
 public class AuthenticationController : Controller
 {
+    private readonly IEmailService _emailService;
+    private readonly ILanguageService _languageService;
+
+    public AuthenticationController(IEmailService emailService, ILanguageService languageService)
+    {
+        _emailService = emailService;
+        _languageService = languageService;
+    }
+
     [HttpPost("recaptcha")]
     [Consumes(MediaTypeNames.Text.Plain)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
@@ -59,8 +69,8 @@ public class AuthenticationController : Controller
                     "Invalid or Missing Beta-code!"));
 
         var data = Globals.ZwooDatabase.CreateUser(body.username, body.email, body.password, body.code);
-
-        Globals.EmailQueue.Enqueue(new EmailData(data.Item1, data.Item2, data.Item3, data.Item4));
+        var recipient = _emailService.CreateRecipient(body.email, body.username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
+        _emailService.SendVerifyMail(recipient, data.Item2, data.Item3);
         return Ok("{\"message\": \"Account create\"}");
     }
 
@@ -169,7 +179,8 @@ public class AuthenticationController : Controller
         u.ValidationCode = StringHelper.GenerateNDigitString(6);
         Globals.ZwooDatabase.UpdateUser(u);
 
-        Globals.EmailQueue.Enqueue(new EmailData(u.Username, u.Id, u.ValidationCode, u.Email));
+        var recipient = _emailService.CreateRecipient(u.Email, u.Username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
+        _emailService.SendVerifyMail(recipient, u.Id, u.ValidationCode);
         return Ok("Email resend!");
     }
 }
