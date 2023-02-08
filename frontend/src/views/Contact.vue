@@ -25,6 +25,7 @@ const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
   () => !isLoading.value && reCaptchaValidator.validate(reCaptchaResponse.value).isValid && message.value?.trim() && senderName.value?.trim()
 );
+const wasSend = ref(false);
 
 onMounted(() => {
   useCookies().loadRecaptcha();
@@ -36,6 +37,7 @@ const submitForm = async () => {
 
   try {
     await MiscApiService.submitContactForm(senderName.value, message.value);
+    wasSend.value = true;
   } catch (e: unknown) {
     reCaptchaResponse.value = undefined;
     setTimeout(() => {
@@ -49,8 +51,9 @@ const submitForm = async () => {
 <template>
   <MaxWidthLayout size="small">
     <h1 class="text-4xl tc-main mt-5 mb-3">{{ t('contact.title') }}</h1>
-    <p class="tc-main-secondary mb-5">{{ t('contact.info') }}</p>
-    <FlatDialog>
+    <p v-if="!wasSend" class="tc-main-secondary mb-5">{{ t('contact.info') }}</p>
+    <p v-else class="tc-main-secondary mb-5">{{ t('contact.thanks') }}</p>
+    <FlatDialog v-if="!wasSend">
       <Form>
         <TextInput id="sender" labelKey="contact.sender" v-model="senderName" :placeholder="t('contact.namePlaceholder')"></TextInput>
         <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>

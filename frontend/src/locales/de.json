@@ -435,6 +435,7 @@
     "namePlaceholder": "Dein Name",
     "message": "Nachricht",
     "messagePlaceholder": "Deine Nachricht",
-    "send": "Absenden!"
+    "send": "Absenden!",
+    "thanks": "Deine Anfrage wurde erfolgreich versendet!"
   }
 }

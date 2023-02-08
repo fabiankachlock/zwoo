@@ -435,6 +435,7 @@
     "namePlaceholder": "Your name",
     "message": "Message",
     "messagePlaceholder": "Your message",
-    "send": "Send!"
+    "send": "Send!",
+    "thanks": "Your request was sent successfully!"
   }
 }
