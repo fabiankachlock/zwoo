@@ -193,7 +193,7 @@ public class Database
         var u = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
         if (u == null)
             return false;
-        if (user.Sid.Contains(cookieData[1]))
+        if (u.Sid.Contains(cookieData[1]))
         {
             user = u;
             sid = cookieData[1];
