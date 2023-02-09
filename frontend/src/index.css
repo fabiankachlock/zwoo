@@ -125,6 +125,7 @@ html {
 .grecaptcha-badge {
 	visibility: hidden;
 	display: none;
+	bottom: 3rem !important;
 }
 
 .grecaptcha-badge.visible {

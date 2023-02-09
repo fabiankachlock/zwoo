@@ -1,3 +1,4 @@
+using System;
 using System.Net.Mail;
 using System.Net;
 using System.Collections.Concurrent;
@@ -31,6 +32,14 @@ public interface IEmailService
     /// <param name="userId">the recipients user id</param>
     /// <param name="code">the recipients verification code</param>
     public void SendVerifyMail(IRecipient recipient, ulong userId, string code);
+
+    /// <summary>
+    /// send an email trigger by a contact form submit
+    /// </summary>
+    /// <param name="recipient">the recipient</param>
+    /// <param name="sender">the specified sender</param>
+    /// <param name="message">the specified message</param>
+    public void SendContactFormEmail(IRecipient recipient, string sender, string message);
 
     /// <summary>
     /// create a recipient object
@@ -86,6 +95,17 @@ public class EmailService : IHostedService, IEmailService
     public void SendVerifyMail(IRecipient recipient, ulong userId, string code)
     {
         MailMessage mail = EmailData.VerifyEmail(_languageService.CodeToString(recipient.PreferredLanguage), recipient.Username, $"{userId}", code);
+        mail.From = new MailAddress(Globals.SmtpHostEmail);
+        mail.To.Add(new MailAddress(recipient.Email));
+        _emailQueue.Enqueue(mail);
+        TryStartWork();
+    }
+
+    public void SendContactFormEmail(IRecipient recipient, string sender, string message)
+    {
+        MailMessage mail = new MailMessage();
+        mail.Subject = $"ContactForm Submit from: {sender}";
+        mail.Body = $"From: '{sender}'\nMessage:\n{message}\n\nSend At: {DateTime.Now}";
         mail.From = new MailAddress(Globals.SmtpHostEmail);
         mail.To.Add(new MailAddress(recipient.Email));
         _emailQueue.Enqueue(mail);

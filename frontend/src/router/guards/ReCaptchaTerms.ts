@@ -29,7 +29,7 @@ export class ReCaptchaTermsVisibilityManager {
 }
 
 export class ReCaptchaTermsRouteInterceptor implements RouterInterceptor {
-  static VisibleRouts = ['/login', '/create-account', '/request-password-reset', '/reset-password'];
+  static VisibleRouts = ['/login', '/create-account', '/request-password-reset', '/reset-password', '/contact'];
 
   static matchesRoute = (route: string): boolean => {
     for (const r of ReCaptchaTermsRouteInterceptor.VisibleRouts) {

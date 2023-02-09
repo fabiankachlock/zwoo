@@ -36,18 +36,18 @@
           </li>
         </ul>
       </div>
-      <div class="grid grid-cols-2 gap-2 mt-4">
+      <div class="grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-2 mt-4">
         <button
           class="flex justify-center items-center bg-light border-2 border-transparent px-4 py-1 rounded transition hover:bg-main cursor-pointer select-none"
-          @click="acceptSelection"
+          @click="rejectAll"
         >
-          <p class="tc-main-secondary text-center">{{ t('cookies.acceptSelection') }}</p>
+          <p class="tc-main-secondary text-center">{{ t('cookies.rejectAll') }}</p>
         </button>
         <button
-          class="flex justify-center items-center bg-main border-2 border-primary px-4 py-1 rounded transition hover:bg-dark cursor-pointer select-none"
-          @click="acceptAll"
+          class="flex justify-center items-center bg-main border-2 border-primary px-4 py-1 rounded transition hover:bg-main cursor-pointer select-none"
+          @click="acceptSelection"
         >
-          <p class="tc-primary text-center">{{ t('cookies.acceptAll') }}</p>
+          <p class="tc-primary text-center">{{ t('cookies.acceptSelection') }}</p>
         </button>
       </div>
     </div>
@@ -77,8 +77,8 @@ const acceptSelection = () => {
   cookies.didShowDialog();
 };
 
-const acceptAll = () => {
-  cookies.acceptAll();
+const rejectAll = () => {
+  cookies.rejectAll();
   cookies.didShowDialog();
 };
 </script>
