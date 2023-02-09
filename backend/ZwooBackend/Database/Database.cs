@@ -37,7 +37,7 @@ public class Database
     {
         _client = new MongoClient(ConnectionString);
         DatabaseLogger.Info($"trying to connect to db ({ConnectionString})");
-        _database = _client.GetDatabase("zwoo");
+        _database = _client.GetDatabase(DatabaseName);
 
         if (_database == null)
         {

@@ -32,6 +32,7 @@ public static class Globals
         ZwooCookieDomain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? ZwooDomain;
 
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
+        ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
         SmtpHostUrl = ReturnIfValidEnvVar("SMTP_HOST_URL");
         if (!int.TryParse(ReturnIfValidEnvVar("SMTP_HOST_PORT").Trim(), out SmtpHostPort))
         {
@@ -103,6 +104,7 @@ public static class Globals
     public static readonly string ZwooCookieDomain;
 
     public static readonly string ConnectionString;
+    public static readonly string DatabaseName;
     public static readonly string SmtpHostUrl;
     public static readonly int SmtpHostPort;
     public static readonly string SmtpHostEmail;

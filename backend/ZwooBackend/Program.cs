@@ -49,7 +49,7 @@ builder.Services.Configure<MongoMigrationSettings>(options =>
 builder.Services.AddMigration(new MongoMigrationSettings
 {
     ConnectionString = Globals.ConnectionString,
-    Database = "zwoo",
+    Database = Globals.DatabaseName,
     DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
 }
 );
