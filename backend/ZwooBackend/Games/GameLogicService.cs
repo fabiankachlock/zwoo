@@ -1,4 +1,5 @@
 ﻿using ZwooBackend.Websockets;
+using ZwooDatabaseClasses;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic;
 
@@ -49,7 +50,17 @@ public class GameLogicService : IGameLogicService
             {
                 uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
             }
-            Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta);
+
+            List<PlayerScore> scores = new();
+            foreach (KeyValuePair<long, int> score in data.Scores)
+            {
+                var player = room.GetPlayer(score.Key);
+                if (player != null)
+                {
+                    scores.Add(new PlayerScore(player.Username, score.Value, player.Role == ZRPRole.Bot));
+                }
+            }
+            Globals.ZwooDatabase.SaveGame(scores, gameMeta);
         };
         return room;
     }

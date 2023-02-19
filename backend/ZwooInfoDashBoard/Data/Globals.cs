@@ -16,6 +16,8 @@ public static class Globals
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
         DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
         LogrushDashboardUrl = Environment.GetEnvironmentVariable("LOGRUSH_DASHBOARD") ?? "";
+
+        Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
         ZwooDatabase = new Database();
     }
 
@@ -23,4 +25,5 @@ public static class Globals
     public static string DatabaseName;
     public static string LogrushDashboardUrl;
     public static Database ZwooDatabase { set; get; }
+    public static readonly string Version = "1.0.0-beta.8";
 }
