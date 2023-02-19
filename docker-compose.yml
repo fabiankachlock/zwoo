@@ -23,6 +23,7 @@ services:
       - SMTP_PASSWORD="###"
       # Database Settings
       - ZWOO_DATABASE_CONNECTION_STRING="###"
+      - ZWOO_DATABASE_NAME="###"
       # Backend Config
       - ZWOO_RECAPTCHA_SIDESECRET="###"
       # SSL Settings

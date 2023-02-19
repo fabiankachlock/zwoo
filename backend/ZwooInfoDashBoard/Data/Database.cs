@@ -12,7 +12,7 @@ public class Database
         var client = new MongoClient(Globals.ConnectionString);
         Console.WriteLine($"connected to {Globals.ConnectionString}");
 
-        _database = client.GetDatabase("zwoo");
+        _database = client.GetDatabase(Globals.DatabaseName);
 
         if (_database == null)
         {
@@ -27,7 +27,7 @@ public class Database
         _accountEventsCollection = _database.GetCollection<AccountEvent>("account_events");
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
-        
+
 
     }
     public IQueryable<GameInfo> GetPlayedGamesAsQueryable() => _gameInfoCollection.AsQueryable();
@@ -36,8 +36,8 @@ public class Database
     public IQueryable<Changelog> GetChangelogs() => _changelogCollection.AsQueryable();
     public IQueryable<AccountEvent> GetAccountEventsAsQueryable() => _accountEventsCollection.AsQueryable();
     public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerID == id);
-    public void UpdateUser(User user) => _userCollection.ReplaceOne(x=> x.Id == user.Id, user);
-    public void UpdateChangelog(Changelog changelog) => _changelogCollection.ReplaceOne(x=> x.Id == changelog.Id, changelog);
+    public void UpdateUser(User user) => _userCollection.ReplaceOne(x => x.Id == user.Id, user);
+    public void UpdateChangelog(Changelog changelog) => _changelogCollection.ReplaceOne(x => x.Id == changelog.Id, changelog);
     public User GetUser(ulong id) => _userCollection.Find(x => x.Id == id).First();
     public User GenerateUser()
     {
@@ -51,7 +51,7 @@ public class Database
     public void InsertBetacode(BetaCode code) => _betacodesCollection.InsertOne(code);
     public Changelog InsertVersion(Changelog changelog)
     {
-        if (_changelogCollection.AsQueryable().FirstOrDefault(x => x.ChangelogVersion == changelog.ChangelogVersion) == null )
+        if (_changelogCollection.AsQueryable().FirstOrDefault(x => x.ChangelogVersion == changelog.ChangelogVersion) == null)
             _changelogCollection.InsertOne(changelog);
         return _changelogCollection.AsQueryable().First(x => x.ChangelogVersion == changelog.ChangelogVersion);
     }
