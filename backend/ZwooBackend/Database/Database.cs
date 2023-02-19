@@ -314,19 +314,8 @@ public class Database
     public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == version && c.Public);
     public Changelog[] GetChangelogs() => _changelogCollection.AsQueryable().Where(x => x.Public).ToArray();
 
-    public void SaveGame(List<PlayerScore> scores, GameMeta meta)
-    {
-        try
-        {
-            var info = new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds());
-            _gameInfoCollection.InsertOne(info);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-        Console.WriteLine("saved");
-    }
+    public void SaveGame(List<PlayerScore> scores, GameMeta meta) =>
+        _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
 
     private void CreateAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("create", puid, success,

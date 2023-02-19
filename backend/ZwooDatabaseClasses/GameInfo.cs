@@ -9,6 +9,7 @@ namespace ZwooDatabaseClasses;
 
 [RuntimeVersion("1.0.0-beta.8")]
 [StartUpVersion("1.0.0-beta.8")]
+[CollectionLocation("game_info", "zwoo")]
 public class GameInfo : IDocument
 {
     public GameInfo() { }
@@ -56,7 +57,7 @@ public class GameInfo : IDocument
     public DocumentVersion Version { get; set; }
 }
 
-public class PlayerScore : IDocument
+public class PlayerScore
 {
     public PlayerScore() { }
 
@@ -76,9 +77,4 @@ public class PlayerScore : IDocument
 
     [BsonElement("is_bot")]
     public bool IsBot { set; get; } = false;
-
-    [JsonIgnore]
-    [BsonElement("version")]
-    [BsonSerializer(typeof(DocumentVersionSerializer))]
-    public DocumentVersion Version { get; set; }
 }

@@ -12,11 +12,17 @@ public class Beta1008PlayerScore : DocumentMigration<GameInfo>
 
     public override void Up(BsonDocument document)
     {
-        document.Add("is_bot", false);
+        foreach (BsonDocument doc in (BsonArray)document["scores"])
+        {
+            doc.Add("is_bot", false);
+        }
     }
 
     public override void Down(BsonDocument document)
     {
-        document.Remove("is_bot");
+        foreach (BsonDocument doc in (BsonArray)document["scores"])
+        {
+            doc.Remove("is_bot");
+        }
     }
 }

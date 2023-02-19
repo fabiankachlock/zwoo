@@ -53,8 +53,9 @@ public static class Globals
         var versionOverride = Environment.GetEnvironmentVariable("ZWOO_VERSION_OVERRIDE");
         if (versionOverride != null && versionOverride != "")
         {
-            ApiVersion = "1.0.0-beta.7";
+            ApiVersion = versionOverride;
         }
+        ApiVersion = "1.0.0-beta.7";
 
         Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
         hierarchy.Root.Level = Level.Debug;
