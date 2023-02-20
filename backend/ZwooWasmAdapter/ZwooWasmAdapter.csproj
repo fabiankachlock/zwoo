@@ -3,7 +3,7 @@
     <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
   </ItemGroup>
   <PropertyGroup>
-    <TargetFramework>net7.0-browser-wasm</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
     <WasmMainJSPath>main.js</WasmMainJSPath>
