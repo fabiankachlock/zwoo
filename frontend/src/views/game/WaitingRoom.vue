@@ -20,9 +20,7 @@
         <PlayersWidget />
         <SpectatorsWidget />
         <RulesWidget />
-        <template v-if="isHost">
-          <BotsWidget />
-        </template>
+        <BotsWidget />
       </div>
       <div class="main-content hidden md:grid grid-cols-2 gap-2 mx-auto max-w-5xl">
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
@@ -32,9 +30,7 @@
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
           <ChatWidget />
           <RulesWidget />
-          <template v-if="isHost">
-            <BotsWidget />
-          </template>
+          <BotsWidget />
         </div>
       </div>
     </main>

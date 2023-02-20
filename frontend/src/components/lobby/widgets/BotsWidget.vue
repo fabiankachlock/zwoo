@@ -2,19 +2,21 @@
   <Widget v-model="isOpen" title="wait.bots" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <template #actions>
       <div class="flex flex-row">
-        <button @click="createBot()" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
-          <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="fluent:bot-add-20-regular" class="icon text-2xl"></Icon>
-          </div>
-        </button>
+        <template v-if="isHost">
+          <button @click="createBot()" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
+            <div class="transform transition-transform hover:scale-110 p-1">
+              <Icon icon="fluent:bot-add-20-regular" class="icon text-2xl"></Icon>
+            </div>
+          </button>
+        </template>
       </div>
     </template>
     <template #default>
       <div class="w-full flex flex-col">
-        <div v-if="Object.keys(bots).length === 0">
+        <div v-if="Object.keys(isHost ? realBots : fakeBots).length === 0">
           <p class="tc-main-dark italic">{{ t('wait.noBots') }}</p>
         </div>
-        <div v-if="botDialogOpen">
+        <div v-if="botDialogOpen && isHost">
           <FloatingDialog content-class="sm:max-w-lg">
             <div class="absolute top-2 right-2 z-10">
               <button @click="botDialogOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
@@ -42,7 +44,7 @@
           </FloatingDialog>
         </div>
         <div
-          v-for="bot of bots"
+          v-for="bot of isHost ? realBots : fakeBots"
           :key="bot.id"
           class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest"
         >
@@ -59,9 +61,11 @@
                 <Icon icon="carbon:settings" />
               </button>
             -->
-            <button v-tooltip="t('wait.kick')" @click="deleteBot(bot.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
-              <Icon icon="iconoir:delete-circled-outline" />
-            </button>
+            <template v-if="isHost">
+              <button v-tooltip="t('wait.kick')" @click="deleteBot(bot.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+                <Icon icon="iconoir:delete-circled-outline" />
+              </button>
+            </template>
           </div>
         </div>
       </div>
@@ -79,13 +83,18 @@ import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useBotManager } from '@/core/adapter/play/botManager';
+import { useLobbyStore } from '@/core/adapter/play/lobby';
+import { useIsHost } from '@/core/adapter/play/util/userRoles';
 
 import Widget from '../Widget.vue';
 
 const { t } = useI18n();
+const { isHost } = useIsHost();
 const isOpen = useUserDefaults('lobby:widgetBotsOpen', true);
 const botManager = useBotManager();
-const bots = computed(() => botManager.botConfigs);
+const lobby = useLobbyStore();
+const realBots = computed(() => botManager.botConfigs);
+const fakeBots = computed(() => lobby.bots.reduce((sum, bot) => ({ ...sum, [bot.id]: { id: bot.id, name: bot.username, config: {} } }), {}));
 const botDialogOpen = ref(false);
 const isBotUpdate = ref(false);
 const botName = ref('');
