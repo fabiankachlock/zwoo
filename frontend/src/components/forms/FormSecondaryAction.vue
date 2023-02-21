@@ -1,19 +1,14 @@
 <template>
-  <button
+  <div
     class="block text-xs tc-main-secondary mt-1 mb-2 tc-main-dark transition cursor-pointer hover:bg-light w-[80%] rounded-full py-1"
-    :href="link"
     @click="emit('click')"
   >
     <slot></slot>
-  </button>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue';
-
-defineProps<{
-  link?: string;
-}>();
+import { defineEmits } from 'vue';
 
 const emit = defineEmits<{
   (event: 'click'): void;
