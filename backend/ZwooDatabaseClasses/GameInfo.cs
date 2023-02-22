@@ -9,7 +9,7 @@ namespace ZwooDatabaseClasses;
 
 [RuntimeVersion("1.0.0-beta.8")]
 [StartUpVersion("1.0.0-beta.8")]
-[CollectionLocation("game_info", "zwoo")]
+[CollectionLocation("game_info")]
 public class GameInfo : IDocument
 {
     public GameInfo() { }

@@ -60,15 +60,8 @@ public class GameLogicService : IGameLogicService
                     scores.Add(new PlayerScore(player.Username, score.Value, player.Role == ZRPRole.Bot));
                 }
             }
-            try
-            {
-                Globals.ZwooDatabase.SaveGame(scores, gameMeta);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-                Console.WriteLine(e);
-            }
+
+            Globals.ZwooDatabase.SaveGame(scores, gameMeta);
         };
         return room;
     }

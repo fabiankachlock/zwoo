@@ -9,7 +9,7 @@ namespace ZwooDatabaseClasses;
 
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]
-[CollectionLocation("users", "zwoo")]
+[CollectionLocation("users")]
 public class User : IDocument
 {
     public User() { }
