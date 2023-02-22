@@ -11,14 +11,15 @@ export class OfflineGuard implements RouterInterceptor {
     const isOffline = useRootApp().environment === 'offline';
     if (isOffline) {
       this.Logger.log('enforcing offline mode');
-      if (to.fullPath !== '/offline') {
-        next('/offline');
+      if (to.meta['onlineOnly']) {
+        if (to.meta['offlineRedirect']) {
+          next(to.meta['offlineRedirect']);
+        } else {
+          next('/offline');
+        }
       } else {
         next();
       }
-      return true;
-    } else if (!isOffline && to.fullPath === '/offline') {
-      next('/');
       return true;
     } else {
       return false;
