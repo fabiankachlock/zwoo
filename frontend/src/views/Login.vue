@@ -18,10 +18,12 @@
           </button>
         </div>
         <FormSecondaryAction>
-          <router-link :to="'/request-password-reset?' + joinQuery(route.query)">{{ t('login.resetPassword') }}</router-link>
+          <router-link class="w-full block text-center" :to="'/request-password-reset?' + joinQuery(route.query)">{{
+            t('login.resetPassword')
+          }}</router-link>
         </FormSecondaryAction>
         <FormAlternativeAction>
-          <router-link :to="'/create-account?' + joinQuery(route.query)">{{ t('nav.createAccount') }}</router-link>
+          <router-link class="w-full block text-center" :to="'/create-account?' + joinQuery(route.query)">{{ t('nav.createAccount') }}</router-link>
         </FormAlternativeAction>
       </FormActions>
     </Form>
