@@ -18,7 +18,7 @@ export const useRootApp = defineStore('app', {
   state: () => {
     return {
       // global app state
-      isOffline: false,
+      environment: 'online' as 'offline' | 'online',
       // versions
       serverVersion: new Awaiter() as string | Awaiter<string>,
       clientVersion: AppConfig.Version,
@@ -40,7 +40,7 @@ export const useRootApp = defineStore('app', {
       const [version, err] = unwrapBackendError(response);
       if (err && AppConfig.UseBackend) {
         // enable offline mode
-        this.isOffline = true;
+        this.environment = 'offline';
         console.warn('### zwoo entered offline mode');
         RouterService.getRouter().push('/offline');
       } else if (version !== AppConfig.Version) {
