@@ -54,6 +54,8 @@ export const useRootApp = defineStore('app', {
           this.serverVersion.callback(response);
           this.serverVersion = response;
         }
+      } else {
+        this.serverVersion = AppConfig.Version;
       }
 
       MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);

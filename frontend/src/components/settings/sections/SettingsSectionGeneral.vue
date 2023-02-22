@@ -23,12 +23,14 @@
     <SettingsRow :title="t('settings.cardTheme')" :settings-key="ZwooConfigKey.CardsTheme">
       <SelectTheme />
     </SettingsRow>
-    <SettingsRow :title="t('settings.cookies')">
-      <ManageCookies />
-    </SettingsRow>
-    <SettingsRow :title="t('settings.versionHistory')">
-      <VersionHistory />
-    </SettingsRow>
+    <Environment show="online">
+      <SettingsRow :title="t('settings.cookies')">
+        <ManageCookies />
+      </SettingsRow>
+      <SettingsRow :title="t('settings.versionHistory')">
+        <VersionHistory />
+      </SettingsRow>
+    </Environment>
   </SettingsSection>
 </template>
 
@@ -36,6 +38,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import Environment from '@/components/misc/Environment.vue';
 import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import LanguageSelection from '@/components/settings/LanguageSelection.vue';

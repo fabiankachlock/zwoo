@@ -7,7 +7,9 @@
       <div class="flex py-1">
         <!-- <span class="footer-item">© {{ year }}</span> -->
         <router-link to="/imprint" class="footer-item">{{ t('nav.imprint') }}</router-link>
-        <router-link to="/contact" class="footer-item">{{ t('nav.contact') }}</router-link>
+        <Environment show="online">
+          <router-link to="/contact" class="footer-item">{{ t('nav.contact') }}</router-link>
+        </Environment>
         <!-- <router-link to="/privacy" class="footer-item">{{ t('nav.privacy') }}</router-link> -->
       </div>
       <!-- TODO: implement
@@ -24,6 +26,8 @@
 import { useI18n } from 'vue-i18n';
 
 import { Icon } from '@/components/misc/Icon';
+
+import Environment from '../misc/Environment.vue';
 
 const { t } = useI18n();
 // const year = new Date().getFullYear();
