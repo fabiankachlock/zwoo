@@ -7,12 +7,14 @@ namespace ZwooInfoDashBoard.Data;
 
 public class Database
 {
+    public readonly IMongoClient _client;
+
     public Database()
     {
-        var client = new MongoClient(Globals.ConnectionString);
+        _client = new MongoClient(Globals.ConnectionString);
         Console.WriteLine($"connected to {Globals.ConnectionString}");
 
-        _database = client.GetDatabase(Globals.DatabaseName);
+        _database = _client.GetDatabase(Globals.DatabaseName);
 
         if (_database == null)
         {

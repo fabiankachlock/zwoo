@@ -117,6 +117,7 @@ public sealed class GameStateManager
         _gameState = new GameState();
         _cardPile = new Pile();
         _playerCycle = new PlayerCycle(new List<long>());
+        _actionsQueue = new AsyncExecutionQueue();
     }
 
     private void HandlePlayerLeave(long id)

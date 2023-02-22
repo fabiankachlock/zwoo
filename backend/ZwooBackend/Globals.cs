@@ -55,6 +55,7 @@ public static class Globals
         {
             ApiVersion = versionOverride;
         }
+        ApiVersion = "1.0.0-beta.7";
 
         Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
         hierarchy.Root.Level = Level.Debug;
@@ -120,6 +121,6 @@ public static class Globals
 
     public static readonly string RecaptchaSideSecret;
 
-    public static readonly string Version = "1.0.0-beta.7";
+    public static readonly string Version = "1.0.0-beta.8";
     public static readonly string ApiVersion = Version;
 }

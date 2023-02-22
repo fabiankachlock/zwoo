@@ -107,9 +107,9 @@ public sealed class Game
 
     public void HandleEvent(ClientEvent clientEvent)
     {
-        _logger.Info($"received event: {clientEvent.Type}");
         if (IsRunning)
         {
+            _logger.Info($"received event: {clientEvent.Type}");
             _stateManager.HandleEvent(clientEvent);
         }
     }
