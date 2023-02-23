@@ -23,15 +23,16 @@
 import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { ReCaptchaResponse, ReCaptchaService } from '@/core/api/restapi/Captcha';
+import { CaptchaResponse } from '@/core/api/entities/Captcha';
+import { ReCaptchaService } from '@/core/api/restapi/Captcha';
 import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
 
 const props = defineProps<{
-  response?: ReCaptchaResponse;
+  response?: CaptchaResponse;
 }>();
 
 const emit = defineEmits<{
-  (event: 'responseChanged', response: ReCaptchaResponse): void;
+  (event: 'responseChanged', response: CaptchaResponse): void;
 }>();
 
 const { t } = useI18n();

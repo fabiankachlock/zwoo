@@ -33,7 +33,7 @@ import { Icon } from '@/components/misc/Icon';
 import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
-import { ReCaptchaResponse } from '@/core/api/restapi/Captcha';
+import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { joinQuery } from '@/core/helper/utils';
 import { EmailValidator } from '@/core/services/validator/email';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
@@ -52,7 +52,7 @@ const reCaptchaValidator = new RecaptchaValidator();
 const emailValidator = new EmailValidator();
 
 const email = ref('');
-const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
+const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
 const isLoading = ref<boolean>(false);

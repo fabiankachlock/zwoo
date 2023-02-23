@@ -2,13 +2,9 @@ import { AppConfig } from '@/config';
 import { useRuntimeConfig } from '@/core/runtimeConfig';
 import { ReCaptchaTermsVisibilityManager } from '@/router/guards/ReCaptchaTerms';
 
+import { BackendErrorAble, parseBackendError, unwrapBackendError } from '../ApiError';
+import { CaptchaResponse } from '../entities/Captcha';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble, parseBackendError, unwrapBackendError } from './Errors';
-
-export type ReCaptchaResponse = {
-  success: boolean;
-  score: number;
-};
 
 /**
  * The Captcha Service is the only API Service which is not offline safe.
@@ -40,7 +36,7 @@ export class ReCaptchaService {
     };
   };
 
-  private performCheck = async (): Promise<ReCaptchaResponse | undefined> => {
+  private performCheck = async (): Promise<CaptchaResponse | undefined> => {
     if (!AppConfig.UseBackend) {
       return Promise.resolve({
         success: true,
@@ -62,7 +58,7 @@ export class ReCaptchaService {
     });
   };
 
-  private verify = async (token: string): Promise<BackendErrorAble<ReCaptchaResponse>> => {
+  private verify = async (token: string): Promise<BackendErrorAble<CaptchaResponse>> => {
     if (AppConfig.UseBackend) {
       const req = await fetch(Backend.getUrl(Endpoint.Recaptcha), {
         method: 'POST',
@@ -75,7 +71,7 @@ export class ReCaptchaService {
         };
       }
 
-      const response = (await req.json()) as ReCaptchaResponse;
+      const response = (await req.json()) as CaptchaResponse;
       return {
         success: response.success,
         score: response.score

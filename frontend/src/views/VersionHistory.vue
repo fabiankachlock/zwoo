@@ -60,8 +60,8 @@ import { useI18n } from 'vue-i18n';
 
 import Changelog from '@/components/misc/changelog/Changelog.vue';
 import { Icon } from '@/components/misc/Icon';
+import { unwrapBackendError } from '@/core/api/ApiError';
 import { ConfigService } from '@/core/api/restapi/Config';
-import { unwrapBackendError } from '@/core/api/restapi/Errors';
 
 const { t } = useI18n();
 const versions = ref<string[] | undefined>([]);

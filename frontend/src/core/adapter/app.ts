@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@/config';
+import { unwrapBackendError } from '@/core/api/ApiError';
 import { ConfigService } from '@/core/api/restapi/Config';
-import { unwrapBackendError } from '@/core/api/restapi/Errors';
 import { RouterService } from '@/core/global/Router';
 import { Awaiter } from '@/core/helper/Awaiter';
 

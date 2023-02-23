@@ -1,8 +1,10 @@
+// eslint-disable-next-line simple-import-sort/imports
 import { AppConfig } from '@/config';
 import { Logger } from '@/core/services/logging/logImport';
+import { FetchResponse } from '../ApiEntities';
 
 import { Backend, Endpoint } from './ApiConfig';
-import { FetchResponse, WrappedFetch } from './FetchWrapper';
+import { WrappedFetch } from './FetchWrapper';
 
 export class AccountService {
   static performChangePassword = async (oldPassword: string, newPassword: string): Promise<FetchResponse<undefined>> => {

@@ -2,24 +2,10 @@ import { AppConfig } from '@/config';
 import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import Logger from '@/core/services/logging/logImport';
 
+import { BackendErrorAble } from '../ApiError';
+import { GameJoinResponse, GameMeta, GamesList } from '../entities/Game';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble } from './Errors';
 import { WrappedFetch } from './FetchWrapper';
-
-export type GameJoinResponse = BackendErrorAble<{
-  id: number;
-  isRunning: boolean;
-  role: ZRPRole;
-}>;
-
-export type GameMeta = {
-  id: number;
-  name: string;
-  isPublic: boolean;
-  playerCount: number;
-};
-
-export type GamesList = GameMeta[];
 
 export class GameManagementService {
   static createGame = async (name: string, isPublic: boolean, password: string): Promise<GameJoinResponse> => {

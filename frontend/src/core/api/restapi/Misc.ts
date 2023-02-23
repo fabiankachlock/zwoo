@@ -1,12 +1,12 @@
 import { AppConfig } from '@/config';
 import Logger from '@/core/services/logging/logImport';
 
+import { BackendErrorAble } from '../ApiError';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble } from './Errors';
 import { WrappedFetch } from './FetchWrapper';
 
 export class MiscApiService {
-  static async submitContactForm(sender: string, message: string): Promise<BackendErrorAble<string>> {
+  static submitContactForm = async (sender: string, message: string): Promise<BackendErrorAble<string>> => {
     Logger.Api.log(`submitting contact form`);
 
     const response = await WrappedFetch<string>(`${Backend.getUrl(Endpoint.ContactFormSubmission)}`, {
@@ -29,5 +29,5 @@ export class MiscApiService {
     }
 
     return response.data ?? '';
-  }
+  };
 }

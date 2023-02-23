@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 
+import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+
+import { CaptchaResponse } from '../api/entities/Captcha';
 import { AccountService } from '../api/restapi/Account';
 import { AuthenticationService } from '../api/restapi/Authentication';
-import { ReCaptchaResponse } from '../api/restapi/Captcha';
-import { getBackendErrorTranslation, unwrapBackendError } from '../api/restapi/Errors';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
@@ -22,7 +23,7 @@ export const useAuth = defineStore('auth', {
     };
   },
   actions: {
-    async login(email: string, password: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async login(email: string, password: string, recaptchaResponse: CaptchaResponse | undefined) {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
@@ -64,7 +65,7 @@ export const useAuth = defineStore('auth', {
       email: string,
       password: string,
       repeatPassword: string,
-      recaptchaResponse: ReCaptchaResponse | undefined,
+      recaptchaResponse: CaptchaResponse | undefined,
       beta: string
     ) {
       const usernameValid = new UsernameValidator().validate(username);
@@ -127,7 +128,7 @@ export const useAuth = defineStore('auth', {
         throw getBackendErrorTranslation(response.error);
       }
     },
-    async requestPasswordReset(email: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async requestPasswordReset(email: string, recaptchaResponse: CaptchaResponse | undefined) {
       const emailValid = new EmailValidator().validate(email);
       if (!emailValid.isValid) throw emailValid.getErrors();
 
@@ -140,7 +141,7 @@ export const useAuth = defineStore('auth', {
         throw getBackendErrorTranslation(response.error);
       }
     },
-    async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: CaptchaResponse | undefined) {
       const passwordValid = new PasswordValidator().validate(password);
       if (!passwordValid.isValid) throw passwordValid.getErrors();
 

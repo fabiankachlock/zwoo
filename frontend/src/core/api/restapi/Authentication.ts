@@ -1,26 +1,10 @@
 import { AppConfig } from '@/config';
 import { Logger } from '@/core/services/logging/logImport';
 
+import { BackendErrorAble } from '../ApiError';
+import { AuthenticationStatus, UserInfo } from '../entities/AuthenticationStatus';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble, WithBackendError } from './Errors';
 import { WrappedFetch } from './FetchWrapper';
-
-type UserInfo = {
-  username: string;
-  email: string;
-  wins: number;
-};
-
-export type AuthenticationStatus =
-  | {
-      username: string;
-      email: string;
-      isLoggedIn: true;
-      wins?: number;
-    }
-  | WithBackendError<{
-      isLoggedIn?: false;
-    }>;
 
 export class AuthenticationService {
   static getUserInfo = async (): Promise<AuthenticationStatus> => {

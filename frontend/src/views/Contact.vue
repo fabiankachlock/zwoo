@@ -8,8 +8,8 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import TextArea from '@/components/forms/TextArea.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
-import { ReCaptchaResponse } from '@/core/api/restapi/Captcha';
-import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/restapi/Errors';
+import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/ApiError';
+import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { MiscApiService } from '@/core/api/restapi/Misc';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
@@ -19,7 +19,7 @@ const reCaptchaValidator = new RecaptchaValidator();
 
 const senderName = ref('');
 const message = ref('');
-const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
+const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(

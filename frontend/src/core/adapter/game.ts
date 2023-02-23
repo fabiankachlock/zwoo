@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 
 import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
 import { Backend, Endpoint } from '@/core/api/restapi/ApiConfig';
-import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/restapi/Errors';
-import { GameManagementService, GameMeta, GamesList } from '@/core/api/restapi/GameManagement';
+import { GameManagementService } from '@/core/api/restapi/GameManagement';
 import { ZRPWebsocketAdapter } from '@/core/api/wsgame/MessageDistributer';
 import { ZRPMessageBuilder } from '@/core/domain/zrp/zrpBuilder';
 import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
@@ -13,6 +13,7 @@ import { RouterService } from '@/core/global/Router';
 import Logger from '@/core/services/logging/logImport';
 import { GameNameValidator } from '@/core/services/validator/gameName';
 
+import { GameMeta, GamesList } from '../api/entities/Game';
 import { useGameEvents } from './play/events';
 
 export type SavedGame = {

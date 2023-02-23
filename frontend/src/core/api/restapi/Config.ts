@@ -3,12 +3,12 @@ import semverRCompare from 'semver/functions/rcompare';
 import { AppConfig } from '@/config';
 import Logger from '@/core/services/logging/logImport';
 
+import { BackendErrorAble } from '../ApiError';
 import { Backend, Endpoint } from './ApiConfig';
-import { BackendErrorAble } from './Errors';
 import { WrappedFetch } from './FetchWrapper';
 
 export class ConfigService {
-  static async fetchVersion(): Promise<BackendErrorAble<string>> {
+  static fetchVersion = async (): Promise<BackendErrorAble<string>> => {
     Logger.Api.log(`fetching version`);
 
     const response = await WrappedFetch<string>(`${Backend.getUrl(Endpoint.Version)}?t=${Date.now()}`, {
@@ -27,9 +27,9 @@ export class ConfigService {
     }
 
     return response.data!;
-  }
+  };
 
-  static async fetchVersionHistory(): Promise<BackendErrorAble<string[]>> {
+  static fetchVersionHistory = async (): Promise<BackendErrorAble<string[]>> => {
     Logger.Api.log(`fetching version history`);
 
     const response = await WrappedFetch<{ versions: string[] }>(Backend.getUrl(Endpoint.VersionHistory), {
@@ -44,9 +44,9 @@ export class ConfigService {
       };
     }
     return (response.data?.versions ?? []).sort(semverRCompare);
-  }
+  };
 
-  static async fetchChangelog(version: string): Promise<BackendErrorAble<string>> {
+  static fetchChangelog = async (version: string): Promise<BackendErrorAble<string>> => {
     Logger.Api.log(`fetching changelog for ${version}`);
 
     const response = await WrappedFetch<string>(Backend.getDynamicUrl(Endpoint.Changelog, { version: version }), {
@@ -64,5 +64,5 @@ export class ConfigService {
       };
     }
     return response.data ?? `<h2><i>No changes in version ${version}</i></h2>`;
-  }
+  };
 }

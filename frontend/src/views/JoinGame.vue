@@ -60,7 +60,7 @@ import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useGameConfig } from '@/core/adapter/game';
-import { BackendError } from '@/core/api/restapi/Errors';
+import { BackendError } from '@/core/api/ApiError';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
