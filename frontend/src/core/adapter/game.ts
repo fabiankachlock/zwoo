@@ -2,17 +2,17 @@ import { defineStore } from 'pinia';
 
 import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { Backend, Endpoint } from '@/core/api/restapi/ApiConfig';
+import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/restapi/Errors';
+import { GameManagementService, GameMeta, GamesList } from '@/core/api/restapi/GameManagement';
+import { ZRPWebsocketAdapter } from '@/core/api/wsgame/MessageDistributer';
+import { ZRPMessageBuilder } from '@/core/domain/zrp/zrpBuilder';
+import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
+import { ZRPOPCode, ZRPPayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
+import { RouterService } from '@/core/global/Router';
+import Logger from '@/core/services/logging/logImport';
+import { GameNameValidator } from '@/core/services/validator/gameName';
 
-import { Backend, Endpoint } from '../services/api/ApiConfig';
-import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
-import { GameManagementService, GameMeta, GamesList } from '../services/api/GameManagement';
-import { RouterService } from '../services/global/Router';
-import Logger from '../services/logging/logImport';
-import { GameNameValidator } from '../services/validator/gameName';
-import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
-import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
-import { ZRPCoder } from '../services/zrp/zrpCoding';
-import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
 import { useGameEvents } from './play/events';
 
 export type SavedGame = {

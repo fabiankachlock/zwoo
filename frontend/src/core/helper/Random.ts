@@ -1,4 +1,4 @@
-import { Card, CardColor } from '@/core/services/game/CardTypes';
+import { Card, CardColor } from '@/core/domain/game/CardTypes';
 export const Random = {
   numberInRange(lowerBound: number, higherBound: number) {
     return Math.random() * (higherBound - lowerBound) + lowerBound;

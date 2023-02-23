@@ -57,7 +57,7 @@ import { useI18n } from 'vue-i18n';
 import ChatMessage from '@/components/game/chat/ChatMessage.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useChatBroadcast } from '@/core/adapter/play/features/chatBroadcast';
-import { ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import NonScrollableLayout from '@/layouts/NonScrollableLayout.vue';
 
 const chat = useChatBroadcast();

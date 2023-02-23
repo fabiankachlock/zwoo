@@ -4,9 +4,9 @@ import { computed, ref } from 'vue';
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
-import { RouterService } from '@/core/services/global/Router';
-import { arrayDiff } from '@/core/services/utils';
-import { ZRPAllLobbyPlayersPayload, ZRPIdPayload, ZRPNamePayload, ZRPOPCode, ZRPPlayerWithRolePayload, ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { ZRPAllLobbyPlayersPayload, ZRPIdPayload, ZRPNamePayload, ZRPOPCode, ZRPPlayerWithRolePayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
+import { RouterService } from '@/core/global/Router';
+import { arrayDiff } from '@/core/helper/utils';
 import { I18nInstance } from '@/i18n';
 
 import { useAuth } from '../auth';

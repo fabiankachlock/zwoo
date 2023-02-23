@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
 
+import { AppConfig } from '@//config';
+import { AccountService } from '@/core/api/restapi/Account';
+import { CardThemeIdentifier } from '@/core/domain/cards/CardThemeConfig';
+import { CardThemeManager } from '@/core/domain/cards/ThemeManager';
 import { Logger as _Logger } from '@/core/services/logging/logImport';
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
-
-import { AppConfig } from '../../config';
-import { AccountService } from '../services/api/Account';
-import { CardThemeIdentifier } from '../services/cards/CardThemeConfig';
-import { CardThemeManager } from '../services/cards/ThemeManager';
 
 const Logger = _Logger.createOne('config');
 const configKey = 'zwoo:config';

@@ -1,8 +1,9 @@
-import { AsyncMessageQueue } from '../helper/MessageQueue';
-import Logger from '../logging/logImport';
-import { ZRPCoder } from '../zrp/zrpCoding';
-import { BidirectionalMessageSource } from '../zrp/zrpInterfaces';
-import { ZRPMessage } from '../zrp/zrpTypes';
+import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
+import { BidirectionalMessageSource } from '@/core/domain/zrp/zrpInterfaces';
+import { ZRPMessage } from '@/core/domain/zrp/zrpTypes';
+import { AsyncMessageQueue } from '@/core/helper/MessageQueue';
+import Logger from '@/core/services/logging/logImport';
+
 import { GameWebsocket } from './Websocket';
 
 export class ZRPWebsocketAdapter implements BidirectionalMessageSource<ZRPMessage> {

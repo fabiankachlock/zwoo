@@ -42,10 +42,10 @@ import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
-import { AuthenticationService } from '@/core/services/api/Authentication';
-import { ReCaptchaResponse } from '@/core/services/api/Captcha';
-import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/services/api/Errors';
-import { joinQuery } from '@/core/services/utils';
+import { AuthenticationService } from '@/core/api/restapi/Authentication';
+import { ReCaptchaResponse } from '@/core/api/restapi/Captcha';
+import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/api/restapi/Errors';
+import { joinQuery } from '@/core/helper/utils';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import FormLayout from '@/layouts/FormLayout.vue';
 

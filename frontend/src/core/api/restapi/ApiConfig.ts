@@ -3,8 +3,7 @@
 import { LocationQuery } from 'vue-router';
 
 import { AppConfig } from '@/config';
-
-import { joinQuery } from '../utils';
+import { joinQuery } from '@/core/helper/utils';
 
 type ExtractRouteParams<str extends string> = str extends ''
   ? {}

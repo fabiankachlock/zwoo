@@ -1,6 +1,6 @@
-import Logger from '../logging/logImport';
-import { ZRPCoder } from '../zrp/zrpCoding';
-import { ZRPMessage, ZRPOPCode } from '../zrp/zrpTypes';
+import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
+import { ZRPMessage, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
+import Logger from '@/core/services/logging/logImport';
 
 export class GameWebsocket {
   private connection: WebSocket;

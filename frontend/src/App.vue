@@ -18,7 +18,7 @@ import { useRootApp } from './core/adapter/app';
 import { useAuth } from './core/adapter/auth';
 import { useConfig } from './core/adapter/config';
 import { useCookies } from './core/adapter/cookies';
-import { useRuntimeConfig } from './core/services/runtimeConfig';
+import { useRuntimeConfig } from './core/runtimeConfig';
 const ChangelogManager = defineAsyncComponent(() => import('./components/misc/changelog/ChangelogManager.vue'));
 
 useRootApp().configure(); // init app

@@ -8,9 +8,9 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import TextArea from '@/components/forms/TextArea.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
-import { ReCaptchaResponse } from '@/core/services/api/Captcha';
-import { BackendErrorType, getBackendErrorTranslation } from '@/core/services/api/Errors';
-import { MiscApiService } from '@/core/services/api/Misc';
+import { ReCaptchaResponse } from '@/core/api/restapi/Captcha';
+import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/restapi/Errors';
+import { MiscApiService } from '@/core/api/restapi/Misc';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 

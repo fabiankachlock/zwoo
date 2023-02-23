@@ -77,8 +77,8 @@ import { Key, useKeyPress } from '@/composables/useKeyPress';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/useSwipeGesture';
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Card as CardTyping } from '@/core/services/game/CardTypes';
+import { CardDescriptor } from '@/core/domain/cards/CardThemeConfig';
+import { Card as CardTyping } from '@/core/domain/game/CardTypes';
 
 import Card from './Card.vue';
 

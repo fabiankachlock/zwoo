@@ -27,7 +27,7 @@ import { computed, ref } from 'vue';
 
 import { useGameCardDeck } from '@/core/adapter/play/deck';
 import { useGameState } from '@/core/adapter/play/gameState';
-import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
+import { CardDescriptor } from '@/core/domain/cards/CardThemeConfig';
 
 import Card from './Card.vue';
 

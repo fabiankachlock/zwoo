@@ -72,7 +72,7 @@ export const useCookies = defineStore('cookies', {
     },
     async loadRecaptcha() {
       if (this.cookies.recaptcha) {
-        const reCaptchaService = await import('../services/api/Captcha');
+        const reCaptchaService = await import('../api/restapi/Captcha');
         reCaptchaService.default.load();
       }
     },

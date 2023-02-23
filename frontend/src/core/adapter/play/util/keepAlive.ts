@@ -2,8 +2,8 @@ import { defineStore } from 'pinia';
 
 import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 import Logger from '@/core/services/logging/logImport';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
 
 const keepAliveWatcher = new MonolithicEventWatcher(ZRPOPCode.AckKeepAlive);
 

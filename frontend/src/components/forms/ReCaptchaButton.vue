@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { defineEmits, defineProps, toRefs } from 'vue';
 
-import { ReCaptchaResponse } from '@/core/services/api/Captcha';
+import { ReCaptchaResponse } from '@/core/api/restapi/Captcha';
 import { Validator } from '@/core/services/validator/_type';
 
 import NotARobot from '../security/NotARobot.vue';

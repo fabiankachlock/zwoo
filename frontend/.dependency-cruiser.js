@@ -2,6 +2,36 @@
 module.exports = {
   forbidden: [
     {
+      name: 'not-domain-to-globales',
+      severity: 'warn',
+      from: { path: 'core/domain' },
+      to: { path: 'core/globals' }
+    },
+    {
+      name: 'not-api-to-services',
+      severity: 'warn',
+      from: { path: 'core/api' },
+      to: { path: 'core/services', pathNot: 'core/services/logging' }
+    },
+    {
+      name: 'not-domain-to-api',
+      severity: 'warn',
+      from: { path: 'core/domain' },
+      to: { path: 'core/api' }
+    },
+    {
+      name: 'not-domain-to-adapter',
+      severity: 'warn',
+      from: { path: 'core/domain' },
+      to: { path: 'core/adapter' }
+    },
+    {
+      name: 'not-domain-to-services',
+      severity: 'warn',
+      from: { path: 'core/domain' },
+      to: { path: 'core/services', pathNot: 'core/services/logging' }
+    },
+    {
       name: 'not-service-to-adapter',
       severity: 'warn',
       from: { path: 'core/services' },

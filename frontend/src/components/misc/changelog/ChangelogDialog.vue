@@ -21,8 +21,8 @@
 import { defineEmits, defineProps, onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { ConfigService } from '@/core/services/api/Config';
-import { unwrapBackendError } from '@/core/services/api/Errors';
+import { ConfigService } from '@/core/api/restapi/Config';
+import { unwrapBackendError } from '@/core/api/restapi/Errors';
 
 import FloatingDialog from '../FloatingDialog.vue';
 import Changelog from './Changelog.vue';

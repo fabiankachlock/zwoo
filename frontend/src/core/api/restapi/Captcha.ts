@@ -1,7 +1,7 @@
 import { AppConfig } from '@/config';
+import { useRuntimeConfig } from '@/core/runtimeConfig';
 import { ReCaptchaTermsVisibilityManager } from '@/router/guards/ReCaptchaTerms';
 
-import { useRuntimeConfig } from '../runtimeConfig';
 import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorAble, parseBackendError, unwrapBackendError } from './Errors';
 

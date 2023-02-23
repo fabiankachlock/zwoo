@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-import { CardThemeIdentifier } from '@/core/services/cards/CardThemeConfig';
+import { CardThemeIdentifier } from '@/core/domain/cards/CardThemeConfig';
 import { defaultLanguage, supportedLanguages } from '@/i18n';
 
 const languageKey = 'zwoo:lng';

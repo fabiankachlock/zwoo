@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 
 import { useAuth } from '@/core/adapter/auth';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 import { useGameConfig } from '../../game';
 import { ChatMessage, useChatStore } from '../chat';

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
-import { WrappedFetch } from './api/FetchWrapper';
-import { Awaiter } from './helper/Awaiter';
+import { WrappedFetch } from '@/core/api/restapi/FetchWrapper';
+import { Awaiter } from '@/core/helper/Awaiter';
 
 const configKey = 'zwoo:runtimeConfig';
 

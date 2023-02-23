@@ -22,8 +22,8 @@ import { useI18n } from 'vue-i18n';
 
 import ThemesGalleryEntry from '@/components/themes/ThemesGalleryEntry.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-import { CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
-import { CardThemeManager } from '@/core/services/cards/ThemeManager';
+import { CardThemeInformation } from '@/core/domain/cards/CardThemeConfig';
+import { CardThemeManager } from '@/core/domain/cards/ThemeManager';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();

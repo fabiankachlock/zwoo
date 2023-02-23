@@ -131,8 +131,8 @@ import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import QRCodeReader from '@/components/misc/QRCodeReader.vue';
 import { SavedGame, useGameConfig } from '@/core/adapter/game';
-import { GameMeta, GamesList } from '@/core/services/api/GameManagement';
-import { ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { GameMeta, GamesList } from '@/core/api/restapi/GameManagement';
+import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();

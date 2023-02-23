@@ -2,8 +2,8 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
-import { RouterService } from '@/core/services/global/Router';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
+import { RouterService } from '@/core/global/Router';
 
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 

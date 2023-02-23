@@ -21,7 +21,7 @@ import { computed, ref, watch } from 'vue';
 
 import { useAuth } from '@/core/adapter/auth';
 import { useChatStore } from '@/core/adapter/play/chat';
-import { ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
 import ChatMessage from './ChatMessage.vue';
 

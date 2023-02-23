@@ -1,7 +1,7 @@
 import { AppConfig } from '@/config';
+import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
+import Logger from '@/core/services/logging/logImport';
 
-import Logger from '../logging/logImport';
-import { ZRPRole } from '../zrp/zrpTypes';
 import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorAble } from './Errors';
 import { WrappedFetch } from './FetchWrapper';

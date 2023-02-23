@@ -62,9 +62,9 @@ import { useI18n } from 'vue-i18n';
 import { Icon } from '@/components/misc/Icon';
 import { useColorTheme } from '@/core/adapter/helper/useColorTheme';
 import { useCardTheme } from '@/core/adapter/play/cardTheme';
-import { CardTheme } from '@/core/services/cards/CardTheme';
-import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
-import { CardThemeManager } from '@/core/services/cards/ThemeManager';
+import { CardTheme } from '@/core/domain/cards/CardTheme';
+import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/domain/cards/CardThemeConfig';
+import { CardThemeManager } from '@/core/domain/cards/ThemeManager';
 
 import Card from '../game/Card.vue';
 const { setTheme } = useCardTheme();

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
-import { ZRPBotConfig, ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import { ZRPBotConfig, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 

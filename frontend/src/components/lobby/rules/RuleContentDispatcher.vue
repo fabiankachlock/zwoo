@@ -12,7 +12,7 @@ import { defineProps } from 'vue';
 
 import { DisplayRule, useRules } from '@/core/adapter/play/rules';
 import { useIsHost } from '@/core/adapter/play/util/userRoles';
-import { RuleType } from '@/core/services/game/GameRules';
+import { RuleType } from '@/core/domain/game/GameRules';
 
 import NumericRule from './contentTypes/NumericRule.vue';
 import RuleSwitch from './contentTypes/RuleSwitch.vue';

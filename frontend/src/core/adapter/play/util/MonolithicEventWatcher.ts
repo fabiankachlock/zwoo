@@ -1,6 +1,6 @@
 import { WatchStopHandle } from 'vue';
 
-import { ZRPMessage, ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import { ZRPMessage, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 import { useWatchGameEvents } from './gameEventWatcher';
 import { createZRPOPCodeMatcher, ZRPMatcher } from './zrpMatcher';

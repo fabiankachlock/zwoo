@@ -28,8 +28,8 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Icon } from '@/components/misc/Icon';
-import { AuthenticationService } from '@/core/services/api/Authentication';
-import { unwrapBackendError } from '@/core/services/api/Errors';
+import { AuthenticationService } from '@/core/api/restapi/Authentication';
+import { unwrapBackendError } from '@/core/api/restapi/Errors';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const route = useRoute();

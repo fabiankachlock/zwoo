@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
-import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Card } from '@/core/services/game/CardTypes';
-import { RouterService } from '@/core/services/global/Router';
+import { CardDescriptor } from '@/core/domain/cards/CardThemeConfig';
+import { Card } from '@/core/domain/game/CardTypes';
+import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/core/domain/zrp/zrpTypes';
+import { RouterService } from '@/core/global/Router';
 import Logger from '@/core/services/logging/logImport';
-import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/core/services/zrp/zrpTypes';
 
 import { useAuth } from '../auth';
 import { useGameCardDeck } from './deck';

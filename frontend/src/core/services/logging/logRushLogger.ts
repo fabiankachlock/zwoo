@@ -2,7 +2,7 @@ import { LogRushClient } from '@log-rush/client';
 
 import { AppConfig } from '@/config';
 
-import { useRuntimeConfig } from '../runtimeConfig';
+import { useRuntimeConfig } from '../../runtimeConfig';
 import { BaseLogger } from './logTypes';
 
 export async function GetLogger(): Promise<() => BaseLogger> {

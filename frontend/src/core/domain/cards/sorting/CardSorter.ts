@@ -1,5 +1,5 @@
-import { Card } from '../../game/CardTypes';
-import { NodeBasedQueue } from '../../helper/NodeBasedQueue';
+import { Card } from '@/core/domain/game/CardTypes';
+import { NodeBasedQueue } from '@/core/helper/NodeBasedQueue';
 
 export class CardSorter {
   private cardToNumber = (card: Card): number => card.color * 100 + card.type;

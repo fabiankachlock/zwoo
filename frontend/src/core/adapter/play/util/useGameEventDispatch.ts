@@ -1,5 +1,5 @@
 import { useGameConfig } from '@/core/adapter/game';
-import { ZRPOPCode, ZRPPayload } from '@/core/services/zrp/zrpTypes';
+import { ZRPOPCode, ZRPPayload } from '@/core/domain/zrp/zrpTypes';
 
 export const useGameEventDispatch =
   () =>

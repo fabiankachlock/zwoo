@@ -1,4 +1,4 @@
-import { ZRPMessage, ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import { ZRPMessage, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 export interface ZRPMatcher<T = unknown> {
   matches(msg: ZRPMessage<T>): boolean;

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { ZRPPlayerState, ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { ZRPPlayerState, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
 export type InGamePlayer = {
   id: string;

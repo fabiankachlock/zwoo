@@ -3,9 +3,9 @@ import { Component, markRaw, ref, watch } from 'vue';
 
 import ColorSelectModal from '@/components/game/modals/ColorSelectModal.vue';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
-import { CardColor } from '@/core/services/game/CardTypes';
-import { Awaiter } from '@/core/services/helper/Awaiter';
-import { ZRPOPCode } from '@/core/services/zrp/zrpTypes';
+import { CardColor } from '@/core/domain/game/CardTypes';
+import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
+import { Awaiter } from '@/core/helper/Awaiter';
 
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 

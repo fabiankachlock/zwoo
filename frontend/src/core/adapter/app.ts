@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@/config';
-import { ConfigService } from '@/core/services/api/Config';
-import { RouterService } from '@/core/services/global/Router';
-import { Awaiter } from '@/core/services/helper/Awaiter';
+import { ConfigService } from '@/core/api/restapi/Config';
+import { unwrapBackendError } from '@/core/api/restapi/Errors';
+import { RouterService } from '@/core/global/Router';
+import { Awaiter } from '@/core/helper/Awaiter';
 
-import { unwrapBackendError } from '../services/api/Errors';
 import { MigrationRunner } from './migrations/MigrationRunner';
 
 const versionInfo = {

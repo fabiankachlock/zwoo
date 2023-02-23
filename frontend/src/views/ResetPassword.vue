@@ -37,7 +37,7 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
-import { ReCaptchaResponse } from '@/core/services/api/Captcha';
+import { ReCaptchaResponse } from '@/core/api/restapi/Captcha';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';

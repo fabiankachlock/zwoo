@@ -1,8 +1,8 @@
 import semverRCompare from 'semver/functions/rcompare';
 
 import { AppConfig } from '@/config';
+import Logger from '@/core/services/logging/logImport';
 
-import Logger from '../logging/logImport';
 import { Backend, Endpoint } from './ApiConfig';
 import { BackendErrorAble } from './Errors';
 import { WrappedFetch } from './FetchWrapper';

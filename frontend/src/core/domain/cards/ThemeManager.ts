@@ -1,6 +1,7 @@
-import { Awaiter } from '../helper/Awaiter';
-import { QueuedCache } from '../helper/QueuedCache';
-import Logger from '../logging/logImport';
+import { Awaiter } from '@/core/helper/Awaiter';
+import { QueuedCache } from '@/core/helper/QueuedCache';
+import Logger from '@/core/services/logging/logImport';
+
 import { CardTheme } from './CardTheme';
 import { CardThemeIdentifier, CardThemeInformation, CardThemesMeta } from './CardThemeConfig';
 

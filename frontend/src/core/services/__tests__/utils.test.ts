@@ -1,4 +1,4 @@
-import { arrayDiff, joinQuery } from '../utils';
+import { arrayDiff, joinQuery } from '../../helper/utils';
 
 describe('Utils', () => {
   describe('joinQuery', () => {

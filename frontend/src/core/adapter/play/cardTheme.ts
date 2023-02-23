@@ -2,10 +2,10 @@ import { reactive, ref, watch } from 'vue';
 
 import { ZwooConfigKey } from '@/core/adapter/config';
 import { useColorTheme } from '@/core/adapter/helper/useColorTheme';
-import { CardTheme } from '@/core/services/cards/CardTheme';
-import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/services/cards/CardThemeConfig';
-import { CardThemeManager } from '@/core/services/cards/ThemeManager';
-import { CreateUseHook } from '@/core/services/helper/CreateUseHook';
+import { CardTheme } from '@/core/domain/cards/CardTheme';
+import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/domain/cards/CardThemeConfig';
+import { CardThemeManager } from '@/core/domain/cards/ThemeManager';
+import { CreateUseHook } from '@/core/helper/CreateUseHook';
 import Logger from '@/core/services/logging/logImport';
 
 import { useConfig } from '../config';

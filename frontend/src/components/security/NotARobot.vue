@@ -23,7 +23,7 @@
 import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/Captcha';
+import { ReCaptchaResponse, ReCaptchaService } from '@/core/api/restapi/Captcha';
 import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
 
 const props = defineProps<{

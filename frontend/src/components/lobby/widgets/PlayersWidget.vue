@@ -131,8 +131,8 @@ import { useAuth } from '@/core/adapter/auth';
 import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
 import { useIsHost } from '@/core/adapter/play/util/userRoles';
-import { Frontend } from '@/core/services/api/ApiConfig';
-import { ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { Frontend } from '@/core/api/restapi/ApiConfig';
+import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
 import Widget from '../Widget.vue';
 
