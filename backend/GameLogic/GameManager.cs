@@ -1,35 +1,47 @@
 ﻿using log4net;
-using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Lobby;
 
 namespace ZwooGameLogic;
 
 public sealed class GameManager
 {
     private readonly ILog _logger;
-
     private long _gameId;
-    private Dictionary<long, Game.Game> _activeGames;
-    private Func<long, NotificationManager> _notificationManagerFactory;
+    private Dictionary<long, ZwooRoom> _activeGames;
+    private INotificationAdapter _notificationAdapter;
 
 
-    public GameManager(Func<long, NotificationManager> notificationManagerFactory)
+    public GameManager(INotificationAdapter notificationAdapter)
     {
         _gameId = 0;
-        _activeGames = new Dictionary<long, Game.Game>();
-        _notificationManagerFactory = notificationManagerFactory;
+        _activeGames = new Dictionary<long, ZwooRoom>();
+        _notificationAdapter = notificationAdapter;
         _logger = LogManager.GetLogger("GameManager");
     }
 
-    public Game.Game CreateGame(string name, bool isPublic)
+    public ZwooRoom CreateGame(string name, bool isPublic)
     {
         long id = nextGameId();
-        Game.Game newGame = new Game.Game(id, name, isPublic, _notificationManagerFactory(id));
-        _activeGames.Add(newGame.Id, newGame);
+
+        GameEventTranslator notificationManager = new GameEventTranslator(this._notificationAdapter);
+        Game.Game newGame = new Game.Game(id, name, isPublic, notificationManager);
+        LobbyManager lobby = new LobbyManager(newGame.Id, newGame.Settings);
+        ZwooRoom room = new ZwooRoom(newGame, lobby, _notificationAdapter);
+
+        notificationManager.SetGame(room);
+        room.OnClosed += () =>
+        {
+            RemoveGame(room.Id);
+            _notificationAdapter.DisconnectGame(room.Id);
+        };
+
+        _activeGames.Add(newGame.Id, room);
         _logger.Info($"created game {newGame.Id}");
-        return newGame;
+        return room;
     }
 
-    public Game.Game? GetGame(long id)
+    public ZwooRoom? GetGame(long id)
     {
         if (_activeGames.ContainsKey(id))
         {
@@ -45,28 +57,26 @@ public sealed class GameManager
         return _activeGames.Remove(id);
     }
 
-    public List<Game.Game> FindGames(string search)
+    public List<ZwooRoom> FindGames(string search)
     {
         return _activeGames
-            .Where(pair => pair.Key.ToString().Contains(search) || pair.Value.Name.Contains(search))
+            .Where(pair => pair.Key.ToString().Contains(search) || pair.Value.Game.Name.Contains(search))
             .Select(pair => pair.Value)
             .ToList();
     }
 
-    public List<Game.Game> GetAllGames()
+    public List<ZwooRoom> GetAllGames()
     {
         return _activeGames
             .Select(pair => pair.Value)
             .ToList();
     }
 
-    public void SendEvent(long gameId, ClientEvent clientEvent)
+    public void SendEvent(long gameId, IIncomingZRPMessage msg)
     {
-        Game.Game? game = GetGame(gameId);
-        if (game != null)
-        {
-            game.HandleEvent(clientEvent);
-        }
+        ZwooRoom? room = GetGame(gameId);
+        if (room == null) return;
+        room.EventDistributer.Distribute(room, msg);
     }
 
     private long nextGameId()

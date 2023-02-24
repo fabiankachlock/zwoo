@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
+﻿using log4net;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.State;
@@ -32,6 +26,12 @@ public sealed class Game
 
     public List<long> AllPlayers { get => _playerManager.Players; }
     public int PlayerCount { get => _playerManager.PlayerCount; }
+
+    public event GameStateManager.FinishedHandler OnFinished
+    {
+        add => _stateManager.OnFinished += value;
+        remove => _stateManager.OnFinished -= value;
+    }
 
     public GameStateManager State
     {
@@ -98,7 +98,6 @@ public sealed class Game
         _logger.Info($"received event: {clientEvent.Type}");
         _stateManager.HandleEvent(clientEvent);
     }
-
 }
 
 

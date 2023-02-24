@@ -14,13 +14,11 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build Test Runner Image
         run:  docker build -f ./e2e/Dockerfile -t zwoo-e2e .
       - name: Prepare Container
         run: docker run -d --privileged --name test-runner zwoo-e2e
-      - name: Wait some time
-        run: sleep 10  
       - name: Run E2E-Tests
         run: docker exec -i test-runner sh /app/e2e/run-tests.sh ${{ secrets.CYPRESS_KEY }}
       - uses: actions/upload-artifact@v3

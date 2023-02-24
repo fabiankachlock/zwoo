@@ -127,7 +127,8 @@ export const Logger: ZwooLogger = {
   Api: _Logger.createOne('api'),
   Zrp: _Logger.createOne('zrp'),
   RouterGuard: _Logger.createOne('guard'),
-  Theme: _Logger.createOne('theme')
+  Theme: _Logger.createOne('theme'),
+  Wasm: _Logger.createOne('wasm')
 };
 
 export const LogStore = {

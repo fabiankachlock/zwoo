@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.MongoMigrations", "Zwo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration", "Mongo.Migration\Mongo.Migration.csproj", "{EF01BBD9-0415-4071-B23E-15585A6EE1BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwooWasmAdapter", "ZwooWasmAdapter\ZwooWasmAdapter.csproj", "{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{EF01BBD9-0415-4071-B23E-15585A6EE1BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF01BBD9-0415-4071-B23E-15585A6EE1BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF01BBD9-0415-4071-B23E-15585A6EE1BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

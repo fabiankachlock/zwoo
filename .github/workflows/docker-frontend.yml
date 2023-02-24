@@ -1,23 +1,22 @@
-
 name: Frontend Docker Pipeline
 
-'on':
+"on":
   push:
     branches:
       - main
     paths:
-      - 'frontend/**'
-      - '.github/workflows/**'
+      - "frontend/**"
+      - ".github/workflows/**"
+  workflow_dispatch:
 
 jobs:
   frontend-docker:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v2
-        - name: Build Image
-          working-directory: ./frontend
-          run: 'docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:nightly'
-        - name: Log into JFrog
-          run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
-        - name: Push Image
-          run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:nightly'
+      - uses: actions/checkout@v3
+      - name: Build Image
+        run: "docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:nightly ."
+      - name: Log into JFrog
+        run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
+      - name: Push Image
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:nightly"
