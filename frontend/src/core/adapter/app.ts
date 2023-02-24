@@ -6,6 +6,7 @@ import { ConfigService } from '@/core/api/restapi/Config';
 import { RouterService } from '@/core/global/Router';
 import { Awaiter } from '@/core/helper/Awaiter';
 
+import { RestApi } from '../api/restapi/RestApi';
 import { MigrationRunner } from './migrations/MigrationRunner';
 
 const versionInfo = {
@@ -32,6 +33,9 @@ export const useRootApp = defineStore('app', {
   getters: {
     versionInfo() {
       return versionInfo;
+    },
+    api() {
+      return RestApi;
     }
   },
   actions: {

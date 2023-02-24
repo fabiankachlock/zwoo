@@ -155,7 +155,8 @@ export interface ApiAdapter {
 
   /**
    * exposes the raw fetch method
+   * @param url the request url
    * @param init the request options
    */
-  fetchRaw<T>(init: FetchOptions<T>): Promise<FetchResponse<T>>;
+  fetchRaw<T>(url: string, init: FetchOptions<T>): Promise<FetchResponse<T>>;
 }
