@@ -30,7 +30,7 @@ const versionFiles = [
     replace: 'public static readonly string Version = "###";',
   },
   {
-    path: "/backend/ZwooInfoDashBoard/Globals.cs",
+    path: "/backend/ZwooInfoDashBoard/Data/Globals.cs",
     regex: /public static readonly string Version = "(.*)";/,
     replace: 'public static readonly string Version = "###";',
   },
