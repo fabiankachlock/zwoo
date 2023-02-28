@@ -26,6 +26,7 @@ const ApiRef: ApiAdapter = {
   storeUserSettings: (...args) => useRootApp().api.storeUserSettings(...args),
   submitContactForm: (...args) => useRootApp().api.submitContactForm(...args),
   verifyUserAccount: (...args) => useRootApp().api.verifyUserAccount(...args),
+  generateJoinUrl: (...args) => useRootApp().api.generateJoinUrl(...args),
   fetchRaw: (...args) => useRootApp().api.fetchRaw(...args)
 };
 

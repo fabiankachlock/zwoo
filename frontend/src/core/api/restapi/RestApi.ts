@@ -1,5 +1,6 @@
 import { ApiAdapter } from '../ApiAdapter';
 import { AccountService } from './Account';
+import { Frontend } from './ApiConfig';
 import { AuthenticationService } from './Authentication';
 import ReCaptchaService from './Captcha';
 import { ConfigService } from './Config';
@@ -32,5 +33,6 @@ export const RestApi: ApiAdapter = {
   storeUserSettings: AccountService.storeSettings,
   submitContactForm: MiscApiService.submitContactForm,
   verifyUserAccount: AuthenticationService.verifyAccount,
-  fetchRaw: WrappedFetch
+  fetchRaw: WrappedFetch,
+  generateJoinUrl: id => `${Frontend.url}/join/${id}`
 };

@@ -37,7 +37,7 @@
             {{ t('wait.qrcodeInfo') }}
           </p>
           <div class="qrcode-wrapper mx-auto max-w-xs">
-            <QRCode :data="`${Frontend.url}/join/${gameId}`" :width="256" :height="256" />
+            <QRCode :data="joinUrl" :width="256" :height="256" />
           </div>
         </FloatingDialog>
       </div>
@@ -129,19 +129,20 @@ import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useAuth } from '@/core/adapter/auth';
 import { useGameConfig } from '@/core/adapter/game';
+import { useApi } from '@/core/adapter/helper/useApi';
 import { useLobbyStore } from '@/core/adapter/play/lobby';
 import { useIsHost } from '@/core/adapter/play/util/userRoles';
-import { Frontend } from '@/core/api/restapi/ApiConfig';
 import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
 import Widget from '../Widget.vue';
 
 const { t } = useI18n();
+const { generateJoinUrl } = useApi();
 const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);
 const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
 const auth = useAuth();
-const gameId = computed(() => gameConfig.gameId);
+const joinUrl = computed(() => generateJoinUrl(gameConfig.gameId?.toString() ?? ''));
 const { isHost } = useIsHost();
 const publicId = computed(() => auth.publicId);
 const gameHost = computed(() => lobby.host);
