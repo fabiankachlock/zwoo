@@ -7,3 +7,10 @@ export interface ReadableMessageSource<T> {
 }
 
 export interface BidirectionalMessageSource<T> extends WriteableMessageSource<T>, ReadableMessageSource<T> {}
+
+export abstract class RealtimeGameMessageAdapter {
+  abstract state: number;
+  abstract onMessage(handler: (msg: string) => void): void;
+  abstract sendMessage(msg: string): void;
+  abstract close(): void;
+}

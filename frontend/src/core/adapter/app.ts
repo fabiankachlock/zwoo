@@ -6,6 +6,7 @@ import { RouterService } from '@/core/global/Router';
 import { Awaiter } from '@/core/helper/Awaiter';
 
 import { RestApi } from '../api/restapi/RestApi';
+import { WsGameAdapter } from '../api/wsgame/WsGameAdapter';
 import { MigrationRunner } from './migrations/MigrationRunner';
 
 const versionInfo = {
@@ -35,6 +36,9 @@ export const useRootApp = defineStore('app', {
     },
     api() {
       return RestApi;
+    },
+    realtimeApi() {
+      return WsGameAdapter;
     }
   },
   actions: {

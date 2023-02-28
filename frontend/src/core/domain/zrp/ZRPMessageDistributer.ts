@@ -1,17 +1,13 @@
 import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
-import { BidirectionalMessageSource } from '@/core/domain/zrp/zrpInterfaces';
+import { BidirectionalMessageSource, RealtimeGameMessageAdapter } from '@/core/domain/zrp/zrpInterfaces';
 import { ZRPMessage } from '@/core/domain/zrp/zrpTypes';
 import { AsyncMessageQueue } from '@/core/helper/MessageQueue';
 import Logger from '@/core/services/logging/logImport';
 
-import { GameWebsocket } from './Websocket';
-
 export class ZRPWebsocketAdapter implements BidirectionalMessageSource<ZRPMessage> {
-  private ws: GameWebsocket;
   private messageQueue: AsyncMessageQueue;
 
-  constructor(public readonly url: string, public readonly gameId: string) {
-    this.ws = new GameWebsocket(url);
+  constructor(private readonly ws: RealtimeGameMessageAdapter) {
     this.messageQueue = new AsyncMessageQueue();
     if (this.messageQueue.isStopped) {
       this.messageQueue.continue();

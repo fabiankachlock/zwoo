@@ -1,8 +1,9 @@
 import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
+import { RealtimeGameMessageAdapter } from '@/core/domain/zrp/zrpInterfaces';
 import { ZRPMessage, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 import Logger from '@/core/services/logging/logImport';
 
-export class GameWebsocket {
+export class GameWebsocket implements RealtimeGameMessageAdapter {
   private connection: WebSocket;
 
   get state(): number {

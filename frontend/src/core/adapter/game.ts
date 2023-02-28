@@ -3,10 +3,9 @@ import { defineStore } from 'pinia';
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
 import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
-import { Backend, Endpoint } from '@/core/api/restapi/ApiConfig';
-import { ZRPWebsocketAdapter } from '@/core/api/wsgame/MessageDistributer';
 import { ZRPMessageBuilder } from '@/core/domain/zrp/zrpBuilder';
 import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
+import { ZRPWebsocketAdapter } from '@/core/domain/zrp/ZRPMessageDistributer';
 import { ZRPOPCode, ZRPPayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import { RouterService } from '@/core/global/Router';
 import Logger from '@/core/services/logging/logImport';
@@ -142,10 +141,7 @@ export const useGameConfig = defineStore('game-config', {
     async connect(isRunning = false) {
       await this._initGameModules();
       setTimeout(() => {
-        this._connection = new ZRPWebsocketAdapter(
-          Backend.getDynamicUrl(Endpoint.Websocket, { id: (this.gameId ?? -1).toString() }),
-          (this.gameId ?? -1).toString()
-        );
+        this._connection = new ZRPWebsocketAdapter(useApi().createConnection((this.gameId ?? -1).toString()));
         const events = useGameEvents();
         this._connection.readMessages(events.handleIncomingEvent);
 

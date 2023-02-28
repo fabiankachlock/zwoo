@@ -1,8 +1,9 @@
 import { ApiAdapter } from '@/core/api/ApiAdapter';
+import { GameAdapter } from '@/core/api/GameAdapter';
 
 import { useRootApp } from '../app';
 
-const ApiRef: ApiAdapter = {
+const ApiRef: ApiAdapter & GameAdapter = {
   changeUserPassword: (...args) => useRootApp().api.changeUserPassword(...args),
   createGame: (...args) => useRootApp().api.createGame(...args),
   createUserAccount: (...args) => useRootApp().api.createUserAccount(...args),
@@ -27,7 +28,9 @@ const ApiRef: ApiAdapter = {
   submitContactForm: (...args) => useRootApp().api.submitContactForm(...args),
   verifyUserAccount: (...args) => useRootApp().api.verifyUserAccount(...args),
   generateJoinUrl: (...args) => useRootApp().api.generateJoinUrl(...args),
-  fetchRaw: (...args) => useRootApp().api.fetchRaw(...args)
+  fetchRaw: (...args) => useRootApp().api.fetchRaw(...args),
+
+  createConnection: (...args) => useRootApp().realtimeApi.createConnection(...args)
 };
 
 export const useApi = () => ApiRef;
