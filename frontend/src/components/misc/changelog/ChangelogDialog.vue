@@ -21,8 +21,8 @@
 import { defineEmits, defineProps, onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { useApi } from '@/core/adapter/helper/useApi';
 import { unwrapBackendError } from '@/core/api/ApiError';
-import { ConfigService } from '@/core/api/restapi/Config';
 
 import FloatingDialog from '../FloatingDialog.vue';
 import Changelog from './Changelog.vue';
@@ -37,6 +37,7 @@ const emit = defineEmits<{
 
 const { version } = toRefs(props);
 const { t } = useI18n();
+const { loadChangelog } = useApi();
 const changelog = ref<string | undefined>(undefined);
 
 onMounted(() => {
@@ -49,7 +50,7 @@ watch(version, newVersion => {
 
 const loadVersion = async (version: string) => {
   try {
-    const result = await ConfigService.fetchChangelog(version);
+    const result = await loadChangelog(version);
     const [changelogHtml, error] = unwrapBackendError(result);
 
     if (error) {

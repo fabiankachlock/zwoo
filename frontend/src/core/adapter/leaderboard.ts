@@ -1,7 +1,7 @@
 import { CacheTTL, useDebounce } from '@/core/adapter/helper/useDebounce';
-import { LeaderBoardService } from '@/core/api/restapi/LeaderBoard';
 
 import { LeaderBoardPositionResponse, LeaderBoardResponse } from '../api/entities/Leaderboard';
+import { useApi } from './helper/useApi';
 
 export type LeaderBoardEntry = {
   position: number;
@@ -11,7 +11,7 @@ export type LeaderBoardEntry = {
 
 const leaderBoardStore = {
   getLeaderBoard: useDebounce<LeaderBoardEntry[]>(async () => {
-    const response = await LeaderBoardService.fetchLeaderBoard();
+    const response = await useApi().loadLeaderBoard();
     if ('error' in response) {
       return [];
     }
@@ -41,7 +41,7 @@ const leaderBoardStore = {
   }, CacheTTL.minute * 5),
 
   getOwnPosition: useDebounce<number>(async () => {
-    const response = await LeaderBoardService.fetchOwnLeaderBoardPosition();
+    const response = await useApi().loadOwnLeaderBoardPosition();
     if ('error' in response) {
       return -1;
     }

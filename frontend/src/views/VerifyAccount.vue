@@ -28,13 +28,14 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Icon } from '@/components/misc/Icon';
+import { useApi } from '@/core/adapter/helper/useApi';
 import { unwrapBackendError } from '@/core/api/ApiError';
-import { AuthenticationService } from '@/core/api/restapi/Authentication';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
+const { verifyUserAccount } = useApi();
 
 const isLoading = ref(true);
 const isSuccess = ref(false);
@@ -44,7 +45,7 @@ onMounted(async () => {
   const id = Array.isArray(route.query['id']) ? route.query['id'][0] : route.query['id'];
   const code = Array.isArray(route.query['code']) ? route.query['code'][0] : route.query['code'];
 
-  const response = await AuthenticationService.verifyAccount(id ?? '', code ?? '');
+  const response = await verifyUserAccount(id ?? '', code ?? '');
   const [success] = typeof response === 'object' ? unwrapBackendError(response) : [response, undefined];
   isLoading.value = false;
   if (success) {

@@ -4,7 +4,6 @@ import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
 import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
 import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
 import { Backend, Endpoint } from '@/core/api/restapi/ApiConfig';
-import { GameManagementService } from '@/core/api/restapi/GameManagement';
 import { ZRPWebsocketAdapter } from '@/core/api/wsgame/MessageDistributer';
 import { ZRPMessageBuilder } from '@/core/domain/zrp/zrpBuilder';
 import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
@@ -14,6 +13,7 @@ import Logger from '@/core/services/logging/logImport';
 import { GameNameValidator } from '@/core/services/validator/gameName';
 
 import { GameMeta, GamesList } from '../api/entities/Game';
+import { useApi } from './helper/useApi';
 import { useGameEvents } from './play/events';
 
 export type SavedGame = {
@@ -51,7 +51,7 @@ export const useGameConfig = defineStore('game-config', {
       const nameValid = new GameNameValidator().validate(name);
       if (!nameValid.isValid) throw nameValid.getErrors();
 
-      const status = await GameManagementService.createGame(name, isPublic, isPublic ? '' : password);
+      const status = await useApi().createGame(name, isPublic, isPublic ? '' : password);
       const [game, error] = unwrapBackendError(status);
       if (error) {
         throw getBackendErrorTranslation(error);
@@ -73,7 +73,7 @@ export const useGameConfig = defineStore('game-config', {
 
       const data = await this.getGameMeta(id);
 
-      const status = await GameManagementService.joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
+      const status = await useApi().joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
       const [game, error] = unwrapBackendError(status);
       if (error) {
         throw getBackendErrorTranslation(error);
@@ -106,7 +106,7 @@ export const useGameConfig = defineStore('game-config', {
       }
     },
     async listGames(): Promise<GamesList> {
-      const response = await GameManagementService.listAll();
+      const response = await useApi().loadAvailableGames();
       const [games, error] = unwrapBackendError(response);
       if (!error) {
         this.allGames = games;
@@ -120,7 +120,7 @@ export const useGameConfig = defineStore('game-config', {
         return game;
       }
 
-      const response = await GameManagementService.getJoinMeta(id);
+      const response = await useApi().loadGameMeta(id);
       return unwrapBackendError(response)[0];
     },
     async _initGameModules(): Promise<void> {

@@ -42,14 +42,15 @@ import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
+import { useApi } from '@/core/adapter/helper/useApi';
 import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
 import { CaptchaResponse } from '@/core/api/entities/Captcha';
-import { AuthenticationService } from '@/core/api/restapi/Authentication';
 import { joinQuery } from '@/core/helper/utils';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
+const { resendVerificationEmail } = useApi();
 const config = useConfig();
 const auth = useAuth();
 const route = useRoute();
@@ -96,7 +97,7 @@ const logIn = async () => {
 
 const resendVerifyEmail = async () => {
   showNotVerifiedInfo.value = false;
-  const res = await AuthenticationService.resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
+  const res = await resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
   const [, err] = unwrapBackendError(res);
   if (err !== undefined) {
     error.value = [getBackendErrorTranslation(err)];

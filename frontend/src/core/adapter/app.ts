@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 
 import { AppConfig } from '@/config';
 import { unwrapBackendError } from '@/core/api/ApiError';
-import { ConfigService } from '@/core/api/restapi/Config';
 import { RouterService } from '@/core/global/Router';
 import { Awaiter } from '@/core/helper/Awaiter';
 
@@ -40,7 +39,7 @@ export const useRootApp = defineStore('app', {
   },
   actions: {
     async configure() {
-      const response = await ConfigService.fetchVersion();
+      const response = await this.api.loadVersion();
       const [version, err] = unwrapBackendError(response);
       if (err && AppConfig.UseBackend) {
         // enable offline mode

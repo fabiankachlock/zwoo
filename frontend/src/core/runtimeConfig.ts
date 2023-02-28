@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 
-import { WrappedFetch } from '@/core/api/restapi/FetchWrapper';
 import { Awaiter } from '@/core/helper/Awaiter';
+
+import { useRootApp } from './adapter/app';
 
 const configKey = 'zwoo:runtimeConfig';
 
@@ -52,7 +53,7 @@ export const useRuntimeConfig = defineStore('runtime-config', {
       }
     },
     async configure() {
-      const config = await WrappedFetch<string>('config.json', {
+      const config = await useRootApp().api.fetchRaw<string>('config.json', {
         useBackend: true,
         responseOptions: {
           decodeJson: false

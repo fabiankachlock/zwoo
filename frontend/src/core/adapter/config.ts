@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@//config';
-import { AccountService } from '@/core/api/restapi/Account';
 import { CardThemeIdentifier } from '@/core/domain/cards/CardThemeConfig';
 import { CardThemeManager } from '@/core/domain/cards/ThemeManager';
 import { Logger as _Logger } from '@/core/services/logging/logImport';
 import { defaultLanguage, setI18nLanguage, supportedLanguages } from '@/i18n';
+
+import { useApi } from './helper/useApi';
 
 const Logger = _Logger.createOne('config');
 const configKey = 'zwoo:config';
@@ -125,7 +126,7 @@ export const useConfig = defineStore('config', {
     },
     async loadProfile() {
       Logger.info(`loading config for the current user`);
-      const config = await AccountService.loadSettings();
+      const config = await useApi().loadUserSettings();
       if (config) {
         const parsedConfig = this._deserializeConfig(config);
         this.applyConfig(parsedConfig ?? {});
@@ -147,7 +148,7 @@ export const useConfig = defineStore('config', {
       localStorage.setItem(configKey, this._serializeConfig(this._config, true));
       if (this._isLoggedIn && !onlyLocal) {
         // save full config remote
-        await AccountService.storeSettings(this._serializeConfig(this._config, false));
+        await useApi().storeUserSettings(this._serializeConfig(this._config, false));
       }
     },
     _serializeConfig(config: ZwooConfig, ignore: boolean): string {

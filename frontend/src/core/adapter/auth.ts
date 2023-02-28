@@ -3,14 +3,13 @@ import { defineStore } from 'pinia';
 import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
 
 import { CaptchaResponse } from '../api/entities/Captcha';
-import { AccountService } from '../api/restapi/Account';
-import { AuthenticationService } from '../api/restapi/Authentication';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
 import { RecaptchaValidator } from '../services/validator/recaptcha';
 import { UsernameValidator } from '../services/validator/username';
 import { useConfig, ZwooConfigKey } from './config';
+import { useApi } from './helper/useApi';
 
 export const useAuth = defineStore('auth', {
   state: () => {
@@ -27,7 +26,7 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performLogin(email, password);
+      const status = await useApi().loginUser(email, password);
 
       if (status.isLoggedIn) {
         this.$patch({
@@ -45,7 +44,7 @@ export const useAuth = defineStore('auth', {
       }
     },
     async logout() {
-      const status = await AuthenticationService.performLogout();
+      const status = await useApi().logoutUser();
       if (!status.isLoggedIn) {
         const [, error] = unwrapBackendError(status);
         if (error) {
@@ -83,7 +82,7 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performCreateAccount(username, email, password, beta, useConfig().get(ZwooConfigKey.Language));
+      const status = await useApi().createUserAccount(username, email, password, beta, useConfig().get(ZwooConfigKey.Language));
 
       if (status.isLoggedIn) {
         this.$patch({
@@ -100,7 +99,7 @@ export const useAuth = defineStore('auth', {
       }
     },
     async deleteAccount(password: string) {
-      const result = await AuthenticationService.performDeleteAccount(password);
+      const result = await useApi().deleteUserAccount(password);
       if (!result.isLoggedIn) {
         const [, error] = unwrapBackendError(result);
         if (error) {
@@ -122,7 +121,7 @@ export const useAuth = defineStore('auth', {
       const passwordMatchValid = new PasswordMatchValidator().validate([newPassword, newPasswordRepeat]);
       if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
 
-      const response = await AccountService.performChangePassword(oldPassword, newPassword);
+      const response = await useApi().changeUserPassword(oldPassword, newPassword);
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);
@@ -135,7 +134,7 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const response = await AccountService.requestPasswordReset(email, useConfig().get(ZwooConfigKey.Language));
+      const response = await useApi().requestUserPasswordReset(email, useConfig().get(ZwooConfigKey.Language));
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);
@@ -151,14 +150,14 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const response = await AccountService.performResetPassword(code, password);
+      const response = await useApi().resetUserPassword(code, password);
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);
       }
     },
     async askStatus() {
-      const response = await AuthenticationService.getUserInfo();
+      const response = await useApi().loadUserInfo();
       if (response.isLoggedIn) {
         this.$patch({
           username: response.username,
