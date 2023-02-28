@@ -55,7 +55,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useAuth } from '@/core/adapter/auth';
-import { LeaderBoardEntry, useLeaderBoard } from '@/core/adapter/leaderboard';
+import { LeaderBoardEntry, useLeaderBoard } from '@/core/adapter/controller/leaderboard';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();

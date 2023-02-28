@@ -32,8 +32,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useCardTheme } from '@/core/adapter/play/cardTheme';
-import { useGameModal } from '@/core/adapter/play/modal';
+import { useCardTheme } from '@/core/adapter/game/cardTheme';
+import { useGameModal } from '@/core/adapter/game/modal';
 import { CardColor } from '@/core/domain/game/CardTypes';
 
 import BaseModal from './BaseModal.vue';

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { ZwooConfigKey } from '@/core/adapter/config';
-import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { Card } from '@/core/domain/game/CardTypes';
 import { CardDeck } from '@/core/domain/game/PlayerDeck';
 import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';

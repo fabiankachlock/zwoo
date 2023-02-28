@@ -34,9 +34,9 @@
 import { defineProps, ref, toRefs, watch } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
-import { useChatStore } from '@/core/adapter/play/chat';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useIsHost } from '@/core/adapter/play/util/userRoles';
+import { useChatStore } from '@/core/adapter/game/chat';
+import { useLobbyStore } from '@/core/adapter/game/lobby';
+import { useIsHost } from '@/core/adapter/game/util/userRoles';
 
 const chat = useChatStore();
 const lobby = useLobbyStore();

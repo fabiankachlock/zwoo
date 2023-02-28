@@ -23,7 +23,7 @@
 import { defineProps } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useGameModal } from '@/core/adapter/play/modal';
+import { useGameModal } from '@/core/adapter/game/modal';
 
 import FloatingDialog from '../../misc/FloatingDialog.vue';
 

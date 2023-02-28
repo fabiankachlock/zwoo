@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { AllRules, EditableRules, RuleType, RuleTypeDefinitions } from '@/core/domain/game/GameRules';
 import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 

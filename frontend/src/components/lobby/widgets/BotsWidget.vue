@@ -82,9 +82,9 @@ import Form from '@/components/forms/Form.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useUserDefaults } from '@/composables/userDefaults';
-import { useBotManager } from '@/core/adapter/play/botManager';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useIsHost } from '@/core/adapter/play/util/userRoles';
+import { useBotManager } from '@/core/adapter/game/botManager';
+import { useLobbyStore } from '@/core/adapter/game/lobby';
+import { useIsHost } from '@/core/adapter/game/util/userRoles';
 
 import Widget from '../Widget.vue';
 

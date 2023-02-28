@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
+import { MonolithicEventWatcher } from '@/core/adapter/game/util/MonolithicEventWatcher';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { ZRPOPCode, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 

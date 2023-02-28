@@ -25,8 +25,8 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 
-import { useGameCardDeck } from '@/core/adapter/play/deck';
-import { useGameState } from '@/core/adapter/play/gameState';
+import { useGameCardDeck } from '@/core/adapter/game/deck';
+import { useGameState } from '@/core/adapter/game/gameState';
 import { Card as CardTyping } from '@/core/domain/game/CardTypes';
 
 import Card from './Card.vue';

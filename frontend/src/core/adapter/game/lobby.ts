@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { MonolithicEventWatcher } from '@/core/adapter/play/util/MonolithicEventWatcher';
-import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { MonolithicEventWatcher } from '@/core/adapter/game/util/MonolithicEventWatcher';
+import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { ZRPAllLobbyPlayersPayload, ZRPIdPayload, ZRPNamePayload, ZRPOPCode, ZRPPlayerWithRolePayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import { RouterService } from '@/core/global/Router';

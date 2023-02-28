@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { Component, markRaw, ref, watch } from 'vue';
 
 import ColorSelectModal from '@/components/game/modals/ColorSelectModal.vue';
-import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { CardColor } from '@/core/domain/game/CardTypes';
 import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 import { Awaiter } from '@/core/helper/Awaiter';

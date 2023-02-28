@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
+import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
-import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
 import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
 import { Backend, Endpoint } from '@/core/api/restapi/ApiConfig';
 import { ZRPWebsocketAdapter } from '@/core/api/wsgame/MessageDistributer';
@@ -13,8 +13,8 @@ import Logger from '@/core/services/logging/logImport';
 import { GameNameValidator } from '@/core/services/validator/gameName';
 
 import { GameMeta, GamesList } from '../api/entities/Game';
+import { useGameEvents } from './game/events';
 import { useApi } from './helper/useApi';
-import { useGameEvents } from './play/events';
 
 export type SavedGame = {
   id: number;
@@ -125,17 +125,17 @@ export const useGameConfig = defineStore('game-config', {
     },
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {
-        (await import('./play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
-        (await import('./play/cardTheme')).useCardTheme().__init__();
-        (await import('./play/chat')).useChatStore().__init__();
-        (await import('./play/deck')).useGameCardDeck().__init__();
-        (await import('./play/events')).useGameEvents().__init__();
-        (await import('./play/gameState')).useGameState().__init__();
-        (await import('./play/lobby')).useLobbyStore().__init__();
-        (await import('./play/rules')).useRules().__init__();
-        (await import('./play/summary')).useGameSummary().__init__();
-        (await import('./play/util/keepAlive')).useKeepAlive().__init__();
-        (await import('./play/features/chatBroadcast')).useChatBroadcast().__init__();
+        (await import('./game/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
+        (await import('./game/cardTheme')).useCardTheme().__init__();
+        (await import('./game/chat')).useChatStore().__init__();
+        (await import('./game/deck')).useGameCardDeck().__init__();
+        (await import('./game/events')).useGameEvents().__init__();
+        (await import('./game/gameState')).useGameState().__init__();
+        (await import('./game/lobby')).useLobbyStore().__init__();
+        (await import('./game/rules')).useRules().__init__();
+        (await import('./game/summary')).useGameSummary().__init__();
+        (await import('./game/util/keepAlive')).useKeepAlive().__init__();
+        (await import('./game/features/chatBroadcast')).useChatBroadcast().__init__();
         initializedGameModules = true;
       }
     },

@@ -60,8 +60,8 @@ import { defineProps, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { Icon } from '@/components/misc/Icon';
+import { useCardTheme } from '@/core/adapter/game/cardTheme';
 import { useColorTheme } from '@/core/adapter/helper/useColorTheme';
-import { useCardTheme } from '@/core/adapter/play/cardTheme';
 import { CardTheme } from '@/core/domain/cards/CardTheme';
 import { CARD_THEME_VARIANT_AUTO, CardThemeInformation } from '@/core/domain/cards/CardThemeConfig';
 import { CardThemeManager } from '@/core/domain/cards/ThemeManager';

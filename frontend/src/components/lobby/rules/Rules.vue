@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useRules } from '@/core/adapter/play/rules';
+import { useRules } from '@/core/adapter/game/rules';
 
 import GameRule from './GameRule.vue';
 import RuleContentDispatcher from './RuleContentDispatcher.vue';

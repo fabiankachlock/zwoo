@@ -129,9 +129,9 @@ import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useAuth } from '@/core/adapter/auth';
 import { useGameConfig } from '@/core/adapter/game';
+import { useLobbyStore } from '@/core/adapter/game/lobby';
+import { useIsHost } from '@/core/adapter/game/util/userRoles';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useIsHost } from '@/core/adapter/play/util/userRoles';
 import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
 import Widget from '../Widget.vue';

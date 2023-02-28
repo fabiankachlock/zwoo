@@ -75,8 +75,8 @@ import { useI18n } from 'vue-i18n';
 import { Icon } from '@/components/misc/Icon';
 import { Key, useKeyPress } from '@/composables/useKeyPress';
 import { SWIPE_DIRECTION, useSwipeGesture } from '@/composables/useSwipeGesture';
-import { useGameCardDeck } from '@/core/adapter/play/deck';
-import { useGameState } from '@/core/adapter/play/gameState';
+import { useGameCardDeck } from '@/core/adapter/game/deck';
+import { useGameState } from '@/core/adapter/game/gameState';
 import { CardDescriptor } from '@/core/domain/cards/CardThemeConfig';
 import { Card as CardTyping } from '@/core/domain/game/CardTypes';
 

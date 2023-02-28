@@ -1,7 +1,7 @@
 import { CacheTTL, useDebounce } from '@/core/adapter/helper/useDebounce';
 
-import { LeaderBoardPositionResponse, LeaderBoardResponse } from '../api/entities/Leaderboard';
-import { useApi } from './helper/useApi';
+import { LeaderBoardPositionResponse, LeaderBoardResponse } from '../../api/entities/Leaderboard';
+import { useApi } from '../helper/useApi';
 
 export type LeaderBoardEntry = {
   position: number;

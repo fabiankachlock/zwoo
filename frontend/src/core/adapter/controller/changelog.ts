@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
-import { useRootApp } from './app';
-import { MigrationRunner } from './migrations/MigrationRunner';
+import { useRootApp } from '../app';
+import { MigrationRunner } from '../migrations/MigrationRunner';
 
 export const useChangelog = defineStore('changelog', {
   state: () => ({

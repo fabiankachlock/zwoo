@@ -47,8 +47,8 @@ import PlayersWidget from '@/components/lobby/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/lobby/widgets/RulesWidget.vue';
 import SpectatorsWidget from '@/components/lobby/widgets/SpectatorsWidget.vue';
 import { useGameConfig } from '@/core/adapter/game';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useIsHost } from '@/core/adapter/play/util/userRoles';
+import { useLobbyStore } from '@/core/adapter/game/lobby';
+import { useIsHost } from '@/core/adapter/game/util/userRoles';
 
 const { t } = useI18n();
 const gameConfig = useGameConfig();

@@ -18,8 +18,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useChatStore } from '@/core/adapter/play/chat';
-import { useGameState } from '@/core/adapter/play/gameState';
+import { useChatStore } from '@/core/adapter/game/chat';
+import { useGameState } from '@/core/adapter/game/gameState';
 
 import Opponent from './Opponent.vue';
 
