@@ -89,11 +89,6 @@ export interface ApiAdapter {
   resendVerificationEmail(email: string, lng?: string): Promise<BackendErrorAble<boolean>>;
 
   /**
-   * Get a captcha score for the current user
-   */
-  performCaptchaCheck(): Promise<CaptchaResponse | undefined>;
-
-  /**
    * Load the servers current version
    */
   loadVersion(): Promise<BackendErrorAble<string>>;
@@ -158,6 +153,12 @@ export interface ApiAdapter {
    * @param message teh senders message
    */
   submitContactForm(sender: string, message: string): Promise<BackendErrorAble<string>>;
+
+  /**
+   * Verify a generated captcha token
+   * @param token the token generated on the client
+   */
+  verifyCaptchaToken(token: string): Promise<BackendErrorAble<CaptchaResponse>>;
 
   /**
    * exposes the raw fetch method

@@ -2,7 +2,7 @@ import { ApiAdapter } from '../ApiAdapter';
 import { AccountService } from './Account';
 import { Frontend } from './ApiConfig';
 import { AuthenticationService } from './Authentication';
-import ReCaptchaService from './Captcha';
+import { CaptchaApiService } from './Captcha';
 import { ConfigService } from './Config';
 import { WrappedFetch } from './FetchWrapper';
 import { GameManagementService } from './GameManagement';
@@ -26,7 +26,6 @@ export const RestApi: ApiAdapter = {
   loadVersionHistory: ConfigService.fetchVersionHistory,
   loginUser: AuthenticationService.performLogin,
   logoutUser: AuthenticationService.performLogout,
-  performCaptchaCheck: ReCaptchaService.checkUser,
   requestUserPasswordReset: AccountService.requestPasswordReset,
   resendVerificationEmail: AuthenticationService.resendVerificationEmail,
   resetUserPassword: AccountService.requestPasswordReset,
@@ -34,5 +33,6 @@ export const RestApi: ApiAdapter = {
   submitContactForm: MiscApiService.submitContactForm,
   verifyUserAccount: AuthenticationService.verifyAccount,
   fetchRaw: WrappedFetch,
-  generateJoinUrl: id => `${Frontend.url}/join/${id}`
+  generateJoinUrl: id => `${Frontend.url}/join/${id}`,
+  verifyCaptchaToken: CaptchaApiService.verify
 };
