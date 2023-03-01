@@ -5,9 +5,14 @@ import { unwrapBackendError } from '@/core/api/ApiError';
 import { RouterService } from '@/core/global/Router';
 import { Awaiter } from '@/core/helper/Awaiter';
 
+import { ApiAdapter } from '../api/ApiAdapter';
+import { GameAdapter } from '../api/GameAdapter';
 import { RestApi } from '../api/restapi/RestApi';
+import { WasmApi } from '../api/wasmapi/WasmApi';
 import { WsGameAdapter } from '../api/wsgame/WsGameAdapter';
 import { MigrationRunner } from './migrations/MigrationRunner';
+
+type AppEnv = 'offline' | 'online';
 
 const versionInfo = {
   override: AppConfig.VersionOverride,
@@ -15,11 +20,22 @@ const versionInfo = {
   hash: AppConfig.VersionHash
 };
 
+const apiMap: Record<AppEnv, { api: ApiAdapter; realtime: GameAdapter }> = {
+  online: {
+    api: RestApi,
+    realtime: WsGameAdapter
+  },
+  offline: {
+    api: WasmApi,
+    realtime: WasmApi
+  }
+};
+
 export const useRootApp = defineStore('app', {
   state: () => {
     return {
       // global app state
-      environment: 'online' as 'offline' | 'online',
+      environment: 'online' as AppEnv,
       // versions
       serverVersion: new Awaiter() as string | Awaiter<string>,
       clientVersion: AppConfig.Version,
@@ -34,11 +50,11 @@ export const useRootApp = defineStore('app', {
     versionInfo() {
       return versionInfo;
     },
-    api() {
-      return RestApi;
+    api: state => {
+      return apiMap[state.environment].api;
     },
-    realtimeApi() {
-      return WsGameAdapter;
+    realtimeApi: state => {
+      return apiMap[state.environment].realtime;
     }
   },
   actions: {

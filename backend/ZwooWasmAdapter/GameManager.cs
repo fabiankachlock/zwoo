@@ -8,7 +8,6 @@ namespace ZwooWasm;
 
 public partial class GameManager
 {
-
     public readonly static GameManager Instance = new GameManager();
 
     private ZwooGameLogic.GameManager _gameManager;
@@ -34,6 +33,19 @@ public partial class GameManager
         {
             Instance._activeGame = null;
         };
+    }
+
+    [JSExport]
+    public static void AddPlayer([JSMarshalAs<JSType.String>] string username)
+    {
+        // cleanup
+        if (Instance._activeGame == null)
+        {
+            return;
+        }
+        Console.WriteLine("### adding local player");
+        Instance._activeGame.Lobby.Initialize(Constants.LocalUser, username, "", !Instance._activeGame.Game.IsPublic);
+        Instance._activeGame.Lobby.IsPlayerAllowedToConnect(Constants.LocalUser);
     }
 
     [JSExport]
