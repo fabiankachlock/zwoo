@@ -15,7 +15,7 @@
       <FloatingMenu />
     </div>
     <div class="main-content">
-      <div class="pt-2 mt-10 relative">
+      <div class="pt-2 pb-2 mt-10 mb-8 relative">
         <div class="w-full sticky z-10 bg-main top-10">
           <slot name="sticky-content"></slot>
         </div>
@@ -25,12 +25,16 @@
         <!-- workaround for ios hidden content on the end of the side -->
         <div class="h-14"></div>
       </div>
+      <div class="footer fixed bottom-0 left-0 right-0 bg-darkest h-8 bc-primary border-t-1 z-30">
+        <Footer />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import FloatingMenu from '@/components/menu/FloatingMenu.vue';
+import Footer from '@/components/menu/Footer.vue';
 import NavBar from '@/components/menu/NavBar.vue';
 </script>
 

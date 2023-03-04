@@ -10,7 +10,7 @@ import { CardDeck } from '../../services/game/PlayerDeck';
 import { useConfig } from '../config';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
-const deckWatcher = new MonolithicEventWatcher(ZRPOPCode.GameStarted, ZRPOPCode.GetCard, ZRPOPCode.RemoveCard, ZRPOPCode.GetHand);
+const deckWatcher = new MonolithicEventWatcher(ZRPOPCode.GameStarted, ZRPOPCode.GetCards, ZRPOPCode.RemoveCard, ZRPOPCode.GetHand);
 
 export const useGameCardDeck = defineStore('game-cards', () => {
   const cards = ref<Card[]>([]);
@@ -22,11 +22,13 @@ export const useGameCardDeck = defineStore('game-cards', () => {
   const _receiveMessage: typeof deckWatcher['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.GameStarted) {
       dispatchEvent(ZRPOPCode.RequestHand, {});
-    } else if (msg.code === ZRPOPCode.GetCard) {
-      addCard({
-        color: msg.data.type,
-        type: msg.data.symbol
-      });
+    } else if (msg.code === ZRPOPCode.GetCards) {
+      for (const card of msg.data.cards) {
+        addCard({
+          color: card.type,
+          type: card.symbol
+        });
+      }
     } else if (msg.code === ZRPOPCode.RemoveCard) {
       removeCard({
         color: msg.data.type,

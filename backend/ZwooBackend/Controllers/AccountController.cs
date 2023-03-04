@@ -2,14 +2,24 @@ using BackendHelper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
+using ZwooBackend.Services;
 
 namespace ZwooBackend.Controllers;
 
 [ApiController]
-[EnableCors("Zwoo")] 
+[EnableCors("Zwoo")]
 [Route("account")]
 public class AccountController : Controller
 {
+    private readonly IEmailService _emailService;
+    private readonly ILanguageService _languageService;
+
+    public AccountController(IEmailService emailService, ILanguageService languageService)
+    {
+        _emailService = emailService;
+        _languageService = languageService;
+    }
+
     [HttpGet("settings")]
     public IActionResult GetSettings()
     {
@@ -17,7 +27,7 @@ public class AccountController : Controller
             return Ok($"{{\"settings\": \"{user.Settings.Replace("\"", "\\\"")}\"}}");
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
-    
+
     [HttpPost("settings")]
     public IActionResult PostSettings([FromBody] SetSettings body)
     {
@@ -29,7 +39,7 @@ public class AccountController : Controller
         }
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
-    
+
     [HttpPost("changePassword")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -48,7 +58,7 @@ public class AccountController : Controller
         }
         return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
-    
+
     [HttpPost("requestPasswordReset")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -59,7 +69,10 @@ public class AccountController : Controller
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
         if (!Globals.ZwooDatabase.EmailExists(body.email))
             return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "no User with this Email"));
-        Globals.PasswordChangeRequestEmailQueue.Enqueue(Globals.ZwooDatabase.RequestChangePassword(body.email));
+
+        var user = Globals.ZwooDatabase.RequestChangePassword(body.email);
+        var recipient = _emailService.CreateRecipient(user.Email, user.Username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
+        _emailService.SendPasswordResetMail(recipient, user.PasswordResetCode ?? "");
         return Ok("");
     }
 

@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
+import { LocationQuery } from 'vue-router';
+
 import { AppConfig } from '@/config';
+
+import { joinQuery } from '../utils';
 
 type ExtractRouteParams<str extends string> = str extends ''
   ? {}
@@ -37,7 +41,8 @@ export enum Endpoint {
   ResetPassword = 'account/resetPassword',
   ResendVerificationEmail = 'auth/resendVerificationEmail',
   VersionHistory = 'versionHistory',
-  UserSettings = 'account/settings'
+  UserSettings = 'account/settings',
+  ContactFormSubmission = 'contactForm'
 }
 
 export class Backend {
@@ -65,6 +70,14 @@ export class Backend {
     }
 
     return url;
+  }
+
+  public static getUrlWithQuery(endpoint: Endpoint, query: LocationQuery): string {
+    return `${this.getUrl(endpoint)}?${joinQuery(query)}`;
+  }
+
+  public static getDynamicUrlWithQuery<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>, query: LocationQuery): string {
+    return `${this.getDynamicUrl(endpoint, params)}?${joinQuery(query)}`;
   }
 }
 

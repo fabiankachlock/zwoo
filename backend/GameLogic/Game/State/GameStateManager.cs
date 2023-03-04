@@ -1,16 +1,16 @@
-﻿using log4net;
-using ZwooGameLogic.Game.Cards;
+﻿using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Helper;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game.State;
 
 public sealed class GameStateManager
 {
     public readonly GameMeta Meta;
-    private readonly NotificationManager _notificationManager;
+    private readonly IGameEventManager _notificationManager;
     private readonly RuleManager _ruleManager;
     private PlayerManager _playerManager;
     private GameSettings _gameSettings;
@@ -21,7 +21,7 @@ public sealed class GameStateManager
     private AsyncExecutionQueue _actionsQueue;
     private bool _isRunning;
 
-    private ILog _logger;
+    private ILogger _logger;
 
     public bool IsRunning
     {
@@ -31,7 +31,7 @@ public sealed class GameStateManager
     public delegate void FinishedHandler(GameEvent.PlayerWonEvent data, GameMeta gameMeta);
     public event FinishedHandler OnFinished = delegate { };
 
-    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, NotificationManager notification)
+    internal GameStateManager(GameMeta meta, PlayerManager playerManager, GameSettings settings, IGameEventManager notification, ILoggerFactory loggerFactory)
     {
         Meta = meta;
         _gameSettings = settings;
@@ -42,9 +42,9 @@ public sealed class GameStateManager
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
         _playerOrder = new Dictionary<long, int>();
-        _ruleManager = new RuleManager(meta.Id, _gameSettings);
+        _ruleManager = new RuleManager(meta.Id, _gameSettings, loggerFactory);
         _actionsQueue = new AsyncExecutionQueue();
-        _logger = LogManager.GetLogger($"GameState-{Meta.Id}");
+        _logger = loggerFactory.CreateLogger($"GameState-{meta.Id}");
         _playerManager.OnPlayerLeave(HandlePlayerLeave);
     }
 
@@ -97,6 +97,8 @@ public sealed class GameStateManager
             _logger.Warn("game not started");
             return;
         }
+        _actionsQueue.Clear();
+        _actionsQueue.Stop();
         _isRunning = false;
     }
 
@@ -106,14 +108,16 @@ public sealed class GameStateManager
     /// </summary>
     internal void Reset()
     {
-        if (!_isRunning)
+        if (_isRunning)
         {
             _logger.Warn("resetting running game");
+            Stop();
         }
         _isRunning = false;
         _gameState = new GameState();
         _cardPile = new Pile();
         _playerCycle = new PlayerCycle(new List<long>());
+        _actionsQueue = new AsyncExecutionQueue();
     }
 
     private void HandlePlayerLeave(long id)
@@ -124,6 +128,8 @@ public sealed class GameStateManager
             _logger.Warn($"player {id} left the running game");
             long lastPlayer = _playerCycle.ActivePlayer;
             _playerCycle.RemovePlayer(id, _gameState.Direction);
+            if (_playerCycle.Order.Count() <= 1) return;
+
             long newPlayer = _playerCycle.ActivePlayer;
 
             GameState newState = _gameState.Clone();
@@ -227,7 +233,7 @@ public sealed class GameStateManager
                     break;
                 case GameEventType.GetCard:
                     GameEvent.GetCardEvent getCardEvent = evt.CastPayload<GameEvent.GetCardEvent>();
-                    _notificationManager.SendCard(new SendCardDTO(getCardEvent.Player, getCardEvent.Card));
+                    _notificationManager.SendCard(new SendCardDTO(getCardEvent.Player, getCardEvent.Cards));
                     break;
                 case GameEventType.RemoveCard:
                     GameEvent.RemoveCardEvent removeCardEvent = evt.CastPayload<GameEvent.RemoveCardEvent>();
@@ -243,9 +249,9 @@ public sealed class GameStateManager
                         stateUpdateEvent.LastPlayerCardAmount
                     ));
                     break;
-                case GameEventType.GetPlayerDecission:
-                    GameEvent.PlayerDecissionEvent playerDecissionEvent = evt.CastPayload<GameEvent.PlayerDecissionEvent>();
-                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecissionEvent.Player, playerDecissionEvent.Decission));
+                case GameEventType.GetPlayerDecision:
+                    GameEvent.PlayerDecisionEvent playerDecisionEvent = evt.CastPayload<GameEvent.PlayerDecisionEvent>();
+                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecisionEvent.Player, playerDecisionEvent.Decision));
                     break;
                 case GameEventType.PlayerWon:
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();

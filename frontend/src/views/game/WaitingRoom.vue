@@ -20,7 +20,7 @@
         <PlayersWidget />
         <SpectatorsWidget />
         <RulesWidget />
-        <!-- <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div> -->
+        <BotsWidget />
       </div>
       <div class="main-content hidden md:grid grid-cols-2 gap-2 mx-auto max-w-5xl">
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
@@ -30,9 +30,7 @@
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
           <ChatWidget />
           <RulesWidget />
-          <!--
-            <div v-if="isHost" class="bg-light" style="height: fit-content">Host section...</div>
-          -->
+          <BotsWidget />
         </div>
       </div>
     </main>
@@ -43,6 +41,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import BotsWidget from '@/components/lobby/widgets/BotsWidget.vue';
 import ChatWidget from '@/components/lobby/widgets/ChatWidget.vue';
 import PlayersWidget from '@/components/lobby/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/lobby/widgets/RulesWidget.vue';

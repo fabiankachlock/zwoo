@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Events;
+﻿using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
-using log4net;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game.Rules;
 
@@ -19,14 +14,14 @@ internal abstract class BaseRule
 
     public abstract GameSettingsKey? AssociatedOption { get; }
 
-    protected ILog _logger;
+    protected ILogger _logger;
 
-    public BaseRule(ILog? logger = null)
+    public BaseRule(ILogger? logger = null)
     {
-        _logger = logger ?? LogManager.GetLogger(Name);
+        _logger = logger ?? new VoidLogger();
     }
 
-    internal void SetLogger(ILog? logger)
+    internal void SetLogger(ILogger? logger)
     {
         _logger = logger ?? _logger;
     }

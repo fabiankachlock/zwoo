@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabaseClasses;
@@ -10,7 +9,7 @@ namespace ZwooDatabaseClasses;
 
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]
-[CollectionLocation("users", "zwoo")]
+[CollectionLocation("users")]
 public class User : IDocument
 {
     public User() { }
@@ -31,7 +30,7 @@ public class User : IDocument
 
     [JsonIgnore]
     [BsonElement("_id")]
-    public UInt64 Id { set; get; } = 0;
+    public UInt64 Id { set; get; }
 
     [BsonElement("sid")]
     [JsonIgnore]
@@ -52,7 +51,7 @@ public class User : IDocument
 
     [JsonPropertyName("wins")]
     [BsonElement("wins")]
-    public UInt32 Wins { set; get; } = 0;
+    public UInt32 Wins { set; get; }
 
     [BsonElement("settings")]
     [JsonIgnore]
@@ -66,7 +65,7 @@ public class User : IDocument
 
     [JsonIgnore]
     [BsonElement("verified")]
-    public bool Verified { set; get; } = false;
+    public bool Verified { set; get; }
 
     [BsonElement("beta_code")]
     [JsonIgnore]

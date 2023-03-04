@@ -44,9 +44,12 @@
     "createAccount": "Account erstellen",
     "idea": "Neue Idee?",
     "imprint": "Impressum",
+    "privacy": "Datenschutz",
     "logout": "Abmelden",
     "settings": "Einstellungen",
-    "home": "Home"
+    "home": "Home",
+    "help": "Hilfe",
+    "contact": "Kontakt"
   },
   "login": {
     "title": "Anmeldung",
@@ -135,6 +138,7 @@
     "recaptcha": "Die Bot-Challenge muss bestanden sein.",
     "inputTooLong": "Die Eingabe ist zu lang.",
     "backend": {
+      "-2": "Interner Fehler",
       "-1": "Unbekannter Fehler",
       "100": "Fehler im Backend.",
       "110": "Der Account ist nicht verifiziert.",
@@ -163,6 +167,7 @@
       "400": "Ein Fehler is aufgetreten",
       "420": "Fehlende Berechtigung",
       "421": "Das Spiel ist voll",
+      "425": "Ein Bot mit dem Name existiert bereits",
       "434": "Karte nicht erlaubt",
       "900": "Fehler aufgetreten",
       "901": "Verbindungsfehler",
@@ -188,8 +193,16 @@
     "play": "Spielen",
     "kick": "Rauswerfen",
     "chat": "Chat",
+    "bots": "Bots",
+    "botName": "Bot Name",
+    "exampleBotName": "MeinBot",
+    "editBot": "Bot bearbeiten",
+    "updateBot": "Bot speichern",
+    "createBot": "Bot erstellen",
+    "edit": "Bearbeiten",
     "noPlayers": "keine Spieler vorhanden...",
     "noSpectators": "keine Zuschauer vorhanden...",
+    "noBots": "keine Bots vorhanden...",
     "sharesheet": {
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."
@@ -243,7 +256,7 @@
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
-        "name": "Authetifizierungs Cookies",
+        "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
       },
       "recaptcha": {
@@ -253,7 +266,7 @@
     },
     "active": "Aktiviert",
     "inactive": "Deaktiviert",
-    "acceptAll": "Alle Akzeptieren",
+    "rejectAll": "Alle Ablehnen",
     "acceptSelection": "Auswahl Akzeptieren",
     "manage": "Cookies Verwalten",
     "disallowed": {
@@ -414,5 +427,15 @@
   "offline": {
     "title": "Ooops, du bist offline!",
     "info": "Die zwoo Server können nicht erreicht werden. Solange zwoo nicht offline gespielt werden kann, wird eine aktive Internetverbindung benötigt um zwoo zu spielen."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "info": "Setzen Sie sich mit uns in Verbindung!",
+    "sender": "Name",
+    "namePlaceholder": "Dein Name",
+    "message": "Nachricht",
+    "messagePlaceholder": "Deine Nachricht",
+    "send": "Absenden!",
+    "thanks": "Deine Anfrage wurde erfolgreich versendet!"
   }
 }

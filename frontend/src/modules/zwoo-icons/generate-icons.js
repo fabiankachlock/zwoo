@@ -1,3 +1,4 @@
+/* eslint-disable */
 const icons = [
   'akar-icons:box',
   'akar-icons:check',
@@ -51,7 +52,11 @@ const icons = [
   'mdi:fullscreen',
   'mdi:fullscreen-exit',
   'mdi:cloud-sync-outline',
-  'mdi:cloud-off-outline'
+  'mdi:cloud-off-outline',
+  'fluent:bot-add-20-regular',
+  'fluent:bot-24-regular',
+  'material-symbols:help-outline-rounded',
+  'mdi:email-outline'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');
@@ -70,7 +75,7 @@ const reducedIcons = icons
 
 console.log(`starting icon build process`);
 console.log(`cleaning output folder...`);
-// eslint-disable-next-line no-undef
+
 const iconsDir = path.join(__dirname, 'icons');
 if (fs.existsSync(iconsDir)) {
   fs.rmSync(iconsDir, { recursive: true });
@@ -98,3 +103,49 @@ for (const iconCollection in reducedIcons) {
 
 console.log(`built ${count} icons`);
 console.log(`finished`);
+
+if (!process.argv.includes('--view')) {
+  process.exit(0);
+}
+
+console.log('generating html overview');
+
+const html = `<html><head><title>zwoo icons</title><style>
+body { padding: 0 1rem; }
+div.collection { display: grid; grid-template-columns: auto auto auto; grid-gap: 4px; margin-bottom: 1rem; }
+div.row { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: center; }
+svg { width: 2rem; height: 2rem; margin-right: 1rem; display: block; }
+p, h1, h2 { font-family: 'Segoe UI', sans-serif;  margin: 0; }
+p { font-size: 1.5rem; }
+h1 { font-size: 3rem; }
+h2 { font-size: 2rem; margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid black; }
+</style></head><body><h1>Zwoo Icons</h1>
+{body}</body></html>
+`;
+
+const createIconRow = (name, svg) => {
+  return `<div class="row"><p>${name}</p>${svg}</div>`;
+};
+
+const createIconCollection = (name, html) => {
+  return `<h2>${name}</h2>
+<div class="collection">${html}</div>
+`;
+};
+
+const collections = [];
+
+for (const iconCollection in reducedIcons) {
+  let collection = new Collection();
+  collection.loadIconifyCollection(iconCollection, iconifyPath);
+  const rows = [];
+
+  for (const icon of reducedIcons[iconCollection]) {
+    const svgData = collection.getIconData(icon);
+    const svg = new SVG(svgData);
+    rows.push(createIconRow(icon, svg.getSVG({})));
+  }
+  collections.push(createIconCollection(iconCollection, rows.join('')));
+}
+
+fs.writeFileSync(path.join(__dirname, 'icons.html'), html.replace('{body}', collections.join('')));

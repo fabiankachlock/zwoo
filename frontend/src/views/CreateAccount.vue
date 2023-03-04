@@ -31,7 +31,7 @@
           {{ t('createAccount.create') }}
         </FormSubmit>
         <FormAlternativeAction>
-          <router-link :to="'/login?' + joinQuery(route.query)">{{ t('nav.login') }}</router-link>
+          <router-link class="w-full block text-center" :to="'/login?' + joinQuery(route.query)">{{ t('nav.login') }}</router-link>
         </FormAlternativeAction>
       </FormActions>
       <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
@@ -56,6 +56,7 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
 import { AuthenticationService } from '@/core/services/api/Authentication';
 import { ReCaptchaResponse } from '@/core/services/api/Captcha';
@@ -69,6 +70,7 @@ import { UsernameValidator } from '@/core/services/validator/username';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
+const config = useConfig();
 const auth = useAuth();
 const route = useRoute();
 const isBeta = AppConfig.IsBeta;
@@ -136,7 +138,7 @@ const create = async () => {
 const resendVerifyEmail = async () => {
   if (!showResend.value) return;
   showResend.value = false;
-  const res = await AuthenticationService.resendVerificationEmail(email.value);
+  const res = await AuthenticationService.resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
   const [, err] = unwrapBackendError(res);
   if (err !== undefined) {
     error.value = [getBackendErrorTranslation(err)];

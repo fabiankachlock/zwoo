@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Rules;
-using ZwooGameLogic.Game.State;
+﻿using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Settings;
-using log4net;
-using GameLogic.Game.Rules;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game.State;
 
@@ -25,14 +18,16 @@ internal class RuleManager
 
     public readonly long GameId;
 
+    private readonly ILoggerFactory _loggerFactory;
     private readonly GameSettings _settings;
     private List<BaseRule> _activeRules;
 
-    public RuleManager(long gameId, GameSettings settings)
+    public RuleManager(long gameId, GameSettings settings, ILoggerFactory loggerFactory)
     {
         GameId = gameId;
         _settings = settings;
         _activeRules = new List<BaseRule>();
+        _loggerFactory = loggerFactory;
     }
 
     public void Configure()
@@ -46,8 +41,7 @@ internal class RuleManager
 
         foreach (var rule in _activeRules)
         {
-            // TODO: Fix log management
-            rule.SetLogger(LogManager.GetLogger($"[Game-{GameId}]"));
+            rule.SetLogger(_loggerFactory.CreateLogger($"Game-{GameId}"));
         }
     }
 
@@ -56,13 +50,13 @@ internal class RuleManager
         return _activeRules.Where(rule => rule.IsResponsible(clientEvent, state)).ToList();
     }
 
-    public BaseRule GetPrioritiesedRule(List<BaseRule> rules)
+    public BaseRule GetPrioritizedRule(List<BaseRule> rules)
     {
         return rules.OrderByDescending(rule => rule.Priority).First();
     }
 
     public BaseRule? getRule(ClientEvent clientEvent, GameState state)
     {
-        return GetPrioritiesedRule(GetResponsibleRules(clientEvent, state));
+        return GetPrioritizedRule(GetResponsibleRules(clientEvent, state));
     }
 }

@@ -44,9 +44,12 @@
     "createAccount": "Create Account",
     "idea": "New Idea?",
     "imprint": "Imprint",
+    "privacy": "Privacy",
     "logout": "Logout",
     "settings": "Settings",
-    "home": "Home"
+    "home": "Home",
+    "help": "Help",
+    "contact": "Contact"
   },
   "login": {
     "title": "Login",
@@ -135,6 +138,7 @@
     "recaptcha": "The Bot-Challenge must be passed.",
     "inputTooLong": "Your input is too long.",
     "backend": {
+      "-2": "Internal Error",
       "-1": "Unknown Error",
       "100": "An error occurred in the backend.",
       "110": "The account is not verified.",
@@ -163,6 +167,7 @@
       "400": "An Error occurred",
       "420": "Missing Authorization",
       "421": "Game full",
+      "425": "Bot with this name already exists",
       "434": "Card not allowed",
       "900": "Error occurred",
       "901": "Connection error",
@@ -188,8 +193,16 @@
     "play": "Play",
     "kick": "Kick",
     "chat": "Chat",
+    "bots": "Bots",
+    "botName": "Bot name",
+    "exampleBotName": "MyBot",
+    "editBot": "Edit bot",
+    "updateBot": "Save Bot",
+    "createBot": "Create Bot",
+    "edit": "edit",
     "noPlayers": "no players available...",
     "noSpectators": "no spectators available...",
+    "noBots": "no bots available...",
     "sharesheet": {
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."
@@ -207,7 +220,6 @@
       "title": "Add draw amounts",
       "info": "On top of a draw card, further draw cards can be placed. The number of cards to be drawn is added. You can put +2 cards on top of +4 cards, as well as +4 cards on top of +2 cards."
     },
-
     "initialCards": {
       "title": "Amount Of Cards",
       "info": "Choose the amount of cards each player is supplied with at the start of a game.."
@@ -244,7 +256,7 @@
     "functional": {
       "title": "Functional Cookies",
       "auth": {
-        "name": "Authentication Cookies",
+        "name": "Authentication Cookies (Strictly necessary)",
         "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
       },
       "recaptcha": {
@@ -254,7 +266,7 @@
     },
     "active": "Active",
     "inactive": "Inactive",
-    "acceptAll": "Accept All",
+    "rejectAll": "Reject All",
     "acceptSelection": "Accept Selection",
     "manage": "Manage Cookies",
     "disallowed": {
@@ -415,5 +427,15 @@
   "offline": {
     "title": "Ooops, you're offline!",
     "info": "The zwoo servers can't be reached. As long as zwoo dosn't support offline games, you need to be online to play zwoo."
+  },
+  "contact": {
+    "title": "Contact",
+    "info": "Get in touch!",
+    "sender": "Name",
+    "namePlaceholder": "Your name",
+    "message": "Message",
+    "messagePlaceholder": "Your message",
+    "send": "Send!",
+    "thanks": "Your request was sent successfully!"
   }
 }

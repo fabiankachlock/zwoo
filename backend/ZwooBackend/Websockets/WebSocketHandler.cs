@@ -45,7 +45,7 @@ public class WebSocketHandler : IWebSocketHandler
             }
             else if (hasTooLongMessage)
             {
-                await webSocket.SendAsync(ZRPEncoder.EncodeToBytes(ZRPCode.MessageToLongError, new ErrorDTO((int)ZRPCode.MessageToLongError, "message to long")), WebSocketMessageType.Text, true, CancellationToken.None);
+                await webSocket.SendAsync(ZRPEncoder.EncodeToBytes(ZRPCode.MessageToLongError, new Error((int)ZRPCode.MessageToLongError, "message to long")), WebSocketMessageType.Text, true, CancellationToken.None);
                 hasTooLongMessage = false;
             }
             else

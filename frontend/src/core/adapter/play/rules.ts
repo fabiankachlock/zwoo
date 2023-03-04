@@ -16,7 +16,7 @@ export type DisplayRule = {
   description: string;
 };
 
-const settingsWatcher = new MonolithicEventWatcher(ZRPOPCode.AllSettings, ZRPOPCode.SettingsUpdated);
+const settingsWatcher = new MonolithicEventWatcher(ZRPOPCode.AllSettings, ZRPOPCode.SettingChanged);
 
 export const useRules = defineStore('game-rules', () => {
   const rules = ref<DisplayRule[]>([]);
@@ -34,7 +34,7 @@ export const useRules = defineStore('game-rules', () => {
           isReadonly: !EditableRules.includes(setting.setting),
           ruleType: RuleTypeDefinitions[setting.setting] as RuleType
         }));
-    } else if (msg.code === ZRPOPCode.SettingsUpdated) {
+    } else if (msg.code === ZRPOPCode.SettingChanged) {
       for (const setting of rules.value) {
         if (setting.id === msg.data.setting) {
           setting.value = msg.data.value;
@@ -45,7 +45,7 @@ export const useRules = defineStore('game-rules', () => {
   };
 
   const updateRule = <K extends string>(key: K, value: number): void => {
-    dispatchEvent(ZRPOPCode.ChangeSettings, {
+    dispatchEvent(ZRPOPCode.UpdateSetting, {
       setting: key,
       value: value
     });

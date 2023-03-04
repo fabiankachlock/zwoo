@@ -8,6 +8,7 @@ const configKey = 'zwoo:runtimeConfig';
 type ConfigType = {
   config: {
     recaptcha: string;
+    logrushServer?: string;
   };
   features: {
     beta: boolean;
@@ -17,12 +18,14 @@ type ConfigType = {
 export const useRuntimeConfig = defineStore('runtime-config', {
   state: () => ({
     _isBeta: new Awaiter<boolean>() as boolean | Awaiter<boolean>,
-    _recaptchaKey: new Awaiter<string>() as string | Awaiter<string>
+    _recaptchaKey: new Awaiter<string>() as string | Awaiter<string>,
+    _logrushServer: new Awaiter<string | undefined>() as string | undefined | Awaiter<string>
   }),
 
   getters: {
     isBeta: state => (typeof state._isBeta === 'object' ? state._isBeta.promise : Promise.resolve(state._isBeta)),
-    recaptchaKey: state => (typeof state._recaptchaKey === 'object' ? state._recaptchaKey.promise : Promise.resolve(state._recaptchaKey))
+    recaptchaKey: state => (typeof state._recaptchaKey === 'object' ? state._recaptchaKey.promise : Promise.resolve(state._recaptchaKey)),
+    logrushServer: state => (typeof state._logrushServer === 'object' ? state._logrushServer.promise : Promise.resolve(state._logrushServer))
   },
 
   actions: {
@@ -38,6 +41,11 @@ export const useRuntimeConfig = defineStore('runtime-config', {
           this._recaptchaKey.callback(parsed.config.recaptcha);
         } else {
           this._recaptchaKey = parsed.config.recaptcha;
+        }
+        if (typeof this._logrushServer === 'object') {
+          this._logrushServer.callback(parsed.config.logrushServer);
+        } else {
+          this._logrushServer = parsed.config.logrushServer;
         }
       } catch {
         return;

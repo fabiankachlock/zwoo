@@ -19,7 +19,7 @@ public static class Globals
         {
             if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(s)))
             {
-                Logger.Error($"{s} is required! please set it as Environment variable");
+                Console.WriteLine($"{s} is required! please set it as Environment variable");
                 Environment.Exit(1);
             }
             return Environment.GetEnvironmentVariable(s)!;
@@ -32,6 +32,7 @@ public static class Globals
         ZwooCookieDomain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? ZwooDomain;
 
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
+        DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
         SmtpHostUrl = ReturnIfValidEnvVar("SMTP_HOST_URL");
         if (!int.TryParse(ReturnIfValidEnvVar("SMTP_HOST_PORT").Trim(), out SmtpHostPort))
         {
@@ -48,6 +49,12 @@ public static class Globals
         LogRushAlias = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_ALIAS") ?? "";
         LogRushId = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_ID") ?? "";
         LogRushKey = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_Key") ?? "";
+
+        var versionOverride = Environment.GetEnvironmentVariable("ZWOO_VERSION_OVERRIDE");
+        if (versionOverride != null && versionOverride != "")
+        {
+            ApiVersion = versionOverride;
+        }
 
         Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
         hierarchy.Root.Level = Level.Debug;
@@ -90,9 +97,6 @@ public static class Globals
 
     public static readonly Database.Database ZwooDatabase;
 
-    public static readonly ConcurrentQueue<EmailData> EmailQueue = new ConcurrentQueue<EmailData>();
-    public static readonly ConcurrentQueue<User> PasswordChangeRequestEmailQueue = new ConcurrentQueue<User>();
-
     public static readonly bool UseSsl;
     public static readonly bool IsBeta;
     public static readonly string Cors;
@@ -100,6 +104,7 @@ public static class Globals
     public static readonly string ZwooCookieDomain;
 
     public static readonly string ConnectionString;
+    public static readonly string DatabaseName;
     public static readonly string SmtpHostUrl;
     public static readonly int SmtpHostPort;
     public static readonly string SmtpHostEmail;
@@ -116,4 +121,5 @@ public static class Globals
     public static readonly string RecaptchaSideSecret;
 
     public static readonly string Version = "1.0.0-beta.7";
+    public static readonly string ApiVersion = Version;
 }

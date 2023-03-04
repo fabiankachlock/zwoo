@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices.JavaScript;
-using ZwooGameLogic;
+using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
 
 namespace ZwooWasm;
@@ -39,20 +39,20 @@ public partial class LocalNotificationAdapter : INotificationAdapter
 
     #region Javascript Adaptation
 
-    private static Action<int, object> _messageHandler = (int code, object payload) => { };
+    private Action<int, object> _messageHandler = (int code, object payload) => { };
 
     [JSExport]
     public static void OnMessage([JSMarshalAsAttribute<JSType.Function<JSType.Number, JSType.Any>>] Action<int, object> callback)
     {
-        _messageHandler = callback;
+        Instance._messageHandler = callback;
     }
 
-    private static Action _disconnectHandler = () => { };
+    private Action _disconnectHandler = () => { };
 
     [JSExport]
     public static void OnDisconnect([JSMarshalAsAttribute<JSType.Function>] Action callback)
     {
-        _disconnectHandler = callback;
+        Instance._disconnectHandler = callback;
     }
 
     #endregion Javascript Adaptation

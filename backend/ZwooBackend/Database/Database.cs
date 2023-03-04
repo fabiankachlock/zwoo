@@ -3,7 +3,6 @@ using System.Text;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using BackendHelper;
-using MongoDB.Bson.Serialization;
 using Quartz;
 using ZwooBackend.Controllers;
 using ZwooBackend.Controllers.DTO;
@@ -30,25 +29,37 @@ public class Database
     [Serializable]
     private class DatabaseException : Exception
     {
-        public DatabaseException() : base() { }
+        public DatabaseException() { }
         public DatabaseException(string message) : base(message) { }
     }
 
     public Database()
     {
         _client = new MongoClient(ConnectionString);
-        DatabaseLogger.Info($"connected to {ConnectionString}");
-
-        _database = _client.GetDatabase("zwoo");
+        DatabaseLogger.Info($"trying to connect to db ({ConnectionString})");
+        _database = _client.GetDatabase(DatabaseName);
 
         if (_database == null)
         {
             DatabaseLogger.Error("cant connect to database");
             Environment.Exit(1);
         }
+
+        try
+        {
+            _database.ListCollectionNames();
+        }
+        catch (Exception e)
+        {
+            DatabaseLogger.Error(e);
+            DatabaseLogger.Fatal("closing! failed to connect to database");
+            Environment.Exit(1);
+        }
+
         DatabaseLogger.Info($"established connection with database");
 
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
+
         _userCollection = _database.GetCollection<User>("users");
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
@@ -72,7 +83,12 @@ public class Database
     {
         DatabaseLogger.Debug($"[User] creating {username}");
         var code = StringHelper.GenerateNDigitString(6);
-        var id = _userCollection.AsQueryable().Max(x => x.Id) + 1;
+
+        ulong id;
+        if (_userCollection.AsQueryable().Any())
+            id = _userCollection.AsQueryable().Max(x => x.Id) + 1;
+        else
+            id = 1;
 
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
@@ -167,17 +183,19 @@ public class Database
     /// </summary>
     /// <param name="cookie">cookie from user</param>
     /// <param name="user">user</param>
+    /// <param name="sid">session id of the user</param>
     /// <returns>user found</returns>
     public bool GetUser(string cookie, out User user, out string sid)
     {
         user = new User();
         sid = "";
         var cookieData = cookie.Split(",");
-        user = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
-        if (user == null)
+        var u = _userCollection.AsQueryable().FirstOrDefault(x => x.Id == Convert.ToUInt64(cookieData[0]));
+        if (u == null)
             return false;
-        if (user.Sid.Contains(cookieData[1]))
+        if (u.Sid.Contains(cookieData[1]))
         {
+            user = u;
             sid = cookieData[1];
             return true;
         }
@@ -251,7 +269,7 @@ public class Database
 
     public User RequestChangePassword(string email)
     {
-        var user = _userCollection.AsQueryable().FirstOrDefault(x => x.Email == email);
+        var user = _userCollection.AsQueryable().First(x => x.Email == email);
         user.PasswordResetCode = Guid.NewGuid().ToString();
         _userCollection.UpdateOne(x => x.Id == user.Id,
             Builders<User>.Update.Set(u => u.PasswordResetCode, user.PasswordResetCode));
@@ -296,8 +314,8 @@ public class Database
     public Changelog? GetChangelog(string version) => _changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == version && c.Public);
     public Changelog[] GetChangelogs() => _changelogCollection.AsQueryable().Where(x => x.Public).ToArray();
 
-    public void SaveGame(Dictionary<long, int> scores, GameMeta meta) =>
-        _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores.Select(x => new PlayerScore(_userCollection.AsQueryable().First(y => y.Id == (ulong)x.Key).Username, x.Value)).ToList(), (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
+    public void SaveGame(List<PlayerScore> scores, GameMeta meta) =>
+        _gameInfoCollection.InsertOne(new GameInfo(meta.Name, meta.Id, meta.IsPublic, scores, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
 
     private void CreateAttempt(ulong puid, bool success) =>
         _accountEventCollection.InsertOne(new AccountEvent("create", puid, success,

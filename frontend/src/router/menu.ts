@@ -10,6 +10,14 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/Imprint.vue')
   },
   {
+    path: 'privacy',
+    component: () => import('../views/Privacy.vue')
+  },
+  {
+    path: 'contact',
+    component: () => import('../views/Contact.vue')
+  },
+  {
     path: 'login',
     component: () => import('../views/Login.vue'),
     meta: {

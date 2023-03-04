@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="fixed bottom-3 left-3 rounded-full bg-dark flex flex-row items-center">
+  <div v-if="visible" class="fixed bottom-11 left-3 rounded-full bg-dark flex flex-row items-center">
     <div
       class="h-full bg-darkest p-2 rounded-full transition-transform duration-300 ease-out hover:scale-90 cursor-pointer"
       :class="{ 'rotate-90': isOpen }"
@@ -7,7 +7,7 @@
     >
       <Icon icon="carbon:settings" class="text-3xl sm:text-2xl tc-main-light" />
     </div>
-    <!-- can't be w-auto, otherwise the transition won't work-->
+    <!-- can't be w-auto, otherwise the transition won't work -->
     <div
       :class="{ 'open p-2': isOpen }"
       class="w-0 h-full transition overflow-hidden duration-300 ease-out"

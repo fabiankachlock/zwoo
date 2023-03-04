@@ -1,6 +1,8 @@
 ﻿using ZwooBackend.Websockets;
+using ZwooDatabaseClasses;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic;
+
 
 namespace ZwooBackend.Games;
 
@@ -31,7 +33,7 @@ public class GameLogicService : IGameLogicService
     public GameLogicService(IWebSocketManager wsManager)
     {
         _wsManager = wsManager;
-        _gameManager = new GameManager(wsManager);
+        _gameManager = new GameManager(wsManager, new Log4NetFactory());
     }
 
     public bool HasGame(long gameId)
@@ -44,8 +46,22 @@ public class GameLogicService : IGameLogicService
         ZwooRoom room = _gameManager.CreateGame(name, isPublic);
         room.Game.OnFinished += (data, gameMeta) =>
         {
-            uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
-            Globals.ZwooDatabase.SaveGame(data.Scores, gameMeta);
+            if (room.GetPlayer(data.Winner)?.Role != ZRPRole.Bot)
+            {
+                uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
+            }
+
+            List<PlayerScore> scores = new();
+            foreach (KeyValuePair<long, int> score in data.Scores)
+            {
+                var player = room.GetPlayer(score.Key);
+                if (player != null)
+                {
+                    scores.Add(new PlayerScore(player.Username, score.Value, player.Role == ZRPRole.Bot));
+                }
+            }
+
+            Globals.ZwooDatabase.SaveGame(scores, gameMeta);
         };
         return room;
     }

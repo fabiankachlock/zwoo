@@ -11,20 +11,23 @@
 
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\..\..\..\.nuget\packages\mongodb.bson\2.16.1\lib\netstandard2.1\MongoDB.Bson.dll</HintPath>
+      <HintPath>
+        ..\..\..\..\..\.nuget\packages\mongodb.bson\2.16.1\lib\netstandard2.1\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\..\..\..\.nuget\packages\mongodb.driver\2.16.1\lib\netstandard2.1\MongoDB.Driver.dll</HintPath>
+      <HintPath>
+        ..\..\..\..\..\.nuget\packages\mongodb.driver\2.16.1\lib\netstandard2.1\MongoDB.Driver.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
-    <PackageReference Include="Radzen.Blazor" Version="4.1.12" />
+    <PackageReference Include="Radzen.Blazor" Version="4.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BackendHelper\BackendHelper.csproj" />
+    <ProjectReference Include="..\Zwoo.MongoMigrations\Zwoo.MongoMigrations.csproj" />
     <ProjectReference Include="..\ZwooDatabaseClasses\ZwooDatabaseClasses.csproj" />
   </ItemGroup>
 

@@ -3,10 +3,11 @@
     <div class="opponents overflow-x-scroll flex flex-row flex-nowrap items-center h-12 select-none">
       <Opponent
         v-for="player in players"
-        :key="player.name"
+        :key="player.id"
+        :id="player.id"
         :name="player.name"
         :card-amount="player.cards"
-        :is-active="player.name === activePlayer"
+        :is-active="player.id === activePlayer"
         :is-muted="mutedState[player.name]"
         :is-connected="player.isConnected"
       />
@@ -26,7 +27,7 @@ const game = useGameState();
 const chat = useChatStore();
 
 const players = computed(() => game.players);
-const activePlayer = computed(() => game.activePlayerName);
+const activePlayer = computed(() => game.activePlayerId);
 const mutedState = computed(() => chat.muted);
 </script>
 

@@ -67,8 +67,8 @@ export const useCookies = defineStore('cookies', {
     setReCaptchaCookie(allowed: boolean) {
       this.cookies.recaptcha = allowed;
     },
-    acceptAll() {
-      this.cookies.recaptcha = true;
+    rejectAll() {
+      this.cookies.recaptcha = false;
     },
     async loadRecaptcha() {
       if (this.cookies.recaptcha) {

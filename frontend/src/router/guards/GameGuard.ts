@@ -1,6 +1,6 @@
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
-import { useRedirect } from '@/composables/useRedirect';
+import { createRedirect } from '@/composables/useRedirect';
 import { useGameConfig } from '@/core/adapter/game';
 import Logger from '@/core/services/logging/logImport';
 import { GameRoute } from '@/router/game';
@@ -18,7 +18,6 @@ export class InGameGuard implements RouterInterceptor {
       if (!game.inActiveGame) {
         this.Logger.warn(`not allowed to access ${to.fullPath}`);
         const redirect = to.meta['redirect'] as string | boolean | undefined;
-        const { createRedirect } = useRedirect();
 
         if (redirect === true) {
           this.Logger.log(`redirecting to login with loopback `);

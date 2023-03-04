@@ -1,7 +1,7 @@
-﻿using log4net;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.State;
+using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game;
 
@@ -11,8 +11,8 @@ public sealed class Game
     private GameSettings _gameSettings;
     private PlayerManager _playerManager;
     private GameStateManager _stateManager;
-    private readonly NotificationManager _notificationManager;
-    private readonly ILog _logger;
+    private readonly IGameEventManager _notificationManager;
+    private readonly ILogger _logger;
 
     public long Id { get => _meta.Id; }
     public string Name { get => _meta.Name; }
@@ -42,7 +42,8 @@ public sealed class Game
         long id,
         string name,
         bool isPublic,
-        NotificationManager notificationManager
+        IGameEventManager notificationManager,
+        ILoggerFactory loggerFactory
     )
     {
         _meta = new GameMeta();
@@ -52,8 +53,8 @@ public sealed class Game
         _notificationManager = notificationManager;
         _gameSettings = GameSettings.FromDefaults();
         _playerManager = new PlayerManager();
-        _stateManager = new GameStateManager(_meta, _playerManager, _gameSettings, _notificationManager);
-        _logger = LogManager.GetLogger($"Game-{id}");
+        _stateManager = new GameStateManager(_meta, _playerManager, _gameSettings, _notificationManager, loggerFactory);
+        _logger = loggerFactory.CreateLogger($"Game-{id}");
     }
 
 
@@ -63,10 +64,21 @@ public sealed class Game
         return _playerManager.AddPlayer(id);
     }
 
+    public bool HasPlayer(long id)
+    {
+        return _playerManager.HasPlayer(id);
+    }
+
     public bool RemovePlayer(long id)
     {
         _logger.Debug($"removing player {id}");
-        return _playerManager.RemovePlayer(id);
+        bool result = _playerManager.RemovePlayer(id);
+
+        if (PlayerCount <= 1)
+        {
+            Stop();
+        }
+        return result;
     }
 
     public void SetSetting(string key, int value)
@@ -95,8 +107,11 @@ public sealed class Game
 
     public void HandleEvent(ClientEvent clientEvent)
     {
-        _logger.Info($"received event: {clientEvent.Type}");
-        _stateManager.HandleEvent(clientEvent);
+        if (IsRunning)
+        {
+            _logger.Info($"received event: {clientEvent.Type}");
+            _stateManager.HandleEvent(clientEvent);
+        }
     }
 }
 

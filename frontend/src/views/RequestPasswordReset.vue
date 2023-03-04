@@ -11,7 +11,7 @@
           {{ t('requestPasswordReset.request') }}
         </FormSubmit>
         <FormSecondaryAction>
-          <router-link :to="'/login?' + joinQuery(route.query)">{{ t('requestPasswordReset.login') }}</router-link>
+          <router-link class="w-full block text-center" :to="'/login?' + joinQuery(route.query)">{{ t('requestPasswordReset.login') }}</router-link>
         </FormSecondaryAction>
       </FormActions>
       <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">

@@ -14,6 +14,7 @@ import { usePlayerManager } from './playerManager';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GamePlayer = {
+  id: string;
   name: string;
   cards: number;
   order: number;
@@ -37,7 +38,7 @@ export const useGameState = defineStore('game-state', () => {
   const isActivePlayer = ref(false);
   const playerManager = usePlayerManager();
   const topCard = ref<Card | CardDescriptor>(CardDescriptor.BackUpright);
-  const activePlayerName = ref('');
+  const activePlayerId = ref('');
   const players = ref<Omit<GamePlayer, 'isConnected'>[]>([]);
   const dispatchEvent = useGameEventDispatch();
   const auth = useAuth();
@@ -61,11 +62,11 @@ export const useGameState = defineStore('game-state', () => {
     } else if (msg.code == ZRPOPCode.PlayerWon) {
       RouterService.getRouter().replace('/game/summary');
     } else if (msg.code == ZRPOPCode.PlayerLeft) {
-      removePlayer(msg.data.username);
+      removePlayer(msg.data.id);
     } else if (msg.code === ZRPOPCode.PlayerDisconnected) {
-      playerManager.setPlayerDisconnected(msg.data.username);
+      playerManager.setPlayerDisconnected(msg.data.id);
     } else if (msg.code === ZRPOPCode.PlayerReconnected) {
-      playerManager.setPlayerConnected(msg.data.username);
+      playerManager.setPlayerConnected(msg.data.id);
     }
   };
 
@@ -76,12 +77,12 @@ export const useGameState = defineStore('game-state', () => {
 
   const activateSelf = () => {
     isActivePlayer.value = true;
-    activePlayerName.value = auth.username;
+    activePlayerId.value = auth.publicId;
   };
 
   const deactivateSelf = () => {
     isActivePlayer.value = false;
-    activePlayerName.value = '';
+    activePlayerId.value = '';
   };
 
   const updatePile = (card: Card) => {
@@ -94,14 +95,14 @@ export const useGameState = defineStore('game-state', () => {
       type: data.pileTop.symbol
     });
     for (let i = 0; i < players.value.length; i++) {
-      if (players.value[i].name === data.activePlayer) {
+      if (players.value[i].id === data.activePlayer) {
         players.value[i].cards = data.activePlayerCardAmount;
       }
-      if (players.value[i].name === data.lastPlayer) {
+      if (players.value[i].id === data.lastPlayer) {
         players.value[i].cards = data.lastPlayerCardAmount;
       }
     }
-    activePlayerName.value = data.activePlayer;
+    activePlayerId.value = data.activePlayer;
     verifyDeck();
   };
 
@@ -110,9 +111,10 @@ export const useGameState = defineStore('game-state', () => {
     players.value = data.players
       .map(p => {
         if (p.isActivePlayer) {
-          activePlayer = p.username;
+          activePlayer = p.id;
         }
         return {
+          id: p.id,
           name: p.username,
           cards: p.cards,
           order: p.order
@@ -121,16 +123,16 @@ export const useGameState = defineStore('game-state', () => {
       .sort((a, b) => a.order - b.order);
 
     if (activePlayer) {
-      activePlayerName.value = activePlayer;
-      if (auth.username === activePlayer) {
+      activePlayerId.value = activePlayer;
+      if (auth.publicId === activePlayer) {
         activateSelf();
       }
     }
     verifyDeck();
   };
 
-  const removePlayer = (playerToDelete: string) => {
-    players.value = players.value.filter(p => p.name !== playerToDelete);
+  const removePlayer = (id: string) => {
+    players.value = players.value.filter(p => p.id !== id);
   };
 
   const verifyDeck = () => {
@@ -143,7 +145,7 @@ export const useGameState = defineStore('game-state', () => {
 
   const reset = () => {
     isActivePlayer.value = false;
-    activePlayerName.value = '';
+    activePlayerId.value = '';
     topCard.value = CardDescriptor.BackUpright;
     players.value = [];
   };
@@ -155,11 +157,11 @@ export const useGameState = defineStore('game-state', () => {
   return {
     topCard,
     isActivePlayer,
-    activePlayerName,
+    activePlayerId: activePlayerId,
     players: computed<GamePlayer[]>(() =>
       players.value.map(p => ({
         ...p,
-        isConnected: playerManager.isPlayerActive(p.name)
+        isConnected: playerManager.isPlayerActive(p.id)
       }))
     ),
     // eslint-disable-next-line @typescript-eslint/no-empty-function

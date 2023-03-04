@@ -1,8 +1,9 @@
 ﻿using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Notifications;
 
 namespace ZwooGameLogic.ZRP.Handlers;
 
-public class SettingsHandler : IMessageHandler
+public class SettingsHandler : IEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
@@ -31,12 +32,12 @@ public class SettingsHandler : IMessageHandler
     {
         try
         {
-            AllSettingsDTO payload = new AllSettingsDTO(context.Game.Settings.GetSettings().Select(setting => new AllSettings_SettingDTO(SettingsKeyMapper.ToString(setting.Key), setting.Value)).ToArray());
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.AllSettings, payload);
+            AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(setting => new AllSettings_SettingDTO(SettingsKeyMapper.ToString(setting.Key), setting.Value)).ToArray());
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, payload);
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -44,22 +45,22 @@ public class SettingsHandler : IMessageHandler
     {
         try
         {
-            UpdateSettingDTO payload = message.DecodePayload<UpdateSettingDTO>();
+            UpdateSettingEvent payload = message.DecodePayload<UpdateSettingEvent>();
 
             if (context.Role != ZRPRole.Host)
             {
-                _webSocketManager.SendPlayer(context.Id, ZRPCode.AccessDeniedError, new ErrorDTO((int)ZRPCode.AccessDeniedError, "you are not the host"));
+                _webSocketManager.SendPlayer(context.Id, ZRPCode.AccessDeniedError, new Error((int)ZRPCode.AccessDeniedError, "you are not the host"));
                 return;
             }
 
             if (context.Game.Settings.Set(payload.Setting, payload.Value))
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.ChangedSettings, new ChangedSettingsDTO(payload.Setting, payload.Value));
+                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SettingChanged, new SettingChangedNotification(payload.Setting, payload.Value));
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new ErrorDTO((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 }

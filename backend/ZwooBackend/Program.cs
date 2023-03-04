@@ -9,7 +9,9 @@ using ZwooBackend;
 using ZwooBackend.Websockets;
 using ZwooBackend.Games;
 using ZwooBackend.Database;
+using ZwooBackend.Services;
 using ZwooDatabaseClasses;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,20 +43,23 @@ builder.Services.AddSingleton(Globals.ZwooDatabase._client);
 builder.Services.Configure<MongoMigrationSettings>(options =>
 {
     options.ConnectionString = Globals.ConnectionString;
-    options.Database = "zwoo";
+    options.Database = Globals.DatabaseName;
     options.DatabaseMigrationVersion = new DocumentVersion(Globals.Version);
 });
 builder.Services.AddMigration(new MongoMigrationSettings
 {
     ConnectionString = Globals.ConnectionString,
-    Database = "zwoo",
+    Database = Globals.DatabaseName,
     DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
-}
-);
+});
 
 builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
 builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<ILanguageService, LanguageService>();
+
+builder.Services.AddHostedService<EmailService>();
 
 var app = builder.Build();
 
@@ -93,69 +98,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-var mail_thread = new Thread(() =>
-{
-    while (true)
-    {
-        if (!Globals.EmailQueue.IsEmpty)
-        {
-            if (Globals.EmailQueue.TryDequeue(out var data))
-            {
-                if (data.Puid == 0)
-                    break;
-                try
-                {
-                    EmailData.SendMail(data);
-                }
-                catch (Exception e)
-                {
-                    Globals.Logger.Error($"Could not send Email: {e.Message}");
-                }
-            }
-        }
-        else
-            Thread.Sleep(500);
-    }
-});
-
-var mail_thread2 = new Thread(() =>
-{
-    while (true)
-    {
-        if (!Globals.PasswordChangeRequestEmailQueue.IsEmpty)
-        {
-            if (Globals.PasswordChangeRequestEmailQueue.TryDequeue(out var data))
-            {
-                if (data.Id == 0)
-                    break;
-                try
-                {
-                    EmailData.SendPasswordChangeRequest(data);
-                }
-                catch (Exception e)
-                {
-                    Globals.Logger.Error($"Could not send Email: {e.Message}");
-                }
-            }
-        }
-        else
-            Thread.Sleep(500);
-    }
-});
-
 var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+#pragma warning disable 4014
 scheduler.Start();
 scheduler.ScheduleJob(
     JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
     TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
+#pragma warning restore 4014
 
-mail_thread.Start();
-mail_thread2.Start();
 
 app.Run();
 
-Globals.EmailQueue.Enqueue(new EmailData("", 0, "", ""));
-Globals.PasswordChangeRequestEmailQueue.Enqueue(new User(0, new List<string>(), "", "", "", 0, "", "", false));
-mail_thread.Join();
-mail_thread2.Join();
-scheduler.Shutdown();
+await scheduler.Shutdown();

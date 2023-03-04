@@ -15,7 +15,7 @@
   >
     <Icon icon="gg:close" class="text-xl transition-transform" />
   </button>
-  <form class="w-full h-full relative">
+  <form class="w-full h-full relative" @submit.prevent>
     <slot></slot>
   </form>
 </template>
