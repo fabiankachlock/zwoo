@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@log-rush/client": "^1.1.1",
-    "@tauri-apps/api": "^1.1.0",
+    "@tauri-apps/api": "^1.2.0",
     "dexie": "^3.2.1",
     "pinia": "^2.0.11",
     "register-service-worker": "^1.7.2",
