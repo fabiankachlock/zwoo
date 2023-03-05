@@ -15,7 +15,7 @@ public partial class LocalNotificationAdapter : INotificationAdapter
     public Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)
     {
         Console.WriteLine($"sending broadcast: {code}");
-        _messageHandler((int)code, JsonSerializer.Serialize(payload, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+        _messageHandler(ZRPEncoder.Encode(code, payload));
         return Task.FromResult(true);
     }
 
@@ -38,7 +38,7 @@ public partial class LocalNotificationAdapter : INotificationAdapter
         Console.WriteLine($"sending player {playerId} {code} {JsonSerializer.Serialize(payload)}");
         if (playerId == Constants.LocalUser)
         {
-            _messageHandler((int)code, JsonSerializer.Serialize(payload, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+            _messageHandler(ZRPEncoder.Encode(code, payload));
         }
         return Task.FromResult(true);
     }
@@ -47,10 +47,10 @@ public partial class LocalNotificationAdapter : INotificationAdapter
 
     #region Javascript Adaptation
 
-    private Action<int, string> _messageHandler = (int code, string payload) => { };
+    private Action<string> _messageHandler = (string msg) => { };
 
     [JSExport]
-    public static void OnMessage([JSMarshalAsAttribute<JSType.Function<JSType.Number, JSType.String>>] Action<int, string> callback)
+    public static void OnMessage([JSMarshalAsAttribute<JSType.Function<JSType.String>>] Action<string> callback)
     {
         Instance._messageHandler = callback;
     }
