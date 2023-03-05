@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { I18nInstance } from '@/i18n';
 
 import { CaptchaResponse } from '../api/entities/Captcha';
 import { EmailValidator } from '../services/validator/email';
@@ -179,6 +180,16 @@ export const useAuth = defineStore('auth', {
       if (this.isLoggedIn) {
         useConfig().login();
       }
+    },
+    applyOfflineConfig() {
+      const username = I18nInstance.t('offline.playerName');
+      this.$patch({
+        isInitialized: true,
+        isLoggedIn: true,
+        publicId: `p_${username}`,
+        username: username,
+        wins: 0
+      });
     }
   }
 });

@@ -428,7 +428,8 @@
   "offline": {
     "statusOffline": "Offline",
     "gameName": "Offline Spiel",
-    "create": "Neues Offline Spiel"
+    "create": "Neues Offline Spiel",
+    "playerName": "Lokaler SPieler"
   },
   "contact": {
     "title": "Kontakt",

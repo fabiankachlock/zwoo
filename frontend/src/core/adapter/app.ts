@@ -10,6 +10,7 @@ import { GameAdapter } from '../api/GameAdapter';
 import { RestApi } from '../api/restapi/RestApi';
 import { WasmApi } from '../api/wasmapi/WasmApi';
 import { WsGameAdapter } from '../api/wsgame/WsGameAdapter';
+import { useAuth } from './auth';
 import { MigrationRunner } from './migrations/MigrationRunner';
 
 type AppEnv = 'offline' | 'online';
@@ -65,6 +66,7 @@ export const useRootApp = defineStore('app', {
         // enable offline mode
         this.environment = 'offline';
         console.warn('### zwoo entered offline mode');
+        useAuth().applyOfflineConfig();
         RouterService.getRouter().push('/offline');
       } else if (version !== AppConfig.Version) {
         RouterService.getRouter().push('/invalid-version');

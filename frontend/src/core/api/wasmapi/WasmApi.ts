@@ -1,5 +1,6 @@
 import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import { WasmManger } from '@/core/services/wasm/WasmManager';
+import { I18nInstance } from '@/i18n';
 
 import { ApiAdapter } from '../ApiAdapter';
 import { GameAdapter } from '../GameAdapter';
@@ -11,7 +12,7 @@ export const WasmApi: ApiAdapter & GameAdapter = {
   createGame: async (name, isPublic) => {
     const instance = await WasmManger.global.getInstance();
     await instance.GameManager.CreateGame(name, isPublic);
-    await instance.GameManager.AddPlayer('OfflinePlayer');
+    await instance.GameManager.AddPlayer(I18nInstance.t('offline.playerName'));
     return {
       id: 1,
       isRunning: false,
