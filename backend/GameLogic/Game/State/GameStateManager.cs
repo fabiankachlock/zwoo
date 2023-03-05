@@ -149,7 +149,6 @@ public sealed class GameStateManager
                         lastPlayerCardAmount: _gameState.CurrentPlayer == id ? 0 : newState.PlayerDecks[_gameState.CurrentPlayer].Count
                     )
                 };
-                Console.WriteLine(events);
                 SendEvents(events);
             }
             _gameState = newState;

@@ -133,6 +133,7 @@ export const useGameConfig = defineStore('game-config', {
         (await import('./game/lobby')).useLobbyStore().__init__();
         (await import('./game/rules')).useRules().__init__();
         (await import('./game/summary')).useGameSummary().__init__();
+        (await import('./game/botManager')).useBotManager().__init__();
         (await import('./game/util/keepAlive')).useKeepAlive().__init__();
         (await import('./game/features/chatBroadcast')).useChatBroadcast().__init__();
         initializedGameModules = true;

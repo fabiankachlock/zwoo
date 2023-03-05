@@ -27,7 +27,9 @@ export class WasmSocket implements RealtimeGameMessageAdapter {
 
   private handleMessage = (message: string) => {
     Logger.Websocket.debug(`[wasm] received: ${message}`);
-    this.messageHandler(message);
+    setTimeout(() => {
+      this.messageHandler(message);
+    });
   };
 
   private handleOpen = () => {
@@ -53,8 +55,11 @@ export class WasmSocket implements RealtimeGameMessageAdapter {
   }
 
   public sendMessage(msg: string) {
-    Logger.Websocket.log(`[wasm] sending: ${msg}`);
-    this._instance?.GameManager.SendEvent(msg);
+    // TODO: why? without timeout this seems to block
+    setTimeout(() => {
+      Logger.Websocket.log(`[wasm] sending: ${msg}`);
+      this._instance?.GameManager.SendEvent(msg);
+    });
   }
 
   public close() {

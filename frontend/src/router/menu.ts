@@ -73,7 +73,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/CreateGame.vue'),
     meta: {
       requiresAuth: true,
-      onlineOnly: false
+      onlineOnly: true
     }
   },
   {

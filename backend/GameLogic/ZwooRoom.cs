@@ -54,7 +54,6 @@ public class ZwooRoom
 
     public void DistributeEvent(IIncomingZRPMessage msg)
     {
-        Console.WriteLine("### distributing");
         EventDistributer.Distribute(this, msg);
     }
 }

@@ -25,9 +25,7 @@ public class UserEventDistributer
     public void Distribute(ZwooRoom room, IIncomingZRPMessage msg)
     {
         IPlayer? player = room.GetPlayer(msg.UserId);
-        Console.WriteLine($"### getting player {msg.UserId} {room.Lobby.HasPlayerId(1)} {room.Lobby.GetPlayer(1) == null}");
         if (player == null) return;
-        Console.WriteLine($"### player not null");
 
         UserContext context = new UserContext(player.Id, player.PublicId, player.Username, player.Role, room.Id, room);
         foreach (IEventHandler handler in _handlers)

@@ -14,28 +14,24 @@ public partial class LocalNotificationAdapter : INotificationAdapter
     #region Interface Implementation
     public Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)
     {
-        Console.WriteLine($"sending broadcast: {code}");
         _messageHandler(ZRPEncoder.Encode(code, payload));
         return Task.FromResult(true);
     }
 
     public Task<bool> DisconnectGame(long gameId)
     {
-        Console.WriteLine($"disconnect");
         _disconnectHandler();
         return Task.FromResult(true);
     }
 
     public Task<bool> DisconnectPlayer(long playerId)
     {
-        Console.WriteLine($"disconnect");
         _disconnectHandler();
         return Task.FromResult(true);
     }
 
     public Task<bool> SendPlayer<T>(long playerId, ZRPCode code, T payload)
     {
-        Console.WriteLine($"sending player {playerId} {code} {JsonSerializer.Serialize(payload)}");
         if (playerId == Constants.LocalUser)
         {
             _messageHandler(ZRPEncoder.Encode(code, payload));
