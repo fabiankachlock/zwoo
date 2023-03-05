@@ -1,4 +1,4 @@
-import vueI18n from '@intlify/vite-plugin-vue-i18n';
+import vueI18n from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -137,8 +137,7 @@ export default defineConfig({
   resolve: {
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
+      '@': path.resolve(__dirname, './src')
     }
   }
 });

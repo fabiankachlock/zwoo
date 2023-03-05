@@ -8,9 +8,10 @@ namespace ZwooDatabaseClasses;
 
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]
+[CollectionLocation("account_events")]
 public class AccountEvent : IDocument
 {
-    public AccountEvent() {}
+    public AccountEvent() { }
 
     public AccountEvent(string eventType, ulong playerId, bool success, ulong timeStamp)
     {
@@ -19,7 +20,7 @@ public class AccountEvent : IDocument
         Success = success;
         TimeStamp = timeStamp;
     }
-    
+
     [BsonConstructor]
     public AccountEvent(ObjectId id, string eventType, ulong playerId, bool success, ulong timeStamp)
     {
@@ -29,23 +30,23 @@ public class AccountEvent : IDocument
         Success = success;
         TimeStamp = timeStamp;
     }
-    
+
     [BsonElement("_id")]
     public ObjectId Id { set; get; }
-    
+
     [BsonElement("event_type")]
     public string EventType { set; get; } = "none";
 
     [BsonElement("player_id")]
     public ulong PlayerID { set; get; } = 0;
-    
+
     [BsonElement("success")]
     public bool Success;
-    
+
     [BsonElement("timestamp")]
     public ulong TimeStamp;
 
-    [BsonElement("user_data")] 
+    [BsonElement("user_data")]
     public DeletedUserData? UserData;
 
     [BsonElement("version")]
@@ -55,7 +56,7 @@ public class AccountEvent : IDocument
 
 public class DeletedUserData
 {
-    public DeletedUserData() {}
+    public DeletedUserData() { }
 
     public DeletedUserData(User? user)
     {
@@ -67,7 +68,7 @@ public class DeletedUserData
         Wins = user.Wins;
         Timestamp = (ulong)DateTimeOffset.Now.ToUnixTimeSeconds();
     }
-    
+
     [BsonConstructor]
     public DeletedUserData(string username, string email, string password, uint wins, ulong timestamp)
     {
@@ -80,16 +81,16 @@ public class DeletedUserData
 
     [BsonElement("username")]
     public string Username { set; get; } = "";
-    
+
     [BsonElement("email")]
     public string Email { set; get; } = "";
-    
+
     [BsonElement("password")]
     public string Password { set; get; } = "";
-    
+
     [BsonElement("wins")]
     public UInt32 Wins { set; get; } = 0;
 
-    [BsonElement("timestamp")] 
+    [BsonElement("timestamp")]
     public ulong Timestamp;
 }

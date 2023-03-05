@@ -43,7 +43,7 @@ builder.Services.AddSingleton(Globals.ZwooDatabase._client);
 builder.Services.Configure<MongoMigrationSettings>(options =>
 {
     options.ConnectionString = Globals.ConnectionString;
-    options.Database = "zwoo";
+    options.Database = Globals.DatabaseName;
     options.DatabaseMigrationVersion = new DocumentVersion(Globals.Version);
 });
 builder.Services.AddMigration(new MongoMigrationSettings
@@ -51,8 +51,7 @@ builder.Services.AddMigration(new MongoMigrationSettings
     ConnectionString = Globals.ConnectionString,
     Database = Globals.DatabaseName,
     DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
-}
-);
+});
 
 builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
 builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocketManager>();
