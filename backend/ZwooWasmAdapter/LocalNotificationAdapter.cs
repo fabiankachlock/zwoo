@@ -1,5 +1,5 @@
 using System;
-using System.Text.Json;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices.JavaScript;
 using ZwooGameLogic.Notifications;
@@ -7,6 +7,7 @@ using ZwooGameLogic.ZRP;
 
 namespace ZwooWasm;
 
+[SupportedOSPlatform("browser")]
 public partial class LocalNotificationAdapter : INotificationAdapter
 {
     public static readonly LocalNotificationAdapter Instance = new LocalNotificationAdapter();

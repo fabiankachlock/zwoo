@@ -2,10 +2,12 @@ using ZwooGameLogic;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic.Logging;
 using ZwooWasm.Logging;
+using System.Runtime.Versioning;
 using System.Runtime.InteropServices.JavaScript;
 
 namespace ZwooWasm;
 
+[SupportedOSPlatform("browser")]
 public partial class GameManager
 {
     public readonly static GameManager Instance = new GameManager();

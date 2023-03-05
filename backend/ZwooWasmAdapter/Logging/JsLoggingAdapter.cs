@@ -1,10 +1,11 @@
 using System;
+using System.Runtime.Versioning;
 using System.Runtime.InteropServices.JavaScript;
 using ZwooGameLogic.Logging;
 
 namespace ZwooWasm.Logging;
 
-
+[SupportedOSPlatform("browser")]
 public partial class WasmLoggerFactory : ILoggerFactory
 {
     public static readonly WasmLoggerFactory Instance = new WasmLoggerFactory();

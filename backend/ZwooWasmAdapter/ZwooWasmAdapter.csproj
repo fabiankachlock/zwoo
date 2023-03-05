@@ -10,5 +10,6 @@
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WasmAppDir>../../frontend/public/wasm</WasmAppDir>
+    <NoWarn>IL2026</NoWarn>
   </PropertyGroup>
 </Project>
