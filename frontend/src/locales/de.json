@@ -49,7 +49,8 @@
     "settings": "Einstellungen",
     "home": "Home",
     "help": "Hilfe",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "statusOffline": "Offline"
   },
   "login": {
     "title": "Anmeldung",
@@ -425,8 +426,9 @@
     "failure": "Der Versionverlauf konnte nicht geladen werden."
   },
   "offline": {
-    "title": "Ooops, du bist offline!",
-    "info": "Die zwoo Server können nicht erreicht werden. Solange zwoo nicht offline gespielt werden kann, wird eine aktive Internetverbindung benötigt um zwoo zu spielen."
+    "statusOffline": "Offline",
+    "gameName": "Offline Spiel",
+    "create": "Neues Offline Spiel"
   },
   "contact": {
     "title": "Kontakt",

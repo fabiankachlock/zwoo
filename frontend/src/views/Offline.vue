@@ -3,8 +3,14 @@
     <div class="w-full flex justify-center">
       <img style="max-width: 10rem" src="/img/logo/zwoo_logo_none.svg" alt="" />
     </div>
-    <h1 class="text-6xl tc-primary text-center">zwoo Offline</h1>
+    <h1 class="text-6xl tc-primary text-center">zwoo</h1>
     <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
+    <Environment show="offline">
+      <div class="flex justify-center items-center">
+        <Icon icon="ic:baseline-wifi-off" class="text-sm tc-main-secondary"></Icon>
+        <p class="text-sm tc-main-secondary ml-1">{{ t('offline.statusOffline') }}</p>
+      </div>
+    </Environment>
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative flex-1 w-full">
         <div class="action bg-dark hover:bg-darkest cursor-pointer">
@@ -22,6 +28,7 @@
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useGameConfig } from '@/core/adapter/game';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';

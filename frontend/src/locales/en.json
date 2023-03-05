@@ -49,7 +49,8 @@
     "settings": "Settings",
     "home": "Home",
     "help": "Help",
-    "contact": "Contact"
+    "contact": "Contact",
+    "statusOffline": "Offline"
   },
   "login": {
     "title": "Login",
@@ -425,8 +426,9 @@
     "failure": "The version history could not be loaded."
   },
   "offline": {
-    "title": "Ooops, you're offline!",
-    "info": "The zwoo servers can't be reached. As long as zwoo dosn't support offline games, you need to be online to play zwoo."
+    "statusOffline": "Offline",
+    "gameName": "Offline Game",
+    "create": "Play Offline Game"
   },
   "contact": {
     "title": "Contact",
