@@ -6,10 +6,10 @@ export type CSharpExport = {
     CreateGame: (name: string, isPublic: boolean) => void;
     CloseGame: () => void;
     AddPlayer: (username: string) => void;
-    SendEvent: (code: number, payload: unknown) => void;
+    SendEvent: (msg: string) => void;
   };
   LocalNotificationAdapter: {
-    OnMessage: (callback: (code: number, payload: string) => void) => void;
+    OnMessage: (callback: (message: string) => void) => void;
     OnDisconnect: (callback: () => void) => void;
   };
   Logging: {

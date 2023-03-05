@@ -25,11 +25,9 @@ export class WasmSocket implements RealtimeGameMessageAdapter {
     this.handleOpen();
   }
 
-  private handleMessage = (code: number, payload: string) => {
-    console.log(code, payload, JSON.stringify(payload));
-    Logger.Websocket.debug(`[wasm] received: ${code},${payload}`);
-    // TODO: remove unnesessary encoding here
-    this.messageHandler(ZRPCoder.encode({ code, data: JSON.parse(payload) }));
+  private handleMessage = (message: string) => {
+    Logger.Websocket.debug(`[wasm] received: ${message}`);
+    this.messageHandler(message);
   };
 
   private handleOpen = () => {
@@ -56,8 +54,7 @@ export class WasmSocket implements RealtimeGameMessageAdapter {
 
   public sendMessage(msg: string) {
     Logger.Websocket.log(`[wasm] sending: ${msg}`);
-    const data = ZRPCoder.decode(msg);
-    this._instance?.GameManager.SendEvent(data.code, data.data);
+    this._instance?.GameManager.SendEvent(msg);
   }
 
   public close() {
