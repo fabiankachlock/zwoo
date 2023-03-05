@@ -36,6 +36,7 @@ export const useRootApp = defineStore('app', {
   state: () => {
     return {
       // global app state
+      isLoading: true,
       environment: 'online' as AppEnv,
       // versions
       serverVersion: new Awaiter() as string | Awaiter<string>,
@@ -84,6 +85,7 @@ export const useRootApp = defineStore('app', {
       }
 
       MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
+      this.isLoading = false;
     },
 
     _setUpdateFunc(func: (reload: boolean) => Promise<void>) {
