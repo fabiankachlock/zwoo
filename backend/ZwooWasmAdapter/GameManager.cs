@@ -53,6 +53,7 @@ public partial class GameManager
         Instance._logger.Debug("adding local player");
         Instance._activeGame.Lobby.Initialize(Constants.LocalUser, username, "", !Instance._activeGame.Game.IsPublic);
         Instance._activeGame.Lobby.IsPlayerAllowedToConnect(Constants.LocalUser);
+        Instance._activeGame.Lobby.MarkPlayerConnected(Constants.LocalUser);
     }
 
     [JSExport]
