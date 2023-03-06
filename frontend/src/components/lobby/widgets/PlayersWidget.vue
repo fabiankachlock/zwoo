@@ -2,16 +2,18 @@
   <Widget v-model="isOpen" title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <template #actions>
       <div class="flex flex-row">
-        <button @click="shareSheetOpen = true" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
-          <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
-          </div>
-        </button>
-        <button @click="qrCodeOpen = true" class="scan-code rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light">
-          <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
-          </div>
-        </button>
+        <Environment show="online">
+          <button @click="shareSheetOpen = true" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
+            <div class="transform transition-transform hover:scale-110 p-1">
+              <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
+            </div>
+          </button>
+          <button @click="qrCodeOpen = true" class="scan-code rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light">
+            <div class="transform transition-transform hover:scale-110 p-1">
+              <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
+            </div>
+          </button>
+        </Environment>
       </div>
       <div v-if="shareSheetOpen">
         <FloatingDialog>
@@ -37,7 +39,7 @@
             {{ t('wait.qrcodeInfo') }}
           </p>
           <div class="qrcode-wrapper mx-auto max-w-xs">
-            <QRCode :data="`${Frontend.url}/join/${gameId}`" :width="256" :height="256" />
+            <QRCode :data="joinUrl" :width="256" :height="256" />
           </div>
         </FloatingDialog>
       </div>
@@ -122,6 +124,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ShareSheet from '@/components/lobby/ShareSheet.vue';
+import Environment from '@/components/misc/Environment.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import QRCode from '@/components/misc/QRCode.vue';
@@ -129,19 +132,20 @@ import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useAuth } from '@/core/adapter/auth';
 import { useGameConfig } from '@/core/adapter/game';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useIsHost } from '@/core/adapter/play/util/userRoles';
-import { Frontend } from '@/core/services/api/ApiConfig';
-import { ZRPRole } from '@/core/services/zrp/zrpTypes';
+import { useLobbyStore } from '@/core/adapter/game/lobby';
+import { useIsHost } from '@/core/adapter/game/util/userRoles';
+import { useApi } from '@/core/adapter/helper/useApi';
+import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
 import Widget from '../Widget.vue';
 
 const { t } = useI18n();
+const { generateJoinUrl } = useApi();
 const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);
 const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
 const auth = useAuth();
-const gameId = computed(() => gameConfig.gameId);
+const joinUrl = computed(() => generateJoinUrl(gameConfig.gameId?.toString() ?? ''));
 const { isHost } = useIsHost();
 const publicId = computed(() => auth.publicId);
 const gameHost = computed(() => lobby.host);

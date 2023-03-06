@@ -1,13 +1,21 @@
 <template>
   <footer class="h-full">
-    <div class="h-8 py-1 flex justify-between items-center mx-3">
-      <router-link to="/">
-        <Icon icon="mi:home" class="text-xl tc-main hover:scale-110 transition-transform" />
-      </router-link>
-      <div class="flex py-1">
+    <div class="h-8 py-1 grid grid-cols-3 items-center mx-3">
+      <div class="flex items-center">
+        <router-link to="/">
+          <Icon icon="mi:home" class="text-xl tc-main hover:scale-110 transition-transform" />
+        </router-link>
+        <Environment show="offline">
+          <Icon icon="ic:baseline-wifi-off" class="ml-3 text-xs tc-main-secondary"></Icon>
+          <p class="text-xs tc-main-secondary ml-1">{{ t('nav.statusOffline') }}</p>
+        </Environment>
+      </div>
+      <div class="flex justify-center items-center">
         <!-- <span class="footer-item">© {{ year }}</span> -->
         <router-link to="/imprint" class="footer-item">{{ t('nav.imprint') }}</router-link>
-        <router-link to="/contact" class="footer-item">{{ t('nav.contact') }}</router-link>
+        <Environment show="online">
+          <router-link to="/contact" class="footer-item">{{ t('nav.contact') }}</router-link>
+        </Environment>
         <!-- <router-link to="/privacy" class="footer-item">{{ t('nav.privacy') }}</router-link> -->
       </div>
       <!-- TODO: implement
@@ -23,6 +31,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
+import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
 
 const { t } = useI18n();

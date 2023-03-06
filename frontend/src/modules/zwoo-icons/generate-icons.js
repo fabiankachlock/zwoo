@@ -56,7 +56,8 @@ const icons = [
   'fluent:bot-add-20-regular',
   'fluent:bot-24-regular',
   'material-symbols:help-outline-rounded',
-  'mdi:email-outline'
+  'mdi:email-outline',
+  'ic:baseline-wifi-off'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

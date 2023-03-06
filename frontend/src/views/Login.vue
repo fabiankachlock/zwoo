@@ -42,14 +42,15 @@ import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
-import { AuthenticationService } from '@/core/services/api/Authentication';
-import { ReCaptchaResponse } from '@/core/services/api/Captcha';
-import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/services/api/Errors';
-import { joinQuery } from '@/core/services/utils';
+import { useApi } from '@/core/adapter/helper/useApi';
+import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { CaptchaResponse } from '@/core/api/entities/Captcha';
+import { joinQuery } from '@/core/helper/utils';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
+const { resendVerificationEmail } = useApi();
 const config = useConfig();
 const auth = useAuth();
 const route = useRoute();
@@ -64,7 +65,7 @@ const reCaptchaValidator = new RecaptchaValidator();
 
 const email = ref('');
 const password = ref('');
-const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
+const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
 const showNotVerifiedInfo = ref(false);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
@@ -96,7 +97,7 @@ const logIn = async () => {
 
 const resendVerifyEmail = async () => {
   showNotVerifiedInfo.value = false;
-  const res = await AuthenticationService.resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
+  const res = await resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
   const [, err] = unwrapBackendError(res);
   if (err !== undefined) {
     error.value = [getBackendErrorTranslation(err)];

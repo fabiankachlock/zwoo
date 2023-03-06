@@ -1,11 +1,13 @@
 <template>
   <div class="flex flex-col sm:flex-row gap-3">
-    <div v-if="!isLoggedIn">
-      <NavBarItem :title="t('nav.login')" link="/login" />
-    </div>
-    <div v-if="!isLoggedIn">
-      <NavBarItem :title="t('nav.createAccount')" link="/create-account" />
-    </div>
+    <Environment show="online">
+      <div v-if="!isLoggedIn">
+        <NavBarItem :title="t('nav.login')" link="/login" />
+      </div>
+      <div v-if="!isLoggedIn">
+        <NavBarItem :title="t('nav.createAccount')" link="/create-account" />
+      </div>
+    </Environment>
     <div v-if="!isLoggedIn">
       <div class="divider bc-invert-main"></div>
     </div>
@@ -19,9 +21,11 @@
     <div class="divider bc-invert-main"></div>
     <NavBarItem :title="t('nav.imprint')" link="/imprint" />
     <NavBarItem :title="t('nav.settings')" link="/settings" />
-    <div v-if="isLoggedIn">
-      <NavBarItem :title="t('nav.logout')" link="/logout" />
-    </div>
+    <Environment show="online">
+      <div v-if="isLoggedIn">
+        <NavBarItem :title="t('nav.logout')" link="/logout" />
+      </div>
+    </Environment>
   </div>
 </template>
 
@@ -31,6 +35,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useAuth } from '@/core/adapter/auth';
 
+import Environment from '../misc/Environment.vue';
 import NavBarItem from './NavBarItem.vue';
 
 const { t } = useI18n();

@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia';
 
-import { AccountService } from '../services/api/Account';
-import { AuthenticationService } from '../services/api/Authentication';
-import { ReCaptchaResponse } from '../services/api/Captcha';
-import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
+import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { I18nInstance } from '@/i18n';
+
+import { CaptchaResponse } from '../api/entities/Captcha';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
 import { RecaptchaValidator } from '../services/validator/recaptcha';
 import { UsernameValidator } from '../services/validator/username';
 import { useConfig, ZwooConfigKey } from './config';
+import { useApi } from './helper/useApi';
 
 export const useAuth = defineStore('auth', {
   state: () => {
@@ -22,11 +23,11 @@ export const useAuth = defineStore('auth', {
     };
   },
   actions: {
-    async login(email: string, password: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async login(email: string, password: string, recaptchaResponse: CaptchaResponse | undefined) {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performLogin(email, password);
+      const status = await useApi().loginUser(email, password);
 
       if (status.isLoggedIn) {
         this.$patch({
@@ -44,7 +45,7 @@ export const useAuth = defineStore('auth', {
       }
     },
     async logout() {
-      const status = await AuthenticationService.performLogout();
+      const status = await useApi().logoutUser();
       if (!status.isLoggedIn) {
         const [, error] = unwrapBackendError(status);
         if (error) {
@@ -64,7 +65,7 @@ export const useAuth = defineStore('auth', {
       email: string,
       password: string,
       repeatPassword: string,
-      recaptchaResponse: ReCaptchaResponse | undefined,
+      recaptchaResponse: CaptchaResponse | undefined,
       beta: string
     ) {
       const usernameValid = new UsernameValidator().validate(username);
@@ -82,7 +83,7 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const status = await AuthenticationService.performCreateAccount(username, email, password, beta, useConfig().get(ZwooConfigKey.Language));
+      const status = await useApi().createUserAccount(username, email, password, beta, useConfig().get(ZwooConfigKey.Language));
 
       if (status.isLoggedIn) {
         this.$patch({
@@ -99,7 +100,7 @@ export const useAuth = defineStore('auth', {
       }
     },
     async deleteAccount(password: string) {
-      const result = await AuthenticationService.performDeleteAccount(password);
+      const result = await useApi().deleteUserAccount(password);
       if (!result.isLoggedIn) {
         const [, error] = unwrapBackendError(result);
         if (error) {
@@ -121,26 +122,26 @@ export const useAuth = defineStore('auth', {
       const passwordMatchValid = new PasswordMatchValidator().validate([newPassword, newPasswordRepeat]);
       if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
 
-      const response = await AccountService.performChangePassword(oldPassword, newPassword);
+      const response = await useApi().changeUserPassword(oldPassword, newPassword);
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);
       }
     },
-    async requestPasswordReset(email: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async requestPasswordReset(email: string, recaptchaResponse: CaptchaResponse | undefined) {
       const emailValid = new EmailValidator().validate(email);
       if (!emailValid.isValid) throw emailValid.getErrors();
 
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const response = await AccountService.requestPasswordReset(email, useConfig().get(ZwooConfigKey.Language));
+      const response = await useApi().requestUserPasswordReset(email, useConfig().get(ZwooConfigKey.Language));
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);
       }
     },
-    async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: ReCaptchaResponse | undefined) {
+    async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: CaptchaResponse | undefined) {
       const passwordValid = new PasswordValidator().validate(password);
       if (!passwordValid.isValid) throw passwordValid.getErrors();
 
@@ -150,14 +151,14 @@ export const useAuth = defineStore('auth', {
       const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
       if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
 
-      const response = await AccountService.performResetPassword(code, password);
+      const response = await useApi().resetUserPassword(code, password);
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);
       }
     },
     async askStatus() {
-      const response = await AuthenticationService.getUserInfo();
+      const response = await useApi().loadUserInfo();
       if (response.isLoggedIn) {
         this.$patch({
           username: response.username,
@@ -179,6 +180,16 @@ export const useAuth = defineStore('auth', {
       if (this.isLoggedIn) {
         useConfig().login();
       }
+    },
+    applyOfflineConfig() {
+      const username = I18nInstance.t('offline.playerName');
+      this.$patch({
+        isInitialized: true,
+        isLoggedIn: true,
+        publicId: `p_${username}`,
+        username: username,
+        wins: 0
+      });
     }
   }
 });

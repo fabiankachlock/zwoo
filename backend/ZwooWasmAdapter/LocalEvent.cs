@@ -8,23 +8,39 @@ public class LocalEvent : IIncomingZRPMessage
 
     public ZRPCode Code { get; private set; }
 
-    public object Payload { get; private set; }
+    public object? Payload { get; private set; }
 
     public long UserId => Constants.LocalUser;
 
-    public LocalEvent(ZRPCode code, object payload)
+    private string _rawMessage;
+
+    public LocalEvent(ZRPCode code, string message)
     {
         Code = code;
-        Payload = payload;
+        _rawMessage = message;
     }
 
     public T? CastPayload<T>()
     {
-        return (T)Payload;
+        try
+        {
+            return (T?)Payload;
+        }
+        catch
+        {
+            return default(T?);
+        }
     }
 
     public T? DecodePayload<T>()
     {
-        return (T)Payload;
+        try
+        {
+            return ZRPDecoder.DecodePayload<T>(_rawMessage);
+        }
+        catch
+        {
+            return default(T?);
+        }
     }
 }

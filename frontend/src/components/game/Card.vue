@@ -15,10 +15,10 @@
 <script setup lang="ts">
 import { computed, defineProps } from 'vue';
 
-import { useCardTheme } from '@/core/adapter/play/cardTheme';
-import { CardTheme } from '@/core/services/cards/CardTheme';
-import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
-import { Card } from '@/core/services/game/CardTypes';
+import { useCardTheme } from '@/core/adapter/game/cardTheme';
+import { CardTheme } from '@/core/domain/cards/CardTheme';
+import { CardDescriptor } from '@/core/domain/cards/CardThemeConfig';
+import { Card } from '@/core/domain/game/CardTypes';
 
 const props = defineProps<{
   card:

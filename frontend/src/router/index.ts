@@ -33,12 +33,18 @@ const routes: Array<RouteRecordRaw> = [
         component: Home,
         meta: {
           requiresAuth: true,
-          redirect: '/landing'
+          redirect: '/landing',
+          onlineOnly: true,
+          offlineRedirect: '/offline'
         }
       },
       {
         path: '/landing',
-        component: Landing
+        component: Landing,
+        meta: {
+          onlineOnly: true,
+          offlineRedirect: '/offline'
+        }
       },
       ...MenuRoutes
     ]
@@ -49,12 +55,18 @@ const routes: Array<RouteRecordRaw> = [
   InternalRoute,
   {
     path: '/invalid-version',
-    component: Version
+    component: Version,
+    meta: {
+      onlineOnly: true
+    }
   },
   AppConfig.IsBeta
     ? {
         path: '/beta/:code',
-        component: Beta
+        component: Beta,
+        meta: {
+          onlineOnly: true
+        }
       }
     : {
         path: '/beta/:code',

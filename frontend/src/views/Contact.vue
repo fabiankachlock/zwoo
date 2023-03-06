@@ -8,18 +8,19 @@ import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import TextArea from '@/components/forms/TextArea.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
-import { ReCaptchaResponse } from '@/core/services/api/Captcha';
-import { BackendErrorType, getBackendErrorTranslation } from '@/core/services/api/Errors';
-import { MiscApiService } from '@/core/services/api/Misc';
+import { useApi } from '@/core/adapter/helper/useApi';
+import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/ApiError';
+import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
+const { submitContactForm } = useApi();
 const { t } = useI18n();
 const reCaptchaValidator = new RecaptchaValidator();
 
 const senderName = ref('');
 const message = ref('');
-const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
+const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
@@ -36,7 +37,7 @@ const submitForm = async () => {
   isLoading.value = true;
 
   try {
-    await MiscApiService.submitContactForm(senderName.value, message.value);
+    await submitContactForm(senderName.value, message.value);
     wasSend.value = true;
   } catch (e: unknown) {
     reCaptchaResponse.value = undefined;

@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useChangelog } from '@/core/adapter/changelog';
+import { useChangelog } from '@/core/adapter/controller/changelog';
 
 import ChangelogDialog from './ChangelogDialog.vue';
 

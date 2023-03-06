@@ -1,19 +1,19 @@
 import { defineStore } from 'pinia';
 
+import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
-import { useGameEventDispatch } from '@/core/adapter/play/util/useGameEventDispatch';
+import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { ZRPMessageBuilder } from '@/core/domain/zrp/zrpBuilder';
+import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
+import { ZRPWebsocketAdapter } from '@/core/domain/zrp/ZRPMessageDistributer';
+import { ZRPOPCode, ZRPPayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
+import { RouterService } from '@/core/global/Router';
+import Logger from '@/core/services/logging/logImport';
+import { GameNameValidator } from '@/core/services/validator/gameName';
 
-import { Backend, Endpoint } from '../services/api/ApiConfig';
-import { getBackendErrorTranslation, unwrapBackendError } from '../services/api/Errors';
-import { GameManagementService, GameMeta, GamesList } from '../services/api/GameManagement';
-import { RouterService } from '../services/global/Router';
-import Logger from '../services/logging/logImport';
-import { GameNameValidator } from '../services/validator/gameName';
-import { ZRPWebsocketAdapter } from '../services/ws/MessageDistributer';
-import { ZRPMessageBuilder } from '../services/zrp/zrpBuilder';
-import { ZRPCoder } from '../services/zrp/zrpCoding';
-import { ZRPOPCode, ZRPPayload, ZRPRole } from '../services/zrp/zrpTypes';
-import { useGameEvents } from './play/events';
+import { GameMeta, GamesList } from '../api/entities/Game';
+import { useGameEvents } from './game/events';
+import { useApi } from './helper/useApi';
 
 export type SavedGame = {
   id: number;
@@ -50,7 +50,7 @@ export const useGameConfig = defineStore('game-config', {
       const nameValid = new GameNameValidator().validate(name);
       if (!nameValid.isValid) throw nameValid.getErrors();
 
-      const status = await GameManagementService.createGame(name, isPublic, isPublic ? '' : password);
+      const status = await useApi().createGame(name, isPublic, isPublic ? '' : password);
       const [game, error] = unwrapBackendError(status);
       if (error) {
         throw getBackendErrorTranslation(error);
@@ -72,7 +72,7 @@ export const useGameConfig = defineStore('game-config', {
 
       const data = await this.getGameMeta(id);
 
-      const status = await GameManagementService.joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
+      const status = await useApi().joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
       const [game, error] = unwrapBackendError(status);
       if (error) {
         throw getBackendErrorTranslation(error);
@@ -105,7 +105,7 @@ export const useGameConfig = defineStore('game-config', {
       }
     },
     async listGames(): Promise<GamesList> {
-      const response = await GameManagementService.listAll();
+      const response = await useApi().loadAvailableGames();
       const [games, error] = unwrapBackendError(response);
       if (!error) {
         this.allGames = games;
@@ -119,32 +119,30 @@ export const useGameConfig = defineStore('game-config', {
         return game;
       }
 
-      const response = await GameManagementService.getJoinMeta(id);
+      const response = await useApi().loadGameMeta(id);
       return unwrapBackendError(response)[0];
     },
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {
-        (await import('./play/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
-        (await import('./play/cardTheme')).useCardTheme().__init__();
-        (await import('./play/chat')).useChatStore().__init__();
-        (await import('./play/deck')).useGameCardDeck().__init__();
-        (await import('./play/events')).useGameEvents().__init__();
-        (await import('./play/gameState')).useGameState().__init__();
-        (await import('./play/lobby')).useLobbyStore().__init__();
-        (await import('./play/rules')).useRules().__init__();
-        (await import('./play/summary')).useGameSummary().__init__();
-        (await import('./play/util/keepAlive')).useKeepAlive().__init__();
-        (await import('./play/features/chatBroadcast')).useChatBroadcast().__init__();
+        (await import('./game/util/errorToSnackbar')).useInGameErrorWatcher().__init__();
+        (await import('./game/cardTheme')).useCardTheme().__init__();
+        (await import('./game/chat')).useChatStore().__init__();
+        (await import('./game/deck')).useGameCardDeck().__init__();
+        (await import('./game/events')).useGameEvents().__init__();
+        (await import('./game/gameState')).useGameState().__init__();
+        (await import('./game/lobby')).useLobbyStore().__init__();
+        (await import('./game/rules')).useRules().__init__();
+        (await import('./game/summary')).useGameSummary().__init__();
+        (await import('./game/botManager')).useBotManager().__init__();
+        (await import('./game/util/keepAlive')).useKeepAlive().__init__();
+        (await import('./game/features/chatBroadcast')).useChatBroadcast().__init__();
         initializedGameModules = true;
       }
     },
     async connect(isRunning = false) {
       await this._initGameModules();
       setTimeout(() => {
-        this._connection = new ZRPWebsocketAdapter(
-          Backend.getDynamicUrl(Endpoint.Websocket, { id: (this.gameId ?? -1).toString() }),
-          (this.gameId ?? -1).toString()
-        );
+        this._connection = new ZRPWebsocketAdapter(useApi().createConnection((this.gameId ?? -1).toString()));
         const events = useGameEvents();
         this._connection.readMessages(events.handleIncomingEvent);
 

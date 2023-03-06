@@ -36,8 +36,8 @@ import MainCard from '@/components/game/MainCard.vue';
 import Opponents from '@/components/game/OpponentsStrip.vue';
 import Pile from '@/components/game/Pile.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-import { useGameModal } from '@/core/adapter/play/modal';
-import { useIsSpectator } from '@/core/adapter/play/util/userRoles';
+import { useGameModal } from '@/core/adapter/game/modal';
+import { useIsSpectator } from '@/core/adapter/game/util/userRoles';
 
 const config = useConfig();
 const modalState = useGameModal();

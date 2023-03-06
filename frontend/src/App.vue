@@ -1,8 +1,15 @@
 <template>
-  <!-- reset stacking context -->
-  <div class="relative">
-    <router-view />
-  </div>
+  <template v-if="isLoading">
+    <div>
+      <Loader />
+    </div>
+  </template>
+  <template v-else>
+    <!-- reset stacking context -->
+    <div class="relative">
+      <router-view />
+    </div>
+  </template>
 
   <ChangelogManager />
   <ConsentManager />
@@ -10,18 +17,22 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted } from 'vue';
+import { computed, defineAsyncComponent, onMounted } from 'vue';
 
 import ConsentManager from './components/cookies/ConsentManager.vue';
+import Loader from './components/misc/Loader.vue';
 import Snackbar from './components/misc/Snackbar.vue';
 import { useRootApp } from './core/adapter/app';
 import { useAuth } from './core/adapter/auth';
 import { useConfig } from './core/adapter/config';
 import { useCookies } from './core/adapter/cookies';
-import { useRuntimeConfig } from './core/services/runtimeConfig';
+import { useRuntimeConfig } from './core/runtimeConfig';
 const ChangelogManager = defineAsyncComponent(() => import('./components/misc/changelog/ChangelogManager.vue'));
 
-useRootApp().configure(); // init app
+const app = useRootApp();
+const isLoading = computed(() => app.isLoading);
+
+app.configure(); // init app
 useAuth().configure(); // 'read' from may existing session
 const cookies = useCookies();
 cookies.setup();

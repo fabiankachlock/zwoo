@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useGameState } from '@/core/adapter/play/gameState';
+import { useGameState } from '@/core/adapter/game/gameState';
 
 import Card from './Card.vue';
 const gameState = useGameState();

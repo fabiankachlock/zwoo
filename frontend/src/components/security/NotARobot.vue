@@ -23,18 +23,20 @@
 import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { ReCaptchaResponse, ReCaptchaService } from '@/core/services/api/Captcha';
+import { useCaptcha } from '@/core/adapter/captcha';
+import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { MIN_RECAPTCHA_SCORE } from '@/core/services/validator/recaptcha';
 
 const props = defineProps<{
-  response?: ReCaptchaResponse;
+  response?: CaptchaResponse;
 }>();
 
 const emit = defineEmits<{
-  (event: 'responseChanged', response: ReCaptchaResponse): void;
+  (event: 'responseChanged', response: CaptchaResponse): void;
 }>();
 
 const { t } = useI18n();
+const captcha = useCaptcha();
 const verifyState = ref<'none' | 'verifying' | 'done' | 'error'>('none');
 const success = computed(() => props.response?.success ?? false);
 const humanRate = computed(() => props.response?.score ?? 0);
@@ -63,7 +65,7 @@ const handleClick = async (evt: Event) => {
   verifyState.value = 'verifying';
 
   try {
-    const response = await ReCaptchaService.checkUser();
+    const response = await captcha.performCheck();
     if (response) {
       emit('responseChanged', response);
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices.JavaScript;
 using ZwooGameLogic.Notifications;
@@ -6,6 +7,7 @@ using ZwooGameLogic.ZRP;
 
 namespace ZwooWasm;
 
+[SupportedOSPlatform("browser")]
 public partial class LocalNotificationAdapter : INotificationAdapter
 {
     public static readonly LocalNotificationAdapter Instance = new LocalNotificationAdapter();
@@ -13,7 +15,7 @@ public partial class LocalNotificationAdapter : INotificationAdapter
     #region Interface Implementation
     public Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)
     {
-        _messageHandler((int)code, payload!);
+        _messageHandler(ZRPEncoder.Encode(code, payload));
         return Task.FromResult(true);
     }
 
@@ -31,7 +33,10 @@ public partial class LocalNotificationAdapter : INotificationAdapter
 
     public Task<bool> SendPlayer<T>(long playerId, ZRPCode code, T payload)
     {
-        _messageHandler((int)code, payload!);
+        if (playerId == Constants.LocalUser)
+        {
+            _messageHandler(ZRPEncoder.Encode(code, payload));
+        }
         return Task.FromResult(true);
     }
 
@@ -39,10 +44,10 @@ public partial class LocalNotificationAdapter : INotificationAdapter
 
     #region Javascript Adaptation
 
-    private Action<int, object> _messageHandler = (int code, object payload) => { };
+    private Action<string> _messageHandler = (string msg) => { };
 
     [JSExport]
-    public static void OnMessage([JSMarshalAsAttribute<JSType.Function<JSType.Number, JSType.Any>>] Action<int, object> callback)
+    public static void OnMessage([JSMarshalAsAttribute<JSType.Function<JSType.String>>] Action<string> callback)
     {
         Instance._messageHandler = callback;
     }

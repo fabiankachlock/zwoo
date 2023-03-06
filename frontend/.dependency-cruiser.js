@@ -2,6 +2,30 @@
 module.exports = {
   forbidden: [
     {
+      name: 'not-api-to-adapter',
+      severity: 'warn',
+      from: { path: 'core/api' },
+      to: { path: 'core/adapter', pathNot: 'core/services/logging' }
+    },
+    {
+      name: 'not-api-to-global',
+      severity: 'warn',
+      from: { path: 'core/api' },
+      to: { path: 'core/global', pathNot: 'core/services/logging' }
+    },
+    {
+      name: 'not-helper-to-adapter',
+      severity: 'warn',
+      from: { path: 'core/helper' },
+      to: { path: 'core/adapter', pathNot: 'core/services/logging' }
+    },
+    {
+      name: 'not-domain-to-somewhere',
+      severity: 'warn',
+      from: { path: 'core/domain' },
+      to: { pathNot: ['core/services/logging', 'core/domain', 'core/helper'] }
+    },
+    {
       name: 'not-service-to-adapter',
       severity: 'warn',
       from: { path: 'core/services' },

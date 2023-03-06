@@ -21,7 +21,7 @@
 import { ref } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
-import { useChatStore } from '@/core/adapter/play/chat';
+import { useChatStore } from '@/core/adapter/game/chat';
 
 const message = ref('');
 const gameChat = useChatStore();

@@ -25,9 +25,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { useGameCardDeck } from '@/core/adapter/play/deck';
-import { useGameState } from '@/core/adapter/play/gameState';
-import { CardDescriptor } from '@/core/services/cards/CardThemeConfig';
+import { useGameCardDeck } from '@/core/adapter/game/deck';
+import { useGameState } from '@/core/adapter/game/gameState';
+import { CardDescriptor } from '@/core/domain/cards/CardThemeConfig';
 
 import Card from './Card.vue';
 

@@ -47,8 +47,8 @@ import { Icon } from '@/components/misc/Icon';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useAuth } from '@/core/adapter/auth';
-import { useLobbyStore } from '@/core/adapter/play/lobby';
-import { useIsHost } from '@/core/adapter/play/util/userRoles';
+import { useLobbyStore } from '@/core/adapter/game/lobby';
+import { useIsHost } from '@/core/adapter/game/util/userRoles';
 
 import Widget from '../Widget.vue';
 

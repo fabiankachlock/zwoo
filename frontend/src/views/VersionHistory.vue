@@ -58,16 +58,17 @@ import { useI18n } from 'vue-i18n';
 
 import Changelog from '@/components/misc/changelog/Changelog.vue';
 import { Icon } from '@/components/misc/Icon';
-import { ConfigService } from '@/core/services/api/Config';
-import { unwrapBackendError } from '@/core/services/api/Errors';
+import { useApi } from '@/core/adapter/helper/useApi';
+import { unwrapBackendError } from '@/core/api/ApiError';
 
 const { t } = useI18n();
+const { loadVersionHistory, loadChangelog } = useApi();
 const versions = ref<string[] | undefined>([]);
 const versionChangelogs = ref<Record<string, string>>({});
 const openVersions = ref<Record<string, boolean>>({});
 
 onMounted(async () => {
-  const res = await ConfigService.fetchVersionHistory();
+  const res = await loadVersionHistory();
   const [data, error] = unwrapBackendError(res);
   if (!error && data) {
     versions.value = data;
@@ -77,15 +78,15 @@ onMounted(async () => {
 const toggleVersionOpen = (version: string) => {
   openVersions.value[version] = !openVersions.value[version];
   if (openVersions.value[version] && !versionChangelogs.value[version]) {
-    loadChangelog(version);
+    loadChangelogOfVersion(version);
   }
 };
 
-const loadChangelog = async (version: string) => {
+const loadChangelogOfVersion = async (version: string) => {
   if (versionChangelogs.value[version]) {
     return;
   }
-  const changelogResponse = await ConfigService.fetchChangelog(version);
+  const changelogResponse = await loadChangelog(version);
   const [changelog] = unwrapBackendError(changelogResponse);
   if (changelog) {
     versionChangelogs.value[version] = changelog;

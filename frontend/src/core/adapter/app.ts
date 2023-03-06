@@ -1,12 +1,19 @@
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@/config';
-import { ConfigService } from '@/core/services/api/Config';
-import { RouterService } from '@/core/services/global/Router';
-import { Awaiter } from '@/core/services/helper/Awaiter';
+import { unwrapBackendError } from '@/core/api/ApiError';
+import { RouterService } from '@/core/global/Router';
+import { Awaiter } from '@/core/helper/Awaiter';
 
-import { unwrapBackendError } from '../services/api/Errors';
+import { ApiAdapter } from '../api/ApiAdapter';
+import { GameAdapter } from '../api/GameAdapter';
+import { RestApi } from '../api/restapi/RestApi';
+import { WasmApi } from '../api/wasmapi/WasmApi';
+import { WsGameAdapter } from '../api/wsgame/WsGameAdapter';
+import { useAuth } from './auth';
 import { MigrationRunner } from './migrations/MigrationRunner';
+
+type AppEnv = 'offline' | 'online';
 
 const versionInfo = {
   override: AppConfig.VersionOverride,
@@ -14,11 +21,23 @@ const versionInfo = {
   hash: AppConfig.VersionHash
 };
 
+const apiMap: Record<AppEnv, { api: ApiAdapter; realtime: GameAdapter }> = {
+  online: {
+    api: RestApi,
+    realtime: WsGameAdapter
+  },
+  offline: {
+    api: WasmApi,
+    realtime: WasmApi
+  }
+};
+
 export const useRootApp = defineStore('app', {
   state: () => {
     return {
       // global app state
-      isOffline: false,
+      isLoading: true,
+      environment: 'online' as AppEnv,
       // versions
       serverVersion: new Awaiter() as string | Awaiter<string>,
       clientVersion: AppConfig.Version,
@@ -32,16 +51,23 @@ export const useRootApp = defineStore('app', {
   getters: {
     versionInfo() {
       return versionInfo;
+    },
+    api: state => {
+      return apiMap[state.environment].api;
+    },
+    realtimeApi: state => {
+      return apiMap[state.environment].realtime;
     }
   },
   actions: {
     async configure() {
-      const response = await ConfigService.fetchVersion();
+      const response = await this.api.loadVersion();
       const [version, err] = unwrapBackendError(response);
       if (err && AppConfig.UseBackend) {
         // enable offline mode
-        this.isOffline = true;
+        this.environment = 'offline';
         console.warn('### zwoo entered offline mode');
+        useAuth().applyOfflineConfig();
         RouterService.getRouter().push('/offline');
       } else if (version !== AppConfig.Version) {
         RouterService.getRouter().push('/invalid-version');
@@ -54,9 +80,12 @@ export const useRootApp = defineStore('app', {
           this.serverVersion.callback(response);
           this.serverVersion = response;
         }
+      } else {
+        this.serverVersion = AppConfig.Version;
       }
 
       MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
+      this.isLoading = false;
     },
 
     _setUpdateFunc(func: (reload: boolean) => Promise<void>) {

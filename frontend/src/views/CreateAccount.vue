@@ -58,10 +58,10 @@ import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
-import { AuthenticationService } from '@/core/services/api/Authentication';
-import { ReCaptchaResponse } from '@/core/services/api/Captcha';
-import { getBackendErrorTranslation, unwrapBackendError } from '@/core/services/api/Errors';
-import { joinQuery } from '@/core/services/utils';
+import { useApi } from '@/core/adapter/helper/useApi';
+import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { CaptchaResponse } from '@/core/api/entities/Captcha';
+import { joinQuery } from '@/core/helper/utils';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
@@ -70,6 +70,7 @@ import { UsernameValidator } from '@/core/services/validator/username';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
+const { resendVerificationEmail } = useApi();
 const config = useConfig();
 const auth = useAuth();
 const route = useRoute();
@@ -89,7 +90,7 @@ const password = ref('');
 const passwordRepeat = ref('');
 const betaCode = ref('');
 const matchError = ref<string[]>([]);
-const reCaptchaResponse = ref<ReCaptchaResponse | undefined>(undefined);
+const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
 const isLoading = ref<boolean>(false);
@@ -138,7 +139,7 @@ const create = async () => {
 const resendVerifyEmail = async () => {
   if (!showResend.value) return;
   showResend.value = false;
-  const res = await AuthenticationService.resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
+  const res = await resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
   const [, err] = unwrapBackendError(res);
   if (err !== undefined) {
     error.value = [getBackendErrorTranslation(err)];

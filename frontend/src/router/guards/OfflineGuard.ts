@@ -8,16 +8,18 @@ export class OfflineGuard implements RouterInterceptor {
   private Logger = Logger.RouterGuard.createOne('offline');
 
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
-    if (useRootApp().isOffline) {
+    const isOffline = useRootApp().environment === 'offline';
+    if (isOffline) {
       this.Logger.log('enforcing offline mode');
-      if (to.fullPath !== '/offline') {
-        next('/offline');
+      if (to.meta['onlineOnly']) {
+        if (to.meta['offlineRedirect']) {
+          next(to.meta['offlineRedirect']);
+        } else {
+          next('/offline');
+        }
       } else {
         next();
       }
-      return true;
-    } else if (!useRootApp().isOffline && to.fullPath === '/offline') {
-      next('/');
       return true;
     } else {
       return false;

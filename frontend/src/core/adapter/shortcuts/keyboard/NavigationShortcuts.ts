@@ -1,4 +1,4 @@
-import { RouterService } from '@/core/services/global/Router';
+import { RouterService } from '@/core/global/Router';
 
 import { Shortcut } from '../types';
 
