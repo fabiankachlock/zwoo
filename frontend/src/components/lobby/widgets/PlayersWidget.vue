@@ -2,16 +2,18 @@
   <Widget v-model="isOpen" title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <template #actions>
       <div class="flex flex-row">
-        <button @click="shareSheetOpen = true" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
-          <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
-          </div>
-        </button>
-        <button @click="qrCodeOpen = true" class="scan-code rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light">
-          <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
-          </div>
-        </button>
+        <Environment show="online">
+          <button @click="shareSheetOpen = true" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
+            <div class="transform transition-transform hover:scale-110 p-1">
+              <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
+            </div>
+          </button>
+          <button @click="qrCodeOpen = true" class="scan-code rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light">
+            <div class="transform transition-transform hover:scale-110 p-1">
+              <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
+            </div>
+          </button>
+        </Environment>
       </div>
       <div v-if="shareSheetOpen">
         <FloatingDialog>
@@ -122,6 +124,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ShareSheet from '@/components/lobby/ShareSheet.vue';
+import Environment from '@/components/misc/Environment.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import QRCode from '@/components/misc/QRCode.vue';

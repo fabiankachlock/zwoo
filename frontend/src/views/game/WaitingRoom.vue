@@ -18,14 +18,18 @@
       <div class="main-content md:hidden grid grid-cols-1 gap-2 mx-auto max-w-5xl">
         <ChatWidget />
         <PlayersWidget />
-        <SpectatorsWidget />
+        <Environment show="online">
+          <SpectatorsWidget />
+        </Environment>
         <RulesWidget />
         <BotsWidget />
       </div>
       <div class="main-content hidden md:grid grid-cols-2 gap-2 mx-auto max-w-5xl">
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
           <PlayersWidget />
-          <SpectatorsWidget />
+          <Environment show="online">
+            <SpectatorsWidget />
+          </Environment>
         </div>
         <div class="grid grid-cols-1 gap-2" style="height: fit-content">
           <ChatWidget />
@@ -46,6 +50,7 @@ import ChatWidget from '@/components/lobby/widgets/ChatWidget.vue';
 import PlayersWidget from '@/components/lobby/widgets/PlayersWidget.vue';
 import RulesWidget from '@/components/lobby/widgets/RulesWidget.vue';
 import SpectatorsWidget from '@/components/lobby/widgets/SpectatorsWidget.vue';
+import Environment from '@/components/misc/Environment.vue';
 import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/game/lobby';
 import { useIsHost } from '@/core/adapter/game/util/userRoles';
