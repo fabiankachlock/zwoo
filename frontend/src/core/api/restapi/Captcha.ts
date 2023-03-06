@@ -1,32 +1,26 @@
 import { AppConfig } from '@/config';
 
-import { BackendErrorAble, parseBackendError } from '../ApiError';
+import { BackendErrorAble } from '../ApiError';
 import { CaptchaResponse } from '../entities/Captcha';
 import { Backend, Endpoint } from './ApiConfig';
+import { WrappedFetch } from './FetchWrapper';
 
 export class CaptchaApiService {
   static verify = async (token: string): Promise<BackendErrorAble<CaptchaResponse>> => {
-    if (AppConfig.UseBackend) {
-      const req = await fetch(Backend.getUrl(Endpoint.Recaptcha), {
-        method: 'POST',
-        body: token
-      });
-
-      if (req.status !== 200) {
-        return {
-          error: parseBackendError(await req.text())
-        };
+    const response = await WrappedFetch<CaptchaResponse>(Backend.getUrl(Endpoint.Recaptcha), {
+      useBackend: AppConfig.UseBackend,
+      method: 'POST',
+      body: token,
+      requestOptions: {
+        contentType: 'text/plain'
+      },
+      fallbackValue: {
+        score: 1,
+        success: true
       }
-
-      const response = (await req.json()) as CaptchaResponse;
-      return {
-        success: response.success,
-        score: response.score
-      };
-    }
-    return Promise.resolve({
-      success: true,
-      score: 1
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return response.data!;
   };
 }
