@@ -38,7 +38,7 @@ echo "===== ELECTRON ====="
 echo ""
 launch_app
 echo "running tests in electron..."
-docker run -i --name e2e-test-runner-electron --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --record --key $CY_KEY
+docker run -i --name e2e-test-runner-electron --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --record --key $CY_KEY
 EL_EXIT_CODE=$?
 echo "electron tests ran!"
 shutdown_app
@@ -48,7 +48,7 @@ echo "===== CHROME ====="
 echo ""
 launch_app
 echo "running tests in chrome..."
-docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser chrome --record --key $CY_KEY
+docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser chrome --record --key $CY_KEY
 CH_EXIT_CODE=$?
 echo "chrome tests ran!"
 shutdown_app
@@ -58,7 +58,7 @@ echo "===== FIREFOX ====="
 echo ""
 launch_app
 echo "running tests in firefox..."
-docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser firefox --record --key $CY_KEY
+docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser firefox --record --key $CY_KEY
 FI_EXIT_CODE=$?
 echo "firefox tests ran!"
 shutdown_app
@@ -68,7 +68,7 @@ echo "===== EDGE ====="
 echo ""
 launch_app
 echo "running tests in edge..."
-docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:10.9.0 --browser edge --record --key $CY_KEY
+docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser edge --record --key $CY_KEY
 ED_EXIT_CODE=$?
 echo "edge tests ran!"
 shutdown_app
