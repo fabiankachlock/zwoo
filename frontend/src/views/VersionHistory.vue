@@ -6,13 +6,11 @@
       </div>
       <div class="relative flex flex-col flex-nowrap">
         <div v-if="versions">
-          <div
-            v-for="version in versions"
-            :key="version"
-            @click="toggleVersionOpen(version)"
-            class="item my-2 rounded-lg border bc-darkest bg-light px-3 py-2 cursor-pointer"
-          >
-            <div class="version-card-header flex flex-row flex-nowrap justify-between items-center">
+          <div v-for="version in versions" :key="version" class="item my-2 rounded-lg border bc-darkest bg-light px-3 py-2">
+            <div
+              class="version-card-header flex flex-row flex-nowrap justify-between items-center cursor-pointer"
+              @click="toggleVersionOpen(version)"
+            >
               <div class="version-card-title">
                 <p class="text-xl tc-main">{{ t('versionHistory.versionTitle', [version]) }}</p>
               </div>
