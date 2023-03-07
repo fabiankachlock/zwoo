@@ -15,7 +15,7 @@
       <FloatingMenu />
     </div>
     <div class="main-content">
-      <div class="pt-2 pb-2 mt-10 mb-8 relative">
+      <div class="pt-2 pb-2 margin-layout relative">
         <div class="w-full sticky z-10 bg-main top-10">
           <slot name="sticky-content"></slot>
         </div>
@@ -25,7 +25,7 @@
         <!-- workaround for ios hidden content on the end of the side -->
         <div class="h-14"></div>
       </div>
-      <div class="footer fixed bottom-0 left-0 right-0 bg-darkest h-8 bc-primary border-t-1 z-30">
+      <div class="footer fixed bottom-0 left-0 right-0 bg-darkest bc-primary border-t-1 z-30">
         <Footer />
       </div>
     </div>
@@ -42,6 +42,17 @@ import NavBar from '@/components/menu/NavBar.vue';
 /* notch phone things */
 .header {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  height: calc(2.5rem + env(safe-area-inset-top));
+}
+
+.footer {
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  height: calc(2rem + env(safe-area-inset-bottom));
+}
+
+.margin-layout {
+  margin-top: calc(2.5rem + env(safe-area-inset-top));
+  margin-bottom: calc(2rem + env(safe-area-inset-bottom));
 }
 
 .main-content {
