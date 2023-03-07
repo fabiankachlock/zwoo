@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="fixed bottom-11 left-3 rounded-full bg-dark flex flex-row items-center">
+  <div v-if="visible" class="quick-menu fixed left-3 rounded-full bg-dark flex flex-row items-center">
     <div
       class="h-full bg-darkest p-2 rounded-full transition-transform duration-300 ease-out hover:scale-90 cursor-pointer"
       :class="{ 'rotate-90': isOpen }"
@@ -40,6 +40,10 @@ const visible = computed(() => config.get(ZwooConfigKey.QuickMenu));
 </script>
 
 <style scoped>
+.quick-menu {
+  bottom: calc(2rem + 0.75rem + env(safe-area-inset-bottom));
+}
+
 #content > * {
   @apply mx-1;
 }
