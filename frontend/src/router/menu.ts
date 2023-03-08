@@ -121,6 +121,10 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: 'offline',
-    component: () => import('../views/Offline.vue')
+    component: () => import('../views/Offline.vue'),
+    meta: {
+      offlineOnly: true,
+      onlineRedirect: '/home'
+    }
   }
 ];

@@ -39,11 +39,6 @@ const { t } = useI18n();
 </script>
 
 <style lang="css" scoped>
-/* notch phone things */
-.footer {
-  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-}
-
 .footer-item:not(:last-child) {
   @apply border-r bc-lightest px-3;
 }

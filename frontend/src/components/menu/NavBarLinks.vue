@@ -7,10 +7,10 @@
       <div v-if="!isLoggedIn">
         <NavBarItem :title="t('nav.createAccount')" link="/create-account" />
       </div>
+      <div v-if="!isLoggedIn">
+        <div class="divider bc-invert-main"></div>
+      </div>
     </Environment>
-    <div v-if="!isLoggedIn">
-      <div class="divider bc-invert-main"></div>
-    </div>
     <div v-if="isLoggedIn" class="sm:flex flex-row">
       <NavBarItem :title="t('nav.home')" link="/home" />
     </div>
