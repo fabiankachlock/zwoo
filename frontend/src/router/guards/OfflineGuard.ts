@@ -17,8 +17,7 @@ export class OfflineGuard implements RouterInterceptor {
         } else {
           next('/offline');
         }
-      } else {
-        next();
+        return true;
       }
     } else {
       if (to.meta['offlineOnly']) {
@@ -27,10 +26,9 @@ export class OfflineGuard implements RouterInterceptor {
         } else {
           next('/landing');
         }
-      } else {
-        next();
+        return true;
       }
     }
-    return true;
+    return false;
   };
 }
