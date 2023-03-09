@@ -25,7 +25,8 @@ export class CardTheme {
   get identifier(): CardThemeIdentifier {
     return {
       name: this.name,
-      variant: this.variant
+      variant: this.variant,
+      version: this.info.version
     };
   }
 

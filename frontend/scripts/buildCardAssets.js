@@ -25,6 +25,7 @@ const DEFAULT_CARD_PREVIEWS = ['back_u', 'front_1_1', 'front_2_a', 'front_3_b', 
  */
 const BaseThemeConfig = {
   name: 'the theme name', // required
+  version: '1', // optional, but recommended
   description: 'a theme description', // optional
   author: 'the theme author', // optional
   isMultiLayer: true, // optional,
@@ -309,47 +310,45 @@ async function createMetaFiles(themes) {
     defaultTheme = themes[0];
   }
   const data = {
-    themes: themes.map(t => t.name),
+    themesList: themes.map(t => t.name),
     defaultTheme: {
       name: defaultTheme.name,
+      version: defaultTheme.version,
       variant: computeThemeVariants(defaultTheme.variants).includes(VARIANT_AUTO) ? VARIANT_AUTO : defaultTheme.variants[0]
     },
-    configs: combineToObject(
+    themes: combineToObject(
       themes.map(theme => ({
         [theme.name]: {
-          name: theme.name ?? '',
-          description: theme.description ?? '',
-          author: theme.author ?? '',
-          isMultiLayer: theme.isMultiLayer,
-          variants: computeThemeVariants(theme.variants),
-          previews: computeThemePreviews(theme.previews),
-          colors: theme.variants.reduce(
-            (acc, variant) => ({
-              ...acc,
-              [variant]: Object.entries(BaseThemeConfig.colors.__example).reduce(
-                (acc, [index, value]) => ({
-                  ...acc,
-                  [index]: ((theme.colors ?? {})[variant] ?? {})[index] ?? value
-                }),
-                {}
-              )
-            }),
-            {}
-          )
+          files: {
+            previews: {
+              ...theme._files.previews
+            },
+            ...objectWithoutKey(theme._files, 'previews')
+          },
+          config: {
+            name: theme.name ?? '',
+            description: theme.description ?? '',
+            author: theme.author ?? '',
+            isMultiLayer: theme.isMultiLayer,
+            variants: computeThemeVariants(theme.variants),
+            previews: computeThemePreviews(theme.previews),
+            colors: theme.variants.reduce(
+              (acc, variant) => ({
+                ...acc,
+                [variant]: Object.entries(BaseThemeConfig.colors.__example).reduce(
+                  (acc, [index, value]) => ({
+                    ...acc,
+                    [index]: ((theme.colors ?? {})[variant] ?? {})[index] ?? value
+                  }),
+                  {}
+                )
+              }),
+              {}
+            )
+          }
         }
       }))
-    ),
-    variants: combineToObject(
-      themes.map(theme => ({
-        [theme.name]: computeThemeVariants(theme.variants)
-      }))
-    ),
-    files: {
-      previews: {
-        ...combineToObject(themes.map(theme => ({ [theme.name]: theme._files.previews })))
-      },
-      ...combineToObject(themes.map(theme => ({ [theme.name]: objectWithoutKey(theme._files, 'previews') })))
-    }
+    )
   };
 
   writeJSONFile(join(OUT_DIR, 'meta.json'), data);

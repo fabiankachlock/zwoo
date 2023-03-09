@@ -21,7 +21,8 @@ export class CardThemeManager {
       themes: [],
       defaultTheme: {
         name: '',
-        variant: ''
+        variant: '',
+        version: ''
       },
       variants: {},
       files: {
@@ -42,7 +43,7 @@ export class CardThemeManager {
   }
 
   private createCacheKey(theme: CardThemeIdentifier): string {
-    return `${theme.name}_${theme.variant}`;
+    return `${theme.name}_${theme.variant}_v${theme.version}`;
   }
 
   private async loadThemes(): Promise<CardThemesMeta> {

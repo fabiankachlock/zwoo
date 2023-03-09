@@ -1,18 +1,25 @@
 import { CardColor } from '../game/CardTypes';
 
 export interface CardThemesMeta {
-  themes: string[];
   defaultTheme: {
     name: string;
     variant: string;
+    version: string;
   };
-  variants: Record<string, string[]>;
-  files: Record<string, Record<string, string>> & { previews: Record<string, Record<string, string>> };
-  configs: Record<string, CardThemeInformation>;
+  themesList: string[];
+  themes: Record<
+    string,
+    {
+      name: string;
+      files: Record<string, string> & { previews: Record<string, Record<string, string>> };
+      config: CardThemeInformation;
+    }
+  >;
 }
 
 export type CardThemeInformation = {
   name: string;
+  version: string;
   description: string;
   author: string;
   isMultiLayer: boolean;
@@ -24,6 +31,7 @@ export type CardThemeInformation = {
 export type CardThemeIdentifier = {
   name: string;
   variant: string;
+  version: string;
 };
 
 export type CardThemeData = Record<string, string>;
