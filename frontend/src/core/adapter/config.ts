@@ -50,7 +50,8 @@ const DefaultConfig: ZwooConfig = {
   cd: false,
   th: {
     name: '__default__',
-    variant: '@auto'
+    variant: '@auto',
+    version: ''
   },
   'dev-settings': false,
   logging: '',

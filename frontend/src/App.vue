@@ -26,6 +26,7 @@ import { useRootApp } from './core/adapter/app';
 import { useAuth } from './core/adapter/auth';
 import { useConfig } from './core/adapter/config';
 import { useCookies } from './core/adapter/cookies';
+import { CardTheme } from './core/domain/cards/CardTheme';
 import { useRuntimeConfig } from './core/runtimeConfig';
 const ChangelogManager = defineAsyncComponent(() => import('./components/misc/changelog/ChangelogManager.vue'));
 
@@ -39,6 +40,7 @@ cookies.setup();
 const asyncSetup = async () => {
   useConfig().configure(); // load stored config from localStorage
   useRuntimeConfig().configure();
+
   if (cookies.recaptchaCookie) {
     setTimeout(() => {
       cookies.loadRecaptcha();
@@ -49,6 +51,17 @@ const asyncSetup = async () => {
 onMounted(() => {
   import('./core/adapter/shortcuts/ShortcutManager').then(module => {
     module.ShortcutManager.global.activate();
+  });
+
+  setTimeout(() => {
+    Promise.all([
+      import('./core/domain/cards/ThemeManager'),
+      import('./core/services/themeCache/BrowserCardThemeCache'),
+      import('./core/helper/QueuedCache')
+    ]).then(([{ CardThemeManager }, { BrowserCardThemeCache }, { AsyncQueuedCache }]) => {
+      CardThemeManager.global = new CardThemeManager(new BrowserCardThemeCache(), new AsyncQueuedCache<CardTheme>(Infinity));
+      import('./core/adapter/game/cardTheme').then(({ useCardTheme }) => useCardTheme().__init__());
+    });
   });
 });
 

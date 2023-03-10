@@ -10,11 +10,6 @@
   },
   "themes": {
     "__default__": {
-      "variants": [
-        "dark",
-        "light",
-        "@auto"
-      ],
       "files": {
         "previews": {
           "dark": "__default__.dark.preview.json",
@@ -27,6 +22,7 @@
         "name": "__default__",
         "description": "",
         "author": "",
+        "version": "1",
         "isMultiLayer": true,
         "variants": [
           "dark",
@@ -60,9 +56,6 @@
       }
     },
     "test": {
-      "variants": [
-        "dark"
-      ],
       "files": {
         "previews": {
           "dark": "test.dark.preview.json"
@@ -73,6 +66,7 @@
         "name": "test",
         "description": "",
         "author": "",
+        "version": "1",
         "isMultiLayer": false,
         "variants": [
           "dark"

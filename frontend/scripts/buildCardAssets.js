@@ -329,6 +329,7 @@ async function createMetaFiles(themes) {
             name: theme.name ?? '',
             description: theme.description ?? '',
             author: theme.author ?? '',
+            version: theme.version ?? '',
             isMultiLayer: theme.isMultiLayer,
             variants: computeThemeVariants(theme.variants),
             previews: computeThemePreviews(theme.previews),
