@@ -59,8 +59,7 @@ export const useCardTheme = CreateUseHook(() => {
     const newVariant = variant === CARD_THEME_VARIANT_AUTO ? colorMode.value : variant;
     config.set(ZwooConfigKey.CardsTheme, {
       name,
-      variant,
-      version: 'USER' // <- this version does not matter
+      variant
     });
     loadTheme(name, newVariant);
   };

@@ -40,8 +40,8 @@ export class CardThemeManager {
     })();
   }
 
-  private createCacheKey(theme: CardThemeIdentifier): string {
-    return `${theme.name}_${theme.variant}_v${theme.version}`;
+  private createCacheKey(theme: CardThemeIdentifier, version: string): string {
+    return `${theme.name}_${theme.variant}_v${version}`;
   }
 
   private async loadThemes(): Promise<CardThemesMeta> {
@@ -72,16 +72,11 @@ export class CardThemeManager {
     return this.meta.defaultTheme;
   }
 
-  public async loadTheme(theme: Omit<CardThemeIdentifier, 'version'>): Promise<CardTheme> {
+  public async loadTheme(theme: CardThemeIdentifier): Promise<CardTheme> {
     Logger.Theme.log(`loading theme ${theme.name}.${theme.variant}`);
 
     await this.waitForThemes();
-    const identifier: CardThemeIdentifier = {
-      ...theme,
-      version: this.meta.themes[theme.name].config.version
-    };
-
-    const cachedTheme = await this.themeCache.get(this.createCacheKey(identifier));
+    const cachedTheme = await this.themeCache.get(this.createCacheKey(theme, this.meta.themes[theme.name].config.version));
     if (cachedTheme) {
       // already loaded
       Logger.Theme.debug('theme already cached');
@@ -97,14 +92,14 @@ export class CardThemeManager {
     const uri = this.meta.themes[theme.name].files[theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
     const loadedTheme = new CardTheme(theme.name, theme.variant, config, this.meta.themes[theme.name].config);
-    this.themeCache.set(this.createCacheKey(identifier), loadedTheme.toJson());
+    this.themeCache.set(this.createCacheKey(theme, this.meta.themes[theme.name].config.version), loadedTheme.toJson());
     return loadedTheme;
   }
 
   public async loadPreview(theme: Omit<CardThemeIdentifier, 'version'>): Promise<CardTheme> {
     Logger.Theme.log(`loading preview for theme ${theme.name}.${theme.variant}`);
 
-    const cachedTheme = await this.previewCache.get(this.createCacheKey({ ...theme, version: 'PREVIEW' }));
+    const cachedTheme = await this.previewCache.get(this.createCacheKey(theme, 'PREVIEW'));
     if (cachedTheme) {
       // already loaded
       Logger.Theme.debug('theme preview already cached');
@@ -115,7 +110,7 @@ export class CardThemeManager {
     const uri = this.meta.themes[theme.name].files.previews[theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
     const loadedPreview = new CardTheme(theme.name, theme.variant, config, this.meta.themes[theme.name].config);
-    this.previewCache.set(this.createCacheKey({ ...theme, version: 'PREVIEW' }), loadedPreview);
+    this.previewCache.set(this.createCacheKey(theme, 'PREVIEW'), loadedPreview);
     return loadedPreview;
   }
 

@@ -31,7 +31,6 @@ export type CardThemeInformation = {
 export type CardThemeIdentifier = {
   name: string;
   variant: string;
-  version: string;
 };
 
 export type CardThemeData = Record<string, string>;
