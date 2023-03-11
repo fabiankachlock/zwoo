@@ -6,7 +6,8 @@
       "about": "About zwoo",
       "game": "Game",
       "account": "Account",
-      "developers": "Developer"
+      "developers": "Developer",
+      "": "Error"
     },
     "update": {
       "available": "An update is available",

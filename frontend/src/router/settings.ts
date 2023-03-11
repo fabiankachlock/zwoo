@@ -19,7 +19,7 @@ export const SettingsRoutes: Array<RouteRecordRaw> = [
         component: () => import('../components/settings/sections/SettingsSectionGame.vue')
       },
       {
-        path: 'developer',
+        path: 'developers',
         component: () => import('../components/settings/sections/SettingsSectionDevelopers.vue')
       },
       {
