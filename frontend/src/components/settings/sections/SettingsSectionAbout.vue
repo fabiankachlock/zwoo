@@ -25,27 +25,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Environment from '@/components/misc/Environment.vue';
 import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
 import Version from '@/components/misc/Version.vue';
 import SettingsRow from '@/components/settings/common/SettingsRow.vue';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 import SettingsSection from '../common/SettingsSection.vue';
 import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();
-
-const showDevSettings = ref(localStorage.getItem('zwoo:dev-settings') === 'true');
+const config = useConfig();
 
 let clicks = 0;
 const clickVersion = () => {
   clicks++;
   if (clicks === 10) {
-    localStorage.setItem('zwoo:dev-settings', 'true');
-    showDevSettings.value = true;
+    config.set(ZwooConfigKey.DevSettings, true);
   }
 };
 </script>
