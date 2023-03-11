@@ -15,6 +15,9 @@
       style="transition-property: width, padding"
     >
       <div class="h-full flex flex-row items-center justify-end" id="content">
+        <router-link to="/settings">
+          <Icon icon="akar-icons:settings-horizontal" class="tc-main text-xl ease-linear transition-transform hover:scale-110"></Icon>
+        </router-link>
         <div @click="toggleDarkMode" class="tc-main text-xl ease-linear transition-transform hover:scale-110">
           <Icon icon="ri:moon-fill" v-show="isDarkMode" />
           <Icon icon="ri:sun-fill" v-show="!isDarkMode" />
@@ -52,6 +55,6 @@ const toggleDarkMode = () => {
 }
 
 .open {
-  width: 2rem; /* w-8 */
+  width: 4rem; /* w-16 */
 }
 </style>
