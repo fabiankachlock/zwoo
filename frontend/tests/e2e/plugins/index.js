@@ -14,9 +14,6 @@ module.exports = (on, config) => {
   //  webpackOptions: require('@vue/cli-service/webpack.config'),
   //  watchOptions: {}
   // }))
-  on('uncaught:exception', () => {
-    return false;
-  });
 
   return Object.assign({}, config, {
     fixturesFolder: 'tests/e2e/fixtures',
