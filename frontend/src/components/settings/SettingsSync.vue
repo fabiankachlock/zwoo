@@ -1,5 +1,10 @@
 <template>
-  <RuleSwitch :model-value="value" @update:model-value="toggle" />
+  <SettingsSwitch :model-value="value" @update:model-value="toggle">
+    <div class="tc-main text-lg">
+      <Icon v-show="value" icon="mdi:cloud-sync-outline" />
+      <Icon v-show="!value" icon="mdi:cloud-off-outline" />
+    </div>
+  </SettingsSwitch>
 </template>
 
 <script setup lang="ts">
@@ -7,7 +12,8 @@ import { computed } from 'vue';
 
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
-import RuleSwitch from '../lobby/rules/contentTypes/RuleSwitch.vue';
+import { Icon } from '../misc/Icon';
+import SettingsSwitch from './common/SettingsSwitch.vue';
 
 const config = useConfig();
 const value = computed(() => config.get(ZwooConfigKey.Sync));
