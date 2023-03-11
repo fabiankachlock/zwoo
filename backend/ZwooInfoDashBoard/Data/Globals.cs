@@ -25,5 +25,5 @@ public static class Globals
     public static string DatabaseName;
     public static string LogrushDashboardUrl;
     public static Database ZwooDatabase { set; get; }
-    public static readonly string Version = "1.0.0-beta.9";
+    public static readonly string Version = "1.0.0-beta.10";
 }
