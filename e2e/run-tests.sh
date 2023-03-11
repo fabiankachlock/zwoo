@@ -58,7 +58,7 @@ echo "===== FIREFOX ====="
 echo ""
 launch_app
 echo "running tests in firefox..."
-docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.6.0 --browser firefox --record --key $CY_KEY
+docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser firefox --record --key $CY_KEY
 FI_EXIT_CODE=$?
 echo "firefox tests ran!"
 shutdown_app
