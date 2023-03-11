@@ -1,19 +1,39 @@
 <template>
   <MaxWidthLayout size="normal">
     <h1 class="tc-main text-4xl my-5">{{ t('settings.title') }}</h1>
-    <div>
-      <div class="relative w-full p-2 flex flex-col justify-end items-stretch bg-lightest rounded-lg my-4">
-        <div>
-          <h3>{{ t(`settings.sections.${currentSection}`) }}</h3>
-          <button>TOGGLE</button>
+    <div class="flex flex-col lg:flex-row items-start">
+      <div class="relative w-full p-2 bg-lightest rounded-lg my-4 lg:mr-4 lg:max-w-xs">
+        <div class="flex justify-between items-center">
+          <h3 class="tc-main text-2xl mx-2 my-1">{{ t(`settings.sections.${currentSection}`) }}</h3>
+          <button
+            @click="toggleOpenState"
+            class="toggle lg:hidden bg-dark hover:bg-darkest text-2xl tc-main relative p-4 rounded w-6 h-6 overflow-hidden"
+          >
+            <Icon
+              icon="iconoir:nav-arrow-down"
+              class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
+              :class="{ 'opacity-0 translate-y-2': isMenuOpen, '-translate-y-1/2': !isMenuOpen }"
+            />
+            <Icon
+              icon="iconoir:nav-arrow-up"
+              class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
+              :class="{ 'opacity-0 translate-y-2': !isMenuOpen, '-translate-y-1/2': isMenuOpen }"
+            />
+          </button>
         </div>
-        <div>
-          <router-link v-for="section in displaySections" :key="section" :to="`/settings/${section}`">
+        <div class="menu-body transition duration-300" :class="{ open: isMenuOpen, 'overflow-hidden lg:block lg:max-h-full': !isMenuOpen }">
+          <router-link
+            class="block tc-main-light bg-dark px-3 py-1 my-2 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
+            :class="{ 'bc-primary': section === currentSection }"
+            v-for="section in displaySections"
+            :key="section"
+            :to="`/settings/${section}`"
+          >
             {{ t(`settings.sections.${section}`) }}
           </router-link>
         </div>
       </div>
-      <div>
+      <div class="w-full lg:flex-1">
         <router-view></router-view>
       </div>
     </div>
@@ -25,6 +45,7 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import { Icon } from '@/components/misc/Icon';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
@@ -33,8 +54,9 @@ const route = useRoute();
 const allSections = ['general', 'account', 'game', 'developers', 'about'];
 const currentSection = ref('');
 const showDevSettings = ref(localStorage.getItem('zwoo:dev-settings') !== 'true');
+const isMenuOpen = ref(false);
 
-const displaySections = computed(() => (showDevSettings.value ? allSections : allSections.filter(section => section === 'developers')));
+const displaySections = computed(() => (showDevSettings.value ? allSections : allSections.filter(section => section !== 'developers')));
 
 watch(
   () => route.fullPath,
@@ -45,4 +67,23 @@ watch(
     immediate: true
   }
 );
+const toggleOpenState = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 </script>
+
+<style scoped>
+.menu-body {
+  transition-property: max-height;
+  max-height: 0;
+  @apply lg:max-h-full;
+}
+.menu-body.open {
+  transition-property: max-height;
+  max-height: 5000px;
+}
+
+.toggle:hover .icon {
+  @apply scale-110;
+}
+</style>
