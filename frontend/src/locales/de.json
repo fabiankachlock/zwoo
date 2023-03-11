@@ -37,7 +37,8 @@
     "versionHistory": "Versionverlauf",
     "settingsSync": "Einstellungen synchronisieren",
     "reportBug": "Fehler melden",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "logout": "Abmelden"
   },
   "lng": {
     "de": "Deutsch",

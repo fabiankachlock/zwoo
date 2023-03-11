@@ -1,5 +1,5 @@
 <template>
-  <SettingsSection :title="t('settings.sections.general')">
+  <SettingsSection>
     <SettingsRow
       :title="t('settings.darkmode')"
       :settings-key="ZwooConfigKey.UiMode"
@@ -24,9 +24,6 @@
       <SettingsRow :title="t('settings.cookies')">
         <ManageCookies />
       </SettingsRow>
-      <SettingsRow :title="t('settings.versionHistory')">
-        <VersionHistory />
-      </SettingsRow>
     </Environment>
   </SettingsSection>
 </template>
@@ -45,7 +42,6 @@ import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 import SettingsSection from '../common/SettingsSection.vue';
 import ManageCookies from '../ManageCookies.vue';
-import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();
 const config = useConfig();

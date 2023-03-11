@@ -1,5 +1,5 @@
 <template>
-  <SettingsSection :title="t('settings.sections.developers')">
+  <SettingsSection>
     <SettingsRow :title="t('settings.deviceId')">
       <p class="tc-main text-right">{{ did }}</p>
     </SettingsRow>

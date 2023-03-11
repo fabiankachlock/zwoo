@@ -1,7 +1,11 @@
 <template>
   <template v-if="isLoggedIn">
-    <SettingsSection :title="t('settings.sections.account')">
-      <SettingsRow :title="t('settings.logout')" v-if="isLoggedIn"> LOGOUT </SettingsRow>
+    <SettingsSection>
+      <SettingsRow :title="t('settings.logout')" v-if="isLoggedIn">
+        <router-link class="tc-main-light bg-light border-2 border-transparent px-2 rounded transition hover:bg-main" to="/logout">
+          {{ t('settings.logout') }}
+        </router-link>
+      </SettingsRow>
       <SettingsRow :title="t('settings.settingsSync')" v-if="isLoggedIn">
         <SettingsSync />
       </SettingsRow>

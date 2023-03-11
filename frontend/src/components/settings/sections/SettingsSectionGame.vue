@@ -1,5 +1,5 @@
 <template>
-  <SettingsSection :title="t('settings.sections.game')">
+  <SettingsSection>
     <SettingsRow :title="t('settings.cardTheme')" :settings-key="ZwooConfigKey.CardsTheme">
       <SelectTheme />
     </SettingsRow>

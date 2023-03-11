@@ -1,5 +1,5 @@
 <template>
-  <SettingsSection :title="t('settings.sections.about')">
+  <SettingsSection>
     <div
       class="w-full flex flex-row justify-start items-center bg-dark px-3 py-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
     >
