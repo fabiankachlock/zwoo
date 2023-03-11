@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col sm:flex-row tc-main-dark">
+  <div class="flex flex-col tc-main-dark">
     <Environment show="online">
       <div v-if="!isLoggedIn">
         <router-link to="/login" class="link">
@@ -18,7 +18,7 @@
       <div class="divider bc-invert-main"></div>
     </Environment>
     <Environment show="online">
-      <div v-if="isLoggedIn" class="sm:flex flex-row">
+      <div v-if="isLoggedIn">
         <router-link to="/home" class="link">
           {{ t('nav.home') }}
         </router-link>
@@ -59,7 +59,7 @@ const isLoggedIn = computed(() => auth.isLoggedIn);
 
 <style scoped>
 .divider {
-  @apply h-0 my-1 border border-solid border-t-0 opacity-50 sm:hidden;
+  @apply h-0 my-1 border border-solid border-t-0 opacity-50;
 }
 
 .link {
