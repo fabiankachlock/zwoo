@@ -6,26 +6,15 @@
       </div>
       <div v-if="!isLoggedIn">
         <NavBarItem :title="t('nav.createAccount')" link="/create-account" />
-      </div>
-      <div v-if="!isLoggedIn">
         <div class="divider bc-invert-main"></div>
       </div>
     </Environment>
     <div v-if="isLoggedIn" class="sm:flex flex-row">
       <NavBarItem :title="t('nav.home')" link="/home" />
-    </div>
-    <div v-if="isLoggedIn" class="sm:flex flex-row">
       <div class="divider bc-invert-main"></div>
     </div>
-    <NavBarItem :title="t('nav.idea')" link="https://github.com/fabiankachlock/zwoo/discussions/categories/ideas" is-external />
-    <div class="divider bc-invert-main"></div>
     <NavBarItem :title="t('nav.imprint')" link="/imprint" />
     <NavBarItem :title="t('nav.settings')" link="/settings" />
-    <Environment show="online">
-      <div v-if="isLoggedIn">
-        <NavBarItem :title="t('nav.logout')" link="/logout" />
-      </div>
-    </Environment>
   </div>
 </template>
 
