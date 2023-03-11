@@ -1,5 +1,8 @@
 <template>
   <SettingsSection :title="t('settings.sections.game')">
+    <SettingsRow :title="t('settings.cardTheme')" :settings-key="ZwooConfigKey.CardsTheme">
+      <SelectTheme />
+    </SettingsRow>
     <SettingsRow
       :title="t('settings.showCardDetail')"
       :settings-key="ZwooConfigKey.ShowCardsDetail"
@@ -23,6 +26,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
+import SelectTheme from '../SelectTheme.vue';
 import SettingsRow from '../SettingsRow.vue';
 import SettingsSection from '../SettingsSection.vue';
 import ShowCardDetailSwitch from '../ShowCardDetailSwitch.vue';

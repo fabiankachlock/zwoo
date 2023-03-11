@@ -19,6 +19,7 @@ import { GameRoute } from './game';
 import { OfflineGuard } from './guards/OfflineGuard';
 import { InternalRoute } from './internal';
 import { MenuRoutes } from './menu';
+import { SettingsRoutes } from './settings';
 import { ThemesRoute } from './themes';
 import { RouterInterceptor } from './types';
 
@@ -46,7 +47,8 @@ const routes: Array<RouteRecordRaw> = [
           offlineRedirect: '/offline'
         }
       },
-      ...MenuRoutes
+      ...MenuRoutes,
+      ...SettingsRoutes
     ]
   },
   GameRoute,

@@ -3,6 +3,7 @@
     "title": "Einstellungen",
     "sections": {
       "general": "Allgemein",
+      "about": "Über zwoo",
       "game": "Spiel",
       "account": "Account",
       "developers": "Entwickler"
@@ -33,7 +34,9 @@
     "deviceId": "Anonyme GeräteID",
     "changePassword": "Passwort ändern",
     "versionHistory": "Versionverlauf",
-    "settingsSync": "Einstellungen synchronisieren"
+    "settingsSync": "Einstellungen synchronisieren",
+    "reportBug": "Fehler melden",
+    "contact": "Kontakt"
   },
   "lng": {
     "de": "Deutsch",
@@ -304,7 +307,7 @@
   },
   "cardThemes": {
     "galleryTitle": "zwoo - Themen Gallerie",
-    "select": "Auswählen",
+    "select": "Theme Auswählen",
     "multiLayer": "MultiLayer",
     "by": "Von:",
     "authorUnknown": "Unbekannt",

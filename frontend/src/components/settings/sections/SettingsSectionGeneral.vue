@@ -20,9 +20,6 @@
     <SettingsRow :title="t('settings.language')" :settings-key="ZwooConfigKey.Language">
       <LanguageSelection />
     </SettingsRow>
-    <SettingsRow :title="t('settings.cardTheme')" :settings-key="ZwooConfigKey.CardsTheme">
-      <SelectTheme />
-    </SettingsRow>
     <Environment show="online">
       <SettingsRow :title="t('settings.cookies')">
         <ManageCookies />
@@ -47,7 +44,6 @@ import SettingsRow from '@/components/settings/SettingsRow.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 import ManageCookies from '../ManageCookies.vue';
-import SelectTheme from '../SelectTheme.vue';
 import SettingsSection from '../SettingsSection.vue';
 import VersionHistory from '../VersionHistory.vue';
 

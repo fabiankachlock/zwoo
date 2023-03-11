@@ -1,6 +1,7 @@
 <template>
   <template v-if="isLoggedIn">
     <SettingsSection :title="t('settings.sections.account')">
+      <SettingsRow :title="t('settings.logout')" v-if="isLoggedIn"> LOGOUT </SettingsRow>
       <SettingsRow :title="t('settings.settingsSync')" v-if="isLoggedIn">
         <SettingsSync />
       </SettingsRow>
