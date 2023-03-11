@@ -26,9 +26,9 @@ import { useI18n } from 'vue-i18n';
 
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
+import SettingsRow from '../common/SettingsRow.vue';
+import SettingsSection from '../common/SettingsSection.vue';
 import SelectTheme from '../SelectTheme.vue';
-import SettingsRow from '../SettingsRow.vue';
-import SettingsSection from '../SettingsSection.vue';
 import ShowCardDetailSwitch from '../ShowCardDetailSwitch.vue';
 import SortCardsSwitch from '../SortCardsSwitch.vue';
 

@@ -31,9 +31,9 @@ import { useI18n } from 'vue-i18n';
 import Environment from '@/components/misc/Environment.vue';
 import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
 import Version from '@/components/misc/Version.vue';
-import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsRow from '@/components/settings/common/SettingsRow.vue';
 
-import SettingsSection from '../SettingsSection.vue';
+import SettingsSection from '../common/SettingsSection.vue';
 import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();

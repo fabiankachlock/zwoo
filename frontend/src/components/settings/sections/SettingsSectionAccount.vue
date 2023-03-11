@@ -22,9 +22,9 @@ import { useI18n } from 'vue-i18n';
 import { useAuth } from '@/core/adapter/auth';
 
 import ChangePassword from '../ChangePassword.vue';
+import SettingsRow from '../common/SettingsRow.vue';
+import SettingsSection from '../common/SettingsSection.vue';
 import DeleteAccount from '../DeleteAccount.vue';
-import SettingsRow from '../SettingsRow.vue';
-import SettingsSection from '../SettingsSection.vue';
 import SettingsSync from '../SettingsSync.vue';
 
 const { t } = useI18n();

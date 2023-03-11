@@ -36,15 +36,15 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Environment from '@/components/misc/Environment.vue';
+import SettingsRow from '@/components/settings/common/SettingsRow.vue';
 import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import LanguageSelection from '@/components/settings/LanguageSelection.vue';
 import QuickMenuSwitch from '@/components/settings/QuickMenuSwitch.vue';
-import SettingsRow from '@/components/settings/SettingsRow.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
+import SettingsSection from '../common/SettingsSection.vue';
 import ManageCookies from '../ManageCookies.vue';
-import SettingsSection from '../SettingsSection.vue';
 import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();

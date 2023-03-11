@@ -10,7 +10,7 @@ import { computed } from 'vue';
 
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
-import { Icon } from '../misc/Icon';
+import { Icon } from '../../misc/Icon';
 
 // eslint-disable-next-line no-undef
 const props = defineProps<{
