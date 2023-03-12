@@ -1,8 +1,10 @@
 <template>
-  <button @click="toggleFullScreen" class="tc-main text-xl ease-linear transition-transform hover:scale-110">
-    <Icon icon="mdi:fullscreen" v-show="!useFullScreen" />
-    <Icon icon="mdi:fullscreen-exit" v-show="useFullScreen" />
-  </button>
+  <SettingsSwitch :model-value="useFullScreen" @update:model-value="toggleFullScreen">
+    <div class="tc-main text-xl">
+      <Icon icon="mdi:fullscreen" v-show="useFullScreen" />
+      <Icon icon="mdi:fullscreen-exit" v-show="!useFullScreen" />
+    </div>
+  </SettingsSwitch>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +12,8 @@ import { computed } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
 import { useConfig } from '@/core/adapter/config';
+
+import SettingsSwitch from './common/SettingsSwitch.vue';
 
 const config = useConfig();
 const useFullScreen = computed(() => config.useFullScreen);

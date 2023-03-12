@@ -17,8 +17,10 @@ export class OfflineGuard implements RouterInterceptor {
         } else {
           next('/offline');
         }
-        return true;
+      } else {
+        next();
       }
+      return true;
     } else {
       if (to.meta['offlineOnly']) {
         if (to.meta['onlineRedirect']) {

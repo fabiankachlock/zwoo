@@ -1,6 +1,11 @@
 <template>
   <template v-if="isLoggedIn">
-    <SettingsSection :title="t('settings.sections.account')">
+    <SettingsSection>
+      <SettingsRow :title="t('settings.logout')" v-if="isLoggedIn">
+        <router-link class="tc-main-light bg-light border-2 border-transparent px-2 rounded transition hover:bg-main" to="/logout">
+          {{ t('settings.logout') }}
+        </router-link>
+      </SettingsRow>
       <SettingsRow :title="t('settings.settingsSync')" v-if="isLoggedIn">
         <SettingsSync />
       </SettingsRow>
@@ -21,9 +26,9 @@ import { useI18n } from 'vue-i18n';
 import { useAuth } from '@/core/adapter/auth';
 
 import ChangePassword from '../ChangePassword.vue';
+import SettingsRow from '../common/SettingsRow.vue';
+import SettingsSection from '../common/SettingsSection.vue';
 import DeleteAccount from '../DeleteAccount.vue';
-import SettingsRow from '../SettingsRow.vue';
-import SettingsSection from '../SettingsSection.vue';
 import SettingsSync from '../SettingsSync.vue';
 
 const { t } = useI18n();

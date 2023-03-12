@@ -17,15 +17,23 @@
             <div class="menu-rounded-edges menu-content border bc-invert-main border-t-0 py-1">
               <div class="scroll-container overflow-y-auto h-full max-h-full">
                 <div class="flex flex-col flex-nowrap">
-                  <div class="menu-section">
+                  <div class="menu-section items-start">
                     <p class="tc-main text-lg">{{ t('ingame.options') }}</p>
                     <div class="menu-options-container flex flex-row justify-end">
-                      <DarkModeSwitch />
-                      <FullScreenSwitch />
+                      <div>
+                        <div class="mb-1">
+                          <DarkModeSwitch class="mr-1" />
+                          <FullScreenSwitch />
+                        </div>
+                        <div>
+                          <SortCardsSwitch class="mr-1" />
+                          <ShowCardDetailSwitch />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <hr class="bc-invert-lightest opacity-40 my-1" />
-                  <div class="menu-section">
+                  <div class="menu-section items-center">
                     <p class="tc-main text-lg">{{ t('ingame.actions') }}</p>
                     <div>
                       <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">
@@ -56,6 +64,8 @@ import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
 import { useGameConfig } from '@/core/adapter/game';
 
+import ShowCardDetailSwitch from '../settings/ShowCardDetailSwitch.vue';
+import SortCardsSwitch from '../settings/SortCardsSwitch.vue';
 import ChatInput from './chat/ChatInput.vue';
 import GameChat from './chat/GameChat.vue';
 import EndTurnButton from './EndTurnButton.vue';
@@ -76,7 +86,7 @@ const handleLeave = () => {
 
 <style scoped>
 .open-menu {
-  height: 19rem;
+  height: 21rem;
 }
 
 .menu-rounded-edges {
@@ -92,6 +102,6 @@ const handleLeave = () => {
 }
 
 .menu-section {
-  @apply flex justify-between items-center m-2;
+  @apply flex justify-between m-2;
 }
 </style>

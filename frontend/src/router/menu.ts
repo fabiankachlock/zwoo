@@ -2,10 +2,6 @@ import { RouteRecordRaw } from 'vue-router';
 
 export const MenuRoutes: Array<RouteRecordRaw> = [
   {
-    path: 'settings',
-    component: () => import('../views/Settings.vue')
-  },
-  {
     path: 'imprint',
     component: () => import('../views/Imprint.vue')
   },

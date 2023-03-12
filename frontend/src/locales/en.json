@@ -3,9 +3,11 @@
     "title": "Settings",
     "sections": {
       "general": "General",
+      "about": "About zwoo",
       "game": "Game",
       "account": "Account",
-      "developers": "Developer"
+      "developers": "Developer",
+      "": "Error"
     },
     "update": {
       "available": "An update is available",
@@ -33,7 +35,10 @@
     "deviceId": "Anonymous DeviceID",
     "changePassword": "Change Password",
     "versionHistory": "Version history",
-    "settingsSync": "Sync settings"
+    "settingsSync": "Sync settings",
+    "reportBug": "Report a Bug",
+    "contact": "Contact",
+    "logout": "Abmelden"
   },
   "lng": {
     "de": "German",
@@ -304,7 +309,7 @@
   },
   "cardThemes": {
     "galleryTitle": "zwoo - Themes Gallery",
-    "select": "Select",
+    "select": "Select Theme",
     "multiLayer": "MultiLayer",
     "by": "By:",
     "authorUnknown": "Unknown",
