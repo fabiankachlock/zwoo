@@ -107,6 +107,8 @@ export const useConfig = defineStore('config', {
         changeUIMode(value as string);
       } else if (ZwooConfigKey.Language === key) {
         changeLanguage(value as string);
+      } else if (ZwooConfigKey.DevSettings === key && value) {
+        localStorage.setItem('zwoo:dev-settings', 'true');
       }
 
       if (save) {
@@ -135,6 +137,9 @@ export const useConfig = defineStore('config', {
     applyConfig(config: Omit<Partial<ZwooConfig>, '_ignore'>) {
       for (const [key, value] of Object.entries(config)) {
         this.set(key as ZwooConfigKey, value, false);
+      }
+      if (localStorage.getItem('zwoo:dev-settings') === 'true') {
+        this.set(ZwooConfigKey.DevSettings, true);
       }
       this._saveConfig(true);
     },
