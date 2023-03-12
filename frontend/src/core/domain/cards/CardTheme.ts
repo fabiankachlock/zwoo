@@ -10,6 +10,13 @@ import {
   MAX_THEME_PREVIEWS
 } from './CardThemeConfig';
 
+export type SerializedCardTheme = {
+  name: string;
+  variant: string;
+  data: CardThemeData;
+  config: CardThemeInformation;
+};
+
 export class CardTheme {
   constructor(
     public readonly name: string,
@@ -72,5 +79,18 @@ export class CardTheme {
       CardLayerSeparator + CardLayerWildcard + CardLayerSeparator
     );
     return [firstLayer, secondLayer];
+  }
+
+  public toJson(): SerializedCardTheme {
+    return {
+      name: this.name,
+      variant: this.variant,
+      config: this.config,
+      data: this.data
+    };
+  }
+
+  public static fromJson(data: SerializedCardTheme): CardTheme {
+    return new CardTheme(data.name, data.variant, data.data, data.config);
   }
 }

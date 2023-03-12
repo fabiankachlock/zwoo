@@ -47,3 +47,31 @@ export class QueuedCache<T> {
     }
   }
 }
+
+export class AsyncQueuedCache<T> {
+  private underlyingCache: QueuedCache<T>;
+
+  public constructor(public readonly maxItemCount: number) {
+    this.underlyingCache = new QueuedCache(maxItemCount);
+  }
+
+  public get(key: string): Promise<T | undefined> {
+    return Promise.resolve(this.underlyingCache.get(key));
+  }
+
+  public set(key: string, value: T): Promise<T> {
+    return Promise.resolve(this.underlyingCache.set(key, value));
+  }
+
+  public getOrSet(key: string, setter: () => T): Promise<T> {
+    return Promise.resolve(this.underlyingCache.getOrSet(key, setter));
+  }
+
+  public async getOrSetAsync(key: string, setter: () => Promise<T>): Promise<T> {
+    return this.underlyingCache.getOrSetAsync(key, setter);
+  }
+
+  public clean(): Promise<void> {
+    return Promise.resolve(this.underlyingCache.clean());
+  }
+}

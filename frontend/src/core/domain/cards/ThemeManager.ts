@@ -1,33 +1,32 @@
 import { Awaiter } from '@/core/helper/Awaiter';
-import { QueuedCache } from '@/core/helper/QueuedCache';
 import Logger from '@/core/services/logging/logImport';
 
-import { CardTheme } from './CardTheme';
+import { CardTheme, SerializedCardTheme } from './CardTheme';
+import { CardThemeCache } from './CardThemeCache';
 import { CardThemeIdentifier, CardThemeInformation, CardThemesMeta } from './CardThemeConfig';
 
 export class CardThemeManager {
-  static global = new CardThemeManager();
+  static global: CardThemeManager;
 
-  private themeCache = new QueuedCache<CardTheme>(3);
+  private themeCache: CardThemeCache<SerializedCardTheme>;
 
-  private previewCache = new QueuedCache<CardTheme>(Infinity);
+  private previewCache: CardThemeCache<CardTheme>;
 
   private meta: CardThemesMeta;
 
   private themesLoader: Promise<void> | undefined;
 
-  private constructor() {
+  public constructor(themeCache: CardThemeCache<SerializedCardTheme>, previewCache: CardThemeCache<CardTheme>) {
+    this.themeCache = themeCache;
+    this.previewCache = previewCache;
     this.meta = {
-      themes: [],
+      themesList: [],
+      themes: {},
       defaultTheme: {
         name: '',
-        variant: ''
-      },
-      variants: {},
-      files: {
-        previews: {}
-      },
-      configs: {}
+        variant: '',
+        version: ''
+      }
     };
     const themeAwaiter = new Awaiter<void>();
     this.themesLoader = themeAwaiter.promise;
@@ -41,12 +40,31 @@ export class CardThemeManager {
     })();
   }
 
-  private createCacheKey(theme: CardThemeIdentifier): string {
-    return `${theme.name}_${theme.variant}`;
+  private createCacheKey(theme: CardThemeIdentifier, version: string): string {
+    return `${theme.name}_${theme.variant}_v${version}`;
   }
 
   private async loadThemes(): Promise<CardThemesMeta> {
-    return fetch(`/assets/meta.json?t=${Date.now()}`).then(res => res.json());
+    try {
+      const response = await fetch(`/assets/meta.json?t=${Date.now()}`).then(res => res.json());
+      await this.themeCache.set('META', response);
+      return response;
+    } catch {
+      Logger.Theme.log('falling back to cache');
+      // TODO: fix cache...
+      const response: CardThemesMeta = (await this.themeCache.get('META')) as unknown as CardThemesMeta;
+      return (
+        response || {
+          defaultTheme: {
+            name: '',
+            variant: '',
+            version: ''
+          },
+          themes: {},
+          themesList: []
+        }
+      );
+    }
   }
 
   public async getDefaultTheme(): Promise<CardThemeIdentifier> {
@@ -57,31 +75,31 @@ export class CardThemeManager {
   public async loadTheme(theme: CardThemeIdentifier): Promise<CardTheme> {
     Logger.Theme.log(`loading theme ${theme.name}.${theme.variant}`);
 
-    const cachedTheme = this.themeCache.get(this.createCacheKey(theme));
+    await this.waitForThemes();
+    const cachedTheme = await this.themeCache.get(this.createCacheKey(theme, this.meta.themes[theme.name].config.version));
     if (cachedTheme) {
       // already loaded
       Logger.Theme.debug('theme already cached');
-      return cachedTheme;
+      return CardTheme.fromJson(cachedTheme);
     }
 
-    await this.waitForThemes();
     if (!theme.name || !theme.variant) {
       Logger.Theme.warn('no theme selected');
       theme.name = this.meta.defaultTheme.name;
       theme.variant = this.meta.defaultTheme.variant;
     }
 
-    const uri = this.meta.files[theme.name][theme.variant];
+    const uri = this.meta.themes[theme.name].files[theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
-    const loadedTheme = new CardTheme(theme.name, theme.variant, config, this.meta.configs[theme.name]);
-    this.themeCache.set(this.createCacheKey(theme), loadedTheme);
+    const loadedTheme = new CardTheme(theme.name, theme.variant, config, this.meta.themes[theme.name].config);
+    this.themeCache.set(this.createCacheKey(theme, this.meta.themes[theme.name].config.version), loadedTheme.toJson());
     return loadedTheme;
   }
 
-  public async loadPreview(theme: CardThemeIdentifier): Promise<CardTheme> {
+  public async loadPreview(theme: Omit<CardThemeIdentifier, 'version'>): Promise<CardTheme> {
     Logger.Theme.log(`loading preview for theme ${theme.name}.${theme.variant}`);
 
-    const cachedTheme = this.previewCache.get(this.createCacheKey(theme));
+    const cachedTheme = await this.previewCache.get(this.createCacheKey(theme, 'PREVIEW'));
     if (cachedTheme) {
       // already loaded
       Logger.Theme.debug('theme preview already cached');
@@ -89,10 +107,10 @@ export class CardThemeManager {
     }
 
     await this.waitForThemes();
-    const uri = this.meta.files.previews[theme.name][theme.variant];
+    const uri = this.meta.themes[theme.name].files.previews[theme.variant];
     const config = await fetch(`/assets/${uri}`).then(res => res.json());
-    const loadedPreview = new CardTheme(theme.name, theme.variant, config, this.meta.configs[theme.name]);
-    this.previewCache.set(this.createCacheKey(theme), loadedPreview);
+    const loadedPreview = new CardTheme(theme.name, theme.variant, config, this.meta.themes[theme.name].config);
+    this.previewCache.set(this.createCacheKey(theme, 'PREVIEW'), loadedPreview);
     return loadedPreview;
   }
 
@@ -106,11 +124,12 @@ export class CardThemeManager {
 
   public async getSelectableThemes(): Promise<CardThemeIdentifier[]> {
     await this.waitForThemes();
-    return this.meta.themes
+    return this.meta.themesList
       .map(theme =>
-        this.meta.variants[theme].map(variant => ({
+        this.meta.themes[theme].config.variants.map(variant => ({
           name: theme,
-          variant
+          variant,
+          version: this.meta.themes[theme].config.version
         }))
       )
       .flat();
@@ -118,11 +137,11 @@ export class CardThemeManager {
 
   public async getThemeInformation(theme: string): Promise<CardThemeInformation | undefined> {
     await this.waitForThemes();
-    return this.meta.configs[theme];
+    return this.meta.themes[theme].config;
   }
 
   public async getAllThemesInformation(): Promise<CardThemeInformation[]> {
     await this.waitForThemes();
-    return this.meta.themes.map(theme => this.meta.configs[theme]);
+    return this.meta.themesList.map(theme => this.meta.themes[theme].config);
   }
 }

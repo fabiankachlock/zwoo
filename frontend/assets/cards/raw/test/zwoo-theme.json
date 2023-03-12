@@ -1,5 +1,6 @@
 {
   "name": "test",
   "isMultiLayer": false,
+  "version": "1",
   "variants": ["dark"]
 }
