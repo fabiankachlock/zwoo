@@ -58,7 +58,6 @@ const icons = [
   'material-symbols:help-outline-rounded',
   'mdi:email-outline',
   'ic:baseline-wifi-off',
-  'akar-icons:more-vertical',
   'akar-icons:settings-horizontal'
 ];
 
