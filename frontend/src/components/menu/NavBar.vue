@@ -1,19 +1,19 @@
 <template>
   <div class="h-full flex items-center relative">
-    <div @click="toggleMenu" class="sm:hidden text-3xl tc-main-secondary cursor-pointer">
+    <DynamicActions></DynamicActions>
+    <div @click="toggleMenu" class="ml-2 text-3xl tc-main-secondary cursor-pointer">
       <Icon :icon="icon" class="tc-main-secondary" />
     </div>
     <div :class="{ hidden: !isMenuOpen, block: isMenuOpen }" class="fixed inset-0" @click="closeMenu"></div>
     <div
-      :class="{ hidden: !isMenuOpen, block: isMenuOpen }"
-      class="bg-darkest bc-invert-lightest fixed text-base z-10 py-2 list-none text-left rounded mt-1 right-4 top-7 border-1 shadow-sm sm:hidden"
-      style="min-width: 10rem"
+      :class="{ 'border-0 max-h-0': !isMenuOpen, 'border-1 max-h-[500px]': isMenuOpen }"
+      class="menu-container bg-darkest bc-invert-lightest bc-primary fixed z-10 right-0 transition duration-300 overflow-hidden shadow-sm"
+      style="min-width: 14rem"
       @click="closeMenu"
     >
-      <NavBarLinks />
-    </div>
-    <div class="hidden sm:flex flex-row list-none">
-      <NavBarLinks />
+      <div>
+        <MenuItems></MenuItems>
+      </div>
     </div>
   </div>
 </template>
@@ -23,7 +23,8 @@ import { computed, ref } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
 
-import NavBarLinks from './NavBarLinks.vue';
+import DynamicActions from './DynamicActions.vue';
+import MenuItems from './MenuItems.vue';
 
 const isMenuOpen = ref(false);
 const icon = computed(() => (isMenuOpen.value ? 'gg:close' : 'gg:menu-grid-o'));
@@ -36,3 +37,14 @@ const closeMenu = () => {
   isMenuOpen.value = false;
 };
 </script>
+
+<style scoped>
+.menu-container {
+  top: calc(2.5rem + env(safe-area-inset-top));
+  border-right-width: 0px;
+  border-top-width: 0px;
+  border-radius: 0 0 0 0.5rem;
+  transition-property: max-height;
+  height: fit-content;
+}
+</style>

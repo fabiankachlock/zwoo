@@ -57,7 +57,8 @@ const icons = [
   'fluent:bot-24-regular',
   'material-symbols:help-outline-rounded',
   'mdi:email-outline',
-  'ic:baseline-wifi-off'
+  'ic:baseline-wifi-off',
+  'akar-icons:settings-horizontal'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

@@ -55,7 +55,9 @@
     "home": "Home",
     "help": "Help",
     "contact": "Contact",
-    "statusOffline": "Offline"
+    "statusOffline": "Offline",
+    "createGame": "Create Game",
+    "joinGame": "Join Game"
   },
   "login": {
     "title": "Login",

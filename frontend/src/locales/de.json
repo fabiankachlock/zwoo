@@ -55,7 +55,9 @@
     "home": "Home",
     "help": "Hilfe",
     "contact": "Kontakt",
-    "statusOffline": "Offline"
+    "statusOffline": "Offline",
+    "createGame": "Spiel erstellen",
+    "joinGame": "Spiel beitreten"
   },
   "login": {
     "title": "Anmeldung",
