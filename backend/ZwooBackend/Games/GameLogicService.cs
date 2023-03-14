@@ -2,7 +2,7 @@
 using ZwooDatabaseClasses;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic;
-
+using log4net;
 
 namespace ZwooBackend.Games;
 
@@ -29,6 +29,8 @@ public class GameLogicService : IGameLogicService
     // globally used GameLogic instance
     private GameManager _gameManager;
     private IWebSocketManager _wsManager;
+    private ILog _logger = LogManager.GetLogger("GamesService");
+
 
     public GameLogicService(IWebSocketManager wsManager)
     {
@@ -46,11 +48,6 @@ public class GameLogicService : IGameLogicService
         ZwooRoom room = _gameManager.CreateGame(name, isPublic);
         room.Game.OnFinished += (data, gameMeta) =>
         {
-            if (room.GetPlayer(data.Winner)?.Role != ZRPRole.Bot)
-            {
-                uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
-            }
-
             List<PlayerScore> scores = new();
             foreach (KeyValuePair<long, int> score in data.Scores)
             {
@@ -62,6 +59,20 @@ public class GameLogicService : IGameLogicService
             }
 
             Globals.ZwooDatabase.SaveGame(scores, gameMeta);
+
+            if (scores.Where(score => !score.IsBot).Count() > 1)
+            {
+                if (room.GetPlayer(data.Winner)?.Role != ZRPRole.Bot)
+                {
+                    _logger.Info($"[{gameMeta.Id}] incrementing win of winner {data.Winner}");
+                    uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
+                }
+            }
+            else
+            {
+                _logger.Info($"[{gameMeta.Id}] dont incrementing winner wins because there are no real opponents");
+            }
+
         };
         return room;
     }
