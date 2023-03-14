@@ -58,7 +58,8 @@ const icons = [
   'material-symbols:help-outline-rounded',
   'mdi:email-outline',
   'ic:baseline-wifi-off',
-  'akar-icons:settings-horizontal'
+  'akar-icons:settings-horizontal',
+  'akar-icons:triangle-alert'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

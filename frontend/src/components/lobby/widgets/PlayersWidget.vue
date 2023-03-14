@@ -114,6 +114,22 @@
             </template>
           </div>
         </div>
+        <Environment show="online">
+          <div v-if="showWinsWarning" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
+            <Icon icon="akar-icons:triangle-alert" class="tc-secondary text-xl mb-2 inline-flex mr-2" />
+            <p class="tc-main-secondary inline">
+              {{ t('wait.noWinInfo') }}
+            </p>
+          </div>
+        </Environment>
+        <Environment show="offline">
+          <div class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
+            <Icon icon="akar-icons:triangle-alert" class="tc-secondary text-xl mb-2 inline-flex mr-2" />
+            <p class="tc-main-secondary inline">
+              {{ t('wait.offlineInfo') }}
+            </p>
+          </div>
+        </Environment>
       </div>
     </template>
   </Widget>
@@ -154,6 +170,7 @@ const playerToKick = ref<string | undefined>(undefined);
 const shareSheetOpen = ref(false);
 const qrCodeOpen = ref(false);
 const players = computed(() => lobby.players);
+const showWinsWarning = computed(() => players.value.filter(player => player.role !== ZRPRole.Bot).length <= 1);
 
 const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
