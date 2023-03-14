@@ -115,7 +115,7 @@
           </div>
         </div>
         <Environment show="online">
-          <div v-if="showWinsWarning" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
+          <div v-if="showWinsWarning" class="info border-2 rounded-lg bc-primary p-2 mt-4">
             <Icon icon="akar-icons:triangle-alert" class="tc-secondary text-xl mb-2 inline-flex mr-2" />
             <p class="tc-main-secondary inline">
               {{ t('wait.noWinInfo') }}
@@ -123,7 +123,7 @@
           </div>
         </Environment>
         <Environment show="offline">
-          <div class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
+          <div class="info border-2 rounded-lg bc-primary p-2 mt-4">
             <Icon icon="akar-icons:triangle-alert" class="tc-secondary text-xl mb-2 inline-flex mr-2" />
             <p class="tc-main-secondary inline">
               {{ t('wait.offlineInfo') }}
