@@ -57,6 +57,6 @@ watch(
 }
 
 #changelog ul {
-  @apply list-inside list-disc;
+  @apply list-inside list-disc ml-4;
 }
 </style>
