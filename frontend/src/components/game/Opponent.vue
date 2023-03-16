@@ -1,14 +1,19 @@
 <template>
   <div
-    :class="{ 'border-secondary': isActive, 'bg-darkest z-0': isConnected, 'bg-main bc-primary sticky left-0 z-10': !isConnected }"
-    class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border border-transparent"
+    :class="{
+      'border-secondary': isActive,
+      'border-transparent': !isActive,
+      'bg-darkest z-0': isConnected,
+      'bg-main bc-primary sticky left-0 z-10': !isConnected
+    }"
+    class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border"
     :ref="r => (elmRef = r as HTMLDivElement)"
   >
     <div
       :class="{ 'tc-main': isConnected, 'tc-main-secondary line-through': !isConnected }"
       class="flex flex-row flex-nowrap w-full h-full items-center cursor-default overflow-hidden whitespace-nowrap"
     >
-      <span class="opponent-name">
+      <span class="opponent-name" :class="{ 'tc-primary': isSelf }">
         {{ name }}
       </span>
       <template v-if="id.startsWith('b_')">
@@ -43,6 +48,7 @@ const lobby = useLobbyStore();
 const { isHost } = useIsHost();
 const props = defineProps<{
   isActive: boolean;
+  isSelf: boolean;
   isConnected: boolean;
   id: string;
   name: string;
