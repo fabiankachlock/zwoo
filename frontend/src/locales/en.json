@@ -214,7 +214,9 @@
     "sharesheet": {
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."
-    }
+    },
+    "noWinInfo": "A minimum of 2 players ist needed for the wins to count onto the leaderboard. Bots do not count as players.",
+    "offlineInfo": "Wins of offline games do not count in the leaderboard."
   },
   "rules": {
     "widget": {

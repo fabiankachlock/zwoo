@@ -214,7 +214,9 @@
     "sharesheet": {
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."
-    }
+    },
+    "noWinInfo": "Es müssen mindestens 2 Spieler in einem Spiel seien, damit die der Sieg in der Bestenliste gezählt wird. Bots zählen nicht als Spieler.",
+    "offlineInfo": "Die Siege in Offline Spielen werden nicht in der Bestenliste gezählt."
   },
   "rules": {
     "widget": {
@@ -436,7 +438,7 @@
     "statusOffline": "Offline",
     "gameName": "Offline Spiel",
     "create": "Neues Offline Spiel",
-    "playerName": "Lokaler SPieler"
+    "playerName": "Lokaler Spieler"
   },
   "contact": {
     "title": "Kontakt",
