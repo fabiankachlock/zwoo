@@ -59,6 +59,14 @@
     </nav>
 </div>
 
+<AuthorizeView>
+    <Authorized>
+        <div>
+            @context.User.Identity?.Name
+        </div>
+    </Authorized>
+</AuthorizeView>
+
 @code {
     private bool collapseNavMenu = true;
 

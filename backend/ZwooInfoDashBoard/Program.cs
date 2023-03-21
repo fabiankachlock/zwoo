@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Logging;
 using ZwooInfoDashBoard.Data;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
+using Microsoft.IdentityModel.Tokens;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,54 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<DialogService>();
+
+IdentityModelEventSource.ShowPII = true;
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+.AddCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+})
+.AddOpenIdConnect("oidc", options =>
+{
+    options.Authority = "http://localhost:9080/realms/test";
+    options.ClientId = "zwoo-admin-dashbaord";
+    options.ClientSecret = "zwhDZhpTWCg4ZerXzgW40aLYNBDDrUCb";
+
+    options.ResponseType = "code";
+    options.SaveTokens = true;
+    options.GetClaimsFromUserInfoEndpoint = true;
+    options.RequireHttpsMetadata = false;
+
+    options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        NameClaimType = "name",
+        RoleClaimType = "role"
+    };
+
+    options.Events = new OpenIdConnectEvents
+    {
+        OnAccessDenied = context =>
+        {
+            context.HandleResponse();
+            context.Response.Redirect("/");
+            return Task.CompletedTask;
+        }
+    };
+});
 
 builder.WebHost.UseStaticWebAssets();
 
@@ -44,7 +94,14 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseRouting();
+
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    MinimumSameSitePolicy = SameSiteMode.None
+});
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
