@@ -8,6 +8,6 @@ public class LoginModel : PageModel
 {
     public async Task OnGet()
     {
-        await HttpContext.ChallengeAsync("oidc", new AuthenticationProperties());
+        await HttpContext.ChallengeAsync("oidc", new AuthenticationProperties { RedirectUri = "/" });
     }
 }
