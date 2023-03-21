@@ -31,9 +31,9 @@ builder.Services.AddAuthentication(options =>
 })
 .AddOpenIdConnect("oidc", options =>
 {
-    options.Authority = "http://localhost:9080/realms/test";
-    options.ClientId = "zwoo-admin-dashbaord";
-    options.ClientSecret = "zwhDZhpTWCg4ZerXzgW40aLYNBDDrUCb";
+    options.Authority = Globals.AuthenticationAuthority;
+    options.ClientId = Globals.AuthenticationClientId;
+    options.ClientSecret = Globals.AuthenticationClientSecret;
 
     options.ResponseType = "code";
     options.SaveTokens = true;
