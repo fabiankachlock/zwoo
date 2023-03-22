@@ -2,6 +2,9 @@
 
 @inherits LayoutComponentBase
 
+@inject NavigationManager UriHelper
+
+
 <PageTitle>ZwooInfoDashBoard</PageTitle>
 
 <AuthorizeView>
@@ -28,6 +31,10 @@
     </Authorized>
     <NotAuthorized>
         <a href="/login">Login</a>
+        @{
+            var returnUrl = UriHelper.ToBaseRelativePath(UriHelper.Uri);
+            UriHelper.NavigateTo($"login?redirectUri={returnUrl}", forceLoad: true);
+        }
     </NotAuthorized>
     <Authorizing>Loading...</Authorizing>
 </AuthorizeView>

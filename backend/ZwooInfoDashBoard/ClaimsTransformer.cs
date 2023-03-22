@@ -32,8 +32,6 @@ public class KeycloakRolesClaimsTransformation : IClaimsTransformation
                 .GetProperty(Globals.AuthenticationClientId)
                 .GetProperty("roles");
 
-            Console.WriteLine(clientRoles);
-
             foreach (var role in clientRoles.EnumerateArray())
             {
                 var value = role.GetString();
