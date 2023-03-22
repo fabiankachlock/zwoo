@@ -25,11 +25,11 @@ export const SettingsRoutes: Array<RouteRecordRaw> = [
       {
         path: 'about',
         component: () => import('../components/settings/sections/SettingsSectionAbout.vue')
-      },
-      {
-        path: '/:pathMatch(.*)*',
-        redirect: '/settings'
       }
     ]
+  },
+  {
+    path: '/settings/:pathMatch(.*)*',
+    redirect: '/settings'
   }
 ];
