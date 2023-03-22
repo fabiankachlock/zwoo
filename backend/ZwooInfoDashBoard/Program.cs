@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.IdentityModel.Logging;
 using ZwooInfoDashBoard.Data;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication;
+using ZwooInfoDashBoard;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<DialogService>();
-
-IdentityModelEventSource.ShowPII = true;
+builder.Services.AddScoped<IClaimsTransformation, KeycloakRolesClaimsTransformation>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -45,11 +45,11 @@ builder.Services.AddAuthentication(options =>
 
     options.Scope.Add("openid");
     options.Scope.Add("profile");
+    options.Scope.Add("roles");
 
     options.TokenValidationParameters = new TokenValidationParameters
     {
         NameClaimType = "name",
-        RoleClaimType = "role"
     };
 
     options.Events = new OpenIdConnectEvents
@@ -59,7 +59,7 @@ builder.Services.AddAuthentication(options =>
             context.HandleResponse();
             context.Response.Redirect("/");
             return Task.CompletedTask;
-        }
+        },
     };
 });
 

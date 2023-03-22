@@ -1,21 +1,30 @@
-﻿@inherits LayoutComponentBase
+﻿@using ZwooInfoDashBoard.Data
+
+@inherits LayoutComponentBase
 
 <PageTitle>ZwooInfoDashBoard</PageTitle>
 
 <AuthorizeView>
     <Authorized>
-        <div class="page">
-            <div class="sidebar d-flex flex-column">
-                <NavMenu/>
-            </div>
-
-            <main>
-                <article class="content px-4">
-                    @Body
-                </article>
-            </main>
-        </div>
-        <RadzenDialog />
+        <AuthorizeView Roles="@Globals.AuthenticationRole" Context="innerContext">
+            <Authorized>
+                <div class="page">
+                    <div class="sidebar d-flex flex-column">
+                        <NavMenu/>
+                    </div>
+                    <main>
+                        <article class="content px-4">
+                            @Body
+                        </article>
+                    </main>
+                </div>
+                <RadzenDialog />
+            </Authorized>
+            <NotAuthorized>
+                Missing Role @Globals.AuthenticationRole
+                <a href="logout">Logout</a>
+            </NotAuthorized>
+        </AuthorizeView>
     </Authorized>
     <NotAuthorized>
         <a href="/login">Login</a>
