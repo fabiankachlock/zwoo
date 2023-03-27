@@ -102,7 +102,7 @@ public sealed class AsyncExecutionQueue
             if (!_isExecuting.Value)
             {
                 // is not already executing
-                Execute();
+                Task.Run(() => Execute());
             }
         }
     }
