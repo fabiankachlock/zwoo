@@ -64,6 +64,9 @@ public class Database
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
+        _contactRequestsCollection = _database.GetCollection<ContactRequest>("contact_request");
+
+        _contactRequestsCollection.InsertOne(new ContactRequest(new ObjectId(), DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), "test", "mail", "message", true, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), 1.0, "https://zwoo.igd20.de/contact"));
 
         if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == Globals.Version) == null)
             _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));
@@ -349,4 +352,5 @@ public class Database
     private readonly IMongoCollection<AccountEvent> _accountEventCollection;
     private readonly IMongoCollection<Changelog> _changelogCollection;
     private readonly IMongoCollection<BetaCode> _betacodesCollection;
+    private readonly IMongoCollection<ContactRequest> _contactRequestsCollection;
 }

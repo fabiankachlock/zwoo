@@ -47,5 +47,12 @@ public static class ClassInitializer
             cm.MapCreator(p =>
                 new AccountEvent(p.Id, p.EventType, p.PlayerID, p.Success, p.TimeStamp));
         });
+
+        BsonClassMap.RegisterClassMap<ContactRequest>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new ContactRequest(p.Id, p.Timestamp, p.Name, p.Email, p.Message, p.AcceptedTerms, p.AcceptedTermsAt, p.CaptchaScore, p.Origin));
+        });
     }
 }
