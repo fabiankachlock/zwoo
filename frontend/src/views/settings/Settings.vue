@@ -59,7 +59,7 @@ const allSections = ['general', 'account', 'game', 'developers', 'about'];
 const isLoggedIn = computed(() => auth.isLoggedIn);
 const currentSection = ref('');
 const showDevSettings = computed(() => config.get(ZwooConfigKey.DevSettings));
-const isMenuOpen = ref(false);
+const isMenuOpen = ref(true);
 
 const blockedSections = computed(() => [...[isLoggedIn.value ? '-' : 'account'], ...[showDevSettings.value ? '-' : 'developers']]);
 const displaySections = computed(() => allSections.filter(section => !blockedSections.value.includes(section)));
