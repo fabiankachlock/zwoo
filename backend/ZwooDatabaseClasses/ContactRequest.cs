@@ -16,7 +16,7 @@ public class ContactRequest : IDocument
     public ContactRequest() { }
 
     [BsonConstructor]
-    public ContactRequest(ObjectId id, long timestamp, string name, string email, string message, bool acceptedTerms, long acceptedAt, double captchaScore, string origin)
+    public ContactRequest(ObjectId id, long timestamp, string name, string email, string message, bool acceptedTerms, long acceptedTermsAt, double captchaScore, string origin)
     {
         Id = id;
         Timestamp = timestamp;
@@ -24,7 +24,7 @@ public class ContactRequest : IDocument
         Email = email;
         Message = message;
         AcceptedTerms = acceptedTerms;
-        AcceptedTermsAt = acceptedAt;
+        AcceptedTermsAt = acceptedTermsAt;
         CaptchaScore = captchaScore;
         Origin = origin;
     }
