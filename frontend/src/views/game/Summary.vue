@@ -2,9 +2,9 @@
   <div class="game-summary overflow-y-auto">
     <template v-if="winner">
       <div
-        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 bg-dark mouse:hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
+        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-dark mouse:hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
       >
-        <div class="h-full flex flex-nowrap items-center justify-start">
+        <div class="h-full flex-1 flex flex-nowrap items-center justify-start">
           <img src="/img/logo/zwoo_logo_simple_none.png" alt="" class="max-h-full mr-3" />
           <p class="tc-main text-xl">{{ winner.username }}</p>
           <template v-if="winner.id.startsWith('b_')">
@@ -33,7 +33,7 @@
         <div class="flex-1"></div>
         <p class="tc-main-dark italic">{{ player.score }}</p>
       </div>
-      <div class="bottom-spacer h-8"></div>
+      <div class="bottom-spacer h-32"></div>
     </template>
     <div v-else class="flex flex-row justify-center flex-nowrap items-center tc-main">
       <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
