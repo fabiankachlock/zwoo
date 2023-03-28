@@ -32,7 +32,7 @@ public static class Globals
         ZwooCookieDomain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? ZwooDomain;
 
         var extraCors = Environment.GetEnvironmentVariable("ZWOO_CORS_CONTACT_FORM");
-        ContactFormExtraCorsOrigin = (extraCors ?? "").Split(',').Append(Cors).ToArray();
+        ContactFormExtraCorsOrigin = (extraCors ?? "").Split(',').Append(Cors).Where(host => host != "").ToArray();
 
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
         DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");

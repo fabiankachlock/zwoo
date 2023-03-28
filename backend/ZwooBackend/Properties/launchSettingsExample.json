@@ -29,13 +29,14 @@
         "SMTP_PASSWORD": "",
         "ZWOO_RECAPTCHA_SIDESECRET": "",
         "ZWOO_RECAPTCHA_URL": "",
-        "ZWOO_CORS": "",
+        "ZWOO_CORS": "http://localhost:8080/",
         "ZWOO_COOKIE_DOMAIN": "localhost",
         "ZWOO_USE_LOGRUSH": "false",
         "ZWOO_LOGRUSH_URL": "",
         "ZWOO_LOGRUSH_ALIAS": "",
         "ZWOO_LOGRUSH_ID": "",
-        "ZWOO_LOGRUSH_KEY": ""
+        "ZWOO_LOGRUSH_KEY": "",
+        "ZWOO_CORS_CONTACT_FORM": "http://localhost:8081,http://localhost:8082"
       }
     },
     "IIS Express": {

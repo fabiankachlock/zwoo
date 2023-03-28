@@ -3,6 +3,7 @@ import { FetchOptions, FetchResponse } from './ApiEntities';
 import { BackendErrorAble } from './ApiError';
 import { AuthenticationStatus } from './entities/AuthenticationStatus';
 import { CaptchaResponse } from './entities/Captcha';
+import { ContactForm } from './entities/ContactForm';
 import { GameJoinResponse, GameMeta, GamesList } from './entities/Game';
 import { LeaderBoardPositionResponse, LeaderBoardResponse } from './entities/Leaderboard';
 
@@ -152,7 +153,7 @@ export interface ApiAdapter {
    * @param sender the senders name
    * @param message teh senders message
    */
-  submitContactForm(sender: string, message: string): Promise<BackendErrorAble<string>>;
+  submitContactForm(form: ContactForm): Promise<BackendErrorAble<string>>;
 
   /**
    * Verify a generated captcha token

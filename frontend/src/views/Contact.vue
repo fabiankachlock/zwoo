@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { FormActions, FormError, FormSubmit, TextInput } from '@/components/forms';
+import { Checkbox, FormActions, FormError, FormSubmit, TextInput } from '@/components/forms';
 import Form from '@/components/forms/Form.vue';
 import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import TextArea from '@/components/forms/TextArea.vue';
@@ -19,12 +19,15 @@ const { t } = useI18n();
 const reCaptchaValidator = new RecaptchaValidator();
 
 const senderName = ref('');
+const senderEmail = ref('');
 const message = ref('');
+const accepted = ref(false);
+const acceptedAt = ref(0);
 const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
-  () => !isLoading.value && reCaptchaValidator.validate(reCaptchaResponse.value).isValid && message.value?.trim() && senderName.value?.trim()
+  () => !isLoading.value && accepted.value && message.value?.trim() && senderEmail.value?.trim() && senderName.value?.trim()
 );
 const wasSend = ref(false);
 
@@ -32,12 +35,26 @@ onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
+const handleToggleAccept = (value: boolean) => {
+  if (value) {
+    acceptedAt.value = Date.now();
+  }
+};
+
 const submitForm = async () => {
   error.value = [];
   isLoading.value = true;
 
   try {
-    await submitContactForm(senderName.value, message.value);
+    await submitContactForm({
+      name: senderName.value,
+      email: senderEmail.value,
+      message: message.value,
+      acceptedTerms: accepted.value,
+      acceptedTermsAt: acceptedAt.value,
+      captchaScore: reCaptchaResponse.value?.score ?? 0,
+      site: window.location.href
+    });
     wasSend.value = true;
   } catch (e: unknown) {
     reCaptchaResponse.value = undefined;
@@ -57,12 +74,16 @@ const submitForm = async () => {
     <FlatDialog v-if="!wasSend">
       <Form>
         <TextInput id="sender" labelKey="contact.sender" v-model="senderName" :placeholder="t('contact.namePlaceholder')"></TextInput>
+        <TextInput id="email" labelKey="contact.email" v-model="senderEmail" :placeholder="t('contact.emailPlaceholder')"></TextInput>
         <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
         <ReCaptchaButton
           @update:response="res => (reCaptchaResponse = res)"
           :validator="reCaptchaValidator"
           :response="reCaptchaResponse"
         ></ReCaptchaButton>
+        <Checkbox styles="tc-primary mx-3" v-model="accepted" @update:model-value="handleToggleAccept">
+          {{ t('contact.acceptTerms') }}
+        </Checkbox>
         <FormError :error="error"></FormError>
         <FormActions>
           <FormSubmit @click="submitForm" :disabled="!isSubmitEnabled">{{ t('contact.send') }}</FormSubmit>
