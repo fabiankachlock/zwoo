@@ -89,7 +89,18 @@ public class WebSocketController : Controller
                 await game.PlayerManager.ConnectPlayer((long)user.Id);
 
                 _logger.Info($"[{user.Id}] handle");
-                _wsHandler.Handle(gameId, (long)user.Id, webSocket, shouldStop.Token, finished);
+                try
+                {
+                    _wsHandler.Handle(gameId, (long)user.Id, webSocket, shouldStop.Token, finished);
+                }
+                catch (TaskCanceledException)
+                {
+                    _logger.Info($"[{user.Id}] task cancelled");
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn($"[{user.Id}] an error happened while handling a socket", ex);
+                }
                 await finished.Task;
 
                 _logger.Info($"[{user.Id}] remove connection");
