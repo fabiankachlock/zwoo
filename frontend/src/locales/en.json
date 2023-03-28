@@ -448,6 +448,9 @@
     "message": "Message",
     "messagePlaceholder": "Your message",
     "send": "Send!",
-    "thanks": "Your request was sent successfully!"
+    "thanks": "Your request was sent successfully!",
+    "email": "E-Mail",
+    "emailPlaceholder": "Your E-Mail address",
+    "acceptTerms": "TODO [I accept the terms and conditions...]"
   }
 }

@@ -448,6 +448,9 @@
     "message": "Nachricht",
     "messagePlaceholder": "Deine Nachricht",
     "send": "Absenden!",
-    "thanks": "Deine Anfrage wurde erfolgreich versendet!"
+    "thanks": "Deine Anfrage wurde erfolgreich versendet!",
+    "email": "E-Mail",
+    "emailPlaceholder": "Deine E-Mail Adresse",
+    "acceptTerms": "TODO [Hiermit stimme ich der Verarbeitung meiner Personenbezogegenen Daten im Rahmen einer Antwort auf meine Anfrage zu.]"
   }
 }
