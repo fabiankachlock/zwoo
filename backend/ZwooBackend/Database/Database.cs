@@ -66,7 +66,7 @@ public class Database
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
         _contactRequestsCollection = _database.GetCollection<ContactRequest>("contact_request");
 
-        _contactRequestsCollection.InsertOne(new ContactRequest(new ObjectId(), DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), "test", "mail", "message", true, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), 1.0, "https://zwoo.igd20.de/contact"));
+        // _contactRequestsCollection.InsertOne(new ContactRequest(new ObjectId(), DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), "test", "mail", "message", true, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), 1.0, "https://zwoo.igd20.de/contact"));
 
         if (_changelogCollection.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == Globals.Version) == null)
             _changelogCollection.InsertOne(new Changelog(Globals.Version, "", false));

@@ -29,7 +29,7 @@ public class Database
         _accountEventsCollection = _database.GetCollection<AccountEvent>("account_events");
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
-
+        _contactRequestsCollection = _database.GetCollection<ContactRequest>("contact_request");
 
     }
     public IQueryable<GameInfo> GetPlayedGamesAsQueryable() => _gameInfoCollection.AsQueryable();
@@ -38,6 +38,7 @@ public class Database
     public IQueryable<Changelog> GetChangelogs() => _changelogCollection.AsQueryable();
     public IQueryable<AccountEvent> GetAccountEventsAsQueryable() => _accountEventsCollection.AsQueryable();
     public IQueryable<AccountEvent> GetUserAccountEvents(ulong id) => _accountEventsCollection.AsQueryable().Where(x => x.PlayerID == id);
+    public IQueryable<ContactRequest> GetContactRequests() => _contactRequestsCollection.AsQueryable();
     public void UpdateUser(User user) => _userCollection.ReplaceOne(x => x.Id == user.Id, user);
     public void UpdateChangelog(Changelog changelog) => _changelogCollection.ReplaceOne(x => x.Id == changelog.Id, changelog);
     public User GetUser(ulong id) => _userCollection.Find(x => x.Id == id).First();
@@ -76,4 +77,5 @@ public class Database
     private readonly IMongoCollection<AccountEvent> _accountEventsCollection;
     private readonly IMongoCollection<BetaCode> _betacodesCollection;
     private readonly IMongoCollection<Changelog> _changelogCollection;
+    private readonly IMongoCollection<ContactRequest> _contactRequestsCollection;
 }
