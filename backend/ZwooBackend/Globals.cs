@@ -31,6 +31,9 @@ public static class Globals
         ZwooDomain = ReturnIfValidEnvVar("ZWOO_DOMAIN");
         ZwooCookieDomain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? ZwooDomain;
 
+        var extraCors = Environment.GetEnvironmentVariable("ZWOO_CORS_CONTACT_FORM");
+        ContactFormExtraCorsOrigin = (extraCors ?? "").Split(',').Append(Cors).ToArray();
+
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
         DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
         SmtpHostUrl = ReturnIfValidEnvVar("SMTP_HOST_URL");
@@ -100,6 +103,7 @@ public static class Globals
     public static readonly bool UseSsl;
     public static readonly bool IsBeta;
     public static readonly string Cors;
+    public static readonly string[] ContactFormExtraCorsOrigin;
     public static readonly string ZwooDomain;
     public static readonly string ZwooCookieDomain;
 

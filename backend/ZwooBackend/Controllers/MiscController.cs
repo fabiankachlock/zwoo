@@ -41,11 +41,20 @@ public class MiscController : Controller
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult GetChangelogs() => Ok($"{{ \"versions\": {JsonSerializer.Serialize(ZwooDatabase.GetChangelogs().Select(c => c.ChangelogVersion))} }}");
 
+    [EnableCors("ContactForm")]
     [HttpPost("contactForm")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult SubmitContactForm([FromBody] ContactForm body)
     {
-        _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), body.Sender, body.Message);
+        var request = Globals.ZwooDatabase.CreateContactRequest(body);
+        if (body.CaptchaScore >= 0.5)
+        {
+            _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), request);
+        }
+        else
+        {
+            Globals.Logger.Info("skip sending contact email because captcha score is too low");
+        }
         return Ok("sent!");
     }
 }

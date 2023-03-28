@@ -2,6 +2,7 @@ using System;
 using System.Net.Mail;
 using System.Net;
 using System.Collections.Concurrent;
+using ZwooDatabaseClasses;
 using log4net;
 
 namespace ZwooBackend.Services;
@@ -37,9 +38,8 @@ public interface IEmailService
     /// send an email trigger by a contact form submit
     /// </summary>
     /// <param name="recipient">the recipient</param>
-    /// <param name="sender">the specified sender</param>
-    /// <param name="message">the specified message</param>
-    public void SendContactFormEmail(IRecipient recipient, string sender, string message);
+    /// <param name="contactRequest">the form submission data</param>
+    public void SendContactFormEmail(IRecipient recipient, ContactRequest contactRequest);
 
     /// <summary>
     /// create a recipient object
@@ -101,11 +101,14 @@ public class EmailService : IHostedService, IEmailService
         TryStartWork();
     }
 
-    public void SendContactFormEmail(IRecipient recipient, string sender, string message)
+    public void SendContactFormEmail(IRecipient recipient, ContactRequest request)
     {
         MailMessage mail = new MailMessage();
-        mail.Subject = $"ContactForm Submit from: {sender}";
-        mail.Body = $"From: '{sender}'\nMessage:\n{message}\n\nSend At: {DateTime.Now}";
+        mail.Subject = $"ContactForm Submit from: {request.Name} ({request.Origin})";
+        mail.Body = $"From: '{request.Name}' ({request.Email})\n";
+        mail.Body += $"Submitted: {request.Origin} at {DateTimeOffset.FromUnixTimeMilliseconds(request.Timestamp).ToString("dd.MM.yy HH:mm:ss")}\n";
+        mail.Body += $"Captcha Score: {request.CaptchaScore} / 1\n";
+        mail.Body += $"Message:\n{request.Message}\n\n";
         mail.From = new MailAddress(Globals.SmtpHostEmail);
         mail.To.Add(new MailAddress(recipient.Email));
         _emailQueue.Enqueue(mail);

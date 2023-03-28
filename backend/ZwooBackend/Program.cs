@@ -16,9 +16,19 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(s => s.AddPolicy("Zwoo",
-    b => b.WithOrigins(Globals.Cors).AllowAnyHeader().AllowAnyMethod()
-        .AllowCredentials()));
+builder.Services.AddCors(s =>
+{
+    s.AddPolicy("Zwoo", b => b
+        .WithOrigins(Globals.Cors)
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+
+    s.AddPolicy("ContactForm", b => b
+        .WithOrigins(Globals.ContactFormExtraCorsOrigin)
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
