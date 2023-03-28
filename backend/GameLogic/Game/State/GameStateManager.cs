@@ -120,10 +120,9 @@ public sealed class GameStateManager
         _actionsQueue = new AsyncExecutionQueue();
     }
 
-    private void HandlePlayerLeave(long id)
+    private async void HandlePlayerLeave(long id)
     {
-#pragma warning disable CS4014
-        _actionsQueue.Intercept(() =>
+        await _actionsQueue.Intercept(() =>
         {
             _logger.Warn($"player {id} left the running game");
             long lastPlayer = _playerCycle.ActivePlayer;
@@ -154,15 +153,12 @@ public sealed class GameStateManager
             }
             _gameState = newState;
         });
-#pragma warning restore CS4014
     }
 
     internal void HandleEvent(ClientEvent clientEvent)
     {
         // these calls don't need to be awaited, because the caller doesn't care when the event is executed
-#pragma warning disable CS4014
-        _actionsQueue.Enqueue(() => ExecuteEvent(clientEvent));
-#pragma warning restore CS4014
+        var _ = _actionsQueue.Enqueue(() => ExecuteEvent(clientEvent));
     }
 
     private void ExecuteEvent(ClientEvent clientEvent)

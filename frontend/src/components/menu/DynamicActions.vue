@@ -20,7 +20,7 @@
         </router-link>
       </div>
       <div class="hidden xs:block">
-        <router-link v-if="isLoggedIn" to="/join-game" class="link">
+        <router-link v-if="isLoggedIn" to="/available-games" class="link">
           <Icon icon="fluent:square-arrow-forward-32-regular" class="tc-primary"></Icon>
           <span>
             {{ t('nav.joinGame') }}

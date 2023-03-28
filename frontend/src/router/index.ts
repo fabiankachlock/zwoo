@@ -25,6 +25,10 @@ import { RouterInterceptor } from './types';
 
 const routes: Array<RouteRecordRaw> = [
   {
+    path: '/:pathMatch(.*)*',
+    component: CatchAll
+  },
+  {
     path: '/',
     component: Menu,
     redirect: '/home',
@@ -73,11 +77,7 @@ const routes: Array<RouteRecordRaw> = [
     : {
         path: '/beta/:code',
         redirect: '/'
-      },
-  {
-    path: '/:pathMatch(.*)*',
-    component: CatchAll
-  }
+      }
 ];
 
 const router = createRouter({

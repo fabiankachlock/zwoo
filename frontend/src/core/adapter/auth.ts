@@ -181,14 +181,24 @@ export const useAuth = defineStore('auth', {
         useConfig().login();
       }
     },
-    applyOfflineConfig() {
+    async __FIX_resolveNameAsync(): Promise<string> {
       const username = I18nInstance.t('offline.playerName');
-      this.$patch({
-        isInitialized: true,
-        isLoggedIn: true,
-        publicId: `p_${username}`,
-        username: username,
-        wins: 0
+      if (username === 'offline.playerName') {
+        // OR I18nInstance.getLocaleMessage(I18nInstance.locale.value) === {}
+        await new Promise(res => setTimeout(() => res({}), 200));
+        return this.__FIX_resolveNameAsync();
+      }
+      return username;
+    },
+    applyOfflineConfig() {
+      this.__FIX_resolveNameAsync().then(username => {
+        this.$patch({
+          isInitialized: true,
+          isLoggedIn: true,
+          publicId: `p_${username}`,
+          username: username,
+          wins: 0
+        });
       });
     }
   }
