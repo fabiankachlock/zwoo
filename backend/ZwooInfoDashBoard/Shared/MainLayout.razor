@@ -30,11 +30,28 @@
         </AuthorizeView>
     </Authorized>
     <NotAuthorized>
-        <a href="/login">Login</a>
-        @{
-            var returnUrl = UriHelper.ToBaseRelativePath(UriHelper.Uri);
-            UriHelper.NavigateTo($"login?redirectUri={returnUrl}", forceLoad: true);
-        }
+        <div id="notAuthorized">
+            <RadzenCard>
+                <div>
+                    <h1>Zwoo Admin Info Dashboard</h1>
+                    <a href="/login">
+                        <RadzenButton Variant="Variant.Outlined" Text="Login with OIDC" ButtonStyle="ButtonStyle.Primary" />
+                    </a>
+                </div>
+            </RadzenCard>
+            @{
+                var uri = UriHelper.ToAbsoluteUri(UriHelper.Uri);
+                var shouldRedirect = true;
+                if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("noredirect", out var noRedirect))
+                {
+                    shouldRedirect = false;
+                }
+                if (shouldRedirect) {
+                    var returnUrl = UriHelper.ToBaseRelativePath(UriHelper.Uri);
+                    UriHelper.NavigateTo($"login?redirectUri={returnUrl}", forceLoad: true);
+                }
+            }
+        </div>
     </NotAuthorized>
     <Authorizing>Loading...</Authorizing>
 </AuthorizeView>
