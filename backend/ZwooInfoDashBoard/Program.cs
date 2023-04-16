@@ -102,7 +102,8 @@ app.UseRouting();
 
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
-    MinimumSameSitePolicy = SameSiteMode.None
+    MinimumSameSitePolicy = SameSiteMode.None,
+    Secure = CookieSecurePolicy.Always
 });
 
 app.MapBlazorHub();

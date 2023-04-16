@@ -6,3 +6,4 @@ riderModule.iml
 *.user
 Properties/launchSettings.json
 keycloak
+realm-export.json

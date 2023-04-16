@@ -18,6 +18,22 @@
       }
     },
     {
+      "name": "DASH Launch",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dashboard build",
+      "program": "${workspaceFolder}/backend/ZwooInfoDashboard/bin/Debug/net7.0/ZwooInfoDashboard.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/backend/ZwooInfoDashboard",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
       "name": "BE Attach",
       "type": "coreclr",
       "request": "attach"
