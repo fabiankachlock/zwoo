@@ -46,9 +46,9 @@
             </RadzenCard>
             <RadzenCard class="w-100" Style="margin-top: 10px">
                 <h2>Quick Actions</h2>
-                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" class="w-100" Text="Add New Code" Click="@(async () => await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true }))"/>
+                <RadzenButton Icon="note_add" style="margin-bottom: 10px" class="w-100" Text="Add New Code" Click="@(async () => await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true }))"/>
                 <RadzenButton Icon="search" style="margin-bottom: 10px" class="w-100" Text="Quick Find Player" Click="QuickFindPlayer"/>
-                <RadzenButton Icon="add_circle_outline" class="w-100" Text="Add Version Changelog" Click="CreateVersion"/>
+                <RadzenButton Icon="create" class="w-100" Text="Add Version Changelog" Click="CreateVersion"/>
             </RadzenCard>
             <RadzenCard class="w-100" Style="margin-top: 10px">
                 <h2>Graphs</h2>
