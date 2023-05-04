@@ -1,12 +1,58 @@
 ﻿using MongoDB.Bson.Serialization;
 using ZwooDatabase.Dao;
-using System.Security.Cryptography;
-using System.Text;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using log4net;
 
 namespace ZwooDatabase;
+
+public interface IDatabase
+{
+    /// <summary>
+    /// a mongo client instance
+    /// </summary>
+    public IMongoClient Client { get; }
+
+    /// <summary>
+    /// an instance of the currently active mongo database
+    /// </summary>
+    public IMongoDatabase MongoDB { get; }
+
+    /// <summary>
+    /// a reference to the users collection
+    /// </summary>
+    public IMongoCollection<UserDao> Users { get; }
+
+    /// <summary>
+    /// a reference to the games info collection
+    /// </summary>
+    public IMongoCollection<GameInfoDao> GamesInfo { get; }
+
+    /// <summary>
+    /// a reference to the account events collection
+    /// </summary>
+    public IMongoCollection<AccountEventDao> AccountEvents { get; }
+
+    /// <summary>
+    /// a reference to the changelogs  collection
+    /// </summary>
+    public IMongoCollection<ChangelogDao> Changelogs { get; }
+
+    /// <summary>
+    /// a reference to the beta codes collection
+    /// </summary>
+    public IMongoCollection<BetaCodeDao> BetaCodes { get; }
+
+
+    /// <summary>
+    /// Delete unverified users & unused password reset codes & delete expired delete account events
+    /// </summary>
+    public void CleanDatabase();
+
+    /// <summary>
+    /// register bson class mappers
+    /// </summary>
+    public void InitializeClasses();
+}
 
 [Serializable]
 internal class DatabaseException : Exception
@@ -15,15 +61,15 @@ internal class DatabaseException : Exception
     public DatabaseException(string message) : base(message) { }
 }
 
-public class Database
+public class Database : IDatabase
 {
-    public readonly IMongoClient Client;
-    public readonly IMongoDatabase MongoDB;
-    public readonly IMongoCollection<UserDao> Users;
-    public readonly IMongoCollection<GameInfoDao> Games;
-    public readonly IMongoCollection<AccountEventDao> AccountEvents;
-    public readonly IMongoCollection<ChangelogDao> Changelogs;
-    public readonly IMongoCollection<BetaCodeDao> BetaCodes;
+    public IMongoClient Client { get; }
+    public IMongoDatabase MongoDB { get; }
+    public IMongoCollection<UserDao> Users { get; }
+    public IMongoCollection<GameInfoDao> GamesInfo { get; }
+    public IMongoCollection<AccountEventDao> AccountEvents { get; }
+    public IMongoCollection<ChangelogDao> Changelogs { get; }
+    public IMongoCollection<BetaCodeDao> BetaCodes { get; }
 
     private readonly ILog _logger;
 
@@ -57,14 +103,11 @@ public class Database
 
         BetaCodes = MongoDB.GetCollection<BetaCodeDao>("betacodes");
         Users = MongoDB.GetCollection<UserDao>("users");
-        Games = MongoDB.GetCollection<GameInfoDao>("game_info");
+        GamesInfo = MongoDB.GetCollection<GameInfoDao>("game_info");
         AccountEvents = MongoDB.GetCollection<AccountEventDao>("account_events");
         Changelogs = MongoDB.GetCollection<ChangelogDao>("changelogs");
     }
 
-    /// <summary>
-    /// Delete unverified users & unused password reset codes & delete expired delete account events
-    /// </summary>
     public void CleanDatabase()
     {
         {
@@ -85,7 +128,7 @@ public class Database
         }
     }
 
-    static void InitializeClasses()
+    public void InitializeClasses()
     {
         BsonClassMap.RegisterClassMap<UserDao>(cm =>
         {
