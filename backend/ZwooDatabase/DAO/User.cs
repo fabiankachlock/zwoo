@@ -8,12 +8,12 @@ namespace ZwooDatabase.Dao;
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]
 [CollectionLocation("users")]
-public class User : IDocument
+public class UserDao : IDocument
 {
-    public User() { }
+    public UserDao() { }
 
     [BsonConstructor]
-    public User(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified)
+    public UserDao(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified)
     {
         Id = id;
         Sid = sid;

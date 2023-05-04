@@ -3,12 +3,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabase.Dao;
 
-public class PlayerScore
+public class PlayerScoreDao
 {
-    public PlayerScore() { }
+    public PlayerScoreDao() { }
 
     [BsonConstructor]
-    public PlayerScore(string playerUsername, int score, bool isBot)
+    public PlayerScoreDao(string playerUsername, int score, bool isBot)
     {
         PlayerUsername = playerUsername;
         Score = score;

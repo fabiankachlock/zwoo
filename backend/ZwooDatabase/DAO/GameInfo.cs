@@ -9,11 +9,11 @@ namespace ZwooDatabase.Dao;
 [RuntimeVersion("1.0.0-beta.8")]
 [StartUpVersion("1.0.0-beta.8")]
 [CollectionLocation("game_info")]
-public class GameInfo : IDocument
+public class GameInfoDao : IDocument
 {
-    public GameInfo() { }
+    public GameInfoDao() { }
 
-    public GameInfo(string gameName, long gameId, bool isPublic, List<PlayerScore> scores, ulong timeStamp)
+    public GameInfoDao(string gameName, long gameId, bool isPublic, List<PlayerScoreDao> scores, ulong timeStamp)
     {
         GameName = gameName;
         GameId = gameId;
@@ -23,7 +23,7 @@ public class GameInfo : IDocument
     }
 
     [BsonConstructor]
-    public GameInfo(ObjectId id, string gameName, long gameId, bool isPublic, List<PlayerScore> scores, ulong timeStamp)
+    public GameInfoDao(ObjectId id, string gameName, long gameId, bool isPublic, List<PlayerScoreDao> scores, ulong timeStamp)
     {
         Id = id;
         GameName = gameName;
@@ -43,7 +43,7 @@ public class GameInfo : IDocument
     [BsonElement("is_public")]
     public bool IsPublic { set; get; } = false;
     [BsonElement("scores")]
-    public List<PlayerScore> Scores = null!;
+    public List<PlayerScoreDao> Scores = null!;
 
     [BsonElement("timestamp")]
     public ulong TimeStamp { set; get; } = 0;

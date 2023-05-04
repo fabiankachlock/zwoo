@@ -9,11 +9,11 @@ namespace ZwooDatabase.Dao;
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]
 [CollectionLocation("account_events")]
-public class AccountEvent : IDocument
+public class AccountEventDao : IDocument
 {
-    public AccountEvent() { }
+    public AccountEventDao() { }
 
-    public AccountEvent(string eventType, ulong playerId, bool success, ulong timeStamp)
+    public AccountEventDao(string eventType, ulong playerId, bool success, ulong timeStamp)
     {
         EventType = eventType;
         PlayerID = playerId;
@@ -22,7 +22,7 @@ public class AccountEvent : IDocument
     }
 
     [BsonConstructor]
-    public AccountEvent(ObjectId id, string eventType, ulong playerId, bool success, ulong timeStamp)
+    public AccountEventDao(ObjectId id, string eventType, ulong playerId, bool success, ulong timeStamp)
     {
         Id = id;
         EventType = eventType;
@@ -47,7 +47,7 @@ public class AccountEvent : IDocument
     public ulong TimeStamp;
 
     [BsonElement("user_data")]
-    public DeletedUser? UserData;
+    public DeletedUserDao? UserData;
 
     [BsonElement("version")]
     [BsonSerializer(typeof(DocumentVersionSerializer))]

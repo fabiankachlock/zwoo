@@ -9,11 +9,11 @@ namespace ZwooDatabase.Dao;
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]
 [CollectionLocation("changelogs")]
-public partial class Changelog : IDocument
+public partial class ChangelogDao : IDocument
 {
-    public Changelog() { }
+    public ChangelogDao() { }
 
-    public Changelog(string changelogVersion, string changelogText, bool @public)
+    public ChangelogDao(string changelogVersion, string changelogText, bool @public)
     {
         ChangelogVersion = changelogVersion;
         ChangelogText = changelogText;
@@ -21,7 +21,7 @@ public partial class Changelog : IDocument
     }
 
     [BsonConstructor]
-    public Changelog(ObjectId id, string changelogVersion, string changelogText, bool @public, ulong timestamp)
+    public ChangelogDao(ObjectId id, string changelogVersion, string changelogText, bool @public, ulong timestamp)
     {
         Id = id;
         ChangelogVersion = changelogVersion;

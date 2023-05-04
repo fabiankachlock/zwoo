@@ -3,11 +3,11 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabase.Dao;
 
-public class DeletedUser
+public class DeletedUserDao
 {
-    public DeletedUser() { }
+    public DeletedUserDao() { }
 
-    public DeletedUser(User? user)
+    public DeletedUserDao(UserDao? user)
     {
         if (user == null)
             return;
@@ -19,7 +19,7 @@ public class DeletedUser
     }
 
     [BsonConstructor]
-    public DeletedUser(string username, string email, string password, uint wins, ulong timestamp)
+    public DeletedUserDao(string username, string email, string password, uint wins, ulong timestamp)
     {
         Username = username;
         Email = email;

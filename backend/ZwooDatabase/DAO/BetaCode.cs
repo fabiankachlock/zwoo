@@ -6,14 +6,14 @@ using Mongo.Migration.Documents.Attributes;
 namespace ZwooDatabase.Dao;
 
 [CollectionLocation("betacodes")]
-public partial class BetaCode
+public partial class BetaCodeDao
 {
-    BetaCode() { }
+    BetaCodeDao() { }
 
-    public BetaCode(string code) => Code = code;
+    public BetaCodeDao(string code) => Code = code;
 
     [BsonConstructor]
-    public BetaCode(ObjectId id, string code)
+    public BetaCodeDao(ObjectId id, string code)
     {
         Id = id;
         Code = code;
