@@ -24,23 +24,39 @@ public interface IGameInfoService
     /// save a game
     /// </summary>
     /// <param name="data">the game to</param>
-    public void SaveGame(GameInfoDao data);
+    public void SaveGame(GameInfoDao data, AuditOptions? auditOptions = null);
 }
 
 public class GameInfoService : IGameInfoService
 {
 
     private IDatabase _db;
+    private IAuditTrailService _audits;
 
-    public GameInfoService(IDatabase db)
+    public GameInfoService(IDatabase db, IAuditTrailService audits)
     {
         _db = db;
+        _audits = audits;
     }
 
 
-    public void SaveGame(GameInfoDao data)
+    public void SaveGame(GameInfoDao data, AuditOptions? auditOptions = null)
     {
         _db.GamesInfo.InsertOne(data);
+        foreach (var player in data.Scores)
+        {
+            // TODO: avoid querying each user individually
+            var user = _db.Users.AsQueryable().FirstOrDefault(user => user.Username == player.PlayerUsername);
+            if (user != null)
+            {
+                _audits.Protocol(_audits.GetAuditId(user), AuditOptions.CreateEvent(auditOptions, new AuditEventDao()
+                {
+                    Actor = AuditActor.System,
+                    Message = "created game info object",
+                    NewValue = data,
+                }));
+            }
+        }
     }
 
     public ulong GetPosition(UserDao user)

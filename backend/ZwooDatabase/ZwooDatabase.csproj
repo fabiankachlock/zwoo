@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mongo.Migration\Mongo.Migration.csproj" />
+    <ProjectReference Include="..\BackendHelper\BackendHelper.csproj" />
   </ItemGroup>
 
 </Project>

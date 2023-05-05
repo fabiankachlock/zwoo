@@ -187,6 +187,7 @@ public class Database
     /// <returns>user found</returns>
     public bool GetUser(string cookie, out User user, out string sid)
     {
+        // TODO: dont do cookie stuff in db -> handle cookie in controller, request user by id and check session in controller
         user = new User();
         sid = "";
         var cookieData = cookie.Split(",");

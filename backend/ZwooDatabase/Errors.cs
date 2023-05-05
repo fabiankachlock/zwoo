@@ -1,9 +1,8 @@
 namespace ZwooDatabase;
 
-public interface ErrorAble<T>
+public enum ErrorCode
 {
-    public T Value { get; }
-    public ErrorCode? Error { get; }
+    UserNotFound,
+    WrongPassword,
+    NotVerified
 }
-
-public enum ErrorCode { }
