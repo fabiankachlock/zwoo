@@ -1,3 +1,4 @@
+using MongoDB.Driver;
 using ZwooDatabase.Dao;
 
 namespace ZwooDatabase;
@@ -8,5 +9,19 @@ namespace ZwooDatabase;
 public interface IChangelogService
 {
     public ChangelogDao? GetChangelog(string version);
-    public ChangelogDao[] GetChangelogs();
+    public List<ChangelogDao> GetChangelogs();
+}
+
+public class ChangelogService : IChangelogService
+{
+    private IDatabase _db;
+
+    public ChangelogService(IDatabase db)
+    {
+        _db = db;
+    }
+
+    public ChangelogDao? GetChangelog(string version) => _db.Changelogs.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == version && c.Public);
+
+    public List<ChangelogDao> GetChangelogs() => _db.Changelogs.AsQueryable().Where(x => x.Public).ToList();
 }
