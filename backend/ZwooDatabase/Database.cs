@@ -42,6 +42,11 @@ public interface IDatabase
     /// </summary>
     public IMongoCollection<BetaCodeDao> BetaCodes { get; }
 
+    /// <summary>
+    /// a reference to the audit trails collection
+    /// </summary>
+    public IMongoCollection<AuditTrailDao> AuditTrails { get; }
+
 
     /// <summary>
     /// Delete unverified users & unused password reset codes & delete expired delete account events
@@ -70,6 +75,7 @@ public class Database : IDatabase
     public IMongoCollection<AccountEventDao> AccountEvents { get; }
     public IMongoCollection<ChangelogDao> Changelogs { get; }
     public IMongoCollection<BetaCodeDao> BetaCodes { get; }
+    public IMongoCollection<AuditTrailDao> AuditTrails { get; }
 
     private readonly ILog _logger;
 
@@ -106,6 +112,7 @@ public class Database : IDatabase
         GamesInfo = MongoDB.GetCollection<GameInfoDao>("game_info");
         AccountEvents = MongoDB.GetCollection<AccountEventDao>("account_events");
         Changelogs = MongoDB.GetCollection<ChangelogDao>("changelogs");
+        AuditTrails = MongoDB.GetCollection<AuditTrailDao>("audit_trails");
     }
 
     public void CleanDatabase()
@@ -170,6 +177,13 @@ public class Database : IDatabase
             cm.AutoMap();
             cm.MapCreator(p =>
                 new AccountEventDao(p.Id, p.EventType, p.PlayerID, p.Success, p.TimeStamp));
+        });
+
+        BsonClassMap.RegisterClassMap<AuditTrailDao>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new AuditTrailDao(p.Id, p.Events));
         });
     }
 

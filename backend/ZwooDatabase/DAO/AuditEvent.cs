@@ -7,8 +7,17 @@ public class AuditEventDao
 {
     public AuditEventDao() { }
 
+    public AuditEventDao(string actor, string message, long timestamp, object newValue, object? oldValue)
+    {
+        Actor = actor;
+        Message = message;
+        Timestamp = timestamp;
+        NewValue = newValue;
+        OldValue = oldValue;
+    }
+
     [BsonConstructor]
-    public AuditEventDao(ObjectId id, string actor, string message, ulong timestamp, object newValue, object? oldValue)
+    public AuditEventDao(ObjectId id, string actor, string message, long timestamp, object newValue, object? oldValue)
     {
         Id = id;
         Actor = actor;
@@ -28,7 +37,7 @@ public class AuditEventDao
     public string Message { set; get; } = "";
 
     [BsonElement("timestamp")]
-    public ulong Timestamp = 0;
+    public long Timestamp = 0;
 
     [BsonElement("newValue")]
     public object NewValue { set; get; } = null!;
