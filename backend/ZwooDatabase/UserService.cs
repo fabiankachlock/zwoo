@@ -275,11 +275,23 @@ public class UserService : IUserService
 
     public uint IncrementWin(ulong playerId, AuditOptions? auditOptions = null)
     {
-        // TODO: would be great to have acces to the current users session id for audit logging
-        // if (_db.Users.UpdateOne(x => x.Id == puid, Builders<User>.Update.Inc(u => u.Wins, (uint)1)).ModifiedCount != 0)
-        //     return _userCollection.AsQueryable().First(u => u.Id == puid).Wins;
-        // return 0;
-        return 0;
+        var user = GetUserById(playerId);
+        if (user == null)
+        {
+            return 0;
+        }
+
+        _db.Users.UpdateOne(user => user.Id == playerId, Builders<UserDao>.Update.Inc(u => u.Wins, (uint)1));
+        var newUser = _db.Users.AsQueryable().First(user => user.Id == playerId);
+
+        _audits.Protocol(_audits.GetAuditId(user), AuditOptions.CreateEvent(auditOptions, new AuditEventDao()
+        {
+            Actor = AuditActor.System,
+            Message = "incremented wins",
+            NewValue = newUser,
+            OldValue = user,
+        }));
+        return newUser.Wins;
     }
 
     public bool ChangePassword(UserDao user, string oldPassword, string newPassword, string sid, AuditOptions? auditOptions = null)
@@ -306,8 +318,7 @@ public class UserService : IUserService
         }
 
         user.PasswordResetCode = Guid.NewGuid().ToString();
-        user = UpdateUser(user, AuditOptions.WithMessage("requested password reset").Merge(auditOptions));
-        return user;
+        return UpdateUser(user, AuditOptions.WithMessage("requested password reset").Merge(auditOptions));
     }
 
     public UserDao? ResetPassword(string code, string password, AuditOptions? auditOptions = null)
