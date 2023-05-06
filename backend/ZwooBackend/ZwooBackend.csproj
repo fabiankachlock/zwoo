@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BackendHelper\BackendHelper.csproj" />
+    <ProjectReference Include="..\ZwooDatabase\ZwooDatabase.csproj" />
   </ItemGroup>
 
   <ItemGroup>

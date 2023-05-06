@@ -1,4 +1,3 @@
-using BackendHelper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
@@ -10,8 +9,7 @@ using ZwooBackend.Websockets;
 using ZwooBackend.Games;
 using ZwooBackend.Database;
 using ZwooBackend.Services;
-using ZwooDatabaseClasses;
-using System.Reflection;
+using ZwooDatabase;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,8 +36,19 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.Domain = Globals.ZwooCookieDomain;
 });
 
-// Database
-builder.Services.AddSingleton(Globals.ZwooDatabase._client);
+// database
+var db = new ZwooDatabase.Database(Globals.ConnectionString, Globals.DatabaseName, Globals.DatabaseLogger);
+
+builder.Services.AddSingleton<IDatabase>(db);
+builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
+builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
+builder.Services.AddSingleton<IChangelogService, ChangelogService>();
+builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
+
+// migrations
+builder.Services.AddSingleton(db.Client);
 builder.Services.Configure<MongoMigrationSettings>(options =>
 {
     options.ConnectionString = Globals.ConnectionString;
@@ -53,6 +62,7 @@ builder.Services.AddMigration(new MongoMigrationSettings
     DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
 });
 
+// backend services
 builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
 builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();

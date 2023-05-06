@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 using ZwooBackend.Services;
+using ZwooDatabase;
 using static ZwooBackend.Globals;
 
 namespace ZwooBackend.Controllers;
@@ -13,10 +14,12 @@ namespace ZwooBackend.Controllers;
 public class MiscController : Controller
 {
     private IEmailService _emailService;
+    private IChangelogService _changelogs;
 
-    public MiscController(IEmailService emailService)
+    public MiscController(IEmailService emailService, IChangelogService changelogs)
     {
         _emailService = emailService;
+        _changelogs = changelogs;
     }
 
     [HttpGet("version")]
@@ -31,15 +34,24 @@ public class MiscController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     public IActionResult GetChangelog([FromQuery] string version)
     {
-        var changelog = ZwooDatabase.GetChangelog(version);
+        var changelog = _changelogs.GetChangelog(version);
         if (changelog == null)
-            return NotFound("");
+        {
+            return NotFound("changelog for version not present");
+        }
         return Ok(changelog.ChangelogText);
     }
 
     [HttpGet("versionHistory")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    public IActionResult GetChangelogs() => Ok($"{{ \"versions\": {JsonSerializer.Serialize(ZwooDatabase.GetChangelogs().Select(c => c.ChangelogVersion))} }}");
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(VersionHistory))]
+    public IActionResult GetChangelogs()
+    {
+        var versions = _changelogs.GetChangelogs().Select(c => c.ChangelogVersion);
+        return Ok(new VersionHistory()
+        {
+            Versions = versions.ToList(),
+        });
+    }
 
     [HttpPost("contactForm")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]

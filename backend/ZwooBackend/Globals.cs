@@ -84,7 +84,7 @@ public static class Globals
         hierarchy.Configured = true;
 
         Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
-        ZwooDatabase = new Database.Database();
+        // ZwooDatabase = new Database.Database();
     }
 
     public static readonly ILog Logger = LogManager.GetLogger("Global");
@@ -95,7 +95,7 @@ public static class Globals
     public static readonly ILog LobbyLogger = LogManager.GetLogger("Lobby");
     public static readonly ILog GameLogger = LogManager.GetLogger("Game");
 
-    public static readonly Database.Database ZwooDatabase;
+    // public static readonly Database.Database ZwooDatabase;
 
     public static readonly bool UseSsl;
     public static readonly bool IsBeta;
