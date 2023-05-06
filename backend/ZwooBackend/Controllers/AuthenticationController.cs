@@ -106,51 +106,35 @@ public class AuthenticationController : Controller
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public IActionResult Login([FromBody] Login body)
     {
-        if (!StringHelper.IsValidEmail(body.email))
+        var result = _userService.LoginUser(body.email, body.password);
+        if (result.User == null || result.SessionId == null)
         {
-            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
-        }
-        if (!StringHelper.IsValidPassword(body.password))
-        {
-            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(result.Error), "could not log in"));
         }
 
-        var result = _userService.LoginUser(body.email, body.password);
-        if (result.User != null && result.SessionId != null)
+        var claims = new List<Claim>
         {
-            var claims = new List<Claim>
-            {
-                new Claim("auth", CookieHelper.CreateCookieValue(result.User.Id, result.SessionId)),
-            };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity)).Wait();
-            return Ok(new MessageDTO() { Message = "user logged in!" });
-        }
-        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(result.Error), "could not log in"));
+            new Claim("auth", CookieHelper.CreateCookieValue(result.User.Id, result.SessionId)),
+        };
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity)).Wait();
+        return Ok(new MessageDTO() { Message = "user logged in!" });
     }
 
     [HttpGet("user")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
     public IActionResult GetUser()
     {
-        var data = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        if (data.UserId == "")
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
         {
             return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
         }
 
-        var user = _userService.GetUserById(Convert.ToUInt64(data.UserId));
-        if (user == null)
-        {
-            return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
-        }
-
-        if (user.Sid.Contains(data.SessionId))
+        if (user.Sid.Contains(sessionId))
         {
             return Ok(user.ToDTO());
         }
@@ -160,73 +144,47 @@ public class AuthenticationController : Controller
     [HttpGet("logout")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
     public IActionResult Logout()
     {
-        var data = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        if (data.UserId == "")
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
         }
 
-        var user = _userService.GetUserById(Convert.ToUInt64(data.UserId));
-        if (user == null)
-        {
-            return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
-        }
-
-        if (_userService.LogoutUser(user, data.SessionId))
+        if (_userService.LogoutUser(user, sessionId))
         {
             HttpContext.SignOutAsync().Wait();
             return Ok(new MessageDTO() { Message = "logged out" });
         }
-        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "cant logout session"));
     }
 
     [HttpPost("delete")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
     public IActionResult Delete([FromBody] Delete body)
     {
-        if (!StringHelper.IsValidPassword(body.password))
-            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
-
-        var data = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        if (data.UserId == "")
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
         }
 
-        var user = _userService.GetUserById(Convert.ToUInt64(data.UserId));
-        if (user == null)
-        {
-            return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
-        }
-
-        if (_userService.DeleteUser(user, body.password, AuditOptions.WithActor(AuditActor.User(user.Id, data.SessionId))))
+        if (_userService.DeleteUser(user, body.password, AuditOptions.WithActor(AuditActor.User(user.Id, sessionId))))
         {
             HttpContext.SignOutAsync().Wait();
             return Ok(new MessageDTO() { Message = "account deleted out" });
         }
-        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.PASSWORD_NOT_MATCHING, "cant delete account"));
     }
 
     [HttpPost("resendVerificationEmail")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
     public IActionResult ResendVerificationEmail([FromBody] VerificationEmail body)
     {
-        if (!StringHelper.IsValidEmail(body.email))
-        {
-            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
-        }
-        if (!_userService.ExistsEmail(body.email))
-        {
-            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "User does not exist!"));
-        }
-
         var user = _userService.GetUserByEmail(body.email);
         if (user == null)
         {

@@ -1,11 +1,5 @@
-using System.Net;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
-using BackendHelper;
-using ZwooBackend.Controllers;
-using ZwooBackend.Database;
-using ZwooDatabaseClasses;
+using ZwooDatabase;
+using ZwooDatabase.Dao;
 
 namespace ZwooBackend;
 
@@ -38,5 +32,16 @@ public static class CookieHelper
     public static string CreateCookieValue(ulong userId, string sessionId)
     {
         return $"{userId},{sessionId}";
+    }
+
+    public static (UserDao?, string?) GetUser(IUserService serviceInstance, string? cookie)
+    {
+        var data = CookieHelper.ParseCookie(cookie ?? "");
+        if (data.UserId == "")
+        {
+            return (null, null);
+        }
+
+        return (serviceInstance.GetUserById(Convert.ToUInt64(data.UserId)), data.SessionId);
     }
 }

@@ -30,3 +30,11 @@ public class User
     [JsonPropertyName("wins")]
     public uint Wins { set; get; }
 }
+
+public class UserSettings
+{
+    public UserSettings() { }
+
+    [JsonPropertyName("settings")]
+    public string Settings { set; get; } = "";
+}
