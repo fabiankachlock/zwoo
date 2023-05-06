@@ -11,12 +11,32 @@ namespace ZwooBackend;
 
 public static class CookieHelper
 {
-    public static bool CheckUserCookie( string? cookie, out User user, out string sid )
+    public struct CookieData
     {
-        user = new User();
-        sid = "";
-        if (cookie == null)
-            return false;
-        return Globals.ZwooDatabase.GetUser(cookie, out user, out sid);
+        public string UserId { get; set; }
+        public string SessionId { get; set; }
+    }
+
+    public static CookieData ParseCookie(string cookie)
+    {
+        var cookieData = cookie.Split(",");
+        if (cookieData.Length < 2)
+        {
+            return new CookieData()
+            {
+                SessionId = "",
+                UserId = cookieData[0],
+            };
+        }
+        return new CookieData()
+        {
+            UserId = cookieData[0],
+            SessionId = cookieData[1],
+        };
+    }
+
+    public static string CreateCookieValue(ulong userId, string sessionId)
+    {
+        return $"{userId},{sessionId}";
     }
 }

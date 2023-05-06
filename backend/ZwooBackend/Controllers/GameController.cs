@@ -38,7 +38,7 @@ public class GameController : Controller
     {
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
             return Ok($"{{\"position\": {Globals.ZwooDatabase.GetPosition(user)}}}");
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.COOKIE_MISSING,
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.COOKIE_MISSING,
             "Missing Cookie"));
     }
 
@@ -54,14 +54,14 @@ public class GameController : Controller
         {
             if (_wsManager.HasConnection((long)user.Id))
             {
-                return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.ALREADY_INGAME, ""));
+                return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.ALREADY_INGAME, ""));
             }
 
             if (body.Opcode == ZRPRole.Host)
             {
                 if (body.Name == null || body.UsePassword == null || (body.UsePassword == true && body.Password == null))
                 {
-                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NAME_MISSING, "Insufficient create game data"));
+                    return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NAME_MISSING, "Insufficient create game data"));
                 }
 
                 user.Username = user.Username;
@@ -75,13 +75,13 @@ public class GameController : Controller
             {
                 if (body.GameId == null)
                 {
-                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_GAMEID, "gameid is null"));
+                    return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_GAMEID, "gameid is null"));
                 }
 
                 ZwooRoom? game = _gamesService.GetGame(body.GameId.Value);
                 if (game == null)
                 {
-                    return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
+                    return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
                 }
 
                 if (game.Game.IsRunning && game.Lobby.GetPlayer(user.Username) == null)
@@ -96,15 +96,15 @@ public class GameController : Controller
                 {
                     if (result == LobbyResult.ErrorLobbyFull)
                     {
-                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_FULL, "lobby is full"));
+                        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_FULL, "lobby is full"));
                     }
                     else if (result == LobbyResult.ErrorWrongPassword)
                     {
-                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
                     }
                     else
                     {
-                        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "cant join"));
+                        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.JOIN_FAILED, "cant join"));
                     }
                 }
 
@@ -114,9 +114,9 @@ public class GameController : Controller
                 return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, player == null ? body.Opcode : player.Role)));
             }
 
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
     }
 
     [HttpGet("games")]
@@ -132,7 +132,7 @@ public class GameController : Controller
 
             return Ok(JsonSerializer.Serialize(response));
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
     }
 
     [HttpGet("games/{id}")]
@@ -147,12 +147,12 @@ public class GameController : Controller
             ZwooRoom? game = _gamesService.GetGame(id);
             if (game == null)
             {
-                return NotFound(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "game Not found"));
+                return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "game Not found"));
             }
             GameMetaResponse response = new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount());
 
             return Ok(JsonSerializer.Serialize(response));
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
     }
 }

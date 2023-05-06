@@ -47,7 +47,7 @@ public class WebSocketController : Controller
                 if (game == null)
                 {
                     HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                    response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_NOT_FOUND, "game not found"));
+                    response = Encoding.UTF8.GetBytes(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "game not found"));
                     await HttpContext.Response.Body.WriteAsync(response, 0, response.Length);
                     return;
                 }
@@ -57,15 +57,15 @@ public class WebSocketController : Controller
                 {
                     if (result == LobbyResult.ErrorLobbyFull)
                     {
-                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.GAME_FULL, "lobby is full"));
+                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_FULL, "lobby is full"));
                     }
                     else if (result == LobbyResult.ErrorWrongPassword)
                     {
-                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
+                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "wrong password"));
                     }
                     else
                     {
-                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.JOIN_FAILED, "not allowed to join"));
+                        response = Encoding.UTF8.GetBytes(ErrorCodes.GetResponse(ErrorCodes.Errors.JOIN_FAILED, "not allowed to join"));
                     }
                     HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await HttpContext.Response.Body.WriteAsync(response, 0, response.Length);
@@ -116,7 +116,7 @@ public class WebSocketController : Controller
                 return;
             }
             HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            response = Encoding.UTF8.GetBytes(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+            response = Encoding.UTF8.GetBytes(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
             await HttpContext.Response.Body.WriteAsync(response, 0, response.Length);
         }
         else

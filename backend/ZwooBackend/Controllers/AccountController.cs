@@ -25,7 +25,7 @@ public class AccountController : Controller
     {
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
             return Ok($"{{\"settings\": \"{user.Settings.Replace("\"", "\\\"")}\"}}");
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
 
     [HttpPost("settings")]
@@ -37,7 +37,7 @@ public class AccountController : Controller
             Globals.ZwooDatabase.UpdateUser(user);
             return Ok("");
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
 
     [HttpPost("changePassword")]
@@ -46,17 +46,17 @@ public class AccountController : Controller
     public IActionResult ChangePassword([FromBody] ChangePassword body)
     {
         if (!StringHelper.IsValidPassword(body.oldPassword))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Old Password Invalid!"));
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "Old Password Invalid!"));
         if (!StringHelper.IsValidPassword(body.newPassword))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "New Password Invalid!"));
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "New Password Invalid!"));
 
         if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
         {
             if (Globals.ZwooDatabase.ChangePassword(user, body.oldPassword, body.newPassword, sid))
                 return Ok("Password changed");
-            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.PASSWORD_NOT_MATCHING, "Password did not match"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.PASSWORD_NOT_MATCHING, "Password did not match"));
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
 
     [HttpPost("requestPasswordReset")]
@@ -66,9 +66,9 @@ public class AccountController : Controller
     public IActionResult RequestResetPassword([FromBody] RequestResetPassword body)
     {
         if (!StringHelper.IsValidEmail(body.email))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
         if (!Globals.ZwooDatabase.EmailExists(body.email))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "no User with this Email"));
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "no User with this Email"));
 
         var user = Globals.ZwooDatabase.RequestChangePassword(body.email);
         var recipient = _emailService.CreateRecipient(user.Email, user.Username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
@@ -82,7 +82,7 @@ public class AccountController : Controller
     public IActionResult ResetPassword([FromBody] ResetPassword body)
     {
         if (!StringHelper.IsValidPassword(body.password))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
         Globals.ZwooDatabase.ResetPassword(body.code, body.password);
         return Ok("");
     }
