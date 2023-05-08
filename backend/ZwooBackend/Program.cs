@@ -3,7 +3,7 @@ using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
 using Quartz;
-using Quartz.Impl;
+using Quartz.Simpl;
 using ZwooBackend;
 using ZwooBackend.Websockets;
 using ZwooBackend.Games;
@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.ExpireTimeSpan = TimeSpan.FromDays(90);
     // Dont use SlidingExpiration, because its an security issue!
     o.Cookie.Name = "auth";
-    o.Cookie.HttpOnly = Globals.UseSsl;
+    o.Cookie.HttpOnly = true;
     o.Cookie.MaxAge = o.ExpireTimeSpan;
     if (Globals.UseSsl)
     {
@@ -70,8 +70,27 @@ builder.Services.AddSingleton<ILanguageService, LanguageService>();
 
 builder.Services.AddHostedService<EmailService>();
 
+builder.Services.AddQuartz(q =>
+{
+    q.SchedulerId = "zwoo-scheduler";
+    q.UseThreadPool<DefaultThreadPool>(c =>
+    {
+        c.MaxConcurrency = 1;
+    });
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    q.ScheduleJob<DatabaseCleanupJob>(t => t
+        .WithIdentity("cleanup", "db")
+        .WithCronSchedule("0 1 1 1/1 * ? *"));
+});
+builder.Services.AddQuartzHostedService(options =>
+{
+    options.WaitForJobsToComplete = true;
+});
+builder.Services.AddTransient<DatabaseCleanupJob>();
+
 var app = builder.Build();
 
+// http logging
 app.Use(async (context, next) =>
 {
     if (context.Request.Method != "OPTIONS")
@@ -85,7 +104,6 @@ app.Use(async (context, next) =>
     }
 });
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     Globals.Logger.Debug("adding swagger");
@@ -107,32 +125,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
-#pragma warning disable 4014
-scheduler.Start();
-scheduler.ScheduleJob(
-    JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
-    TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
-#pragma warning restore 4014
-
-
 app.Run();
 
-await scheduler.Shutdown();
-
-// TODO: clean this up
-public class DatabaseCleanupJob : IJob
-{
-    private IDatabase _db { get; set; }
-
-    public DatabaseCleanupJob(IDatabase db)
-    {
-        _db = db;
-    }
-
-    public Task Execute(IJobExecutionContext context)
-    {
-        _db.CleanDatabase();
-        return Task.CompletedTask;
-    }
-}
