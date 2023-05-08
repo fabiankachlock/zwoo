@@ -133,6 +133,7 @@ public class UserService : IUserService
     {
         var code = StringHelper.GenerateNDigitString(6);
         ulong id = _db.Users.AsQueryable().Any() ? _db.Users.AsQueryable().Max(x => x.Id) + 1 : 1;
+        id += (ulong)_db.AccountEvents.AsQueryable().Where(evt => evt.UserData != null).Count();
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
 
