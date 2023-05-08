@@ -34,7 +34,6 @@ public class AccountController : Controller
             return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
         }
 
-        // TODO check if needed: return Ok($"{{\"settings\": \"{user.Settings.Replace("\"", "\\\"")}\"}}");
         return Ok(new UserSettings() { Settings = user.Settings });
     }
 
