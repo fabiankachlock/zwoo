@@ -219,7 +219,7 @@ public class UserService : IUserService
             return null;
         }
 
-        if (isBeta && _betaCodes.RemoveBetaCode(user.BetaCode ?? "#"))
+        if (isBeta && !_betaCodes.RemoveBetaCode(user.BetaCode ?? "#"))
         {
             _accountEvents.VerifyAttempt(user, false);
             return null;
