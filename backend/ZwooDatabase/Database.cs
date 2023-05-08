@@ -67,6 +67,7 @@ internal class DatabaseException : Exception
     public DatabaseException(string message) : base(message) { }
 }
 
+
 public class Database : IDatabase
 {
     public IMongoClient Client { get; }
@@ -80,10 +81,10 @@ public class Database : IDatabase
 
     private readonly ILog _logger;
 
-    public Database(string connectionString, string dbName, ILog logger)
+    public Database(string connectionString, string dbName, ILog? logger = null)
     {
         Client = new MongoClient(connectionString);
-        _logger = logger;
+        _logger = logger ?? LogManager.GetLogger("Database");
         _logger.Info($"trying to connect to db");
         MongoDB = Client.GetDatabase(dbName);
 
@@ -100,12 +101,11 @@ public class Database : IDatabase
         catch (Exception e)
         {
             _logger.Error(e);
-            _logger.Fatal("closing! failed to connect to database");
+            _logger.Fatal("failed to connect to database");
             Environment.Exit(1);
         }
 
         InitializeClasses();
-
         _logger.Info($"established connection with database");
 
         BetaCodes = MongoDB.GetCollection<BetaCodeDao>("betacodes");
@@ -118,21 +118,20 @@ public class Database : IDatabase
 
     public void CleanDatabase()
     {
+
+        var unverifiedUsers = Users.AsQueryable().Where(x => !x.Verified);
+        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} unverified user(s).");
+        foreach (var user in unverifiedUsers)
         {
-            var users = Users.AsQueryable().Where(x => !x.Verified);
-            _logger.Info($"[CleanUp] deleted {users.Count()} user(s).");
-            foreach (var user in users)
-            {
-                Users.DeleteOne(x => x.Id == user.Id);
-            }
+            Users.DeleteOne(x => x.Id == user.Id);
         }
+
+
+        var usersWithPasswordReset = Users.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
+        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} password reset codes.");
+        foreach (var user in unverifiedUsers)
         {
-            var users = Users.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
-            _logger.Info($"[CleanUp] deleted {users.Count()} password reset codes.");
-            foreach (var user in users)
-            {
-                Users.UpdateOne(x => x.Id == user.Id, Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
-            }
+            Users.UpdateOne(x => x.Id == user.Id, Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
         }
     }
 
@@ -187,6 +186,7 @@ public class Database : IDatabase
                 new AuditTrailDao(p.Id, p.Events));
         });
 
+        // setup object serializer for AuditTrailEventDaos `object` properties
         var objectSerializer = new ObjectSerializer(type => ObjectSerializer.DefaultAllowedTypes(type) || type.FullName?.StartsWith("ZwooDatabase") != false);
         BsonSerializer.RegisterSerializer(objectSerializer);
     }

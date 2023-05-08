@@ -1,5 +1,5 @@
-using MongoDB.Driver;
 using ZwooDatabase.Dao;
+using log4net;
 
 namespace ZwooDatabase;
 
@@ -46,35 +46,42 @@ public interface IAccountEventService
 
 public class AccountEventService : IAccountEventService
 {
-    private IDatabase _db;
+    private readonly IDatabase _db;
+    private readonly ILog _logger;
 
-    public AccountEventService(IDatabase db)
+    public AccountEventService(IDatabase db, ILog? logger = null)
     {
         _db = db;
+        _logger = logger ?? LogManager.GetLogger("AccountEventService");
     }
 
     public void CreateAttempt(UserDao user, bool success)
     {
+        _logger.Debug($"creating create user attempt for {user.Id}");
         _db.AccountEvents.InsertOne(new AccountEventDao("create", user.Id, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
     }
 
     public void VerifyAttempt(UserDao user, bool success)
     {
+        _logger.Debug($"creating verify attempt for {user.Id}");
         _db.AccountEvents.InsertOne(new AccountEventDao("verify", user.Id, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
     }
 
     public void LoginAttempt(UserDao user, bool success)
     {
+        _logger.Debug($"creating login attempt for {user.Id}");
         _db.AccountEvents.InsertOne(new AccountEventDao("login", user.Id, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
     }
 
     public void LogoutAttempt(UserDao user, bool success)
     {
+        _logger.Debug($"creating logout attempt for {user.Id}");
         _db.AccountEvents.InsertOne(new AccountEventDao("logout", user.Id, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()));
     }
 
     public void DeleteAttempt(UserDao user, bool success)
     {
+        _logger.Debug($"creating delete account attempt for {user.Id}");
         var u = new AccountEventDao("delete", user.Id, success, (ulong)DateTimeOffset.Now.ToUnixTimeSeconds())
         {
             UserData = new DeletedUserDao(user)

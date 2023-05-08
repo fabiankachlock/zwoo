@@ -61,8 +61,6 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult JoinGame([FromBody] JoinGame body)
     {
-        Globals.Logger.Info("POST /game/join");
-
         var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
         if (user == null || sessionId == null)
         {

@@ -8,13 +8,21 @@ namespace ZwooDatabase;
 /// </summary>
 public interface IChangelogService
 {
+    /// <summary>
+    /// retrieve a changelog for a certain version
+    /// </summary>
+    /// <param name="version"></param>
     public ChangelogDao? GetChangelog(string version);
+
+    /// <summary>
+    /// return public  accessible changelogs
+    /// </summary>
     public List<ChangelogDao> GetChangelogs();
 }
 
 public class ChangelogService : IChangelogService
 {
-    private IDatabase _db;
+    private readonly IDatabase _db;
 
     public ChangelogService(IDatabase db)
     {

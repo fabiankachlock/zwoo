@@ -1,5 +1,6 @@
 using MongoDB.Driver;
 using ZwooDatabase.Dao;
+using log4net;
 
 namespace ZwooDatabase;
 
@@ -42,17 +43,20 @@ public interface IAuditTrailService
 
 public class AuditTrailService : IAuditTrailService
 {
-    private IDatabase _db;
+    private readonly IDatabase _db;
+    private readonly ILog _logger;
 
-    public AuditTrailService(IDatabase db)
+    public AuditTrailService(IDatabase db, ILog? logger = null)
     {
         _db = db;
+        _logger = LogManager.GetLogger("AuditTrailService");
     }
 
     private void ensureDao(string id)
     {
         if (_db.AuditTrails.AsQueryable().FirstOrDefault(dao => dao.Id == id) == null)
         {
+            _logger.Info($"creating audit trail for {id}");
             _db.AuditTrails.InsertOne(new AuditTrailDao()
             {
                 Id = id,
@@ -64,6 +68,7 @@ public class AuditTrailService : IAuditTrailService
     public void Protocol(string id, string actor, string message, object newValue, object? oldValue)
     {
         ensureDao(id);
+        _logger.Debug($"creating audit trail event for {id}");
         var newEvent = new AuditEventDao(actor, message, DateTimeOffset.Now.ToUnixTimeMilliseconds(), newValue, oldValue);
         _db.AuditTrails.UpdateOne(trail => trail.Id == id, Builders<AuditTrailDao>.Update.Push(trail => trail.Events, newEvent));
     }
@@ -71,6 +76,7 @@ public class AuditTrailService : IAuditTrailService
     public void Protocol(string id, AuditEventDao data)
     {
         ensureDao(id);
+        _logger.Debug($"creating audit trail event for {id}");
         _db.AuditTrails.UpdateOne(trail => trail.Id == id, Builders<AuditTrailDao>.Update.Push(trail => trail.Events, data));
     }
 

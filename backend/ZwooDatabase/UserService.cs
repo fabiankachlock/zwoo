@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using MongoDB.Driver;
 using ZwooDatabase.Dao;
 using BackendHelper;
+using log4net;
 
 namespace ZwooDatabase;
 
@@ -116,17 +117,19 @@ public interface IUserService
 public class UserService : IUserService
 {
 
-    private IDatabase _db;
-    private IAuditTrailService _audits;
-    private IAccountEventService _accountEvents;
-    private IBetaCodesService _betaCodes;
+    private readonly IDatabase _db;
+    private readonly IAuditTrailService _audits;
+    private readonly IAccountEventService _accountEvents;
+    private readonly IBetaCodesService _betaCodes;
+    private readonly ILog _logger;
 
-    public UserService(IDatabase db, IAuditTrailService audits, IAccountEventService accountEvents, IBetaCodesService betaCodes)
+    public UserService(IDatabase db, IAuditTrailService audits, IAccountEventService accountEvents, IBetaCodesService betaCodes, ILog? logger = null)
     {
         _db = db;
         _audits = audits;
         _accountEvents = accountEvents;
         _betaCodes = betaCodes;
+        _logger = logger ?? LogManager.GetLogger("UserService");
     }
 
     public UserDao CreateUser(string username, string email, string password, string? betaCode, AuditOptions? auditOptions = null)
@@ -136,6 +139,7 @@ public class UserService : IUserService
         id += (ulong)_db.AccountEvents.AsQueryable().Where(evt => evt.UserData != null).Count();
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
+        _logger.Info($"creating new user with id {id}");
 
         var user = new UserDao
         {
@@ -182,8 +186,10 @@ public class UserService : IUserService
 
     public bool DeleteUser(UserDao user, string password, AuditOptions? auditOptions = null)
     {
+        _logger.Debug($"deleting user {user.Id}");
         if (!StringHelper.CheckPassword(password, user.Password) || !user.Verified)
         {
+            _logger.Warn($"deleting user {user.Id} failed - wrong password");
             _accountEvents.DeleteAttempt(user, false);
             return false;
         }
@@ -214,14 +220,17 @@ public class UserService : IUserService
 
     public UserDao? VerifyUser(ulong id, string code, bool isBeta, AuditOptions? auditOptions = null)
     {
+        _logger.Debug($"verifying user {id}");
         var user = _db.Users.AsQueryable().FirstOrDefault(user => user.Id == id && user.ValidationCode == code);
         if (user == null)
         {
+            _logger.Warn($"verifying user {id} failed - unknown user");
             return null;
         }
 
         if (isBeta && !_betaCodes.RemoveBetaCode(user.BetaCode ?? "#"))
         {
+            _logger.Warn($"verifying user {id} failed - wrong beta code");
             _accountEvents.VerifyAttempt(user, false);
             return null;
         }
@@ -244,6 +253,7 @@ public class UserService : IUserService
 
         if (StringHelper.CheckPassword(password, user.Password) && user.Verified)
         {
+            _logger.Warn($"logging in {user.Id} failed - wrong password");
             string sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
             user.Sid.Add(sid);
             UpdateUser(user, AuditOptions.WithMessage("logged user in").Merge(auditOptions));
@@ -251,12 +261,14 @@ public class UserService : IUserService
             return new UserLoginResult(user, sid, null);
         }
 
+        _logger.Debug($"logging in {user.Id}");
         _accountEvents.LoginAttempt(user, false);
         return new UserLoginResult(user, null, user.Verified ? ErrorCode.WrongPassword : ErrorCode.NotVerified);
     }
 
     public bool LogoutUser(UserDao user, string sessionId, AuditOptions? auditOptions = null)
     {
+        _logger.Debug($"logging out {user.Id}");
         user.Sid.Remove(sessionId);
         var res = UpdateUser(user, new AuditOptions(AuditActor.User(user.Id, sessionId), "logged out user").Merge(auditOptions));
         _accountEvents.LogoutAttempt(user, res != null);
@@ -279,9 +291,11 @@ public class UserService : IUserService
         var user = GetUserById(playerId);
         if (user == null)
         {
+            _logger.Warn($"incrementing win of unknown user {playerId}");
             return 0;
         }
 
+        _logger.Debug($"incrementing win of {user.Id}");
         _db.Users.UpdateOne(user => user.Id == playerId, Builders<UserDao>.Update.Inc(u => u.Wins, (uint)1));
         var newUser = _db.Users.AsQueryable().First(user => user.Id == playerId);
 
@@ -297,6 +311,7 @@ public class UserService : IUserService
 
     public bool ChangePassword(UserDao user, string oldPassword, string newPassword, string sid, AuditOptions? auditOptions = null)
     {
+        _logger.Debug($"changing password of {user.Id}");
         if (StringHelper.CheckPassword(oldPassword, user.Password))
         {
             var salt = RandomNumberGenerator.GetBytes(16);
@@ -307,6 +322,7 @@ public class UserService : IUserService
             var res = UpdateUser(user, new AuditOptions(AuditActor.User(user.Id, sid), "changed password").Merge(auditOptions));
             return res != null;
         }
+        _logger.Warn($"changing password of {user.Id} failed - wrong password");
         return false;
     }
 
@@ -315,9 +331,11 @@ public class UserService : IUserService
         var user = _db.Users.AsQueryable().First(user => user.Email == email);
         if (user == null)
         {
+            _logger.Warn($"requested password reset for unknown user {email}");
             return null;
         }
 
+        _logger.Debug($"requested password reset for {user.Id}");
         user.PasswordResetCode = Guid.NewGuid().ToString();
         return UpdateUser(user, AuditOptions.WithMessage("requested password reset").Merge(auditOptions));
     }
@@ -327,9 +345,11 @@ public class UserService : IUserService
         var user = _db.Users.AsQueryable().FirstOrDefault(user => user.PasswordResetCode == code);
         if (user == null)
         {
+            _logger.Warn($"resetting password for {code} failed - unknown code");
             return null;
         }
 
+        _logger.Debug($"resetting password for {user.Id}");
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
 
