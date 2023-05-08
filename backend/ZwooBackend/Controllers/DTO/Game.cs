@@ -1,26 +1,57 @@
 using System.Text.Json.Serialization;
 using ZwooGameLogic.ZRP;
+using ZwooDatabase.Dao;
 
 namespace ZwooBackend.Controllers.DTO;
 
+public static class LeaderboardPlayerDaoExtensions
+{
+    public static LeaderBoardPlayer ToDTO(this LeaderBoardPlayerDao dao)
+    {
+        return new LeaderBoardPlayer()
+        {
+            Username = dao.Username,
+            Wins = dao.Wins,
+        };
+    }
+}
+
+public static class LeaderboardDaoExtensions
+{
+    public static LeaderBoard ToDTO(this LeaderBoardDao dao)
+    {
+        return new LeaderBoard()
+        {
+            TopPlayers = dao.TopPlayers.Select(playerDao => playerDao.ToDTO()).ToList()
+        };
+    }
+}
+
 public class LeaderBoard
 {
+    public LeaderBoard() { }
+
     [JsonPropertyName("leaderboard")]
-    public List<LeaderBoardPlayer>? TopPlayers { set; get; }
+    public List<LeaderBoardPlayer> TopPlayers { set; get; } = new();
 }
 
 public class LeaderBoardPlayer
 {
-    public LeaderBoardPlayer(string username, uint wins)
-    {
-        Username = username;
-        Wins = wins;
-    }
+    public LeaderBoardPlayer() { }
 
     [JsonPropertyName("username")]
-    public string Username { set; get; }
+    public string Username { set; get; } = "";
+
     [JsonPropertyName("wins")]
-    public UInt32 Wins { set; get; }
+    public uint Wins { set; get; } = 0;
+}
+
+public class LeaderBoardPosition
+{
+    public LeaderBoardPosition() { }
+
+    [JsonPropertyName("position")]
+    public ulong Position { set; get; } = 0;
 }
 
 public class JoinGame
