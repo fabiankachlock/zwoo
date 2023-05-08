@@ -137,38 +137,39 @@ public class GameController : Controller
 
     [HttpGet("games")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GamesListResponse))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult ListGames()
     {
-        Globals.Logger.Info("GET /game/games");
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
         {
-            IEnumerable<ZwooRoom> games = _gamesService.ListAll();
-            GamesListResponse response = new GamesListResponse(games.Select(game => new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount())).ToArray());
-
-            return Ok(JsonSerializer.Serialize(response));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
         }
-        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+
+        IEnumerable<ZwooRoom> games = _gamesService.ListAll();
+        GamesListResponse response = new GamesListResponse(games.Select(game => new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount())).ToArray());
+        return Ok(response);
     }
 
     [HttpGet("games/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameMetaResponse))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
     public IActionResult GetGames(long id)
     {
-        Globals.Logger.Info($"GET /game/games/{id}");
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out _))
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
         {
-            ZwooRoom? game = _gamesService.GetGame(id);
-            if (game == null)
-            {
-                return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "game Not found"));
-            }
-            GameMetaResponse response = new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount());
-
-            return Ok(JsonSerializer.Serialize(response));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
         }
-        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Unauthorized"));
+
+        ZwooRoom? game = _gamesService.GetGame(id);
+        if (game == null)
+        {
+            return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "game Not found"));
+        }
+
+        GameMetaResponse response = new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount());
+        return Ok(response);
     }
 }

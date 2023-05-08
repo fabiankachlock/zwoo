@@ -49,6 +49,7 @@ public class GameInfoService : IGameInfoService
             var user = _db.Users.AsQueryable().FirstOrDefault(user => user.Username == player.PlayerUsername);
             if (user != null)
             {
+                // TODO: would be great to have the active session id here
                 _audits.Protocol(_audits.GetAuditId(user), AuditOptions.CreateEvent(auditOptions, new AuditEventDao()
                 {
                     Actor = AuditActor.System,
