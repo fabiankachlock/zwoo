@@ -110,12 +110,29 @@ app.MapControllers();
 var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 #pragma warning disable 4014
 scheduler.Start();
-// scheduler.ScheduleJob(
-//     JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
-//     TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
+scheduler.ScheduleJob(
+    JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
+    TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
 #pragma warning restore 4014
 
 
 app.Run();
 
 await scheduler.Shutdown();
+
+// TODO: clean this up
+public class DatabaseCleanupJob : IJob
+{
+    private IDatabase _db { get; set; }
+
+    public DatabaseCleanupJob(IDatabase db)
+    {
+        _db = db;
+    }
+
+    public Task Execute(IJobExecutionContext context)
+    {
+        _db.CleanDatabase();
+        return Task.CompletedTask;
+    }
+}

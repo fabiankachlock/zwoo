@@ -12,17 +12,6 @@
 
 // namespace ZwooBackend.Database;
 // TODO: cleanup
-// public class DatabaseCleanupJob : IJob
-// {
-//     // Periodic Database Cleanup job
-//     public Task Execute(IJobExecutionContext context)
-//     {
-//         DatabaseLogger.Info("[CleanUp] starting db cleanup");
-//         ZwooDatabase.CleanDatabase();
-//         DatabaseLogger.Info("[CleanUp] finished db cleanup");
-//         return Task.CompletedTask;
-//     }
-// }
 
 // public class Database
 // {

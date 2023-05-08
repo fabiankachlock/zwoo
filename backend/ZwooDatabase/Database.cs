@@ -121,18 +121,18 @@ public class Database : IDatabase
         {
             var users = Users.AsQueryable().Where(x => !x.Verified);
             _logger.Info($"[CleanUp] deleted {users.Count()} user(s).");
-            // foreach (var user in users)
-            // DeleteAttempt(user.Id, Users.DeleteOne(x => x.Id == user.Id).DeletedCount == 1, user);
+            foreach (var user in users)
+            {
+                Users.DeleteOne(x => x.Id == user.Id);
+            }
         }
         {
             var users = Users.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
             _logger.Info($"[CleanUp] deleted {users.Count()} password reset codes.");
             foreach (var user in users)
-                Users.UpdateOne(x => x.Id == user.Id,
-                    Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
-        }
-        {
-            _logger.Info($"[CleanUp] deleted {AccountEvents.DeleteMany(x => x.EventType == "delete" && x.TimeStamp > (ulong)((DateTimeOffset)(DateTime.Today - TimeSpan.FromDays(6))).ToUnixTimeSeconds()).DeletedCount} delete account events.");
+            {
+                Users.UpdateOne(x => x.Id == user.Id, Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
+            }
         }
     }
 
