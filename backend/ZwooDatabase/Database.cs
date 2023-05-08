@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using ZwooDatabase.Dao;
 using MongoDB.Driver;
 using log4net;
@@ -185,6 +186,9 @@ public class Database : IDatabase
             cm.MapCreator(p =>
                 new AuditTrailDao(p.Id, p.Events));
         });
+
+        var objectSerializer = new ObjectSerializer(type => ObjectSerializer.DefaultAllowedTypes(type) || type.FullName?.StartsWith("ZwooDatabase") != false);
+        BsonSerializer.RegisterSerializer(objectSerializer);
     }
 
 }

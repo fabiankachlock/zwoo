@@ -5,10 +5,14 @@ namespace ZwooDatabase.Dao;
 
 public class AuditEventDao
 {
-    public AuditEventDao() { }
+    public AuditEventDao()
+    {
+        Id = ObjectId.GenerateNewId();
+    }
 
     public AuditEventDao(string actor, string message, long timestamp, object newValue, object? oldValue)
     {
+        Id = ObjectId.GenerateNewId();
         Actor = actor;
         Message = message;
         Timestamp = timestamp;
@@ -28,7 +32,7 @@ public class AuditEventDao
     }
 
     [BsonElement("_id")]
-    public ObjectId Id { get; set; } = new ObjectId();
+    public ObjectId Id { get; set; } = new();
 
     [BsonElement("actor")]
     public string Actor { set; get; } = "";

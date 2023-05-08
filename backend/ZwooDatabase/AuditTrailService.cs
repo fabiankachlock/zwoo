@@ -49,14 +49,28 @@ public class AuditTrailService : IAuditTrailService
         _db = db;
     }
 
+    private void ensureDao(string id)
+    {
+        if (_db.AuditTrails.AsQueryable().FirstOrDefault(dao => dao.Id == id) == null)
+        {
+            _db.AuditTrails.InsertOne(new AuditTrailDao()
+            {
+                Id = id,
+                Events = new(),
+            });
+        }
+    }
+
     public void Protocol(string id, string actor, string message, object newValue, object? oldValue)
     {
+        ensureDao(id);
         var newEvent = new AuditEventDao(actor, message, DateTimeOffset.Now.ToUnixTimeMilliseconds(), newValue, oldValue);
         _db.AuditTrails.UpdateOne(trail => trail.Id == id, Builders<AuditTrailDao>.Update.Push(trail => trail.Events, newEvent));
     }
 
     public void Protocol(string id, AuditEventDao data)
     {
+        ensureDao(id);
         _db.AuditTrails.UpdateOne(trail => trail.Id == id, Builders<AuditTrailDao>.Update.Push(trail => trail.Events, data));
     }
 
