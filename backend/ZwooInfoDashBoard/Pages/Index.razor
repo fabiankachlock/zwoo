@@ -66,7 +66,11 @@
                 <h2>Leaderboard</h2>
                 <RadzenDataGrid TItem="LeaderBoardPlayerDao" Data="_leaderboard.TopPlayers">
                     <Columns>
-                        <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Property="Position" Title="Position"/>
+                        <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Title="Position">
+                            <Template Context="player">
+                                @(_leaderboard.TopPlayers.IndexOf(player)+1).
+                            </Template>
+                        </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Property="Username" Title="Name"/>
                         <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Property="Wins" Title="Wins"/>
                         <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" TextAlign="TextAlign.Center" Width="60px">

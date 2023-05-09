@@ -18,6 +18,7 @@ builder.WebHost.UseStaticWebAssets();
 var db = new ZwooDatabase.Database(Globals.ConnectionString, Globals.DatabaseName);
 
 builder.Services.AddSingleton<IDatabase>(db);
+builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
 builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
 builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
 builder.Services.AddSingleton<IUserService, UserService>();

@@ -1,6 +1,5 @@
 @page "/add-version-dialog"
-@using ZwooInfoDashBoard.Data
-@using ZwooDatabaseClasses
+@inject IDatabase _db
 
 @inject DialogService DialogService
 
@@ -9,12 +8,20 @@
 <div class="row">
     <div class="col-md-12 text-right">
         <RadzenButton Click="@((args) => DialogService.Close())" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="width: 120px" Class="mr-1" />
-        <RadzenButton Click="@(CreateVersion)" Text="OK" Style="width: 120px" />
+        <RadzenButton Click="@(() => CreateVersion())" Text="OK" Style="width: 120px" />
     </div>
 </div>
 
 @code {
     string _version = "";
     
-    private void CreateVersion() => DialogService.Close(Globals.ZwooDatabase.InsertVersion(new Changelog(_version, $"<h1>{_version}<h1>", false)));
+    private void CreateVersion()
+    {
+        var changelog = _db.Changelogs.AsQueryable().FirstOrDefault(changelog => changelog.ChangelogVersion == _version);
+        if (changelog == null)
+        {
+            _db.Changelogs.InsertOne(new ChangelogDao(_version, $"<h1>{_version}</h1>", false));
+        }
+        DialogService.Close();
+    }
 }

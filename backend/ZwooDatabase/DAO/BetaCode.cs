@@ -8,7 +8,10 @@ namespace ZwooDatabase.Dao;
 [CollectionLocation("betacodes")]
 public partial class BetaCodeDao
 {
-    BetaCodeDao() { }
+    public BetaCodeDao()
+    {
+        Id = ObjectId.GenerateNewId();
+    }
 
     public BetaCodeDao(string code) => Code = code;
 

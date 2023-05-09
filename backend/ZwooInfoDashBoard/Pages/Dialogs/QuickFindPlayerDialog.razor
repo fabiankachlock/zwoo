@@ -1,8 +1,5 @@
-@page "/QuickFindPlayerDialog"
-@using ZwooInfoDashBoard.Data
-@using ZwooDatabaseClasses
-
 @inject DialogService DialogService
+@inject IDatabase _db
 
 <div class="container">
     <div class="row"> 
@@ -26,19 +23,19 @@
 </div>
     
 @code {
-    enum SearchType
+    private enum SearchType
     {
         Id,
         Name
     }
 
-    string _query = "";
-    SearchType _searchType = SearchType.Id;
-    string _error = "";
+    private SearchType _searchType = SearchType.Id;
+    private string _query = "";
+    private string _error = "";
 
     private void FindUser()
     {
-        User usr = null!;
+        UserDao? user = null;
         switch (_searchType)
         {
             case SearchType.Id:
@@ -48,25 +45,23 @@
                     _error = "ID could not be parsed";
                     break;
                 }
-#pragma warning disable CS8600
-                usr = Globals.ZwooDatabase.GetUsersAsQueryable().FirstOrDefault(x => x.Id == val);
-#pragma warning restore CS8600
+                user = _db.Users.AsQueryable().FirstOrDefault(x => x.Id == val);
                 break;
             }
             case SearchType.Name:
             {
-#pragma warning disable CS8600
-                usr = Globals.ZwooDatabase.GetUsersAsQueryable().FirstOrDefault(x => x.Username == _query);
-#pragma warning restore CS8600
+                user = _db.Users.AsQueryable().FirstOrDefault(x => x.Username == _query);
                 break;
             }
-            default:
-                throw new ArgumentOutOfRangeException();
         }
-        if (usr == null)
+
+        if (user == null)
+        {
             _error = "User could not be found";
-        else
-            DialogService.Close(usr);
+            return;
+        }
+        
+        DialogService.Close(user);
     }
 
 }

@@ -1,41 +1,52 @@
-@page "/ChangelogEditDialog/{changelog}"
-@using ZwooInfoDashBoard.Data
 @using Microsoft.AspNetCore.Components
-@using ZwooDatabaseClasses
+@inject IChangelogService _changelogs
 
-@inject DialogService DialogService
+@if (changelog == null)
+{
+    <p>No changelog provided</p>
+}
+else 
+{
+    <div class="w-100" style="padding: 5px;">
+        <RadzenButton Text="Save" Click="@(() => Save())"/>
+    </div>
 
-<div class="w-100" style="padding: 5px;">
-    <RadzenButton Text="Save" Click="(() => Globals.ZwooDatabase.UpdateChangelog(changelog!))"/>
-</div>
-
-<RadzenHtmlEditor @bind-Value="@changelog!.ChangelogText" Style="flex-grow: 1">
-    <RadzenHtmlEditorUndo />
-    <RadzenHtmlEditorRedo />
-    <RadzenHtmlEditorSeparator />
-    <RadzenHtmlEditorBold />
-    <RadzenHtmlEditorItalic />
-    <RadzenHtmlEditorUnderline />
-    <RadzenHtmlEditorStrikeThrough />
-    <RadzenHtmlEditorSeparator />
-    <RadzenHtmlEditorAlignLeft />
-    <RadzenHtmlEditorAlignCenter />
-    <RadzenHtmlEditorAlignRight />
-    <RadzenHtmlEditorJustify />
-    <RadzenHtmlEditorSeparator />
-    <RadzenHtmlEditorIndent />
-    <RadzenHtmlEditorOutdent />
-    <RadzenHtmlEditorUnorderedList />
-    <RadzenHtmlEditorOrderedList />
-    <RadzenHtmlEditorSeparator />
-    <RadzenHtmlEditorRemoveFormat />
-    <RadzenHtmlEditorSeparator />
-    <RadzenHtmlEditorSubscript />
-    <RadzenHtmlEditorSuperscript />
-    <RadzenHtmlEditorSeparator />
-    <RadzenHtmlEditorFormatBlock />
-</RadzenHtmlEditor>
+    <RadzenHtmlEditor @bind-Value="@changelog.ChangelogText" Style="flex-grow: 1">
+        <RadzenHtmlEditorUndo />
+        <RadzenHtmlEditorRedo />
+        <RadzenHtmlEditorSeparator />
+        <RadzenHtmlEditorBold />
+        <RadzenHtmlEditorItalic />
+        <RadzenHtmlEditorUnderline />
+        <RadzenHtmlEditorStrikeThrough />
+        <RadzenHtmlEditorSeparator />
+        <RadzenHtmlEditorAlignLeft />
+        <RadzenHtmlEditorAlignCenter />
+        <RadzenHtmlEditorAlignRight />
+        <RadzenHtmlEditorJustify />
+        <RadzenHtmlEditorSeparator />
+        <RadzenHtmlEditorIndent />
+        <RadzenHtmlEditorOutdent />
+        <RadzenHtmlEditorUnorderedList />
+        <RadzenHtmlEditorOrderedList />
+        <RadzenHtmlEditorSeparator />
+        <RadzenHtmlEditorRemoveFormat />
+        <RadzenHtmlEditorSeparator />
+        <RadzenHtmlEditorSubscript />
+        <RadzenHtmlEditorSuperscript />
+        <RadzenHtmlEditorSeparator />
+        <RadzenHtmlEditorFormatBlock />
+    </RadzenHtmlEditor>
+}
 
 @code {
-    [Parameter] public Changelog? changelog { set; get; }
+    [Parameter] public ChangelogDao? changelog { set; get; }
+
+    private void Save()
+    {
+        if (changelog != null)
+        {
+            _changelogs.UpdateChangelog(changelog);
+        }
+    }
 }
