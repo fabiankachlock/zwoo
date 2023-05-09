@@ -18,6 +18,12 @@ public interface IChangelogService
     /// return public  accessible changelogs
     /// </summary>
     public List<ChangelogDao> GetChangelogs();
+
+    /// <summary>
+    /// update a changelog entity
+    /// </summary>
+    /// <param name="data">the new changelog</param>
+    public void UpdateChangelog(ChangelogDao data);
 }
 
 public class ChangelogService : IChangelogService
@@ -32,4 +38,9 @@ public class ChangelogService : IChangelogService
     public ChangelogDao? GetChangelog(string version) => _db.Changelogs.AsQueryable().FirstOrDefault(c => c.ChangelogVersion == version && c.Public);
 
     public List<ChangelogDao> GetChangelogs() => _db.Changelogs.AsQueryable().Where(x => x.Public).ToList();
+
+    public void UpdateChangelog(ChangelogDao changelog)
+    {
+        _db.Changelogs.ReplaceOne(x => x.Id == changelog.Id, changelog);
+    }
 }

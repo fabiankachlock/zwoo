@@ -18,12 +18,12 @@ public static class Globals
         LogrushDashboardUrl = Environment.GetEnvironmentVariable("LOGRUSH_DASHBOARD") ?? "";
 
         Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
-        ZwooDatabase = new Database();
+        // ZwooDatabase = new Database();
     }
 
     public static string ConnectionString;
     public static string DatabaseName;
     public static string LogrushDashboardUrl;
-    public static Database ZwooDatabase { set; get; }
+    // public static Database ZwooDatabase { set; get; }
     public static readonly string Version = "1.0.0-beta.11";
 }

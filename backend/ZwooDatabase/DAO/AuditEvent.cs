@@ -8,6 +8,7 @@ public class AuditEventDao
     public AuditEventDao()
     {
         Id = ObjectId.GenerateNewId();
+        Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     }
 
     public AuditEventDao(string actor, string message, long timestamp, object newValue, object? oldValue)
@@ -32,7 +33,7 @@ public class AuditEventDao
     }
 
     [BsonElement("_id")]
-    public ObjectId Id { get; set; } = new();
+    public ObjectId Id { get; set; }
 
     [BsonElement("actor")]
     public string Actor { set; get; } = "";
@@ -40,8 +41,11 @@ public class AuditEventDao
     [BsonElement("message")]
     public string Message { set; get; } = "";
 
+    /// <summary>
+    /// time in unix milliseconds
+    /// </summary>
     [BsonElement("timestamp")]
-    public long Timestamp = 0;
+    public long Timestamp { get; set; }
 
     [BsonElement("newValue")]
     public object NewValue { set; get; } = null!;

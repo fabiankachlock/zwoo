@@ -1,8 +1,6 @@
 @page "/changelog-editor"
-@using ZwooInfoDashBoard.Data
 @using ZwooInfoDashBoard.Pages.Dialogs
-@using ZwooDatabaseClasses
-
+@inject IDatabase _db;
 @inject DialogService DialogService
 
 <PageTitle>Changelog Editor</PageTitle>
@@ -10,26 +8,26 @@
 
 <RadzenButton Icon="add_circle_outline" Text="Add Version Changelog" Click="CreateVersion" style="margin-bottom: 10px"/>
 
-<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25"
-                               TItem="Changelog" Data="_changelogs" AllowVirtualization="true">
+<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="_grid"
+                               TItem="ChangelogDao" Data="_changelogs" AllowVirtualization="true">
     <Columns>
-        <RadzenDataGridColumn TItem="Changelog" Property="ChangelogVersion" Title="Version"/>
-        <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="Public" Width="60px" Filterable="false">
+        <RadzenDataGridColumn TItem="ChangelogDao" Property="ChangelogVersion" Title="Version"/>
+        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="Public" Width="60px" Filterable="false">
             <Template Context="c">
                 <RadzenCheckBox Disabled="true" @bind-Value="c.Public"/>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="" Filterable="false" Width="100px">
+        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="100px">
             <Template Context="c">
-                <RadzenButton Text="Publish" @bind-Enabled="@c.Private" Click="(() => { c.Public = true; c.Timestamp = (ulong)DateTimeOffset.Now.ToUnixTimeSeconds(); Globals.ZwooDatabase.UpdateChangelog(c); })"/>
+                <RadzenButton Text="Publish" @bind-Enabled="@(!c.Public)" Click="(() => { c.Public = true; c.Timestamp = (ulong)DateTimeOffset.Now.ToUnixTimeSeconds(); Globals.ZwooDatabase.UpdateChangelog(c); })"/>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="Changelog" Property="Public" Title="" Filterable="false" Width="110px">
+        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="110px">
             <Template Context="c">
                 <RadzenButton Text="Unpublish" @bind-Enabled="@c.Public" Click="(() => { c.Public = false; c.Timestamp = 1; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="Changelog" Property="Changelog" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="220px">
+        <RadzenDataGridColumn TItem="ChangelogDao" Property="Changelog" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="220px">
             <Template Context="changelog">
                 <RadzenButton Text="Edit Changelog" Icon="edit" Click="@(() => DialogService.Open<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true }))"/>
             </Template>
@@ -38,14 +36,20 @@
 </RadzenDataGrid>
 
 @code {
-    IQueryable<Changelog> _changelogs = Globals.ZwooDatabase.GetChangelogs();
+    private IQueryable<ChangelogDao> _changelogs
+    {
+        get => _db.Changelogs.AsQueryable();
+    }
+    RadzenDataGrid<ChangelogDao> _grid = null!;
 
-    protected override void OnInitialized() => DialogService.OnClose += (o => _changelogs = Globals.ZwooDatabase.GetChangelogs());
+    protected override void OnInitialized() => DialogService.OnClose += ((o) => _grid.Reload());
     
     private async Task CreateVersion()
     {
         var res = await DialogService.OpenAsync<AddVersionDialog>("Create version", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "200px", Resizable = false, Draggable = true });
-        if (res is Changelog changelog)
+        if (res is ChangelogDao changelog)
+        {
             await DialogService.OpenAsync<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true });
+        }
     }
 }

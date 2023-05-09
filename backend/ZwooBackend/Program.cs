@@ -70,6 +70,7 @@ builder.Services.AddSingleton<ILanguageService, LanguageService>();
 
 builder.Services.AddHostedService<EmailService>();
 
+// scheduler
 builder.Services.AddQuartz(q =>
 {
     q.SchedulerId = "zwoo-scheduler";

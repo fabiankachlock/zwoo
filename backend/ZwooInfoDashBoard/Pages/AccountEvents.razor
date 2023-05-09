@@ -1,22 +1,21 @@
 @page "/account-events"
-@using ZwooInfoDashBoard.Data
-@using ZwooDatabaseClasses
+@inject IDatabase _db
 
 <PageTitle>Account Events</PageTitle>
 
 <h1>Account Events</h1>
 
 <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
-                TItem="AccountEvent" Data="_events" AllowVirtualization="true">
+                TItem="AccountEventDao" Data="_events" AllowVirtualization="true">
     <Columns>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="PlayerID" Title="ID"/>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="EventType" Title="Type"/>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success">
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="PlayerID" Title="ID"/>
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="EventType" Title="Type"/>
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="Success" Title="Success">
             <Template Context="info">
                 @info.Success.ToString()
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="TimeStamp" Title="Time">
             <Template Context="info">
                 @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
             </Template>
@@ -25,5 +24,8 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<AccountEvent> _events = Globals.ZwooDatabase.GetAccountEventsAsQueryable();
+    private IQueryable<AccountEventDao> _events
+    {
+        get =>  _db.AccountEvents.AsQueryable();
+    }
 }
