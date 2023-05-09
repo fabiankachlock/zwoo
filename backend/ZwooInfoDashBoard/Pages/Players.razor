@@ -1,25 +1,20 @@
 @page "/players"
-
-<PageTitle>Players</PageTitle>
-
-@using ZwooInfoDashBoard.Data
 @using ZwooInfoDashBoard.Pages.Dialogs
-@using System.Security.Cryptography
-@using System.Text
-@using BackendHelper
-@using ZwooDatabaseClasses
+@inject IDatabase _db
+@inject IUserService _userService
 @inject DialogService DialogService
 
+<PageTitle>Players</PageTitle>
 <h1>Players</h1>
 <p>List of All Players.</p>
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(_playerToInsert != null)/>
 <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
-                TItem="User" Data="_players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
+                TItem="UserDao" Data="_players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
                 @ref="_playerGrid" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
     <Columns>
-        <RadzenDataGridColumn TItem="User" Property="Id" Title="ID"/>
-        <RadzenDataGridColumn TItem="User" Property="Username" Title="Username">
+        <RadzenDataGridColumn TItem="UserDao" Property="Id" Title="ID"/>
+        <RadzenDataGridColumn TItem="UserDao" Property="Username" Title="Username">
             <Template Context="player">
                 @player.Username
             </Template>
@@ -30,7 +25,7 @@
                 <RadzenLengthValidator Component="Name" Text="Username too long" Max="20"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="User" Property="Email" Title="Email">
+        <RadzenDataGridColumn TItem="UserDao" Property="Email" Title="Email">
             <Template Context="player">
                 @player.Email
             </Template>
@@ -40,8 +35,8 @@
                 <RadzenEmailValidator Component="Email" Text="Email is Invalid."/> 
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="User" Property="Wins" Title="Wins"/>
-        <RadzenDataGridColumn TItem="User" Property="Verified" Title="Verified">
+        <RadzenDataGridColumn TItem="UserDao" Property="Wins" Title="Wins"/>
+        <RadzenDataGridColumn TItem="UserDao" Property="Verified" Title="Verified">
             <Template Context="player">
                 <RadzenCheckBox Disabled="true" Value="player.Verified"/>
             </Template>
@@ -49,7 +44,7 @@
                 <RadzenCheckBox @bind-Value="player.Verified"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="User" Property="BetaCode" Title="Betacode">
+        <RadzenDataGridColumn TItem="UserDao" Property="BetaCode" Title="Betacode">
             <Template Context="player">
                 @player.BetaCode
             </Template>
@@ -57,7 +52,7 @@
                 <RadzenTextBox @bind-Value="player.BetaCode" Style="width:100%; display: block" Name="Name"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="User" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+        <RadzenDataGridColumn TItem="UserDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
             <Template Context="player">
                 <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="info" Class="m-1" Click="@(() => OpenPlayer(player.Id))"/>
             </Template>
@@ -65,7 +60,7 @@
                 <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="build" Class="m-1" Click="@(() => ChangePlayerPassword(player))"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="User" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="120px">
+        <RadzenDataGridColumn TItem="UserDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="120px">
             <Template Context="player">
                 <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" class="m-1" Click="@(() => EditRow(player))" @onabort:stopPropagation="true"/>
             </Template>
@@ -74,7 +69,7 @@
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(player))"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="User" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+        <RadzenDataGridColumn TItem="UserDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
             <Template Context="player">
                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(player))"  @onclick:stopPropagation="true" />
             </Template>
@@ -87,23 +82,28 @@
 
 
 @code {
-    IQueryable<User> _players = Globals.ZwooDatabase.GetUsersAsQueryable();
-    RadzenDataGrid<User> _playerGrid = new RadzenDataGrid<User>();
-    User? _playerToInsert = null;
+    IQueryable<UserDao> _players
+    {
+        get => _db.Users.AsQueryable();
+    }
+
+    RadzenDataGrid<UserDao> _playerGrid = new RadzenDataGrid<UserDao>();
+    UserDao? _playerToInsert = null;
     bool _newPlayer = false;
 
     private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
 
-    async Task EditRow(User player) => await _playerGrid.EditRow(player);
+    async Task EditRow(UserDao player) => await _playerGrid.EditRow(player);
 
     private async void InsertRow()
     {
-        _playerToInsert = Globals.ZwooDatabase.GenerateUser();
+        // TODO: Audit options
+        _playerToInsert = _userService.CreateUser("NewUser", "example@test.com", "DEFAULT", null);
         _newPlayer = true;
         await _playerGrid.InsertRow(_playerToInsert);
     }
     
-    private void SaveRow(User player)
+    private void SaveRow(UserDao player)
     {
         if (_playerToInsert == player)
             _playerToInsert = null;
@@ -111,7 +111,7 @@
         _playerGrid.UpdateRow(player);
     }
 
-    private async Task CancelEdit(User player)
+    private async Task CancelEdit(UserDao player)
     {
         if (_playerToInsert == player)
             _playerToInsert = null;
@@ -121,30 +121,33 @@
         await _playerGrid.Reload();
     }
 
-    private async Task DeleteRow(User player)
+    private async Task DeleteRow(UserDao player)
     {
         if (_playerToInsert == player)
             _playerToInsert = null;
         var res = await DialogService.Confirm($"Are you sure that you want to delete {player.Username}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
         if (res == null || (bool)!res)
             return;
-        Globals.ZwooDatabase.DeleteUser(player);
+        // TODO: delete & audit
+        // _userService.DeleteUser(player);
         await _playerGrid.Reload();
     } 
     
-    private void OnUpdateRow(User player)
+    private void OnUpdateRow(UserDao player)
     {
         if (_playerToInsert == player)
             _playerToInsert = null;
-        Globals.ZwooDatabase.UpdateUser(player);
+        // TODO: audit
+        _userService.UpdateUser(player);
     }
 
-    private void OnCreateRow(User player) => Globals.ZwooDatabase.UpdateUser(player);
+    private void OnCreateRow(UserDao player) => _userService.UpdateUser(player);
 
-    private async Task ChangePlayerPassword(User player)
+    private async Task ChangePlayerPassword(UserDao player)
     {
         var res = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "470px", Height = "220px", Resizable = true, Draggable = true });
-        if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
+       // TODO: change passwor & audit
+        @* if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
         {
             if (!StringHelper.IsValidPassword(changePassword.Password))
             {
@@ -153,7 +156,7 @@
             }
             var salt = RandomNumberGenerator.GetBytes(16);
             player.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(StringHelper.HashString(Encoding.ASCII.GetBytes(changePassword.Password).Concat(salt).ToArray()))}";
-        }
+        } *@
     }
 
 }

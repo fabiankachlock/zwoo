@@ -1,6 +1,7 @@
 @page "/changelog-editor"
 @using ZwooInfoDashBoard.Pages.Dialogs
-@inject IDatabase _db;
+@inject IDatabase _db
+@inject IChangelogService _changelogService
 @inject DialogService DialogService
 
 <PageTitle>Changelog Editor</PageTitle>
@@ -17,7 +18,7 @@
                 <RadzenCheckBox Disabled="true" @bind-Value="c.Public"/>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="100px">
+        @* <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="100px">
             <Template Context="c">
                 <RadzenButton Text="Publish" @bind-Enabled="@(!c.Public)" Click="(() => { c.Public = true; c.Timestamp = (ulong)DateTimeOffset.Now.ToUnixTimeSeconds(); Globals.ZwooDatabase.UpdateChangelog(c); })"/>
             </Template>
@@ -26,10 +27,15 @@
             <Template Context="c">
                 <RadzenButton Text="Unpublish" @bind-Enabled="@c.Public" Click="(() => { c.Public = false; c.Timestamp = 1; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
             </Template>
+        </RadzenDataGridColumn> *@
+        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="100px">
+            <Template Context="changelog">
+                <RadzenSwitch @bind-Value=@changelog.Public Change=@(args => OnIsPublicChange(changelog, args))/>
+            </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="ChangelogDao" Property="Changelog" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="220px">
             <Template Context="changelog">
-                <RadzenButton Text="Edit Changelog" Icon="edit" Click="@(() => DialogService.Open<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true }))"/>
+                <RadzenButton Text="Edit Changelog" Icon="edit" Click=@(args => OnEdit(changelog))/>
             </Template>
         </RadzenDataGridColumn>
     </Columns>
@@ -42,7 +48,21 @@
     }
     RadzenDataGrid<ChangelogDao> _grid = null!;
 
-    protected override void OnInitialized() => DialogService.OnClose += ((o) => _grid.Reload());
+    protected override void OnInitialized()
+    {
+        DialogService.OnClose += ((o) => _grid.Reload());
+    }
+
+    private void OnIsPublicChange(ChangelogDao changelog, bool? value)
+    {
+        changelog.Public = value ?? false;
+        _changelogService.UpdateChangelog(changelog);
+    }
+
+    private void OnEdit(ChangelogDao changelog)
+    {
+        DialogService.Open<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true });
+    }
     
     private async Task CreateVersion()
     {

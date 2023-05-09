@@ -1,46 +1,47 @@
 @page "/games-overview"
+@inject IDatabase _db
 
 <PageTitle>Games Overview</PageTitle>
-
-@using ZwooInfoDashBoard.Data
-@using ZwooDatabaseClasses
-
 <h1>Games Overview</h1>
 <p>Tabel with all Played Games and the Scores of every Player.</p>
 
 <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
                 ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
-                TItem="GameInfo" Data="_gameInfos" @ref="_gamesDataGrid" AllowVirtualization="true">
+                TItem="GameInfoDao" Data="_gameInfos" @ref="_gamesDataGrid" AllowVirtualization="true">
     <Template Context="info">
         <p>Scoreboard:</p>
-        <RadzenDataGrid TItem="PlayerScore" Data="info.Scores">
+        <RadzenDataGrid TItem="PlayerScoreDao" Data="info.Scores">
             <Columns>
-                <RadzenDataGridColumn TItem="PlayerScore" Property="Score" Title="Score"/>
-                <RadzenDataGridColumn TItem="PlayerScore" Property="PlayerUsername" Title="Name"/>
-                <RadzenDataGridColumn TItem="PlayerScore" Property="IsBot" Title="IsBot"/>
+                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="Score" Title="Score"/>
+                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="PlayerUsername" Title="Name"/>
+                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="IsBot" Title="IsBot"/>
             </Columns>
         </RadzenDataGrid>
     </Template>
     <Columns>
-        <RadzenDataGridColumn TItem="GameInfo" Property="GameId" Title="ID"/>
-        <RadzenDataGridColumn TItem="GameInfo" Property="GameName" Title="Name"/>
-        <RadzenDataGridColumn TItem="GameInfo" Property="TimeStamp" Title="Time">
+        <RadzenDataGridColumn TItem="GameInfoDao" Property="GameId" Title="ID"/>
+        <RadzenDataGridColumn TItem="GameInfoDao" Property="GameName" Title="Name"/>
+        <RadzenDataGridColumn TItem="GameInfoDao" Property="TimeStamp" Title="Time">
             <Template Context="info">
                 @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="GameInfo" Property="IsPublic" Title="Public">
+        <RadzenDataGridColumn TItem="GameInfoDao" Property="IsPublic" Title="Public">
             <Template Context="info">
                 <RadzenCheckBox Disabled="true" Value="info.IsPublic"/>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="GameInfo" Property="Winner" Title="Winner" Sortable="false" Filterable="false"/>
+        <RadzenDataGridColumn TItem="GameInfoDao" Property="Winner" Title="Winner" Sortable="false" Filterable="false"/>
     </Columns>
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<GameInfo> _gameInfos = Globals.ZwooDatabase.GetPlayedGamesAsQueryable();
-    private RadzenDataGrid<GameInfo> _gamesDataGrid = null!;
+    private IQueryable<GameInfoDao> _gameInfos 
+    {
+        get => _db.GamesInfo.AsQueryable();
+    }
+
+    private RadzenDataGrid<GameInfoDao> _gamesDataGrid = null!;
     
-    private void RenderRow(RowRenderEventArgs<GameInfo> args) => args.Expandable = true;
+    private void RenderRow(RowRenderEventArgs<GameInfoDao> args) => args.Expandable = true;
 }

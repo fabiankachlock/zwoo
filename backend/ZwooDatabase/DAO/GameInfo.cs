@@ -45,6 +45,9 @@ public class GameInfoDao : IDocument
     [BsonElement("scores")]
     public List<PlayerScoreDao> Scores = null!;
 
+    /// <summary>
+    /// time in unix seconds
+    /// </summary>
     [BsonElement("timestamp")]
     public ulong TimeStamp { set; get; } = 0;
 
