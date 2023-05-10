@@ -22,7 +22,7 @@ builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
 builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
 builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IChangelogService, ChangelogService>(); // add update method
+builder.Services.AddSingleton<IChangelogService, ChangelogService>();
 builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
 
 // migrations
@@ -41,6 +41,7 @@ builder.Services.AddMigration(new MongoMigrationSettings
 });
 
 // services
+builder.Services.AddSingleton<IAuthService, AuthService>();
 
 var app = builder.Build();
 

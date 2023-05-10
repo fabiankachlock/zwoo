@@ -1,11 +1,14 @@
 @inject IDatabase _db
 @inject IUserService _userService
+@inject IAuthService _auth
 @inject DialogService DialogService
 
 <RadzenCard>
+@if(_player != null)
+{
     <div class="d-flex flex-row">
         <h3>@_player.Username</h3>
-        @if (_player.Verified)
+        @if (_player.Verified == true)
         {
             <RadzenIcon Icon="check_circle_outline" IconStyle="IconStyle.Success" Style="margin-left: 5px; margin-bottom: 5px"/>
         }
@@ -23,6 +26,7 @@
     {
         <p>@($"Betacode: {_player.BetaCode}")</p>
     }
+}    
 </RadzenCard>
 
 <RadzenTabs>
@@ -47,7 +51,7 @@
         </RadzenTabsItem>
         <RadzenTabsItem Text="Sessions">
             <RadzenDataGrid AllowFiltering="false" AllowGrouping="false" AllowSorting="false" AllowPaging="true" PageSize="20"
-                            TItem="string" Data="_player?.Sid" AllowVirtualization="true" @ref="_playerSidGrid">
+                            TItem="string" Data="_player?.Sid" AllowVirtualization="true">
                 <Columns>
                     <RadzenDataGridColumn TItem="string" Property="this" Title="Session ID"/>
                     <RadzenDataGridColumn TItem="string" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
@@ -97,39 +101,38 @@
 @code {
     [Parameter] public ulong Id { set; get; }
 
-    private UserDao? _player
-    {
-        get => _userService.GetUserById(Id);
-    }
-
-    private IEnumerable<AccountEventDao> _events
-    {
-        get => _db.AccountEvents.AsQueryable().Where(e => e.PlayerID == Id);
-    }
+    private UserDao? _player { get; set; } = null;
+    private IEnumerable<AccountEventDao> _events { get; set; } = new List<AccountEventDao>();
+    
     private IEnumerable<GameInfoDao> _gamesPlayed
     {
         get => _db.GamesInfo.AsQueryable().Where(x => x.Scores.Any(z => _player != null && _player.Username == z.PlayerUsername));
     }
 
-    RadzenDataGrid<string> _playerSidGrid = new RadzenDataGrid<string>();
-    
-    @* protected override void OnInitialized()
+    protected override void OnInitialized()
     {
-        _player = Globals.ZwooDatabase.GetUser(Id);
-        _events = Globals.ZwooDatabase.GetUserAccountEvents(Id);
-        _gamesPlayed = Globals.ZwooDatabase.GetPlayedGamesAsQueryable().Where(x => x.Scores.Any(x => x.PlayerUsername == _player.Username));
-    } *@
+        base.OnInitialized();
+        _load();
+    }
 
+    private void _load()
+    {
+        _player = _userService.GetUserById(Id);
+        _events = _db.AccountEvents.AsQueryable().Where(e => e.PlayerID == Id);
+        StateHasChanged();
+    }
+    
+    
     private async void DeleteRow(string sid)
     {
-        // TODO: audit & co
-        @* var res = await DialogService.Confirm($"Are you sure that you want to delete {_player.Username}s sid?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
-        if (res == null || (bool)!res)
-            return;
-        _player.Sid.Remove(sid);
-        Globals.ZwooDatabase.UpdateUser(_player);
-        await _playerSidGrid.Reload(); *@
+        if (_player == null) return;
+        var res = await DialogService.Confirm($"Are you sure that you want to delete the session id {sid} of user {_player.Username}", "Delete Session ID", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (res != true) return;
+
+        _userService.LogoutUser(_player, sid,  AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("deleted user session"));
+        _load();
     }
     
     private void RenderRow(RowRenderEventArgs<GameInfoDao> args) => args.Expandable = true;
 }
+
