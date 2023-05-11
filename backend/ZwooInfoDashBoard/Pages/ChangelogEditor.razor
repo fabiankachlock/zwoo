@@ -1,5 +1,4 @@
 @page "/changelog-editor"
-@using ZwooInfoDashBoard.Pages.Dialogs
 @inject IDatabase _db
 @inject IChangelogService _changelogService
 @inject DialogService DialogService
@@ -18,16 +17,6 @@
                 <RadzenCheckBox Disabled="true" @bind-Value="c.Public"/>
             </Template>
         </RadzenDataGridColumn>
-        @* <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="100px">
-            <Template Context="c">
-                <RadzenButton Text="Publish" @bind-Enabled="@(!c.Public)" Click="(() => { c.Public = true; c.Timestamp = (ulong)DateTimeOffset.Now.ToUnixTimeSeconds(); Globals.ZwooDatabase.UpdateChangelog(c); })"/>
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="110px">
-            <Template Context="c">
-                <RadzenButton Text="Unpublish" @bind-Enabled="@c.Public" Click="(() => { c.Public = false; c.Timestamp = 1; Globals.ZwooDatabase.UpdateChangelog(c); })"/>
-            </Template>
-        </RadzenDataGridColumn> *@
         <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="100px">
             <Template Context="changelog">
                 <RadzenSwitch @bind-Value=@changelog.Public Change=@(args => OnIsPublicChange(changelog, args))/>
