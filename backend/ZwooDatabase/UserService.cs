@@ -208,7 +208,7 @@ public class UserService : IUserService
             return false;
         }
 
-        _db.Users.DeleteOne(user => user.Id == user.Id);
+        _db.Users.DeleteOne(u => u.Id == user.Id);
         _accountEvents.DeleteAttempt(user, true);
         _audits.Protocol(_audits.GetAuditId(user), AuditOptions.CreateEvent(auditOptions, new AuditEventDao()
         {
@@ -223,7 +223,7 @@ public class UserService : IUserService
     public bool DeleteUserAdmin(UserDao user, AuditOptions? auditOptions = null)
     {
         _logger.Debug($"deleting user {user.Id} as admin");
-        _db.Users.DeleteOne(user => user.Id == user.Id);
+        _db.Users.DeleteOne(u => u.Id == user.Id);
         _accountEvents.DeleteAttempt(user, true);
         _audits.Protocol(_audits.GetAuditId(user), AuditOptions.CreateEvent(auditOptions, new AuditEventDao()
         {

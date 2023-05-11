@@ -129,6 +129,7 @@
         if (res == null || (bool)!res)
             return;
 
+        Console.WriteLine(player.Id);
         _userService.DeleteUserAdmin(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("deleted user in admin dashboard"));
         await _playerGrid.Reload();
     } 
