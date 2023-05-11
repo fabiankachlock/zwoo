@@ -35,6 +35,12 @@ public interface IUserService
     /// <param name="password">teh users password</param>
     public bool DeleteUser(UserDao user, string password, AuditOptions? auditOptions = null);
 
+    /// <summary>
+    /// delete an user as an admin
+    /// </summary>
+    /// <param name="user">the user to delete</param>
+    public bool DeleteUserAdmin(UserDao user, AuditOptions? auditOptions = null);
+
 
     /// <summary>
     /// query a user by its id
@@ -99,6 +105,13 @@ public interface IUserService
     /// <param name="newPassword">the users new password</param>
     /// <param name="sid">the current session od the user</param>
     public bool ChangePassword(UserDao user, string oldPassword, string newPassword, string sid, AuditOptions? auditOptions = null);
+
+    /// <summary>
+    /// change the password of an user as an admin in ziad
+    /// </summary>
+    /// <param name="user">the user to change the password of</param>
+    /// <param name="newPassword">the users new password</param>
+    public bool ChangePasswordAdmin(UserDao user, string newPassword, AuditOptions? auditOptions = null);
 
     /// <summary>
     /// request a password change of an user
@@ -194,6 +207,21 @@ public class UserService : IUserService
             return false;
         }
 
+        _db.Users.DeleteOne(user => user.Id == user.Id);
+        _accountEvents.DeleteAttempt(user, true);
+        _audits.Protocol(_audits.GetAuditId(user), AuditOptions.CreateEvent(auditOptions, new AuditEventDao()
+        {
+            Actor = AuditActor.User(user.Id, ""),
+            Message = "deleted the users account",
+            NewValue = user,
+            OldValue = user
+        }));
+        return true;
+    }
+
+    public bool DeleteUserAdmin(UserDao user, AuditOptions? auditOptions = null)
+    {
+        _logger.Debug($"deleting user {user.Id} as admin");
         _db.Users.DeleteOne(user => user.Id == user.Id);
         _accountEvents.DeleteAttempt(user, true);
         _audits.Protocol(_audits.GetAuditId(user), AuditOptions.CreateEvent(auditOptions, new AuditEventDao()
@@ -312,18 +340,30 @@ public class UserService : IUserService
     public bool ChangePassword(UserDao user, string oldPassword, string newPassword, string sid, AuditOptions? auditOptions = null)
     {
         _logger.Debug($"changing password of {user.Id}");
-        if (StringHelper.CheckPassword(oldPassword, user.Password))
+        if (!StringHelper.CheckPassword(oldPassword, user.Password))
         {
-            var salt = RandomNumberGenerator.GetBytes(16);
-            var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
-            user.Sid = new List<string> { sid };
-            user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
-
-            var res = UpdateUser(user, new AuditOptions(AuditActor.User(user.Id, sid), "changed password").Merge(auditOptions));
-            return res != null;
+            _logger.Warn($"changing password of {user.Id} failed - wrong password");
+            return false;
         }
-        _logger.Warn($"changing password of {user.Id} failed - wrong password");
-        return false;
+        var salt = RandomNumberGenerator.GetBytes(16);
+        var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
+        user.Sid = new List<string> { sid };
+        user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
+
+        var res = UpdateUser(user, new AuditOptions(AuditActor.User(user.Id, sid), "changed password").Merge(auditOptions));
+        return res != null;
+    }
+
+    public bool ChangePasswordAdmin(UserDao user, string newPassword, AuditOptions? auditOptions = null)
+    {
+        _logger.Debug($"changing password of {user.Id} as admin");
+        var salt = RandomNumberGenerator.GetBytes(16);
+        var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
+        user.Sid = new List<string>();
+        user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
+
+        var res = UpdateUser(user, AuditOptions.WithMessage("changed password as admin").Merge(auditOptions));
+        return res != null;
     }
 
     public UserDao? RequestChangePassword(string email, AuditOptions? auditOptions = null)

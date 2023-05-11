@@ -1,6 +1,8 @@
 @page "/players"
+@using BackendHelper
 @inject IDatabase _db
 @inject IUserService _userService
+@inject IAuthService _auth
 @inject DialogService DialogService
 
 <PageTitle>Players</PageTitle>
@@ -96,8 +98,7 @@
 
     private async void InsertRow()
     {
-        // TODO: Audit options
-        _playerToInsert = _userService.CreateUser("NewUser", "example@test.com", "DEFAULT", null);
+        _playerToInsert = _userService.CreateUser("NewUser", "example@test.com", "", null, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("created user in admin dashboard"));
         _newPlayer = true;
         await _playerGrid.InsertRow(_playerToInsert);
     }
@@ -127,8 +128,8 @@
         var res = await DialogService.Confirm($"Are you sure that you want to delete {player.Username}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
         if (res == null || (bool)!res)
             return;
-        // TODO: delete & audit
-        // _userService.DeleteUser(player);
+
+        _userService.DeleteUserAdmin(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("deleted user in admin dashboard"));
         await _playerGrid.Reload();
     } 
     
@@ -136,26 +137,23 @@
     {
         if (_playerToInsert == player)
             _playerToInsert = null;
-        // TODO: audit
-        _userService.UpdateUser(player);
+        _userService.UpdateUser(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("updated user data in admin dashboard"));
     }
 
-    private void OnCreateRow(UserDao player) => _userService.UpdateUser(player);
+    private void OnCreateRow(UserDao player) => _userService.UpdateUser(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("updated user data in admin dashboard"));
 
     private async Task ChangePlayerPassword(UserDao player)
     {
         var res = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "470px", Height = "220px", Resizable = true, Draggable = true });
-       // TODO: change passwor & audit
-        @* if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
+        if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
         {
             if (!StringHelper.IsValidPassword(changePassword.Password))
             {
                 await DialogService.Confirm("Invalid Password");
                 return;
             }
-            var salt = RandomNumberGenerator.GetBytes(16);
-            player.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(StringHelper.HashString(Encoding.ASCII.GetBytes(changePassword.Password).Concat(salt).ToArray()))}";
-        } *@
+            _userService.ChangePasswordAdmin(player, changePassword.Password, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("changed password in admin dashboard"));
+        }
     }
 
 }

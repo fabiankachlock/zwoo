@@ -2,6 +2,7 @@
 @inject IDatabase _db;
 @inject IUserService _userService;
 @inject IAuditTrailService _auditTrails;
+@inject IAuthService _auth;
 @inject DialogService DialogService
 
 <PageTitle>Deleted Accounts</PageTitle>
@@ -80,11 +81,11 @@
             Wins = player.UserData.Wins,
             Verified  = true,
         };
-        // TODO: access the current staff memeber here
+
         _db.Users.InsertOne(user);
         _auditTrails.Protocol(_auditTrails.GetAuditId(user), new AuditEventDao(){
-            Actor = AuditActor.System,
-            Message = "restired user account",
+            Actor = AuditActor.Staff(_auth.Username),
+            Message = "restored user account in admin dashboard",
             NewValue = user,
             OldValue = null,
         });
