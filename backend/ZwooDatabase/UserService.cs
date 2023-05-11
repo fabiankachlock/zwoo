@@ -148,8 +148,9 @@ public class UserService : IUserService
     public UserDao CreateUser(string username, string email, string password, string? betaCode, AuditOptions? auditOptions = null)
     {
         var code = StringHelper.GenerateNDigitString(6);
-        ulong id = _db.Users.AsQueryable().Any() ? _db.Users.AsQueryable().Max(x => x.Id) + 1 : 1;
-        id += (ulong)_db.AccountEvents.AsQueryable().Where(evt => evt.UserData != null).Count();
+        ulong maxId = _db.Users.AsQueryable().Any() ? _db.Users.AsQueryable().Max(x => x.Id) : 0;
+        ulong deletedId = _db.AccountEvents.AsQueryable().Where(evt => evt.UserData != null).Any() ? _db.AccountEvents.AsQueryable().Where(evt => evt.UserData != null).Max(evt => evt.UserData!.Id) : 0;
+        ulong id = maxId > deletedId ? maxId + 1 : deletedId + 1;
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
         _logger.Info($"creating new user with id {id}");

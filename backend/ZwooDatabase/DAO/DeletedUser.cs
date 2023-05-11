@@ -22,6 +22,7 @@ public class DeletedUserDao
     [BsonConstructor]
     public DeletedUserDao(ulong id, string username, string email, string password, uint wins, ulong timestamp)
     {
+        Id = id;
         Username = username;
         Email = email;
         Password = password;
@@ -30,7 +31,7 @@ public class DeletedUserDao
     }
 
     [BsonElement("_id")]
-    public UInt64 Id { set; get; }
+    public UInt64 Id { set; get; } = 0;
 
     [BsonElement("username")]
     public string Username { set; get; } = "";

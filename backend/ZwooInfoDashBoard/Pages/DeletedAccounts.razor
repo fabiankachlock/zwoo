@@ -9,7 +9,7 @@
 
 <h1>Deleted Accounts</h1>
 
-<RadzenDataGrid TItem="AccountEventDao" Data="_events">
+<RadzenDataGrid TItem="AccountEventDao" Data="_events" @ref="_grid">
     <Columns>
         <RadzenDataGridColumn TItem="AccountEventDao" Property="PlayerID" Title="Id"/>
         <RadzenDataGridColumn TItem="AccountEventDao" Property="Success" Title="Success">
@@ -46,8 +46,10 @@
 @code {
     private IQueryable<AccountEventDao> _events 
     {
-        get => _db.AccountEvents.AsQueryable().Where(x => x.EventType == "delete");
+        get => _db.AccountEvents.AsQueryable().Where(x => x.EventType == "delete" && x.UserData != null);
     }
+
+    RadzenDataGrid<AccountEventDao> _grid = new RadzenDataGrid<AccountEventDao>();
 
     private async void RestoreAccount(AccountEventDao player)
     {
@@ -81,14 +83,17 @@
             Wins = player.UserData.Wins,
             Verified  = true,
         };
+        player.UserData = null;
 
         _db.Users.InsertOne(user);
+        _db.AccountEvents.ReplaceOne(e => e.Id == player.Id, player);
         _auditTrails.Protocol(_auditTrails.GetAuditId(user), new AuditEventDao(){
             Actor = AuditActor.Staff(_auth.Username),
             Message = "restored user account in admin dashboard",
             NewValue = user,
             OldValue = null,
         });
+        await _grid.Reload();
     }
 
 }
