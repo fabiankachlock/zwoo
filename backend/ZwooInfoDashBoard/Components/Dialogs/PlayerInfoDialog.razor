@@ -1,6 +1,7 @@
 @inject IDatabase _db
 @inject IUserService _userService
 @inject IAuthService _auth
+@inject IAuditTrailService _auditService
 @inject DialogService DialogService
 
 <RadzenCard>
@@ -95,6 +96,24 @@
                 </Columns>
             </RadzenDataGrid>
         </RadzenTabsItem>
+        <RadzenTabsItem Text="Audit Events">
+            <RadzenDataGrid AllowFiltering="true" AllowGrouping="false" AllowSorting="true" AllowPaging="true" PageSize="25"
+                            ExpandMode="DataGridExpandMode.Single" RowRender="@RenderAudit"
+                            TItem="AuditEventDao" Data="_audits" AllowVirtualization="true">
+                <Template Context="evt">
+                    <p>ID: @evt.Id</p>
+                </Template>
+                <Columns>
+                    <RadzenDataGridColumn TItem="AuditEventDao" Property="Timestamp" Title="Time">
+                        <Template Context="evt">
+                            @DateTimeOffset.FromUnixTimeMilliseconds((long)evt.Timestamp).ToString("dd.MM.yy HH:mm:ss")
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="AuditEventDao" Property="Actor" Title="Actor"/>
+                    <RadzenDataGridColumn TItem="AuditEventDao" Property="Message" Title="Message" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenTabsItem>
     </Tabs>
 </RadzenTabs>
 
@@ -103,6 +122,7 @@
 
     private UserDao? _player { get; set; } = null;
     private IEnumerable<AccountEventDao> _events { get; set; } = new List<AccountEventDao>();
+    private IEnumerable<AuditEventDao> _audits { get; set; } = new List<AuditEventDao>();
     
     private IEnumerable<GameInfoDao> _gamesPlayed
     {
@@ -118,7 +138,11 @@
     private void _load()
     {
         _player = _userService.GetUserById(Id);
-        _events = _db.AccountEvents.AsQueryable().Where(e => e.PlayerID == Id);
+        if (_player != null)
+        {
+            _events = _db.AccountEvents.AsQueryable().Where(e => e.PlayerID == Id);
+            _audits = _auditService.GetProtocol(_auditService.GetAuditId(_player))?.Events ?? new();
+        }
         StateHasChanged();
     }
     
@@ -134,5 +158,6 @@
     }
     
     private void RenderRow(RowRenderEventArgs<GameInfoDao> args) => args.Expandable = true;
+    private void RenderAudit(RowRenderEventArgs<AuditEventDao> args) => args.Expandable = true;
 }
 
