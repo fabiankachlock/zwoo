@@ -83,18 +83,27 @@
 
 
 @code {
-    IQueryable<UserDao> _players
-    {
-        get => _db.Users.AsQueryable();
-    }
+    IQueryable<UserDao>? _players;
 
     RadzenDataGrid<UserDao> _playerGrid = new RadzenDataGrid<UserDao>();
     UserDao? _playerToInsert = null;
     bool _newPlayer = false;
 
+    protected override Task OnInitializedAsync()
+    {
+        _players = _db.Users.AsQueryable();
+        return base.OnInitializedAsync();
+    }
+
+    
     private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
 
-    async Task EditRow(UserDao player) => await _playerGrid.EditRow(player);
+    async Task EditRow(UserDao player)
+    {
+         Console.WriteLine(_playerGrid.IsRowInEditMode(player));
+         await _playerGrid.EditRow(player);
+         Console.WriteLine(_playerGrid.IsRowInEditMode(player));
+    }
 
     private async void InsertRow()
     {
@@ -158,3 +167,4 @@
     }
 
 }
+

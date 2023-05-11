@@ -12,12 +12,7 @@
                                TItem="ChangelogDao" Data="_changelogs" AllowVirtualization="true">
     <Columns>
         <RadzenDataGridColumn TItem="ChangelogDao" Property="ChangelogVersion" Title="Version"/>
-        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="Public" Width="60px" Filterable="false">
-            <Template Context="c">
-                <RadzenCheckBox Disabled="true" @bind-Value="c.Public"/>
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="" Filterable="false" Width="100px">
+        <RadzenDataGridColumn TItem="ChangelogDao" Property="Public" Title="Public" Filterable="false" Width="100px">
             <Template Context="changelog">
                 <RadzenSwitch @bind-Value=@changelog.Public Change=@(args => OnIsPublicChange(changelog, args))/>
             </Template>
