@@ -2,8 +2,8 @@
 @inject IDatabase _db
 
 <PageTitle>Games Overview</PageTitle>
+
 <h1>Games Overview</h1>
-<p>Tabel with all Played Games and the Scores of every Player.</p>
 
 <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
                 ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
@@ -40,12 +40,13 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<GameInfoDao> _gameInfos 
+    private IQueryable<GameInfoDao> _gameInfos  = new List<GameInfoDao>().AsQueryable();
+    private RadzenDataGrid<GameInfoDao> _gamesDataGrid = new RadzenDataGrid<GameInfoDao>();
+    
+    protected override void OnInitialized()
     {
-        get => _db.GamesInfo.AsQueryable();
+        _gameInfos = _db.GamesInfo.AsQueryable();
     }
 
-    private RadzenDataGrid<GameInfoDao> _gamesDataGrid = null!;
-    
     private void RenderRow(RowRenderEventArgs<GameInfoDao> args) => args.Expandable = true;
 }

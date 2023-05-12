@@ -6,10 +6,10 @@
 @inject DialogService DialogService
 
 <PageTitle>Players</PageTitle>
-<h1>Players</h1>
-<p>List of All Players.</p>
 
-<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(_playerToInsert != null)/>
+<h1>Players</h1>
+
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(_newPlayer != null)/>
 <RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
                 TItem="UserDao" Data="_players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
                 @ref="_playerGrid" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
@@ -83,79 +83,68 @@
 
 
 @code {
-    IQueryable<UserDao>? _players;
+    private IQueryable<UserDao> _players = new List<UserDao>().AsQueryable();
+    private RadzenDataGrid<UserDao> _playerGrid = new RadzenDataGrid<UserDao>();
+    private UserDao? _newPlayer = null;
 
-    RadzenDataGrid<UserDao> _playerGrid = new RadzenDataGrid<UserDao>();
-    UserDao? _playerToInsert = null;
-    bool _newPlayer = false;
-
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         _players = _db.Users.AsQueryable();
-        return base.OnInitializedAsync();
     }
 
     
     private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
 
-    async Task EditRow(UserDao player)
-    {
-         Console.WriteLine(_playerGrid.IsRowInEditMode(player));
-         await _playerGrid.EditRow(player);
-         Console.WriteLine(_playerGrid.IsRowInEditMode(player));
-    }
+    private async Task EditRow(UserDao player) => await _playerGrid.EditRow(player);
 
     private async void InsertRow()
     {
-        _playerToInsert = _userService.CreateUser("NewUser", "example@test.com", "", null, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("created user in admin dashboard"));
-        _newPlayer = true;
-        await _playerGrid.InsertRow(_playerToInsert);
+        _newPlayer = _userService.CreateUser("NewUser", "example@test.com", "", null, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("created user in admin dashboard"));
+        await _playerGrid.InsertRow(_newPlayer);
     }
     
     private void SaveRow(UserDao player)
     {
-        if (_playerToInsert == player)
-            _playerToInsert = null;
-        _newPlayer = false;
         _playerGrid.UpdateRow(player);
+        _newPlayer = null;
     }
 
     private async Task CancelEdit(UserDao player)
     {
-        if (_playerToInsert == player)
-            _playerToInsert = null;
-        if (_newPlayer == true)
+        if (_newPlayer != null)
+        {
             await DeleteRow(player);
+        }
+
+        _newPlayer = null;
         _playerGrid.CancelEditRow(player);
         await _playerGrid.Reload();
     }
 
     private async Task DeleteRow(UserDao player)
     {
-        if (_playerToInsert == player)
-            _playerToInsert = null;
-        var res = await DialogService.Confirm($"Are you sure that you want to delete {player.Username}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
-        if (res == null || (bool)!res)
-            return;
+        var result = await DialogService.Confirm($"Are you sure that you want to delete {player.Username}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (result == null || (bool)!result) return;
 
-        Console.WriteLine(player.Id);
         _userService.DeleteUserAdmin(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("deleted user in admin dashboard"));
         await _playerGrid.Reload();
     } 
     
     private void OnUpdateRow(UserDao player)
     {
-        if (_playerToInsert == player)
-            _playerToInsert = null;
         _userService.UpdateUser(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("updated user data in admin dashboard"));
     }
 
-    private void OnCreateRow(UserDao player) => _userService.UpdateUser(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("updated user data in admin dashboard"));
+    private void OnCreateRow(UserDao player) 
+    {
+        _userService.UpdateUser(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("updated user data in admin dashboard"));
+        _newPlayer = null;
+    }
 
     private async Task ChangePlayerPassword(UserDao player)
     {
-        var res = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "470px", Height = "220px", Resizable = true, Draggable = true });
-        if (res is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
+        var result = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "470px", Height = "220px", Resizable = true, Draggable = true });
+        if (result is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
         {
             if (!StringHelper.IsValidPassword(changePassword.Password))
             {

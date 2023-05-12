@@ -5,7 +5,6 @@
 <PageTitle>Betacodes</PageTitle>
 
 <h1>Beta Codes</h1>
-<p>List of All Betacodes.</p>
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Code" Click="@InsertBetaCode"/>
 <RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="_grid"
@@ -17,16 +16,17 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<BetaCodeDao> _codes 
+    private IQueryable<BetaCodeDao> _codes  = new List<BetaCodeDao>().AsQueryable();
+    private RadzenDataGrid<BetaCodeDao> _grid = new RadzenDataGrid<BetaCodeDao>();
+
+    protected override void OnInitialized()
     {
-        get => _db.BetaCodes.AsQueryable();
+        _codes = _db.BetaCodes.AsQueryable();
     }
 
-    RadzenDataGrid<BetaCodeDao> _grid = null!;
     private async Task InsertBetaCode()
     {
         await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true });
         await _grid.Reload();
     }
-
 }

@@ -44,17 +44,18 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<AccountEventDao> _events 
-    {
-        get => _db.AccountEvents.AsQueryable().Where(x => x.EventType == "delete" && x.UserData != null);
-    }
+    private IQueryable<AccountEventDao> _events = new List<AccountEventDao>().AsQueryable();
+    private RadzenDataGrid<AccountEventDao> _grid = new RadzenDataGrid<AccountEventDao>();
 
-    RadzenDataGrid<AccountEventDao> _grid = new RadzenDataGrid<AccountEventDao>();
+    protected override void OnInitialized()
+    {
+        _events = _db.AccountEvents.AsQueryable().Where(x => x.EventType == "delete" && x.UserData != null);
+    }
 
     private async void RestoreAccount(AccountEventDao player)
     {
-        var r = await DialogService.Confirm($"Do you really want to restore {player.UserData!.Username}s account?");
-        if (r == null || !r.Value)
+        var result = await DialogService.Confirm($"Do you really want to restore {player.UserData!.Username}s account?");
+        if (result == null || !result.Value)
         {
             return;
         }
@@ -95,5 +96,4 @@
         });
         await _grid.Reload();
     }
-
 }

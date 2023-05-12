@@ -24,8 +24,10 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<AccountEventDao> _events
+    private IQueryable<AccountEventDao> _events = new List<AccountEventDao>().AsQueryable();
+
+    protected override void OnInitialized()
     {
-        get =>  _db.AccountEvents.AsQueryable();
+        _events = _db.AccountEvents.AsQueryable();
     }
 }

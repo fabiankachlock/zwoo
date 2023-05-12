@@ -4,10 +4,10 @@
 @inject DialogService DialogService
 
 <PageTitle>Changelog Editor</PageTitle>
+
 <h1>Changelog Editor</h1>
 
 <RadzenButton Icon="add_circle_outline" Text="Add Version Changelog" Click="CreateVersion" style="margin-bottom: 10px"/>
-
 <RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="_grid"
                                TItem="ChangelogDao" Data="_changelogs" AllowVirtualization="true">
     <Columns>
@@ -26,14 +26,12 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<ChangelogDao> _changelogs
-    {
-        get => _db.Changelogs.AsQueryable();
-    }
-    RadzenDataGrid<ChangelogDao> _grid = null!;
+    private IQueryable<ChangelogDao> _changelogs = new List<ChangelogDao>().AsQueryable();
+    private RadzenDataGrid<ChangelogDao> _grid = new RadzenDataGrid<ChangelogDao>();
 
     protected override void OnInitialized()
     {
+        _changelogs = _db.Changelogs.AsQueryable();
         DialogService.OnClose += ((o) => _grid.Reload());
     }
 
