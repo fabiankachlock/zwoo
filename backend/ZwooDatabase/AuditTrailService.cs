@@ -39,6 +39,7 @@ public interface IAuditTrailService
     /// </summary>
     /// <param name="user">the user for which the id should get created</param>
     public string GetAuditId(UserDao user);
+    public string GetAuditId(DeletedUserDao user);
 }
 
 public class AuditTrailService : IAuditTrailService
@@ -86,6 +87,11 @@ public class AuditTrailService : IAuditTrailService
     }
 
     public string GetAuditId(UserDao user)
+    {
+        return user.Id.ToString();
+    }
+
+    public string GetAuditId(DeletedUserDao user)
     {
         return user.Id.ToString();
     }
