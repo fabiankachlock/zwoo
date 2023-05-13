@@ -102,7 +102,15 @@
                             TItem="AuditEventDao" Data="_audits" AllowVirtualization="true">
                 <Template Context="evt">
                     <p>ID: @evt.Id</p>
-                    <ObjectView ObjectData="@evt.NewValue"/>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr">
+                        <ObjectView ObjectData="@evt.NewValue" DiffTo="@evt.OldValue"/>
+                        @if (evt.OldValue != null) {
+                            <ObjectView ObjectData="@evt.OldValue" DiffTo="@evt.NewValue" IsDiffPositive="@false"/>
+                        }
+                        else {
+                            @("<null>");
+                        }
+                    </div>
                 </Template>
                 <Columns>
                     <RadzenDataGridColumn TItem="AuditEventDao" Property="Timestamp" Title="Time">

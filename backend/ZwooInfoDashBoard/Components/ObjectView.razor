@@ -3,7 +3,7 @@
 @if (IsChild != true)
 {
 <RadzenTree>
-    <ObjectView ObjectData="@ObjectData" IsChild="@true"/>
+    <ObjectView ObjectData="@ObjectData" DiffTo="@DiffTo" IsDiffPositive="@IsDiffPositive" IsChild="@true"/>
 </RadzenTree>
 }
 else 
@@ -23,8 +23,8 @@ else
                     <span>@item.Key</span>
                     @if (item.Value != null)
                     {
-                        <span> : </span>
-                        <span>@item.Value</span>
+                        <span style="margin: 0 4px">@(item.Key != "" ? ":" : "-")</span>
+                        <span style=@GetStyle(item.State)>@item.Value</span>
                     }
                 </Template>
             </RadzenTreeItem>
@@ -36,8 +36,8 @@ else
                     <span>@item.Key</span>
                     @if (item.Value != null)
                     {
-                        <span>@(item.Key != "" ? " : " : "- ")</span>
-                        <span>@item.Value</span>
+                        <span style="margin: 0 4px">@(item.Key != "" ? ":" : "-")</span>
+                        <span style=@GetStyle(item.State)>@item.Value</span>
                     }
                 </Template>
             </RadzenTreeItem>
@@ -47,15 +47,25 @@ else
 
 @code {
     [Parameter] public object ObjectData { set; get; } = new();
+    [Parameter] public object? DiffTo { set; get; } = null;
+    [Parameter] public bool IsDiffPositive { set; get; } = true;
     [Parameter] public bool? IsChild { set; get; } = null;
     private List<TreeData> _data = new List<TreeData>();
+
+    protected enum State
+    {
+        Nutral, Added, Changed
+    }
 
     protected struct TreeData {
         public string Key { get; set; } = "";
         public string? Value { get; set; } = null;
-        public object[] Children { get; set; } = new List<object>().ToArray();
+        public object[] Children { get; set; } = new object[0];
+        public object[] DiffChildren { get; set; } = new object[0];
 
-         public TreeData() {}
+        public State State { get; set; } = State.Nutral;
+
+        public TreeData() {}
     }
 
     protected override void OnParametersSet()
@@ -67,37 +77,65 @@ else
             _data.Add(new TreeData(){
                 Key = "",
                 Value = ObjectData.ToString() ?? "",
+                State = DiffTo == null ? State.Added 
+                    :  DiffTo != ObjectData ? State.Changed : State.Nutral,
             });
             return;
         }
 
         var properties = type.GetProperties();
+        var oldProperties = DiffTo?.GetType().GetProperties() ?? new PropertyInfo[0];
         foreach (var prop in properties)
         {
-            Console.WriteLine($"{prop.Name} : {prop.PropertyType.Name}");
+            var oldProp = oldProperties.FirstOrDefault(p => p.Name == prop.Name);
+            var value = prop.GetValue(ObjectData);
+            var oldValue = DiffTo != null ? oldProp?.GetValue(DiffTo) : null;
+            var state = oldValue == null && value != null ? State.Added : oldValue?.ToString() != value?.ToString() ? State.Changed : State.Nutral;
+
             if (prop.PropertyType.IsPrimitive)
             {
                 _data.Add(new TreeData(){
                     Key = prop.Name,
-                    Value = prop.GetValue(ObjectData)?.ToString() ?? "<null>",
+                    Value = value?.ToString() ?? "<null>",
+                    State = state,
                 });
             }
             else if (prop.PropertyType.Name == "String")
             {
                 _data.Add(new TreeData(){
                     Key = prop.Name,
-                    Value = prop.GetValue(ObjectData)?.ToString() ?? "<null>",
+                    Value = value?.ToString() ?? "<null>",
+                    State = state,
                 });
             }
-            else if (prop.PropertyType.Name.StartsWith("List")) {
-                var value =  (List<string>?)prop.GetValue(ObjectData);
+            else if (prop.PropertyType.Name.StartsWith("List") && prop.PropertyType.GetGenericArguments().First().Name == "String")
+            {
+                dynamic? dynValue = prop.GetValue(ObjectData);
+                dynamic? dynOldValue = oldProp?.GetValue(DiffTo);
                 if (value == null) continue;
                 _data.Add(new TreeData(){
                     Key = prop.Name,
-                    Children = value.ToArray(),
+                    Children = dynValue?.ToArray() ?? new object[0],
+                    DiffChildren = dynOldValue?.ToArray() ?? new object[0],
+                    State = dynOldValue == null ? State.Added 
+                        : dynValue != dynOldValue ? State.Changed : State.Nutral,
                 });
             }
         }
+    }
+
+    private string GetStyle(State state)
+    {
+        switch (state)
+        {
+            case State.Added:
+                if (IsDiffPositive) return "background-color: var(--rz-success); padding: 2px; border-radius: 3px;";
+                // -> acts as Removed State
+                return "background-color: var(--rz-danger); padding: 2px; border-radius: 3px;";
+            case State.Changed:
+                return "background-color: var(--rz-warning); padding: 2px; border-radius: 3px;";
+        }
+        return "padding: 2px; border-radius: 3px;";
     }
 }
 

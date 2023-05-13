@@ -92,7 +92,7 @@
     }
 
     
-    private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
+    private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "900px", Height = "730px", Resizable = true, Draggable = true });
 
     private async Task EditRow(UserDao player) => await _playerGrid.EditRow(player);
 
