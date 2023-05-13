@@ -1,0 +1,103 @@
+@using System.Reflection
+
+@if (IsChild != true)
+{
+<RadzenTree>
+    <ObjectView ObjectData="@ObjectData" IsChild="@true"/>
+</RadzenTree>
+}
+else 
+{
+@foreach (var item in _data)
+{
+        @if (item.Children.Length > 0)
+        {
+            <RadzenTreeItem>
+                <ChildContent>
+                    @foreach (var child in item.Children)
+                    {
+                        <ObjectView ObjectData="@child" IsChild="@true"/>
+                    }
+                </ChildContent>
+                <Template>
+                    <span>@item.Key</span>
+                    @if (item.Value != null)
+                    {
+                        <span> : </span>
+                        <span>@item.Value</span>
+                    }
+                </Template>
+            </RadzenTreeItem>
+        }
+        else 
+        {
+        <RadzenTreeItem>
+                <Template>
+                    <span>@item.Key</span>
+                    @if (item.Value != null)
+                    {
+                        <span>@(item.Key != "" ? " : " : "- ")</span>
+                        <span>@item.Value</span>
+                    }
+                </Template>
+            </RadzenTreeItem>
+        }
+}
+}
+
+@code {
+    [Parameter] public object ObjectData { set; get; } = new();
+    [Parameter] public bool? IsChild { set; get; } = null;
+    private List<TreeData> _data = new List<TreeData>();
+
+    protected struct TreeData {
+        public string Key { get; set; } = "";
+        public string? Value { get; set; } = null;
+        public object[] Children { get; set; } = new List<object>().ToArray();
+
+         public TreeData() {}
+    }
+
+    protected override void OnParametersSet()
+    {
+        _data = new List<TreeData>();
+        var type = ObjectData.GetType();
+        if (type.IsPrimitive || type.Name == "String")
+        {
+            _data.Add(new TreeData(){
+                Key = "",
+                Value = ObjectData.ToString() ?? "",
+            });
+            return;
+        }
+
+        var properties = type.GetProperties();
+        foreach (var prop in properties)
+        {
+            Console.WriteLine($"{prop.Name} : {prop.PropertyType.Name}");
+            if (prop.PropertyType.IsPrimitive)
+            {
+                _data.Add(new TreeData(){
+                    Key = prop.Name,
+                    Value = prop.GetValue(ObjectData)?.ToString() ?? "<null>",
+                });
+            }
+            else if (prop.PropertyType.Name == "String")
+            {
+                _data.Add(new TreeData(){
+                    Key = prop.Name,
+                    Value = prop.GetValue(ObjectData)?.ToString() ?? "<null>",
+                });
+            }
+            else if (prop.PropertyType.Name.StartsWith("List")) {
+                var value =  (List<string>?)prop.GetValue(ObjectData);
+                if (value == null) continue;
+                _data.Add(new TreeData(){
+                    Key = prop.Name,
+                    Children = value.ToArray(),
+                });
+            }
+        }
+    }
+}
+

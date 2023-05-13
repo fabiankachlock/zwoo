@@ -102,6 +102,7 @@
                             TItem="AuditEventDao" Data="_audits" AllowVirtualization="true">
                 <Template Context="evt">
                     <p>ID: @evt.Id</p>
+                    <ObjectView ObjectData="@evt.NewValue"/>
                 </Template>
                 <Columns>
                     <RadzenDataGridColumn TItem="AuditEventDao" Property="Timestamp" Title="Time">
