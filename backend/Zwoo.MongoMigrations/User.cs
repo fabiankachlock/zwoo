@@ -1,10 +1,10 @@
 using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
-using ZwooDatabaseClasses;
+using ZwooDatabase.Dao;
 
 namespace Zwoo.MongoMigrations;
 
-public class Beta1007User : DocumentMigration<User>
+public class Beta1007User : DocumentMigration<UserDao>
 {
     public Beta1007User() : base("1.0.0-beta.7")
     {

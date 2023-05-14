@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BackendHelper\BackendHelper.csproj" />
     <ProjectReference Include="..\Zwoo.MongoMigrations\Zwoo.MongoMigrations.csproj" />
-    <ProjectReference Include="..\ZwooDatabaseClasses\ZwooDatabaseClasses.csproj" />
     <ProjectReference Include="..\ZwooDatabase\ZwooDatabase.csproj" />
   </ItemGroup>
 
