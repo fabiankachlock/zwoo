@@ -10,7 +10,7 @@
 <h1>Players</h1>
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(_newPlayer != null)/>
-<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
+<RadzenDataGrid AllowPaging="true" PageSize="25"
                 TItem="UserDao" Data="_players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
                 @ref="_playerGrid" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
     <Columns>

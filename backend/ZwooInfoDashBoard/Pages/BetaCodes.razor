@@ -7,7 +7,7 @@
 <h1>Beta Codes</h1>
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Code" Click="@InsertBetaCode"/>
-<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="_grid"
+<RadzenDataGrid AllowPaging="true" PageSize="25" @ref="_grid"
                 TItem="BetaCodeDao" Data="_codes" AllowVirtualization="true">
     <Columns>
         <RadzenDataGridColumn TItem="BetaCodeDao" Property="Id" Title="_id"/>

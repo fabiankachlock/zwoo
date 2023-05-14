@@ -8,7 +8,7 @@
 <h1>Changelog Editor</h1>
 
 <RadzenButton Icon="add_circle_outline" Text="Add Version Changelog" Click="CreateVersion" style="margin-bottom: 10px"/>
-<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="_grid"
+<RadzenDataGrid AllowPaging="true" PageSize="25" @ref="_grid"
                                TItem="ChangelogDao" Data="_changelogs" AllowVirtualization="true">
     <Columns>
         <RadzenDataGridColumn TItem="ChangelogDao" Property="ChangelogVersion" Title="Version"/>

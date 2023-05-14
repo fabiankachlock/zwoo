@@ -5,7 +5,7 @@
 
 <h1>Games Overview</h1>
 
-<RadzenDataGrid AllowFiltering="true" AllowGrouping="true" AllowSorting="true" AllowPaging="true" PageSize="25"
+<RadzenDataGrid AllowPaging="true" PageSize="25"
                 ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
                 TItem="GameInfoDao" Data="_gameInfos" @ref="_gamesDataGrid" AllowVirtualization="true">
     <Template Context="info">
