@@ -143,14 +143,14 @@
     private async Task ChangePlayerPassword(UserDao player)
     {
         var result = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "470px", Height = "220px", Resizable = true, Draggable = true });
-        if (result is ChangeUserPasswordDialog.ChangePasswordDialogResult {ChangePassword: true } changePassword)
+        if (result is string newPassword)
         {
-            if (!StringHelper.IsValidPassword(changePassword.Password))
+            if (!StringHelper.IsValidPassword(newPassword))
             {
                 await DialogService.Confirm("Invalid Password");
                 return;
             }
-            _userService.ChangePasswordAdmin(player, changePassword.Password, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("changed password in admin dashboard"));
+            _userService.ChangePasswordAdmin(player, newPassword, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("changed password in admin dashboard"));
         }
     }
 
