@@ -108,7 +108,7 @@ else
                     State = state,
                 });
             }
-            else if (prop.PropertyType.Name.StartsWith("List") && prop.PropertyType.GetGenericArguments().First().Name == "String")
+            else if (prop.PropertyType.Name.StartsWith("List"))
             {
                 dynamic? dynValue = prop.GetValue(ObjectData);
                 dynamic? dynOldValue = oldProp?.GetValue(DiffTo);

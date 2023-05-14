@@ -110,12 +110,16 @@
         var p = _auditTrails.GetProtocol(_auditTrails.GetAuditId(player.UserData));
         if (p != null) 
         {
-            _db.AuditTrails.DeleteMany(t => t.Id == p.Id);
+            _db.AuditTrails.DeleteOne(t => t.Id == p.Id);
             foreach (var e in p.Events)
             {
                 if (e.NewValue is GameInfoDao info)
                 {
-                    info.Scores.RemoveAll(score => score.PlayerUsername == player.UserData.Username);
+                    var score = info.Scores.Find(score => score.PlayerUsername == player.UserData.Username);
+                    if (score != null)
+                    {
+                        score.PlayerUsername = "-/-";
+                    }
                     _db.GamesInfo.ReplaceOne(i => i.Id == info.Id, info);
                 }
             }

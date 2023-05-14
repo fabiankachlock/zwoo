@@ -43,7 +43,7 @@ public class GameInfoDao : IDocument
     [BsonElement("is_public")]
     public bool IsPublic { set; get; } = false;
     [BsonElement("scores")]
-    public List<PlayerScoreDao> Scores = null!;
+    public List<PlayerScoreDao> Scores { get; set; } = null!;
 
     /// <summary>
     /// time in unix seconds

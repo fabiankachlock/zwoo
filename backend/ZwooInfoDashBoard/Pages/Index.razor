@@ -68,7 +68,7 @@
                     <Columns>
                         <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Title="Position">
                             <Template Context="player">
-                                @(_leaderboard.TopPlayers.IndexOf(player)+1).
+                                @(_leaderboard.TopPlayers.IndexOf(player) + 1).
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Property="Username" Title="Name"/>
@@ -93,21 +93,19 @@
             Day = d;
             Amount = a;
         }
-        
+
         public string Day { get; set; }
         public int Amount { get; set; }
     }
-    
-    private LeaderBoardDao _leaderboard
-    { 
-        get => _gameInfo.GetLeaderBoard();
-    }
+
+    private LeaderBoardDao _leaderboard { get; set; } = new LeaderBoardDao(new List<LeaderBoardPlayerDao>());
 
     private List<DiagramData> _gamesPlayed = new();
     private List<DiagramData> _accountsCreated = new();
 
     protected override void OnInitialized()
     {
+        _leaderboard = _gameInfo.GetLeaderBoard();
         var s = DateTime.Today - TimeSpan.FromDays(6);
         var e = s + TimeSpan.FromDays(1);
         for (int i = 7; i != 0; i--)
