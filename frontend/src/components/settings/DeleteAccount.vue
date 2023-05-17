@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
 import { useAuth } from '@/core/adapter/auth';
 
@@ -50,6 +51,7 @@ import FloatingDialog from '../misc/FloatingDialog.vue';
 import ReassureDialog from '../misc/ReassureDialog.vue';
 
 const auth = useAuth();
+const router = useRouter();
 const { t } = useI18n();
 
 const showDialog = ref(false);
@@ -82,6 +84,7 @@ const deleteAccount = async () => {
   try {
     await auth.deleteAccount(password.value);
     showDialog.value = false;
+    router.push('/');
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
   }
