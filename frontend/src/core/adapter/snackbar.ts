@@ -33,9 +33,19 @@ export type SnackbarItem = {
   position: SnackBarPosition;
   showClose?: boolean;
   color?: 'primary' | 'secondary';
+  mode: 'static' | 'loading';
 };
 
+export type SnackbarItemOptions = Omit<SnackbarItem, 'mode'> & Partial<Pick<SnackbarItem, 'mode'>>;
+
 const DEFAULT_DURATION = 2500;
+
+const normalizeOptions = (opts: SnackbarItemOptions): SnackbarItem => {
+  return {
+    mode: 'static',
+    ...opts
+  };
+};
 
 export const useSnackbar = defineStore('snackbar', () => {
   const activeMessage = ref<SnackbarItem | undefined>(undefined);
@@ -43,14 +53,15 @@ export const useSnackbar = defineStore('snackbar', () => {
   const messageStack = ref<SnackbarItem[]>([]);
   const logger = Logger.createOne('snackbar');
 
-  const pushMessage = (msg: SnackbarItem) => {
+  const pushMessage = (item: SnackbarItemOptions) => {
     logger.log('push one');
+    const msg = normalizeOptions(item);
     if (activeMessage.value === undefined) {
       showMessage(msg);
       return;
     }
     // queue item
-    if (msg.force === true) {
+    if (msg.force === true || activeMessage.value?.mode === 'loading') {
       logger.log('forcing message');
       if (activeTimeout.value) {
         clearTimeout(activeTimeout.value);
@@ -69,11 +80,13 @@ export const useSnackbar = defineStore('snackbar', () => {
   const showMessage = (msg: SnackbarItem) => {
     msg.duration = msg.duration ?? DEFAULT_DURATION;
     activeMessage.value = msg;
-    activeTimeout.value = setTimeout(() => {
-      activeMessage.value = undefined;
-      activeTimeout.value = undefined;
-      evaluateNext();
-    }, msg.duration);
+    if (msg.mode === 'static') {
+      activeTimeout.value = setTimeout(() => {
+        activeMessage.value = undefined;
+        activeTimeout.value = undefined;
+        evaluateNext();
+      }, msg.duration);
+    }
   };
 
   const evaluateNext = () => {
