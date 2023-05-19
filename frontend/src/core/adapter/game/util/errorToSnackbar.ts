@@ -27,7 +27,7 @@ const errorWatcher = new MonolithicEventWatcher(
 export const useInGameErrorWatcher = defineStore('game-error-to-snackbar', () => {
   const snackbar = useSnackbar();
 
-  const _receiveMessage: typeof errorWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof errorWatcher)['_msgHandler'] = msg => {
     snackbar.pushMessage({
       message: `errors.zrp.${msg.code}`,
       position: SnackBarPosition.Top,

@@ -22,7 +22,7 @@ export const useRules = defineStore('game-rules', () => {
   const rules = ref<DisplayRule[]>([]);
   const dispatchEvent = useGameEventDispatch();
 
-  const _receiveMessage: typeof settingsWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof settingsWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.AllSettings) {
       rules.value = msg.data.settings
         .filter(setting => AllRules.includes(setting.setting))

@@ -43,7 +43,7 @@ export const useGameState = defineStore('game-state', () => {
   const dispatchEvent = useGameEventDispatch();
   const auth = useAuth();
 
-  const _receiveMessage: typeof gameWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof gameWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.GameStarted) {
       initialSetup();
     } else if (msg.code === ZRPOPCode.StartTurn) {
