@@ -60,12 +60,14 @@ import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useGameConfig } from '@/core/adapter/game';
+import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import { BackendError } from '@/core/api/ApiError';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const snackbar = useSnackbar();
 const isLoading = ref(true);
 const gameConfig = useGameConfig();
 const gameId = parseInt(route.params['id'] as string) ?? -1;
@@ -86,6 +88,13 @@ const performJoinRequest = async () => {
   showDialog.value = false;
 
   try {
+    snackbar.pushMessage({
+      message: 'errors.zrp.loading',
+      needsTranslation: true,
+      showClose: false,
+      position: SnackBarPosition.Top,
+      mode: 'loading'
+    });
     await gameConfig.join(gameId, password.value, asPlayer, asSpectator);
     router.replace('/game/wait');
   } catch (e: unknown) {

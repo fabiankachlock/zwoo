@@ -41,6 +41,13 @@ const snackbar = useSnackbar();
 
 const create = async () => {
   try {
+    snackbar.pushMessage({
+      message: 'errors.zrp.loading',
+      needsTranslation: true,
+      showClose: false,
+      position: SnackBarPosition.Top,
+      mode: 'loading'
+    });
     await gameConfig.create(t('offline.gameName'), true, '');
     router.push('/game/wait');
   } catch (e: unknown) {
