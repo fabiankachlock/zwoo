@@ -115,19 +115,55 @@
           </div>
         </div>
         <Environment show="online">
-          <div v-if="showWinsWarning" class="info border-2 rounded-lg bc-primary p-2 mt-4">
-            <Icon icon="akar-icons:triangle-alert" class="tc-secondary text-xl mb-2 inline-flex mr-2" />
-            <p class="tc-main-secondary inline">
-              {{ t('wait.noWinInfo') }}
-            </p>
+          <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-main">
+            <div class="flex justify-between items-center">
+              <p class="tc-main-secondary">
+                {{ t('wait.noWinInfo') }}
+              </p>
+              <Icon
+                v-if="!winsInfoOpen"
+                icon="akar-icons:info"
+                class="tc-main hover:tc-primary cursor-pointer text-xl"
+                @click="winsInfoOpen = true"
+              />
+              <Icon
+                v-else
+                icon="akar-icons:circle-chevron-up"
+                class="tc-main hover:tc-primary cursor-pointer text-xl"
+                @click="winsInfoOpen = false"
+              />
+            </div>
+            <div class="grid overflow-hidden grid-rows-[1fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[0fr]': !winsInfoOpen }">
+              <p class="min-h-0 tc-main-secondary">
+                {{ t('wait.noWinsOnlineInfo') }}
+              </p>
+            </div>
           </div>
         </Environment>
         <Environment show="offline">
-          <div class="info border-2 rounded-lg bc-primary p-2 mt-4">
-            <Icon icon="akar-icons:triangle-alert" class="tc-secondary text-xl mb-2 inline-flex mr-2" />
-            <p class="tc-main-secondary inline">
-              {{ t('wait.offlineInfo') }}
-            </p>
+          <div class="rounded-lg px-2 py-1 mt-4 bg-main">
+            <div class="flex justify-between items-center">
+              <p class="tc-main-secondary">
+                {{ t('wait.noWinInfo') }}
+              </p>
+              <Icon
+                v-if="!winsInfoOpen"
+                icon="akar-icons:info"
+                class="tc-main hover:tc-primary cursor-pointer text-xl"
+                @click="winsInfoOpen = true"
+              />
+              <Icon
+                v-else
+                icon="akar-icons:circle-chevron-up"
+                class="tc-main hover:tc-primary cursor-pointer text-xl"
+                @click="winsInfoOpen = false"
+              />
+            </div>
+            <div class="grid overflow-hidden grid-rows-[1fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[0fr]': !winsInfoOpen }">
+              <p class="min-h-0 tc-main-secondary">
+                {{ t('wait.noWinsOfflineInfo') }}
+              </p>
+            </div>
           </div>
         </Environment>
       </div>
@@ -168,6 +204,7 @@ const gameHost = computed(() => lobby.host);
 const playerToPromote = ref<string | undefined>(undefined);
 const playerToKick = ref<string | undefined>(undefined);
 const shareSheetOpen = ref(false);
+const winsInfoOpen = ref(false);
 const qrCodeOpen = ref(false);
 const players = computed(() => lobby.players);
 const showWinsWarning = computed(() => players.value.filter(player => player.role !== ZRPRole.Bot).length <= 1);
