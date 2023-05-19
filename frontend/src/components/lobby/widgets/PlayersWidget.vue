@@ -114,58 +114,27 @@
             </template>
           </div>
         </div>
-        <Environment show="online">
-          <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-main">
-            <div class="flex justify-between items-center">
-              <p class="tc-main-secondary">
-                {{ t('wait.noWinInfo') }}
-              </p>
-              <Icon
-                v-if="!winsInfoOpen"
-                icon="akar-icons:info"
-                class="tc-main hover:tc-primary cursor-pointer text-xl"
-                @click="winsInfoOpen = true"
-              />
-              <Icon
-                v-else
-                icon="akar-icons:circle-chevron-up"
-                class="tc-main hover:tc-primary cursor-pointer text-xl"
-                @click="winsInfoOpen = false"
-              />
-            </div>
-            <div class="grid overflow-hidden grid-rows-[1fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[0fr]': !winsInfoOpen }">
+        <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-main">
+          <div class="flex justify-between items-center">
+            <p class="tc-main-secondary">
+              {{ t('wait.noWinInfo') }}
+            </p>
+            <Icon v-if="!winsInfoOpen" icon="akar-icons:info" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="winsInfoOpen = true" />
+            <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="winsInfoOpen = false" />
+          </div>
+          <div class="grid overflow-hidden grid-rows-[1fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[0fr]': !winsInfoOpen }">
+            <Environment show="online">
               <p class="min-h-0 tc-main-secondary">
                 {{ t('wait.noWinsOnlineInfo') }}
               </p>
-            </div>
-          </div>
-        </Environment>
-        <Environment show="offline">
-          <div class="rounded-lg px-2 py-1 mt-4 bg-main">
-            <div class="flex justify-between items-center">
-              <p class="tc-main-secondary">
-                {{ t('wait.noWinInfo') }}
-              </p>
-              <Icon
-                v-if="!winsInfoOpen"
-                icon="akar-icons:info"
-                class="tc-main hover:tc-primary cursor-pointer text-xl"
-                @click="winsInfoOpen = true"
-              />
-              <Icon
-                v-else
-                icon="akar-icons:circle-chevron-up"
-                class="tc-main hover:tc-primary cursor-pointer text-xl"
-                @click="winsInfoOpen = false"
-              />
-            </div>
-            <div class="grid overflow-hidden grid-rows-[1fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[0fr]': !winsInfoOpen }">
+            </Environment>
+            <Environment show="offline">
               <p class="min-h-0 tc-main-secondary">
                 {{ t('wait.noWinsOfflineInfo') }}
               </p>
-            </div>
+            </Environment>
           </div>
-        </Environment>
+        </div>
       </div>
     </template>
   </Widget>
@@ -181,6 +150,7 @@ import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import QRCode from '@/components/misc/QRCode.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
+import { useIsOffline } from '@/composables/useEnvironment';
 import { useUserDefaults } from '@/composables/userDefaults';
 import { useAuth } from '@/core/adapter/auth';
 import { useGameConfig } from '@/core/adapter/game';
@@ -207,7 +177,8 @@ const shareSheetOpen = ref(false);
 const winsInfoOpen = ref(false);
 const qrCodeOpen = ref(false);
 const players = computed(() => lobby.players);
-const showWinsWarning = computed(() => players.value.filter(player => player.role !== ZRPRole.Bot).length <= 1);
+const isOffline = useIsOffline();
+const showWinsWarning = computed(() => players.value.filter(player => player.role !== ZRPRole.Bot).length <= 1 || isOffline.value);
 
 const handlePromotePlayer = (id: string, allowed: boolean) => {
   if (allowed) {
