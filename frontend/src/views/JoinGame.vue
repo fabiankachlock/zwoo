@@ -93,10 +93,12 @@ const performJoinRequest = async () => {
       needsTranslation: true,
       showClose: false,
       position: SnackBarPosition.Top,
-      mode: 'loading'
+      mode: 'loading',
+      onClosed() {
+        router.replace('/game/wait');
+      }
     });
     await gameConfig.join(gameId, password.value, asPlayer, asSpectator);
-    router.replace('/game/wait');
   } catch (e: unknown) {
     error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     isLoading.value = false;

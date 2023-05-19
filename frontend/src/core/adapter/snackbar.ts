@@ -34,15 +34,18 @@ export type SnackbarItem = {
   showClose?: boolean;
   color?: 'primary' | 'secondary';
   mode: 'static' | 'loading';
+  onClosed: () => void;
 };
 
-export type SnackbarItemOptions = Omit<SnackbarItem, 'mode'> & Partial<Pick<SnackbarItem, 'mode'>>;
+export type SnackbarItemOptions = Omit<SnackbarItem, 'mode' | 'onClosed'> & Partial<Pick<SnackbarItem, 'mode' | 'onClosed'>>;
 
 const DEFAULT_DURATION = 2500;
 
 const normalizeOptions = (opts: SnackbarItemOptions): SnackbarItem => {
   return {
     mode: 'static',
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onClosed: () => {},
     ...opts
   };
 };
@@ -67,6 +70,7 @@ export const useSnackbar = defineStore('snackbar', () => {
         clearTimeout(activeTimeout.value);
       }
 
+      activeMessage.value.onClosed();
       activeMessage.value = undefined;
       setTimeout(() => {
         // wait until the next event loop, so that the animation can be reset before
@@ -82,6 +86,7 @@ export const useSnackbar = defineStore('snackbar', () => {
     activeMessage.value = msg;
     if (msg.mode === 'static') {
       activeTimeout.value = setTimeout(() => {
+        activeMessage.value?.onClosed();
         activeMessage.value = undefined;
         activeTimeout.value = undefined;
         evaluateNext();
