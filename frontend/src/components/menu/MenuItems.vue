@@ -48,6 +48,15 @@
         {{ t('nav.settings') }}
       </router-link>
     </div>
+    <Environment show="online">
+      <div v-if="isLoggedIn">
+        <div class="divider bc-invert-main"></div>
+        <router-link to="/logout" class="link">
+          <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
+          {{ t('nav.logout') }}
+        </router-link>
+      </div>
+    </Environment>
   </div>
 </template>
 
