@@ -47,7 +47,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const auth = useAuth();
   const gameConfig = useGameConfig();
 
-  const _receiveMessage: typeof lobbyWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof lobbyWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerJoined) {
       joinPlayer(msg.data, ZRPRole.Player, true);
     } else if (msg.code === ZRPOPCode.PlayerLeft) {

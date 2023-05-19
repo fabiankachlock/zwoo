@@ -12,7 +12,7 @@ export const useBotManager = defineStore('bot-manager', () => {
   const bots = ref<Record<string, { id: string; name: string; config: ZRPBotConfig }>>({});
   const dispatchEvent = useGameEventDispatch();
 
-  const _receiveMessage: typeof botsWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof botsWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.ListBots) {
       bots.value = msg.data.bots.reduce(
         (map, bot) => ({

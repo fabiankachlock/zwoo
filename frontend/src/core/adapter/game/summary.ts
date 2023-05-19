@@ -20,7 +20,7 @@ export const useGameSummary = defineStore('game-summary', () => {
   const summary = ref<GameSummaryEntry[]>([]);
   const dispatchEvent = useGameEventDispatch();
 
-  const _receiveMessage: typeof summaryWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof summaryWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerWon) {
       summary.value = msg.data.summary
         .map(e => ({

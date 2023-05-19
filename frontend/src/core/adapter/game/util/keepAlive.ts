@@ -11,7 +11,7 @@ export const useKeepAlive = defineStore('game-keep-alive', () => {
   const send = useGameEventDispatch();
   let timeout: number | undefined = undefined;
 
-  const _receiveMessage: typeof keepAliveWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof keepAliveWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.AckKeepAlive) {
       Logger.debug('acknowledged keep alive');
     }
