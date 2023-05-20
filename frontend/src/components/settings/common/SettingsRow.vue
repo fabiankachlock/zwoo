@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 
 import Tooltip from '@/components/misc/Tooltip.vue';
 import { useAuth } from '@/core/adapter/auth';

@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 
 import { useCardTheme } from '@/core/adapter/game/cardTheme';
 import { CardTheme } from '@/core/domain/cards/CardTheme';

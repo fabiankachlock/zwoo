@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, toRefs } from 'vue';
+import { toRefs } from 'vue';
 
 import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { Validator } from '@/core/services/validator/_type';

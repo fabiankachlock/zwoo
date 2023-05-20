@@ -13,9 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits } from 'vue';
-
-// eslint-disable-next-line no-undef
 defineProps<{
   disabled?: boolean;
 }>();

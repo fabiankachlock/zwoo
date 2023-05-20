@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, toRefs, watch } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
 import { useChatStore } from '@/core/adapter/game/chat';

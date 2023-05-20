@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { Icon } from '@/components/misc/Icon';

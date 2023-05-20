@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 import { DisplayRule, useRules } from '@/core/adapter/game/rules';
 import { useIsHost } from '@/core/adapter/game/util/userRoles';
 import { RuleType } from '@/core/domain/game/GameRules';
