@@ -3,16 +3,14 @@ module.exports = {
   env: {
     browser: true,
     es2022: true,
-    node: true,
+    node: true
   },
   parserOptions: {
     ecmaVersion: 2022,
     parser: '@typescript-eslint/parser'
   },
 
-  extends: [
-    'plugin:vue/vue3-essential', 'eslint:recommended', '@vue/typescript/recommended', '@vue/prettier', '@vue/eslint-config-typescript'
-  ],
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/typescript/recommended', '@vue/prettier', '@vue/eslint-config-typescript'],
   plugins: ['simple-import-sort'],
 
   rules: {
@@ -26,7 +24,7 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'sort-imports': 'off',
     'simple-import-sort/imports': 'warn',
-    'simple-import-sort/exports': 'warn',
+    'simple-import-sort/exports': 'warn'
   },
   overrides: [
     {

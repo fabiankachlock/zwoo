@@ -82,7 +82,7 @@ import Form from '@/components/forms/Form.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useUserDefaults } from '@/composables/userDefaults';
-import { useBotManager } from '@/core/adapter/game/botManager';
+import { BotType, useBotManager } from '@/core/adapter/game/botManager';
 import { useLobbyStore } from '@/core/adapter/game/lobby';
 import { useIsHost } from '@/core/adapter/game/util/userRoles';
 
@@ -94,7 +94,9 @@ const isOpen = useUserDefaults('lobby:widgetBotsOpen', true);
 const botManager = useBotManager();
 const lobby = useLobbyStore();
 const realBots = computed(() => botManager.botConfigs);
-const fakeBots = computed(() => lobby.bots.reduce((sum, bot) => ({ ...sum, [bot.id]: { id: bot.id, name: bot.username, config: {} } }), {}));
+const fakeBots = computed(() =>
+  lobby.bots.reduce((sum, bot) => ({ ...sum, [bot.id]: { id: bot.id, name: bot.username, config: { type: 0 } } }), {} as Record<string, BotType>)
+);
 const botDialogOpen = ref(false);
 const isBotUpdate = ref(false);
 const botName = ref('');
