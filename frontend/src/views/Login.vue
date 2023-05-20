@@ -2,18 +2,18 @@
   <FormLayout>
     <Form show-back-button>
       <FormTitle> {{ t('login.title') }} </FormTitle>
-      <TextInput id="email" v-model="email" labelKey="login.email" :placeholder="t('login.email')" />
-      <TextInput id="password" v-model="password" labelKey="login.password" is-password placeholder="******" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
+      <TextInput id="email" v-model="email" label-key="login.email" :placeholder="t('login.email')" />
+      <TextInput id="password" v-model="password" label-key="login.password" is-password placeholder="******" />
+      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="logIn" :disabled="!isSubmitEnabled">
+        <FormSubmit :disabled="!isSubmitEnabled" @click="logIn">
           {{ t('login.login') }}
         </FormSubmit>
         <div v-if="showNotVerifiedInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
           <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
           <p class="tc-main-secondary">{{ t('login.notVerifiedInfo') }}</p>
-          <button @click="resendVerifyEmail" class="tc-primary mt-2 bg-main hover:bg-dark rounded-sm px-2 py-1 text-center">
+          <button class="tc-primary mt-2 bg-main hover:bg-dark rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
             {{ t('login.resendVerifyEmail') }}
           </button>
         </div>

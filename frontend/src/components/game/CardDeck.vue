@@ -9,10 +9,10 @@
         v-for="(card, index) of cards"
         :key="`${index}-${card.color}-${card.type}`"
         :data-x="`${index}-${card.color}-${card.type}`"
-        @click="selectCard(card, index)"
         :style="getComputedCardWrapperStyle"
         :class="{ active: cardsActive, idle: !cardsActive, overlap: isCardOverlap }"
         class="card-wrapper relative overflow-visible"
+        @click="selectCard(card, index)"
       >
         <div class="card relative" :style="getComputedCardStyle">
           <Card :card="card" image-class="transition-all" />

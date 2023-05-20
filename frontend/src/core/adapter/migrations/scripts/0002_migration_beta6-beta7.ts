@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* eslint-disable */
 // @ts-nocheck
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { CardThemeIdentifier } from '@/core/domain/cards/CardThemeConfig';

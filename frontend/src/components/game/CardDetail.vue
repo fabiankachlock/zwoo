@@ -1,17 +1,17 @@
 <template>
-  <div class="fixed z-50 inset-0" v-if="selectedCard" @click="closeDetail()">
+  <div v-if="selectedCard" class="fixed z-50 inset-0" @click="closeDetail()">
     <div class="backdrop absolute inset-0 z-0 transition-all"></div>
     <div class="z-10 relative h-full w-full flex justify-center items-center flex-nowrap">
       <div class="absolute top-10 right-10">
-        <button @click.stop="closeDetail" class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded">
+        <button class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded" @click.stop="closeDetail">
           <Icon icon="akar-icons:cross" />
         </button>
       </div>
       <div class="w-18 md:w-14 mr-4 md:mr-0">
         <button
-          @click.stop="handleNextBefore"
           :class="{ 'opacity-0': !nextBefore }"
           class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+          @click.stop="handleNextBefore"
         >
           <Icon icon="akar-icons:arrow-left" />
         </button>
@@ -39,14 +39,14 @@
               :class="{
                 'play-card-animation': isPlayingCard
               }"
-              @click.stop="handlePlayCard()"
               src="/img/dummy_card.svg"
               alt=""
+              @click.stop="handlePlayCard()"
             >
               <Card :card="displayCard" image-class="h-full"></Card>
             </div>
           </div>
-          <button @click.stop="handlePlayCard()" class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent">
+          <button class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent" @click.stop="handlePlayCard()">
             <!-- TODO: add back when implemented :class="{
               'border-green-600': canPlayCard === CardState.allowed,
               'border-red-500': canPlayCard === CardState.disallowed
@@ -58,8 +58,8 @@
       <div class="w-18 md:w-14 ml-4 md:ml-0">
         <button
           :class="{ 'opacity-0': !nextAfter }"
-          @click.stop="handleNextAfter"
           class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+          @click.stop="handleNextAfter"
         >
           <Icon icon="akar-icons:arrow-right" />
         </button>

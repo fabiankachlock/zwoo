@@ -1,6 +1,6 @@
 <template>
   <div class="box my-2 bg-none rounded-lg relative mx-1 border-2">
-    <button @click="handleClick" class="block w-full h-full tc-main-dark py-2 px-1" :class="enableButtonPointerEvents">
+    <button class="block w-full h-full tc-main-dark py-2 px-1" :class="enableButtonPointerEvents" @click="handleClick">
       <div v-if="verifyState === 'none'">
         <p>
           <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA Logo" class="h-8 mr-2 inline-block align-middle" />

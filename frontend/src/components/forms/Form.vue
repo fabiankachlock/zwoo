@@ -1,17 +1,17 @@
 <template>
   <button
     v-if="showBackButton"
-    @click="goBack"
     id="back-button"
     class="tc-main-secondary bg-light hover:bg-main absolute left-2 top-2 text-xl p-1 rounded-md cursor-pointer"
+    @click="goBack"
   >
     <Icon icon="mdi:chevron-left" class="text-1xl transition-transform scale-125" />
   </button>
   <button
     v-if="showCloseButton"
-    @click="emit('close')"
     id="close-button"
     class="tc-main-secondary bg-light hover:bg-main absolute right-2 top-2 text-xl p-1 rounded-md cursor-pointer"
+    @click="emit('close')"
   >
     <Icon icon="gg:close" class="text-xl transition-transform" />
   </button>

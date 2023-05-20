@@ -2,7 +2,7 @@
   <div v-if="isOpen">
     <FloatingDialog content-class="sm:max-w-lg">
       <div v-if="showCloseButton" class="absolute top-4 right-4 z-10">
-        <button @click="close(false)" class="bg-lightest hover:bg-light p-2 tc-main-dark rounded">
+        <button class="bg-lightest hover:bg-light p-2 tc-main-dark rounded" @click="close(false)">
           <Icon icon="akar-icons:cross" class="text-2xl" />
         </button>
       </div>

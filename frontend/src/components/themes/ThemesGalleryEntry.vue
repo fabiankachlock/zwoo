@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="mx-2">
-      <p class="tc-main-light italic" v-if="props.theme.description">
+      <p v-if="props.theme.description" class="tc-main-light italic">
         {{ t(`cardThemes.description.${props.theme.description}`) }}
       </p>
       <p>
@@ -29,12 +29,12 @@
         <span
           v-for="variant in props.theme.variants"
           :key="variant"
-          @click="previewVariant = variant"
           :class="{
             'bc-primary hover:bc-primary': previewVariant === variant,
             'bc-secondary hover:bc-primary': selectedVariant === variant
           }"
           class="tc-main text-xs inline-tag bg-light hover:bg-main bc-light hover:bc-darkest cursor-pointer select-none"
+          @click="previewVariant = variant"
         >
           {{ t(`cardThemes.variant.${variant}`) }}
         </span>

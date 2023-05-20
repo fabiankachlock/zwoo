@@ -3,13 +3,13 @@
   <!-- TODO: make min & max danymic -->
   <input
     v-else
+    :id="name ?? 'rule-input'"
     autocomplete=""
     class="bg-dark shadow appearance-none border bc-main rounded w-20 h-full py-1 px-2 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
     :name="name ?? 'rule-input'"
     type="number"
     min="1"
     max="20"
-    :id="name ?? 'rule-input'"
     :placeholder="placeholder ?? t('rules.widget.numberPlaceholder')"
     :value="modelValue"
     :readonly="readonly"

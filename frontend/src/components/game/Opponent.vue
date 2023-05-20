@@ -1,5 +1,6 @@
 <template>
   <div
+    :ref="r => (elmRef = r as HTMLDivElement)"
     :class="{
       'border-secondary': isActive,
       'border-transparent': !isActive,
@@ -7,7 +8,6 @@
       'bg-main bc-primary sticky left-0 z-10': !isConnected
     }"
     class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border"
-    :ref="r => (elmRef = r as HTMLDivElement)"
   >
     <div
       :class="{ 'tc-main': isConnected, 'tc-main-secondary line-through': !isConnected }"
@@ -23,11 +23,11 @@
       </template>
       <span class="whitespace-nowrap ml-3">{{ cardAmount }}</span>
       <span class="ml-2 flex items-center">
-        <button v-if="isConnected" @click="toggleMute" class="transition-transform hover:scale-125">
+        <button v-if="isConnected" class="transition-transform hover:scale-125" @click="toggleMute">
           <Icon v-if="isMuted" icon="bi:mic-mute-fill" />
           <Icon v-else icon="bi:mic-fill" />
         </button>
-        <button v-if="isHost && !isConnected" @click="kickPlayer" class="transition-transform hover:scale-110 tc-secondary">
+        <button v-if="isHost && !isConnected" class="transition-transform hover:scale-110 tc-secondary" @click="kickPlayer">
           <Icon icon="akar-icons:cross" />
         </button>
       </span>

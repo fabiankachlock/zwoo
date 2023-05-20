@@ -6,7 +6,7 @@
       </div>
       <div class="widget-actions mx-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
         <slot name="actions"></slot>
-        <button @click="toggleOpenState" class="toggle text-2xl tc-main relative p-4 rounded w-6 h-6 overflow-hidden" :class="buttonClass">
+        <button class="toggle text-2xl tc-main relative p-4 rounded w-6 h-6 overflow-hidden" :class="buttonClass" @click="toggleOpenState">
           <Icon
             icon="iconoir:nav-arrow-down"
             class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
@@ -52,7 +52,7 @@ const emit = defineEmits<{
 
 const isOpen = ref(false);
 const { modelValue } = toRefs(props);
-if (modelValue) {
+if (modelValue?.value) {
   watch(modelValue, value => {
     if (value === undefined) return;
     if (value !== isOpen.value) {
