@@ -1,8 +1,8 @@
 <template>
   <SettingsSwitch :model-value="shouldSortCards" @update:model-value="toggleSortCards">
     <div class="tc-main text-xl">
-      <Icon icon="icon-park-outline:sort-amount-down" v-show="shouldSortCards" />
-      <Icon icon="uis:bars" v-show="!shouldSortCards" />
+      <Icon v-show="shouldSortCards" icon="icon-park-outline:sort-amount-down" />
+      <Icon v-show="!shouldSortCards" icon="uis:bars" />
     </div>
   </SettingsSwitch>
 </template>

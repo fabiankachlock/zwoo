@@ -1,5 +1,5 @@
 <template>
-  <FloatingDialog :without-padding="true" v-show="changelog">
+  <FloatingDialog v-show="changelog" :without-padding="true">
     <div class="sticky top-0 z-10 px-5 pt-5 bg-lightest">
       <h2 class="tc-main text-xl text-center py-2 bc-darkest border-b">{{ t('changelog.title', [version]) }}</h2>
     </div>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, onMounted, ref, toRefs, watch } from 'vue';
+import { onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useApi } from '@/core/adapter/helper/useApi';

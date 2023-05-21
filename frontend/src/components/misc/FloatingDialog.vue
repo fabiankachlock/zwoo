@@ -17,8 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue';
-
 defineProps<{
   contentClass?: string;
   withoutPadding?: boolean;

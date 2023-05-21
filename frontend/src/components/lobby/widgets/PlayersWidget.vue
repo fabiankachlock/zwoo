@@ -3,12 +3,12 @@
     <template #actions>
       <div class="flex flex-row">
         <Environment show="online">
-          <button @click="shareSheetOpen = true" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
+          <button class="share rounded m-1 bg-main hover:bg-dark tc-main-light" @click="shareSheetOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
             </div>
           </button>
-          <button @click="qrCodeOpen = true" class="scan-code rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light">
+          <button class="scan-code rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light" @click="qrCodeOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
             </div>
@@ -18,7 +18,7 @@
       <div v-if="shareSheetOpen">
         <FloatingDialog>
           <div class="absolute top-2 right-2 z-10">
-            <button @click="shareSheetOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
+            <button class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded" @click="shareSheetOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>
@@ -30,7 +30,7 @@
       <div v-if="qrCodeOpen" class="share-qr-dialog">
         <FloatingDialog>
           <div class="absolute top-2 right-2 z-10">
-            <button @click="qrCodeOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
+            <button class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded" @click="qrCodeOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>
@@ -76,7 +76,7 @@
           <div class="flex items-center h-full justify-end">
             <!-- display player actions for player -->
             <template v-if="!isHost && publicId === player.id && player.role !== ZRPRole.Bot">
-              <button v-tooltip="t('wait.spectate')" @click="handleChangeToSpectator()" class="tc-primary h-full bg-light hover:bg-main rounded p-1">
+              <button v-tooltip="t('wait.spectate')" class="tc-primary h-full bg-light hover:bg-main rounded p-1" @click="handleChangeToSpectator()">
                 <Icon icon="iconoir:eye-alt" />
               </button>
             </template>
@@ -84,32 +84,32 @@
             <template v-else-if="isHost && publicId !== player.id && player.role !== ZRPRole.Bot">
               <button
                 v-tooltip="t('wait.spectate')"
-                @click="handlePlayerToSpectator(player.id)"
                 class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+                @click="handlePlayerToSpectator(player.id)"
               >
                 <Icon icon="iconoir:eye-alt" />
               </button>
               <button
                 v-tooltip="t('wait.promote')"
-                @click="askPromotePlayer(player.id)"
                 class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+                @click="askPromotePlayer(player.id)"
               >
                 <Icon icon="akar-icons:crown" />
               </button>
               <ReassureDialog
-                @close="allowed => handlePromotePlayer(player.id, allowed)"
                 :title="t('dialogs.promotePlayer.title', [player.username])"
                 :body="t('dialogs.promotePlayer.body', [player.username])"
                 :is-open="playerToPromote === player.id"
+                @close="allowed => handlePromotePlayer(player.id, allowed)"
               />
-              <button v-tooltip="t('wait.kick')" @click="askKickPlayer(player.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+              <button v-tooltip="t('wait.kick')" class="tc-secondary h-full bg-light hover:bg-main rounded p-1" @click="askKickPlayer(player.id)">
                 <Icon icon="iconoir:delete-circled-outline" />
               </button>
               <ReassureDialog
-                @close="allowed => handleKickPlayer(player.id, allowed)"
                 :title="t('dialogs.kickPlayer.title', [player.username])"
                 :body="t('dialogs.kickPlayer.body', [player.username])"
                 :is-open="playerToKick === player.id"
+                @close="allowed => handleKickPlayer(player.id, allowed)"
               />
             </template>
           </div>

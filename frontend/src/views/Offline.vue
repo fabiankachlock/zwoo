@@ -14,7 +14,7 @@
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative flex-1 w-full">
         <div class="action bg-dark hover:bg-darkest cursor-pointer">
-          <div @click="create" class="link">
+          <div class="link" @click="create">
             <Icon class="icon tc-secondary" icon="fluent:window-new-16-regular" />
             <p class="tc-main-light">{{ t('offline.create') }}</p>
           </div>

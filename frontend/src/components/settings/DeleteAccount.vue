@@ -12,10 +12,10 @@
           <FormTitle>
             {{ t('deleteAccount.title') }}
           </FormTitle>
-          <TextInput id="password" v-model="password" labelKey="deleteAccount.password" is-password placeholder="******" />
+          <TextInput id="password" v-model="password" label-key="deleteAccount.password" is-password placeholder="******" />
           <FormError :error="error" />
           <FormActions>
-            <FormSubmit @click="reassureDecision" :disabled="!password.trim() || isLoading">
+            <FormSubmit :disabled="!password.trim() || isLoading" @click="reassureDecision">
               <span class="tc-secondary">
                 {{ t('deleteAccount.delete') }}
               </span>

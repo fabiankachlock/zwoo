@@ -6,8 +6,8 @@
   >
     <ChatMessage
       v-for="message in messages"
-      :message="message.message"
       :key="message.id"
+      :message="message.message"
       :is-own="message.sender.id === auth.username"
       :is-spectator="message.sender.role === ZRPRole.Spectator"
       :is-host="message.sender.role === ZRPRole.Host"

@@ -5,7 +5,7 @@
     <div class="h-full flex-1 mx-2 tc-main-light flex justify-start items-center">
       <span>{{ title }}</span>
       <span v-if="status" class="text-sm mx-1 tc-main-secondary">({{ status }})</span>
-      <SettingsSyncToggle v-if="settingsKey && isLoggedIn" :settingsKey="settingsKey"></SettingsSyncToggle>
+      <SettingsSyncToggle v-if="settingsKey && isLoggedIn" :settings-key="settingsKey"></SettingsSyncToggle>
     </div>
     <div class="mx-2 h-full flex items-center justify-end">
       <Tooltip v-if="tooltip" :title="tooltip">
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 
 import Tooltip from '@/components/misc/Tooltip.vue';
 import { useAuth } from '@/core/adapter/auth';

@@ -3,7 +3,7 @@
     <template #actions>
       <div class="flex flex-row">
         <template v-if="isHost">
-          <button @click="createBot()" class="share rounded m-1 bg-main hover:bg-dark tc-main-light">
+          <button class="share rounded m-1 bg-main hover:bg-dark tc-main-light" @click="createBot()">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="fluent:bot-add-20-regular" class="icon text-2xl"></Icon>
             </div>
@@ -19,7 +19,7 @@
         <div v-if="botDialogOpen && isHost">
           <FloatingDialog content-class="sm:max-w-lg">
             <div class="absolute top-2 right-2 z-10">
-              <button @click="botDialogOpen = false" class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded">
+              <button class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded" @click="botDialogOpen = false">
                 <Icon icon="akar-icons:cross" class="text-xl" />
               </button>
             </div>
@@ -29,7 +29,7 @@
                 v-if="!isBotUpdate"
                 id="bot-name"
                 v-model="botName"
-                labelKey="wait.botName"
+                label-key="wait.botName"
                 :placeholder="t('wait.exampleBotName')"
               ></TextInput>
               <div v-else class="m-2 text-xl">
@@ -62,7 +62,7 @@
               </button>
             -->
             <template v-if="isHost">
-              <button v-tooltip="t('wait.kick')" @click="deleteBot(bot.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+              <button v-tooltip="t('wait.kick')" class="tc-secondary h-full bg-light hover:bg-main rounded p-1" @click="deleteBot(bot.id)">
                 <Icon icon="iconoir:delete-circled-outline" />
               </button>
             </template>
@@ -82,7 +82,7 @@ import Form from '@/components/forms/Form.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useUserDefaults } from '@/composables/userDefaults';
-import { useBotManager } from '@/core/adapter/game/botManager';
+import { BotType, useBotManager } from '@/core/adapter/game/botManager';
 import { useLobbyStore } from '@/core/adapter/game/lobby';
 import { useIsHost } from '@/core/adapter/game/util/userRoles';
 
@@ -94,7 +94,9 @@ const isOpen = useUserDefaults('lobby:widgetBotsOpen', true);
 const botManager = useBotManager();
 const lobby = useLobbyStore();
 const realBots = computed(() => botManager.botConfigs);
-const fakeBots = computed(() => lobby.bots.reduce((sum, bot) => ({ ...sum, [bot.id]: { id: bot.id, name: bot.username, config: {} } }), {}));
+const fakeBots = computed(() =>
+  lobby.bots.reduce((sum, bot) => ({ ...sum, [bot.id]: { id: bot.id, name: bot.username, config: { type: 0 } } }), {} as Record<string, BotType>)
+);
 const botDialogOpen = ref(false);
 const isBotUpdate = ref(false);
 const botName = ref('');
