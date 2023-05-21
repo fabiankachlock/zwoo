@@ -22,12 +22,12 @@
             <p class="italic text-sm tc-main-secondary">
               {{ t('logging.storedCount', storedLogs.length) }}
             </p>
-            <button @click="clear()" class="px-2 py-1 rounded bg-dark hover:bg-darkest text-error-dark-border dark:text-error-light-border mx-2">
+            <button class="px-2 py-1 rounded bg-dark hover:bg-darkest text-error-dark-border dark:text-error-light-border mx-2" @click="clear()">
               {{ t('logging.clearStore') }}
             </button>
           </div>
           <div class="flex justify-end w-full">
-            <button @click="reload()" class="px-2 py-1 rounded bg-dark hover:bg-darkest tc-main-secondary mx-2">
+            <button class="px-2 py-1 rounded bg-dark hover:bg-darkest tc-main-secondary mx-2" @click="reload()">
               {{ t('logging.reloadLogs') }}
             </button>
           </div>
@@ -65,7 +65,7 @@ import { LogStore } from '@/core/services/logging/logImport';
 import { LogEntry } from '@/core/services/logging/logTypes';
 
 const { t } = useI18n();
-let storedLogs = ref<LogEntry[]>([]);
+const storedLogs = ref<LogEntry[]>([]);
 const stored = localStorage.getItem('zwoo:logging') ?? '';
 const isStoreLogging = ref(stored.includes('s'));
 const isConsoleLogging = ref(stored.includes('c'));

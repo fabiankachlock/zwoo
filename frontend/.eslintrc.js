@@ -1,10 +1,12 @@
 module.exports = {
   root: true,
   env: {
-    es2021: true
+    browser: true,
+    es2022: true,
+    node: true
   },
   parserOptions: {
-    ecmaVersion: 2021,
+    ecmaVersion: 2022,
     parser: '@typescript-eslint/parser'
   },
 
@@ -12,6 +14,7 @@ module.exports = {
   plugins: ['simple-import-sort'],
 
   rules: {
+    'no-undef': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

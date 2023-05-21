@@ -182,7 +182,8 @@
       "911": "Disconnected",
       "920": "Error occurred on client",
       "921": "Received invalid data",
-      "930": "Connected!"
+      "930": "Connected!",
+      "loading": "Connecting..."
     }
   },
   "version": "Version",
@@ -215,8 +216,9 @@
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."
     },
-    "noWinInfo": "A minimum of 2 players ist needed for the wins to count onto the leaderboard. Bots do not count as players.",
-    "offlineInfo": "Wins of offline games do not count in the leaderboard."
+    "noWinInfo": "Wins do not count.",
+    "noWinsOnlineInfo": "A minimum of 2 players ist needed for the wins to count onto the leaderboard. Bots do not count as players.",
+    "noWinsOfflineInfo": "Wins of offline games do not count in the leaderboard."
   },
   "rules": {
     "widget": {

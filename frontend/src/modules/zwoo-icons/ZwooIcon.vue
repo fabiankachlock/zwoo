@@ -1,5 +1,5 @@
 <template>
-  <div id="icon" v-html="icon" :ref="ref => (elementRef = ref as HTMLDivElement)"></div>
+  <div id="icon" :ref="ref => (elementRef = ref as HTMLDivElement)" v-html="icon"></div>
 </template>
 
 <script setup lang="ts">

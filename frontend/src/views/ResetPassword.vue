@@ -4,13 +4,20 @@
       <FormTitle>
         {{ t('resetPassword.title') }}
       </FormTitle>
-      <TextInput id="password" v-model="password" labelKey="resetPassword.password" is-password placeholder="******" :validator="passwordValidator" />
-      <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="resetPassword.passwordRepeat" is-password placeholder="******" />
+      <TextInput
+        id="password"
+        v-model="password"
+        label-key="resetPassword.password"
+        is-password
+        placeholder="******"
+        :validator="passwordValidator"
+      />
+      <TextInput id="passwordRepeat" v-model="passwordRepeat" label-key="resetPassword.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
+      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="reset" :disabled="!isSubmitEnabled || showInfo">
+        <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="reset">
           {{ t('resetPassword.reset') }}
         </FormSubmit>
       </FormActions>

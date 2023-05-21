@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex items-center relative">
     <DynamicActions></DynamicActions>
-    <div @click="toggleMenu" class="ml-2 text-3xl tc-main-secondary cursor-pointer">
+    <div class="ml-2 text-3xl tc-main-secondary cursor-pointer" @click="toggleMenu">
       <Icon :icon="icon" class="tc-main-secondary" />
     </div>
     <div :class="{ hidden: !isMenuOpen, block: isMenuOpen }" class="fixed inset-0" @click="closeMenu"></div>

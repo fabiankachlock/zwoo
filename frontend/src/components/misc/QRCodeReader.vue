@@ -1,7 +1,7 @@
 <template>
   <div v-if="isSupported" class="w-full h-full flex flex-col flex-nowrap p-3">
     <div v-if="cameraOn" class="rounded-sm mx-auto">
-      <video :srcObject="mediaStream" :ref="r => (videoElement = r as HTMLVideoElement)" autoplay="true"></video>
+      <video :ref="r => (videoElement = r as HTMLVideoElement)" :srcObject="mediaStream" autoplay="true"></video>
     </div>
     <div>
       <p class="tc-main-secondary text-center text-lg my-2">
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, onUnmounted, ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 

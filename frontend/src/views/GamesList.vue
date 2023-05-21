@@ -45,7 +45,7 @@
             </div>
             <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
               <div class="tc-primary">
-                <button @click="joinSavedGame()" class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2">
+                <button class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2" @click="joinSavedGame()">
                   <span>{{ t('list.rejoin') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
                 </button>
               </div>
@@ -72,7 +72,7 @@
                 <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', game.playerCount) }})</p>
               </div>
               <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
-                <div class="mr-3" v-tooltip="t('list.spectate')">
+                <div v-tooltip="t('list.spectate')" class="mr-3">
                   <router-link
                     :to="'/join/' + game.id + '?spectate'"
                     class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2"
@@ -105,10 +105,10 @@
                 <router-link to="/create-game" class="text-sm tc-main-secondary block">{{ t('home.create') }}</router-link>
               </button>
               <button
-                @click="refresh()"
                 class="nothing-found-btn bg-main hover:bg-light transition-transform"
                 :class="{ 'scale-95 opacity-50 pointer-events-none cursor-default': refreshing }"
                 :disabled="refreshing"
+                @click="refresh()"
               >
                 <p class="text-sm tc-main-secondary">
                   {{ t('list.reload') }}

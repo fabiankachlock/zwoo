@@ -11,10 +11,10 @@
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>
       <div
-        @click="drawCard()"
         class="pile-card draw-card absolute top-1/2 right-4 h-full transition-all -translate-y-1/2 x-delay-60"
         :class="{ animating: isAnimating }"
         style="max-height: 95%"
+        @click="drawCard()"
       >
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>

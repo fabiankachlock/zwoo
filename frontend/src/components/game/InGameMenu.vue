@@ -4,7 +4,7 @@
     <div class="flex-1 flex flex-row flex-nowrap justify-end items-center">
       <EndTurnButton />
       <div class="relative">
-        <div @click="toggleMenu()" class="bg-main hover:bg-light p-2 rounded tc-main text-2xl text-right cursor-pointer">
+        <div class="bg-main hover:bg-light p-2 rounded tc-main text-2xl text-right cursor-pointer" @click="toggleMenu()">
           <Icon v-if="menuOpen" icon="akar-icons:cross"></Icon>
           <Icon v-else icon="akar-icons:chevron-down"></Icon>
         </div>
@@ -36,7 +36,7 @@
                   <div class="menu-section items-center">
                     <p class="tc-main text-lg">{{ t('ingame.actions') }}</p>
                     <div>
-                      <button @click="handleLeave" class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded">
+                      <button class="tc-main-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded" @click="handleLeave">
                         {{ t('ingame.leave') }}
                       </button>
                     </div>
