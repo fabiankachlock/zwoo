@@ -3,11 +3,11 @@
     <Form show-back-button>
       <FormTitle> {{ t('requestPasswordReset.title') }} </FormTitle>
       <p class="m-2 tc-main-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
-      <TextInput id="email" v-model="email" labelKey="requestPasswordReset.email" :placeholder="t('requestPasswordReset.email')" />
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
+      <TextInput id="email" v-model="email" label-key="requestPasswordReset.email" :placeholder="t('requestPasswordReset.email')" />
+      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="requestReset" :disabled="!isSubmitEnabled || showInfo">
+        <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="requestReset">
           {{ t('requestPasswordReset.request') }}
         </FormSubmit>
         <FormSecondaryAction>

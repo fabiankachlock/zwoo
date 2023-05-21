@@ -56,16 +56,16 @@ const submitForm = async () => {
     <p v-else class="tc-main-secondary mb-5">{{ t('contact.thanks') }}</p>
     <FlatDialog v-if="!wasSend">
       <Form>
-        <TextInput id="sender" labelKey="contact.sender" v-model="senderName" :placeholder="t('contact.namePlaceholder')"></TextInput>
-        <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
+        <TextInput id="sender" v-model="senderName" label-key="contact.sender" :placeholder="t('contact.namePlaceholder')"></TextInput>
+        <TextArea id="message" v-model="message" label-key="contact.message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
         <ReCaptchaButton
-          @update:response="res => (reCaptchaResponse = res)"
           :validator="reCaptchaValidator"
           :response="reCaptchaResponse"
+          @update:response="res => (reCaptchaResponse = res)"
         ></ReCaptchaButton>
         <FormError :error="error"></FormError>
         <FormActions>
-          <FormSubmit @click="submitForm" :disabled="!isSubmitEnabled">{{ t('contact.send') }}</FormSubmit>
+          <FormSubmit :disabled="!isSubmitEnabled" @click="submitForm">{{ t('contact.send') }}</FormSubmit>
         </FormActions>
       </Form>
     </FlatDialog>

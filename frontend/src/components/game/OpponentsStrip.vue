@@ -3,8 +3,8 @@
     <div class="opponents overflow-x-scroll flex flex-row flex-nowrap items-center h-12 select-none">
       <Opponent
         v-for="player in players"
-        :key="player.id"
         :id="player.id"
+        :key="player.id"
         :is-self="player.id === self"
         :name="player.name"
         :card-amount="player.cards"

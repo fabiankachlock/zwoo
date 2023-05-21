@@ -11,13 +11,13 @@
         <div v-if="messages.length > 0" class="mx-auto px-2 max-w-xl overflow-y-auto w-full">
           <div :ref="r => container = (r as HTMLDivElement)" class="h-full py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto">
             <ChatMessage
-              v-for="message in messages"
-              :message="message.message"
-              :key="message.id"
-              :is-own="message.sender.id === username"
-              :is-spectator="message.sender.role === ZRPRole.Spectator"
-              :is-host="message.sender.role === ZRPRole.Host"
-              :name="message.sender.id"
+              v-for="messageItem in messages"
+              :key="messageItem.id"
+              :message="messageItem.message"
+              :is-own="messageItem.sender.id === username"
+              :is-spectator="messageItem.sender.role === ZRPRole.Spectator"
+              :is-host="messageItem.sender.role === ZRPRole.Host"
+              :name="messageItem.sender.id"
             />
           </div>
         </div>
@@ -28,16 +28,16 @@
           <div class="m-2 flex flex-row flex-nowrap justify-between items-stretch">
             <div class="w-full mr-2">
               <input
+                v-model="message"
                 class="appearance-none outline-none w-full bg-darkest tc-main-light px-2 py-0.5 rounded transition focus:bg-darkest border border-transparent focus:bc-primary ring-0"
                 type="text"
-                v-model="message"
                 @keyup.stop
                 @keyup.enter="sendMessage"
               />
             </div>
             <div
-              @click="sendMessage"
               class="sendMessageButton flex justify-center items-center bg-darkest px-3 py-0.5 rounded transition cursor-pointer"
+              @click="sendMessage"
             >
               <button class="tc-primary">
                 <Icon icon="teenyicons:send-outline" class="trasform" />

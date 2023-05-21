@@ -7,15 +7,15 @@
         </p>
         <button
           v-if="msg.showClose !== undefined ? msg.showClose : true"
-          @click="close()"
           class="ml-2 p-1 tc-main-dark bg-main hover:bg-dark rounded"
+          @click="close()"
         >
           <Icon icon="akar-icons:cross" class="text-xs" />
         </button>
       </div>
       <div class="snackbar-progress absolute bottom-0 left-0 right-0 h-1 rounded-b overflow-hidden">
         <div
-          class="h-full"
+          class="h-full relative"
           :class="msg.color ? `bg-${msg.color}` : 'bg-_bg-dark-lightest dark:bg-_bg-light-darkest'"
           :style="constructAnimationString()"
           style="animation-timing-function: linear"
@@ -44,7 +44,13 @@ const close = () => {
 const constructAnimationString = () => {
   // defined message: set animation
   // undefined message: reset animation
-  return msg.value ? `animation: transition-progress; animation-duration: ${msg.value?.duration ?? 0}ms` : 'animation: none';
+  if (!msg.value) {
+    return 'animation: none';
+  } else if (msg.value.mode === 'static') {
+    return `animation: transition-progress; animation-duration: ${msg.value?.duration ?? 0}ms`;
+  } else if (msg.value.mode === 'loading') {
+    return `animation: 800ms linear alternate animation-loading infinite;`;
+  }
 };
 </script>
 
@@ -55,6 +61,29 @@ const constructAnimationString = () => {
   }
   100% {
     width: 100%;
+  }
+}
+
+@keyframes animation-loading {
+  0% {
+    left: 0%;
+    width: 5%;
+  }
+  10% {
+    left: 0%;
+    width: 20%;
+  }
+  50% {
+    left: 30%;
+    width: 40%;
+  }
+  90% {
+    left: 80%;
+    width: 20%;
+  }
+  100% {
+    left: 95%;
+    width: 5%;
   }
 }
 </style>

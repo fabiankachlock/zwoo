@@ -12,11 +12,11 @@
           <FormTitle>
             {{ t('changePassword.title') }}
           </FormTitle>
-          <TextInput id="password" v-model="oldPassword" labelKey="changePassword.oldPassword" is-password placeholder="******" />
+          <TextInput id="password" v-model="oldPassword" label-key="changePassword.oldPassword" is-password placeholder="******" />
           <TextInput
             id="password"
             v-model="password"
-            labelKey="changePassword.newPassword"
+            label-key="changePassword.newPassword"
             is-password
             placeholder="******"
             :validator="passwordValidator"
@@ -24,7 +24,7 @@
           <TextInput
             id="password"
             v-model="passwordRepeat"
-            labelKey="changePassword.newPasswordRepeat"
+            label-key="changePassword.newPasswordRepeat"
             is-password
             placeholder="******"
             :validator="passwordValidator"
@@ -32,7 +32,7 @@
           <FormError :error="matchError" />
           <FormError :error="error" />
           <FormActions>
-            <FormSubmit @click="changePassword" :disabled="!isSubmitEnabled">
+            <FormSubmit :disabled="!isSubmitEnabled" @click="changePassword">
               {{ t('changePassword.change') }}
             </FormSubmit>
           </FormActions>

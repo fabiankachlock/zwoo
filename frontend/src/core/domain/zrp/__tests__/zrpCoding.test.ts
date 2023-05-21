@@ -15,7 +15,7 @@ describe('ZRPCoder', () => {
     it('should always encode into 3 digits', () => {
       expect(
         ZRPCoder.encode({
-          code: 1,
+          code: 1 as ZRPOPCode,
           data: {}
         })
       ).toEqual('001,{}');

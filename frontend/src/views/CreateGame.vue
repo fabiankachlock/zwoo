@@ -4,14 +4,14 @@
       <FormTitle>
         {{ t('createGame.title') }}
       </FormTitle>
-      <TextInput id="game-name" v-model="name" labelKey="createGame.name" :placeholder="t('createGame.name')" :validator="nameValidator" />
-      <Checkbox styles="tc-primary mx-3" v-model="isPublic">
+      <TextInput id="game-name" v-model="name" label-key="createGame.name" :placeholder="t('createGame.name')" :validator="nameValidator" />
+      <Checkbox v-model="isPublic" styles="tc-primary mx-3">
         {{ t('createGame.isPublic') }}
       </Checkbox>
-      <TextInput v-if="!isPublic" id="game-password" v-model="password" labelKey="createGame.password" is-password placeholder="******" />
+      <TextInput v-if="!isPublic" id="game-password" v-model="password" label-key="createGame.password" is-password placeholder="******" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create" :disabled="!nameValidator.validate(name).isValid || isLoading">
+        <FormSubmit :disabled="!nameValidator.validate(name).isValid || isLoading" @click="create">
           {{ t('createAccount.create') }}
         </FormSubmit>
       </FormActions>

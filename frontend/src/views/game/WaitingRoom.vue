@@ -6,11 +6,11 @@
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost && playerCount > 1">
-            <button @click="startGame()" class="tc-main-dark bg-primary hover:bg-primary-dark transition">
+            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition" @click="startGame()">
               {{ t('wait.start') }}
             </button>
           </template>
-          <button @click="leave()" class="tc-main-dark bg-secondary hover:bg-secondary-dark transition">{{ t('wait.leave') }}</button>
+          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition" @click="leave()">{{ t('wait.leave') }}</button>
         </div>
       </div>
     </header>

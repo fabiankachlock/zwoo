@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* eslint-disable */
 // @ts-nocheck
 import { useConfig } from '@/core/adapter/config';
 import { ZwooConfigKey } from '@/core/adapter/config';

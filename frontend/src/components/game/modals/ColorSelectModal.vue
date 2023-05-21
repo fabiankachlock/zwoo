@@ -4,26 +4,26 @@
       <button
         class="rounded-tl-full hover:scale-110 hover:-translate-x-3 hover:-translate-y-3 transition-transform"
         :style="`background-color: ${colors[CardColor.green]}`"
-        @click="close(CardColor.green)"
         aria-label="green"
+        @click="close(CardColor.green)"
       ></button>
       <button
         class="rounded-tr-full hover:scale-110 hover:translate-x-3 hover:-translate-y-3 transition-transform"
         :style="`background-color: ${colors[CardColor.red]}`"
-        @click="close(CardColor.red)"
         aria-label="red"
+        @click="close(CardColor.red)"
       ></button>
       <button
         class="rounded-bl-full hover:scale-110 hover:-translate-x-3 hover:translate-y-3 transition-transform"
         :style="`background-color: ${colors[CardColor.blue]}`"
-        @click="close(CardColor.blue)"
         aria-label="blue"
+        @click="close(CardColor.blue)"
       ></button>
       <button
         class="rounded-br-full hover:scale-110 hover:translate-x-3 hover:translate-y-3 transition-transform"
         :style="`background-color: ${colors[CardColor.yellow]}`"
-        @click="close(CardColor.yellow)"
         aria-label="yellow"
+        @click="close(CardColor.yellow)"
       ></button>
     </div>
   </BaseModal>
