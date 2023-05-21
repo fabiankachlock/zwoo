@@ -12,6 +12,7 @@ import { WasmApi } from '../api/wasmapi/WasmApi';
 import { WsGameAdapter } from '../api/wsgame/WsGameAdapter';
 import { useAuth } from './auth';
 import { MigrationRunner } from './migrations/MigrationRunner';
+import { SnackBarPosition, useSnackbar } from './snackbar';
 
 type AppEnv = 'offline' | 'online';
 
@@ -93,6 +94,13 @@ export const useRootApp = defineStore('app', {
     },
     onOfflineReady() {
       this.offlineReady = true;
+      const snackbar = useSnackbar();
+      snackbar.pushMessage({
+        message: 'snackbar.offlineReady',
+        needsTranslation: true,
+        position: SnackBarPosition.BottomLeft,
+        color: 'primary'
+      });
     },
     onNeedsRefresh() {
       this.updateAvailable = true;
