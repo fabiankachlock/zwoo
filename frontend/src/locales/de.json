@@ -182,7 +182,8 @@
       "911": "Verbindung getrennt",
       "920": "Clientfehler aufgetreten",
       "921": "Fehlerhafte Daten erhalten",
-      "930": "Verbunden!"
+      "930": "Verbunden!",
+      "loading": "Verbinden..."
     }
   },
   "version": "Version",
