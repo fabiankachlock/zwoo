@@ -182,7 +182,8 @@
       "911": "Verbindung getrennt",
       "920": "Clientfehler aufgetreten",
       "921": "Fehlerhafte Daten erhalten",
-      "930": "Verbunden!"
+      "930": "Verbunden!",
+      "loading": "Verbinden..."
     }
   },
   "version": "Version",
@@ -215,8 +216,9 @@
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."
     },
-    "noWinInfo": "Es müssen mindestens 2 Spieler in einem Spiel seien, damit die der Sieg in der Bestenliste gezählt wird. Bots zählen nicht als Spieler.",
-    "offlineInfo": "Die Siege in Offline Spielen werden nicht in der Bestenliste gezählt."
+    "noWinInfo": "Siege werden nicht gezählt.",
+    "noWinsOnlineInfo": "Es müssen mindestens 2 Spieler in einem Spiel seien, damit die der Sieg in der Bestenliste gezählt wird. Bots zählen nicht als Spieler.",
+    "noWinsOfflineInfo": "Die Siege in Offline Spielen werden nicht in der Bestenliste gezählt."
   },
   "rules": {
     "widget": {
