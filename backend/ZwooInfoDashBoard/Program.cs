@@ -1,19 +1,13 @@
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
-=======
->>>>>>> feat/audit-trails
 using ZwooInfoDashBoard.Data;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
-<<<<<<< HEAD
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using ZwooInfoDashBoard;
-=======
 using ZwooDatabase;
->>>>>>> feat/audit-trails
 using Radzen;
 using Microsoft.IdentityModel.Logging;
 

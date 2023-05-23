@@ -10,7 +10,7 @@
 
 <AuthorizeView>
     <Authorized>
-        <AuthorizeView Roles="@Globals.AuthenticationRole" Context="innerContext">
+        <AuthorizeView Roles="@Globals.AuthenticationRole" Context="outerContext">
             <Authorized>
                 <RadzenLayout>
                     <RadzenHeader>
@@ -24,8 +24,8 @@
                                 <Template>
                                     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
                                         <RadzenText TagName="TagName.P" Class="rz-mr-4 rz-mb-0">
-                                            @context.User.FindFirst("preferred_username").Value
-                                            (@context.User.FindFirst(ClaimTypes.Email).Value)
+                                            @context.User.FindFirst("preferred_username")?.Value
+                                            (@context.User.FindFirst(ClaimTypes.Email)?.Value)
                                         </RadzenText>
                                         <RadzenGravatar Email="@context.User.FindFirst(ClaimTypes.Email)?.Value">
                                         </RadzenGravatar>
