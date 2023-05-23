@@ -13,13 +13,25 @@ public static class Globals
             }
             return Environment.GetEnvironmentVariable(s)!;
         }
+
+
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
         DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
         LogrushDashboardUrl = Environment.GetEnvironmentVariable("LOGRUSH_DASHBOARD") ?? "";
 
+        AuthenticationAuthority = ReturnIfValidEnvVar("ZWOO_AUTH_AUTHORITY");
+        AuthenticationClientId = ReturnIfValidEnvVar("ZWOO_AUTH_CLIENT_ID");
+        AuthenticationClientSecret = ReturnIfValidEnvVar("ZWOO_AUTH_CLIENT_SECRET");
+        AuthenticationRole = ReturnIfValidEnvVar("ZWOO_AUTH_ROLE");
+
         Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
         ZwooDatabase = new Database();
     }
+
+    public static string AuthenticationAuthority;
+    public static string AuthenticationClientId;
+    public static string AuthenticationClientSecret;
+    public static string AuthenticationRole;
 
     public static string ConnectionString;
     public static string DatabaseName;
