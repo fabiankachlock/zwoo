@@ -359,7 +359,8 @@
       "changedRoleToPlayer": "{0} ist nun Spieler",
       "changedRoleToSpectator": "{0} ist nun Zuschauer",
       "selfGotHost": "Du bist nun Veranstalter"
-    }
+    },
+    "offlineReady": "Bereit für den OfflineModus"
   },
   "logging": {
     "title": "Logs",
