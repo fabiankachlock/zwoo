@@ -1,17 +1,14 @@
-using BackendHelper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
 using Quartz;
-using Quartz.Impl;
+using Quartz.Simpl;
 using ZwooBackend;
 using ZwooBackend.Websockets;
 using ZwooBackend.Games;
-using ZwooBackend.Database;
 using ZwooBackend.Services;
-using ZwooDatabaseClasses;
-using System.Reflection;
+using ZwooDatabase;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +25,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.ExpireTimeSpan = TimeSpan.FromDays(90);
     // Dont use SlidingExpiration, because its an security issue!
     o.Cookie.Name = "auth";
-    o.Cookie.HttpOnly = Globals.UseSsl;
+    o.Cookie.HttpOnly = true;
     o.Cookie.MaxAge = o.ExpireTimeSpan;
     if (Globals.UseSsl)
     {
@@ -38,8 +35,19 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.Domain = Globals.ZwooCookieDomain;
 });
 
-// Database
-builder.Services.AddSingleton(Globals.ZwooDatabase._client);
+// database
+var db = new ZwooDatabase.Database(Globals.ConnectionString, Globals.DatabaseName, Globals.DatabaseLogger);
+
+builder.Services.AddSingleton<IDatabase>(db);
+builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
+builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
+builder.Services.AddSingleton<IChangelogService, ChangelogService>();
+builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
+
+// migrations
+builder.Services.AddSingleton(db.Client);
 builder.Services.Configure<MongoMigrationSettings>(options =>
 {
     options.ConnectionString = Globals.ConnectionString;
@@ -53,6 +61,7 @@ builder.Services.AddMigration(new MongoMigrationSettings
     DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
 });
 
+// backend services
 builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
 builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
@@ -61,8 +70,28 @@ builder.Services.AddSingleton<ILanguageService, LanguageService>();
 
 builder.Services.AddHostedService<EmailService>();
 
+// scheduler
+builder.Services.AddQuartz(q =>
+{
+    q.SchedulerId = "zwoo-scheduler";
+    q.UseThreadPool<DefaultThreadPool>(c =>
+    {
+        c.MaxConcurrency = 1;
+    });
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    q.ScheduleJob<DatabaseCleanupJob>(t => t
+        .WithIdentity("cleanup", "db")
+        .WithCronSchedule("0 1 1 1/1 * ? *"));
+});
+builder.Services.AddQuartzHostedService(options =>
+{
+    options.WaitForJobsToComplete = true;
+});
+builder.Services.AddTransient<DatabaseCleanupJob>();
+
 var app = builder.Build();
 
+// http logging
 app.Use(async (context, next) =>
 {
     if (context.Request.Method != "OPTIONS")
@@ -76,7 +105,6 @@ app.Use(async (context, next) =>
     }
 });
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     Globals.Logger.Debug("adding swagger");
@@ -98,15 +126,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
-#pragma warning disable 4014
-scheduler.Start();
-scheduler.ScheduleJob(
-    JobBuilder.Create<DatabaseCleanupJob>().WithIdentity("db_cleanup", "db").Build(),
-    TriggerBuilder.Create().WithCronSchedule("0 1 1 1/1 * ? *").Build()); // Every Day at 00:01 UTC+1
-#pragma warning restore 4014
-
-
 app.Run();
 
-await scheduler.Shutdown();

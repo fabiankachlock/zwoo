@@ -59,7 +59,7 @@ public class EmailData
         htmlBody = htmlBody.Replace("{{year}}", DateTime.Now.Year.ToString());
 
         var mail = new MailMessage();
-        mail.Subject = _subjectsMap[$"{language}.verifyAccount"];
+        mail.Subject = _subjectsMap[$"{language}.verify"];
         mail.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(txtBody, null, "text/plain"));
         mail.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(htmlBody, null, "text/html"));
         return mail;

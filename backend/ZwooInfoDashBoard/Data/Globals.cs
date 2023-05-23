@@ -1,3 +1,9 @@
+using log4net;
+using log4net.Repository.Hierarchy;
+using log4net.Core;
+using log4net.Appender;
+using log4net.Layout;
+
 namespace ZwooInfoDashBoard.Data;
 
 public static class Globals
@@ -24,8 +30,21 @@ public static class Globals
         AuthenticationClientSecret = ReturnIfValidEnvVar("ZWOO_AUTH_CLIENT_SECRET");
         AuthenticationRole = ReturnIfValidEnvVar("ZWOO_AUTH_ROLE");
 
+        Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
+        hierarchy.Root.Level = Level.Debug;
+
+        PatternLayout layout = new PatternLayout();
+        layout.ConversionPattern = "[%date] [%logger] [%level] %message%newline";
+        layout.ActivateOptions();
+
+        ConsoleAppender consoleAppender = new ConsoleAppender();
+        consoleAppender.Layout = layout;
+        consoleAppender.ActivateOptions();
+        hierarchy.Root.AddAppender(consoleAppender);
+
+        hierarchy.Configured = true;
+
         Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
-        ZwooDatabase = new Database();
     }
 
     public static string AuthenticationAuthority;
@@ -36,6 +55,5 @@ public static class Globals
     public static string ConnectionString;
     public static string DatabaseName;
     public static string LogrushDashboardUrl;
-    public static Database ZwooDatabase { set; get; }
     public static readonly string Version = "1.0.0-beta.11";
 }

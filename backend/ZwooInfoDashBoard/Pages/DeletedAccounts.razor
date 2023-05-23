@@ -1,70 +1,130 @@
 @page "/deleted-accounts"
-@using ZwooInfoDashBoard.Data
-@using ZwooDatabaseClasses
+@inject IDatabase _db;
+@inject IUserService _userService;
+@inject IAuditTrailService _auditTrails;
+@inject IAuthService _auth;
 @inject DialogService DialogService
 
 <PageTitle>Deleted Accounts</PageTitle>
 
 <h1>Deleted Accounts</h1>
 
-<RadzenDataGrid TItem="AccountEvent" Data="_events">
+<RadzenDataGrid TItem="AccountEventDao" Data="_events" @ref="_grid">
     <Columns>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="PlayerID" Title="Id"/>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="Success" Title="Success">
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="PlayerID" Title="Id"/>
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="Success" Title="Success">
             <Template Context="info">
                 @info.Success.ToString()
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="UserData.Username" Title="Username">
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="UserData.Username" Title="Username">
             <Template Context="ae">
                 @ae.UserData!.Username
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="UserData.Email" Title="Username">
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="UserData.Email" Title="Username">
             <Template Context="ae">
                 @ae.UserData!.Email
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="AccountEvent" Property="TimeStamp" Title="Time">
+        <RadzenDataGridColumn TItem="AccountEventDao" Property="TimeStamp" Title="Time">
             <Template Context="info">
                 @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="AccountEvent" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+        <RadzenDataGridColumn TItem="AccountEventDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
             <Template Context="ae">
                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="restore" Class="m-1" Click="@(args => RestoreAccount(ae))"  @onclick:stopPropagation="true" />
             </Template>
-            <EditTemplate Context="ae">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="restore" Class="m-1" Click="@(args => RestoreAccount(ae))" />
-            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="AccountEventDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="ae">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteAccount(ae))"  @onclick:stopPropagation="true" />
+            </Template>
         </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
 
 @code {
-    readonly IQueryable<AccountEvent> _events = Globals.ZwooDatabase.GetAccountEventsAsQueryable().Where(x => x.EventType == "delete");
+    private IQueryable<AccountEventDao> _events = new List<AccountEventDao>().AsQueryable();
+    private RadzenDataGrid<AccountEventDao> _grid = new RadzenDataGrid<AccountEventDao>();
 
-    private async void RestoreAccount(AccountEvent player)
+    protected override void OnInitialized()
     {
-        var r = await DialogService.Confirm($"Do you really want to restore {player.UserData!.Username}s account?");
-        if (r != null && r.Value)
+        _events = _db.AccountEvents.AsQueryable().Where(x => x.EventType == "delete" && x.UserData != null);
+    }
+
+    private async void RestoreAccount(AccountEventDao player)
+    {
+        var result = await DialogService.Confirm($"Do you really want to restore {player.UserData!.Username}s account?");
+        if (result == null || !result.Value)
         {
-            if (Globals.ZwooDatabase.GetUsersAsQueryable().Any(x => x.Username == player.UserData!.Username))
-            {
-                await DialogService.Confirm($"Username already exists");
-                return;
-            }
-            if (Globals.ZwooDatabase.GetUsersAsQueryable().Any(x => x.Email == player.UserData!.Email))
-            {
-                await DialogService.Confirm($"Email already exists");
-                return;
-            }
-            Globals.ZwooDatabase.InsertUser(new User(Globals.ZwooDatabase.GetUsersAsQueryable().Max(x => x.Id) + 1,
-                new List<string> { "" }, player.UserData!.Username,
-                player.UserData!.Email, player.UserData!.Password,
-                player.UserData!.Wins, "", "", true
-            ));
+            return;
         }
+
+        if (player.UserData == null)
+        {
+            await DialogService.Confirm($"no user data");
+            return;
+        }
+        if (_userService.ExistsUsername(player.UserData.Username))
+        {
+            await DialogService.Confirm($"Username already exists");
+            return;
+        }
+        if (_userService.ExistsEmail(player.UserData.Email))
+        {
+            await DialogService.Confirm($"Email already exists");
+            return;
+        }
+
+        var user = new UserDao(){
+            Id = player.UserData.Id,
+            Username = player.UserData.Username,
+            Email = player.UserData.Email,
+            Password = player.UserData.Password,
+            Wins = player.UserData.Wins,
+            Verified  = true,
+        };
+        player.UserData = null;
+
+        _db.Users.InsertOne(user);
+        _db.AccountEvents.ReplaceOne(e => e.Id == player.Id, player);
+        _auditTrails.Protocol(_auditTrails.GetAuditId(user), new AuditEventDao(){
+            Actor = AuditActor.Staff(_auth.Username),
+            Message = "restored user account in admin dashboard",
+            NewValue = user,
+            OldValue = null,
+        });
+        await _grid.Reload();
+    }
+
+    private async void DeleteAccount(AccountEventDao player)
+    {
+        if (player.UserData == null) return;
+        
+        var result = await DialogService.Confirm($"Are you sure that you want to delete {player.UserData.Username}? All user assoiciated data is going to be removed!", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (result == null || (bool)!result) return;
+
+        _db.AccountEvents.DeleteMany(e => e.PlayerID == player.PlayerID);
+        var p = _auditTrails.GetProtocol(_auditTrails.GetAuditId(player.UserData));
+        if (p != null) 
+        {
+            _db.AuditTrails.DeleteOne(t => t.Id == p.Id);
+            foreach (var e in p.Events)
+            {
+                if (e.NewValue is GameInfoDao info)
+                {
+                    var score = info.Scores.Find(score => score.PlayerUsername == player.UserData.Username);
+                    if (score != null)
+                    {
+                        score.PlayerUsername = "-/-";
+                    }
+                    _db.GamesInfo.ReplaceOne(i => i.Id == info.Id, info);
+                }
+            }
+        }
+        await _grid.Reload();
     }
 
 }

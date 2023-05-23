@@ -1,0 +1,23 @@
+@inject DialogService DialogService
+@inject IDatabase _db
+
+<RadzenTextBox @bind-Value="_code" Placeholder="Beta Code" class="w-100 m-2"/>
+
+<div class="row">
+    <div class="col-md-12 text-right">
+        <RadzenButton Click="@((args) => DialogService.Close())" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="width: 120px" Class="mr-1" />
+        <RadzenButton Click="@(() => Save(_code))" Text="OK" Style="width: 120px" />
+    </div>
+</div>
+
+@code {
+    string _code = "";
+
+    private void Save(string code)
+    {
+        _db.BetaCodes.InsertOne(new BetaCodeDao(){
+            Code = code
+        });
+        DialogService.Close();
+    }
+}

@@ -1,12 +1,9 @@
-using System.Collections.Concurrent;
-using BackendHelper;
 using log4net;
 using log4net.Repository.Hierarchy;
 using log4net.Core;
 using log4net.Appender;
 using log4net.Layout;
 using LogRushClient.Log4Net;
-using ZwooDatabaseClasses;
 
 
 namespace ZwooBackend;
@@ -84,7 +81,6 @@ public static class Globals
         hierarchy.Configured = true;
 
         Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
-        ZwooDatabase = new Database.Database();
     }
 
     public static readonly ILog Logger = LogManager.GetLogger("Global");
@@ -94,8 +90,6 @@ public static class Globals
     public static readonly ILog WebSocketLogger = LogManager.GetLogger("WebSocket");
     public static readonly ILog LobbyLogger = LogManager.GetLogger("Lobby");
     public static readonly ILog GameLogger = LogManager.GetLogger("Game");
-
-    public static readonly Database.Database ZwooDatabase;
 
     public static readonly bool UseSsl;
     public static readonly bool IsBeta;

@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
+=======
+>>>>>>> feat/audit-trails
 using ZwooInfoDashBoard.Data;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
+<<<<<<< HEAD
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using ZwooInfoDashBoard;
+=======
+using ZwooDatabase;
+>>>>>>> feat/audit-trails
 using Radzen;
 using Microsoft.IdentityModel.Logging;
 
@@ -67,8 +74,19 @@ builder.Services.AddAuthentication(options =>
 
 builder.WebHost.UseStaticWebAssets();
 
-// Database
-builder.Services.AddSingleton(Globals.ZwooDatabase._client);
+// database
+var db = new ZwooDatabase.Database(Globals.ConnectionString, Globals.DatabaseName);
+
+builder.Services.AddSingleton<IDatabase>(db);
+builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
+builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
+builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IChangelogService, ChangelogService>();
+builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
+
+// migrations
+builder.Services.AddSingleton(db.Client);
 builder.Services.Configure<MongoMigrationSettings>(options =>
 {
     options.ConnectionString = Globals.ConnectionString;
@@ -82,6 +100,9 @@ builder.Services.AddMigration(new MongoMigrationSettings
     DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
 });
 
+// services
+builder.Services.AddSingleton<IAuthService, AuthService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -93,7 +114,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
 app.UseAuthentication();
@@ -106,6 +126,7 @@ app.UseCookiePolicy(new CookiePolicyOptions()
     Secure = CookieSecurePolicy.Always
 });
 
+app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
