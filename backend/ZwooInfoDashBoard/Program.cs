@@ -17,9 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.WebHost.UseStaticWebAssets();
 builder.Services.AddScoped<DialogService>();
-builder.Services.AddScoped<IClaimsTransformation, KeycloakRolesClaimsTransformation>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IClaimsTransformation, KeycloakRolesClaimsTransformation>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -66,7 +68,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.WebHost.UseStaticWebAssets();
 
 // database
 var db = new ZwooDatabase.Database(Globals.ConnectionString, Globals.DatabaseName);
@@ -96,6 +97,7 @@ builder.Services.AddMigration(new MongoMigrationSettings
 
 // services
 builder.Services.AddSingleton<IAuthService, AuthService>();
+
 
 var app = builder.Build();
 

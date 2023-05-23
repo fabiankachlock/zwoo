@@ -7,8 +7,15 @@ public interface IAuthService
 
 public class AuthService : IAuthService
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public AuthService(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
     public string Username
     {
-        get => "unknown";
+        get => _httpContextAccessor.HttpContext?.User.FindFirst("preferred_username")?.Value ?? "unknown";
     }
 }
