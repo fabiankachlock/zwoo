@@ -1,13 +1,13 @@
 <template>
   <div class="h-full flex items-center relative">
     <DynamicActions></DynamicActions>
-    <div @click="toggleMenu" class="ml-2 text-3xl tc-main-secondary cursor-pointer">
+    <div class="ml-2 text-3xl tc-main-secondary cursor-pointer" @click="toggleMenu">
       <Icon :icon="icon" class="tc-main-secondary" />
     </div>
     <div :class="{ hidden: !isMenuOpen, block: isMenuOpen }" class="fixed inset-0" @click="closeMenu"></div>
     <div
-      :class="{ 'border-0 max-h-0': !isMenuOpen, 'border-1 max-h-[500px]': isMenuOpen }"
-      class="menu-container bg-darkest bc-invert-lightest bc-primary fixed z-10 right-0 transition duration-300 overflow-hidden shadow-sm"
+      :class="{ 'max-h-0': !isMenuOpen, 'open max-h-[500px]': isMenuOpen }"
+      class="menu-container bg-darkest border-1 bc-primary fixed z-10 right-0 transition duration-300 overflow-hidden shadow-sm"
       style="min-width: 14rem"
       @click="closeMenu"
     >
@@ -40,11 +40,15 @@ const closeMenu = () => {
 
 <style scoped>
 .menu-container {
-  top: calc(2.5rem + env(safe-area-inset-top));
+  top: calc(2.5rem + env(safe-area-inset-top) - 1px);
   border-right-width: 0px;
   border-top-width: 0px;
   border-radius: 0 0 0 0.5rem;
   transition-property: max-height;
   height: fit-content;
+}
+
+.menu-container.open {
+  top: calc(2.5rem + env(safe-area-inset-top));
 }
 </style>

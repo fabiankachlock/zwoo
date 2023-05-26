@@ -6,13 +6,15 @@ import { ZRPBotConfig, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
+export type BotType = { id: string; name: string; config: ZRPBotConfig };
+
 const botsWatcher = new MonolithicEventWatcher(ZRPOPCode.ListBots, ZRPOPCode.PromotedToHost);
 
 export const useBotManager = defineStore('bot-manager', () => {
-  const bots = ref<Record<string, { id: string; name: string; config: ZRPBotConfig }>>({});
+  const bots = ref<Record<string, BotType>>({});
   const dispatchEvent = useGameEventDispatch();
 
-  const _receiveMessage: typeof botsWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof botsWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.ListBots) {
       bots.value = msg.data.bots.reduce(
         (map, bot) => ({

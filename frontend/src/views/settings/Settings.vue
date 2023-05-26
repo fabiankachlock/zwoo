@@ -6,8 +6,8 @@
         <div class="flex justify-between items-center">
           <h3 class="tc-main text-2xl mx-2 my-1">{{ t(`settings.sections.${currentSection}`) }}</h3>
           <button
-            @click="toggleOpenState"
             class="toggle lg:hidden bg-dark hover:bg-darkest text-2xl tc-main relative p-4 rounded w-6 h-6 overflow-hidden"
+            @click="toggleOpenState"
           >
             <Icon
               icon="iconoir:nav-arrow-down"
@@ -23,10 +23,10 @@
         </div>
         <div class="menu-body transition duration-300" :class="{ open: isMenuOpen, 'overflow-hidden lg:block lg:max-h-full': !isMenuOpen }">
           <router-link
-            class="block tc-main-light bg-dark px-3 py-1 my-2 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
-            :class="{ 'bc-primary': section === currentSection }"
             v-for="section in displaySections"
             :key="section"
+            class="block tc-main-light bg-dark px-3 py-1 my-2 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
+            :class="{ 'bc-primary': section === currentSection }"
             :to="`/settings/${section}`"
           >
             {{ t(`settings.sections.${section}`) }}
@@ -59,7 +59,7 @@ const allSections = ['general', 'account', 'game', 'developers', 'about'];
 const isLoggedIn = computed(() => auth.isLoggedIn);
 const currentSection = ref('');
 const showDevSettings = computed(() => config.get(ZwooConfigKey.DevSettings));
-const isMenuOpen = ref(false);
+const isMenuOpen = ref(true);
 
 const blockedSections = computed(() => [...[isLoggedIn.value ? '-' : 'account'], ...[showDevSettings.value ? '-' : 'developers']]);
 const displaySections = computed(() => allSections.filter(section => !blockedSections.value.includes(section)));

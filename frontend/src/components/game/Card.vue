@@ -2,8 +2,8 @@
   <div class="relative w-full h-full select-none pointer-events-none">
     <img
       v-for="(layer, i) in cardData.layers"
-      :src="layer"
       :key="i"
+      :src="layer"
       :alt="`${cardData.description} - layer ${i}`"
       class="zwoo-card"
       :class="imageClass"
@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 
 import { useCardTheme } from '@/core/adapter/game/cardTheme';
 import { CardTheme } from '@/core/domain/cards/CardTheme';

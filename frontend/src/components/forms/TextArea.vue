@@ -4,6 +4,7 @@
       <label class="block tc-main-secondary text-sm font-bold mb-2" :for="id">{{ t(labelKey) }}</label>
       <div class="relative">
         <textarea
+          :id="id"
           :ref="
             r => {
               input = r as HTMLInputElement;
@@ -12,7 +13,6 @@
           autocomplete=""
           class="bg-dark shadow appearance-none border bc-main rounded w-full py-2 pl-3 pr-7 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
           :name="id"
-          :id="id"
           :placeholder="placeholder"
           :value="modelValue"
           @keyup.stop
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { Validator } from '@/core/services/validator/_type';

@@ -4,6 +4,7 @@
       <label class="block tc-main-secondary text-sm font-bold mb-2" :for="id">{{ t(labelKey) }}</label>
       <div class="relative">
         <input
+          :id="id"
           :ref="
             r => {
               input = r as HTMLInputElement;
@@ -13,7 +14,6 @@
           class="bg-dark shadow appearance-none border bc-main rounded w-full py-2 pl-3 pr-7 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
           :name="id"
           :type="isPassword ? (isPasswordVisible ? 'text' : 'password') : 'text'"
-          :id="id"
           :placeholder="placeholder"
           :value="modelValue"
           @keyup.stop
@@ -22,11 +22,11 @@
         />
         <button
           v-if="isPassword"
-          @click.stop.prevent="togglePasswordMode"
           class="absolute right-2 top-1/2 transform -translate-y-1/2 tc-main text-lg"
+          @click.stop.prevent="togglePasswordMode"
         >
-          <Icon icon="mdi:eye-outline" v-show="!isPasswordVisible" />
-          <Icon icon="mdi:eye-off-outline" v-show="isPasswordVisible" />
+          <Icon v-show="!isPasswordVisible" icon="mdi:eye-outline" />
+          <Icon v-show="isPasswordVisible" icon="mdi:eye-off-outline" />
         </button>
       </div>
       <div class="my-2">
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { Icon } from '@/components/misc/Icon';

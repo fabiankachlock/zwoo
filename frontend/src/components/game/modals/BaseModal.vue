@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useGameModal } from '@/core/adapter/game/modal';

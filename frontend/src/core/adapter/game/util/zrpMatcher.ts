@@ -26,7 +26,7 @@ export class ZRPCombinedMatcher<T> implements ZRPMatcher<T> {
 }
 
 export const createZRPOPCodeMatcher = (...codes: ZRPOPCode[]) => {
-  return new ZRPCombinedMatcher<typeof codes[number]>(
+  return new ZRPCombinedMatcher<(typeof codes)[number]>(
     ...codes.map(code => {
       return (msg: ZRPMessage) => msg.code === code;
     })

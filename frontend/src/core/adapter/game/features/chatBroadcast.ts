@@ -5,7 +5,7 @@ import { useAuth } from '@/core/adapter/auth';
 import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 import { useGameConfig } from '../../game';
-import { ChatMessage, useChatStore } from '../chat';
+import { ChatMessage as ChatMessageType, useChatStore } from '../chat';
 import { MonolithicEventWatcher } from '../util/MonolithicEventWatcher';
 
 const BroadcastChannelID = 'zwoo:$gameChat';
@@ -29,7 +29,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
   const gameConfigStore = useGameConfig();
   const channel = new BroadcastChannel(BroadcastChannelID);
 
-  const messages = ref<ChatMessage[]>([]);
+  const messages = ref<ChatMessageType[]>([]);
   const isActive = ref(false);
   const gameName = ref('');
   const ownName = ref('');
@@ -92,7 +92,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
         ownName.value = payload.ownName;
       } else if (msg.startsWith(ChatMessage)) {
         // add message to pop-out
-        const payload = JSON.parse(msg.substring(ChatMessage.length)) as ChatMessage;
+        const payload = JSON.parse(msg.substring(ChatMessage.length)) as ChatMessageType;
         messages.value.push(payload);
       } else if (msg.startsWith(RequestSetupMessage) && isPublisher) {
         // START: PUBLISHER-SITE

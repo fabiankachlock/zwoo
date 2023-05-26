@@ -14,13 +14,13 @@
       class="w-0 h-full transition overflow-hidden duration-300 ease-out"
       style="transition-property: width, padding"
     >
-      <div class="h-full flex flex-row items-center justify-end" id="content">
+      <div id="content" class="h-full flex flex-row items-center justify-end">
         <router-link to="/settings">
           <Icon icon="akar-icons:settings-horizontal" class="tc-main text-xl ease-linear transition-transform hover:scale-110"></Icon>
         </router-link>
-        <div @click="toggleDarkMode" class="tc-main text-xl ease-linear transition-transform hover:scale-110">
-          <Icon icon="ri:moon-fill" v-show="isDarkMode" />
-          <Icon icon="ri:sun-fill" v-show="!isDarkMode" />
+        <div class="tc-main text-xl ease-linear transition-transform hover:scale-110" @click="toggleDarkMode">
+          <Icon v-show="isDarkMode" icon="ri:moon-fill" />
+          <Icon v-show="!isDarkMode" icon="ri:sun-fill" />
         </div>
       </div>
     </div>

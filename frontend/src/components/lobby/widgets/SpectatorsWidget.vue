@@ -16,21 +16,21 @@
           <template v-if="publicId === player.id">
             <button
               v-tooltip="t('wait.play')"
-              @click="startPlaying()"
               class="tc-primary h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-light mouse:hover:bg-main rounded"
+              @click="startPlaying()"
             >
               <Icon icon="iconoir:play-outline" />
             </button>
           </template>
           <template v-if="isHost && publicId !== player.id">
-            <button v-tooltip="t('wait.kick')" @click="askKickPlayer(player.id)" class="tc-secondary h-full bg-light hover:bg-main rounded p-1">
+            <button v-tooltip="t('wait.kick')" class="tc-secondary h-full bg-light hover:bg-main rounded p-1" @click="askKickPlayer(player.id)">
               <Icon icon="iconoir:delete-circled-outline" />
             </button>
             <ReassureDialog
-              @close="allowed => handleKickPlayer(player.id, allowed)"
               :title="t('dialogs.kickPlayer.title', [player.username])"
               :body="t('dialogs.kickPlayer.body', [player.username])"
               :is-open="playerToKick === player.id"
+              @close="allowed => handleKickPlayer(player.id, allowed)"
             />
           </template>
         </div>

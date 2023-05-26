@@ -77,16 +77,16 @@ const submitForm = async () => {
         <TextInput id="email" labelKey="contact.email" v-model="senderEmail" :placeholder="t('contact.emailPlaceholder')"></TextInput>
         <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
         <ReCaptchaButton
-          @update:response="res => (reCaptchaResponse = res)"
           :validator="reCaptchaValidator"
           :response="reCaptchaResponse"
+          @update:response="res => (reCaptchaResponse = res)"
         ></ReCaptchaButton>
         <Checkbox styles="tc-primary mx-3" v-model="accepted" @update:model-value="handleToggleAccept">
           {{ t('contact.acceptTerms') }}
         </Checkbox>
         <FormError :error="error"></FormError>
         <FormActions>
-          <FormSubmit @click="submitForm" :disabled="!isSubmitEnabled">{{ t('contact.send') }}</FormSubmit>
+          <FormSubmit :disabled="!isSubmitEnabled" @click="submitForm">{{ t('contact.send') }}</FormSubmit>
         </FormActions>
       </Form>
     </FlatDialog>

@@ -7,27 +7,34 @@
       <TextInput
         id="username"
         v-model="username"
-        labelKey="createAccount.username"
+        label-key="createAccount.username"
         :placeholder="t('createAccount.username')"
         :validator="usernameValidator"
       />
       <TextInput
         id="email"
         v-model="email"
-        labelKey="createAccount.email"
+        label-key="createAccount.email"
         :placeholder="t('createAccount.emailExample', ['@'])"
         :validator="emailValidator"
       />
-      <TextInput id="password" v-model="password" labelKey="createAccount.password" is-password placeholder="******" :validator="passwordValidator" />
-      <TextInput id="passwordRepeat" v-model="passwordRepeat" labelKey="createAccount.passwordRepeat" is-password placeholder="******" />
+      <TextInput
+        id="password"
+        v-model="password"
+        label-key="createAccount.password"
+        is-password
+        placeholder="******"
+        :validator="passwordValidator"
+      />
+      <TextInput id="passwordRepeat" v-model="passwordRepeat" label-key="createAccount.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
       <template v-if="isBeta">
-        <TextInput id="beta-code" v-model="betaCode" labelKey="createAccount.beta" placeholder="xxx-xxx" />
+        <TextInput id="beta-code" v-model="betaCode" label-key="createAccount.beta" placeholder="xxx-xxx" />
       </template>
-      <ReCaptchaButton @update:response="res => (reCaptchaResponse = res)" :validator="reCaptchaValidator" :response="reCaptchaResponse" />
+      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
-        <FormSubmit @click="create" :disabled="!isSubmitEnabled || showInfo">
+        <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="create">
           {{ t('createAccount.create') }}
         </FormSubmit>
         <FormAlternativeAction>
@@ -38,7 +45,7 @@
         <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
         <p class="tc-main-secondary">{{ t('createAccount.info') }}</p>
         <p class="tc-main-secondary">{{ t('createAccount.emailInfo') }}</p>
-        <button @click="resendVerifyEmail" class="tc-primary mt-2 bg-main hover:bg-dark rounded-sm px-2 py-1 text-center">
+        <button class="tc-primary mt-2 bg-main hover:bg-dark rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
           {{ t('createAccount.resendVerifyEmail') }}
         </button>
       </div>

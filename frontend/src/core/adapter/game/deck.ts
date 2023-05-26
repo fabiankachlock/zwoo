@@ -19,7 +19,7 @@ export const useGameCardDeck = defineStore('game-cards', () => {
   const dispatchEvent = useGameEventDispatch();
   const config = useConfig();
 
-  const _receiveMessage: typeof deckWatcher['_msgHandler'] = msg => {
+  const _receiveMessage: (typeof deckWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.GameStarted) {
       dispatchEvent(ZRPOPCode.RequestHand, {});
     } else if (msg.code === ZRPOPCode.GetCards) {

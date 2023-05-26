@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, ref, toRefs, watch } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 
 import { Icon } from '@/components/misc/Icon';
 
