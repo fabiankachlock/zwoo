@@ -18,9 +18,6 @@
             <li>From: @request.Name</li>
             <li>Email: @request.Email</li>
             <li>Sent: @request.Origin at @DateTimeOffset.FromUnixTimeMilliseconds(request.Timestamp).ToString("dd.MM.yy HH:mm:ss")</li>
-            <li>
-                Accepted Terms: <RadzenCheckBox Disabled Value="@request.AcceptedTerms"/> (@DateTimeOffset.FromUnixTimeMilliseconds(request.AcceptedTermsAt).ToString("dd.MM.yy HH:mm:ss"))
-            </li>
             <li>Message:</li>
         </ul>
         <textarea disabled style="width: 100%">@request.Message</textarea>

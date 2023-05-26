@@ -64,7 +64,7 @@ public class Database
         _gameInfoCollection = _database.GetCollection<GameInfo>("game_info");
         _accountEventCollection = _database.GetCollection<AccountEvent>("account_events");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
-        _contactRequestsCollection = _database.GetCollection<ContactRequest>("contact_request");
+        _contactRequestsCollection = _database.GetCollection<ContactRequest>("contact-form");
 
         // _contactRequestsCollection.InsertOne(new ContactRequest(new ObjectId(), DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), "test", "mail", "message", true, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), 1.0, "https://zwoo.igd20.de/contact"));
 
@@ -358,8 +358,6 @@ public class Database
             Name = data.Name,
             Email = data.Email,
             Message = data.Message,
-            AcceptedTerms = data.AcceptedTerms,
-            AcceptedTermsAt = data.AcceptedTermsAt,
             CaptchaScore = data.CaptchaScore,
             Origin = data.Site
         };

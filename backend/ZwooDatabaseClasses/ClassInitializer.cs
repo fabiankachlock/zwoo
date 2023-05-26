@@ -52,7 +52,7 @@ public static class ClassInitializer
         {
             cm.AutoMap();
             cm.MapCreator(p =>
-                new ContactRequest(p.Id, p.Timestamp, p.Name, p.Email, p.Message, p.AcceptedTerms, p.AcceptedTermsAt, p.CaptchaScore, p.Origin));
+                new ContactRequest(p.Id, p.Timestamp, p.Name, p.Email, p.Message, p.CaptchaScore, p.Origin));
         });
     }
 }

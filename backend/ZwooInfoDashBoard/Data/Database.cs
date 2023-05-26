@@ -29,7 +29,7 @@ public class Database
         _accountEventsCollection = _database.GetCollection<AccountEvent>("account_events");
         _betacodesCollection = _database.GetCollection<BetaCode>("betacodes");
         _changelogCollection = _database.GetCollection<Changelog>("changelogs");
-        _contactRequestsCollection = _database.GetCollection<ContactRequest>("contact_request");
+        _contactRequestsCollection = _database.GetCollection<ContactRequest>("contact-form");
 
     }
     public IQueryable<GameInfo> GetPlayedGamesAsQueryable() => _gameInfoCollection.AsQueryable();

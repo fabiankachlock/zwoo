@@ -13,12 +13,6 @@ public class ContactForm
     [JsonPropertyName("message")]
     public string Message { set; get; }
 
-    [JsonPropertyName("acceptedTerms")]
-    public bool AcceptedTerms { set; get; }
-
-    [JsonPropertyName("acceptedTermsAt")]
-    public long AcceptedTermsAt { set; get; }
-
     [JsonPropertyName("captchaScore")]
     public double CaptchaScore { set; get; }
 
@@ -30,8 +24,6 @@ public class ContactForm
         Name = name;
         Email = email;
         Message = message;
-        AcceptedTerms = acceptedTerms;
-        AcceptedTermsAt = acceptedTermsAt;
         CaptchaScore = captchaScore;
         Site = site;
     }

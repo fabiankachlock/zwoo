@@ -10,21 +10,19 @@ namespace ZwooDatabaseClasses;
 
 [RuntimeVersion("1.0.0-beta.11")]
 [StartUpVersion("1.0.0-beta.11")]
-[CollectionLocation("contact_request")]
+[CollectionLocation("contact-form")]
 public class ContactRequest : IDocument
 {
     public ContactRequest() { }
 
     [BsonConstructor]
-    public ContactRequest(ObjectId id, long timestamp, string name, string email, string message, bool acceptedTerms, long acceptedTermsAt, double captchaScore, string origin)
+    public ContactRequest(ObjectId id, long timestamp, string name, string email, string message, double captchaScore, string origin)
     {
         Id = id;
         Timestamp = timestamp;
         Name = name;
         Email = email;
         Message = message;
-        AcceptedTerms = acceptedTerms;
-        AcceptedTermsAt = acceptedTermsAt;
         CaptchaScore = captchaScore;
         Origin = origin;
     }
@@ -48,14 +46,6 @@ public class ContactRequest : IDocument
     [JsonPropertyName("message")]
     [BsonElement("message")]
     public string Message { set; get; } = "";
-
-    [JsonPropertyName("acceptedTerms")]
-    [BsonElement("acceptedTerms")]
-    public bool AcceptedTerms { set; get; } = false;
-
-    [JsonPropertyName("acceptedTermsAt")]
-    [BsonElement("acceptedTermsAt")]
-    public long AcceptedTermsAt { set; get; } = 0;
 
     [JsonPropertyName("captchaScore")]
     [BsonElement("captchaScore")]
