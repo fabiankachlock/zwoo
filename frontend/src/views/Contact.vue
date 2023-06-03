@@ -10,20 +10,17 @@ import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
 import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/ApiError';
-import { CaptchaResponse } from '@/core/api/entities/Captcha';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { submitContactForm } = useApi();
 const { t } = useI18n();
-const reCaptchaValidator = new RecaptchaValidator();
 
 const senderName = ref('');
 const senderEmail = ref('');
 const message = ref('');
 const accepted = ref(false);
 const acceptedAt = ref(0);
-const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
+const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
@@ -52,12 +49,12 @@ const submitForm = async () => {
       message: message.value,
       acceptedTerms: accepted.value,
       acceptedTermsAt: acceptedAt.value,
-      captchaScore: reCaptchaResponse.value?.score ?? 0,
+      captchaToken: captchaResponse.value ?? '',
       site: window.location.href
     });
     wasSend.value = true;
   } catch (e: unknown) {
-    reCaptchaResponse.value = undefined;
+    captchaResponse.value = undefined;
     setTimeout(() => {
       error.value = Array.isArray(e) ? e : [getBackendErrorTranslation(e as BackendErrorType)];
     });
@@ -76,11 +73,7 @@ const submitForm = async () => {
         <TextInput id="sender" labelKey="contact.sender" v-model="senderName" :placeholder="t('contact.namePlaceholder')"></TextInput>
         <TextInput id="email" labelKey="contact.email" v-model="senderEmail" :placeholder="t('contact.emailPlaceholder')"></TextInput>
         <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
-        <CaptchaButton
-          :validator="reCaptchaValidator"
-          :response="reCaptchaResponse"
-          @update:response="res => (reCaptchaResponse = res)"
-        ></CaptchaButton>
+        <CaptchaButton :token="captchaResponse" @update:response="res => (captchaResponse = res)"></CaptchaButton>
         <Checkbox styles="tc-primary mx-3" v-model="accepted" @update:model-value="handleToggleAccept">
           {{ t('contact.acceptTerms') }}
         </Checkbox>

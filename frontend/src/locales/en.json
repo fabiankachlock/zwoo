@@ -143,7 +143,7 @@
     "shouldContainNormalChar": "Password should contain at least one letter character.",
     "shouldContainSpecialChar": "Password should contain at least one special character.",
     "gameNameToShort": "Name should be at least 3 Characters long.",
-    "recaptcha": "The Bot-Challenge must be passed.",
+    "captcha": "The Bot-Challenge must be passed.",
     "inputTooLong": "Your input is too long.",
     "backend": {
       "-2": "Internal Error",
@@ -243,15 +243,6 @@
     "actions": "Actions",
     "leave": "Leave Game",
     "playCard": "Play card"
-  },
-  "recaptcha": {
-    "title": "I'm not a robot",
-    "loading": "loading...",
-    "error": "Some error occurred in the checking process. - Please retry later.",
-    "result": {
-      "success": "All good",
-      "fail": "Failed Bot Check! - Please retry later."
-    }
   },
   "deleteAccount": {
     "title": "Delete Account",

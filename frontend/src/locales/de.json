@@ -143,7 +143,7 @@
     "shouldContainNormalChar": "Das Passwort sollte mindestens einen Buchstaben enthalten.",
     "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
     "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein.",
-    "recaptcha": "Die Bot-Challenge muss bestanden sein.",
+    "captcha": "Die Bot-Challenge muss bestanden sein.",
     "inputTooLong": "Die Eingabe ist zu lang.",
     "backend": {
       "-2": "Interner Fehler",
@@ -243,15 +243,6 @@
     "actions": "Aktionen",
     "leave": "Spiel Verlassen",
     "playCard": "Karte legen"
-  },
-  "recaptcha": {
-    "title": "Ich bin kein Roboter",
-    "loading": "laden...",
-    "error": "Ein fehler ist bei checken aufgetreten. - Versuche es später nochmal.",
-    "result": {
-      "success": "Alles gut",
-      "fail": "Check fehlgeschlagen! - Versuche es später nochmal."
-    }
   },
   "deleteAccount": {
     "title": "Account Löschen",

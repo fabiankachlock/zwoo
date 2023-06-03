@@ -22,7 +22,7 @@ export class MiscApiService {
         message: data.message,
         acceptedTerms: data.acceptedTerms,
         acceptedTermsAt: data.acceptedTermsAt,
-        captchaScore: data.captchaScore,
+        captchaToken: data.captchaToken,
         site: data.site
       })
     });

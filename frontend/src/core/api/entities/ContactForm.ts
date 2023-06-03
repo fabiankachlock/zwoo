@@ -4,6 +4,6 @@ export type ContactForm = {
   message: string;
   acceptedTerms: boolean;
   acceptedTermsAt: number;
-  captchaScore: number;
+  captchaToken: string;
   site: string;
 };

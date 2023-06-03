@@ -4,7 +4,7 @@
       <FormTitle> {{ t('login.title') }} </FormTitle>
       <TextInput id="email" v-model="email" label-key="login.email" :placeholder="t('login.email')" />
       <TextInput id="password" v-model="password" label-key="login.password" is-password placeholder="******" />
-      <CaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="reCaptchaValidator" :token="captchaResponse" @update:response="res => (captchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled" @click="logIn">
@@ -44,9 +44,8 @@ import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
 import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
-import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { joinQuery } from '@/core/helper/utils';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
+import { CaptchaValidator } from '@/core/services/validator/captcha';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
@@ -61,16 +60,16 @@ onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
-const reCaptchaValidator = new RecaptchaValidator();
+const reCaptchaValidator = new CaptchaValidator();
 
 const email = ref('');
 const password = ref('');
-const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
+const captchaResponse = ref<string | undefined>(undefined);
 const showNotVerifiedInfo = ref(false);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
-  () => !isLoading.value && reCaptchaValidator.validate(reCaptchaResponse.value).isValid && email.value?.trim() && password.value?.trim()
+  () => !isLoading.value && reCaptchaValidator.validate(captchaResponse.value).isValid && email.value?.trim() && password.value?.trim()
 );
 
 const logIn = async () => {
@@ -78,12 +77,12 @@ const logIn = async () => {
   isLoading.value = true;
 
   try {
-    await auth.login(email.value, password.value, reCaptchaResponse.value);
+    await auth.login(email.value, password.value, captchaResponse.value);
     if (!applyRedirectReplace()) {
       router.push('/home');
     }
   } catch (e: unknown) {
-    reCaptchaResponse.value = undefined;
+    captchaResponse.value = undefined;
     setTimeout(() => {
       if ((e as BackendErrorType)?.code === BackendError.UserNotVerified) {
         // show resend button

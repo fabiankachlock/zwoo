@@ -1,28 +1,27 @@
 <template>
-  <NotARobot :response="response" @response-changed="changed" />
+  <NotARobot :token="token" @response-changed="changed" />
 </template>
 
 <script setup lang="ts">
 import { toRefs } from 'vue';
 
-import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { Validator } from '@/core/services/validator/_type';
 
 import NotARobot from '../security/NotARobot.vue';
 
 const props = defineProps<{
-  validator?: Validator<CaptchaResponse>;
-  response?: CaptchaResponse;
+  validator?: Validator<string | undefined>;
+  token?: string;
 }>();
 
 const { validator } = toRefs(props);
 
 const emit = defineEmits<{
   (event: 'update:isValid', valid: boolean): void;
-  (event: 'update:response', response: CaptchaResponse): void;
+  (event: 'update:response', token?: string): void;
 }>();
 
-const changed = (response: CaptchaResponse) => {
+const changed = (response: string | undefined) => {
   if (validator?.value && validator.value) {
     const result = validator.value.validate(response);
     emit('update:isValid', result.isValid);

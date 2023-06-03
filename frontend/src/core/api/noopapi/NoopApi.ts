@@ -18,7 +18,6 @@ export const NoopApi: ApiAdapter = {
   loadVersionHistory: (..._args) => Promise.resolve({}),
   loginUser: (..._args) => Promise.resolve({}),
   logoutUser: (..._args) => Promise.resolve({}),
-  verifyCaptchaToken: (..._args) => Promise.resolve({}),
   requestUserPasswordReset: (..._args) => Promise.resolve({}),
   resendVerificationEmail: (..._args) => Promise.resolve({}),
   resetUserPassword: (..._args) => Promise.resolve({}),
