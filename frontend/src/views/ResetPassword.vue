@@ -14,7 +14,7 @@
       />
       <TextInput id="passwordRepeat" v-model="passwordRepeat" label-key="resetPassword.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
-      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="reset">
@@ -39,8 +39,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';

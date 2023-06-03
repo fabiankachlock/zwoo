@@ -3,8 +3,8 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { Checkbox, FormActions, FormError, FormSubmit, TextInput } from '@/components/forms';
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import Form from '@/components/forms/Form.vue';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import TextArea from '@/components/forms/TextArea.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
@@ -76,11 +76,11 @@ const submitForm = async () => {
         <TextInput id="sender" labelKey="contact.sender" v-model="senderName" :placeholder="t('contact.namePlaceholder')"></TextInput>
         <TextInput id="email" labelKey="contact.email" v-model="senderEmail" :placeholder="t('contact.emailPlaceholder')"></TextInput>
         <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
-        <ReCaptchaButton
+        <CaptchaButton
           :validator="reCaptchaValidator"
           :response="reCaptchaResponse"
           @update:response="res => (reCaptchaResponse = res)"
-        ></ReCaptchaButton>
+        ></CaptchaButton>
         <Checkbox styles="tc-primary mx-3" v-model="accepted" @update:model-value="handleToggleAccept">
           {{ t('contact.acceptTerms') }}
         </Checkbox>

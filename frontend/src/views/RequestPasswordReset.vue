@@ -4,7 +4,7 @@
       <FormTitle> {{ t('requestPasswordReset.title') }} </FormTitle>
       <p class="m-2 tc-main-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
       <TextInput id="email" v-model="email" label-key="requestPasswordReset.email" :placeholder="t('requestPasswordReset.email')" />
-      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="requestReset">
@@ -27,8 +27,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';

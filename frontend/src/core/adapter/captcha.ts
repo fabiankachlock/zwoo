@@ -31,6 +31,17 @@ export const useCaptcha = defineStore('captcha', {
         grecaptcha.ready(() => this.whenLoaded());
       };
     },
+    async check(token: string): Promise<CaptchaResponse | undefined> {
+      if (!AppConfig.UseBackend) {
+        return Promise.resolve({
+          success: true,
+          score: 1
+        });
+      }
+
+      const [result] = unwrapBackendError(await useApi().verifyCaptchaToken(token));
+      return result;
+    },
     async performCheck(): Promise<CaptchaResponse | undefined> {
       if (!AppConfig.UseBackend) {
         return Promise.resolve({

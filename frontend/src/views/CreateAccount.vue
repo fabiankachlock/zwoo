@@ -31,7 +31,7 @@
       <template v-if="isBeta">
         <TextInput id="beta-code" v-model="betaCode" label-key="createAccount.beta" placeholder="xxx-xxx" />
       </template>
-      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="create">
@@ -58,8 +58,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';

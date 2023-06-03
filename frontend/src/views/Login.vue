@@ -4,7 +4,7 @@
       <FormTitle> {{ t('login.title') }} </FormTitle>
       <TextInput id="email" v-model="email" label-key="login.email" :placeholder="t('login.email')" />
       <TextInput id="password" v-model="password" label-key="login.password" is-password placeholder="******" />
-      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled" @click="logIn">
@@ -35,8 +35,8 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormAlternativeAction, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
