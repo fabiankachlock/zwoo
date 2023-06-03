@@ -261,10 +261,6 @@
       "auth": {
         "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
-      },
-      "recaptcha": {
-        "name": "Google reCAPTCHA Cookies",
-        "description": "Wir nutzen Google reCAPTCHA um SPAM zu vermeiden. Damit Google reCAPTCHA funktioniert, müssen Cookies gespeichert werden, damit deine Interaktionen mit der Webseite analysiert werden können."
       }
     },
     "active": "Aktiviert",

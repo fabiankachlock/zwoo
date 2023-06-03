@@ -261,10 +261,6 @@
       "auth": {
         "name": "Authentication Cookies (Strictly necessary)",
         "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
-      },
-      "recaptcha": {
-        "name": "Google reCAPTCHA Cookies",
-        "description": "We use Google reCAPTCHA in order to prevent spam. Google reCAPTCHA needs cookies in order to analyze your interactions with the website."
       }
     },
     "active": "Active",

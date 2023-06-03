@@ -31,7 +31,7 @@ const emit = defineEmits<{
 const { locale } = useI18n();
 const theme = useColorTheme();
 const config = useRuntimeConfig();
-const siteKey = computed(() => config.recaptchaKey);
+const siteKey = computed(() => config.captchaKey);
 const captchaRef = ref<VueHcaptcha | undefined>(undefined);
 
 const handleError = () => {
