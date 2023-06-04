@@ -14,12 +14,14 @@ namespace ZwooBackend.Controllers;
 public class MiscController : Controller
 {
     private IEmailService _emailService;
+    private IContactRequestService _contactRequests;
     private IChangelogService _changelogs;
 
-    public MiscController(IEmailService emailService, IChangelogService changelogs)
+    public MiscController(IEmailService emailService, IChangelogService changelogs, IContactRequestService contactRequests)
     {
         _emailService = emailService;
         _changelogs = changelogs;
+        _contactRequests = contactRequests;
     }
 
     [HttpGet("version")]
@@ -58,15 +60,23 @@ public class MiscController : Controller
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public IActionResult SubmitContactForm([FromBody] ContactForm body)
     {
-        var request = Globals.ZwooDatabase.CreateContactRequest(body);
-        if (body.CaptchaScore >= 0.5)
+        var request = new ZwooDatabase.Dao.ContactRequest()
         {
-            _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), request);
-        }
-        else
-        {
-            Globals.Logger.Info("skip sending contact email because captcha score is too low");
-        }
+            Name = body.Name,
+            Email = body.Email,
+            Message = body.Message,
+            Origin = body.Site,
+            CaptchaScore = 1,
+        };
+        _contactRequests.CreateRequest(request);
+        // if (body.CaptchaScore >= 0.5)
+        // {
+        //     _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), request);
+        // }
+        // else
+        // {
+        //     Globals.Logger.Info("skip sending contact email because captcha score is too low");
+        // }
         return Ok("sent!");
     }
 }

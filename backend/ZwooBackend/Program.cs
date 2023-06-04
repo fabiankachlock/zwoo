@@ -55,6 +55,7 @@ builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
 builder.Services.AddSingleton<IChangelogService, ChangelogService>();
 builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
+builder.Services.AddSingleton<IContactRequestService, ContactRequestService>();
 
 // migrations
 builder.Services.AddSingleton(db.Client);

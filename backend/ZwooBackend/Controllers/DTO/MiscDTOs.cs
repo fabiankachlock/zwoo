@@ -13,18 +13,18 @@ public class ContactForm
     [JsonPropertyName("message")]
     public string Message { set; get; }
 
-    [JsonPropertyName("captchaScore")]
-    public double CaptchaScore { set; get; }
+    [JsonPropertyName("captchaToken")]
+    public double CaptchaToken { set; get; }
 
     [JsonPropertyName("site")]
     public string Site { set; get; }
 
-    public ContactForm(string name, string email, string message, bool acceptedTerms, long acceptedTermsAt, double captchaScore, string site)
+    public ContactForm(string name, string email, string message, bool acceptedTerms, long acceptedTermsAt, double captchaToken, string site)
     {
         Name = name;
         Email = email;
         Message = message;
-        CaptchaScore = captchaScore;
+        CaptchaToken = captchaToken;
         Site = site;
     }
 }
