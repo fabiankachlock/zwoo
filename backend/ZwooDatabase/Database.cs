@@ -48,6 +48,11 @@ public interface IDatabase
     /// </summary>
     public IMongoCollection<AuditTrailDao> AuditTrails { get; }
 
+    /// <summary>
+    /// a reference to the contact requests collection
+    /// </summary>
+    public IMongoCollection<ContactRequest> ContactRequests { get; }
+
 
     /// <summary>
     /// Delete unverified users & unused password reset codes & delete expired delete account events
@@ -78,6 +83,7 @@ public class Database : IDatabase
     public IMongoCollection<ChangelogDao> Changelogs { get; }
     public IMongoCollection<BetaCodeDao> BetaCodes { get; }
     public IMongoCollection<AuditTrailDao> AuditTrails { get; }
+    public IMongoCollection<ContactRequest> ContactRequests { get; }
 
     private readonly ILog _logger;
 
@@ -114,6 +120,7 @@ public class Database : IDatabase
         AccountEvents = MongoDB.GetCollection<AccountEventDao>("account_events");
         Changelogs = MongoDB.GetCollection<ChangelogDao>("changelogs");
         AuditTrails = MongoDB.GetCollection<AuditTrailDao>("audit_trails");
+        ContactRequests = MongoDB.GetCollection<ContactRequest>("contact_request");
     }
 
     public void CleanDatabase()

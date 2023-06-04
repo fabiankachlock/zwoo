@@ -1,9 +1,7 @@
 @page "/contact-requests"
+@inject IDatabase _db
 
 <PageTitle>Contact Requests</PageTitle>
-
-@using ZwooInfoDashBoard.Data
-@using ZwooDatabaseClasses
 
 <div class="rz-mb-4" style="display: flex; align-items: center; justify-content: space-between;">
     <h1 style="margin: 0">Contact Requests</h1>
@@ -42,17 +40,23 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<ContactRequest> _requests = Globals.ZwooDatabase.GetContactRequests().OrderByDescending(request => request.Timestamp);
-    private List<string> _availableSites = Globals.ZwooDatabase.GetContactRequests().Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
+    private IQueryable<ContactRequest> _requests = new List<ContactRequest>().AsQueryable();
+    private List<string> _availableSites = new List<string>();
     private string? _selectedSite;
+
+    protected override void OnInitialized()
+    {
+        _requests = _db.ContactRequests.AsQueryable();
+        _availableSites = _db.ContactRequests.AsQueryable().Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
+    }
 
     private void SelectedSiteChanged(object _value) 
     {
         string value = (string)_value;
         if (value == "#All") {
-            _requests = Globals.ZwooDatabase.GetContactRequests().OrderByDescending(request => request.Timestamp);
+            _requests = _db.ContactRequests.AsQueryable().OrderByDescending(request => request.Timestamp);
         } else {
-            _requests = Globals.ZwooDatabase.GetContactRequests().Where(request => request.Origin == value).OrderByDescending(request => request.Timestamp);
+            _requests = _db.ContactRequests.AsQueryable().Where(request => request.Origin == value).OrderByDescending(request => request.Timestamp);
         }
     }
     

@@ -5,12 +5,12 @@ using Mongo.Migration;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace ZwooDatabaseClasses;
+namespace ZwooDatabase.Dao;
 
 
 [RuntimeVersion("1.0.0-beta.11")]
 [StartUpVersion("1.0.0-beta.11")]
-[CollectionLocation("contact-form")]
+[CollectionLocation("contact_request")]
 public class ContactRequest : IDocument
 {
     public ContactRequest() { }
@@ -27,35 +27,27 @@ public class ContactRequest : IDocument
         Origin = origin;
     }
 
-    [JsonIgnore]
     [BsonElement("_id")]
     public ObjectId Id { set; get; } = new();
 
-    [JsonPropertyName("timestamp")]
     [BsonElement("timestamp")]
     public long Timestamp { set; get; } = 0;
 
-    [JsonPropertyName("name")]
     [BsonElement("name")]
     public string Name { set; get; } = "";
 
-    [JsonPropertyName("email")]
     [BsonElement("email")]
     public string Email { set; get; } = "";
 
-    [JsonPropertyName("message")]
     [BsonElement("message")]
     public string Message { set; get; } = "";
 
-    [JsonPropertyName("captchaScore")]
     [BsonElement("captchaScore")]
     public double CaptchaScore { set; get; } = 0;
 
-    [JsonPropertyName("origin")]
     [BsonElement("origin")]
     public string Origin { set; get; } = "";
 
-    [JsonIgnore]
     [BsonElement("version")]
     [BsonSerializer(typeof(DocumentVersionSerializer))]
     public DocumentVersion Version { get; set; }
