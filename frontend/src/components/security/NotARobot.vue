@@ -1,6 +1,7 @@
 <template>
-  <div class="box my-2 bg-none rounded-lg relative mx-1 border-2">
+  <div class="box my-2 bg-none rounded-lg relative mx-2">
     <VueHcaptcha
+      v-if="siteKey"
       :sitekey="siteKey"
       :language="locale"
       :theme="theme"
@@ -14,7 +15,7 @@
 
 <script setup lang="ts">
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
-import { computed, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useColorTheme } from '@/core/adapter/helper/useColorTheme';
@@ -31,8 +32,12 @@ const emit = defineEmits<{
 const { locale } = useI18n();
 const theme = useColorTheme();
 const config = useRuntimeConfig();
-const siteKey = computed(() => config.captchaKey);
+const siteKey = ref<string | undefined>(undefined);
 const captchaRef = ref<VueHcaptcha | undefined>(undefined);
+
+onMounted(async () => {
+  siteKey.value = await config.captchaKey;
+});
 
 const handleError = () => {
   emit('responseChanged', undefined);
