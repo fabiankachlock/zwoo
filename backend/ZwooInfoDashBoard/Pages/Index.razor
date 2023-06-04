@@ -1,15 +1,14 @@
 ﻿@page "/"
-@using ZwooInfoDashBoard.Data
-@using ZwooInfoDashBoard.Pages.Dialogs
-@using ZwooDatabaseClasses
+@inject IDatabase _db
+@inject IGameInfoService _gameInfo
+@inject DialogService DialogService
+
+@attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 
-@inject DialogService DialogService
-
-<h1>Home</h1>
-
 <div class="container">
+    <h1>Home</h1>
     <div class="row">
         <div class="col">
             <RadzenCard class="w-100">
@@ -29,25 +28,25 @@
                         <RadzenLabel Text="Available Beta Codes:"/>
                     </div>
                     <div class="col">
-                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetPlayedGamesAsQueryable().Count()}")"/>
+                        <RadzenLabel Text="@($"{_db.GamesInfo.AsQueryable().Count()}")"/>
                         <div class="w-100"></div>
-                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count()}")"/>
+                        <RadzenLabel Text="@($"{_db.Users.AsQueryable().Count()}")"/>
                         <div class="w-100"></div>
-                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count(x=> !x.Verified)}")"/>
+                        <RadzenLabel Text="@($"{_db.Users.AsQueryable().Count(x=> !x.Verified)}")"/>
                         <div class="w-100"></div>
-                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetAccountEventsAsQueryable().Count(x => x.EventType == "login" && !x.Success)}")"/>
+                        <RadzenLabel Text="@($"{_db.AccountEvents.AsQueryable().Count(x => x.EventType == "login" && !x.Success)}")"/>
                         <div class="w-100"></div>
-                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetUsersAsQueryable().Count(x => x.BetaCode != null)}")"/>
+                        <RadzenLabel Text="@($"{_db.Users.AsQueryable().Count(x => x.BetaCode != null)}")"/>
                         <div class="w-100"></div>
-                        <RadzenLabel Text="@($"{Globals.ZwooDatabase.GetBetaCodesAsQueryable().Count()}")"/>
+                        <RadzenLabel Text="@($"{_db.BetaCodes.AsQueryable().Count()}")"/>
                     </div>
                 </div>
             </RadzenCard>
             <RadzenCard class="w-100" Style="margin-top: 10px">
                 <h2>Quick Actions</h2>
-                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" class="w-100" Text="Add New Code" Click="@(async () => await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true }))"/>
+                <RadzenButton Icon="note_add" style="margin-bottom: 10px" class="w-100" Text="Add New Code" Click="@(async () => await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true }))"/>
                 <RadzenButton Icon="search" style="margin-bottom: 10px" class="w-100" Text="Quick Find Player" Click="QuickFindPlayer"/>
-                <RadzenButton Icon="add_circle_outline" class="w-100" Text="Add Version Changelog" Click="CreateVersion"/>
+                <RadzenButton Icon="create" class="w-100" Text="Add Version Changelog" Click="CreateVersion"/>
             </RadzenCard>
             <RadzenCard class="w-100" Style="margin-top: 10px">
                 <h2>Graphs</h2>
@@ -66,14 +65,18 @@
         <div class="col">
             <RadzenCard>
                 <h2>Leaderboard</h2>
-                <RadzenDataGrid TItem="User" Data="_leaderboard">
+                <RadzenDataGrid TItem="LeaderBoardPlayerDao" Data="_leaderboard.TopPlayers">
                     <Columns>
-                        <RadzenDataGridColumn TItem="User" Property="Position" Title="Position"/>
-                        <RadzenDataGridColumn TItem="User" Property="Username" Title="Name"/>
-                        <RadzenDataGridColumn TItem="User" Property="Wins" Title="Wins"/>
-                        <RadzenDataGridColumn TItem="User" TextAlign="TextAlign.Center" Width="60px">
+                        <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Title="Position">
                             <Template Context="player">
-                                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="info" Class="m-1" Click="@(() => OpenPlayer(player.Id))"/>
+                                @(_leaderboard.TopPlayers.IndexOf(player) + 1).
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Property="Username" Title="Name"/>
+                        <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" Property="Wins" Title="Wins"/>
+                        <RadzenDataGridColumn TItem="LeaderBoardPlayerDao" TextAlign="TextAlign.Center" Width="60px">
+                            <Template Context="player">
+                                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="info" Class="m-1" Click="@(() => OpenPlayer(player.Username))"/>
                             </Template>
                         </RadzenDataGridColumn>
                     </Columns>
@@ -91,30 +94,32 @@
             Day = d;
             Amount = a;
         }
-        
+
         public string Day { get; set; }
         public int Amount { get; set; }
     }
-    
-    readonly List<User> _leaderboard = Globals.ZwooDatabase.GetLeaderboard();
+
+    private LeaderBoardDao _leaderboard { get; set; } = new LeaderBoardDao(new List<LeaderBoardPlayerDao>());
+
     private List<DiagramData> _gamesPlayed = new();
     private List<DiagramData> _accountsCreated = new();
 
     protected override void OnInitialized()
     {
+        _leaderboard = _gameInfo.GetLeaderBoard();
         var s = DateTime.Today - TimeSpan.FromDays(6);
         var e = s + TimeSpan.FromDays(1);
         for (int i = 7; i != 0; i--)
         {
             // Played Games
             {
-                var a = Globals.ZwooDatabase.GetPlayedGamesAsQueryable()
+                var a = _db.GamesInfo.AsQueryable()
                     .Count(x => x.TimeStamp > (ulong)((DateTimeOffset)s).ToUnixTimeSeconds() && x.TimeStamp < (ulong)((DateTimeOffset)e).ToUnixTimeSeconds());
                 _gamesPlayed.Add(new DiagramData(s.ToString("ddd"), a));
             }
             // Accounts created
             {
-                var a = Globals.ZwooDatabase.GetAccountEventsAsQueryable()
+                var a = _db.AccountEvents.AsQueryable()
                     .Where(x => x.EventType == "create" && x.Success)
                     .Count(x => x.TimeStamp > (ulong)((DateTimeOffset)s).ToUnixTimeSeconds() && x.TimeStamp < (ulong)((DateTimeOffset)e).ToUnixTimeSeconds());
                 _accountsCreated.Add(new DiagramData(s.ToString("ddd"), a));
@@ -125,19 +130,23 @@
         }
     }
 
-    private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
+    private async Task OpenPlayer(string username)
+    {
+        var user = _db.Users.AsQueryable().FirstOrDefault(u => u.Username == username);
+        await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", user?.Id ?? 0 } }, new DialogOptions { Width = "700px", Height = "530px", Resizable = true, Draggable = true });
+    }
 
     private async Task QuickFindPlayer()
     {
         var res = await DialogService.OpenAsync<QuickFindPlayerDialog>("Quick Find Player", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "200px", Resizable = false, Draggable = true });
-        if (res is User usr)
-            await OpenPlayer(usr.Id);
+        if (res is UserDao usr)
+            await OpenPlayer(usr.Username);
     }
 
     private async Task CreateVersion()
     {
         var res = await DialogService.OpenAsync<AddVersionDialog>("Create version", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "200px", Resizable = false, Draggable = true });
-        if (res is Changelog changelog)
+        if (res is ChangelogDao changelog)
             await DialogService.OpenAsync<ChangelogEditDialog>("Edit Changelog", new Dictionary<string, object> { { "changelog", changelog } }, new DialogOptions { Width = "1300px", Height = "760px", Resizable = true, Draggable = true });
     }
 }

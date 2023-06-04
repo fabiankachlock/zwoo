@@ -1,8 +1,9 @@
 ﻿using ZwooBackend.Websockets;
-using ZwooDatabaseClasses;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic;
 using log4net;
+using ZwooDatabase;
+using ZwooDatabase.Dao;
 
 namespace ZwooBackend.Games;
 
@@ -27,15 +28,19 @@ public interface IGameLogicService
 public class GameLogicService : IGameLogicService
 {
     // globally used GameLogic instance
-    private GameManager _gameManager;
-    private IWebSocketManager _wsManager;
+    private readonly GameManager _gameManager;
+    private readonly IWebSocketManager _wsManager;
+    private readonly IUserService _userService;
+    private readonly IGameInfoService _gameInfo;
     private ILog _logger = LogManager.GetLogger("GamesService");
 
 
-    public GameLogicService(IWebSocketManager wsManager)
+    public GameLogicService(IWebSocketManager wsManager, IGameInfoService gameInfo, IUserService userService)
     {
         _wsManager = wsManager;
         _gameManager = new GameManager(wsManager, new Log4NetFactory());
+        _gameInfo = gameInfo;
+        _userService = userService;
     }
 
     public bool HasGame(long gameId)
@@ -48,24 +53,30 @@ public class GameLogicService : IGameLogicService
         ZwooRoom room = _gameManager.CreateGame(name, isPublic);
         room.Game.OnFinished += (data, gameMeta) =>
         {
-            List<PlayerScore> scores = new();
+            List<PlayerScoreDao> scores = new();
             foreach (KeyValuePair<long, int> score in data.Scores)
             {
                 var player = room.GetPlayer(score.Key);
                 if (player != null)
                 {
-                    scores.Add(new PlayerScore(player.Username, score.Value, player.Role == ZRPRole.Bot));
+                    scores.Add(new PlayerScoreDao(player.Username, score.Value, player.Role == ZRPRole.Bot));
                 }
             }
 
-            Globals.ZwooDatabase.SaveGame(scores, gameMeta);
+            _gameInfo.SaveGame(new GameInfoDao()
+            {
+                GameId = gameMeta.Id,
+                GameName = gameMeta.Name,
+                IsPublic = gameMeta.IsPublic,
+                Scores = scores,
+            });
 
             if (scores.Where(score => !score.IsBot).Count() > 1)
             {
                 if (room.GetPlayer(data.Winner)?.Role != ZRPRole.Bot)
                 {
                     _logger.Info($"[{gameMeta.Id}] incrementing win of winner {data.Winner}");
-                    uint winnerWins = Globals.ZwooDatabase.IncrementWin((ulong)data.Winner);
+                    _userService.IncrementWin((ulong)data.Winner);
                 }
             }
             else
