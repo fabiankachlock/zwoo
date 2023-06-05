@@ -15,12 +15,15 @@ public class AccountController : Controller
     private readonly IEmailService _emailService;
     private readonly ILanguageService _languageService;
     private readonly IUserService _userService;
+    private ICaptchaService _captcha;
 
-    public AccountController(IEmailService emailService, ILanguageService languageService, IUserService userService)
+
+    public AccountController(IEmailService emailService, ILanguageService languageService, IUserService userService, ICaptchaService captcha)
     {
         _emailService = emailService;
         _languageService = languageService;
         _userService = userService;
+        _captcha = captcha;
     }
 
     [HttpGet("settings")]
@@ -80,8 +83,14 @@ public class AccountController : Controller
     [HttpPost("requestPasswordReset")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
-    public IActionResult RequestResetPassword([FromBody] RequestResetPassword body)
+    public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPassword body)
     {
+        var captchaResponse = await _captcha.Verify(body.captchaToken);
+        if (captchaResponse == null || !captchaResponse.Success)
+        {
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
+        }
+
         var user = _userService.RequestChangePassword(body.email);
         if (user == null)
         {

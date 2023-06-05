@@ -77,14 +77,14 @@ public class MiscController : Controller
             CaptchaScore = captchaResponse.Score,
         };
         _contactRequests.CreateRequest(request);
-        // if (body.CaptchaScore >= 0.5)
-        // {
-        //     _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), request);
-        // }
-        // else
-        // {
-        //     Globals.Logger.Info("skip sending contact email because captcha score is too low");
-        // }
+        if (request.CaptchaScore >= 0.5)
+        {
+            _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), request);
+        }
+        else
+        {
+            Globals.Logger.Info("skip sending contact email because captcha score is too low");
+        }
         return Ok("sent!");
     }
 }

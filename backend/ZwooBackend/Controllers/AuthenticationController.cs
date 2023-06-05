@@ -22,19 +22,22 @@ public class AuthenticationController : Controller
     private readonly ILanguageService _languageService;
     private readonly IUserService _userService;
     private readonly IBetaCodesService _betaCodes;
+    private ICaptchaService _captcha;
 
-    public AuthenticationController(IEmailService emailService, ILanguageService languageService, IUserService userService, IBetaCodesService betaCodes)
+
+    public AuthenticationController(IEmailService emailService, ILanguageService languageService, IUserService userService, IBetaCodesService betaCodes, ICaptchaService captcha)
     {
         _emailService = emailService;
         _languageService = languageService;
         _userService = userService;
         _betaCodes = betaCodes;
+        _captcha = captcha;
     }
 
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
-    public IActionResult CreateAccount([FromBody] CreateAccount body)
+    public async Task<IActionResult> CreateAccount([FromBody] CreateAccount body)
     {
         if (!StringHelper.IsValidEmail(body.email))
         {
@@ -65,6 +68,12 @@ public class AuthenticationController : Controller
             }
         }
 
+        var captchaResponse = await _captcha.Verify(body.captchaToken);
+        if (captchaResponse == null || !captchaResponse.Success)
+        {
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
+        }
+
         var user = _userService.CreateUser(body.username, body.email, body.password, body.code);
         var recipient = _emailService.CreateRecipient(body.email, body.username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
         _emailService.SendVerifyMail(recipient, user.Id, user.ValidationCode);
@@ -87,8 +96,14 @@ public class AuthenticationController : Controller
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    public IActionResult Login([FromBody] Login body)
+    public async Task<IActionResult> Login([FromBody] Login body)
     {
+        var captchaResponse = await _captcha.Verify(body.captchaToken);
+        if (captchaResponse == null || !captchaResponse.Success)
+        {
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
+        }
+
         var result = _userService.LoginUser(body.email, body.password);
         if (result.User == null || result.SessionId == null)
         {

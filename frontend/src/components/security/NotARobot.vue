@@ -1,5 +1,5 @@
 <template>
-  <div class="box my-2 bg-none rounded-lg relative mx-2">
+  <div class="box my-2 bg-none rounded-lg relative mx-2 flex justify-center">
     <VueHcaptcha
       v-if="siteKey"
       :sitekey="siteKey"
