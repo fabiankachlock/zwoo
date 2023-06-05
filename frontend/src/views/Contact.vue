@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { Checkbox, FormActions, FormError, FormSubmit, TextInput } from '@/components/forms';
+import { FormActions, FormError, FormSubmit, TextInput } from '@/components/forms';
 import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import Form from '@/components/forms/Form.vue';
 import TextArea from '@/components/forms/TextArea.vue';
@@ -18,25 +18,15 @@ const { t } = useI18n();
 const senderName = ref('');
 const senderEmail = ref('');
 const message = ref('');
-const accepted = ref(false);
-const acceptedAt = ref(0);
 const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
-const isSubmitEnabled = computed(
-  () => !isLoading.value && accepted.value && message.value?.trim() && senderEmail.value?.trim() && senderName.value?.trim()
-);
+const isSubmitEnabled = computed(() => !isLoading.value && message.value?.trim() && senderEmail.value?.trim() && senderName.value?.trim());
 const wasSend = ref(false);
 
 onMounted(() => {
   useCookies().loadRecaptcha();
 });
-
-const handleToggleAccept = (value: boolean) => {
-  if (value) {
-    acceptedAt.value = Date.now();
-  }
-};
 
 const submitForm = async () => {
   error.value = [];
@@ -47,8 +37,6 @@ const submitForm = async () => {
       name: senderName.value,
       email: senderEmail.value,
       message: message.value,
-      acceptedTerms: accepted.value,
-      acceptedTermsAt: acceptedAt.value,
       captchaToken: captchaResponse.value ?? '',
       site: window.location.href
     });
@@ -74,9 +62,6 @@ const submitForm = async () => {
         <TextInput id="email" labelKey="contact.email" v-model="senderEmail" :placeholder="t('contact.emailPlaceholder')"></TextInput>
         <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
         <CaptchaButton :token="captchaResponse" @update:response="res => (captchaResponse = res)"></CaptchaButton>
-        <Checkbox styles="tc-primary mx-3" v-model="accepted" @update:model-value="handleToggleAccept">
-          {{ t('contact.acceptTerms') }}
-        </Checkbox>
         <FormError :error="error"></FormError>
         <FormActions>
           <FormSubmit :disabled="!isSubmitEnabled" @click="submitForm">{{ t('contact.send') }}</FormSubmit>

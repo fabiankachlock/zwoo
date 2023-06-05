@@ -20,8 +20,6 @@ export class MiscApiService {
         name: data.name,
         email: data.email,
         message: data.message,
-        acceptedTerms: data.acceptedTerms,
-        acceptedTermsAt: data.acceptedTermsAt,
         captchaToken: data.captchaToken,
         site: data.site
       })
