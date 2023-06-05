@@ -78,6 +78,7 @@ builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocke
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<ILanguageService, LanguageService>();
+builder.Services.AddSingleton<ICaptchaService, CaptchaService>();
 
 builder.Services.AddHostedService<EmailService>();
 

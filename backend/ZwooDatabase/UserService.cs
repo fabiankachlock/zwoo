@@ -282,7 +282,7 @@ public class UserService : IUserService
 
         if (StringHelper.CheckPassword(password, user.Password) && user.Verified)
         {
-            _logger.Warn($"logging in {user.Id} failed - wrong password");
+            _logger.Debug($"logging in {user.Id}");
             string sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
             user.Sid.Add(sid);
             UpdateUser(user, AuditOptions.WithMessage("logged user in").Merge(auditOptions));
@@ -290,7 +290,7 @@ public class UserService : IUserService
             return new UserLoginResult(user, sid, null);
         }
 
-        _logger.Debug($"logging in {user.Id}");
+        _logger.Warn($"logging in {user.Id} failed - {(user.Verified ? "wrong password" : "not verified")}");
         _accountEvents.LoginAttempt(user, false);
         return new UserLoginResult(user, null, user.Verified ? ErrorCode.WrongPassword : ErrorCode.NotVerified);
     }

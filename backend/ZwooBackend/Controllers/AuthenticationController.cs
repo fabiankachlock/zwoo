@@ -31,25 +31,6 @@ public class AuthenticationController : Controller
         _betaCodes = betaCodes;
     }
 
-    [HttpPost("recaptcha")]
-    [Consumes(MediaTypeNames.Text.Plain)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    public IActionResult reCaptcha()
-    {
-        HttpClient client = new HttpClient();
-
-        using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-        {
-            var s = reader.ReadToEndAsync();
-            s.Wait();
-            var res = client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={Globals.RecaptchaSideSecret}&response={s.Result}", null);
-            res.Wait();
-            var body = res.Result.Content.ReadAsStringAsync();
-            body.Wait();
-            return Ok(body.Result);
-        }
-    }
-
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]

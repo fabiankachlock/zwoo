@@ -14,12 +14,12 @@ public class ContactForm
     public string Message { set; get; }
 
     [JsonPropertyName("captchaToken")]
-    public double CaptchaToken { set; get; }
+    public string CaptchaToken { set; get; }
 
     [JsonPropertyName("site")]
     public string Site { set; get; }
 
-    public ContactForm(string name, string email, string message, bool acceptedTerms, long acceptedTermsAt, double captchaToken, string site)
+    public ContactForm(string name, string email, string message, bool acceptedTerms, long acceptedTermsAt, string captchaToken, string site)
     {
         Name = name;
         Email = email;

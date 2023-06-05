@@ -16,12 +16,14 @@ public class MiscController : Controller
     private IEmailService _emailService;
     private IContactRequestService _contactRequests;
     private IChangelogService _changelogs;
+    private ICaptchaService _captcha;
 
-    public MiscController(IEmailService emailService, IChangelogService changelogs, IContactRequestService contactRequests)
+    public MiscController(IEmailService emailService, IChangelogService changelogs, IContactRequestService contactRequests, ICaptchaService captcha)
     {
         _emailService = emailService;
         _changelogs = changelogs;
         _contactRequests = contactRequests;
+        _captcha = captcha;
     }
 
     [HttpGet("version")]
@@ -58,15 +60,21 @@ public class MiscController : Controller
     [EnableCors("ContactForm")]
     [HttpPost("contactForm")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    public IActionResult SubmitContactForm([FromBody] ContactForm body)
+    public async Task<IActionResult> SubmitContactForm([FromBody] ContactForm body)
     {
+        var captchaResponse = await _captcha.Verify(body.CaptchaToken);
+        if (captchaResponse == null || !captchaResponse.Success)
+        {
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
+        }
+
         var request = new ZwooDatabase.Dao.ContactRequest()
         {
             Name = body.Name,
             Email = body.Email,
             Message = body.Message,
             Origin = body.Site,
-            CaptchaScore = 1,
+            CaptchaScore = captchaResponse.Score,
         };
         _contactRequests.CreateRequest(request);
         // if (body.CaptchaScore >= 0.5)

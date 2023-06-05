@@ -10,6 +10,7 @@ public static class ErrorCodes
         NONE = 0,
 
         BACKEND_ERROR = 100,
+        CAPTCHA_INVALID = 101,
 
         USER_NOT_VERIFIED = 110,
         COOKIE_MISSING = 111,
