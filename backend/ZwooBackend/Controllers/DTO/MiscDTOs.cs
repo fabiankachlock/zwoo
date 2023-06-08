@@ -19,7 +19,7 @@ public class ContactForm
     [JsonPropertyName("site")]
     public string Site { set; get; }
 
-    public ContactForm(string name, string email, string message, bool acceptedTerms, long acceptedTermsAt, string captchaToken, string site)
+    public ContactForm(string name, string email, string message, string captchaToken, string site)
     {
         Name = name;
         Email = email;
