@@ -56,6 +56,7 @@ public class CaptchaService : ICaptchaService
             var body = await res.Content.ReadAsStringAsync();
 
             CaptchaResponse? response = JsonSerializer.Deserialize<CaptchaResponse>(body);
+            return null;
             if (response != null)
             {
                 // hcaptcha specific

@@ -8,7 +8,7 @@
       @error="handleError"
       @verify="handleVerify"
       @expired="handleExpired"
-      :ref="captchaRef"
+      :ref="(r: VueHcaptcha) => (captchaRef = r)"
     />
   </div>
 </template>

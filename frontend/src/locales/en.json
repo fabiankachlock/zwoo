@@ -144,11 +144,13 @@
     "shouldContainSpecialChar": "Password should contain at least one special character.",
     "gameNameToShort": "Name should be at least 3 Characters long.",
     "captcha": "The Bot-Challenge must be passed.",
+    "fillIn": "Please fill in all required fields.",
     "inputTooLong": "Your input is too long.",
     "backend": {
       "-2": "Internal Error",
       "-1": "Unknown Error",
       "100": "An error occurred in the backend.",
+      "101": "The captcha check failed.",
       "110": "The account is not verified.",
       "111": "The cookie is missing.",
       "112": "The user could not be found.",

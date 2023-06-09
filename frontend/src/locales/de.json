@@ -144,11 +144,13 @@
     "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
     "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein.",
     "captcha": "Die Bot-Challenge muss bestanden sein.",
+    "fillIn": "Bitte fülle alle erforderlichen Felder aus.",
     "inputTooLong": "Die Eingabe ist zu lang.",
     "backend": {
       "-2": "Interner Fehler",
       "-1": "Unbekannter Fehler",
       "100": "Fehler im Backend.",
+      "101": "Der Captcha-Check ist fehlgeschlagen",
       "110": "Der Account ist nicht verifiziert.",
       "111": "Der Cookie fehlt.",
       "112": "Der Nutzer konnte nicht gefunden werden.",
