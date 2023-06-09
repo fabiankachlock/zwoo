@@ -18,7 +18,7 @@ public interface ICaptchaService
 
 public class CaptchaResponse
 {
-    public CaptchaResponse(bool success, ulong timestamp, double score, string[]? errors)
+    public CaptchaResponse(bool success, string timestamp, double score, string[]? errors)
     {
         Success = success;
         Timestamp = timestamp;
@@ -30,7 +30,7 @@ public class CaptchaResponse
     public bool Success { get; set; }
 
     [JsonPropertyName("challenge_ts")]
-    public ulong Timestamp { get; set; }
+    public string Timestamp { get; set; }
 
     public double Score { get; set; }
 
@@ -47,13 +47,14 @@ public class CaptchaService : ICaptchaService
     {
         try
         {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data["secret"] = _secret;
+            data["response"] = token;
+
             var client = new HttpClient();
-            var res = await client.PostAsJsonAsync("https://hcaptcha.com/siteverify", new
-            {
-                secret = _secret,
-                response = token
-            });
-            var body = await res.Content.ReadAsStreamAsync();
+            var res = await client.PostAsync("https://hcaptcha.com/siteverify", new FormUrlEncodedContent(data));
+            var body = await res.Content.ReadAsStringAsync();
+
             CaptchaResponse? response = JsonSerializer.Deserialize<CaptchaResponse>(body);
             if (response != null)
             {
