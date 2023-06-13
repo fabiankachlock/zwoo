@@ -10,7 +10,7 @@ WORKDIR /src
 COPY ["./ZwooBackend/ZwooBackend.csproj", "./ZwooBackend/"]
 COPY ["./GameLogic/GameLogic.csproj", "./GameLogic/"]
 COPY ["./BackendHelper/BackendHelper.csproj", "./BackendHelper/"]
-COPY ["./ZwooDatabaseClasses/ZwooDatabaseClasses.csproj", "./ZwooDatabaseClasses/"]
+COPY ["./ZwooDatabase/ZwooDatabase.csproj", "./ZwooDatabase/"]
 RUN dotnet restore "./ZwooBackend/ZwooBackend.csproj"
 
 # copy all projects into /src (/src/<project>)
