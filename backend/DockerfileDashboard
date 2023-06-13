@@ -18,4 +18,9 @@ RUN dotnet publish "./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj" -c Release -o 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://*:80;https://*:443
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.dotnet/https/certificate.pfx
+
 ENTRYPOINT ["dotnet", "ZwooInfoDashBoard.dll"]
