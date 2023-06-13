@@ -40,13 +40,24 @@
 </RadzenDataGrid>
 
 @code {
+    private IQueryable<ContactRequest> _baseData = new List<ContactRequest>().AsQueryable();
     private IQueryable<ContactRequest> _requests = new List<ContactRequest>().AsQueryable();
     private List<string> _availableSites = new List<string>();
     private string? _selectedSite;
 
     protected override void OnInitialized()
     {
-        _requests = _db.ContactRequests.AsQueryable();
+        if (Globals.WebsiteDatabaseName != null)
+        {
+            var websiteDb = _db.Client.GetDatabase(Globals.WebsiteDatabaseName);
+            var otherCollection = websiteDb.GetCollection<ContactRequest>(Globals.WebsiteDatabaseCollection);
+            _baseData = _db.ContactRequests.AsQueryable().Union(otherCollection.AsQueryable());
+        }
+        else
+        {
+            _baseData = _db.ContactRequests.AsQueryable();
+        }
+        _requests = _baseData;
         _availableSites = _db.ContactRequests.AsQueryable().Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
     }
 
@@ -54,9 +65,9 @@
     {
         string value = (string)_value;
         if (value == "#All") {
-            _requests = _db.ContactRequests.AsQueryable().OrderByDescending(request => request.Timestamp);
+            _requests = _baseData.OrderByDescending(request => request.Timestamp);
         } else {
-            _requests = _db.ContactRequests.AsQueryable().Where(request => request.Origin == value).OrderByDescending(request => request.Timestamp);
+            _requests = _baseData.Where(request => request.Origin == value).OrderByDescending(request => request.Timestamp);
         }
     }
     

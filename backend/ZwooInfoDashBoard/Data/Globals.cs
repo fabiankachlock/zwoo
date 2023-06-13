@@ -25,6 +25,9 @@ public static class Globals
         DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
         LogrushDashboardUrl = Environment.GetEnvironmentVariable("LOGRUSH_DASHBOARD") ?? "";
 
+        WebsiteDatabaseName = Environment.GetEnvironmentVariable("WEBSITE_DATABASE_NAME");
+        WebsiteDatabaseCollection = Environment.GetEnvironmentVariable("WEBSITE_DATABASE_COLLECTION") ?? "contact_request";
+
         AuthenticationAuthority = ReturnIfValidEnvVar("ZWOO_AUTH_AUTHORITY");
         AuthenticationClientId = ReturnIfValidEnvVar("ZWOO_AUTH_CLIENT_ID");
         AuthenticationClientSecret = ReturnIfValidEnvVar("ZWOO_AUTH_CLIENT_SECRET");
@@ -54,6 +57,8 @@ public static class Globals
 
     public static string ConnectionString;
     public static string DatabaseName;
+    public static string? WebsiteDatabaseName;
+    public static string WebsiteDatabaseCollection;
     public static string LogrushDashboardUrl;
     public static readonly string Version = "1.0.0-beta.11";
 }
