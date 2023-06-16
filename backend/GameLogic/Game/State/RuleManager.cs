@@ -30,7 +30,7 @@ internal class RuleManager
         _loggerFactory = loggerFactory;
     }
 
-    public void Configure()
+    public void Configure(Action<GameInterrupt> interruptHandler)
     {
         _activeRules = AllRules
             .Where(rule =>
@@ -41,7 +41,7 @@ internal class RuleManager
 
         foreach (var rule in _activeRules)
         {
-            rule.SetLogger(_loggerFactory.CreateLogger($"Game-{GameId}"));
+            rule.SetupRule(interruptHandler, _loggerFactory.CreateLogger($"Game-{GameId}"));
         }
     }
 
@@ -50,13 +50,23 @@ internal class RuleManager
         return _activeRules.Where(rule => rule.IsResponsible(clientEvent, state)).ToList();
     }
 
+    public List<BaseRule> GetResponsibleRulesForInterrupt(GameInterrupt interrupt, GameState state)
+    {
+        return _activeRules.Where(rule => rule.IsResponsibleForInterrupt(interrupt, state)).ToList();
+    }
+
     public BaseRule GetPrioritizedRule(List<BaseRule> rules)
     {
         return rules.OrderByDescending(rule => rule.Priority).First();
     }
 
-    public BaseRule? getRule(ClientEvent clientEvent, GameState state)
+    public BaseRule? GetRule(ClientEvent clientEvent, GameState state)
     {
         return GetPrioritizedRule(GetResponsibleRules(clientEvent, state));
+    }
+
+    public BaseRule? GetRuleForInterrupt(GameInterrupt interrupt, GameState state)
+    {
+        return GetPrioritizedRule(GetResponsibleRulesForInterrupt(interrupt, state));
     }
 }
