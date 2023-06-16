@@ -42,6 +42,8 @@ internal abstract class BaseRule
         return GameStateUpdate.None(state);
     }
 
+    // listening
+    public virtual void OnGameEvent(GameState state, List<GameEvent> outgoingEvents) { }
 
     // Interrupts
     protected void InterruptGame(string reason, InterruptPayload payload)

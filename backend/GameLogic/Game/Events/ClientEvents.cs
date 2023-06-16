@@ -12,7 +12,7 @@ public enum ClientEventType
     RequestEndTurn = 303,
     PlaceCard = 304,
     DrawCard = 305,
-    SendPlayerDecission = 317
+    SendPlayerDecision = 317
 }
 
 public struct ClientEvent
@@ -94,7 +94,7 @@ public struct ClientEvent
 
     public static ClientEvent PlayerDecision(long player, PlayerDecision decission, int value)
     {
-        return new ClientEvent(ClientEventType.SendPlayerDecission, new PlayerDecissionEvent(player, decission, value));
+        return new ClientEvent(ClientEventType.SendPlayerDecision, new PlayerDecissionEvent(player, decission, value));
     }
 
 }

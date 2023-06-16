@@ -7,7 +7,7 @@ namespace ZwooGameLogic.Game.State;
 
 internal class RuleManager
 {
-    public static List<BaseRule> AllRules = new List<BaseRule>() {
+    public static List<BaseRule> AllRules() => new List<BaseRule>() {
         new BaseCardRule(),
         new BaseDrawRule(),
         new BaseWildCardRule(),
@@ -32,7 +32,7 @@ internal class RuleManager
 
     public void Configure(Action<GameInterrupt> interruptHandler)
     {
-        _activeRules = AllRules
+        _activeRules = AllRules()
             .Where(rule =>
             {
                 return rule.AssociatedOption == GameSettingsKey.DEFAULT_RULE_SET || _settings.Get(rule.AssociatedOption) > 0;
@@ -43,6 +43,11 @@ internal class RuleManager
         {
             rule.SetupRule(interruptHandler, _loggerFactory.CreateLogger($"Game-{GameId}"));
         }
+    }
+
+    public void OnGameUpdate(GameState state, List<GameEvent> outgoingEvents)
+    {
+        _activeRules.ForEach(r => r.OnGameEvent(state, outgoingEvents));
     }
 
     public List<BaseRule> GetResponsibleRules(ClientEvent clientEvent, GameState state)

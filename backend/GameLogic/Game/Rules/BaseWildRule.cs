@@ -36,7 +36,7 @@ internal class BaseWildCardRule : BaseCardRule
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
         return (gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card))
-            || (gameEvent.Type == ClientEventType.SendPlayerDecission && gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>().Decission == PlayerDecision.SelectColor);
+            || (gameEvent.Type == ClientEventType.SendPlayerDecision && gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>().Decission == PlayerDecision.SelectColor);
     }
 
 
