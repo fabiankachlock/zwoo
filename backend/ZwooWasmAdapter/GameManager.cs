@@ -74,7 +74,9 @@ public partial class GameManager
     {
         if (Instance._activeGame != null)
         {
+            Instance._logger.Debug($"received {msg}");
             ZRPCode? code = ZRPDecoder.GetCode(msg);
+            Instance._logger.Debug($"WHATTTT {code}");
             if (code != null)
             {
                 LocalEvent zrpMessage = new LocalEvent(code.Value, msg);

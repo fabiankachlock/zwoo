@@ -43,7 +43,7 @@ public struct ClientEvent
 
     public static ClientEvent RequestEndTurn(long player)
     {
-        return new ClientEvent(ClientEventType.DrawCard, new RequestEndTurnEvent(player));
+        return new ClientEvent(ClientEventType.RequestEndTurn, new RequestEndTurnEvent(player));
     }
 
     public struct PlaceCardEvent
