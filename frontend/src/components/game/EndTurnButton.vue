@@ -1,20 +1,37 @@
 <template>
   <button
+    v-if="isAllowed"
     class="end-turn-btn bg-main hover:bg-light border-2 rounded px-3 py-1 mr-5"
     :class="{
-      hidden: state === 'hidden',
+      hidden: !isEnabled,
       'bc-primary': state === 'active',
-      'bc-secondary x-animate-pulse': state === 'pulse'
+      'bc-secondary x-animate-pulse': isEnabled
     }"
+    @click="handlePress"
   >
     <p class="text-lg tc-main whitespace-nowrap">{{ t('ingame.endTurn') }}</p>
   </button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { useGameCardDeck } from '@/core/adapter/game/deck';
+import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
+import { useIsRuleActive } from '@/core/adapter/game/util/useIsRuleActive';
+import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 const { t } = useI18n();
+
+const isAllowed = useIsRuleActive('explicitLastCard');
+const deck = useGameCardDeck();
+const isEnabled = computed(() => deck.cards.length === 1);
+const sendEvent = useGameEventDispatch();
+
+const handlePress = () => {
+  sendEvent(ZRPOPCode.RequestEndTurn, {});
+};
+
 const state = ref<'hidden' | 'active' | 'pulse'>('hidden');
 </script>
 

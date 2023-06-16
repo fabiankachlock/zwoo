@@ -46,11 +46,6 @@ public struct GameSettings
         return new GameSettings(settings);
     }
 
-    public static GameSettings Empty()
-    {
-        return new GameSettings(new Dictionary<GameSettingsKey, int>() { { GameSettingsKey.DEFAULT_RULE_SET, 1 } });
-    }
-
     public bool Set(GameSettingsKey? key, int value)
     {
         if (key.HasValue && _settings.ContainsKey(key.Value!))

@@ -64,10 +64,12 @@ internal class LastCardRule : BaseDrawRule
         {
             if (deck.Count == 1 && !_pendingTimeouts.ContainsKey(player))
             {
+                _logger.Info($"creating timeout for player {player}");
                 this._pendingTimeouts[player] = _createTimeout(player);
             }
             else if (deck.Count > 1 && _pendingTimeouts.ContainsKey(player))
             {
+                _logger.Info($"cancel timeout for player {player}");
                 this._pendingTimeouts[player].CancellationToken.Cancel();
             }
         }
@@ -82,6 +84,7 @@ internal class LastCardRule : BaseDrawRule
             await Task.Delay(_timeoutMs, cts.Token);
             if (!cts.IsCancellationRequested)
             {
+                _logger.Info($"timeout expired for {player}");
                 InterruptGame(_interruptReason, new InterruptPayload(new List<long>() { player }));
             }
         }), cts);
@@ -100,6 +103,7 @@ internal class LastCardRule : BaseDrawRule
 
         foreach (var player in interrupt.TargetPlayers)
         {
+            _pendingTimeouts.Remove(player);
             List<Card> newCards;
             (state, newCards) = DrawCardsForPlayer(state, player, _penaltyCards, cardPile);
             events.Add(GameEvent.SendCards(player, newCards));

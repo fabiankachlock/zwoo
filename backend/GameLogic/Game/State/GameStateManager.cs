@@ -163,8 +163,9 @@ public sealed class GameStateManager
 
     internal void HandleInterrupt(GameInterrupt interrupt)
     {
+        _logger.Debug($"game interrupted scheduled");
         // these calls don't need to be awaited, because the caller doesn't care when the event is executed
-        var _ = _actionsQueue.Enqueue(() => ExecuteInterrupt(interrupt));
+        var _ = _actionsQueue.Intercept(() => ExecuteInterrupt(interrupt));
     }
 
     private void ExecuteEvent(ClientEvent clientEvent)
