@@ -14,7 +14,7 @@ internal class BaseCardRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.BaseRule;
+        get => RulePriority.BaseRule;
     }
 
     public override string Name

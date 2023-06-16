@@ -14,7 +14,7 @@ internal class BaseDrawRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.BaseRule;
+        get => RulePriority.BaseRule;
     }
 
     public override string Name
@@ -62,7 +62,6 @@ internal class BaseDrawRule : BaseRule
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
         events.Add(GameEvent.SendCards(payload.Player, newCards));
-
 
         return new GameStateUpdate(state, events);
     }

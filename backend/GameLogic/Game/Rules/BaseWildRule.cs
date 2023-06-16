@@ -14,7 +14,7 @@ internal class BaseWildCardRule : BaseCardRule
 {
     public override int Priority
     {
-        get => RulePriorirty.DefaultRule;
+        get => RulePriority.DefaultRule;
     }
 
     public override string Name
