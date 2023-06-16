@@ -12,4 +12,5 @@ public enum GameSettingsKey
     MaxAmountOfPlayers = 1,
     NumberOfCards = 2,
     AddUpDraw = 3,
+    ExplicitLastCard = 4,
 }

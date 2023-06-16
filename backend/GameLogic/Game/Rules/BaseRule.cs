@@ -51,7 +51,7 @@ internal abstract class BaseRule
         _interrupt.Invoke(new GameInterrupt(Name, reason, payload.TargetPlayers));
     }
 
-    public virtual bool IsResponsibleForInterrupt(GameInterrupt clientEvent, GameState state)
+    public virtual bool IsResponsibleForInterrupt(GameInterrupt interrupt, GameState state)
     {
         return false;
     }

@@ -13,7 +13,8 @@ internal class RuleManager
         new BaseWildCardRule(),
         new SkipCardRule(),
         new ReverseCardRule(),
-        new AddUpDrawRule()
+        new AddUpDrawRule(),
+        new LastCardRule()
     };
 
     public readonly long GameId;
