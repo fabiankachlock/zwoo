@@ -82,9 +82,9 @@ internal class LastCardRule : BaseDrawRule
         {
             // TODO: configure waiting amount
             await Task.Delay(_timeoutMs, cts.Token);
+            _logger.Info($"timeout expired for {player}");
             if (!cts.IsCancellationRequested)
             {
-                _logger.Info($"timeout expired for {player}");
                 InterruptGame(_interruptReason, new InterruptPayload(new List<long>() { player }));
             }
         }), cts);
@@ -98,7 +98,6 @@ internal class LastCardRule : BaseDrawRule
     public override GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsibleForInterrupt(interrupt, state)) return GameStateUpdate.None(state);
-
         List<GameEvent> events = new();
 
         foreach (var player in interrupt.TargetPlayers)
@@ -110,5 +109,23 @@ internal class LastCardRule : BaseDrawRule
         }
 
         return new GameStateUpdate(state, events);
+    }
+
+    public override bool IsResponsible(ClientEvent gameEvent, GameState state)
+    {
+        return gameEvent.Type == ClientEventType.RequestEndTurn;
+    }
+
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    {
+        if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
+        List<GameEvent> events = new List<GameEvent>();
+        ClientEvent.RequestEndTurnEvent payload = gameEvent.CastPayload<ClientEvent.RequestEndTurnEvent>();
+
+        if (_pendingTimeouts.ContainsKey(payload.Player))
+        {
+            _pendingTimeouts[payload.Player].CancellationToken.Cancel();
+        }
+        return GameStateUpdate.None(state);
     }
 }

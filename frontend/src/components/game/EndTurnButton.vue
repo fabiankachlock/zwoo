@@ -3,9 +3,9 @@
     v-if="isAllowed"
     class="end-turn-btn bg-main hover:bg-light border-2 rounded px-3 py-1 mr-5"
     :class="{
-      hidden: !isEnabled,
-      'bc-primary': state === 'active',
-      'bc-secondary x-animate-pulse': isEnabled
+      hidden: !isEnabled || wasDisabled,
+      'bc-primary': isEnabled,
+      'bc-secondary x-animate-pulse': false
     }"
     @click="handlePress"
   >
@@ -14,10 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useGameCardDeck } from '@/core/adapter/game/deck';
+import { useGameState } from '@/core/adapter/game/gameState';
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { useIsRuleActive } from '@/core/adapter/game/util/useIsRuleActive';
 import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
@@ -25,14 +26,24 @@ const { t } = useI18n();
 
 const isAllowed = useIsRuleActive('explicitLastCard');
 const deck = useGameCardDeck();
+const state = useGameState();
 const isEnabled = computed(() => deck.cards.length === 1);
 const sendEvent = useGameEventDispatch();
+const wasDisabled = ref(true);
+
+watch(
+  () => state.isActivePlayer,
+  isActive => {
+    if (isActive && wasDisabled.value) {
+      wasDisabled.value = false;
+    }
+  }
+);
 
 const handlePress = () => {
   sendEvent(ZRPOPCode.RequestEndTurn, {});
+  wasDisabled.value = true;
 };
-
-const state = ref<'hidden' | 'active' | 'pulse'>('hidden');
 </script>
 
 <style scoped>

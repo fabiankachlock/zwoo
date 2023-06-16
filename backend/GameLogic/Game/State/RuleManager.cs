@@ -61,9 +61,9 @@ internal class RuleManager
         return _activeRules.Where(rule => rule.IsResponsibleForInterrupt(interrupt, state)).ToList();
     }
 
-    public BaseRule GetPrioritizedRule(List<BaseRule> rules)
+    public BaseRule? GetPrioritizedRule(List<BaseRule> rules)
     {
-        return rules.OrderByDescending(rule => rule.Priority).First();
+        return rules.OrderByDescending(rule => rule.Priority).FirstOrDefault();
     }
 
     public BaseRule? GetRule(ClientEvent clientEvent, GameState state)
