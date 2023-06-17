@@ -179,7 +179,6 @@ public sealed class GameStateManager
             cardAmounts: stateUpdate.NewState.PlayerDecks
                 .Where(kv =>
                 {
-                    Console.WriteLine($"XXX KEY={kv.Key} OLD={_gameState.PlayerDecks[kv.Key].Count} NEW={kv.Value.Count}");
                     return _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count;
                 })
                 .Select(kv => KeyValuePair.Create(kv.Key, kv.Value.Count))
