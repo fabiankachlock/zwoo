@@ -226,9 +226,8 @@ public readonly record struct StateUpdate_PileTopDTO(CardColor Type, CardType Sy
 public readonly record struct StateUpdateNotification(
     StateUpdate_PileTopDTO PileTop,
     string ActivePlayer,
-    int ActivePlayerCardAmount,
-    string LastPlayer,
-    int LastPlayerCardAmount
+    Dictionary<string, int> CardAmounts,
+    int? CurrentDrawAmount
 );
 
 /// <summary>
