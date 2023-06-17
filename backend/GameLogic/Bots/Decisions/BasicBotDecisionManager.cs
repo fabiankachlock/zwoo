@@ -39,6 +39,7 @@ public class BasicBotDecisionManager : IBotDecisionHandler
                 return;
             default:
                 _stateManager.AggregateNotification((BotZRPNotification<object>)message);
+                checkLastCard();
                 break;
         }
 
@@ -48,6 +49,14 @@ public class BasicBotDecisionManager : IBotDecisionHandler
             _logger.Info("starting turn");
             placedCard = -1;
             placeCard();
+        }
+    }
+
+    private void checkLastCard()
+    {
+        if (_stateManager.GetState().Deck.Count < 2)
+        {
+            OnEvent.Invoke(ZRPCode.RequestEndTurn, new RequestEndTurnEvent());
         }
     }
 
