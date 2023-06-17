@@ -109,41 +109,39 @@ public struct GameEvent
     {
         public readonly Card TopCard;
         public readonly long ActivePlayer;
-        public readonly int ActivePlayerCardAmount;
-        public readonly long LastPlayer;
-        public readonly int LastPlayerCardAmount;
+        public readonly Dictionary<long, int> CardAmounts;
+        public readonly int? CurrentDrawAmount;
 
-        public StateUpdateEvent(Card topCard, long activePlayer, int activePlayerCardAmount, long lastPlayer, int lastPlayerCardAmount)
+        public StateUpdateEvent(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, int? currentDrawAmount)
         {
             TopCard = topCard;
             ActivePlayer = activePlayer;
-            ActivePlayerCardAmount = activePlayerCardAmount;
-            LastPlayer = lastPlayer;
-            LastPlayerCardAmount = lastPlayerCardAmount;
+            CardAmounts = cardAmounts;
+            CurrentDrawAmount = currentDrawAmount;
         }
     }
 
-    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, int activePlayerCardAmount, long lastPlayer, int lastPlayerCardAmount)
+    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, int? currentDrawAmount)
     {
-        return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, activePlayerCardAmount, lastPlayer, lastPlayerCardAmount));
+        return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, cardAmounts, currentDrawAmount));
     }
 
-    // PlayerDecissionEvent
+    // PlayerDecisionEvent
     public struct PlayerDecisionEvent
     {
         public readonly long Player;
         public readonly PlayerDecision Decision;
 
-        public PlayerDecisionEvent(long player, PlayerDecision decission)
+        public PlayerDecisionEvent(long player, PlayerDecision decision)
         {
             Player = player;
-            Decision = decission;
+            Decision = decision;
         }
     }
 
-    public static GameEvent GetPlayerDecission(long player, PlayerDecision decission)
+    public static GameEvent GetPlayerDecision(long player, PlayerDecision decision)
     {
-        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decission));
+        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decision));
     }
 
     // PlayerWonEvent
