@@ -172,12 +172,16 @@ public sealed class GameStateManager
         }
         _logger.Debug($"selected rule: {rule.Name}");
 
-        GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
+        GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, newState, _cardPile, _playerCycle);
         GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
             topCard: stateUpdate.NewState.TopCard.Card,
             activePlayer: stateUpdate.NewState.CurrentPlayer,
             cardAmounts: stateUpdate.NewState.PlayerDecks
-                .Where(kv => _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count)
+                .Where(kv =>
+                {
+                    Console.WriteLine($"XXX KEY={kv.Key} OLD={_gameState.PlayerDecks[kv.Key].Count} NEW={kv.Value.Count}");
+                    return _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count;
+                })
                 .Select(kv => KeyValuePair.Create(kv.Key, kv.Value.Count))
                 .ToDictionary(kv => kv.Key, kv => kv.Value),
             currentDrawAmount: null
