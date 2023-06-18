@@ -359,7 +359,8 @@
       "changedRoleToPlayer": "{0} is now Player",
       "changedRoleToSpectator": "{0} is now Spectator",
       "selfGotHost": "You are host now"
-    }
+    },
+    "offlineReady": "Ready for offline games"
   },
   "logging": {
     "title": "Logs",
