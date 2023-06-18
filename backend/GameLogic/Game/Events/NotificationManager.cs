@@ -15,9 +15,8 @@ public readonly record struct RemoveCardDTO(
 public readonly record struct StateUpdateDTO(
     Card PileTop,
     long ActivePlayer,
-    int ActivePlayerCardAmount,
-    long LastPlayer,
-    int LastPlayerCardAmount
+    Dictionary<long, int> CardAmounts,
+    int? CurrentDrawAmount
 );
 
 public readonly record struct PlayerDecisionDTO(

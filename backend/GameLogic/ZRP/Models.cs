@@ -194,6 +194,11 @@ public readonly record struct StartTurnNotification(); // empty
 public readonly record struct EndTurnNotification(); // empty
 
 /// <summary>
+/// ZRPCode: 303
+/// </summary>
+public readonly record struct RequestEndTurnEvent(); // empty
+
+/// <summary>
 /// ZRPCode: 304
 /// </summary>
 public readonly record struct PlaceCardEvent(int Type, int Symbol);
@@ -226,9 +231,8 @@ public readonly record struct StateUpdate_PileTopDTO(CardColor Type, CardType Sy
 public readonly record struct StateUpdateNotification(
     StateUpdate_PileTopDTO PileTop,
     string ActivePlayer,
-    int ActivePlayerCardAmount,
-    string LastPlayer,
-    int LastPlayerCardAmount
+    Dictionary<string, int> CardAmounts,
+    int? CurrentDrawAmount
 );
 
 /// <summary>

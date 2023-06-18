@@ -12,14 +12,16 @@ public class SettingsKeyMapper
     {
         { "maxPlayers", GameSettingsKey.MaxAmountOfPlayers },
         { "initialCards", GameSettingsKey.NumberOfCards },
-        { "addUpDraw", GameSettingsKey.AddUpDraw }
+        { "addUpDraw", GameSettingsKey.AddUpDraw },
+        { "explicitLastCard", GameSettingsKey.ExplicitLastCard }
     };
 
     private static Dictionary<GameSettingsKey, string> KeyToString = new Dictionary<GameSettingsKey, string>
     {
         { GameSettingsKey.MaxAmountOfPlayers, "maxPlayers" },
         { GameSettingsKey.NumberOfCards, "initialCards" },
-        { GameSettingsKey.AddUpDraw, "addUpDraw" }
+        { GameSettingsKey.AddUpDraw, "addUpDraw" },
+        { GameSettingsKey.ExplicitLastCard, "explicitLastCard" }
     };
 
     public static string ToString(GameSettingsKey key)

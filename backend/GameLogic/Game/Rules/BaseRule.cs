@@ -15,26 +15,50 @@ internal abstract class BaseRule
     public abstract GameSettingsKey? AssociatedOption { get; }
 
     protected ILogger _logger;
+    private Action<GameInterrupt> _interrupt;
 
-    public BaseRule(ILogger? logger = null)
+    private void _voidInterrupt(GameInterrupt data) { }
+
+    public BaseRule(Action<GameInterrupt>? interruptHandler = null, ILogger? logger = null)
     {
         _logger = logger ?? new VoidLogger();
+        _interrupt = interruptHandler ?? _voidInterrupt;
     }
 
-    internal void SetLogger(ILogger? logger)
+    internal void SetupRule(Action<GameInterrupt>? interruptHandler, ILogger? logger)
     {
         _logger = logger ?? _logger;
+        _interrupt = interruptHandler ?? _interrupt;
     }
 
+    //Base Rule Stuff
     public virtual bool IsResponsible(ClientEvent clientEvent, GameState state)
     {
         return false;
     }
 
-
     public virtual GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
-        return new GameStateUpdate(state, new List<GameEvent>());
+        return GameStateUpdate.None(state);
+    }
+
+    // listening
+    public virtual void OnGameEvent(GameState state, List<GameEvent> outgoingEvents) { }
+
+    // Interrupts
+    protected void InterruptGame(string reason, InterruptPayload payload)
+    {
+        _interrupt.Invoke(new GameInterrupt(Name, reason, payload.TargetPlayers));
+    }
+
+    public virtual bool IsResponsibleForInterrupt(GameInterrupt interrupt, GameState state)
+    {
+        return false;
+    }
+
+    public virtual GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    {
+        return GameStateUpdate.None(state);
     }
 
     // Rule utilities

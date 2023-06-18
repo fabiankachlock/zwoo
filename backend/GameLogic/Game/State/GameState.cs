@@ -42,6 +42,12 @@ internal struct GameState
 
     public GameState Clone()
     {
-        return new GameState(Direction, CurrentPlayer, TopCard, CardStack, PlayerDecks);
+        return new GameState(
+            Direction,
+            CurrentPlayer,
+            new StackCard(TopCard.Card, TopCard.EventActivated),
+            new List<StackCard>(CardStack),
+            PlayerDecks.ToDictionary(kv => kv.Key, kv => new List<Card>(kv.Value))
+        );
     }
 }

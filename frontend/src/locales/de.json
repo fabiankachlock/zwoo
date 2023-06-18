@@ -235,6 +235,10 @@
     "initialCards": {
       "title": "Anzahl an Karten",
       "info": "Lege eine Anzahl an Karten fest, die ein Spieler am Anfang bekommt."
+    },
+    "explicitLastCard": {
+      "title": "Letzt Karte",
+      "info": "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten."
     }
   },
   "ingame": {

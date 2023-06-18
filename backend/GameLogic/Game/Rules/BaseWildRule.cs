@@ -14,7 +14,7 @@ internal class BaseWildCardRule : BaseCardRule
 {
     public override int Priority
     {
-        get => RulePriorirty.DefaultRule;
+        get => RulePriority.DefaultRule;
     }
 
     public override string Name
@@ -36,7 +36,7 @@ internal class BaseWildCardRule : BaseCardRule
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
         return (gameEvent.Type == ClientEventType.PlaceCard && CardUtilities.IsWild(gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card))
-            || (gameEvent.Type == ClientEventType.SendPlayerDecission && gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>().Decission == PlayerDecision.SelectColor);
+            || (gameEvent.Type == ClientEventType.SendPlayerDecision && gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>().Decission == PlayerDecision.SelectColor);
     }
 
 
@@ -72,7 +72,7 @@ internal class BaseWildCardRule : BaseCardRule
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
 
         _storedEvent = new StoredEvent(payload.Player, payload.Card);
-        events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecision.SelectColor));
+        events.Add(GameEvent.GetPlayerDecision(state.CurrentPlayer, PlayerDecision.SelectColor));
 
         return new GameStateUpdate(state, events);
     }
