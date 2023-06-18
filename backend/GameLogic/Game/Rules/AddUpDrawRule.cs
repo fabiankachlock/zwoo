@@ -9,7 +9,7 @@ internal class AddUpDrawRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.GameLogicExtendions;
+        get => RulePriority.GameLogicExtendions;
     }
 
     public override string Name

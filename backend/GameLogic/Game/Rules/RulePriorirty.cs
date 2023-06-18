@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZwooGameLogic.Game.Rules;
 
-internal class RulePriorirty
+internal class RulePriority
 {
     internal static readonly int None = -1;
     internal static readonly int BaseRule = 1;

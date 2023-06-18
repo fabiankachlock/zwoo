@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZwooBackend", "ZwooBackend\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "GameLogic\GameLogic.csproj", "{E02CDC91-0F9D-4F48-9015-103B938E4E81}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogicTests", "GameLogicTests\GameLogicTests.csproj", "{481D2CE1-987C-40EC-87FF-07A428292DE0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendHelper", "BackendHelper\BackendHelper.csproj", "{38DE1F6C-DC47-495A-BDFF-2155866B2FFC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeImporter", "CodeImporter\CodeImporter.csproj", "{D526D903-307A-4AA7-993F-5F6F0085230A}"
