@@ -90,6 +90,7 @@ public class BasicBotDecisionManager : IBotDecisionHandler
         switch (data.Type)
         {
             case (int)PlayerDecision.SelectColor:
+                // TODO: this should be a subset of the options
                 OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent((int)PlayerDecision.SelectColor, (int)CardColorHelper.Random()));
                 break;
             default:

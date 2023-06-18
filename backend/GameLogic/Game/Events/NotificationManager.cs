@@ -21,7 +21,8 @@ public readonly record struct StateUpdateDTO(
 
 public readonly record struct PlayerDecisionDTO(
     long Player,
-    PlayerDecision Decision
+    PlayerDecision Decision,
+    List<string> Options
 );
 
 public readonly record struct PlayerWonDTO(long Winner,

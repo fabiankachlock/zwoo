@@ -280,7 +280,7 @@ public readonly record struct SendPileTopNotification(CardColor Type, CardType S
 /// <summary>
 /// ZRPCode: 316
 /// </summary>
-public readonly record struct GetPlayerDecisionNotification(int Type);
+public readonly record struct GetPlayerDecisionNotification(int Type, List<string> Options);
 
 /// <summary>
 /// ZRPCode: 317

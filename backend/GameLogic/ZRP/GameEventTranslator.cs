@@ -43,7 +43,7 @@ public class GameEventTranslator : IGameEventManager
 
     public void GetPlayerDecision(ZwooGameLogic.Game.Events.PlayerDecisionDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision, data.Options));
     }
 
     public void PlayerWon(GamePlayerWonDTO data, GameMeta gameMeta)

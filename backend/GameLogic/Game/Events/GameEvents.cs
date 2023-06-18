@@ -131,17 +131,19 @@ public struct GameEvent
     {
         public readonly long Player;
         public readonly PlayerDecision Decision;
+        public readonly List<string> Options;
 
-        public PlayerDecisionEvent(long player, PlayerDecision decision)
+        public PlayerDecisionEvent(long player, PlayerDecision decision, List<string> options)
         {
             Player = player;
             Decision = decision;
+            Options = options;
         }
     }
 
-    public static GameEvent GetPlayerDecision(long player, PlayerDecision decision)
+    public static GameEvent GetPlayerDecision(long player, PlayerDecision decision, List<string> options)
     {
-        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decision));
+        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decision, options));
     }
 
     // PlayerWonEvent

@@ -274,7 +274,7 @@ public sealed class GameStateManager
                     break;
                 case GameEventType.GetPlayerDecision:
                     GameEvent.PlayerDecisionEvent playerDecisionEvent = evt.CastPayload<GameEvent.PlayerDecisionEvent>();
-                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecisionEvent.Player, playerDecisionEvent.Decision));
+                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecisionEvent.Player, playerDecisionEvent.Decision, playerDecisionEvent.Options));
                     break;
                 case GameEventType.PlayerWon:
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();

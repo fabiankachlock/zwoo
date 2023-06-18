@@ -41,7 +41,7 @@ export const useGameModal = defineStore('game-modal', () => {
     const awaiter = new Awaiter<number | undefined>();
     openModal(modal, options);
     watch(_modalResponse, response => {
-      if (response) {
+      if (response !== undefined) {
         awaiter.callback(response);
       }
     });
