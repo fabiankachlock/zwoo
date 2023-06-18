@@ -72,7 +72,7 @@ internal class BaseWildCardRule : BaseCardRule
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
 
         _storedEvent = new StoredEvent(payload.Player, payload.Card);
-        events.Add(GameEvent.GetPlayerDecission(state.CurrentPlayer, PlayerDecision.SelectColor));
+        events.Add(GameEvent.GetPlayerDecision(state.CurrentPlayer, PlayerDecision.SelectColor));
 
         return new GameStateUpdate(state, events);
     }

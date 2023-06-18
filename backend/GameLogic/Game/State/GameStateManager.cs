@@ -144,9 +144,8 @@ public sealed class GameStateManager
                     GameEvent.CreateStateUpdate(
                         topCard: newState.TopCard.Card,
                         activePlayer: newState.CurrentPlayer,
-                        activePlayerCardAmount: newState.PlayerDecks[newState.CurrentPlayer].Count,
-                        lastPlayer: _gameState.CurrentPlayer,
-                        lastPlayerCardAmount: _gameState.CurrentPlayer == id ? 0 : newState.PlayerDecks[_gameState.CurrentPlayer].Count
+                        cardAmounts: new Dictionary<long, int>(),
+                        currentDrawAmount: null
                     )
                 };
                 SendEvents(events);
@@ -180,7 +179,7 @@ public sealed class GameStateManager
         }
         _logger.Debug($"selected rule: {rule.Name}");
 
-        GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
+        GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, newState, _cardPile, _playerCycle);
         _postExecute(stateUpdate);
     }
 
@@ -194,7 +193,7 @@ public sealed class GameStateManager
             _logger.Error($"cant find rule for interrupt ${interrupt}");
             return;
         }
-        _logger.Debug($"selected rule: {rule.Name}");
+        _logger.Debug($"selected interrupt rule: {rule.Name}");
 
         GameStateUpdate stateUpdate = rule.ApplyInterrupt(interrupt, _gameState, _cardPile, _playerCycle);
         _postExecute(stateUpdate);
@@ -205,9 +204,11 @@ public sealed class GameStateManager
         GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
             topCard: stateUpdate.NewState.TopCard.Card,
             activePlayer: stateUpdate.NewState.CurrentPlayer,
-            activePlayerCardAmount: stateUpdate.NewState.PlayerDecks[stateUpdate.NewState.CurrentPlayer].Count,
-            lastPlayer: _gameState.CurrentPlayer,
-            lastPlayerCardAmount: stateUpdate.NewState.PlayerDecks[_gameState.CurrentPlayer].Count
+            cardAmounts: stateUpdate.NewState.PlayerDecks
+                .Where(kv => _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count)
+                .Select(kv => KeyValuePair.Create(kv.Key, kv.Value.Count))
+                .ToDictionary(kv => kv.Key, kv => kv.Value),
+            currentDrawAmount: null
          );
         _gameState = stateUpdate.NewState;
 
@@ -267,9 +268,8 @@ public sealed class GameStateManager
                     _notificationManager.StateUpdate(new StateUpdateDTO(
                         stateUpdateEvent.TopCard,
                         stateUpdateEvent.ActivePlayer,
-                        stateUpdateEvent.ActivePlayerCardAmount,
-                        stateUpdateEvent.LastPlayer,
-                        stateUpdateEvent.LastPlayerCardAmount
+                        stateUpdateEvent.CardAmounts,
+                        stateUpdateEvent.CurrentDrawAmount
                     ));
                     break;
                 case GameEventType.GetPlayerDecision:

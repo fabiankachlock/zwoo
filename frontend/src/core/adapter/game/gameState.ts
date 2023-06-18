@@ -95,11 +95,8 @@ export const useGameState = defineStore('game-state', () => {
       type: data.pileTop.symbol
     });
     for (let i = 0; i < players.value.length; i++) {
-      if (players.value[i].id === data.activePlayer) {
-        players.value[i].cards = data.activePlayerCardAmount;
-      }
-      if (players.value[i].id === data.lastPlayer) {
-        players.value[i].cards = data.lastPlayerCardAmount;
+      if (data.cardAmounts[players.value[i].id]) {
+        players.value[i].cards = data.cardAmounts[players.value[i].id];
       }
     }
     activePlayerId.value = data.activePlayer;

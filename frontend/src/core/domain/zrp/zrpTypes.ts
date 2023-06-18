@@ -256,9 +256,8 @@ export type ZRPStateUpdatePayload = {
     symbol: number;
   };
   activePlayer: string;
-  activePlayerCardAmount: number;
-  lastPlayer: string;
-  lastPlayerCardAmount: number;
+  cardAmounts: Record<string, number>;
+  currentDrawAmount?: number;
 };
 
 export type ZRPDeckPayload = {
