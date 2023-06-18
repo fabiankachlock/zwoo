@@ -25,6 +25,11 @@ public struct GameSettings
         get => _settings[GameSettingsKey.AddUpDraw] != 0;
     }
 
+    public bool ExplizitLastCardEnabled
+    {
+        get => _settings[GameSettingsKey.ExplicitLastCard] != 0;
+    }
+
     private GameSettings(Dictionary<GameSettingsKey, int> initialSettings)
     {
         _settings = initialSettings;
@@ -37,12 +42,8 @@ public struct GameSettings
         settings.Add(GameSettingsKey.MaxAmountOfPlayers, 5);
         settings.Add(GameSettingsKey.NumberOfCards, 7);
         settings.Add(GameSettingsKey.AddUpDraw, 1);
+        settings.Add(GameSettingsKey.ExplicitLastCard, 0);
         return new GameSettings(settings);
-    }
-
-    public static GameSettings Empty()
-    {
-        return new GameSettings(new Dictionary<GameSettingsKey, int>() { { GameSettingsKey.DEFAULT_RULE_SET, 1 } });
     }
 
     public bool Set(GameSettingsKey? key, int value)

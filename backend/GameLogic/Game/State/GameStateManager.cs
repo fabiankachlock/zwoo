@@ -62,7 +62,7 @@ public sealed class GameStateManager
         (_playerCycle, _playerOrder) = _playerManager.ComputeOrder();
         _cardPile = new Pile();
         _actionsQueue.Start();
-        _ruleManager.Configure();
+        _ruleManager.Configure(HandleInterrupt);
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
@@ -161,10 +161,17 @@ public sealed class GameStateManager
         var _ = _actionsQueue.Enqueue(() => ExecuteEvent(clientEvent));
     }
 
+    internal void HandleInterrupt(GameInterrupt interrupt)
+    {
+        _logger.Debug($"game interrupted scheduled");
+        // these calls don't need to be awaited, because the caller doesn't care when the event is executed
+        var _ = _actionsQueue.Intercept(() => ExecuteInterrupt(interrupt));
+    }
+
     private void ExecuteEvent(ClientEvent clientEvent)
     {
         GameState newState = _gameState.Clone();
-        BaseRule? rule = _ruleManager.getRule(clientEvent, newState);
+        BaseRule? rule = _ruleManager.GetRule(clientEvent, newState);
 
         if (rule == null)
         {
@@ -174,6 +181,27 @@ public sealed class GameStateManager
         _logger.Debug($"selected rule: {rule.Name}");
 
         GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
+        _postExecute(stateUpdate);
+    }
+
+    private void ExecuteInterrupt(GameInterrupt interrupt)
+    {
+        GameState newState = _gameState.Clone();
+        BaseRule? rule = _ruleManager.GetRuleForInterrupt(interrupt, newState);
+
+        if (rule == null)
+        {
+            _logger.Error($"cant find rule for interrupt ${interrupt}");
+            return;
+        }
+        _logger.Debug($"selected rule: {rule.Name}");
+
+        GameStateUpdate stateUpdate = rule.ApplyInterrupt(interrupt, _gameState, _cardPile, _playerCycle);
+        _postExecute(stateUpdate);
+    }
+
+    private void _postExecute(GameStateUpdate stateUpdate)
+    {
         GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
             topCard: stateUpdate.NewState.TopCard.Card,
             activePlayer: stateUpdate.NewState.CurrentPlayer,
@@ -183,8 +211,8 @@ public sealed class GameStateManager
          );
         _gameState = stateUpdate.NewState;
 
-        GameEvent? isFinishedEvent = IsGameFinished(_gameState);
 
+        GameEvent? isFinishedEvent = IsGameFinished(_gameState);
         if (isFinishedEvent.HasValue)
         {
             _actionsQueue.Clear();
@@ -192,11 +220,11 @@ public sealed class GameStateManager
             SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
             GameEvent.PlayerWonEvent playerWonEvent = isFinishedEvent.Value.CastPayload<GameEvent.PlayerWonEvent>();
             OnFinished.Invoke(playerWonEvent, Meta);
+            return;
         }
-        else
-        {
-            SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
-        }
+
+        SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
+        _ruleManager.OnGameUpdate(stateUpdate.NewState, stateUpdate.Events);
     }
 
     private GameEvent? IsGameFinished(GameState state)
