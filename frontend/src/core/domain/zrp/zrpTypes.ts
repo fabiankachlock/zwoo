@@ -11,6 +11,8 @@ export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> 
 
 export type ZRPPayload<T extends ZRPOPCode> = ZRPPayloadMap[T];
 
+export const ZRP_VERSION = '3.1.0';
+
 export enum ZRPOPCode {
   // General
   // - players
@@ -95,6 +97,11 @@ export enum ZRPRole {
   Player = 2,
   Spectator = 3,
   Bot = 4
+}
+
+export enum ZRPDecisionType {
+  ColorPicker = 1,
+  PlayerSelector = 2
 }
 
 export type ZRPPlayerState = 'disconnected' | 'connected';
@@ -279,11 +286,12 @@ export type ZRPPlayerCardAmountPayload = {
 };
 
 export type ZRPDecisionRequestPayload = {
-  type: number;
+  type: ZRPDecisionType;
+  options: string[];
 };
 
 export type ZRPDecisionResponsePayload = {
-  type: number;
+  type: ZRPDecisionType;
   decision: number;
 };
 
