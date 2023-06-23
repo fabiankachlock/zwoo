@@ -1,6 +1,6 @@
 <template>
   <!-- TODO tmp(beta): @click-outside="closeModal" -->
-  <FloatingDialog>
+  <FloatingDialog :content-class="contentClass">
     <div class="mb-2 flex justify-between items-center">
       <h1 class="tc-main text-2xl">
         {{ t(title ?? '') }}
@@ -31,6 +31,7 @@ const { t } = useI18n();
 defineProps<{
   title?: string;
   info?: string;
+  contentClass?: string;
 }>();
 
 // const closeModal = () => {

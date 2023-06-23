@@ -43,7 +43,9 @@ public class GameEventTranslator : IGameEventManager
 
     public void GetPlayerDecision(ZwooGameLogic.Game.Events.PlayerDecisionDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision, data.Options));
+        // TODO: switch game id handling to new system
+        var options = data.Decision == PlayerDecision.SelectPlayer ? data.Options.Select(id => _game?.GetPlayer(Convert.ToInt64(id))?.PublicId ?? "").ToList() : data.Options;
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision, options));
     }
 
     public void PlayerWon(GamePlayerWonDTO data, GameMeta gameMeta)
