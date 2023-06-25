@@ -14,7 +14,7 @@
       />
       <TextInput id="passwordRepeat" v-model="passwordRepeat" label-key="resetPassword.passwordRepeat" is-password placeholder="******" />
       <FormError :error="matchError" />
-      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="captchaValidator" :token="captchaResponse" @update:response="res => (captchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="reset">
@@ -39,15 +39,14 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
-import { CaptchaResponse } from '@/core/api/entities/Captcha';
+import { CaptchaValidator } from '@/core/services/validator/captcha';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
@@ -62,28 +61,28 @@ const code = route.query['code'] as string;
 const password = ref('');
 const passwordRepeat = ref('');
 const matchError = ref<string[]>([]);
-const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
+const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
   () =>
     !isLoading.value &&
-    reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
+    captchaValidator.validate(captchaResponse.value).isValid &&
     passwordValidator.validate(password.value).isValid &&
     passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid
 );
 
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();
-const reCaptchaValidator = new RecaptchaValidator();
+const captchaValidator = new CaptchaValidator();
 
 watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   const result = passwordMatchValidator.validate([password, passwordRepeat]);
   matchError.value = result.isValid ? [] : result.getErrors();
 });
 
-watch([password, passwordRepeat, reCaptchaResponse], () => {
+watch([password, passwordRepeat, captchaResponse], () => {
   // clear error since there are changes
   error.value = [];
 });
@@ -93,10 +92,10 @@ const reset = async () => {
   isLoading.value = true;
 
   try {
-    await auth.resetPassword(code, password.value, passwordRepeat.value, reCaptchaResponse.value);
+    await auth.resetPassword(code, password.value, passwordRepeat.value, captchaResponse.value);
     showInfo.value = true;
   } catch (e: unknown) {
-    reCaptchaResponse.value = undefined;
+    captchaResponse.value = undefined;
     setTimeout(() => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });

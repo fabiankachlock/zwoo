@@ -1,0 +1,87 @@
+@page "/contact-requests"
+@inject IDatabase _db
+
+<PageTitle>Contact Requests</PageTitle>
+
+<div class="rz-mb-4" style="display: flex; align-items: center; justify-content: space-between;">
+    <h1 style="margin: 0">Contact Requests</h1>
+    <RadzenDropDown TValue="string" @bind-Value=@_selectedSite Data=@_availableSites Change="@(args => SelectedSiteChanged(args))" Placeholder="Filter by Site" Style="width: 100%; max-width: 300px" />
+</div>
+
+<RadzenDataGrid AllowPaging="true" PageSize="25"
+                ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
+                TItem="ContactRequest" Data="_requests" AllowVirtualization="true">
+    <Template Context="request">
+        <ul>
+            <li>From: @request.Name</li>
+            <li>Email: @request.Email</li>
+            <li>Sent: @request.Origin at @DateTimeOffset.FromUnixTimeMilliseconds(request.Timestamp).ToString("dd.MM.yy HH:mm:ss")</li>
+            <li>Message:</li>
+        </ul>
+        <textarea disabled style="width: 100%">@request.Message</textarea>
+    </Template>
+    <Columns>
+        <RadzenDataGridColumn TItem="ContactRequest" Property="Origin" Title="Site"/>
+        <RadzenDataGridColumn TItem="ContactRequest" Property="Name" Title="Name"/>
+        <RadzenDataGridColumn TItem="ContactRequest" Property="Email" Title="Email"/>
+        <RadzenDataGridColumn TItem="ContactRequest" Property="Timestamp" Title="At">
+            <Template Context="request">
+                @DateTimeOffset.FromUnixTimeMilliseconds(request.Timestamp).ToString("dd.MM.yy HH:mm:ss")
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="ContactRequest" Property="CaptchaScore" Title="CaptchaScore" >
+            <Template Context="request">
+                <div style=@($"width: 100%; height: 100%; background: {GetCaptchaColor(request.CaptchaScore)}; text-align: center; font-weight: bold; color: white")>
+                    @request.CaptchaScore
+                </div>
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private IQueryable<ContactRequest> _baseData = new List<ContactRequest>().AsQueryable();
+    private IQueryable<ContactRequest> _requests = new List<ContactRequest>().AsQueryable();
+    private List<string> _availableSites = new List<string>();
+    private string? _selectedSite;
+
+    protected override void OnInitialized()
+    {
+        if (Globals.WebsiteDatabaseName != null)
+        {
+            var websiteDb = _db.Client.GetDatabase(Globals.WebsiteDatabaseName);
+            var otherCollection = websiteDb.GetCollection<ContactRequest>(Globals.WebsiteDatabaseCollection);
+            _baseData = _db.ContactRequests.AsQueryable().Union(otherCollection.AsQueryable());
+        }
+        else
+        {
+            _baseData = _db.ContactRequests.AsQueryable();
+        }
+        _requests = _baseData;
+        _availableSites = _db.ContactRequests.AsQueryable().Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
+    }
+
+    private void SelectedSiteChanged(object _value) 
+    {
+        string value = (string)_value;
+        if (value == "#All") {
+            _requests = _baseData.OrderByDescending(request => request.Timestamp);
+        } else {
+            _requests = _baseData.Where(request => request.Origin == value).OrderByDescending(request => request.Timestamp);
+        }
+    }
+    
+    private void RenderRow(RowRenderEventArgs<ContactRequest> args) => args.Expandable = true;
+    private string GetCaptchaColor(double score) 
+    {
+        if (score > 0.7) {
+            return "#0aab12";
+        } else if (score > 0.5) {
+            return "#c4a114";
+        } else if (score > 0.3) {
+            return "#c45714";
+        } else {
+            return "#c41414";
+        }
+    }
+}

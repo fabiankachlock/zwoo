@@ -4,16 +4,27 @@ namespace ZwooBackend.Controllers.DTO;
 
 public class ContactForm
 {
+    [JsonPropertyName("name")]
+    public string Name { set; get; }
 
-    [JsonPropertyName("sender")]
-    public string Sender { set; get; }
+    [JsonPropertyName("email")]
+    public string Email { set; get; }
 
     [JsonPropertyName("message")]
     public string Message { set; get; }
 
-    public ContactForm(string sender, string message)
+    [JsonPropertyName("captchaToken")]
+    public string CaptchaToken { set; get; }
+
+    [JsonPropertyName("site")]
+    public string Site { set; get; }
+
+    public ContactForm(string name, string email, string message, string captchaToken, string site)
     {
-        Sender = sender;
+        Name = name;
+        Email = email;
         Message = message;
+        CaptchaToken = captchaToken;
+        Site = site;
     }
 }

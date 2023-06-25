@@ -32,7 +32,7 @@ export class AccountService {
     return response;
   };
 
-  static requestPasswordReset = async (email: string, lng: string | null = null): Promise<FetchResponse<undefined>> => {
+  static requestPasswordReset = async (email: string, captchaToken: string, lng: string | null = null): Promise<FetchResponse<undefined>> => {
     Logger.Api.log('performing request password reset action');
 
     const response = await WrappedFetch<undefined>(Backend.getUrlWithQuery(Endpoint.RequestPasswordReset, { lng: lng }), {
@@ -45,7 +45,8 @@ export class AccountService {
         decodeJson: false
       },
       body: JSON.stringify({
-        email: email
+        email: email,
+        captchaToken: captchaToken
       })
     });
 
@@ -56,7 +57,7 @@ export class AccountService {
     return response;
   };
 
-  static performResetPassword = async (code: string, password: string): Promise<FetchResponse<undefined>> => {
+  static performResetPassword = async (code: string, password: string, captchaToken: string): Promise<FetchResponse<undefined>> => {
     Logger.Api.log('performing reset password action');
 
     const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.ResetPassword), {
@@ -70,7 +71,8 @@ export class AccountService {
       },
       body: JSON.stringify({
         code: code,
-        password: password
+        password: password,
+        captchaToken: captchaToken
       })
     });
 

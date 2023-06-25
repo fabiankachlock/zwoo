@@ -1,71 +1,21 @@
-﻿@using ZwooInfoDashBoard.Data
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Zwoo Dashboard <span style="font-size: 0.7em">@@ @Globals.Version</span></a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+@using ZwooInfoDashBoard.Data;
+@inject IDatabase _db;
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="games-overview">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Games Overview
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="players">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Players
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="deleted-accounts">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Deleted Accounts
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="account-events">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Accounts Events
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="changelog-editor">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Changelog
-            </NavLink>
-        </div>
-        @if (Globals.ZwooDatabase.GetBetaCodesAsQueryable().Count() != 0)
-        {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="betacodes">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Beta Codes
-                </NavLink>
-            </div>
-        }
-        @if (Globals.LogrushDashboardUrl != "")
-        {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="logrush-dashboard">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Logrush Dashboard
-                </NavLink>
-            </div>
-        }
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+<RadzenPanelMenu>
+    <RadzenPanelMenuItem Text="Home" Icon="home" Path="/" />
+    <RadzenPanelMenuItem Text="Contact Requests" Icon="contact_support" Path="contact-requests" />
+    <RadzenPanelMenuItem Text="Games Overview" Icon="list_alt" Path="games-overview" />
+    <RadzenPanelMenuItem Text="Players" Icon="group" Path="players" />
+    <RadzenPanelMenuItem Text="Deleted Accounts" Icon="delete_sweep" Path="deleted-accounts" />
+    <RadzenPanelMenuItem Text="Account Events" Icon="event" Path="account-events" />
+    <RadzenPanelMenuItem Text="Changelog" Icon="edit_square" Path="changelog-editor" />
+    @if (_db.BetaCodes.AsQueryable().Count() != 0)
     {
-        collapseNavMenu = !collapseNavMenu;
+        <RadzenPanelMenuItem Text="Beta Codes" Icon="qr_code" Path="betacodes" />
     }
-}
+    @if (Globals.LogrushDashboardUrl != "")
+    {
+        <RadzenPanelMenuItem Text="Logrush Dashboard" Icon="dashboard" Path="logrush-dashboard" />
+    }
+</RadzenPanelMenu>
+

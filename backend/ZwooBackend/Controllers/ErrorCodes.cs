@@ -1,14 +1,16 @@
-using System.Net;
+using ZwooBackend.Controllers.DTO;
+using ZwooDatabase;
 
 namespace ZwooBackend.Controllers;
 
 public static class ErrorCodes
 {
     public enum Errors
-    { 
+    {
         NONE = 0,
-        
+
         BACKEND_ERROR = 100,
+        CAPTCHA_INVALID = 101,
 
         USER_NOT_VERIFIED = 110,
         COOKIE_MISSING = 111,
@@ -36,8 +38,26 @@ public static class ErrorCodes
         GAME_FULL = 147,
     };
 
-    public static string GetErrorResponseMessage(Errors code, string text)
+    public static Errors FromDatabaseError(ErrorCode? error)
     {
-        return "{\"code\": " + (int)code + ", \"message\": \"" + text + "\"}";
+        switch (error)
+        {
+            case ErrorCode.NotVerified:
+                return Errors.USER_NOT_VERIFIED;
+            case ErrorCode.UserNotFound:
+                return Errors.USER_NOT_FOUND;
+            case ErrorCode.WrongPassword:
+                return Errors.PASSWORD_NOT_MATCHING;
+        }
+        return Errors.NONE;
+    }
+
+    public static ErrorDTO GetResponse(Errors code, string text)
+    {
+        return new ErrorDTO()
+        {
+            Code = (int)code,
+            Message = text,
+        };
     }
 }

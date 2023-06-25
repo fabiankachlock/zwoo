@@ -3,44 +3,67 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { FormActions, FormError, FormSubmit, TextInput } from '@/components/forms';
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import Form from '@/components/forms/Form.vue';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import TextArea from '@/components/forms/TextArea.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/ApiError';
-import { CaptchaResponse } from '@/core/api/entities/Captcha';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
+import { BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { CaptchaValidator } from '@/core/services/validator/captcha';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { submitContactForm } = useApi();
 const { t } = useI18n();
-const reCaptchaValidator = new RecaptchaValidator();
 
 const senderName = ref('');
+const senderEmail = ref('');
 const message = ref('');
-const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
+const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
-  () => !isLoading.value && reCaptchaValidator.validate(reCaptchaResponse.value).isValid && message.value?.trim() && senderName.value?.trim()
+  () =>
+    !isLoading.value &&
+    message.value?.trim() &&
+    senderEmail.value?.trim() &&
+    senderName.value?.trim() &&
+    captchaValidator.validate(captchaResponse.value).isValid
 );
 const wasSend = ref(false);
+
+const captchaValidator = new CaptchaValidator();
 
 onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
 const submitForm = async () => {
+  const captchaValid = captchaValidator.validate(captchaResponse.value);
+  if (!captchaValid.isValid) {
+    error.value = captchaValid.getErrors();
+    return;
+  }
+
   error.value = [];
   isLoading.value = true;
 
   try {
-    await submitContactForm(senderName.value, message.value);
-    wasSend.value = true;
+    const result = await submitContactForm({
+      name: senderName.value,
+      email: senderEmail.value,
+      message: message.value,
+      captchaToken: captchaResponse.value ?? '',
+      site: window.location.href
+    });
+    const [, err] = unwrapBackendError(result);
+    if (err) {
+      error.value = [getBackendErrorTranslation(err)];
+    } else {
+      wasSend.value = true;
+    }
   } catch (e: unknown) {
-    reCaptchaResponse.value = undefined;
+    captchaResponse.value = undefined;
     setTimeout(() => {
       error.value = Array.isArray(e) ? e : [getBackendErrorTranslation(e as BackendErrorType)];
     });
@@ -56,13 +79,10 @@ const submitForm = async () => {
     <p v-else class="tc-main-secondary mb-5">{{ t('contact.thanks') }}</p>
     <FlatDialog v-if="!wasSend">
       <Form>
-        <TextInput id="sender" v-model="senderName" label-key="contact.sender" :placeholder="t('contact.namePlaceholder')"></TextInput>
-        <TextArea id="message" v-model="message" label-key="contact.message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
-        <ReCaptchaButton
-          :validator="reCaptchaValidator"
-          :response="reCaptchaResponse"
-          @update:response="res => (reCaptchaResponse = res)"
-        ></ReCaptchaButton>
+        <TextInput id="sender" labelKey="contact.sender" v-model="senderName" :placeholder="t('contact.namePlaceholder')"></TextInput>
+        <TextInput id="email" labelKey="contact.email" v-model="senderEmail" :placeholder="t('contact.emailPlaceholder')"></TextInput>
+        <TextArea id="message" labelKey="contact.message" v-model="message" :placeholder="t('contact.messagePlaceholder')"></TextArea>
+        <CaptchaButton :token="captchaResponse" :validator="captchaValidator" @update:response="res => (captchaResponse = res)"></CaptchaButton>
         <FormError :error="error"></FormError>
         <FormActions>
           <FormSubmit :disabled="!isSubmitEnabled" @click="submitForm">{{ t('contact.send') }}</FormSubmit>

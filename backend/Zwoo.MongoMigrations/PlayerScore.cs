@@ -1,10 +1,10 @@
 using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
-using ZwooDatabaseClasses;
+using ZwooDatabase.Dao;
 
 namespace Zwoo.MongoMigrations;
 
-public class Beta1008PlayerScore : DocumentMigration<GameInfo>
+public class Beta1008PlayerScore : DocumentMigration<GameInfoDao>
 {
     public Beta1008PlayerScore() : base("1.0.0-beta.8")
     {

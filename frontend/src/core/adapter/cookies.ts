@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia';
 
 type CookiesConfig = {
-  recaptcha: boolean;
+  // recaptcha: boolean;
 };
 
-const PreferredSelection: CookiesConfig = {
-  recaptcha: true
-};
+// const PreferredSelection: CookiesConfig = {
+//   recaptcha: true
+// };
 
 const DefaultSelection: CookiesConfig = {
-  recaptcha: false
+  // recaptcha: false
 };
 
 const cookiesKey = 'zwoo:cookies';
@@ -41,7 +41,7 @@ export const useCookies = defineStore('cookies', {
   }),
 
   getters: {
-    recaptchaCookie: state => (state.popupShowed ? state.cookies.recaptcha : PreferredSelection.recaptcha)
+    // recaptchaCookie: state => (state.popupShowed ? state.cookies.recaptcha : PreferredSelection.recaptcha)
   },
 
   actions: {
@@ -64,17 +64,17 @@ export const useCookies = defineStore('cookies', {
         localStorage.removeItem(cookiesKey);
       }
     },
-    setReCaptchaCookie(allowed: boolean) {
-      this.cookies.recaptcha = allowed;
-    },
+    // setReCaptchaCookie(allowed: boolean) {
+    //   this.cookies.recaptcha = allowed;
+    // },
     rejectAll() {
-      this.cookies.recaptcha = false;
+      // this.cookies.recaptcha = false;
     },
     async loadRecaptcha() {
-      if (this.cookies.recaptcha) {
-        const reCaptchaService = await import('./captcha');
-        reCaptchaService.useCaptcha()._loadScript();
-      }
+      // if (this.cookies.recaptcha) {
+      //   const reCaptchaService = await import('./captcha');
+      //   reCaptchaService.useCaptcha()._loadScript();
+      // }
     },
     didShowDialog() {
       saveCookies(this.cookies);

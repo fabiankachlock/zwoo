@@ -2,7 +2,6 @@ import { ApiAdapter } from '../ApiAdapter';
 import { AccountService } from './Account';
 import { Frontend } from './ApiConfig';
 import { AuthenticationService } from './Authentication';
-import { CaptchaApiService } from './Captcha';
 import { ConfigService } from './Config';
 import { WrappedFetch } from './FetchWrapper';
 import { GameManagementService } from './GameManagement';
@@ -33,6 +32,5 @@ export const RestApi: ApiAdapter = {
   submitContactForm: MiscApiService.submitContactForm,
   verifyUserAccount: AuthenticationService.verifyAccount,
   fetchRaw: WrappedFetch,
-  generateJoinUrl: id => `${Frontend.url}/join/${id}`,
-  verifyCaptchaToken: CaptchaApiService.verify
+  generateJoinUrl: id => `${Frontend.url}/join/${id}`
 };

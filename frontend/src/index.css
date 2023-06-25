@@ -122,17 +122,6 @@ html {
 	}
 }
 
-.grecaptcha-badge {
-	visibility: hidden;
-	display: none;
-	bottom: 3rem !important;
-}
-
-.grecaptcha-badge.visible {
-	visibility: visible !important;
-	display: block !important;
-}
-
 .max-height-ios {
 	height: 100vh;
 	max-height: calc(100vh - 100%);
