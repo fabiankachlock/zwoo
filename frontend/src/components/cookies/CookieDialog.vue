@@ -17,23 +17,6 @@
               </p>
             </div>
           </li>
-          <li class="bc-main">
-            <div>
-              <h4 class="text tc-main">{{ t('cookies.functional.recaptcha.name') }}</h4>
-              <p class="text-xs tc-main-secondary ml-2 mb-1">{{ t('cookies.functional.recaptcha.description') }}</p>
-            </div>
-            <button
-              class="bg-main border-2 border-transparent px-4 py-1 ml-4 rounded transition hover:bg-dark cursor-pointer select-none"
-              :class="{ 'tc-primary': recaptchaActivated, 'tc-main-secondary': !recaptchaActivated }"
-              @click="recaptchaActivated = !recaptchaActivated"
-            >
-              <p class="flex flex-row flex-nowrap justify-end items-center">
-                <span> {{ t(recaptchaActivated ? 'cookies.active' : 'cookies.inactive') }} </span>
-                <Icon v-if="recaptchaActivated" icon="akar-icons:check" class="ml-2" />
-                <Icon v-else icon="akar-icons:cross" class="ml-2" />
-              </p>
-            </button>
-          </li>
         </ul>
       </div>
       <div class="grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-2 mt-4">
@@ -55,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { Icon } from '@/components/misc/Icon';
@@ -66,14 +49,14 @@ import FloatingDialog from '../misc/FloatingDialog.vue';
 const cookies = useCookies();
 const { t } = useI18n();
 
-const recaptchaActivated = ref(true);
+// const recaptchaActivated = ref(true);
 
 onMounted(() => {
-  recaptchaActivated.value = cookies.recaptchaCookie;
+  // recaptchaActivated.value = cookies.recaptchaCookie;
 });
 
 const acceptSelection = () => {
-  cookies.setReCaptchaCookie(recaptchaActivated.value);
+  // cookies.setReCaptchaCookie(recaptchaActivated.value);
   cookies.didShowDialog();
 };
 

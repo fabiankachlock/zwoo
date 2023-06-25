@@ -41,11 +41,11 @@ const asyncSetup = async () => {
   useConfig().configure(); // load stored config from localStorage
   useRuntimeConfig().configure();
 
-  if (cookies.recaptchaCookie) {
-    setTimeout(() => {
-      cookies.loadRecaptcha();
-    });
-  }
+  // if (cookies.recaptchaCookie) {
+  //   setTimeout(() => {
+  //     cookies.loadRecaptcha();
+  //   });
+  // }
 };
 
 onMounted(() => {

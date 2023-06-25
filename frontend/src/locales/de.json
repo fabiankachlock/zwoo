@@ -143,12 +143,14 @@
     "shouldContainNormalChar": "Das Passwort sollte mindestens einen Buchstaben enthalten.",
     "shouldContainSpecialChar": "Das Passwort sollte mindestens ein Sonderzeichen enthalten.",
     "gameNameToShort": "Der Name muss mindestens 3 Zeichen lang sein.",
-    "recaptcha": "Die Bot-Challenge muss bestanden sein.",
+    "captcha": "Die Bot-Challenge muss bestanden sein.",
+    "fillIn": "Bitte fülle alle erforderlichen Felder aus.",
     "inputTooLong": "Die Eingabe ist zu lang.",
     "backend": {
       "-2": "Interner Fehler",
       "-1": "Unbekannter Fehler",
       "100": "Fehler im Backend.",
+      "101": "Der Captcha-Check ist fehlgeschlagen",
       "110": "Der Account ist nicht verifiziert.",
       "111": "Der Cookie fehlt.",
       "112": "Der Nutzer konnte nicht gefunden werden.",
@@ -244,15 +246,6 @@
     "leave": "Spiel Verlassen",
     "playCard": "Karte legen"
   },
-  "recaptcha": {
-    "title": "Ich bin kein Roboter",
-    "loading": "laden...",
-    "error": "Ein fehler ist bei checken aufgetreten. - Versuche es später nochmal.",
-    "result": {
-      "success": "Alles gut",
-      "fail": "Check fehlgeschlagen! - Versuche es später nochmal."
-    }
-  },
   "deleteAccount": {
     "title": "Account Löschen",
     "password": "Passwort",
@@ -270,10 +263,6 @@
       "auth": {
         "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
-      },
-      "recaptcha": {
-        "name": "Google reCAPTCHA Cookies",
-        "description": "Wir nutzen Google reCAPTCHA um SPAM zu vermeiden. Damit Google reCAPTCHA funktioniert, müssen Cookies gespeichert werden, damit deine Interaktionen mit der Webseite analysiert werden können."
       }
     },
     "active": "Aktiviert",
@@ -451,6 +440,9 @@
     "message": "Nachricht",
     "messagePlaceholder": "Deine Nachricht",
     "send": "Absenden!",
-    "thanks": "Deine Anfrage wurde erfolgreich versendet!"
+    "thanks": "Deine Anfrage wurde erfolgreich versendet!",
+    "email": "E-Mail",
+    "emailPlaceholder": "Deine E-Mail Adresse",
+    "acceptTerms": "TODO [Hiermit stimme ich der Verarbeitung meiner Personenbezogegenen Daten im Rahmen einer Antwort auf meine Anfrage zu.]"
   }
 }

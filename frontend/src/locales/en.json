@@ -143,12 +143,14 @@
     "shouldContainNormalChar": "Password should contain at least one letter character.",
     "shouldContainSpecialChar": "Password should contain at least one special character.",
     "gameNameToShort": "Name should be at least 3 Characters long.",
-    "recaptcha": "The Bot-Challenge must be passed.",
+    "captcha": "The Bot-Challenge must be passed.",
+    "fillIn": "Please fill in all required fields.",
     "inputTooLong": "Your input is too long.",
     "backend": {
       "-2": "Internal Error",
       "-1": "Unknown Error",
       "100": "An error occurred in the backend.",
+      "101": "The captcha check failed.",
       "110": "The account is not verified.",
       "111": "The cookie is missing.",
       "112": "The user could not be found.",
@@ -244,15 +246,6 @@
     "leave": "Leave Game",
     "playCard": "Play card"
   },
-  "recaptcha": {
-    "title": "I'm not a robot",
-    "loading": "loading...",
-    "error": "Some error occurred in the checking process. - Please retry later.",
-    "result": {
-      "success": "All good",
-      "fail": "Failed Bot Check! - Please retry later."
-    }
-  },
   "deleteAccount": {
     "title": "Delete Account",
     "password": "Password",
@@ -270,10 +263,6 @@
       "auth": {
         "name": "Authentication Cookies (Strictly necessary)",
         "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
-      },
-      "recaptcha": {
-        "name": "Google reCAPTCHA Cookies",
-        "description": "We use Google reCAPTCHA in order to prevent spam. Google reCAPTCHA needs cookies in order to analyze your interactions with the website."
       }
     },
     "active": "Active",
@@ -451,6 +440,9 @@
     "message": "Message",
     "messagePlaceholder": "Your message",
     "send": "Send!",
-    "thanks": "Your request was sent successfully!"
+    "thanks": "Your request was sent successfully!",
+    "email": "E-Mail",
+    "emailPlaceholder": "Your E-Mail address",
+    "acceptTerms": "TODO [I accept the terms and conditions...]"
   }
 }

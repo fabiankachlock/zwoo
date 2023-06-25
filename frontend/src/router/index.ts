@@ -5,7 +5,7 @@ import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
 import { AuthGuard } from '@/router/guards/AuthGuard';
 import { CookieGuard } from '@/router/guards/CookieGuard';
 import { InGameGuard } from '@/router/guards/GameGuard';
-import { ReCaptchaTermsRouteInterceptor } from '@/router/guards/ReCaptchaTerms';
+// import { ReCaptchaTermsRouteInterceptor } from '@/router/guards/ReCaptchaTerms';
 import { VersionGuard } from '@/router/guards/VersionGuard';
 
 import Menu from '../views/_Layout.vue';
@@ -119,7 +119,7 @@ router.beforeEach(async (to, from, next) => {
 
 const AfterEachSyncGuards: RouterInterceptor['afterEach'][] = [];
 const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [
-  new ReCaptchaTermsRouteInterceptor().afterEachAsync,
+  //new ReCaptchaTermsRouteInterceptor().afterEachAsync,
   ShortcutManager.global.afterEachAsync
 ];
 // (async () => ([

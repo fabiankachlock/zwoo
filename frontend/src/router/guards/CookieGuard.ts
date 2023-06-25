@@ -1,7 +1,7 @@
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+import { RouteLocationNormalized } from 'vue-router';
 
-import { createRedirect } from '@/composables/useRedirect';
-import { useCookies } from '@/core/adapter/cookies';
+// import { createRedirect } from '@/composables/useRedirect';
+// import { useCookies } from '@/core/adapter/cookies';
 import Logger from '@/core/services/logging/logImport';
 import { RouterInterceptor } from '@/router/types';
 
@@ -16,16 +16,16 @@ export class CookieGuard implements RouterInterceptor {
     return false;
   };
 
-  beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
+  beforeEach = async (to: RouteLocationNormalized): Promise<boolean> => {
     const needsCookie = CookieGuard.matchesRoute(to.fullPath);
 
     if (needsCookie) {
       CookieGuard.Logger.debug('needs cookie approval');
-      const cookies = useCookies();
-      if (!cookies.cookies.recaptcha) {
-        CookieGuard.Logger.log('insufficient cookie settings');
-        next(`/missing-cookies?${createRedirect(to.fullPath)}`);
-      }
+      // const cookies = useCookies();
+      // if (!cookies.cookies.recaptcha) {
+      //   CookieGuard.Logger.log('insufficient cookie settings');
+      //   next(`/missing-cookies?${createRedirect(to.fullPath)}`);
+      // }
       CookieGuard.Logger.debug('all fine!');
     }
     return false;

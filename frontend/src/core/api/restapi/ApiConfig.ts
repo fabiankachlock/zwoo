@@ -21,7 +21,6 @@ type ExtractRouteParams<str extends string> = str extends ''
 
 export enum Endpoint {
   CreateAccount = 'auth/create',
-  Recaptcha = 'auth/recaptcha',
   AccountVerify = 'auth/verify?id=:id:&code=:code:',
   AccountLogin = 'auth/login',
   AccountLogout = 'auth/logout',

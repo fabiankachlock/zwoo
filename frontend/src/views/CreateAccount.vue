@@ -31,7 +31,7 @@
       <template v-if="isBeta">
         <TextInput id="beta-code" v-model="betaCode" label-key="createAccount.beta" placeholder="xxx-xxx" />
       </template>
-      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="captchaValidator" :token="captchaResponse" @update:response="res => (captchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="create">
@@ -58,8 +58,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
@@ -67,12 +67,11 @@ import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
 import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
-import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { joinQuery } from '@/core/helper/utils';
+import { CaptchaValidator } from '@/core/services/validator/captcha';
 import { EmailValidator } from '@/core/services/validator/email';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import { UsernameValidator } from '@/core/services/validator/username';
 import FormLayout from '@/layouts/FormLayout.vue';
 
@@ -97,7 +96,7 @@ const password = ref('');
 const passwordRepeat = ref('');
 const betaCode = ref('');
 const matchError = ref<string[]>([]);
-const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
+const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
 const isLoading = ref<boolean>(false);
@@ -105,7 +104,7 @@ const showResend = ref(true);
 const isSubmitEnabled = computed(
   () =>
     !isLoading.value &&
-    reCaptchaValidator.validate(reCaptchaResponse.value).isValid &&
+    captchaValidator.validate(captchaResponse.value).isValid &&
     emailValidator.validate(email.value).isValid &&
     passwordValidator.validate(password.value).isValid &&
     passwordMatchValidator.validate([password.value, passwordRepeat.value]).isValid &&
@@ -116,7 +115,7 @@ const emailValidator = new EmailValidator();
 const usernameValidator = new UsernameValidator();
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();
-const reCaptchaValidator = new RecaptchaValidator();
+const captchaValidator = new CaptchaValidator();
 
 watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   const result = passwordMatchValidator.validate([password, passwordRepeat]);
@@ -132,10 +131,10 @@ const create = async () => {
   error.value = [];
   isLoading.value = true;
   try {
-    await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, reCaptchaResponse.value, betaCode.value);
+    await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, captchaResponse.value, betaCode.value);
     showInfo.value = true;
   } catch (e: unknown) {
-    reCaptchaResponse.value = undefined;
+    captchaResponse.value = undefined;
     setTimeout(() => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });

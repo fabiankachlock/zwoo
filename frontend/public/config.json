@@ -1,6 +1,6 @@
 {
   "config": {
-    "recaptcha": "6LfI8qMiAAAAAJwiBu1sbNMVlujm5i0MAAMr6yEK"
+    "captcha": "10000000-ffff-ffff-ffff-000000000001"
   },
   "features": {
     "beta": true
