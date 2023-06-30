@@ -95,7 +95,7 @@ internal class LastCardRule : BaseDrawRule
         return interrupt.OriginRule == Name && interrupt.Reason == _interruptReason;
     }
 
-    public override GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsibleForInterrupt(interrupt, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new();
@@ -116,7 +116,7 @@ internal class LastCardRule : BaseDrawRule
         return gameEvent.Type == ClientEventType.RequestEndTurn;
     }
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new List<GameEvent>();

@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace ZwooGameLogic.Game.Cards;
 
-internal sealed class Pile
+internal interface IPile
 {
+    public Card DrawCard();
+    public List<Card> DrawCard(int amount);
+}
 
+internal sealed class Pile : IPile
+{
     private List<Card> AvailableCards;
     private Random random = new Random();
 

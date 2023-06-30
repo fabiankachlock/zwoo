@@ -35,7 +35,7 @@ internal class BaseDrawRule : BaseRule
     }
 
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new List<GameEvent>();
@@ -85,14 +85,14 @@ internal class BaseDrawRule : BaseRule
     /// <param name="state">game state object</param>
     /// <param name="player">ID of the player</param>
     /// <param name="amount">amount of cards to draw</param>
-    /// <param name="pile">games card pile</param>
+    /// <param name="pile">games card IPile</param>
     /// <returns>updated game state and drawn cards</returns>
-    protected (GameState, List<Card>) DrawCardsForPlayer(GameState state, long player, int amount, Pile pile)
+    protected (GameState, List<Card>) DrawCardsForPlayer(GameState state, long player, int amount, IPile IPile)
     {
         List<Card> newCards = new List<Card>();
         for (int i = 0; i < amount; i++)
         {
-            newCards.Add(pile.DrawCard());
+            newCards.Add(IPile.DrawCard());
         }
         state.PlayerDecks[player].AddRange(newCards);
         return (state, newCards);

@@ -7,7 +7,19 @@ using ZwooGameLogic.Game.State;
 
 namespace ZwooGameLogic.Game;
 
-internal class PlayerCycle
+internal interface IPlayerCycle
+{
+    public long ActivePlayer { get; }
+    public List<long> Order { get; }
+
+    public long Next();
+    public long Next(GameDirection direction);
+    public long Previous();
+    public int GetOrder(long playerId);
+    public void RemovePlayer(long id, GameDirection direction);
+}
+
+internal class PlayerCycle : IPlayerCycle
 {
     private int _currentIndex;
     private List<long> _players;

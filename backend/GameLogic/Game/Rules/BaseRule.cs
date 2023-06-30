@@ -37,7 +37,7 @@ internal abstract class BaseRule
         return false;
     }
 
-    public virtual GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public virtual GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         return GameStateUpdate.None(state);
     }
@@ -56,7 +56,7 @@ internal abstract class BaseRule
         return false;
     }
 
-    public virtual GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public virtual GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         return GameStateUpdate.None(state);
     }

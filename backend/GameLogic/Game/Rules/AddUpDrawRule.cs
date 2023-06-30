@@ -36,7 +36,7 @@ internal class AddUpDrawRule : BaseRule
         return _placeCardRule.IsResponsible(clientEvent, state) || _drawRule.IsResponsible(clientEvent, state);
     }
 
-    public override GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         if (_placeCardRule.IsResponsible(clientEvent, state))
         {
@@ -66,7 +66,7 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
         ) || base.IsResponsible(gameEvent, state);
     }
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
 
@@ -114,7 +114,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
     }
 
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, IPile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new List<GameEvent>();

@@ -49,7 +49,7 @@ internal sealed class PlayerManager
         _onPlayerLeaveHandler = handler;
     }
 
-    public (PlayerCycle, Dictionary<long, int>) ComputeOrder()
+    public (IPlayerCycle, Dictionary<long, int>) ComputeOrder()
     {
         PlayerCycle cycle = new PlayerCycle(Players);
         Dictionary<long, int> order = new Dictionary<long, int>();
