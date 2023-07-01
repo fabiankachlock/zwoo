@@ -26,12 +26,12 @@ internal class LastCardRule : BaseDrawRule
     {
         SettingsKey = "explicitLastCard",
         Title = new Dictionary<string, string>(){
-            {"de", "DE"},
-            {"en", "EN"},
+            {"de", "Letzt Karte"},
+            {"en", "Last Card"},
         },
         Description = new Dictionary<string, string>(){
-            {"de", "D-DE"},
-            {"en", "D-EN"},
+            {"de", "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten."},
+            {"en", "If a player has only one card left, he has to press the zwoo button or else he will ge two penalty cards."},
         },
         DefaultValue = 0,
     };

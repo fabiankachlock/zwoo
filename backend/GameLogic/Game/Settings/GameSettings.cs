@@ -7,13 +7,6 @@ using ZwooGameLogic.Game.State;
 
 namespace ZwooGameLogic.Game.Settings;
 
-/*
-        { "maxPlayers", GameSettingsKey.MaxAmountOfPlayers },
-        { "initialCards", GameSettingsKey.NumberOfCards },
-        { "addUpDraw", GameSettingsKey.AddUpDraw },
-        { "explicitLastCard", GameSettingsKey.ExplicitLastCard }
-*/
-
 public static class GameSettingsKey
 {
     public static readonly string MaxAmountOfPlayers = "maxPlayers";
@@ -28,12 +21,12 @@ public class GameSettings
         {
             Key = GameSettingsKey.MaxAmountOfPlayers,
             Title = new Dictionary<string, string>(){
-                {"de", "DE"},
-                {"en", "EN"},
+                {"de", "Spieleranzahl"},
+                {"en", "Amount of Players"},
             },
             Description = new Dictionary<string, string>(){
-                {"de", "DE"},
-                {"en", "EN"},
+                {"de", "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."},
+                {"en", "Change maximum amount of players for your game."},
             },
             Type = GameSettingsType.Numeric,
             Min = 1,
@@ -43,12 +36,12 @@ public class GameSettings
         {
             Key = GameSettingsKey.NumberOfCards,
             Title = new Dictionary<string, string>(){
-                {"de", "DE"},
-                {"en", "EN"},
+                {"de", "Anzahl an Karten"},
+                {"en", "Amount of Cards"},
             },
             Description = new Dictionary<string, string>(){
-                {"de", "DE"},
-                {"en", "EN"},
+                {"de", "Lege die Anzahl an Karten fest, die ein Spieler am Anfang bekommt."},
+                {"en", "Choose the amount of cards each player is supplied with at the start of a game."},
             },
             Type = GameSettingsType.Numeric,
             Min = 1,
