@@ -22,11 +22,6 @@ internal class ReverseCardRule : BaseCardRule
         get => "BaseCardRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
-    }
-
     public ReverseCardRule() : base() { }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)

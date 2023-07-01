@@ -22,10 +22,19 @@ internal class LastCardRule : BaseDrawRule
         get => "LastCardRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
+    public override RuleMeta? Setting => new RuleMeta()
     {
-        get => GameSettingsKey.ExplicitLastCard;
-    }
+        SettingsKey = "explicitLastCard",
+        Title = new Dictionary<string, string>(){
+            {"de", "DE"},
+            {"en", "EN"},
+        },
+        Description = new Dictionary<string, string>(){
+            {"de", "D-DE"},
+            {"en", "D-EN"},
+        },
+        DefaultValue = 0,
+    };
 
     public LastCardRule() : base() { }
 

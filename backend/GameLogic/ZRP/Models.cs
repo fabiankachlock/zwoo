@@ -1,4 +1,5 @@
 ﻿using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.ZRP;
 
@@ -123,7 +124,7 @@ public readonly record struct SettingChangedNotification(string Setting, int Val
 public readonly record struct GetSettingsEvent(); // empty
 
 /// <see cref="AllSettingsNotification" />
-public readonly record struct AllSettings_SettingDTO(string Setting, int Value);
+public readonly record struct AllSettings_SettingDTO(string Setting, int Value, Dictionary<string, string> Title, Dictionary<string, string> Description, GameSettingsType Type, bool IsReadonly, int? Min, int? Max);
 
 /// <summary>
 /// ZRPCode: 203

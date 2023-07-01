@@ -17,10 +17,19 @@ internal class AddUpDrawRule : BaseRule
         get => "AddUpDrawRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
+    public override RuleMeta? Setting => new RuleMeta()
     {
-        get => GameSettingsKey.AddUpDraw;
-    }
+        SettingsKey = "addUpDraw",
+        Title = new Dictionary<string, string>(){
+            {"de", "DE"},
+            {"en", "EN"},
+        },
+        Description = new Dictionary<string, string>(){
+            {"de", "D-DE"},
+            {"en", "D-EN"},
+        },
+        DefaultValue = 1
+    };
 
     private BaseRule _placeCardRule;
     private BaseRule _drawRule;

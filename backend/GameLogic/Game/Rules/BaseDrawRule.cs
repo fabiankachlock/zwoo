@@ -22,10 +22,7 @@ internal class BaseDrawRule : BaseRule
         get => "BaseDrawRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
-    }
+    public override RuleMeta? Setting => null;
 
     public BaseDrawRule() : base() { }
 
@@ -33,7 +30,6 @@ internal class BaseDrawRule : BaseRule
     {
         return gameEvent.Type == ClientEventType.DrawCard;
     }
-
 
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
