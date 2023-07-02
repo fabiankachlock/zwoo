@@ -68,7 +68,7 @@ public class GameEventTranslator : IGameEventManager
 
     public void RemoveCard(ZwooGameLogic.Game.Events.RemoveCardDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCard, new ZRP.RemoveCardNotification(data.Card.Color, data.Card.Type));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCards, new ZRP.RemoveCardNotification(data.Cards.Select(card => new RemoveCard_CardDTO(card.Color, card.Type)).ToArray()));
     }
 
     // TODO: utilize, that multiple cards can be sent at once

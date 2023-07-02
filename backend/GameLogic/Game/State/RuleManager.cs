@@ -15,7 +15,7 @@ internal class RuleManager
         new ReverseCardRule(),
         new AddUpDrawRule(),
         new LastCardRule(),
-        new TestChangeCardRule()
+        new DeckChangeRule()
     };
 
     public readonly long GameId;

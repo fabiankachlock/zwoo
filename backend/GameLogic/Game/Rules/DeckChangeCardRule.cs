@@ -10,7 +10,7 @@ using ZwooGameLogic.Game.Cards;
 
 namespace ZwooGameLogic.Game.Rules;
 
-internal class TestChangeCardRule : BaseCardRule
+internal class DeckChangeRule : BaseCardRule
 {
     public override int Priority
     {
@@ -19,7 +19,7 @@ internal class TestChangeCardRule : BaseCardRule
 
     public override string Name
     {
-        get => "TestChangeCardRule";
+        get => "DeckChangeRule";
     }
 
     public override GameSettingsKey? AssociatedOption
@@ -31,7 +31,7 @@ internal class TestChangeCardRule : BaseCardRule
 
     private StoredEvent? _storedEvent = null;
 
-    public TestChangeCardRule() : base() { }
+    public DeckChangeRule() : base() { }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
@@ -99,13 +99,19 @@ internal class TestChangeCardRule : BaseCardRule
             long targetPlayer = _storedEvent.Value.Options[payload.Value];
             state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
 
+            List<GameEvent> swapEvents = new List<GameEvent>();
+            swapEvents.Add(GameEvent.RemoveCard(targetPlayer, state.PlayerDecks[targetPlayer]));
+            swapEvents.Add(GameEvent.SendCards(targetPlayer, state.PlayerDecks[payload.Player]));
+            swapEvents.Add(GameEvent.RemoveCard(payload.Player, state.PlayerDecks[payload.Player]));
+            swapEvents.Add(GameEvent.SendCards(payload.Player, state.PlayerDecks[targetPlayer]));
+
             var targetPlayerDeck = state.PlayerDecks[targetPlayer];
             state.PlayerDecks[targetPlayer] = state.PlayerDecks[payload.Player];
             state.PlayerDecks[payload.Player] = targetPlayerDeck;
 
             state = AddCardToStack(state, _storedEvent.Value.Card);
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
-            events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
+            events.AddRange(swapEvents);
             _storedEvent = null;
             return new GameStateUpdate(state, events);
         }

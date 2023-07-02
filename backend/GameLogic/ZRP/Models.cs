@@ -216,10 +216,13 @@ public readonly record struct SendCard_CardDTO(CardColor Type, CardType Symbol);
 /// </summary>
 public readonly record struct SendCardsNotification(SendCard_CardDTO[] Cards);
 
+/// <see cref="RemoveCardNotification" />
+public readonly record struct RemoveCard_CardDTO(CardColor Type, CardType Symbol);
+
 /// <summary>
 /// ZRPCode: 307
 /// </summary>
-public readonly record struct RemoveCardNotification(CardColor Type, CardType Symbol);
+public readonly record struct RemoveCardNotification(RemoveCard_CardDTO[] Cards);
 
 
 /// <see cref="StateUpdateNotification" />
