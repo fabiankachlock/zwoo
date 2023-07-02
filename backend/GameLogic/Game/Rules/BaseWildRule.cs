@@ -22,11 +22,6 @@ internal class BaseWildCardRule : BaseCardRule
         get => "BaseCardRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
-    }
-
     private record struct StoredEvent(long Player, Card Card);
 
     private StoredEvent? _storedEvent = null;

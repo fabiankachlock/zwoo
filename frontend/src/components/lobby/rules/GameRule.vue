@@ -5,7 +5,7 @@
     @click="toggleOpenState"
   >
     <div class="flex flex-row flex-nowrap justify-between items-center">
-      <p class="text-lg tc-main-dark">{{ t(title) }}</p>
+      <p class="text-lg tc-main-dark">{{ t(translatedTitle) }}</p>
       <div>
         <slot></slot>
       </div>
@@ -14,7 +14,7 @@
       <div class="divider w-full my-2 bc-invert-darkest border-b"></div>
       <div class="content">
         <p class="text-sm italic tc-main-secondary">
-          {{ t(description) }}
+          {{ t(translatedDescription) }}
         </p>
       </div>
     </div>
@@ -22,19 +22,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-defineProps<{
-  title: string;
-  description: string;
+import { defaultLanguage } from '@/i18n';
+
+const props = defineProps<{
+  title: Record<string, string>;
+  description: Record<string, string>;
 }>();
 
-const { t } = useI18n();
+const { title, description } = toRefs(props);
+
+const { t, locale } = useI18n();
 const isOpen = ref(false);
+const translatedTitle = computed(() => getTranslationOrFallback(title.value, locale.value));
+const translatedDescription = computed(() => getTranslationOrFallback(description.value, locale.value));
 
 const toggleOpenState = () => {
   isOpen.value = !isOpen.value;
+};
+
+const getTranslationOrFallback = (translateAble: Record<string, string>, locale: string): string => {
+  if (translateAble[locale]) return translateAble[locale];
+  return translateAble[defaultLanguage];
 };
 </script>
 
