@@ -4,7 +4,7 @@
       <FormTitle> {{ t('requestPasswordReset.title') }} </FormTitle>
       <p class="m-2 tc-main-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
       <TextInput id="email" v-model="email" label-key="requestPasswordReset.email" :placeholder="t('requestPasswordReset.email')" />
-      <ReCaptchaButton :validator="reCaptchaValidator" :response="reCaptchaResponse" @update:response="res => (reCaptchaResponse = res)" />
+      <CaptchaButton :validator="captchaValidator" :token="captchaResponse" @update:response="res => (captchaResponse = res)" />
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="requestReset">
@@ -27,16 +27,15 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
+import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormError, FormSecondaryAction, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
-import ReCaptchaButton from '@/components/forms/ReCaptchaButton.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useRedirect } from '@/composables/useRedirect';
 import { useAuth } from '@/core/adapter/auth';
 import { useCookies } from '@/core/adapter/cookies';
-import { CaptchaResponse } from '@/core/api/entities/Captcha';
 import { joinQuery } from '@/core/helper/utils';
+import { CaptchaValidator } from '@/core/services/validator/captcha';
 import { EmailValidator } from '@/core/services/validator/email';
-import { RecaptchaValidator } from '@/core/services/validator/recaptcha';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
@@ -48,19 +47,19 @@ onMounted(() => {
   useCookies().loadRecaptcha();
 });
 
-const reCaptchaValidator = new RecaptchaValidator();
+const captchaValidator = new CaptchaValidator();
 const emailValidator = new EmailValidator();
 
 const email = ref('');
-const reCaptchaResponse = ref<CaptchaResponse | undefined>(undefined);
+const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
 const showInfo = ref(false);
 const isLoading = ref<boolean>(false);
 const isSubmitEnabled = computed(
-  () => !isLoading.value && emailValidator.validate(email.value).isValid && reCaptchaValidator.validate(reCaptchaResponse.value).isValid
+  () => !isLoading.value && emailValidator.validate(email.value).isValid && captchaValidator.validate(captchaResponse.value).isValid
 );
 
-watch([email, reCaptchaResponse], () => {
+watch([email, captchaResponse], () => {
   // clear error since there are changes
   error.value = [];
 });
@@ -70,11 +69,11 @@ const requestReset = async () => {
   isLoading.value = true;
 
   try {
-    await auth.requestPasswordReset(email.value, reCaptchaResponse.value);
+    await auth.requestPasswordReset(email.value, captchaResponse.value);
     showInfo.value = true;
     applyRedirectReplace();
   } catch (e: unknown) {
-    reCaptchaResponse.value = undefined;
+    captchaResponse.value = undefined;
     setTimeout(() => {
       error.value = Array.isArray(e) ? e : [(e as Error).toString()];
     });

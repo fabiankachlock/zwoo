@@ -1,12 +1,9 @@
-using System.Collections.Concurrent;
-using BackendHelper;
 using log4net;
 using log4net.Repository.Hierarchy;
 using log4net.Core;
 using log4net.Appender;
 using log4net.Layout;
 using LogRushClient.Log4Net;
-using ZwooDatabaseClasses;
 
 
 namespace ZwooBackend;
@@ -30,6 +27,9 @@ public static class Globals
         Cors = ReturnIfValidEnvVar("ZWOO_CORS");
         ZwooDomain = ReturnIfValidEnvVar("ZWOO_DOMAIN");
         ZwooCookieDomain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? ZwooDomain;
+
+        var extraCors = Environment.GetEnvironmentVariable("ZWOO_CORS_CONTACT_FORM");
+        ContactFormExtraCorsOrigin = (extraCors ?? "").Split(',').Append(Cors).Where(host => host != "").ToArray();
 
         ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
         DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
@@ -84,7 +84,6 @@ public static class Globals
         hierarchy.Configured = true;
 
         Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
-        ZwooDatabase = new Database.Database();
     }
 
     public static readonly ILog Logger = LogManager.GetLogger("Global");
@@ -95,11 +94,10 @@ public static class Globals
     public static readonly ILog LobbyLogger = LogManager.GetLogger("Lobby");
     public static readonly ILog GameLogger = LogManager.GetLogger("Game");
 
-    public static readonly Database.Database ZwooDatabase;
-
     public static readonly bool UseSsl;
     public static readonly bool IsBeta;
     public static readonly string Cors;
+    public static readonly string[] ContactFormExtraCorsOrigin;
     public static readonly string ZwooDomain;
     public static readonly string ZwooCookieDomain;
 

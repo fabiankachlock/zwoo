@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Controllers.DTO;
 using ZwooBackend.Services;
+using ZwooDatabase;
 
 namespace ZwooBackend.Controllers;
 
@@ -13,77 +14,110 @@ public class AccountController : Controller
 {
     private readonly IEmailService _emailService;
     private readonly ILanguageService _languageService;
+    private readonly IUserService _userService;
+    private ICaptchaService _captcha;
 
-    public AccountController(IEmailService emailService, ILanguageService languageService)
+
+    public AccountController(IEmailService emailService, ILanguageService languageService, IUserService userService, ICaptchaService captcha)
     {
         _emailService = emailService;
         _languageService = languageService;
+        _userService = userService;
+        _captcha = captcha;
     }
 
     [HttpGet("settings")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult GetSettings()
     {
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
-            return Ok($"{{\"settings\": \"{user.Settings.Replace("\"", "\\\"")}\"}}");
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
+        {
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
+        }
+
+        return Ok(new UserSettings() { Settings = user.Settings });
     }
 
     [HttpPost("settings")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult PostSettings([FromBody] SetSettings body)
     {
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
         {
-            user.Settings = body.settings;
-            Globals.ZwooDatabase.UpdateUser(user);
-            return Ok("");
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+
+        user.Settings = body.settings;
+        _userService.UpdateUser(user, AuditOptions.WithActor(AuditActor.User(user.Id, sessionId)).AddMessage("updated settings"));
+        return Ok(new MessageDTO() { Message = "updated settings" });
     }
 
     [HttpPost("changePassword")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult ChangePassword([FromBody] ChangePassword body)
     {
-        if (!StringHelper.IsValidPassword(body.oldPassword))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Old Password Invalid!"));
         if (!StringHelper.IsValidPassword(body.newPassword))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "New Password Invalid!"));
-
-        if (CookieHelper.CheckUserCookie(HttpContext.User.FindFirst("auth")?.Value, out var user, out var sid))
         {
-            if (Globals.ZwooDatabase.ChangePassword(user, body.oldPassword, body.newPassword, sid))
-                return Ok("Password changed");
-            return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.PASSWORD_NOT_MATCHING, "Password did not match"));
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "New Password Invalid!"));
         }
-        return Unauthorized(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
+
+        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
+        if (user == null || sessionId == null)
+        {
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
+        }
+
+        if (!_userService.ChangePassword(user, body.oldPassword, body.newPassword, sessionId))
+        {
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.PASSWORD_NOT_MATCHING, "Password did not match"));
+        }
+        return Ok(new MessageDTO() { Message = "Password changed" });
     }
 
     [HttpPost("requestPasswordReset")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult RequestResetPassword([FromBody] RequestResetPassword body)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
+    public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPassword body)
     {
-        if (!StringHelper.IsValidEmail(body.email))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
-        if (!Globals.ZwooDatabase.EmailExists(body.email))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.USER_NOT_FOUND, "no User with this Email"));
+        var captchaResponse = await _captcha.Verify(body.captchaToken);
+        if (captchaResponse == null || !captchaResponse.Success)
+        {
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
+        }
 
-        var user = Globals.ZwooDatabase.RequestChangePassword(body.email);
+        var user = _userService.RequestChangePassword(body.email);
+        if (user == null)
+        {
+            return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "no user found"));
+        }
+
         var recipient = _emailService.CreateRecipient(user.Email, user.Username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
         _emailService.SendPasswordResetMail(recipient, user.PasswordResetCode ?? "");
-        return Ok("");
+        return Ok(new MessageDTO() { Message = "password change email sent" });
     }
 
     [HttpPost("resetPassword")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
     public IActionResult ResetPassword([FromBody] ResetPassword body)
     {
         if (!StringHelper.IsValidPassword(body.password))
-            return BadRequest(ErrorCodes.GetErrorResponseMessage(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
-        Globals.ZwooDatabase.ResetPassword(body.code, body.password);
-        return Ok("");
+        {
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "Password Invalid!"));
+        }
+
+        var user = _userService.ResetPassword(body.code, body.password);
+        if (user == null)
+        {
+            return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "no user with this reset code found"));
+        }
+        return Ok(new MessageDTO() { Message = "reset user password" });
     }
 }

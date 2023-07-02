@@ -1,32 +1,32 @@
 @page "/betacodes"
-@using ZwooInfoDashBoard.Data
-@using ZwooInfoDashBoard.Pages.Dialogs
-@using ZwooDatabaseClasses
-
 @inject DialogService DialogService
+@inject IDatabase _db
 
 <PageTitle>Betacodes</PageTitle>
 
 <h1>Beta Codes</h1>
-<p>List of All Betacodes.</p>
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Code" Click="@InsertBetaCode"/>
-<RadzenDataGrid AllowFiltering="true" AllowPaging="true" PageSize="25" @ref="_grid"
-                TItem="BetaCode" Data="_codes" AllowVirtualization="true">
+<RadzenDataGrid AllowPaging="true" PageSize="25" @ref="_grid"
+                TItem="BetaCodeDao" Data="_codes" AllowVirtualization="true">
     <Columns>
-        <RadzenDataGridColumn TItem="BetaCode" Property="Id" Title="_id"/>
-        <RadzenDataGridColumn TItem="BetaCode" Property="Code" Title="Code"/>
+        <RadzenDataGridColumn TItem="BetaCodeDao" Property="Id" Title="_id"/>
+        <RadzenDataGridColumn TItem="BetaCodeDao" Property="Code" Title="Code"/>
     </Columns>
 </RadzenDataGrid>
 
 @code {
-    readonly IQueryable<BetaCode> _codes = Globals.ZwooDatabase.GetBetaCodesAsQueryable();
-    RadzenDataGrid<BetaCode> _grid = null!;
-    
+    private IQueryable<BetaCodeDao> _codes  = new List<BetaCodeDao>().AsQueryable();
+    private RadzenDataGrid<BetaCodeDao> _grid = new RadzenDataGrid<BetaCodeDao>();
+
+    protected override void OnInitialized()
+    {
+        _codes = _db.BetaCodes.AsQueryable();
+    }
+
     private async Task InsertBetaCode()
     {
         await DialogService.OpenAsync<NewBetaCode>("New Betacode", new Dictionary<string, object> { }, new DialogOptions { Width = "460px", Height = "180px", Resizable = false, Draggable = true });
         await _grid.Reload();
     }
-
 }

@@ -20,7 +20,6 @@ const ApiRef: ApiAdapter & GameAdapter = {
   loadVersionHistory: (...args) => useRootApp().api.loadVersionHistory(...args),
   loginUser: (...args) => useRootApp().api.loginUser(...args),
   logoutUser: (...args) => useRootApp().api.logoutUser(...args),
-  verifyCaptchaToken: (...args) => useRootApp().api.verifyCaptchaToken(...args),
   requestUserPasswordReset: (...args) => useRootApp().api.requestUserPasswordReset(...args),
   resendVerificationEmail: (...args) => useRootApp().api.resendVerificationEmail(...args),
   resetUserPassword: (...args) => useRootApp().api.resetUserPassword(...args),

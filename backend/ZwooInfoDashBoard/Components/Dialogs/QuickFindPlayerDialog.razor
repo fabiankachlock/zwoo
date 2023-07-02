@@ -1,0 +1,67 @@
+@inject DialogService DialogService
+@inject IDatabase _db
+
+<div class="container">
+    <div class="row"> 
+        <div class="col-sm-4">
+            <RadzenDropDown AllowClear="false" AllowFiltering="false"
+                            TValue="SearchType" Data="Enum.GetValues(typeof(SearchType))" @bind-Value="_searchType"/>
+        </div>
+        <div class="col-sm-8">
+            <RadzenTextBox @bind-Value="_query" Placeholder="Search Query"/>
+        </div>
+    </div>
+    <div class="row">
+        <RadzenLabel Text="@_error" Style="color: red"/>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <RadzenButton Click="@((args) => DialogService.Close(false))" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="width: 120px" Class="mr-1" />
+            <RadzenButton Click="@((args) => FindUser())" Text="Search" Style="width: 120px" />
+        </div>
+    </div>
+</div>
+    
+@code {
+    private enum SearchType
+    {
+        Id,
+        Name
+    }
+
+    private SearchType _searchType = SearchType.Id;
+    private string _query = "";
+    private string _error = "";
+
+    private void FindUser()
+    {
+        UserDao? user = null;
+        switch (_searchType)
+        {
+            case SearchType.Id:
+            {
+                if (!ulong.TryParse(_query, out var val))
+                {
+                    _error = "ID could not be parsed";
+                    break;
+                }
+                user = _db.Users.AsQueryable().FirstOrDefault(x => x.Id == val);
+                break;
+            }
+            case SearchType.Name:
+            {
+                user = _db.Users.AsQueryable().FirstOrDefault(x => x.Username == _query);
+                break;
+            }
+        }
+
+        if (user == null)
+        {
+            _error = "User could not be found";
+            return;
+        }
+        
+        DialogService.Close(user);
+    }
+
+}

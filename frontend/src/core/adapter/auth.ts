@@ -3,11 +3,10 @@ import { defineStore } from 'pinia';
 import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
 import { I18nInstance } from '@/i18n';
 
-import { CaptchaResponse } from '../api/entities/Captcha';
+import { CaptchaValidator } from '../services/validator/captcha';
 import { EmailValidator } from '../services/validator/email';
 import { PasswordValidator } from '../services/validator/password';
 import { PasswordMatchValidator } from '../services/validator/passwordMatch';
-import { RecaptchaValidator } from '../services/validator/recaptcha';
 import { UsernameValidator } from '../services/validator/username';
 import { useConfig, ZwooConfigKey } from './config';
 import { useApi } from './helper/useApi';
@@ -23,11 +22,15 @@ export const useAuth = defineStore('auth', {
     };
   },
   actions: {
-    async login(email: string, password: string, recaptchaResponse: CaptchaResponse | undefined) {
-      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
-      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+    async login(email: string, password: string, captchaResponse: string | undefined) {
+      const captchaValid = new CaptchaValidator().validate(captchaResponse);
+      if (!captchaValid.isValid) throw captchaValid.getErrors();
 
-      const status = await useApi().loginUser(email, password);
+      const status = await useApi().loginUser({
+        login: email,
+        password: password,
+        captchaToken: captchaResponse ?? ''
+      });
 
       if (status.isLoggedIn) {
         this.$patch({
@@ -65,7 +68,7 @@ export const useAuth = defineStore('auth', {
       email: string,
       password: string,
       repeatPassword: string,
-      recaptchaResponse: CaptchaResponse | undefined,
+      captchaResponse: string | undefined,
       beta: string
     ) {
       const usernameValid = new UsernameValidator().validate(username);
@@ -80,10 +83,19 @@ export const useAuth = defineStore('auth', {
       const passwordMatchValid = new PasswordMatchValidator().validate([password, repeatPassword]);
       if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
 
-      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
-      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+      const captchaValid = new CaptchaValidator().validate(captchaResponse);
+      if (!captchaValid.isValid) throw captchaValid.getErrors();
 
-      const status = await useApi().createUserAccount(username, email, password, beta, useConfig().get(ZwooConfigKey.Language));
+      const status = await useApi().createUserAccount(
+        {
+          username,
+          email,
+          password,
+          beta,
+          captchaToken: captchaResponse ?? ''
+        },
+        useConfig().get(ZwooConfigKey.Language)
+      );
 
       if (status.isLoggedIn) {
         this.$patch({
@@ -128,30 +140,30 @@ export const useAuth = defineStore('auth', {
         throw getBackendErrorTranslation(response.error);
       }
     },
-    async requestPasswordReset(email: string, recaptchaResponse: CaptchaResponse | undefined) {
+    async requestPasswordReset(email: string, captchaResponse: string | undefined) {
       const emailValid = new EmailValidator().validate(email);
       if (!emailValid.isValid) throw emailValid.getErrors();
 
-      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
-      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+      const captchaValid = new CaptchaValidator().validate(captchaResponse);
+      if (!captchaValid.isValid) throw captchaValid.getErrors();
 
-      const response = await useApi().requestUserPasswordReset(email, useConfig().get(ZwooConfigKey.Language));
+      const response = await useApi().requestUserPasswordReset(email, captchaResponse ?? '', useConfig().get(ZwooConfigKey.Language));
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);
       }
     },
-    async resetPassword(code: string, password: string, passwordRepeat: string, recaptchaResponse: CaptchaResponse | undefined) {
+    async resetPassword(code: string, password: string, passwordRepeat: string, captchaResponse: string | undefined) {
       const passwordValid = new PasswordValidator().validate(password);
       if (!passwordValid.isValid) throw passwordValid.getErrors();
 
       const passwordMatchValid = new PasswordMatchValidator().validate([password, passwordRepeat]);
       if (!passwordMatchValid.isValid) throw passwordMatchValid.getErrors();
 
-      const recaptchaValid = new RecaptchaValidator().validate(recaptchaResponse);
-      if (!recaptchaValid.isValid) throw recaptchaValid.getErrors();
+      const captchaValid = new CaptchaValidator().validate(captchaResponse);
+      if (!captchaValid.isValid) throw captchaValid.getErrors();
 
-      const response = await useApi().resetUserPassword(code, password);
+      const response = await useApi().resetUserPassword(code, password, captchaResponse ?? '');
 
       if (response.error) {
         throw getBackendErrorTranslation(response.error);

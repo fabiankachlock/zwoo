@@ -2,7 +2,7 @@ import { AppConfig } from '@/config';
 import { Logger } from '@/core/services/logging/logImport';
 
 import { BackendErrorAble } from '../ApiError';
-import { AuthenticationStatus, UserInfo } from '../entities/AuthenticationStatus';
+import { AuthenticationStatus, NewUser, UserInfo, UserLogin } from '../entities/Authentication';
 import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
@@ -23,7 +23,7 @@ export class AuthenticationService {
       }
     });
 
-    if (response.error) {
+    if (response.error || !response.data) {
       Logger.Api.warn('received erroneous response while fetching user auth status');
       return {
         isLoggedIn: false,
@@ -31,7 +31,7 @@ export class AuthenticationService {
       };
     }
 
-    const data = response.data!;
+    const data = response.data;
     return {
       isLoggedIn: true,
       username: data.username,
@@ -40,8 +40,8 @@ export class AuthenticationService {
     };
   };
 
-  static performLogin = async (email: string, password: string): Promise<AuthenticationStatus> => {
-    Logger.Api.log(`logging in as ${email}`);
+  static performLogin = async (data: UserLogin): Promise<AuthenticationStatus> => {
+    Logger.Api.log(`logging in as ${data.login}`);
 
     const response = await WrappedFetch(Backend.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
@@ -53,8 +53,9 @@ export class AuthenticationService {
         decodeJson: false
       },
       body: JSON.stringify({
-        email: email,
-        password: password
+        email: data.login,
+        password: data.password,
+        captchaToken: data.captchaToken
       })
     });
 
@@ -96,14 +97,8 @@ export class AuthenticationService {
     };
   };
 
-  static performCreateAccount = async (
-    username: string,
-    email: string,
-    password: string,
-    beta?: string,
-    lng: string | null = null
-  ): Promise<AuthenticationStatus> => {
-    Logger.Api.log(`performing create account action of ${username} with ${email}`);
+  static performCreateAccount = async (data: NewUser, lng: string | null = null): Promise<AuthenticationStatus> => {
+    Logger.Api.log(`performing create account action of ${data.username} with ${data.email}`);
 
     const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.CreateAccount, { lng: lng }), {
       method: 'POST',
@@ -115,10 +110,11 @@ export class AuthenticationService {
         decodeJson: false
       },
       body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
-        code: beta
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        code: data.beta,
+        captchaToken: data.captchaToken
       })
     });
 
