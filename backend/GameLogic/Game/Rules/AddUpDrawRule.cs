@@ -17,10 +17,19 @@ internal class AddUpDrawRule : BaseRule
         get => "AddUpDrawRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
+    public override RuleMeta? Setting => new RuleMeta()
     {
-        get => GameSettingsKey.AddUpDraw;
-    }
+        SettingsKey = "addUpDraw",
+        Title = new Dictionary<string, string>(){
+            {"de", "Ziehkarten addieren"},
+            {"en", "Add draw amounts"},
+        },
+        Description = new Dictionary<string, string>(){
+            {"de", "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."},
+            {"en", "On top of a draw card, further draw cards can be placed. The number of cards to be drawn is added. You can put +2 cards on top of +4 cards, as well as +4 cards on top of +2 cards."},
+        },
+        DefaultValue = 1
+    };
 
     private BaseRule _placeCardRule;
     private BaseRule _drawRule;

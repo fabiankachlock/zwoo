@@ -225,22 +225,6 @@
   "rules": {
     "widget": {
       "numberPlaceholder": "Zahl"
-    },
-    "maxPlayers": {
-      "title": "Spieleranzahl",
-      "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."
-    },
-    "addUpDraw": {
-      "title": "Ziehkarten addieren",
-      "info": "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."
-    },
-    "initialCards": {
-      "title": "Anzahl an Karten",
-      "info": "Lege eine Anzahl an Karten fest, die ein Spieler am Anfang bekommt."
-    },
-    "explicitLastCard": {
-      "title": "Letzt Karte",
-      "info": "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten."
     }
   },
   "ingame": {

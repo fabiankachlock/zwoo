@@ -22,10 +22,19 @@ internal class LastCardRule : BaseDrawRule
         get => "LastCardRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
+    public override RuleMeta? Setting => new RuleMeta()
     {
-        get => GameSettingsKey.ExplicitLastCard;
-    }
+        SettingsKey = "explicitLastCard",
+        Title = new Dictionary<string, string>(){
+            {"de", "Letzt Karte"},
+            {"en", "Last Card"},
+        },
+        Description = new Dictionary<string, string>(){
+            {"de", "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten."},
+            {"en", "If a player has only one card left, he has to press the zwoo button or else he will ge two penalty cards."},
+        },
+        DefaultValue = 0,
+    };
 
     public LastCardRule() : base() { }
 

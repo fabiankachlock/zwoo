@@ -225,22 +225,6 @@
   "rules": {
     "widget": {
       "numberPlaceholder": "Number"
-    },
-    "maxPlayers": {
-      "title": "Amount of Players",
-      "info": "Change maximum amount of players for your game."
-    },
-    "addUpDraw": {
-      "title": "Add draw amounts",
-      "info": "On top of a draw card, further draw cards can be placed. The number of cards to be drawn is added. You can put +2 cards on top of +4 cards, as well as +4 cards on top of +2 cards."
-    },
-    "initialCards": {
-      "title": "Amount Of Cards",
-      "info": "Choose the amount of cards each player is supplied with at the start of a game.."
-    },
-    "explicitLastCard": {
-      "title": "Last Card",
-      "info": "If a player has only one card left, he has to press the zwoo button or else he will ge two penalty cards."
     }
   },
   "ingame": {
