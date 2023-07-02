@@ -320,6 +320,10 @@
     "selectColor": {
       "title": "Wähle eine Farbe",
       "info": "Wähle die Farbe, mit der weiter gespielt werden soll."
+    },
+    "selectPlayer": {
+      "title": "Wähle einen Spieler",
+      "info": "Wähle einen Spieler, auf den die Aktion der gerade gelegten Karten angewendet werden soll."
     }
   },
   "reassureDialog": {
