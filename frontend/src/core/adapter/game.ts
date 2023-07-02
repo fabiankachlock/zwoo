@@ -87,13 +87,15 @@ export const useGameConfig = defineStore('game-config', {
         this._saveConfig({ id: game.id, role: game.role });
       }
     },
-    leave(): void {
+    leave(keepSavedGame = false): void {
       if (this.inActiveGame) {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
         this._wakeLock(); // relief wakelock
         useGameEvents().clear();
-        this.clearStoredConfig();
+        if (!keepSavedGame) {
+          this.clearStoredConfig();
+        }
         this.$patch({
           inActiveGame: false,
           gameId: undefined,
@@ -161,7 +163,7 @@ export const useGameConfig = defineStore('game-config', {
       Logger.RouterGuard.warn('routing out of active game');
       if (this._connection) {
         Logger.RouterGuard.warn('force closing game connection');
-        this.leave();
+        this.leave(true);
       }
     },
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {

@@ -29,29 +29,24 @@
             <Icon class="text-lg tc-main transition-transform hover:scale-110" icon="akar-icons:cross" />
           </button>
         </div>
-        <router-link :to="'/join/' + savedGame.id">
-          <div class="flex flex-row justify-between flex-wrap items-center">
-            <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">
-              <p class="text-md mr-2">
-                {{ savedGame.name }}
-              </p>
-              <p
-                v-if="!savedGame.isPublic"
-                class="inline-flex align-baseline flex-row flex-nowrap items-center tc-main-secondary text-sm italic mx-1"
-              >
-                <Icon icon="iconoir:lock-key" class="text-sm tc-secondary mx-0.5" /><span>{{ t('list.private') }}</span>
-              </p>
-              <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', savedGame.playerCount) }})</p>
-            </div>
-            <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
-              <div class="tc-primary">
-                <button class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2" @click="joinSavedGame()">
-                  <span>{{ t('list.rejoin') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
-                </button>
-              </div>
+        <div class="flex flex-row justify-between flex-wrap items-center">
+          <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">
+            <p class="text-md mr-2">
+              {{ savedGame.name }}
+            </p>
+            <p v-if="!savedGame.isPublic" class="inline-flex align-baseline flex-row flex-nowrap items-center tc-main-secondary text-sm italic mx-1">
+              <Icon icon="iconoir:lock-key" class="text-sm tc-secondary mx-0.5" /><span>{{ t('list.private') }}</span>
+            </p>
+            <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', savedGame.playerCount) }})</p>
+          </div>
+          <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
+            <div class="tc-primary">
+              <button class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2" @click.stop="joinSavedGame()">
+                <span>{{ t('list.rejoin') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
+              </button>
             </div>
           </div>
-        </router-link>
+        </div>
       </div>
       <!-- Games -->
       <div class="relative flex flex-col flex-nowrap">
