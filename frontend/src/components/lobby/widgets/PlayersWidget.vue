@@ -114,6 +114,7 @@
             </template>
           </div>
         </div>
+        <!-- wins info section -->
         <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-main">
           <div class="flex justify-between items-center">
             <p class="tc-main-secondary">
@@ -122,7 +123,7 @@
             <Icon v-if="!winsInfoOpen" icon="akar-icons:info" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="winsInfoOpen = true" />
             <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="winsInfoOpen = false" />
           </div>
-          <div class="grid overflow-hidden grid-rows-[1fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[0fr]': !winsInfoOpen }">
+          <div class="grid overflow-hidden grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': winsInfoOpen }">
             <Environment show="online">
               <p class="min-h-0 tc-main-secondary">
                 {{ t('wait.noWinsOnlineInfo') }}
