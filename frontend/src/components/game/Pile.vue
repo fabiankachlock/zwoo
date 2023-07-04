@@ -19,6 +19,9 @@
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>
     </div>
+    <div class="absolute top-1/2 right-6 -translate-y-1/2">
+      <p class="tc-main text-lg">{{ drawAmount ? `+${drawAmount}` : '' }}</p>
+    </div>
   </div>
 </template>
 
@@ -35,6 +38,7 @@ const deckState = useGameCardDeck();
 const gameState = useGameState();
 const isAnimating = ref(false);
 const isActive = computed(() => gameState.isActivePlayer);
+const drawAmount = computed(() => gameState.currentDrawAmount);
 
 const drawCard = () => {
   if (!isAnimating.value) {

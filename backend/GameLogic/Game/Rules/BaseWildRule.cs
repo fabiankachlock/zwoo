@@ -19,7 +19,7 @@ internal class BaseWildCardRule : BaseCardRule
 
     public override string Name
     {
-        get => "BaseCardRule";
+        get => "BaseWildRule";
     }
 
     private record struct StoredEvent(long Player, Card Card);
@@ -69,7 +69,7 @@ internal class BaseWildCardRule : BaseCardRule
         _storedEvent = new StoredEvent(payload.Player, payload.Card);
         events.Add(GameEvent.GetPlayerDecision(state.CurrentPlayer, PlayerDecision.SelectColor));
 
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.WithEvents(state, events);
     }
 
     /// <summary>
@@ -91,8 +91,9 @@ internal class BaseWildCardRule : BaseCardRule
             state = AddCardToStack(state, newCard);
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
+            state.Ui.CurrentDrawAmount = GetActiveDrawAmount(state.TopCard);
             _storedEvent = null;
-            return new GameStateUpdate(state, events);
+            return GameStateUpdate.WithEvents(state, events);
         }
         return GameStateUpdate.None(state);
     }
