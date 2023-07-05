@@ -179,7 +179,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
             {
                 break;
             }
-            stack[i].ActivateEvent();
+            stack[i] = new StackCard(stack[i].Card, true);
         }
         return stack;
     }
