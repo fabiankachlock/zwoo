@@ -4,15 +4,30 @@
 
     <p>Angaben gemäß § 5 TMG</p>
 
-    <p>Timo Stockhausen</p>
-
-    <!-- <p><span class="text-base">Vertreten durch:</span><br />Timo Stockhausen</p> -->
+    <p>IGD 2.0 UG (haftungsbeschränkt)</p>
 
     <p>
-      <span class="text-base">Kontakt:</span><br />
+      Alnpeckstraße 4 <br />
+      01239 Dresden <br />
+      Deutschland
+    </p>
+
+    <p>
+      <span class="text-base font-bold">Vertreten durch den Geschäftsführer:</span><br />
+      Thore Georgi
+    </p>
+
+    <p>
+      <span class="text-base font-bold">Kontakt:</span><br />
       <a href="mailto:info@igd20.de"> Email: <span style="text-decoration: underline">info@igd20.de</span> </a>
       <br />
       <a style="text-decoration: underline" href="/contact">Kontakt-Formular</a>
+    </p>
+
+    <p>
+      <span class="text-base font-bold">Registereintrag:</span><br />
+      Registergericht: Amtsgericht Dresden<br />
+      Registernummer: HRB 43974
     </p>
 
     <h2 class="tc-main">Haftungsausschluss:</h2>
