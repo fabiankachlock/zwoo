@@ -187,18 +187,21 @@ public class LobbyHandler : IEventHandler
                 return;
             }
 
-            IPlayer? newHost = context.Lobby.GetHost();
-            if (context.Role == ZRPRole.Host && newHost != null)
+            if (context.Role == ZRPRole.Host)
             {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.PublicId, ZRPRole.Host));
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(newHost.PublicId));
-                _webSocketManager.SendPlayer(newHost.Id, ZRPCode.PromotedToHost, new YouAreHostNotification());
-            }
-            else
-            {
-                // a game without host cant exist
-                context.Room.Close();
-                return;
+                IPlayer? newHost = context.Lobby.GetHost();
+                if (newHost != null)
+                {
+                    _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.PublicId, ZRPRole.Host));
+                    _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(newHost.PublicId));
+                    _webSocketManager.SendPlayer(newHost.Id, ZRPCode.PromotedToHost, new YouAreHostNotification());
+                }
+                else
+                {
+                    // a game without host cant exist
+                    context.Room.Close();
+                    return;
+                }
             }
 
             if (result != LobbyResult.Success) return;
