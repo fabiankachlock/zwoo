@@ -6,12 +6,16 @@
     <SettingsRow :title="t('settings.logging')">
       <LoggingSettings />
     </SettingsRow>
+    <SettingsRow :title="t('settings.localLogs')">
+      <ClearLocalLogs />
+    </SettingsRow>
   </SettingsSection>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
+import ClearLocalLogs from '../ClearLocalLogs.vue';
 import SettingsRow from '../common/SettingsRow.vue';
 import SettingsSection from '../common/SettingsSection.vue';
 import LoggingSettings from '../LoggingSettings.vue';
