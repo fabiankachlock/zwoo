@@ -32,7 +32,7 @@ public class SettingsHandler : IEventHandler
     {
         try
         {
-            AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(setting => new AllSettings_SettingDTO(SettingsKeyMapper.ToString(setting.Key), setting.Value)).ToArray());
+            AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
             _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, payload);
         }
         catch (Exception e)

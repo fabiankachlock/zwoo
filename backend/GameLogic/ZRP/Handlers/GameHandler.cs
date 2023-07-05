@@ -51,6 +51,11 @@ public class GameHandler : IEventHandler
             HandleSendDecision(context, message);
             return true;
         }
+        else if (message.Code == ZRPCode.RequestEndTurn)
+        {
+            HandleRequestEndTurn(context, message);
+            return true;
+        }
         return false;
     }
 
@@ -169,6 +174,20 @@ public class GameHandler : IEventHandler
         {
             var top = context.Game.State.GetPileTop();
             _webSocketManager.SendPlayer(context.Id, ZRPCode.SendPileTop, new SendPileTopNotification(top.Color, top.Type));
+        }
+        catch (Exception e)
+        {
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+        }
+    }
+
+    private void HandleRequestEndTurn(UserContext context, IIncomingZRPMessage message)
+    {
+        if (context.Role == ZRPRole.Spectator) return;
+        try
+        {
+            RequestEndTurnEvent payload = message.DecodePayload<RequestEndTurnEvent>();
+            context.Game.HandleEvent(ClientEvent.RequestEndTurn(context.Id));
         }
         catch (Exception e)
         {

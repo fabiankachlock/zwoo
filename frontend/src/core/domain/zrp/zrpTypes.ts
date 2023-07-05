@@ -99,6 +99,11 @@ export enum ZRPRole {
 
 export type ZRPPlayerState = 'disconnected' | 'connected';
 
+export enum SettingsType {
+  Numeric = 1,
+  Boolean = 2
+}
+
 export type ZRPPayloadMap = {
   // General
   [ZRPOPCode.PlayerJoined]: ZRPNamePayload;
@@ -216,6 +221,12 @@ export type ZRPSettingsPayload = {
   settings: {
     setting: string;
     value: number;
+    title: Record<string, string>;
+    description: Record<string, string>;
+    type: SettingsType;
+    isReadonly: boolean;
+    min?: number;
+    max?: number;
   }[];
 };
 
@@ -256,9 +267,8 @@ export type ZRPStateUpdatePayload = {
     symbol: number;
   };
   activePlayer: string;
-  activePlayerCardAmount: number;
-  lastPlayer: string;
-  lastPlayerCardAmount: number;
+  cardAmounts: Record<string, number>;
+  currentDrawAmount?: number;
 };
 
 export type ZRPDeckPayload = {

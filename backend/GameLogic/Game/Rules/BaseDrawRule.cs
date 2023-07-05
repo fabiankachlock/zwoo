@@ -14,7 +14,7 @@ internal class BaseDrawRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.BaseRule;
+        get => RulePriority.BaseRule;
     }
 
     public override string Name
@@ -22,10 +22,7 @@ internal class BaseDrawRule : BaseRule
         get => "BaseDrawRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
-    }
+    public override RuleMeta? Setting => null;
 
     public BaseDrawRule() : base() { }
 
@@ -33,7 +30,6 @@ internal class BaseDrawRule : BaseRule
     {
         return gameEvent.Type == ClientEventType.DrawCard;
     }
-
 
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
@@ -62,7 +58,6 @@ internal class BaseDrawRule : BaseRule
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
         events.Add(GameEvent.SendCards(payload.Player, newCards));
-
 
         return new GameStateUpdate(state, events);
     }

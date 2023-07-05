@@ -14,7 +14,7 @@ internal class BaseCardRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.BaseRule;
+        get => RulePriority.BaseRule;
     }
 
     public override string Name
@@ -22,10 +22,7 @@ internal class BaseCardRule : BaseRule
         get => "BaseCardRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
-    }
+    public override RuleMeta? Setting => null;
 
     public BaseCardRule() : base() { }
 

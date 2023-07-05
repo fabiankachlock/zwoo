@@ -1,4 +1,5 @@
 ﻿using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.ZRP;
 
@@ -123,7 +124,7 @@ public readonly record struct SettingChangedNotification(string Setting, int Val
 public readonly record struct GetSettingsEvent(); // empty
 
 /// <see cref="AllSettingsNotification" />
-public readonly record struct AllSettings_SettingDTO(string Setting, int Value);
+public readonly record struct AllSettings_SettingDTO(string Setting, int Value, Dictionary<string, string> Title, Dictionary<string, string> Description, GameSettingsType Type, bool IsReadonly, int? Min, int? Max);
 
 /// <summary>
 /// ZRPCode: 203
@@ -194,6 +195,11 @@ public readonly record struct StartTurnNotification(); // empty
 public readonly record struct EndTurnNotification(); // empty
 
 /// <summary>
+/// ZRPCode: 303
+/// </summary>
+public readonly record struct RequestEndTurnEvent(); // empty
+
+/// <summary>
 /// ZRPCode: 304
 /// </summary>
 public readonly record struct PlaceCardEvent(int Type, int Symbol);
@@ -226,9 +232,8 @@ public readonly record struct StateUpdate_PileTopDTO(CardColor Type, CardType Sy
 public readonly record struct StateUpdateNotification(
     StateUpdate_PileTopDTO PileTop,
     string ActivePlayer,
-    int ActivePlayerCardAmount,
-    string LastPlayer,
-    int LastPlayerCardAmount
+    Dictionary<string, int> CardAmounts,
+    int? CurrentDrawAmount
 );
 
 /// <summary>

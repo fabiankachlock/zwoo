@@ -1,6 +1,5 @@
 <template>
   <p v-if="readonly" class="tc-main-light leading-tight">{{ modelValue }}</p>
-  <!-- TODO: make min & max danymic -->
   <input
     v-else
     :id="name ?? 'rule-input'"
@@ -8,8 +7,8 @@
     class="bg-dark shadow appearance-none border bc-main rounded w-20 h-full py-1 px-2 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
     :name="name ?? 'rule-input'"
     type="number"
-    min="1"
-    max="20"
+    :min="min"
+    :max="max"
     :placeholder="placeholder ?? t('rules.widget.numberPlaceholder')"
     :value="modelValue"
     :readonly="readonly"
@@ -28,6 +27,8 @@ defineProps<{
   name?: string;
   placeholder?: string;
   readonly?: boolean;
+  min?: number;
+  max?: number;
 }>();
 
 const emit = defineEmits<{

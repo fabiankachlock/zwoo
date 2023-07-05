@@ -14,17 +14,12 @@ internal class ReverseCardRule : BaseCardRule
 {
     public override int Priority
     {
-        get => RulePriorirty.DefaultRule;
+        get => RulePriority.DefaultRule;
     }
 
     public override string Name
     {
         get => "BaseCardRule";
-    }
-
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
     }
 
     public ReverseCardRule() : base() { }
