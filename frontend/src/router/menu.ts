@@ -7,10 +7,6 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: 'privacy',
-    component: () => import('../views/DataProtection.vue')
-  },
-  {
-    path: 'privacy',
     component: () => import('../views/Privacy.vue')
   },
   {
