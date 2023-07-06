@@ -4,15 +4,30 @@
 
     <p>Angaben gemäß § 5 TMG</p>
 
-    <p>Timo Stockhausen</p>
-
-    <!-- <p><span class="text-base">Vertreten durch:</span><br />Timo Stockhausen</p> -->
+    <p>IGD 2.0 UG (haftungsbeschränkt)</p>
 
     <p>
-      <span class="text-base">Kontakt:</span><br />
+      Alnpeckstraße 4 <br />
+      01239 Dresden <br />
+      Deutschland
+    </p>
+
+    <p>
+      <span class="text-base font-bold">Vertreten durch den Geschäftsführer:</span><br />
+      Thore Georgi
+    </p>
+
+    <p>
+      <span class="text-base font-bold">Kontakt:</span><br />
       <a href="mailto:info@igd20.de"> Email: <span style="text-decoration: underline">info@igd20.de</span> </a>
       <br />
       <a style="text-decoration: underline" href="/contact">Kontakt-Formular</a>
+    </p>
+
+    <p>
+      <span class="text-base font-bold">Registereintrag:</span><br />
+      Registergericht: Amtsgericht Dresden<br />
+      Registernummer: HRB 43974
     </p>
 
     <h2 class="tc-main">Haftungsausschluss:</h2>
@@ -57,32 +72,7 @@
       (beispielsweise Name, Anschrift oder eMail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten
       werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.
     </p>
-
-    <p>
-      Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein
-      lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
-    </p>
-
-    <p>
-      Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter
-      Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche
-      Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.
-    </p>
-
-    <h3 class="tc-main">Google reCAPTCHA</h3>
-
-    <p>
-      Diese Website benutzt Google reCAPTCHA, einen Dienst zur Vermeidung von Missbrauch und SPAM der Google Inc. ("Google"). Google reCAPTCHA
-      verwendet sog. "Cookies", Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie
-      ermöglicht. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website (einschließlich Ihrer IP-Adresse) wird an einen
-      Server von Google in den USA übertragen und dort gespeichert. Google wird diese Informationen benutzen, um Ihre Nutzung der Website auszuwerten,
-      um Reports über die Websiteaktivitäten für die Websitebetreiber zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung
-      verbundene Dienstleistungen zu erbringen. Auch wird Google diese Informationen gegebenenfalls an Dritte übertragen, sofern dies gesetzlich
-      vorgeschrieben oder soweit Dritte diese Daten im Auftrag von Google verarbeiten. Sie können die Installation der Cookies durch eine
-      entsprechende Einstellung Ihrer Browser Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht
-      sämtliche Funktionen dieser Website voll umfänglich nutzen können. Durch die Nutzung dieser Website erklären Sie sich mit der Bearbeitung der
-      über Sie erhobenen Daten durch Google in der zuvor beschriebenen Art und Weise und zu dem zuvor benannten Zweck einverstanden.
-    </p>
+    <router-link to="/privacy"> Unsere Datenschutzerklärung befindet sich <span class="underline">hier</span> </router-link>
   </MaxWidthLayout>
 </template>
 
