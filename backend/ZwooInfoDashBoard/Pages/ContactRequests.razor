@@ -51,14 +51,14 @@
         {
             var websiteDb = _db.Client.GetDatabase(Globals.WebsiteDatabaseName);
             var otherCollection = websiteDb.GetCollection<ContactRequest>(Globals.WebsiteDatabaseCollection);
-            _baseData = _db.ContactRequests.AsQueryable().Union(otherCollection.AsQueryable());
+            _baseData = _db.ContactRequests.AsQueryable().ToList().Union(otherCollection.AsQueryable().ToList()).AsQueryable();
         }
         else
         {
             _baseData = _db.ContactRequests.AsQueryable();
         }
-        _requests = _baseData;
-        _availableSites = _db.ContactRequests.AsQueryable().Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
+        _requests = _baseData.OrderByDescending(request => request.Timestamp);
+        _availableSites = _baseData.Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
     }
 
     private void SelectedSiteChanged(object _value) 
