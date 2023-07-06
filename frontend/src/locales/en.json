@@ -38,7 +38,9 @@
     "settingsSync": "Sync settings",
     "reportBug": "Report a Bug",
     "contact": "Contact",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "localLogs": "Locally saved logs",
+    "clearLogs": "Clear logs"
   },
   "lng": {
     "de": "German",
@@ -347,7 +349,8 @@
     "storedCount": "no logs stored | 1 entry | {count} entries",
     "clearStore": "Clear Store",
     "reloadLogs": "Reload Logs",
-    "storedLogs": "Stored Logs"
+    "storedLogs": "Stored Logs",
+    "logsCleared": "Logs cleared"
   },
   "shortcuts": {
     "title": "Keyboard shortcuts",

@@ -38,7 +38,9 @@
     "settingsSync": "Einstellungen synchronisieren",
     "reportBug": "Fehler melden",
     "contact": "Kontakt",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "localLogs": "Lokal gespeicherte Logs",
+    "clearLogs": "Logs zurücksetzen"
   },
   "lng": {
     "de": "Deutsch",
@@ -347,7 +349,8 @@
     "storedCount": "keine Logs gespeichert | ein Eintrag | {count} Einträge",
     "clearStore": "Speicher leeren",
     "reloadLogs": "Logs neu laden",
-    "storedLogs": "Gespeicherte Logs"
+    "storedLogs": "Gespeicherte Logs",
+    "logsCleared": "Logs zurückgesetzt"
   },
   "shortcuts": {
     "title": "Tastenkombinationen",

@@ -67,7 +67,6 @@ const displaySections = computed(() => allSections.filter(section => !blockedSec
 watch(
   () => route.fullPath,
   currentPath => {
-    console.log(blockedSections.value, displaySections.value);
     currentSection.value = allSections.find(section => currentPath.includes(section)) ?? '';
   },
   {
