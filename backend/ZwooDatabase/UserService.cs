@@ -20,7 +20,7 @@ public interface IUserService
     /// <param name="password">the users password</param>
     /// <param name="betaCode">the users beta code</param>
     /// <returns></returns>
-    public UserDao CreateUser(string username, string email, string password, string? betaCode, AuditOptions? auditOptions = null);
+    public UserDao CreateUser(string username, string email, string password, bool acceptedTerms, string? betaCode, AuditOptions? auditOptions = null);
 
     /// <summary>
     /// update a users data
@@ -145,7 +145,7 @@ public class UserService : IUserService
         _logger = logger ?? LogManager.GetLogger("UserService");
     }
 
-    public UserDao CreateUser(string username, string email, string password, string? betaCode, AuditOptions? auditOptions = null)
+    public UserDao CreateUser(string username, string email, string password, bool acceptedTerms, string? betaCode, AuditOptions? auditOptions = null)
     {
         var code = StringHelper.GenerateNDigitString(6);
         ulong maxId = _db.Users.AsQueryable().Any() ? _db.Users.AsQueryable().Max(x => x.Id) : 0;
@@ -165,6 +165,8 @@ public class UserService : IUserService
             Wins = 0,
             ValidationCode = code.Trim().Normalize(),
             Verified = false,
+            AcceptedTerms = acceptedTerms,
+            AcceptedTermsAt = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
             BetaCode = betaCode
         };
 
@@ -265,6 +267,7 @@ public class UserService : IUserService
         }
 
         user.Verified = true;
+        user.VerifiedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         user.ValidationCode = "";
 
         _accountEvents.VerifyAttempt(user, true);

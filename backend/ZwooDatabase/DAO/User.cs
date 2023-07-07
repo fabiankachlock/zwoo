@@ -5,15 +5,15 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabase.Dao;
 
-[RuntimeVersion("1.0.0-beta.7")]
-[StartUpVersion("1.0.0-beta.7")]
+[RuntimeVersion("1.0.0-beta.12")]
+[StartUpVersion("1.0.0-beta.12")]
 [CollectionLocation("users")]
 public class UserDao : IDocument
 {
     public UserDao() { }
 
     [BsonConstructor]
-    public UserDao(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified)
+    public UserDao(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified, long? verifiedAt, bool acceptedTerms, long? acceptedTermsAt)
     {
         Id = id;
         Sid = sid;
@@ -24,6 +24,9 @@ public class UserDao : IDocument
         Settings = settings;
         ValidationCode = validationCode;
         Verified = verified;
+        VerifiedAt = verifiedAt;
+        AcceptedTerms = acceptedTerms;
+        AcceptedTermsAt = acceptedTermsAt;
     }
 
     [BsonElement("_id")]
@@ -56,6 +59,10 @@ public class UserDao : IDocument
     [BsonElement("verified")]
     public bool Verified { set; get; }
 
+    [BsonElement("verified_at")]
+    [BsonIgnoreIfDefault]
+    public long? VerifiedAt { get; set; }
+
     [BsonElement("beta_code")]
     [BsonIgnoreIfDefault]
     public string? BetaCode { set; get; }
@@ -63,6 +70,13 @@ public class UserDao : IDocument
     [BsonElement("password_reset_code")]
     [BsonIgnoreIfDefault]
     public string? PasswordResetCode { set; get; }
+
+    [BsonElement("accepted_terms")]
+    public bool AcceptedTerms { get; set; }
+
+    [BsonElement("accepted_terms_at")]
+    [BsonIgnoreIfDefault]
+    public long? AcceptedTermsAt { get; set; }
 
     [BsonElement("version")]
     [BsonSerializer(typeof(DocumentVersionSerializer))]
