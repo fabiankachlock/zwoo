@@ -79,7 +79,7 @@ public class MiscController : Controller
         _contactRequests.CreateRequest(request);
         if (request.CaptchaScore >= 0.5)
         {
-            _emailService.SendContactFormEmail(_emailService.CreateRecipient("info@igd20.de", "ZwooBackend", LanguageCode.English), request);
+            _emailService.SendContactFormEmail(_emailService.CreateRecipient(ContactEmail, "ZwooBackend", LanguageCode.English), request);
         }
         else
         {
