@@ -82,7 +82,8 @@
     "beta": "BETA Code",
     "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden.",
     "resendVerifyEmail": "Email neu senden",
-    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen."
+    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
+    "terms": "Ich willige in die Verarbeitung und Speicherung meiner oben angegebenen personenbezogenen Daten zur Nutzung von ZWOO ein."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -162,6 +163,7 @@
       "116": "Der Benutzername ist ungültig.",
       "117": "Das Passwort ist ungültig.",
       "118": "Der BETA-Code ist ungültig.",
+      "119": "Die Einwilligung zur Datenverarbeitung wird benötigt.",
       "120": "Die Email wird bereits genutzt.",
       "121": "Der Benutzername wird bereits genutzt.",
       "122": "Der Account konnte nicht verifiziert werden.",

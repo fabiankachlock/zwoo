@@ -82,7 +82,8 @@
     "beta": "BETA Code",
     "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account.",
     "resendVerifyEmail": "Resend email",
-    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account."
+    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account.",
+    "terms": "I consent to the processing and storage of my personal data provided above for the use of ZWOO."
   },
   "createGame": {
     "title": "Create Game",
@@ -162,6 +163,7 @@
       "116": "The username is invalid.",
       "117": "The password is invalid.",
       "118": "The BETA-Code is invalid.",
+      "119": "The Consent to data processing is required.",
       "120": "The email is already used.",
       "121": "The username is already used.",
       "122": "The account could not be verified.",

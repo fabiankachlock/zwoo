@@ -148,7 +148,7 @@ public class Database : IDatabase
         {
             cm.AutoMap();
             cm.MapCreator(p =>
-                new UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified, p.VerifiedAt, p.AcceptedTerms, p.AcceptedTermsAt));
+                new UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified, p.AcceptedTerms));
         });
 
         BsonClassMap.RegisterClassMap<BetaCodeDao>(cm =>

@@ -1,5 +1,5 @@
 <template>
-  <div class="m-2 mb-4 flex no-wrap items-center">
+  <div class="m-2 mb-4 flex no-wrap items-center" :class="{ 'flex-row-reverse': align === 'start' }">
     <label class="tc-main-secondary text-sm font-bold my-2 relative">
       <slot></slot>
     </label>
@@ -20,6 +20,7 @@ const checked = ref(false);
 const props = defineProps<{
   styles: string;
   modelValue: boolean;
+  align?: 'start' | 'end';
 }>();
 
 const { modelValue } = toRefs(props);
