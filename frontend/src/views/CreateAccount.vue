@@ -4,13 +4,20 @@
       <FormTitle>
         {{ t('createAccount.title') }}
       </FormTitle>
-      <TextInput
-        id="username"
-        v-model="username"
-        label-key="createAccount.username"
-        :placeholder="t('createAccount.username')"
-        :validator="usernameValidator"
-      />
+      <TextInput id="username" v-model="username" :placeholder="t('createAccount.username')" :validator="usernameValidator">
+        <div class="flex justify-between items-center">
+          <span>
+            {{ t('createAccount.username') }}
+          </span>
+          <Icon v-if="!nameInfoOpen" icon="akar-icons:info" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="nameInfoOpen = true" />
+          <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="nameInfoOpen = false" />
+        </div>
+        <div class="grid overflow-hidden grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': nameInfoOpen }">
+          <p class="min-h-0 tc-main-secondary font-normal ml-4 text-xs">
+            {{ t('createAccount.nameInfo') }}
+          </p>
+        </div>
+      </TextInput>
       <TextInput
         id="email"
         v-model="email"
@@ -102,6 +109,7 @@ const password = ref('');
 const passwordRepeat = ref('');
 const betaCode = ref('');
 const acceptedTerms = ref(false);
+const nameInfoOpen = ref(false);
 const matchError = ref<string[]>([]);
 const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
