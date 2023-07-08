@@ -36,7 +36,7 @@ internal class RuleManager
         _activeRules = AllRules()
             .Where(rule =>
             {
-                if (rule.Setting == null) return false;
+                if (rule.Setting == null) return true;
                 return _settings.Get(rule.Setting.Value.SettingsKey) > 0;
             })
             .ToList();
