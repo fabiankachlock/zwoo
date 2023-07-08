@@ -322,6 +322,10 @@
     "selectColor": {
       "title": "Choose a color",
       "info": "Choose the color, that should be played with from now on."
+    },
+    "selectPlayer": {
+      "title": "Choose a player",
+      "info": "Select a player to whom the action of the cards just laid should be applied."
     }
   },
   "reassureDialog": {

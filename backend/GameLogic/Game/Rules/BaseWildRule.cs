@@ -26,6 +26,14 @@ internal class BaseWildCardRule : BaseCardRule
 
     private StoredEvent? _storedEvent = null;
 
+    private readonly List<CardColor> _optionsMapper = new List<CardColor>()
+    {
+         CardColor.Red,
+         CardColor.Yellow,
+         CardColor.Blue,
+         CardColor.Green,
+    };
+
     public BaseWildCardRule() : base() { }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
@@ -67,7 +75,11 @@ internal class BaseWildCardRule : BaseCardRule
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
 
         _storedEvent = new StoredEvent(payload.Player, payload.Card);
-        events.Add(GameEvent.GetPlayerDecision(state.CurrentPlayer, PlayerDecision.SelectColor));
+        events.Add(GameEvent.GetPlayerDecision(
+            state.CurrentPlayer,
+            PlayerDecision.SelectColor,
+            _optionsMapper.Select(k => ((int)k).ToString()).ToList()
+        ));
 
         return new GameStateUpdate(state, events);
     }
@@ -86,7 +98,8 @@ internal class BaseWildCardRule : BaseCardRule
 
         if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
         {
-            Card newCard = new Card((CardColor)payload.Value, _storedEvent.Value.Card.Type);
+            CardColor color = _optionsMapper[payload.Value];
+            Card newCard = new Card(color, _storedEvent.Value.Card.Type);
             state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
             state = AddCardToStack(state, newCard);
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));

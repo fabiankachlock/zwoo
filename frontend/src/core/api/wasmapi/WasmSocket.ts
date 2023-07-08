@@ -46,6 +46,12 @@ export class WasmSocket implements RealtimeGameMessageAdapter {
   private handleClose = () => {
     Logger.Websocket.debug(`[wasm] connection disconnect`);
     this._state = WebSocket.CLOSED;
+    this.messageHandler(
+      ZRPCoder.encode({
+        code: ZRPOPCode._ConnectionClosed,
+        data: {}
+      } as ZRPMessage<ZRPOPCode._ConnectionClosed>)
+    );
   };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

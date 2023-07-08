@@ -89,18 +89,24 @@ public struct GameEvent
     public struct RemoveCardEvent
     {
         public readonly long Player;
-        public readonly Card Card;
+        public readonly List<Card> Cards;
 
-        public RemoveCardEvent(long player, Card card)
+        public RemoveCardEvent(long player, List<Card> cards)
         {
             Player = player;
-            Card = card;
+            Cards = cards;
         }
     }
 
+    public static GameEvent RemoveCard(long player, List<Card> cards)
+    {
+        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, cards));
+    }
+
+    // added for compatibility reasons
     public static GameEvent RemoveCard(long player, Card card)
     {
-        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, card));
+        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, new List<Card>() { card }));
     }
 
 
@@ -131,17 +137,19 @@ public struct GameEvent
     {
         public readonly long Player;
         public readonly PlayerDecision Decision;
+        public readonly List<string> Options;
 
-        public PlayerDecisionEvent(long player, PlayerDecision decision)
+        public PlayerDecisionEvent(long player, PlayerDecision decision, List<string> options)
         {
             Player = player;
             Decision = decision;
+            Options = options;
         }
     }
 
-    public static GameEvent GetPlayerDecision(long player, PlayerDecision decision)
+    public static GameEvent GetPlayerDecision(long player, PlayerDecision decision, List<string> options)
     {
-        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decision));
+        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decision, options));
     }
 
     // PlayerWonEvent

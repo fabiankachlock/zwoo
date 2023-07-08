@@ -2,28 +2,12 @@
   <BaseModal title="dialogs.selectColor.title" info="dialogs.selectColor.info">
     <div class="color-select-modal-grid">
       <button
-        class="rounded-tl-full hover:scale-110 hover:-translate-x-3 hover:-translate-y-3 transition-transform"
-        :style="`background-color: ${colors[CardColor.green]}`"
+        v-for="(option, idx) in colors"
+        :key="option.key"
+        :class="classes[idx]"
+        :style="`background-color: ${option.color}`"
         aria-label="green"
-        @click="close(CardColor.green)"
-      ></button>
-      <button
-        class="rounded-tr-full hover:scale-110 hover:translate-x-3 hover:-translate-y-3 transition-transform"
-        :style="`background-color: ${colors[CardColor.red]}`"
-        aria-label="red"
-        @click="close(CardColor.red)"
-      ></button>
-      <button
-        class="rounded-bl-full hover:scale-110 hover:-translate-x-3 hover:translate-y-3 transition-transform"
-        :style="`background-color: ${colors[CardColor.blue]}`"
-        aria-label="blue"
-        @click="close(CardColor.blue)"
-      ></button>
-      <button
-        class="rounded-br-full hover:scale-110 hover:translate-x-3 hover:translate-y-3 transition-transform"
-        :style="`background-color: ${colors[CardColor.yellow]}`"
-        aria-label="yellow"
-        @click="close(CardColor.yellow)"
+        @click="close(option.key)"
       ></button>
     </div>
   </BaseModal>
@@ -41,10 +25,21 @@ import BaseModal from './BaseModal.vue';
 const modalState = useGameModal();
 const theme = useCardTheme();
 
-const colors = computed(() => theme.theme.colors);
+const classes = [
+  'rounded-tl-full hover:scale-110 hover:-translate-x-3 hover:-translate-y-3 transition-transform',
+  'rounded-tr-full hover:scale-110 hover:translate-x-3 hover:-translate-y-3 transition-transform',
+  'rounded-bl-full hover:scale-110 hover:-translate-x-3 hover:translate-y-3 transition-transform',
+  'rounded-br-full hover:scale-110 hover:translate-x-3 hover:translate-y-3 transition-transform'
+];
+const colors = computed(() =>
+  modalState.currentOptions.map((key, idx) => ({
+    key: idx,
+    color: theme.theme.colors[key as unknown as CardColor]
+  }))
+);
 
-const close = (color: CardColor) => {
-  modalState.closeSelf(color);
+const close = (item: number) => {
+  modalState.closeSelf(item);
 };
 </script>
 

@@ -43,7 +43,9 @@ public class GameEventTranslator : IGameEventManager
 
     public void GetPlayerDecision(ZwooGameLogic.Game.Events.PlayerDecisionDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision));
+        // TODO: switch game id handling to new system
+        var options = data.Decision == PlayerDecision.SelectPlayer ? data.Options.Select(id => _game?.GetPlayer(Convert.ToInt64(id))?.PublicId ?? "").ToList() : data.Options;
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision, options));
     }
 
     public void PlayerWon(GamePlayerWonDTO data, GameMeta gameMeta)
@@ -66,7 +68,7 @@ public class GameEventTranslator : IGameEventManager
 
     public void RemoveCard(ZwooGameLogic.Game.Events.RemoveCardDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCard, new ZRP.RemoveCardNotification(data.Card.Color, data.Card.Type));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCards, new ZRP.RemoveCardNotification(data.Cards.Select(card => new RemoveCard_CardDTO(card.Color, card.Type)).ToArray()));
     }
 
     // TODO: utilize, that multiple cards can be sent at once

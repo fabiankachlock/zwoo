@@ -16,6 +16,7 @@ public class BasicBotDecisionManager : IBotDecisionHandler
     private BasicBotStateManager _stateManager;
     private int placedCard = -1;
     private ILogger _logger;
+    private Random _rand { get; set; } = new();
 
     public BasicBotDecisionManager(ILogger logger)
     {
@@ -38,7 +39,7 @@ public class BasicBotDecisionManager : IBotDecisionHandler
                 placeCard();
                 return;
             default:
-                _stateManager.AggregateNotification((BotZRPNotification<object>)message);
+                _stateManager.AggregateNotification(message);
                 checkLastCard();
                 break;
         }
@@ -87,16 +88,8 @@ public class BasicBotDecisionManager : IBotDecisionHandler
 
     private void makeDecision(GetPlayerDecisionNotification data)
     {
-        switch (data.Type)
-        {
-            case (int)PlayerDecision.SelectColor:
-                OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent((int)PlayerDecision.SelectColor, (int)CardColorHelper.Random()));
-                break;
-            default:
-                // do at least something
-                placeCard();
-                break;
-        }
+        var decision = _rand.Next(data.Options.Count);
+        OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent(data.Type, decision));
     }
 
     public void Reset()

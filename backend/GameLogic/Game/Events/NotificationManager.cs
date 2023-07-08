@@ -9,7 +9,7 @@ public readonly record struct SendCardDTO(
 
 public readonly record struct RemoveCardDTO(
     long Player,
-    Card Card
+    List<Card> Cards
 );
 
 public readonly record struct StateUpdateDTO(
@@ -21,7 +21,8 @@ public readonly record struct StateUpdateDTO(
 
 public readonly record struct PlayerDecisionDTO(
     long Player,
-    PlayerDecision Decision
+    PlayerDecision Decision,
+    List<string> Options
 );
 
 public readonly record struct PlayerWonDTO(long Winner,
