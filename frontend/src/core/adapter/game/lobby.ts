@@ -4,7 +4,7 @@ import { computed, ref } from 'vue';
 import { MonolithicEventWatcher } from '@/core/adapter/game/util/MonolithicEventWatcher';
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
-import { ZRPAllLobbyPlayersPayload, ZRPIdPayload, ZRPNamePayload, ZRPOPCode, ZRPPlayerWithRolePayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
+import { ZRPAllLobbyPlayersPayload, ZRPIdPayload, ZRPNamePayload, ZRPOPCode, ZRPPlayerChangedRolePayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import { RouterService } from '@/core/global/Router';
 import { arrayDiff } from '@/core/helper/utils';
 import { I18nInstance } from '@/i18n';
@@ -140,7 +140,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
     }
   };
 
-  const changePlayerRole = (data: ZRPPlayerWithRolePayload, pushMessage = false) => {
+  const changePlayerRole = (data: ZRPPlayerChangedRolePayload, pushMessage = false) => {
     const player = players.value.find(player => player.id === data.id);
     const spectator = spectators.value.find(player => player.id === data.id);
 
