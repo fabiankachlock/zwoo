@@ -82,7 +82,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
     public void PrepareBotsForGame()
     {
         _logger.Info($"preparing bots for game");
-        long i = 1;
+        long i = 1000; // FIXME: ZWOO-326 player cant receive bot notification if they happen to have the same id and are currently playing another game
         foreach (Bot bot in _bots)
         {
             while (_game.HasPlayer(i))
