@@ -99,7 +99,7 @@ public class GameController : Controller
                 return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
             }
 
-            if (game.Game.IsRunning && game.Lobby.GetPlayer(user.Username) == null)
+            if (game.Game.IsRunning && game.Lobby.GetPlayerByUserName(user.Username) == null)
             {
                 // join as spectator when game is already running and its an new player
                 // don't make the player a spectator when he his already in the game, because then hes rejoining

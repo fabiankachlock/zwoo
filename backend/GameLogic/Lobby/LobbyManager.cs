@@ -99,6 +99,15 @@ public class LobbyManager
     }
 
     /// <summary>
+    /// return a player if present
+    /// </summary>
+    /// <param name="username">the players real id</param>
+    public LobbyEntry? GetPlayerByUserName(string username)
+    {
+        return _players.FirstOrDefault(p => p.Username == username);
+    }
+
+    /// <summary>
     /// create a new lobby with a given host
     /// </summary>
     /// <param name="hostId">the hosts user id</param>
