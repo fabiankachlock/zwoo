@@ -22,7 +22,7 @@ public class ChatHandler : IEventHandler
         try
         {
             ChatMessageEvent payload = message.DecodePayload<ChatMessageEvent>();
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SendChatMessage, new ChatMessageNotification(payload.Message, context.Username, context.Role));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SendChatMessage, new ChatMessageNotification(context.LobbyId, payload.Message));
             return false;
         }
         catch (Exception e)

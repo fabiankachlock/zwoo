@@ -71,7 +71,7 @@ public class GameHandler : IEventHandler
             context.BotManager.PrepareBotsForGame();
             foreach (var bot in context.BotManager.ListBots())
             {
-                context.Game.AddPlayer(bot.PlayerId);
+                context.Game.AddPlayer(bot.LobbyId);
             }
             context.Game.Start();
 
@@ -151,7 +151,7 @@ public class GameHandler : IEventHandler
                 if (player != null)
                 {
                     amounts.Add(new SendPlayerState_PlayerDTO(
-                        player.PublicId,
+                        player.LobbyId,
                         player.Username,
                         context.Game.State.GetPlayerCardAmount(player.Id)!.Value,
                         context.Game.State.GetPlayerOrder(player.Id)!.Value,

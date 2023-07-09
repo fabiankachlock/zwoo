@@ -40,7 +40,7 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
     public Bot? GetBot(long id)
     {
-        return _bots.Where(bot => bot.PlayerId == id).FirstOrDefault();
+        return _bots.Where(bot => bot.LobbyId == id).FirstOrDefault();
     }
 
     public bool HasBotWithName(string name)
@@ -48,11 +48,16 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
         return _bots.Where(bot => bot.Username == name).Count() > 0;
     }
 
+    public int NextLobbyId()
+    {
+        return _bots.Select(b => b.LobbyId).Append(100).Max() + 1;
+    }
+
     public Bot CreateBot(string username, BotConfig config)
     {
         _logger.Info($"creating bot {username}");
         var botLogger = _loggerFactory.CreateLogger($"Bot-{username}");
-        Bot bot = new Bot(_game.Id, username, config, botLogger, (BotZRPEvent evt) =>
+        Bot bot = new Bot(_game.Id, NextLobbyId(), username, config, botLogger, (BotZRPEvent evt) =>
         {
             botLogger.Debug($"sending event {evt.Code} {evt.Payload}");
             OnEvent.Invoke(evt);
@@ -62,10 +67,10 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
         return bot;
     }
 
-    public void RemoveBot(string publicId)
+    public void RemoveBot(int lobbyId)
     {
-        _logger.Info($"removing bot {publicId}");
-        Bot? botToRemove = _bots.Find(bot => bot.AsPlayer().PublicId == publicId);
+        _logger.Info($"removing bot {lobbyId}");
+        Bot? botToRemove = _bots.Find(bot => bot.AsPlayer().LobbyId == lobbyId);
         if (botToRemove != null)
         {
             _bots.Remove(botToRemove);

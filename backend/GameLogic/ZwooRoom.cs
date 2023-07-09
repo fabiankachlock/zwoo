@@ -38,12 +38,12 @@ public class ZwooRoom
 
     public string ResolvePlayerName(long id)
     {
-        return (Lobby.HasPlayerId(id) ? Lobby.GetPlayer(id)?.Username : BotManager.GetBot(id)?.Username) ?? "unknown player";
+        return (Lobby.HasPlayerId(id) ? Lobby.GetPlayerByUserId(id)?.Username : BotManager.GetBot(id)?.Username) ?? "unknown player";
     }
 
     public IPlayer? GetPlayer(long id)
     {
-        return Lobby.HasPlayerId(id) ? Lobby.GetPlayer(id) : BotManager.GetBot(id)?.AsPlayer();
+        return Lobby.HasPlayerId(id) ? Lobby.GetPlayerByUserId(id) : BotManager.GetBot(id)?.AsPlayer();
     }
 
     public void Close()

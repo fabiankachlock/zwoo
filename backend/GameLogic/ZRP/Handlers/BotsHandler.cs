@@ -54,7 +54,7 @@ public class BotsHandler : IEventHandler
             {
                 Type = data.Config.Type
             });
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.AsPlayer().PublicId, newBot.Username));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.AsPlayer().LobbyId, newBot.Username, 0));
         }
         catch (Exception e)
         {
@@ -67,7 +67,7 @@ public class BotsHandler : IEventHandler
         try
         {
             UpdateBotEvent data = message.DecodePayload<UpdateBotEvent>();
-            Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.AsPlayer().PublicId == data.Id);
+            Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.AsPlayer().LobbyId == data.Id);
             if (botToUpdate != null)
             {
                 botToUpdate.SetConfig(new BotConfig()
@@ -100,7 +100,7 @@ public class BotsHandler : IEventHandler
     {
         try
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().PublicId, bot.Username, new BotConfigDTO(bot.Config.Type))).ToArray()));
+            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().LobbyId, bot.Username, new BotConfigDTO(bot.Config.Type), 0)).ToArray()));
         }
         catch (Exception e)
         {
