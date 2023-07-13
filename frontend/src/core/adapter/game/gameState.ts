@@ -14,7 +14,7 @@ import { usePlayerManager } from './playerManager';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GamePlayer = {
-  id: string;
+  id: number;
   name: string;
   cards: number;
   order: number;

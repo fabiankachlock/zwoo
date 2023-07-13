@@ -19,20 +19,20 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useAuth } from '@/core/adapter/auth';
+import { useGameConfig } from '@/core/adapter/game';
 import { useChatStore } from '@/core/adapter/game/chat';
 import { useGameState } from '@/core/adapter/game/gameState';
 
 import Opponent from './Opponent.vue';
 
+const gameConfig = useGameConfig();
 const game = useGameState();
 const chat = useChatStore();
-const auth = useAuth();
 
 const players = computed(() => game.players);
 const activePlayer = computed(() => game.activePlayerId);
 const mutedState = computed(() => chat.muted);
-const self = computed(() => auth.publicId);
+const self = computed(() => gameConfig.lobbyId);
 </script>
 
 <style scoped>

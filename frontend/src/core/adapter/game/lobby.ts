@@ -14,7 +14,7 @@ import { useGameConfig } from '../game';
 import { usePlayerManager } from './playerManager';
 
 export type LobbyPlayer = {
-  id: string;
+  id: number;
   username: string;
   role: ZRPRole;
 };
@@ -40,7 +40,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   const players = computed<LobbyPlayer[]>(() => playerManager.players);
   const spectators = computed<LobbyPlayer[]>(() => playerManager.spectators);
   const bots = computed<LobbyPlayer[]>(() => playerManager.bots);
-  const gameHost = ref('');
+  const gameHost = ref(0);
   const dispatchEvent = useGameEventDispatch();
   const snackbar = useSnackbar();
   const translations = I18nInstance;
@@ -152,7 +152,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         id: data.id,
         role: data.role
       });
-      if (pushMessage && data.id !== auth.publicId) {
+      if (pushMessage && data.id !== gameConfig.lobbyId) {
         snackbar.pushMessage({
           message: translations.t(`snackbar.lobby.changedRoleToPlayer`, [spectator.username]),
           position: SnackBarPosition.Top
@@ -166,14 +166,14 @@ export const useLobbyStore = defineStore('game-lobby', () => {
         id: data.id,
         role: data.role
       });
-      if (pushMessage && data.id !== auth.publicId) {
+      if (pushMessage && data.id !== gameConfig.lobbyId) {
         snackbar.pushMessage({
           message: translations.t(`snackbar.lobby.changedRoleToSpectator`, [player.username]),
           position: SnackBarPosition.Top
         });
       }
     }
-    if (data.id === auth.publicId) {
+    if (data.id === gameConfig.lobbyId) {
       gameConfig.changeRole(data.role);
     }
   };
@@ -184,18 +184,18 @@ export const useLobbyStore = defineStore('game-lobby', () => {
 
   const reset = () => {
     playerManager.reset();
-    gameHost.value = '';
+    gameHost.value = 0;
   };
 
-  const kickPlayer = (id: string) => {
+  const kickPlayer = (id: number) => {
     dispatchEvent(ZRPOPCode.KickPlayer, { id: id });
   };
 
-  const promotePlayer = (id: string) => {
+  const promotePlayer = (id: number) => {
     dispatchEvent(ZRPOPCode.PromotePlayerToHost, { id: id });
   };
 
-  const changeToSpectator = (id: string) => {
+  const changeToSpectator = (id: number) => {
     dispatchEvent(ZRPOPCode.PlayerToSpectator, { id: id });
   };
 
@@ -212,7 +212,7 @@ export const useLobbyStore = defineStore('game-lobby', () => {
   };
 
   const selfGotHost = () => {
-    gameHost.value = auth.publicId;
+    gameHost.value = gameConfig.lobbyId ?? 0;
     gameConfig.changeRole(ZRPRole.Host);
     snackbar.pushMessage({
       message: translations.t('snackbar.lobby.selfGotHost'),

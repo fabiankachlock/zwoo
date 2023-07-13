@@ -208,7 +208,7 @@ public sealed class GameStateManager
                 .Where(kv => _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count)
                 .Select(kv => KeyValuePair.Create(kv.Key, kv.Value.Count))
                 .ToDictionary(kv => kv.Key, kv => kv.Value),
-            currentDrawAmount: null
+            currentDrawAmount: stateUpdate.OverrideStateUpdate?.CurrentDrawAmount
          );
         _gameState = stateUpdate.NewState;
 

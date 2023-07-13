@@ -50,7 +50,7 @@ const props = defineProps<{
   isActive: boolean;
   isSelf: boolean;
   isConnected: boolean;
-  id: string;
+  id: number;
   name: string;
   cardAmount: number;
   isMuted?: boolean;
