@@ -83,7 +83,7 @@
     "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account.",
     "resendVerifyEmail": "Resend email",
     "emailInfo": "If you did not get an email, you can resend the verification email to verify your account.",
-    "terms": "I consent to the processing and storage of my personal data provided above for the use of ZWOO.",
+    "terms": "I consent to the processing and storage of my personal data provided above for the use of ZWOO. More info at:",
     "nameInfo": "Your username is visible to other players in the game. Therefore, it is best to choose a fictitious name."
   },
   "createGame": {

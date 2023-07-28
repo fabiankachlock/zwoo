@@ -39,9 +39,9 @@
         <TextInput id="beta-code" v-model="betaCode" label-key="createAccount.beta" placeholder="xxx-xxx" />
       </template>
       <CaptchaButton :validator="captchaValidator" :token="captchaResponse" @update:response="res => (captchaResponse = res)" />
-      <Checkbox v-model="acceptedTerms" styles="tc-primary mx-3" align="start">
+      <Checkbox v-model="acceptedTerms" align="end" position="start">
         {{ t('createAccount.terms') }}
-        <router-link to="/privacy">
+        <router-link to="/privacy" class="underline">
           {{ t('nav.privacy') }}
         </router-link>
       </Checkbox>
