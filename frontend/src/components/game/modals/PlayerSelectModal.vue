@@ -30,7 +30,7 @@ const players = computed(() =>
   modalState.currentOptions.map((pid, idx) => ({
     key: idx,
     name: playerManager.getPlayer(parseInt(pid)).username,
-    amount: gameState.players.find(p => p.id === pid)?.cards
+    amount: gameState.players.find(p => p.id.toString() === pid)?.cards
   }))
 );
 

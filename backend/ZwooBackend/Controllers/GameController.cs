@@ -84,7 +84,8 @@ public class GameController : Controller
             game.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
 
             Globals.Logger.Info($"{user.Id} created game {game.Id}");
-            return Ok(new JoinGameResponse(game.Id, false, ZRPRole.Host));
+            // TODO send dynamic lobby id
+            return Ok(new JoinGameResponse(game.Id, false, ZRPRole.Host, 1));
         }
         else if (body.Opcode == ZRPRole.Player || body.Opcode == ZRPRole.Spectator)
         {
@@ -127,7 +128,7 @@ public class GameController : Controller
             var player = game.Lobby.GetPlayerByUserId((long)user.Id);
             Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
             // the players opcode may changed based on rejoin
-            return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, player == null ? body.Opcode : player.Role)));
+            return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, player == null ? body.Opcode : player.Role, player?.LobbyId ?? 0)));
         }
 
         return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));

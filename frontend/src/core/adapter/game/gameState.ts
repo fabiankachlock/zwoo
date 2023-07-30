@@ -8,7 +8,7 @@ import { ZRPOPCode, ZRPPlayerCardAmountPayload, ZRPStateUpdatePayload } from '@/
 import { RouterService } from '@/core/global/Router';
 import Logger from '@/core/services/logging/logImport';
 
-import { useAuth } from '../auth';
+import { useGameConfig } from '../game';
 import { useGameCardDeck } from './deck';
 import { usePlayerManager } from './playerManager';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
@@ -38,10 +38,10 @@ export const useGameState = defineStore('game-state', () => {
   const isActivePlayer = ref(false);
   const playerManager = usePlayerManager();
   const topCard = ref<Card | CardDescriptor>(CardDescriptor.BackUpright);
-  const activePlayerId = ref('');
+  const activePlayerId = ref<number | undefined>(undefined);
   const players = ref<Omit<GamePlayer, 'isConnected'>[]>([]);
   const dispatchEvent = useGameEventDispatch();
-  const auth = useAuth();
+  const gameConfig = useGameConfig();
 
   const _receiveMessage: (typeof gameWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.GameStarted) {
@@ -77,12 +77,12 @@ export const useGameState = defineStore('game-state', () => {
 
   const activateSelf = () => {
     isActivePlayer.value = true;
-    activePlayerId.value = auth.publicId;
+    activePlayerId.value = gameConfig.lobbyId;
   };
 
   const deactivateSelf = () => {
     isActivePlayer.value = false;
-    activePlayerId.value = '';
+    activePlayerId.value = undefined;
   };
 
   const updatePile = (card: Card) => {
@@ -104,7 +104,7 @@ export const useGameState = defineStore('game-state', () => {
   };
 
   const updatePlayers = (data: ZRPPlayerCardAmountPayload) => {
-    let activePlayer: string | undefined;
+    let activePlayer: number | undefined;
     players.value = data.players
       .map(p => {
         if (p.isActivePlayer) {
@@ -121,20 +121,20 @@ export const useGameState = defineStore('game-state', () => {
 
     if (activePlayer) {
       activePlayerId.value = activePlayer;
-      if (auth.publicId === activePlayer) {
+      if (gameConfig.lobbyId === activePlayer) {
         activateSelf();
       }
     }
     verifyDeck();
   };
 
-  const removePlayer = (id: string) => {
+  const removePlayer = (id: number) => {
     players.value = players.value.filter(p => p.id !== id);
   };
 
   const verifyDeck = () => {
     // TODO: Optimize this
-    if (useGameCardDeck().cards.length !== players.value.find(p => p.name === auth.username)?.cards) {
+    if (useGameCardDeck().cards.length !== players.value.find(p => p.id === gameConfig.lobbyId)?.cards) {
       Logger.warn(`local deck didnt match remote state: ${JSON.stringify(useGameCardDeck().cards)}`);
       dispatchEvent(ZRPOPCode.RequestHand, {});
     }
@@ -142,7 +142,7 @@ export const useGameState = defineStore('game-state', () => {
 
   const reset = () => {
     isActivePlayer.value = false;
-    activePlayerId.value = '';
+    activePlayerId.value = undefined;
     topCard.value = CardDescriptor.BackUpright;
     players.value = [];
   };

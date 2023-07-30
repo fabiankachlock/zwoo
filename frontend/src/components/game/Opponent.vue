@@ -16,7 +16,7 @@
       <span class="opponent-name" :class="{ 'tc-primary': isSelf }">
         {{ name }}
       </span>
-      <template v-if="id.startsWith('b_')">
+      <template v-if="isBot">
         <span class="tc-primary text-lg ml-1">
           <Icon icon="fluent:bot-24-regular" />
         </span>
@@ -50,6 +50,7 @@ const props = defineProps<{
   isActive: boolean;
   isSelf: boolean;
   isConnected: boolean;
+  isBot: boolean;
   id: number;
   name: string;
   cardAmount: number;

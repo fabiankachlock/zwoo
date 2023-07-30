@@ -21,7 +21,8 @@ export const usePlayerManager = defineStore('game-players', {
     allPlayers: state => Object.values(state._allPlayers),
     getPlayer: state => (playerId: number) => state._allPlayers[playerId],
     isPlayerActive: state => (playerId: number) => state._allPlayers[playerId]?.state === 'connected',
-    getPlayerRole: state => (playerId: number) => state._allPlayers[playerId]?.role
+    getPlayerRole: state => (playerId: number) => state._allPlayers[playerId]?.role,
+    getPlayerName: state => (playerId: number) => state._allPlayers[playerId]?.username
   },
   actions: {
     addPlayer(player: Omit<InGamePlayer, 'state'>) {
