@@ -1409,10 +1409,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.41.0.tgz#080321c3b68253522f7646b55b577dd99d2950b3"
   integrity sha512-LxcyMGxwmTh2lY9FwHPGWOHmYFCZvbrFCBZL4FzSSsxsRPuhrYUg/49/0KDfW8tnIEaEHtfmn6+NPN+1DqaNmA==
 
-"@hcaptcha/vue3-hcaptcha@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@hcaptcha/vue3-hcaptcha/-/vue3-hcaptcha-1.2.1.tgz#7413d97d502c1e051874b47fae3a7db45011fe22"
-  integrity sha512-v2lkkGLBKllPXfq5iACjG17jw9MTcQQVQxrfH6dM/MVZOclcVkiXRoRSGvpgQnz8OvYg4sto2jQSHW2yHAW4UA==
+"@hcaptcha/vue3-hcaptcha@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@hcaptcha/vue3-hcaptcha/-/vue3-hcaptcha-1.3.0.tgz#0c8ffcc46d57d1a1c73eafb4c58396df35e5e1d1"
+  integrity sha512-IEonS6JiYdU7uy6aeib8cYtMO4nj8utwStbA9bWHyYbOvOvhpkV+AW8vfSKh6SntYxqle/TRwhv+kU9p92CfsA==
   dependencies:
     vue "^3.2.19"
 
