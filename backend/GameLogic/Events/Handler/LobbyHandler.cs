@@ -1,10 +1,10 @@
 ﻿using ZwooGameLogic.Lobby;
 using ZwooGameLogic.Notifications;
+using ZwooGameLogic.ZRP;
 
+namespace ZwooGameLogic.Events.Handler;
 
-namespace ZwooGameLogic.ZRP.Handlers;
-
-public class LobbyHandler : IEventHandler
+public class LobbyHandler : IUserEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
@@ -13,7 +13,7 @@ public class LobbyHandler : IEventHandler
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingEvent message)
     {
         if (message.Code == ZRPCode.KeepAlive)
         {
@@ -56,7 +56,7 @@ public class LobbyHandler : IEventHandler
     /// <summary>
     /// handle ZRP 110
     /// </summary>
-    private void SpectatorToPlayer(UserContext context, IIncomingZRPMessage message)
+    private void SpectatorToPlayer(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -76,7 +76,7 @@ public class LobbyHandler : IEventHandler
         }
     }
 
-    private void PlayerToSpectator(UserContext context, IIncomingZRPMessage message)
+    private void PlayerToSpectator(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -90,7 +90,7 @@ public class LobbyHandler : IEventHandler
         }
     }
 
-    private void PlayerToHost(UserContext context, IIncomingZRPMessage message)
+    private void PlayerToHost(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -117,7 +117,7 @@ public class LobbyHandler : IEventHandler
         }
     }
 
-    private void KickPlayer(UserContext context, IIncomingZRPMessage message)
+    private void KickPlayer(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -162,7 +162,7 @@ public class LobbyHandler : IEventHandler
         }
     }
 
-    private void LeavePlayer(UserContext context, IIncomingZRPMessage message)
+    private void LeavePlayer(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -221,7 +221,7 @@ public class LobbyHandler : IEventHandler
         }
     }
 
-    private void GetPlayers(UserContext context, IIncomingZRPMessage message)
+    private void GetPlayers(UserContext context, IIncomingEvent message)
     {
         try
         {

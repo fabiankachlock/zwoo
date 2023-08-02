@@ -1,8 +1,9 @@
 ﻿using ZwooGameLogic.Notifications;
+using ZwooGameLogic.ZRP;
 
-namespace ZwooGameLogic.ZRP.Handlers;
+namespace ZwooGameLogic.Events.Handler;
 
-public class ChatHandler : IEventHandler
+public class ChatHandler : IUserEventHandler
 {
 
     private INotificationAdapter _webSocketManager;
@@ -12,7 +13,7 @@ public class ChatHandler : IEventHandler
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingEvent message)
     {
         if (message.Code != ZRPCode.CreateChatMessage)
         {

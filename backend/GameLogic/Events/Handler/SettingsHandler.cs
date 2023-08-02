@@ -1,9 +1,10 @@
-﻿using ZwooGameLogic.Game.Settings;
-using ZwooGameLogic.Notifications;
+﻿using ZwooGameLogic.Notifications;
+using ZwooGameLogic.ZRP;
 
-namespace ZwooGameLogic.ZRP.Handlers;
 
-public class SettingsHandler : IEventHandler
+namespace ZwooGameLogic.Events.Handler;
+
+public class SettingsHandler : IUserEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
@@ -12,7 +13,7 @@ public class SettingsHandler : IEventHandler
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingEvent message)
     {
         if (message.Code == ZRPCode.GetAllSettings)
         {
@@ -28,7 +29,7 @@ public class SettingsHandler : IEventHandler
     }
 
 
-    private void GetSettings(UserContext context, IIncomingZRPMessage message)
+    private void GetSettings(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -41,7 +42,7 @@ public class SettingsHandler : IEventHandler
         }
     }
 
-    private void UpdateSettings(UserContext context, IIncomingZRPMessage message)
+    private void UpdateSettings(UserContext context, IIncomingEvent message)
     {
         try
         {

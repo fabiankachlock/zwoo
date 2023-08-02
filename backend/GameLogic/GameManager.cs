@@ -28,6 +28,7 @@ public sealed class GameManager
     {
         long id = nextGameId();
 
+        // TODO: place game event translater at right place in chain
         NotificationDistributer notificationDistributer = new NotificationDistributer(this._notificationAdapter);
         GameEventTranslator notificationManager = new GameEventTranslator(notificationDistributer);
         Game.Game newGame = new Game.Game(id, name, isPublic, notificationManager, _loggerFactory);
@@ -81,7 +82,7 @@ public sealed class GameManager
     {
         ZwooRoom? room = GetGame(gameId);
         if (room == null) return;
-        room.EventDistributer.Distribute(room, msg);
+        room.EventDistributer.DistributeEvent(msg);
     }
 
     private long nextGameId()

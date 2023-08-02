@@ -1,11 +1,11 @@
 ﻿using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Notifications;
+using ZwooGameLogic.ZRP;
 
-namespace ZwooGameLogic.ZRP.Handlers;
+namespace ZwooGameLogic.Events.Handler;
 
-
-public class GameHandler : IEventHandler
+public class GameHandler : IUserEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
@@ -14,7 +14,7 @@ public class GameHandler : IEventHandler
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingEvent message)
     {
         if (message.Code == ZRPCode.StartGame)
         {
@@ -59,7 +59,7 @@ public class GameHandler : IEventHandler
         return false;
     }
 
-    private void StartGame(UserContext context, IIncomingZRPMessage message)
+    private void StartGame(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -83,7 +83,7 @@ public class GameHandler : IEventHandler
         }
     }
 
-    private void HandleCardPlace(UserContext context, IIncomingZRPMessage message)
+    private void HandleCardPlace(UserContext context, IIncomingEvent message)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try
@@ -97,7 +97,7 @@ public class GameHandler : IEventHandler
         }
     }
 
-    private void HandleCardDraw(UserContext context, IIncomingZRPMessage message)
+    private void HandleCardDraw(UserContext context, IIncomingEvent message)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try
@@ -111,7 +111,7 @@ public class GameHandler : IEventHandler
         }
     }
 
-    private void HandleSendDecision(UserContext context, IIncomingZRPMessage message)
+    private void HandleSendDecision(UserContext context, IIncomingEvent message)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try
@@ -125,7 +125,7 @@ public class GameHandler : IEventHandler
         }
     }
 
-    private void SendHand(UserContext context, IIncomingZRPMessage message)
+    private void SendHand(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -138,7 +138,7 @@ public class GameHandler : IEventHandler
         }
     }
 
-    private void SendCardAmount(UserContext context, IIncomingZRPMessage message)
+    private void SendCardAmount(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -167,7 +167,7 @@ public class GameHandler : IEventHandler
         }
     }
 
-    private void SendPileTop(UserContext context, IIncomingZRPMessage message)
+    private void SendPileTop(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -180,7 +180,7 @@ public class GameHandler : IEventHandler
         }
     }
 
-    private void HandleRequestEndTurn(UserContext context, IIncomingZRPMessage message)
+    private void HandleRequestEndTurn(UserContext context, IIncomingEvent message)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try

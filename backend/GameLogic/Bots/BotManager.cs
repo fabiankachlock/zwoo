@@ -1,5 +1,6 @@
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Events;
 using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Bots;
@@ -8,7 +9,7 @@ namespace ZwooGameLogic.Bots;
 /// <summary>
 /// an object managing multiple bot instances within a game
 /// </summary>
-public class BotManager : INotificationAdapter, IUserEventEmitter
+public class BotManager : INotificationAdapter, IRoutableNotificationAdapter, IUserEventEmitter
 {
 
     private readonly Game.Game _game;
@@ -23,6 +24,11 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
 
     public event IUserEventEmitter.EventHandler OnEvent = delegate { };
+
+    public long TargetId
+    {
+        get => Bot.MOCK_REAL_ID;
+    }
 
     public BotManager(Game.Game game, ILoggerFactory loggerFactory)
     {

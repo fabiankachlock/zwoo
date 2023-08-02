@@ -11,7 +11,6 @@ public class Bot : INotificationTarget
 {
     public static readonly long MOCK_REAL_ID = -1;
 
-
     public long GameId { get; private set; }
 
     /// <summary>

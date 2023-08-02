@@ -1,11 +1,11 @@
-using ZwooGameLogic.Lobby;
+using ZwooGameLogic.ZRP;
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.Bots;
 
 
-namespace ZwooGameLogic.ZRP.Handlers;
+namespace ZwooGameLogic.Events.Handler;
 
-public class BotsHandler : IEventHandler
+public class BotsHandler : IUserEventHandler
 {
     private INotificationAdapter _webSocketManager;
 
@@ -14,7 +14,7 @@ public class BotsHandler : IEventHandler
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingEvent message)
     {
         if (message.Code == ZRPCode.CreateBot)
         {
@@ -39,7 +39,7 @@ public class BotsHandler : IEventHandler
         return false;
     }
 
-    private void CreateBot(UserContext context, IIncomingZRPMessage message)
+    private void CreateBot(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -62,7 +62,7 @@ public class BotsHandler : IEventHandler
         }
     }
 
-    private void UpdateBot(UserContext context, IIncomingZRPMessage message)
+    private void UpdateBot(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -79,7 +79,7 @@ public class BotsHandler : IEventHandler
         }
     }
 
-    private void DeleteBot(UserContext context, IIncomingZRPMessage message)
+    private void DeleteBot(UserContext context, IIncomingEvent message)
     {
         try
         {
@@ -93,7 +93,7 @@ public class BotsHandler : IEventHandler
         }
     }
 
-    private void GetBots(UserContext context, IIncomingZRPMessage message)
+    private void GetBots(UserContext context, IIncomingEvent message)
     {
         try
         {

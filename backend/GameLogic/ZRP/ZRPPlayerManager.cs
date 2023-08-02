@@ -42,9 +42,7 @@ public class ZRPPlayerManager
         var player = _game.Lobby.GetPlayerByUserId(playerId);
         if (player == null) return;
 
-
         LobbyResult playerRemoveResult = LobbyResult.Success;
-
         if (_game.Game.IsRunning)
         {
             _logger.Info($"{playerId} disconnected from running game");
@@ -58,7 +56,7 @@ public class ZRPPlayerManager
                 {
                     await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.LobbyId, ZRPRole.Host, 0));
                     await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.HostChanged, new NewHostNotification(newHost.LobbyId));
-                    await _webSocketManager.SendPlayer(newHost.RealId, ZRPCode.PromotedToHost, new YouAreHostNotification());
+                    await _webSocketManager.SendPlayer(newHost.LobbyId, ZRPCode.PromotedToHost, new YouAreHostNotification());
                 }
                 else
                 {
@@ -74,7 +72,6 @@ public class ZRPPlayerManager
             // only send leave message when the player leaves (NOT disconnects)
             if (player.Role == ZRPRole.Spectator)
             {
-                // TODO: change player model to include wins
                 await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.LobbyId));
             }
             else

@@ -1,6 +1,8 @@
-﻿namespace ZwooGameLogic.ZRP;
+using ZwooGameLogic.ZRP;
 
-public interface IIncomingZRPMessage
+namespace ZwooGameLogic.Events;
+
+public interface IIncomingEvent
 {
     /// <summary>
     /// the operation code of a message
@@ -13,11 +15,6 @@ public interface IIncomingZRPMessage
     /// since the payload gets decoded lazily this will be null until DecodePayload() was called
     /// </summary>
     public object? Payload { get; }
-
-    /// <summary>
-    /// the lobbyId of the player how sent this message
-    /// </summary>
-    public long UserId { get; }
 
     /// <summary>
     /// cast the payload to a certain type
@@ -33,4 +30,3 @@ public interface IIncomingZRPMessage
     /// <returns>the decoded payload</returns>
     public T? DecodePayload<T>();
 }
-
