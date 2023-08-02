@@ -57,16 +57,11 @@ public class LobbyManager
     /// </summary>
     public bool HasHost() => _players.Where(p => p.Role == ZRPRole.Host).Count() == 1;
 
-    public int NextLobbyId()
-    {
-        return Math.Max(_players.Select(p => p.LobbyId).Append(0).Max(), _preparedPlayers.Select(p => p.LobbyId).Append(0).Max()) + 1;
-    }
-
     /// <summary>
     /// determine whether the lobby has a player with a specifies public id
     /// </summary>
     /// <param name="lobbyId">the players public id</param>
-    public bool HasLobbyId(int lobbyId)
+    public bool HasLobbyId(long lobbyId)
     {
         return _players.Where(p => p.LobbyId == lobbyId).Count() == 1 || _preparedPlayers.Where(p => p.LobbyId == lobbyId).Count() == 1;
     }
@@ -77,14 +72,14 @@ public class LobbyManager
     /// <param name="id">the players real id</param>
     public bool HasPlayerId(long id)
     {
-        return _players.Where(p => p.Id == id).Count() == 1 || _preparedPlayers.Where(p => p.Id == id).Count() == 1;
+        return _players.Where(p => p.RealId == id).Count() == 1 || _preparedPlayers.Where(p => p.RealId == id).Count() == 1;
     }
 
     /// <summary>
     /// return a player if present
     /// </summary>
     /// <param name="lobbyId">the players public id</param>
-    public LobbyEntry? GetPlayer(int lobbyId)
+    public LobbyEntry? GetPlayer(long lobbyId)
     {
         return _players.FirstOrDefault(p => p.LobbyId == lobbyId);
     }
@@ -95,7 +90,7 @@ public class LobbyManager
     /// <param name="id">the players real id</param>
     public LobbyEntry? GetPlayerByUserId(long id)
     {
-        return _players.FirstOrDefault(p => p.Id == id);
+        return _players.FirstOrDefault(p => p.RealId == id);
     }
 
     /// <summary>
@@ -130,14 +125,14 @@ public class LobbyManager
     /// <param name="username">the players name</param>
     /// <param name="role">the role in which the player wants to join</param>
     /// <param name="password">the password entered by the user</param>
-    public LobbyResult AddPlayer(long userId, string username, ZRPRole role, string password)
+    public LobbyResult AddPlayer(long userId, long lobbyId, string username, ZRPRole role, string password)
     {
         if (_usePassword && password != _password) return LobbyResult.ErrorWrongPassword; // check whether the password is correct
         if (GetPlayerByUserId(userId)?.State == ZRPPlayerState.Disconnected) return LobbyResult.Success; // handle reconnect after disconnect
         if (HasPlayerId(userId) || role == ZRPRole.Host) return LobbyResult.ErrorAlreadyInGame; // cant join hosts or players which are already in the lobby
         if (PlayerCount() >= _settings.MaxAmountOfPlayers && role != ZRPRole.Spectator) return LobbyResult.ErrorLobbyFull; // check if theres is space in the lobby
 
-        _preparedPlayers.Add(new LobbyEntry(userId, NextLobbyId(), username, role, ZRPPlayerState.Disconnected));
+        _preparedPlayers.Add(new LobbyEntry(userId, lobbyId, username, role, ZRPPlayerState.Disconnected));
         return LobbyResult.Success;
     }
 
@@ -151,7 +146,7 @@ public class LobbyManager
         if (GetPlayerByUserId(id)?.State == ZRPPlayerState.Disconnected) return LobbyResult.Success;
 
         // find if the player is prepared
-        int playerIndex = _preparedPlayers.FindIndex((p) => p.Id == id);
+        int playerIndex = _preparedPlayers.FindIndex((p) => p.RealId == id);
         if (playerIndex < 0)
         {
             // if not hes not allowed
@@ -193,7 +188,7 @@ public class LobbyManager
     /// remove a player from the lobby
     /// </summary>
     /// <param name="publicId">the player public id</param>
-    public LobbyResult RemovePlayer(int lobbyId)
+    public LobbyResult RemovePlayer(long lobbyId)
     {
         LobbyEntry? player = GetPlayer(lobbyId);
         if (player == null) return LobbyResult.ErrorInvalidPlayer; // check if the player is present
@@ -217,7 +212,7 @@ public class LobbyManager
     /// </summary>
     /// <param name="lobbyId">the players public id</param>
     /// <param name="newRole">the role the players wants to assume</param>
-    public LobbyResult ChangeRole(int lobbyId, ZRPRole newRole)
+    public LobbyResult ChangeRole(long lobbyId, ZRPRole newRole)
     {
         if (newRole == ZRPRole.Host)
         {

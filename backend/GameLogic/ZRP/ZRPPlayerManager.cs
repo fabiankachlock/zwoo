@@ -58,7 +58,7 @@ public class ZRPPlayerManager
                 {
                     await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.LobbyId, ZRPRole.Host, 0));
                     await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.HostChanged, new NewHostNotification(newHost.LobbyId));
-                    await _webSocketManager.SendPlayer(newHost.Id, ZRPCode.PromotedToHost, new YouAreHostNotification());
+                    await _webSocketManager.SendPlayer(newHost.RealId, ZRPCode.PromotedToHost, new YouAreHostNotification());
                 }
                 else
                 {

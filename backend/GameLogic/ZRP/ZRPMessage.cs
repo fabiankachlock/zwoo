@@ -15,7 +15,7 @@ public interface IIncomingZRPMessage
     public object? Payload { get; }
 
     /// <summary>
-    /// the id of the user how sent this message
+    /// the lobbyId of the player how sent this message
     /// </summary>
     public long UserId { get; }
 

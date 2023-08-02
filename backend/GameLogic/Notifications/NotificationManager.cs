@@ -6,6 +6,7 @@ namespace ZwooGameLogic.Notifications;
 
 /// <summary>
 /// an object that forwards notifications to targets
+/// --> managed notification adapter implementation
 /// </summary>
 public class NotificationManager : INotificationAdapter
 {

@@ -53,9 +53,9 @@ public class GameEventTranslator : IGameEventManager
             _game!.Id,
             ZRPCode.PlayerWon,
             new PlayerWonNotification(
-                _game.GetPlayer(data.Winner)?.LobbyId ?? 0,
+                data.Winner,
                 data.Scores.Select(score => new PlayerWon_PlayerSummaryDTO(
-                    _game.GetPlayer(score.Key)?.LobbyId ?? 0,
+                    score.Key,
                     data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value
                 )).OrderBy(s => s.Position).ToArray()
             )
@@ -85,8 +85,8 @@ public class GameEventTranslator : IGameEventManager
             ZRPCode.StateUpdated,
             new ZRP.StateUpdateNotification(
                 new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type),
-                _game.GetPlayer(data.ActivePlayer)?.LobbyId ?? 0,
-                data.CardAmounts.Select(kv => KeyValuePair.Create(_game.GetPlayer(kv.Key)?.LobbyId ?? 0, kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value),
+                data.ActivePlayer,
+                data.CardAmounts,
                 data.CurrentDrawAmount
             )
         );

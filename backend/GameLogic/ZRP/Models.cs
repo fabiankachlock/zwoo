@@ -6,22 +6,22 @@ namespace ZwooGameLogic.ZRP;
 /// <summary>
 /// ZRPCode: 100 
 /// </summary>
-public readonly record struct PlayerJoinedNotification(int Id, string Username, int Wins, bool IsBot);
+public readonly record struct PlayerJoinedNotification(long Id, string Username, int Wins, bool IsBot);
 
 /// <summary>
 /// ZRPCode: 101
 /// </summary>
-public readonly record struct SpectatorJoinedNotification(int Id, string Username);
+public readonly record struct SpectatorJoinedNotification(long Id, string Username);
 
 /// <summary>
 /// ZRPCode: 102
 /// </summary>
-public readonly record struct PlayerLeftNotification(int Id);
+public readonly record struct PlayerLeftNotification(long Id);
 
 /// <summary>
 /// ZRPCode: 103 
 /// </summary>
-public readonly record struct SpectatorLeftNotification(int Id);
+public readonly record struct SpectatorLeftNotification(long Id);
 
 /// <summary>
 /// ZRPCode: 104
@@ -31,7 +31,7 @@ public readonly record struct ChatMessageEvent(string Message);
 /// <summary>
 /// ZRPCode: 105
 /// </summary>
-public readonly record struct ChatMessageNotification(int Id, string Message);
+public readonly record struct ChatMessageNotification(long Id, string Message);
 
 /// <summary>
 /// ZRPCode: 106
@@ -45,7 +45,7 @@ public readonly record struct LeaveEvent(); // empty
 public readonly record struct GetLobbyEvent(); // empty
 
 /// <see cref="GetLobbyNotification"/>
-public readonly record struct GetLobby_PlayerDTO(int Id, string Username, ZRPRole Role, ZRPPlayerState State, int Wins);
+public readonly record struct GetLobby_PlayerDTO(long Id, string Username, ZRPRole Role, ZRPPlayerState State, int Wins);
 
 /// <summary>
 /// ZRPCode: 109
@@ -60,12 +60,12 @@ public readonly record struct SpectatorToPlayerEvent(); // empty
 /// <summary>
 /// ZRPCode: 111
 /// </summary>
-public readonly record struct PlayerToSpectatorEvent(int Id);
+public readonly record struct PlayerToSpectatorEvent(long Id);
 
 /// <summary>
 /// ZRPCode: 112
 /// </summary>
-public readonly record struct PlayerToHostEvent(int Id);
+public readonly record struct PlayerToHostEvent(long Id);
 
 /// <summary>
 /// ZRPCode: 113
@@ -75,27 +75,27 @@ public readonly record struct YouAreHostNotification(); // empty
 /// <summary>
 /// ZRPCode: 114
 /// </summary>
-public readonly record struct NewHostNotification(int Id);
+public readonly record struct NewHostNotification(long Id);
 
 /// <summary>
 /// ZRPCode: 115
 /// </summary>
-public readonly record struct KickPlayerEvent(int Id);
+public readonly record struct KickPlayerEvent(long Id);
 
 /// <summary>
 /// ZRPCode: 116
 /// </summary>
-public readonly record struct PlayerChangedRoleNotification(int Id, ZRPRole Role, int Wins);
+public readonly record struct PlayerChangedRoleNotification(long Id, ZRPRole Role, int Wins);
 
 /// <summary>
 /// ZRPCode: 117
 /// </summary>
-public readonly record struct PlayerDisconnectedNotification(int Id);
+public readonly record struct PlayerDisconnectedNotification(long Id);
 
 /// <summary>
 /// ZRPCode: 118
 /// </summary>
-public readonly record struct PlayerReconnectedNotification(int Id);
+public readonly record struct PlayerReconnectedNotification(long Id);
 
 /// <summary>
 /// ZRPCode: 198
@@ -149,22 +149,22 @@ public readonly record struct CreateBotEvent(string Username, BotConfigDTO Confi
 /// <summary>
 /// ZRPCode: 231
 /// </summary>
-public readonly record struct BotJoinedNotification(int Id, string Username, int Wins);
+public readonly record struct BotJoinedNotification(long Id, string Username, int Wins);
 
 /// <summary>
 /// ZRPCode: 232
 /// </summary>
-public readonly record struct BotLeftNotification(int Id);
+public readonly record struct BotLeftNotification(long Id);
 
 /// <summary>
 /// ZRPCode: 233
 /// </summary>
-public readonly record struct UpdateBotEvent(int Id, BotConfigDTO Config);
+public readonly record struct UpdateBotEvent(long Id, BotConfigDTO Config);
 
 /// <summary>
 /// ZRPCode: 235
 /// </summary>
-public readonly record struct DeleteBotEvent(int Id);
+public readonly record struct DeleteBotEvent(long Id);
 
 /// <summary>
 /// ZRPCode: 236
@@ -172,7 +172,7 @@ public readonly record struct DeleteBotEvent(int Id);
 public readonly record struct GetBotsEvent();
 
 /// <see cref="AllBotsNotification" />
-public readonly record struct AllBots_BotDTO(int Id, string Username, BotConfigDTO Config, int Wins);
+public readonly record struct AllBots_BotDTO(long Id, string Username, BotConfigDTO Config, int Wins);
 
 /// <summary>
 /// ZRPCode: 237
@@ -234,8 +234,8 @@ public readonly record struct StateUpdate_PileTopDTO(CardColor Type, CardType Sy
 /// </summary>
 public readonly record struct StateUpdateNotification(
     StateUpdate_PileTopDTO PileTop,
-    int ActivePlayer,
-    Dictionary<int, int> CardAmounts,
+    long ActivePlayer,
+    Dictionary<long, int> CardAmounts,
     int? CurrentDrawAmount
 );
 
@@ -259,7 +259,7 @@ public readonly record struct GetPlayerStateEvent(); // empty
 
 /// <see cref="SendPlayerStateNotification" />
 public readonly record struct SendPlayerState_PlayerDTO(
-    int Id,
+    long Id,
     string Username,
     int Cards,
     int Order,
@@ -293,7 +293,7 @@ public readonly record struct PlayerDecisionEvent(int Type, int Decision);
 
 /// <see cref="PlayerWonNotification" />
 public readonly record struct PlayerWon_PlayerSummaryDTO(
-    int Id,
+    long Id,
     int Position,
     int Score
 );
@@ -302,7 +302,7 @@ public readonly record struct PlayerWon_PlayerSummaryDTO(
 /// ZRPCode: 399
 /// </summary>
 public readonly record struct PlayerWonNotification(
-    int Id,
+    long Id,
     PlayerWon_PlayerSummaryDTO[] Summary
 );
 

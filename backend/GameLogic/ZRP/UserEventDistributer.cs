@@ -27,7 +27,7 @@ public class UserEventDistributer
         IPlayer? player = room.GetPlayer(msg.UserId);
         if (player == null) return;
 
-        UserContext context = new UserContext(player.Id, player.LobbyId, player.Username, player.Role, room.Id, room);
+        UserContext context = new UserContext(player.RealId, player.LobbyId, player.Username, player.Role, room.Id, room);
         foreach (IEventHandler handler in _handlers)
         {
             if (handler.HandleMessage(context, msg))

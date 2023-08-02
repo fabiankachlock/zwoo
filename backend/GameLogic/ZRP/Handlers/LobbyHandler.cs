@@ -17,7 +17,7 @@ public class LobbyHandler : IEventHandler
     {
         if (message.Code == ZRPCode.KeepAlive)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.AckKeepAlive, new AckKeepAliveNotification());
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.AckKeepAlive, new AckKeepAliveNotification());
             return true;
         }
         else if (message.Code == ZRPCode.PlayerLeaves)
@@ -67,12 +67,12 @@ public class LobbyHandler : IEventHandler
             }
             else if (result == LobbyResult.ErrorLobbyFull)
             {
-                _webSocketManager.SendPlayer(context.Id, ZRPCode.LobbyFullError, new LobbyFullError((int)ZRPCode.LobbyFullError, "max amount of players reached"));
+                _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.LobbyFullError, new LobbyFullError((int)ZRPCode.LobbyFullError, "max amount of players reached"));
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -86,7 +86,7 @@ public class LobbyHandler : IEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -98,7 +98,7 @@ public class LobbyHandler : IEventHandler
             var result = context.Lobby.ChangeRole(payload.Id, ZRPRole.Host);
             if (result != LobbyResult.Success)
             {
-                _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, result.ToString()));
+                _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, result.ToString()));
                 return;
             }
 
@@ -108,12 +108,12 @@ public class LobbyHandler : IEventHandler
             var newHost = context.Lobby.GetPlayerByUserId(payload.Id);
             if (newHost != null)
             {
-                _webSocketManager.SendPlayer(newHost.Id, ZRPCode.PromotedToHost, new YouAreHostNotification());
+                _webSocketManager.SendPlayer(newHost.LobbyId, ZRPCode.PromotedToHost, new YouAreHostNotification());
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -127,7 +127,7 @@ public class LobbyHandler : IEventHandler
             // remove player from  active game
             if (context.Game.IsRunning && player != null)
             {
-                context.Game.RemovePlayer(player.Id);
+                context.Game.RemovePlayer(player.LobbyId);
                 if (context.Game.PlayerCount == 1)
                 {
                     // stop game when it has no active players
@@ -147,18 +147,18 @@ public class LobbyHandler : IEventHandler
 
             if (player != null && player.Role == ZRPRole.Spectator)
             {
-                _webSocketManager.DisconnectPlayer(player.Id);
+                _webSocketManager.DisconnectPlayer(player.RealId);
                 _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.LobbyId));
             }
             else if (player != null)
             {
-                _webSocketManager.DisconnectPlayer(player.Id);
+                _webSocketManager.DisconnectPlayer(player.RealId);
                 _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.LobbyId));
             }
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -169,7 +169,7 @@ public class LobbyHandler : IEventHandler
             // remove player from  active game
             if (context.Game.IsRunning)
             {
-                context.Game.RemovePlayer(context.Id);
+                context.Game.RemovePlayer(context.LobbyId);
                 if (context.Game.PlayerCount <= 1)
                 {
                     // stop game when it has no active players
@@ -194,7 +194,7 @@ public class LobbyHandler : IEventHandler
                 {
                     _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.LobbyId, ZRPRole.Host, 0));
                     _webSocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(newHost.LobbyId));
-                    _webSocketManager.SendPlayer(newHost.Id, ZRPCode.PromotedToHost, new YouAreHostNotification());
+                    _webSocketManager.SendPlayer(newHost.LobbyId, ZRPCode.PromotedToHost, new YouAreHostNotification());
                 }
                 else
                 {
@@ -217,7 +217,7 @@ public class LobbyHandler : IEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -228,11 +228,11 @@ public class LobbyHandler : IEventHandler
             var players = context.Lobby.ListAll().Select(p => new GetLobby_PlayerDTO(p.LobbyId, p.Username, p.Role, p.State, 0));
             var bots = context.BotManager.ListBots().Select(b => new GetLobby_PlayerDTO(b.AsPlayer().LobbyId, b.Username, ZRPRole.Bot, ZRPPlayerState.Connected, 0));
             GetLobbyNotification payload = new GetLobbyNotification(players.Concat(bots).ToArray());
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendLobby, payload);
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.SendLobby, payload);
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 }

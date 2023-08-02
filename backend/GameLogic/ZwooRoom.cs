@@ -19,6 +19,8 @@ public class ZwooRoom
     public delegate void ClosedHandler();
     public event ClosedHandler OnClosed = delegate { };
 
+    private long _runningId = 0;
+
     public long Id
     {
         get => Game.Id;
@@ -36,14 +38,11 @@ public class ZwooRoom
         BotManager.OnEvent += DistributeEvent;
     }
 
-    public string ResolvePlayerName(long id)
-    {
-        return (Lobby.HasPlayerId(id) ? Lobby.GetPlayerByUserId(id)?.Username : BotManager.GetBot(id)?.Username) ?? "unknown player";
-    }
+    public long NextId() => ++_runningId;
 
-    public IPlayer? GetPlayer(long id)
+    public IPlayer? GetPlayer(long lobbyId)
     {
-        return Lobby.HasPlayerId(id) ? Lobby.GetPlayerByUserId(id) : BotManager.GetBot(id)?.AsPlayer();
+        return Lobby.HasLobbyId(lobbyId) ? Lobby.GetPlayerByUserId(lobbyId) : BotManager.GetBot(lobbyId)?.AsPlayer();
     }
 
     public void Close()

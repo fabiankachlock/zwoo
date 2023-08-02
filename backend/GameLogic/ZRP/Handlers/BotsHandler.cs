@@ -46,11 +46,11 @@ public class BotsHandler : IEventHandler
             CreateBotEvent data = message.DecodePayload<CreateBotEvent>();
             if (context.BotManager.HasBotWithName(data.Username))
             {
-                _webSocketManager.SendPlayer(context.Id, ZRPCode.BotNameExistsError, new Error((int)ZRPCode.BotNameExistsError, "bot name already exists"));
+                _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.BotNameExistsError, new Error((int)ZRPCode.BotNameExistsError, "bot name already exists"));
                 return;
             }
 
-            Bot newBot = context.BotManager.CreateBot(data.Username, new BotConfig()
+            Bot newBot = context.BotManager.CreateBot(context.Room.NextId(), data.Username, new BotConfig()
             {
                 Type = data.Config.Type
             });
@@ -58,7 +58,7 @@ public class BotsHandler : IEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -68,17 +68,14 @@ public class BotsHandler : IEventHandler
         {
             UpdateBotEvent data = message.DecodePayload<UpdateBotEvent>();
             Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.AsPlayer().LobbyId == data.Id);
-            if (botToUpdate != null)
+            botToUpdate?.SetConfig(new BotConfig()
             {
-                botToUpdate.SetConfig(new BotConfig()
-                {
-                    Type = data.Config.Type
-                });
-            }
+                Type = data.Config.Type
+            });
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -92,7 +89,7 @@ public class BotsHandler : IEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
@@ -100,11 +97,11 @@ public class BotsHandler : IEventHandler
     {
         try
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().LobbyId, bot.Username, new BotConfigDTO(bot.Config.Type), 0)).ToArray()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().LobbyId, bot.Username, new BotConfigDTO(bot.Config.Type), 0)).ToArray()));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.Id, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 

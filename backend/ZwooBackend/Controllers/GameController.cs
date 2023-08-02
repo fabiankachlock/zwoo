@@ -107,7 +107,7 @@ public class GameController : Controller
                 body.Opcode = ZRPRole.Spectator;
             }
 
-            LobbyResult result = game.Lobby.AddPlayer((long)user.Id, user.Username, body.Opcode, body.Password ?? "");
+            LobbyResult result = game.Lobby.AddPlayer((long)user.Id, game.NextId(), user.Username, body.Opcode, body.Password ?? "");
             // TODO: move into ErrorCodes helper method like db error
             if (LobbyResult.Success != result)
             {
