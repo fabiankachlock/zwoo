@@ -27,23 +27,15 @@ public sealed class GameManager
     public ZwooRoom CreateGame(string name, bool isPublic)
     {
         long id = nextGameId();
-
-        // TODO: place game event translater at right place in chain
-        NotificationDistributer notificationDistributer = new NotificationDistributer(this._notificationAdapter);
-        GameEventTranslator notificationManager = new GameEventTranslator(notificationDistributer);
-        Game.Game newGame = new Game.Game(id, name, isPublic, notificationManager, _loggerFactory);
-        LobbyManager lobby = new LobbyManager(newGame.Id, newGame.Settings);
-        ZwooRoom room = new ZwooRoom(newGame, lobby, notificationDistributer, _loggerFactory);
-
-        notificationManager.SetGame(room);
+        var room = new ZwooRoom(id, name, isPublic, _notificationAdapter, _loggerFactory);
         room.OnClosed += () =>
         {
             RemoveGame(room.Id);
             _notificationAdapter.DisconnectGame(room.Id);
         };
 
-        _activeGames.Add(newGame.Id, room);
-        _logger.Info($"created game {newGame.Id}");
+        _activeGames.Add(room.Game.Id, room);
+        _logger.Info($"created game {room.Game.Id}");
         return room;
     }
 

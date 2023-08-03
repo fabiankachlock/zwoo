@@ -64,7 +64,7 @@ public class IdBasedNotificationRouter : INotificationAdapter
                 return await target.DisconnectPlayer(player.LobbyId);
             }
         }
-        return await _defaultTarget.DisconnectPlayer(playerId);
+        return await _defaultTarget.DisconnectPlayer(player.RealId);
     }
 
     public async Task<bool> SendPlayer<T>(long playerId, ZRPCode code, T payload)
@@ -79,6 +79,6 @@ public class IdBasedNotificationRouter : INotificationAdapter
                 return await target.SendPlayer(player.LobbyId, code, payload);
             }
         }
-        return await _defaultTarget.SendPlayer(playerId, code, payload);
+        return await _defaultTarget.SendPlayer(player.RealId, code, payload);
     }
 }

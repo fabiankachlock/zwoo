@@ -29,25 +29,27 @@ public class ZwooRoom
         get => _notificationDistributer;
     }
 
-    private long _runningId = 0;
+    // id 1 is reserved for the host that creates the game
+    private long _runningId = 1;
 
     public long Id
     {
         get => Game.Id;
     }
 
-    public ZwooRoom(Game.Game game, LobbyManager lobby, IdBasedNotificationRouter notificationrouter, ILoggerFactory loggerFactory)
+    public ZwooRoom(long id, string name, bool isPublic, INotificationAdapter notificationAdapter, ILoggerFactory loggerFactory)
     {
-        Game = game;
-        Lobby = lobby;
-        BotManager = new BotManager(Game, loggerFactory);
-
+        _notificationDistributer = new(this, notificationAdapter);
         _eventDistributer = new UserEventDistributer(this);
-        BotManager.OnEvent += _eventDistributer.DistributeEvent;
 
-        _notificationDistributer = new IdBasedNotificationRouter(this, notificationrouter);
-        _notificationDistributer.RegisterTarget(BotManager);
+        GameEventTranslator notificationTranslator = new(this, _notificationDistributer);
+        Game = new(id, name, isPublic, notificationTranslator, loggerFactory);
+        Lobby = new(Game.Id, Game.Settings);
         PlayerManager = new ZRPPlayerManager(_notificationDistributer, this, loggerFactory.CreateLogger("PlayerManager"));
+
+        BotManager = new BotManager(Game, loggerFactory);
+        BotManager.OnEvent += _eventDistributer.DistributeEvent;
+        _notificationDistributer.RegisterTarget(BotManager);
     }
 
     public long NextId() => ++_runningId;

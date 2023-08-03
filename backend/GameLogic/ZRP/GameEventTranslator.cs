@@ -9,17 +9,12 @@ public class GameEventTranslator : IGameEventManager
 {
 
     private INotificationAdapter _wsAdapter;
-    private ZwooRoom? _game;
+    private ZwooRoom _game;
 
 
-    public GameEventTranslator(INotificationAdapter wsAdapter, ZwooRoom? game = null)
+    public GameEventTranslator(ZwooRoom game, INotificationAdapter wsAdapter)
     {
         _wsAdapter = wsAdapter;
-        _game = game;
-    }
-
-    public void SetGame(ZwooRoom game)
-    {
         _game = game;
     }
 
