@@ -41,7 +41,7 @@ export const useRootApp = defineStore('app', {
       environment: 'online' as AppEnv,
       // versions
       serverVersion: new Awaiter() as string | Awaiter<string>,
-      clientVersion: AppConfig.Version,
+      clientVersion: AppConfig.VersionOverride || AppConfig.Version,
       // updates
       updateAvailable: false,
       offlineReady: false,
@@ -85,7 +85,7 @@ export const useRootApp = defineStore('app', {
         this.serverVersion = AppConfig.Version;
       }
 
-      MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
+      MigrationRunner.run(MigrationRunner.lastVersion, AppConfig.Version);
       this.isLoading = false;
     },
 
