@@ -31,7 +31,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: Menu,
-    redirect: '/home',
+    redirect() {
+      console.log('XX__redirect');
+      return '/home';
+    },
+    // redirect: '/home',
     children: [
       {
         path: '/home',
@@ -131,6 +135,7 @@ const AfterEachAsyncGuards: RouterInterceptor['afterEachAsync'][] = [
 // ]));
 
 router.afterEach(async (to, from, failure) => {
+  console.log('XX__after', { to, from, failure });
   for (const guard of AfterEachSyncGuards) {
     if (guard) {
       await guard(from, to, failure);
