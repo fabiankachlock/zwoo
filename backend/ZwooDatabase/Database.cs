@@ -55,11 +55,6 @@ public interface IDatabase
 
 
     /// <summary>
-    /// Delete unverified users & unused password reset codes & delete expired delete account events
-    /// </summary>
-    public void CleanDatabase();
-
-    /// <summary>
     /// register bson class mappers
     /// </summary>
     public void InitializeClasses();
@@ -121,25 +116,6 @@ public class Database : IDatabase
         Changelogs = MongoDB.GetCollection<ChangelogDao>("changelogs");
         AuditTrails = MongoDB.GetCollection<AuditTrailDao>("audit_trails");
         ContactRequests = MongoDB.GetCollection<ContactRequest>("contact_request");
-    }
-
-    public void CleanDatabase()
-    {
-
-        var unverifiedUsers = Users.AsQueryable().Where(x => !x.Verified);
-        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} unverified user(s).");
-        foreach (var user in unverifiedUsers)
-        {
-            Users.DeleteOne(x => x.Id == user.Id);
-        }
-
-
-        var usersWithPasswordReset = Users.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
-        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} password reset codes.");
-        foreach (var user in unverifiedUsers)
-        {
-            Users.UpdateOne(x => x.Id == user.Id, Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
-        }
     }
 
     public void InitializeClasses()

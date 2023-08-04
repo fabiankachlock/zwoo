@@ -125,6 +125,17 @@ public interface IUserService
     /// <param name="code">the reset code</param>
     /// <param name="password">the new password</param>
     public UserDao? ResetPassword(string code, string password, AuditOptions? auditOptions = null);
+
+    /// <summary>
+    /// deletes all data that references a certain user (DSGVO save)
+    /// </summary>
+    /// <param name="id">the users id</param>
+    public void ClearAllUserData(ulong id);
+
+    /// <summary>
+    /// clean up unverified users and reset password reset codes
+    /// </summary>
+    public void CleanUpUsers();
 }
 
 public class UserService : IUserService
@@ -247,7 +258,6 @@ public class UserService : IUserService
     {
         return _db.Users.AsQueryable().FirstOrDefault(user => user.Email == email);
     }
-
 
     public UserDao? VerifyUser(ulong id, string code, bool isBeta, AuditOptions? auditOptions = null)
     {
@@ -401,5 +411,47 @@ public class UserService : IUserService
         user.Sid = new List<string>();
         user.PasswordResetCode = "";
         return UpdateUser(user, AuditOptions.WithMessage("resetting user password").Merge(auditOptions));
+    }
+
+    public void ClearAllUserData(ulong id)
+    {
+        var user = _db.Users.AsQueryable().FirstOrDefault(user => user.Id == id);
+        if (user == null) return;
+
+        _db.AccountEvents.DeleteMany(e => e.PlayerID == user.Id);
+        var p = _audits.GetProtocol(_audits.GetAuditId(user));
+        if (p != null)
+        {
+            _db.AuditTrails.DeleteOne(t => t.Id == p.Id);
+            foreach (var e in p.Events)
+            {
+                if (e.NewValue is GameInfoDao info)
+                {
+                    var score = info.Scores.Find(score => score.PlayerUsername == user.Username);
+                    if (score != null)
+                    {
+                        score.PlayerUsername = "-/-";
+                    }
+                    _db.GamesInfo.ReplaceOne(i => i.Id == info.Id, info);
+                }
+            }
+        }
+    }
+
+    public void CleanUpUsers()
+    {
+        var unverifiedUsers = _db.Users.AsQueryable().Where(x => !x.Verified);
+        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} unverified user(s).");
+        foreach (var user in unverifiedUsers)
+        {
+            ClearAllUserData(user.Id);
+        }
+
+        var usersWithPasswordReset = _db.Users.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
+        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} password reset codes.");
+        foreach (var user in unverifiedUsers)
+        {
+            _db.Users.UpdateOne(x => x.Id == user.Id, Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
+        }
     }
 }
