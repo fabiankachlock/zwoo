@@ -263,6 +263,7 @@
   },
   "cookies": {
     "title": "Cookie Zustimmungen",
+    "userInformation": "Da uns die Privatsphäre unserer Spieler sehr am Herzen liegt, verzichten wir komplett auf Tracking-Cookies und setzen stattdessen ausschließlich technisch notwendige Cookies ein.",
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
@@ -278,7 +279,9 @@
     "disallowed": {
       "title": "Fehlende Cookies",
       "info": "Die Login- und Accounterstellungsfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
-    }
+    },
+    "__close": "Schließen",
+    "__info": "Cookie Informationen"
   },
   "share": {
     "facebook": "Auf Facebook teilen",
