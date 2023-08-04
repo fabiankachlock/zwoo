@@ -76,7 +76,7 @@ public class MiscController : Controller
             Origin = body.Site,
             CaptchaScore = captchaResponse.Score,
         };
-        _contactRequests.CreateRequest(request);
+        request = _contactRequests.CreateRequest(request);
         if (request.CaptchaScore >= 0.5)
         {
             _emailService.SendContactFormEmail(_emailService.CreateRecipient(ContactEmail, "ZwooBackend", LanguageCode.English), request);
