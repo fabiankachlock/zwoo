@@ -70,7 +70,7 @@ export const useRootApp = defineStore('app', {
         console.warn('### zwoo entered offline mode');
         useAuth().applyOfflineConfig();
         RouterService.getRouter().push('/offline');
-      } else if (version !== AppConfig.Version) {
+      } else if (version !== AppConfig.Version && version !== AppConfig.VersionOverride) {
         RouterService.getRouter().push('/invalid-version');
       }
 
