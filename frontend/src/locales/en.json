@@ -264,6 +264,7 @@
   "cookies": {
     "title": "Cookie Consent",
     "userInformation": "Since the privacy of our players is very important to us, we completely dispense with tracking cookies and instead use only technically necessary cookies.",
+    "privacyLink": "More info at:",
     "functional": {
       "title": "Functional Cookies",
       "auth": {

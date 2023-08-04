@@ -264,6 +264,7 @@
   "cookies": {
     "title": "Cookie Zustimmungen",
     "userInformation": "Da uns die Privatsphäre unserer Spieler sehr am Herzen liegt, verzichten wir komplett auf Tracking-Cookies und setzen stattdessen ausschließlich technisch notwendige Cookies ein.",
+    "privacyLink": "Weiter Informationen unter:",
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {

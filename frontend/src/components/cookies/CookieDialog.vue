@@ -2,7 +2,13 @@
   <FloatingDialog>
     <div class="flex flex-col mx-2 overflow-y-auto">
       <h2 class="tc-main text-xl text-center mt-2">{{ t('cookies.title') }}</h2>
-      <p class="tc-main-secondary mb-2">{{ t('cookies.userInformation') }}</p>
+      <p class="tc-main-secondary text-sm">{{ t('cookies.userInformation') }}</p>
+      <p class="tc-main-secondary text-sm mb-2">
+        {{ t('cookies.privacyLink') }}
+        <router-link to="/privacy" class="underline" @click="close">
+          {{ t('nav.privacy') }}
+        </router-link>
+      </p>
       <div class="py-1">
         <div class="flex justify-between items-center bg-light rounded p-1" @click="toggle('functional')">
           <h3 class="tc-main text-lg ml-1">{{ t('cookies.functional.title') }}</h3>

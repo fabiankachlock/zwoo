@@ -4,12 +4,8 @@ type CookiesConfig = {
   // recaptcha: boolean;
 };
 
-// const PreferredSelection: CookiesConfig = {
-//   recaptcha: true
-// };
-
 const DefaultSelection: CookiesConfig = {
-  // recaptcha: false
+  // recaptcha: false !Important: TTDSG §25 -> active aception of optional cookies needed
 };
 
 const cookiesKey = 'zwoo:cookies';
@@ -23,19 +19,19 @@ const saveCookies = (selection: CookiesConfig) => {
   localStorage.setItem(cookiesKey, base64);
 };
 
-const readCookies = (): CookiesConfig | undefined => {
-  const stored = localStorage.getItem(cookiesKey);
-  if (!stored) return undefined;
-  let json = stored;
-  for (let i = 0; i < 5; i++) {
-    json = atob(json);
-  }
-  return JSON.parse(json);
-};
+// const readCookies = (): CookiesConfig | undefined => {
+//   const stored = localStorage.getItem(cookiesKey);
+//   if (!stored) return undefined;
+//   let json = stored;
+//   for (let i = 0; i < 5; i++) {
+//     json = atob(json);
+//   }
+//   return JSON.parse(json);
+// };
 
 export const useCookies = defineStore('cookies', {
   state: () => ({
-    popupShowed: false,
+    popupShowed: true,
     popupOpen: false,
     cookies: DefaultSelection
   }),
@@ -46,23 +42,23 @@ export const useCookies = defineStore('cookies', {
 
   actions: {
     setup() {
-      try {
-        const selection = readCookies();
-        if (selection) {
-          this.popupShowed = true;
-          this.cookies = {
-            ...DefaultSelection,
-            ...selection
-          };
-        } else {
-          this.popupOpen = true;
-        }
-      } catch (_e: unknown) {
-        // invalid config
-        this.popupShowed = false;
-        this.popupOpen = true;
-        localStorage.removeItem(cookiesKey);
-      }
+      // try {
+      //   const selection = readCookies();
+      //   if (selection) {
+      //     this.popupShowed = true;
+      //     this.cookies = {
+      //       ...DefaultSelection,
+      //       ...selection
+      //     };
+      //   } else {
+      //     this.popupOpen = true;
+      //   }
+      // } catch (_e: unknown) {
+      //   // invalid config
+      //   this.popupShowed = false;
+      //   this.popupOpen = true;
+      //   localStorage.removeItem(cookiesKey);
+      // }
     },
     // setReCaptchaCookie(allowed: boolean) {
     //   this.cookies.recaptcha = allowed;
