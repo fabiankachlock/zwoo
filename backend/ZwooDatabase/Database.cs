@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using ZwooDatabase.Dao;
+using ZwooDatabase.Legacy;
 using MongoDB.Driver;
 using log4net;
 
@@ -174,6 +175,13 @@ public class Database : IDatabase
             cm.AutoMap();
             cm.MapCreator(p =>
                 new ContactRequest(p.Id, p.Timestamp, p.Name, p.Email, p.Message, p.CaptchaScore, p.Origin));
+        });
+
+        BsonClassMap.RegisterClassMap<Beta11UserDao>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new Beta11UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified));
         });
 
         // setup object serializer for AuditTrailEventDaos `object` properties
