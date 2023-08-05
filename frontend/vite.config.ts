@@ -2,7 +2,7 @@ import vueI18n from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { defineConfig } from 'vite';
+import { defineConfig, UserConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 const manifestIcons = [
@@ -92,52 +92,58 @@ const manifestIcons = [
 // TODO: configure reload (settings and invalid version): https://vite-pwa-org.netlify.app/guide/prompt-for-update.html
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    vueI18n({
-      compositionOnly: true,
-      include: path.resolve(__dirname, './src/locales/**')
-    }),
-    VitePWA({
-      injectRegister: 'inline',
-      strategies: 'generateSW',
-      manifest: {
-        id: '@zwoo/zwoo',
-        name: 'zwoo',
-        description: 'zwoo - The Second Challenge.',
-        background_color: '#404254',
-        orientation: 'any',
-        short_name: 'zwoo',
-        theme_color: '#3066BE',
-        start_url: '.',
-        display: 'standalone',
-        icons: manifestIcons
+export default defineConfig(
+  ({ mode }) =>
+    ({
+      plugins: [
+        vue(),
+        vueI18n({
+          compositionOnly: true,
+          include: path.resolve(__dirname, './src/locales/**')
+        }),
+        VitePWA({
+          injectRegister: 'inline',
+          strategies: 'generateSW',
+          manifest: {
+            id: '@zwoo/zwoo',
+            name: 'zwoo',
+            description: 'zwoo - The Second Challenge.',
+            background_color: '#404254',
+            orientation: 'any',
+            short_name: 'zwoo',
+            theme_color: '#3066BE',
+            start_url: '.',
+            display: 'standalone',
+            icons: manifestIcons
+          },
+          workbox: {
+            globIgnores: ['**/config.json'], // dont cache config.json, since it should be dynamic
+            globPatterns: ['**/*.{js,css,html,ico,png,svg,json}', '**/wasm/**'],
+            cleanupOutdatedCaches: true,
+            maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // dont cache more than 10 mib
+          }
+        }),
+        ...(process.env.ANALYZE !== undefined
+          ? [
+              visualizer({
+                open: true,
+                template: 'treemap'
+              })
+            ]
+          : [])
+      ],
+      envPrefix: 'VUE_APP',
+      server: {
+        port: 8080
       },
-      workbox: {
-        globIgnores: ['**/config.json'], // dont cache config.json, since it should be dynamic
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}', '**/wasm/**'],
-        cleanupOutdatedCaches: true,
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // dont cache more than 10 mib
+      build: {
+        sourcemap: mode === 'dev-instance'
+      },
+      resolve: {
+        extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+        alias: {
+          '@': path.resolve(__dirname, './src')
+        }
       }
-    }),
-    ...(process.env.ANALYZE !== undefined
-      ? [
-          visualizer({
-            open: true,
-            template: 'treemap'
-          })
-        ]
-      : [])
-  ],
-  envPrefix: 'VUE_APP',
-  server: {
-    port: 8080
-  },
-  resolve: {
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  }
-});
+    } as UserConfig)
+);
