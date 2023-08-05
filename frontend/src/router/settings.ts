@@ -12,7 +12,11 @@ export const SettingsRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: 'account',
-        component: () => import('../components/settings/sections/SettingsSectionAccount.vue')
+        component: () => import('../components/settings/sections/SettingsSectionAccount.vue'),
+        meta: {
+          onlineOnly: true,
+          offlineRedirect: '/settings'
+        }
       },
       {
         path: 'game',

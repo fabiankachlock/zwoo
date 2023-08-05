@@ -210,7 +210,7 @@ export const useAuth = defineStore('auth', {
       this.__FIX_resolveNameAsync().then(username => {
         this.$patch({
           isInitialized: true,
-          isLoggedIn: true,
+          isLoggedIn: false,
           publicId: `p_${username}`,
           username: username,
           wins: 0
