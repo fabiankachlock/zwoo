@@ -1,11 +1,13 @@
 Hello {{username}},
 
-please verify your account using the link below:
+please verify your account using the link below.
+
+By clicking on the link, you agree to the processing and storage of your previously provided personal data for the use of ZWOO.
+If you do not want to agree to the processing of the data or do not want to register, you can ignore this e-mail. Your data will then be completely deleted from our systems in a short time.
 
 {{link}}
 
 The link expires with the end of this day (UTC + 01:00).
-If you don't want to register, please ignore it.
 
 
 Ⓒ ZWOO {{year}}

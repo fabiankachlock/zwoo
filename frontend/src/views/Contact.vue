@@ -39,6 +39,12 @@ onMounted(() => {
 });
 
 const submitForm = async () => {
+  if (isLoading.value) return;
+  if (!message.value?.trim() || !senderEmail.value?.trim() || !senderName.value?.trim()) {
+    error.value = ['errors.fillIn'];
+    return;
+  }
+
   const captchaValid = captchaValidator.validate(captchaResponse.value);
   if (!captchaValid.isValid) {
     error.value = captchaValid.getErrors();

@@ -28,11 +28,12 @@ services:
       - SMTP_HOST_EMAIL=x
       - SMTP_USERNAME=x
       - SMTP_PASSWORD=x
+      - ZWOO_CONTACT_EMAIL=info@igd20.de
       # Database Settings
       - ZWOO_DATABASE_CONNECTION_STRING=mongodb://db:27017
       - ZWOO_DATABASE_NAME=zwoo
       # Backend Config
-      - ZWOO_RECAPTCHA_SIDESECRET=xxx
+      - ZWOO_RECAPTCHA_SIDESECRET=0x0000000000000000000000000000000000000000
       # SSL Settings
       - USE_SSL=False
       - ZWOO_CORS=https://zwoo.igd20.de

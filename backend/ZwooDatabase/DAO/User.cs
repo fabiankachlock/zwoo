@@ -5,15 +5,15 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabase.Dao;
 
-[RuntimeVersion("1.0.0-beta.7")]
-[StartUpVersion("1.0.0-beta.7")]
+[RuntimeVersion("1.0.0-beta.12")]
+[StartUpVersion("1.0.0-beta.12")]
 [CollectionLocation("users")]
 public class UserDao : IDocument
 {
     public UserDao() { }
 
     [BsonConstructor]
-    public UserDao(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified)
+    public UserDao(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified, bool acceptedTerms)
     {
         Id = id;
         Sid = sid;
@@ -24,6 +24,7 @@ public class UserDao : IDocument
         Settings = settings;
         ValidationCode = validationCode;
         Verified = verified;
+        AcceptedTerms = acceptedTerms;
     }
 
     [BsonElement("_id")]
@@ -55,6 +56,17 @@ public class UserDao : IDocument
 
     [BsonElement("verified")]
     public bool Verified { set; get; }
+
+    [BsonElement("accepted_terms")]
+    public bool AcceptedTerms { get; set; }
+
+    [BsonElement("verified_at")]
+    [BsonIgnoreIfDefault]
+    public long? VerifiedAt { get; set; }
+
+    [BsonElement("accepted_terms_at")]
+    [BsonIgnoreIfDefault]
+    public long? AcceptedTermsAt { get; set; }
 
     [BsonElement("beta_code")]
     [BsonIgnoreIfDefault]

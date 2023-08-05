@@ -106,24 +106,7 @@
         var result = await DialogService.Confirm($"Are you sure that you want to delete {player.UserData.Username}? All user assoiciated data is going to be removed!", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
         if (result == null || (bool)!result) return;
 
-        _db.AccountEvents.DeleteMany(e => e.PlayerID == player.PlayerID);
-        var p = _auditTrails.GetProtocol(_auditTrails.GetAuditId(player.UserData));
-        if (p != null) 
-        {
-            _db.AuditTrails.DeleteOne(t => t.Id == p.Id);
-            foreach (var e in p.Events)
-            {
-                if (e.NewValue is GameInfoDao info)
-                {
-                    var score = info.Scores.Find(score => score.PlayerUsername == player.UserData.Username);
-                    if (score != null)
-                    {
-                        score.PlayerUsername = "-/-";
-                    }
-                    _db.GamesInfo.ReplaceOne(i => i.Id == info.Id, info);
-                }
-            }
-        }
+        _userService.ClearAllUserData(player.PlayerID);
         await _grid.Reload();
     }
 

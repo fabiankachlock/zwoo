@@ -1,5 +1,6 @@
 @page "/contact-requests"
 @inject IDatabase _db
+@inject DialogService DialogService
 
 <PageTitle>Contact Requests</PageTitle>
 
@@ -8,7 +9,7 @@
     <RadzenDropDown TValue="string" @bind-Value=@_selectedSite Data=@_availableSites Change="@(args => SelectedSiteChanged(args))" Placeholder="Filter by Site" Style="width: 100%; max-width: 300px" />
 </div>
 
-<RadzenDataGrid AllowPaging="true" PageSize="25"
+<RadzenDataGrid AllowPaging="true" PageSize="25" @ref="_grid"
                 ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
                 TItem="ContactRequest" Data="_requests" AllowVirtualization="true">
     <Template Context="request">
@@ -36,29 +37,40 @@
                 </div>
             </Template>
         </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="ContactRequest" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="request">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" Icon="delete" Click="@(args => deleteRequest(request))"  @onclick:stopPropagation="true" />
+            </Template>
+        </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
 
 @code {
+    private RadzenDataGrid<ContactRequest> _grid = new RadzenDataGrid<ContactRequest>();
     private IQueryable<ContactRequest> _baseData = new List<ContactRequest>().AsQueryable();
     private IQueryable<ContactRequest> _requests = new List<ContactRequest>().AsQueryable();
     private List<string> _availableSites = new List<string>();
-    private string? _selectedSite;
+    private string? _selectedSite = "#All";
 
     protected override void OnInitialized()
+    {
+        _load();
+    }
+
+    private void _load()
     {
         if (Globals.WebsiteDatabaseName != null)
         {
             var websiteDb = _db.Client.GetDatabase(Globals.WebsiteDatabaseName);
             var otherCollection = websiteDb.GetCollection<ContactRequest>(Globals.WebsiteDatabaseCollection);
-            _baseData = _db.ContactRequests.AsQueryable().Union(otherCollection.AsQueryable());
+            _baseData = _db.ContactRequests.AsQueryable().ToList().Union(otherCollection.AsQueryable().ToList()).AsQueryable();
         }
         else
         {
             _baseData = _db.ContactRequests.AsQueryable();
         }
-        _requests = _baseData;
-        _availableSites = _db.ContactRequests.AsQueryable().Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
+        _requests = _baseData.OrderByDescending(request => request.Timestamp);
+        _availableSites = _baseData.Select(request => request.Origin).Distinct().ToList().Append("#All").ToList();
     }
 
     private void SelectedSiteChanged(object _value) 
@@ -83,5 +95,28 @@
         } else {
             return "#c41414";
         }
+    }
+
+    private async void deleteRequest(ContactRequest request)
+    {
+        var result = await DialogService.Confirm($"Are you sure that you want to delete the contact request of {request.Email}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (result == null || (bool)!result) return;
+
+        _db.ContactRequests.DeleteOne(r => r.Id == request.Id);
+        if (Globals.WebsiteDatabaseName != null)
+        {
+            var websiteDb = _db.Client.GetDatabase(Globals.WebsiteDatabaseName);
+            var otherCollection = websiteDb.GetCollection<ContactRequest>(Globals.WebsiteDatabaseCollection);
+            otherCollection.DeleteOne(r => r.Id == request.Id);
+        }
+
+        _load();
+        if (_selectedSite == "#All") {
+            _requests = _baseData.OrderByDescending(request => request.Timestamp);
+        } else {
+            _requests = _baseData.Where(request => request.Origin == _selectedSite).OrderByDescending(request => request.Timestamp);
+        }
+        StateHasChanged();
+        await _grid.Reload();
     }
 }

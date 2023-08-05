@@ -82,7 +82,9 @@
     "beta": "BETA Code",
     "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden.",
     "resendVerifyEmail": "Email neu senden",
-    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen."
+    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
+    "terms": "Ich willige in die Verarbeitung und Speicherung meiner oben angegebenen personenbezogenen Daten zur Nutzung von ZWOO ein. Weitere Infos unter:",
+    "nameInfo": "Dein Benutzername ist für andere Spieler im Spiel einsehbar. Wähle daher am besten einen fiktiven Namen."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -162,6 +164,7 @@
       "116": "Der Benutzername ist ungültig.",
       "117": "Das Passwort ist ungültig.",
       "118": "Der BETA-Code ist ungültig.",
+      "119": "Die Einwilligung zur Datenverarbeitung wird benötigt.",
       "120": "Die Email wird bereits genutzt.",
       "121": "Der Benutzername wird bereits genutzt.",
       "122": "Der Account konnte nicht verifiziert werden.",
@@ -248,6 +251,8 @@
   },
   "cookies": {
     "title": "Cookie Zustimmungen",
+    "userInformation": "Da uns die Privatsphäre unserer Spieler sehr am Herzen liegt, verzichten wir komplett auf Tracking-Cookies und setzen stattdessen ausschließlich technisch notwendige Cookies ein.",
+    "privacyLink": "Weiter Informationen unter:",
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
@@ -263,7 +268,9 @@
     "disallowed": {
       "title": "Fehlende Cookies",
       "info": "Die Login- und Accounterstellungsfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
-    }
+    },
+    "__close": "Schließen",
+    "__info": "Cookie Informationen"
   },
   "share": {
     "facebook": "Auf Facebook teilen",
