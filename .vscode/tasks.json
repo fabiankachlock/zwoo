@@ -19,7 +19,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/backend/ZwooInfoDashboard/ZwooInfoDashboard.csproj",
+        "${workspaceFolder}/backend/ZwooInfoDashBoard/ZwooInfoDashBoard.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],

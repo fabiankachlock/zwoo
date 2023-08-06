@@ -21,6 +21,7 @@ public static class ErrorCodes
         INVALID_USERNAME = 116,
         INVALID_PASSWORD = 117,
         INVALID_BETACODE = 118,
+        NEEDS_TERMS = 119,
 
         EMAIL_ALREADY_TAKEN = 120,
         USERNAME_ALREADY_TAKEN = 121,

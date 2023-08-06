@@ -65,9 +65,12 @@ export const useAuth = defineStore('auth', {
       email: string,
       password: string,
       repeatPassword: string,
+      acceptedTerms: boolean,
       captchaResponse: string | undefined,
       beta: string
     ) {
+      if (!acceptedTerms) throw ['errors.backend.119'];
+
       const usernameValid = new UsernameValidator().validate(username);
       if (!usernameValid.isValid) throw usernameValid.getErrors();
 
@@ -89,6 +92,7 @@ export const useAuth = defineStore('auth', {
           email,
           password,
           beta,
+          acceptedTerms,
           captchaToken: captchaResponse ?? ''
         },
         useConfig().get(ZwooConfigKey.Language)
@@ -201,7 +205,7 @@ export const useAuth = defineStore('auth', {
       this.__FIX_resolveNameAsync().then(username => {
         this.$patch({
           isInitialized: true,
-          isLoggedIn: true,
+          isLoggedIn: false,
           username: username,
           wins: 0
         });

@@ -12,7 +12,7 @@ public interface IContactRequestService
     /// create a new contact request
     /// </summary>
     /// <param name="data">the contact request</param>
-    public void CreateRequest(ContactRequest data);
+    public ContactRequest CreateRequest(ContactRequest data);
 }
 
 
@@ -25,7 +25,7 @@ public class ContactRequestService : IContactRequestService
         _db = db;
     }
 
-    public void CreateRequest(ContactRequest data)
+    public ContactRequest CreateRequest(ContactRequest data)
     {
         ContactRequest request = new ContactRequest()
         {
@@ -37,5 +37,6 @@ public class ContactRequestService : IContactRequestService
             Origin = data.Origin
         };
         _db.ContactRequests.InsertOne(request);
+        return request;
     }
 }
