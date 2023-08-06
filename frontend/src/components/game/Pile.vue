@@ -12,15 +12,15 @@
       </div>
       <div
         class="pile-card draw-card absolute top-1/2 right-4 h-full transition-all -translate-y-1/2 x-delay-60"
-        :class="{ animating: isAnimating }"
+        :class="{ animating: isAnimating, 'cursor-pointer': isActive }"
         style="max-height: 95%"
         @click="drawCard()"
       >
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
+        <div class="absolute text-2xl -top-6 right-0 md:top-1/2 md:right-3 md:text-3xl -translate-y-1/2 select-none z-10">
+          <p class="tc-main">{{ drawAmount ? `+${drawAmount}` : '' }}</p>
+        </div>
       </div>
-    </div>
-    <div class="absolute top-1/2 right-6 -translate-y-1/2">
-      <p class="tc-main text-lg">{{ drawAmount ? `+${drawAmount}` : '' }}</p>
     </div>
   </div>
 </template>
