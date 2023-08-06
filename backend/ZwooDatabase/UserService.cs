@@ -430,6 +430,7 @@ public class UserService : IUserService
 
     private void ClearAllUserData(ulong id, string username)
     {
+        _db.Users.DeleteOne(u => u.Id == id);
         _db.AccountEvents.DeleteMany(e => e.PlayerID == id);
         var p = _audits.GetProtocol(_audits.GetAuditId(id));
         if (p != null)
