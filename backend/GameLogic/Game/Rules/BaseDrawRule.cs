@@ -59,7 +59,7 @@ internal class BaseDrawRule : BaseRule
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
         events.Add(GameEvent.SendCards(payload.Player, newCards));
 
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.WithEvents(state, events);
     }
 
     // Rule utilities

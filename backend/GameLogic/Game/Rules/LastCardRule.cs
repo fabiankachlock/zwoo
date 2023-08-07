@@ -117,7 +117,7 @@ internal class LastCardRule : BaseDrawRule
             events.Add(GameEvent.SendCards(player, newCards));
         }
 
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.WithEvents(state, events);
     }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)

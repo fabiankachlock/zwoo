@@ -44,7 +44,7 @@ internal class BaseCardRule : BaseRule
             state = PlayPlayerCard(state, payload.Player, payload.Card);
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return new GameStateUpdate(state, events);
+            return GameStateUpdate.WithEvents(state, events);
         }
 
         return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });

@@ -81,7 +81,7 @@ internal class BaseWildCardRule : BaseCardRule
             _optionsMapper.Select(k => ((int)k).ToString()).ToList()
         ));
 
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.WithEvents(state, events);
     }
 
     /// <summary>
@@ -105,7 +105,7 @@ internal class BaseWildCardRule : BaseCardRule
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
             _storedEvent = null;
-            return new GameStateUpdate(state, events);
+            return GameStateUpdate.WithEvents(state, events);
         }
         return GameStateUpdate.None(state);
     }

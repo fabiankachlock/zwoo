@@ -87,7 +87,7 @@ internal class DeckChangeRule : BaseCardRule
             options.Select(k => ((int)k).ToString()).ToList()
         ));
 
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.WithEvents(state, events);
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ internal class DeckChangeRule : BaseCardRule
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.AddRange(swapEvents);
             _storedEvent = null;
-            return new GameStateUpdate(state, events);
+            return GameStateUpdate.WithEvents(state, events);
         }
         return GameStateUpdate.None(state);
     }
