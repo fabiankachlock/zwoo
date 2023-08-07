@@ -104,6 +104,20 @@ export enum ZRPDecisionType {
   PlayerSelector = 2
 }
 
+export enum ZRPFeedbackKind {
+  Individual = 1,
+  Interaction = 2,
+  Unaffected = 3
+}
+
+export enum ZRPFeedbackType {
+  Skipped = 1,
+  DirectionChanged = 2,
+  PlayerHasDrawn = 3,
+  MissedLast = 4,
+  DeckSwapped = 5
+}
+
 export type ZRPPlayerState = 'disconnected' | 'connected';
 
 export enum SettingsType {
@@ -268,6 +282,12 @@ export type ZRPCardListPayload = {
   cards: ZRPCardPayload[];
 };
 
+export type ZRPFeedback = {
+  type: ZRPFeedbackType;
+  kind: ZRPFeedbackKind;
+  args: Record<'target' | 'origin', number>;
+};
+
 export type ZRPStateUpdatePayload = {
   pileTop: {
     type: number;
@@ -275,6 +295,7 @@ export type ZRPStateUpdatePayload = {
   };
   activePlayer: string;
   cardAmounts: Record<string, number>;
+  feedback: ZRPFeedback[];
   currentDrawAmount?: number;
 };
 
