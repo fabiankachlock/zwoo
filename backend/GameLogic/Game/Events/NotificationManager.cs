@@ -1,4 +1,5 @@
 ﻿using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Feedback;
 
 namespace ZwooGameLogic.Game.Events;
 
@@ -16,6 +17,7 @@ public readonly record struct StateUpdateDTO(
     Card PileTop,
     long ActivePlayer,
     Dictionary<long, int> CardAmounts,
+    List<UIFeedback> Feedback,
     int? CurrentDrawAmount
 );
 
