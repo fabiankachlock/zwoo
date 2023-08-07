@@ -20,6 +20,8 @@ export enum ZwooConfigKey {
   ShowCardsDetail = 'cd',
   CardsTheme = 'th',
   UserDefaults = 'ud',
+  FeedbackDisplay = 'fd',
+  FeedbackRange = 'fr',
   DevSettings = 'dev-settings',
   Logging = 'logging',
   _Version = '#v'
@@ -35,6 +37,8 @@ export type ZwooConfig = {
   [ZwooConfigKey.ShowCardsDetail]: boolean;
   [ZwooConfigKey.CardsTheme]: CardThemeIdentifier;
   [ZwooConfigKey.UserDefaults]: string;
+  [ZwooConfigKey.FeedbackDisplay]: string;
+  [ZwooConfigKey.FeedbackRange]: string;
   [ZwooConfigKey.DevSettings]: boolean;
   [ZwooConfigKey.Logging]: string;
   [ZwooConfigKey._Version]: string;
@@ -52,6 +56,8 @@ const DefaultConfig: ZwooConfig = {
     name: '__default__',
     variant: '@auto'
   },
+  fd: 'chat',
+  fr: 'self',
   'dev-settings': false,
   logging: '',
   ud: '',

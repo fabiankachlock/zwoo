@@ -40,7 +40,9 @@
     "contact": "Contact",
     "logout": "Abmelden",
     "localLogs": "Locally saved logs",
-    "clearLogs": "Clear logs"
+    "clearLogs": "Clear logs",
+    "feedbackRange": "Feedback Messages",
+    "feedbackConsumer": "Feedback Visualization"
   },
   "lng": {
     "de": "German",
@@ -444,7 +446,18 @@
     "send": "Send!",
     "thanks": "Your request was sent successfully!",
     "email": "E-Mail",
-    "emailPlaceholder": "Your E-Mail address",
-    "acceptTerms": "TODO [I accept the terms and conditions...]"
+    "emailPlaceholder": "Your E-Mail address"
+  },
+  "feedbackRange": {
+    "option": {
+      "self": "Only mine",
+      "all": "All",
+      "none": "None"
+    }
+  },
+  "feedbackConsumer": {
+    "option": {
+      "chat": "Chat"
+    }
   }
 }

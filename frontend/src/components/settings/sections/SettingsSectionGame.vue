@@ -10,6 +10,12 @@
     >
       <ShowCardDetailSwitch />
     </SettingsRow>
+    <SettingsRow :title="t('settings.feedbackRange')" :settings-key="ZwooConfigKey.FeedbackRange">
+      <SelectFeedbackRange />
+    </SettingsRow>
+    <SettingsRow :title="t('settings.feedbackConsumer')" :settings-key="ZwooConfigKey.FeedbackDisplay">
+      <SelectFeedbackDisplay />
+    </SettingsRow>
     <SettingsRow
       :title="t('settings.sortCards')"
       :settings-key="ZwooConfigKey.SortCards"
@@ -28,6 +34,8 @@ import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
 import SettingsRow from '../common/SettingsRow.vue';
 import SettingsSection from '../common/SettingsSection.vue';
+import SelectFeedbackDisplay from '../SelectFeedbackDisplay.vue';
+import SelectFeedbackRange from '../SelectFeedbackRange.vue';
 import SelectTheme from '../SelectTheme.vue';
 import ShowCardDetailSwitch from '../ShowCardDetailSwitch.vue';
 import SortCardsSwitch from '../SortCardsSwitch.vue';

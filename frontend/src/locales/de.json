@@ -40,7 +40,9 @@
     "contact": "Kontakt",
     "logout": "Abmelden",
     "localLogs": "Lokal gespeicherte Logs",
-    "clearLogs": "Logs zurücksetzen"
+    "clearLogs": "Logs zurücksetzen",
+    "feedbackRange": "Feedback Nachrichten",
+    "feedbackConsumer": "Feedback Darstellung"
   },
   "lng": {
     "de": "Deutsch",
@@ -444,7 +446,18 @@
     "send": "Absenden!",
     "thanks": "Deine Anfrage wurde erfolgreich versendet!",
     "email": "E-Mail",
-    "emailPlaceholder": "Deine E-Mail Adresse",
-    "acceptTerms": "TODO [Hiermit stimme ich der Verarbeitung meiner Personenbezogegenen Daten im Rahmen einer Antwort auf meine Anfrage zu.]"
+    "emailPlaceholder": "Deine E-Mail Adresse"
+  },
+  "feedbackRange": {
+    "option": {
+      "self": "Nur meine",
+      "all": "Alle",
+      "none": "Keine"
+    }
+  },
+  "feedbackConsumer": {
+    "option": {
+      "chat": "Chat"
+    }
   }
 }

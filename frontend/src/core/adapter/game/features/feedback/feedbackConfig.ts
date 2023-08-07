@@ -1,20 +1,59 @@
-import { useConfig } from '@/core/adapter/config';
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
+// import { useGameConfig } from '@/core/adapter/game';
 import { ZRPFeedback } from '@/core/domain/zrp/zrpTypes';
 
 export enum FeedbackConsumerReason {
   Chat = 'chat'
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export enum FeedbackConsumingRange {
+  OnlySelf = 'self',
+  All = 'all',
+  None = 'none'
+}
+
 export const isFeedbackReasonEnabled = (reason: FeedbackConsumerReason) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const config = useConfig();
-  // return config.get()
-  return true;
+  const consumers = getAllowedConsumers(config.get(ZwooConfigKey.FeedbackDisplay));
+  return consumers.includes(reason);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const shouldShowFeedback = (feedback: ZRPFeedback) => {
-  // TODO: implement feedback guards like `onlySelf` or `all`
-  return true;
+  const config = useConfig();
+  // const {  lobbyId } = useGameConfig(); // TODO: implement when lobby id branch is merged
+  const range = getFeedbackRange(config.get(ZwooConfigKey.FeedbackRange));
+  if (range === FeedbackConsumingRange.All) {
+    return true;
+  } else if (range === FeedbackConsumingRange.OnlySelf) {
+    // feedback.args.target === lobbyId || feedback.args.origin === lobbyId
+    return true;
+  }
+  // range === FeedbackConsumingRange.None
+  return false;
 };
+
+export const getAllowedConsumers = (storedConfig: string): FeedbackConsumerReason[] => {
+  const allowed: string[] = Object.values(FeedbackConsumerReason);
+  return storedConfig
+    .split(',')
+    .map(consumer => (allowed.includes(consumer) ? (consumer as FeedbackConsumerReason) : (null as unknown as FeedbackConsumerReason)))
+    .filter(consumer => consumer);
+};
+
+export const getFeedbackRange = (storedConfig: string): FeedbackConsumingRange => {
+  switch (storedConfig) {
+    case FeedbackConsumingRange.All:
+      return FeedbackConsumingRange.All;
+    case FeedbackConsumingRange.OnlySelf:
+      return FeedbackConsumingRange.OnlySelf;
+    case FeedbackConsumingRange.None:
+      return FeedbackConsumingRange.None;
+    default:
+      return FeedbackConsumingRange.OnlySelf;
+  }
+};
+
+export const stringifyFeedbackRange = (range: FeedbackConsumingRange): string => range;
+
+export const stringifyFeedbackConsumer = (consumers: FeedbackConsumerReason[]): string => consumers.join(',');
