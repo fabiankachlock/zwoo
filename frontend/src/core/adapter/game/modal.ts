@@ -73,6 +73,8 @@ export const useGameModal = defineStore('game-modal', () => {
     modalComponent,
     openModal,
     closeSelf,
-    useResponse
+    useResponse,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    __init__: () => {}
   };
 });
