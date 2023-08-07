@@ -39,6 +39,7 @@ export const useGameState = defineStore('game-state', () => {
   const playerManager = usePlayerManager();
   const topCard = ref<Card | CardDescriptor>(CardDescriptor.BackUpright);
   const activePlayerId = ref('');
+  const currentDrawAmount = ref<number | null>(null);
   const players = ref<Omit<GamePlayer, 'isConnected'>[]>([]);
   const dispatchEvent = useGameEventDispatch();
   const auth = useAuth();
@@ -100,6 +101,7 @@ export const useGameState = defineStore('game-state', () => {
       }
     }
     activePlayerId.value = data.activePlayer;
+    currentDrawAmount.value = data.currentDrawAmount ?? null;
     verifyDeck();
   };
 
@@ -145,6 +147,7 @@ export const useGameState = defineStore('game-state', () => {
     activePlayerId.value = '';
     topCard.value = CardDescriptor.BackUpright;
     players.value = [];
+    currentDrawAmount.value = null;
   };
 
   gameWatcher.onMessage(_receiveMessage);
@@ -155,6 +158,7 @@ export const useGameState = defineStore('game-state', () => {
     topCard,
     isActivePlayer,
     activePlayerId: activePlayerId,
+    currentDrawAmount: currentDrawAmount,
     players: computed<GamePlayer[]>(() =>
       players.value.map(p => ({
         ...p,
