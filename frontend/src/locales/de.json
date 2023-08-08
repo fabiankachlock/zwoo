@@ -258,7 +258,7 @@
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
-        "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
+        "name": "Authentifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
       }
     },
