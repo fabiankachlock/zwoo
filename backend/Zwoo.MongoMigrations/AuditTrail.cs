@@ -27,5 +27,16 @@ public class Beta10012AuditTrail : DocumentMigration<AuditTrailDao>
 
     public override void Down(BsonDocument document)
     {
+        foreach (var e in document["events"].AsBsonArray)
+        {
+            if (e["newValue"].BsonType != BsonType.Null && e["newValue"]["_t"] == "Beta11UserDao")
+            {
+                e["newValue"]["_t"] = "UserDao";
+            }
+            if (e["oldValue"].BsonType != BsonType.Null && e["oldValue"]["_t"] == "Beta11UserDao")
+            {
+                e["oldValue"]["_t"] = "UserDao";
+            }
+        }
     }
 }
