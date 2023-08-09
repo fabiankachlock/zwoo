@@ -16,7 +16,8 @@ export const WasmApi: ApiAdapter & GameAdapter = {
     return {
       id: 1,
       isRunning: false,
-      role: ZRPRole.Host
+      role: ZRPRole.Host,
+      ownId: 1
     };
   },
   createConnection() {

@@ -2,7 +2,7 @@ using ZwooGameLogic.ZRP;
 
 namespace ZwooGameLogic.Bots;
 
-public struct BotZRPNotification<T>
+public readonly struct BotZRPNotification<T>
 {
 
     public readonly ZRPCode Code;
@@ -16,18 +16,18 @@ public struct BotZRPNotification<T>
     }
 }
 
-public class BotZRPEvent : IIncomingZRPMessage
+public readonly struct BotZRPEvent : ILocalZRPMessage
 {
 
-    public ZRPCode Code { get; private set; }
+    public readonly ZRPCode Code { get; }
 
-    public object Payload { get; private set; }
+    public readonly object Payload { get; }
 
-    public long UserId { get; private set; }
+    public readonly long LobbyId { get; }
 
     public BotZRPEvent(long botId, ZRPCode code, object payload)
     {
-        UserId = botId;
+        LobbyId = botId;
         Code = code;
         Payload = payload;
     }

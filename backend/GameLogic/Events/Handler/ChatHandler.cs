@@ -1,8 +1,9 @@
 ﻿using ZwooGameLogic.Notifications;
+using ZwooGameLogic.ZRP;
 
-namespace ZwooGameLogic.ZRP.Handlers;
+namespace ZwooGameLogic.Events.Handler;
 
-public class ChatHandler : IEventHandler
+public class ChatHandler : IUserEventHandler
 {
 
     private INotificationAdapter _webSocketManager;
@@ -12,7 +13,7 @@ public class ChatHandler : IEventHandler
         _webSocketManager = websocketManager;
     }
 
-    public bool HandleMessage(UserContext context, IIncomingZRPMessage message)
+    public bool HandleMessage(UserContext context, IIncomingEvent message)
     {
         if (message.Code != ZRPCode.CreateChatMessage)
         {
@@ -22,7 +23,7 @@ public class ChatHandler : IEventHandler
         try
         {
             ChatMessageEvent payload = message.DecodePayload<ChatMessageEvent>();
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SendChatMessage, new ChatMessageNotification(payload.Message, context.Username, context.Role));
+            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SendChatMessage, new ChatMessageNotification(context.LobbyId, payload.Message));
             return false;
         }
         catch (Exception e)

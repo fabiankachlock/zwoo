@@ -17,7 +17,6 @@ export const useAuth = defineStore('auth', {
       isInitialized: false,
       isLoggedIn: false,
       username: '',
-      publicId: '', // TODO: dont hardcode this,
       wins: -1
     };
   },
@@ -35,7 +34,6 @@ export const useAuth = defineStore('auth', {
       if (status.isLoggedIn) {
         this.$patch({
           username: status.username,
-          publicId: `p_${status.username}`,
           isLoggedIn: status.isLoggedIn
         });
         useConfig().login();
@@ -58,7 +56,6 @@ export const useAuth = defineStore('auth', {
       useConfig().logout();
       this.$patch({
         username: '',
-        publicId: '',
         isLoggedIn: status.isLoggedIn,
         wins: -1
       });
@@ -127,7 +124,6 @@ export const useAuth = defineStore('auth', {
 
       this.$patch({
         username: '',
-        publicId: '',
         isLoggedIn: false
       });
     },
@@ -178,7 +174,6 @@ export const useAuth = defineStore('auth', {
       if (response.isLoggedIn) {
         this.$patch({
           username: response.username,
-          publicId: `p_${response.username}`,
           isLoggedIn: response.isLoggedIn,
           wins: response.wins ?? -1,
           isInitialized: true
@@ -211,7 +206,6 @@ export const useAuth = defineStore('auth', {
         this.$patch({
           isInitialized: true,
           isLoggedIn: false,
-          publicId: `p_${username}`,
           username: username,
           wins: 0
         });

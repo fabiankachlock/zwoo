@@ -8,10 +8,10 @@
       v-for="message in messages"
       :key="message.id"
       :message="message.message"
-      :is-own="message.sender.id === auth.username"
+      :is-own="message.sender.id === lobbyId"
       :is-spectator="message.sender.role === ZRPRole.Spectator"
       :is-host="message.sender.role === ZRPRole.Host"
-      :name="message.sender.id"
+      :name="message.sender.name"
     />
   </div>
 </template>
@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 
-import { useAuth } from '@/core/adapter/auth';
+import { useGameConfig } from '@/core/adapter/game';
 import { useChatStore } from '@/core/adapter/game/chat';
 import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
@@ -27,7 +27,8 @@ import ChatMessage from './ChatMessage.vue';
 
 const chat = useChatStore();
 const messages = computed(() => chat.allMessages);
-const auth = useAuth();
+const gameConfig = useGameConfig();
+const lobbyId = computed(() => gameConfig.lobbyId);
 const container = ref<HTMLDivElement | undefined>(undefined);
 
 watch(messages, () => {
