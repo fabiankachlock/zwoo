@@ -147,12 +147,12 @@ public class LobbyHandler : IUserEventHandler
 
             if (player != null && player.Role == ZRPRole.Spectator)
             {
-                _webSocketManager.DisconnectPlayer(player.RealId);
+                _webSocketManager.DisconnectPlayer(player.LobbyId);
                 _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.LobbyId));
             }
             else if (player != null)
             {
-                _webSocketManager.DisconnectPlayer(player.RealId);
+                _webSocketManager.DisconnectPlayer(player.LobbyId);
                 _webSocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.LobbyId));
             }
         }
