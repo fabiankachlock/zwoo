@@ -127,4 +127,29 @@ internal abstract class BaseRule
         state.CurrentPlayer = nextPlayer;
         return (state, events);
     }
+
+    /// <summary>
+    /// get the draw amount of a card
+    /// </summary>
+    /// <param name="card">card</param>
+    /// <returns>the amount of card a player should draw</returns>
+    protected int GetDrawAmount(Card card)
+    {
+        if (card.Type == CardType.DrawTwo) return 2;
+        else if (card.Type == CardType.WildFour) return 4;
+        else return 0;
+    }
+
+    /// <summary>
+    /// get the draw amount of a card
+    /// </summary>
+    /// <param name="card">card</param>
+    /// <returns>the amount of card a player should draw</returns>
+    protected int? GetActiveDrawAmount(StackCard card)
+    {
+        if (card.EventActivated) return null;
+        else if (card.Card.Type == CardType.DrawTwo) return 2;
+        else if (card.Card.Type == CardType.WildFour) return 4;
+        return null;
+    }
 }

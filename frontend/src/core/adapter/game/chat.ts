@@ -4,14 +4,16 @@ import { computed, ref } from 'vue';
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { ZRPMessage, ZRPOPCode, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 
+import { usePlayerManager } from './playerManager';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type ChatMessage = {
   id: number;
   message: string;
   sender: {
-    id: string;
+    id: number;
     role: ZRPRole;
+    name: string;
   };
 };
 
@@ -21,6 +23,7 @@ export const useChatStore = defineStore('game-chat', () => {
   const messages = ref<ChatMessage[]>([]);
   const lastMessage = ref<ChatMessage | undefined>(undefined);
   const muted = ref<Record<string, boolean>>({});
+  const playerManager = usePlayerManager();
   const sendEvent = useGameEventDispatch();
 
   const sendChatMessage = (msg: string, self = true) => {
@@ -48,8 +51,9 @@ export const useChatStore = defineStore('game-chat', () => {
   const _receiveMessage = (msg: ZRPMessage<ZRPOPCode.ReceiveMessage>) => {
     if (msg.code === ZRPOPCode.ReceiveMessage) {
       pushMessage(msg.data.message, {
-        id: msg.data.username,
-        role: msg.data.role
+        id: msg.data.id,
+        role: playerManager.getPlayerRole(msg.data.id),
+        name: playerManager.getPlayerName(msg.data.id)
       });
     }
   };

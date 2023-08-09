@@ -100,11 +100,11 @@ const fakeBots = computed(() =>
 const botDialogOpen = ref(false);
 const isBotUpdate = ref(false);
 const botName = ref('');
-const botId = ref('');
+const botId = ref<number | undefined>(undefined);
 
 const createBot = () => {
   botName.value = '';
-  botId.value = '';
+  botId.value = undefined;
   botDialogOpen.value = true;
   isBotUpdate.value = false;
 };
@@ -118,12 +118,12 @@ const createBot = () => {
 //   isBotUpdate.value = true;
 // };
 
-const deleteBot = (id: string) => {
+const deleteBot = (id: number) => {
   botManager.deleteBot(id);
 };
 
 const submitBot = () => {
-  if (isBotUpdate.value) {
+  if (isBotUpdate.value && botId.value) {
     botManager.updateBot(botId.value, {
       type: 1
     });
@@ -134,6 +134,6 @@ const submitBot = () => {
   }
   botDialogOpen.value = false;
   botName.value = '';
-  botId.value = '';
+  botId.value = undefined;
 };
 </script>

@@ -9,17 +9,12 @@ public class GameEventTranslator : IGameEventManager
 {
 
     private INotificationAdapter _wsAdapter;
-    private ZwooRoom? _game;
+    private ZwooRoom _game;
 
 
-    public GameEventTranslator(INotificationAdapter wsAdapter, ZwooRoom? game = null)
+    public GameEventTranslator(ZwooRoom game, INotificationAdapter wsAdapter)
     {
         _wsAdapter = wsAdapter;
-        _game = game;
-    }
-
-    public void SetGame(ZwooRoom game)
-    {
         _game = game;
     }
 
@@ -43,9 +38,7 @@ public class GameEventTranslator : IGameEventManager
 
     public void GetPlayerDecision(ZwooGameLogic.Game.Events.PlayerDecisionDTO data)
     {
-        // TODO: switch game id handling to new system
-        var options = data.Decision == PlayerDecision.SelectPlayer ? data.Options.Select(id => _game?.GetPlayer(Convert.ToInt64(id))?.PublicId ?? "").ToList() : data.Options;
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision, options));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.GetPlayerDecision, new GetPlayerDecisionNotification((int)data.Decision, data.Options));
     }
 
     public void PlayerWon(GamePlayerWonDTO data, GameMeta gameMeta)
@@ -55,11 +48,9 @@ public class GameEventTranslator : IGameEventManager
             _game!.Id,
             ZRPCode.PlayerWon,
             new PlayerWonNotification(
-                _game.GetPlayer(data.Winner)?.PublicId ?? "",
-                _game.ResolvePlayerName(data.Winner) ?? "",
+                data.Winner,
                 data.Scores.Select(score => new PlayerWon_PlayerSummaryDTO(
-                    _game.GetPlayer(score.Key)?.PublicId ?? "",
-                    _game.ResolvePlayerName(score.Key),
+                    score.Key,
                     data.Scores.Where(s => s.Value < score.Value).Count() + 1, score.Value
                 )).OrderBy(s => s.Position).ToArray()
             )
@@ -89,8 +80,8 @@ public class GameEventTranslator : IGameEventManager
             ZRPCode.StateUpdated,
             new ZRP.StateUpdateNotification(
                 new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type),
-                _game.GetPlayer(data.ActivePlayer)?.PublicId ?? "",
-                data.CardAmounts.Select(kv => KeyValuePair.Create(_game.GetPlayer(kv.Key)?.PublicId ?? "", kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value),
+                data.ActivePlayer,
+                data.CardAmounts,
                 data.Feedback.Select(f => new StateUpdate_FeedbackDTO(f.Type, f.Kind, f.Args)).ToList(),
                 data.CurrentDrawAmount
             )

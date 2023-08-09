@@ -11,7 +11,7 @@ export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> 
 
 export type ZRPPayload<T extends ZRPOPCode> = ZRPPayloadMap[T];
 
-export const ZRP_VERSION = '3.3.0';
+export const ZRP_VERSION = '4.0.0';
 
 export enum ZRPOPCode {
   // General
@@ -127,7 +127,7 @@ export enum SettingsType {
 
 export type ZRPPayloadMap = {
   // General
-  [ZRPOPCode.PlayerJoined]: ZRPNamePayload;
+  [ZRPOPCode.PlayerJoined]: ZRPPlayerJoinedPayload;
   [ZRPOPCode.SpectatorJoined]: ZRPNamePayload;
   [ZRPOPCode.PlayerLeft]: ZRPIdPayload;
   [ZRPOPCode.SpectatorLeft]: ZRPIdPayload;
@@ -145,7 +145,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.PromotedToHost]: Record<string, never>;
   [ZRPOPCode.NewHost]: ZRPIdPayload;
   [ZRPOPCode.KickPlayer]: ZRPIdPayload;
-  [ZRPOPCode.PlayerChangedRole]: ZRPPlayerWithRolePayload;
+  [ZRPOPCode.PlayerChangedRole]: ZRPPlayerChangedRolePayload;
   [ZRPOPCode.PlayerDisconnected]: ZRPIdPayload;
   [ZRPOPCode.PlayerReconnected]: ZRPIdPayload;
   // Keep alive
@@ -159,14 +159,14 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.StartGame]: Record<string, never>;
   // Bots
   [ZRPOPCode.CreateBot]: ZRPCreateBotPayload;
-  [ZRPOPCode.BotJoined]: ZRPNamePayload;
+  [ZRPOPCode.BotJoined]: Omit<ZRPPlayerJoinedPayload, 'isBot'>;
   [ZRPOPCode.BotLeft]: ZRPIdPayload;
   [ZRPOPCode.UpdateBot]: ZRPUpdateBotPayload;
   [ZRPOPCode.DeleteBot]: ZRPIdPayload;
   [ZRPOPCode.GetBots]: Record<string, never>;
   [ZRPOPCode.ListBots]: ZRPListBotsPayload;
   // Game
-  [ZRPOPCode.GameStarted]: Record<string, never>;
+  [ZRPOPCode.GameStarted]: ZRPGameStartedPayload;
   [ZRPOPCode.StartTurn]: Record<string, never>;
   [ZRPOPCode.EndTurn]: Record<string, never>;
   [ZRPOPCode.RequestEndTurn]: Record<string, never>;
@@ -204,32 +204,37 @@ export type ZRPPayloadMap = {
 };
 
 export type ZRPIdPayload = {
-  id: string;
+  id: number;
 };
 
 export type ZRPNamePayload = ZRPIdPayload & {
   username: string;
 };
 
-export type ZRPPlayerWithRolePayload = ZRPIdPayload & {
+export type ZRPPlayerJoinedPayload = ZRPIdPayload &
+  ZRPNamePayload & {
+    wins: number;
+    isBot: boolean;
+  };
+
+export type ZRPPlayerChangedRolePayload = ZRPIdPayload & {
   role: ZRPRole;
+  wins: number;
 };
 
 export type ZRPSendChatMessagePayload = {
   message: string;
 };
 
-export type ZRPChatMessagePayload = ZRPSendChatMessagePayload & {
-  username: string;
-  role: ZRPRole;
-};
+export type ZRPChatMessagePayload = ZRPSendChatMessagePayload & ZRPIdPayload;
 
 export type ZRPAllLobbyPlayersPayload = {
   players: {
-    id: string;
+    id: number;
     username: string;
     role: ZRPRole;
     state: ZRPPlayerState;
+    wins: number;
   }[];
 };
 
@@ -261,17 +266,23 @@ export type ZRPCreateBotPayload = {
 };
 
 export type ZRPUpdateBotPayload = {
-  id: string;
+  id: number;
   config: ZRPBotConfig;
 };
 
 export type ZRPListBotsPayload = {
   bots: {
-    id: string;
+    id: number;
     username: string;
     config: ZRPBotConfig;
+    wins: number;
   }[];
 };
+
+export type ZRPGameStartedPayload = ZRPDeckPayload &
+  ZRPPlayerCardAmountPayload & {
+    pile: ZRPCardPayload;
+  };
 
 export type ZRPCardPayload = {
   type: number;
@@ -293,8 +304,8 @@ export type ZRPStateUpdatePayload = {
     type: number;
     symbol: number;
   };
-  activePlayer: string;
-  cardAmounts: Record<string, number>;
+  activePlayer: number;
+  cardAmounts: Record<number, number>;
   feedback: ZRPFeedback[];
   currentDrawAmount?: number;
 };
@@ -308,7 +319,7 @@ export type ZRPDeckPayload = {
 
 export type ZRPPlayerCardAmountPayload = {
   players: {
-    id: string;
+    id: number;
     username: string;
     cards: number;
     order: number;
@@ -327,11 +338,9 @@ export type ZRPDecisionResponsePayload = {
 };
 
 export type ZRPGameWinnerPayload = {
-  id: string;
-  username: string;
+  id: number;
   summary: {
-    id: string;
-    username: string;
+    id: number;
     position: number;
     score: number;
   }[];

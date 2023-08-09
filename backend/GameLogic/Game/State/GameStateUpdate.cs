@@ -5,6 +5,7 @@ namespace ZwooGameLogic.Game.State;
 
 internal struct GameStateUpdate
 {
+
     public GameState NewState;
     public List<GameEvent> Events;
     public List<UIFeedback> Feedback;

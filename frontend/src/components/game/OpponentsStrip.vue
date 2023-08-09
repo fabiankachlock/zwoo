@@ -11,6 +11,7 @@
         :is-active="player.id === activePlayer"
         :is-muted="mutedState[player.name]"
         :is-connected="player.isConnected"
+        :is-bot="isBot(player.id)"
       />
     </div>
   </div>
@@ -19,20 +20,26 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useAuth } from '@/core/adapter/auth';
+import { useGameConfig } from '@/core/adapter/game';
 import { useChatStore } from '@/core/adapter/game/chat';
 import { useGameState } from '@/core/adapter/game/gameState';
+import { usePlayerManager } from '@/core/adapter/game/playerManager';
 
 import Opponent from './Opponent.vue';
 
+const playerManager = usePlayerManager();
+const gameConfig = useGameConfig();
 const game = useGameState();
 const chat = useChatStore();
-const auth = useAuth();
 
 const players = computed(() => game.players);
 const activePlayer = computed(() => game.activePlayerId);
 const mutedState = computed(() => chat.muted);
-const self = computed(() => auth.publicId);
+const self = computed(() => gameConfig.lobbyId);
+
+const isBot = (id: number) => {
+  return playerManager.bots.some(b => b.id == id);
+};
 </script>
 
 <style scoped>

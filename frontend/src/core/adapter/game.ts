@@ -29,6 +29,7 @@ export const useGameConfig = defineStore('game-config', {
     gameId: undefined as number | undefined,
     name: '',
     role: undefined as ZRPRole | undefined,
+    lobbyId: undefined as number | undefined,
     inActiveGame: false,
     _connection: undefined as ZRPWebsocketAdapter | undefined,
     _wakeLock: () => {
@@ -59,6 +60,7 @@ export const useGameConfig = defineStore('game-config', {
           inActiveGame: true,
           role: game.role,
           gameId: game.id,
+          lobbyId: game.ownId,
           name: name
         });
         this.connect();
@@ -80,6 +82,7 @@ export const useGameConfig = defineStore('game-config', {
         this.$patch({
           inActiveGame: true,
           role: game.role,
+          lobbyId: game.ownId,
           gameId: game.id,
           name: data?.name ?? 'error'
         });
@@ -157,7 +160,16 @@ export const useGameConfig = defineStore('game-config', {
         });
 
         if (isRunning) {
-          events.pushEvent(ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {}));
+          events.pushEvent(
+            ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {
+              hand: [],
+              pile: {
+                symbol: 0,
+                type: 0
+              },
+              players: []
+            })
+          );
         }
       }, 0);
     },

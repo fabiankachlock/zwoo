@@ -19,7 +19,7 @@ internal class ReverseCardRule : BaseCardRule
 
     public override string Name
     {
-        get => "BaseCardRule";
+        get => "ReverseCardRule";
     }
 
     public ReverseCardRule() : base() { }

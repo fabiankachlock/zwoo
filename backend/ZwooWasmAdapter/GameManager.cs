@@ -79,7 +79,7 @@ public partial class GameManager
             if (code != null)
             {
                 LocalEvent zrpMessage = new LocalEvent(code.Value, msg);
-                Instance._activeGame.DistributeEvent(zrpMessage);
+                Instance._activeGame.EventDistributer.DistributeEvent(zrpMessage);
             }
             else
             {

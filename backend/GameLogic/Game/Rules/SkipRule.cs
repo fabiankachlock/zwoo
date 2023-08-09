@@ -19,7 +19,7 @@ internal class SkipCardRule : BaseCardRule
 
     public override string Name
     {
-        get => "BaseCardRule";
+        get => "SkipCardRule";
     }
 
     public SkipCardRule() : base() { }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using ZwooBackend.Websockets;
 using ZwooBackend.Games;
 using System.Net.WebSockets;
-using System.Text;
 using ZwooGameLogic;
 using ZwooGameLogic.Lobby;
 using ZwooDatabase;
@@ -114,6 +113,6 @@ public class WebSocketController : Controller
 
         _logger.Info($"[{user.Id}] disconnect");
         await game.PlayerManager.DisconnectPlayer((long)user.Id);
-        return Ok("connection ended");
+        return new EmptyResult();
     }
 }

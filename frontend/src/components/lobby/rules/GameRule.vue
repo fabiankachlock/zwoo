@@ -5,7 +5,7 @@
     @click="toggleOpenState"
   >
     <div class="flex flex-row flex-nowrap justify-between items-center">
-      <p class="text-lg tc-main-dark">{{ t(translatedTitle) }}</p>
+      <p class="text-lg tc-main-dark">{{ translatedTitle }}</p>
       <div>
         <slot></slot>
       </div>
@@ -14,7 +14,7 @@
       <div class="divider w-full my-2 bc-invert-darkest border-b"></div>
       <div class="content">
         <p class="text-sm italic tc-main-secondary">
-          {{ t(translatedDescription) }}
+          {{ translatedDescription }}
         </p>
       </div>
     </div>

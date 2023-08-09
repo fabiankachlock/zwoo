@@ -111,7 +111,7 @@ public class GameLogicService : IGameLogicService
 
     public void DistributeEvent(long gameId, IIncomingZRPMessage msg)
     {
-        _gameManager.GetGame(gameId)?.DistributeEvent(msg);
+        _gameManager.GetGame(gameId)?.EventDistributer.DistributeEvent(msg);
     }
 
 }
