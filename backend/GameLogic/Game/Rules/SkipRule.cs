@@ -19,7 +19,7 @@ internal class SkipCardRule : BaseCardRule
 
     public override string Name
     {
-        get => "BaseCardRule";
+        get => "SkipCardRule";
     }
 
     public SkipCardRule() : base() { }
@@ -42,7 +42,7 @@ internal class SkipCardRule : BaseCardRule
             state = PlayPlayerCard(state, payload.Player, payload.Card);
             (state, events) = ChangeActivePlayerByAmount(state, playerOrder, 2);
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return new GameStateUpdate(state, events);
+            return GameStateUpdate.WithEvents(state, events);
         }
 
         return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });

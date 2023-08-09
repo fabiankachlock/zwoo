@@ -68,7 +68,8 @@ public sealed class GameStateManager
             currentPlayer: _playerCycle.ActivePlayer,
             topCard: new StackCard(DrawSaveCard()),
             cardStack: new List<StackCard>(),
-            playerDecks: GeneratePlayerDecks(_playerManager.Players)
+            playerDecks: GeneratePlayerDecks(_playerManager.Players),
+            ui: new UiHints()
         );
     }
 
@@ -208,10 +209,9 @@ public sealed class GameStateManager
                 .Where(kv => _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count)
                 .Select(kv => KeyValuePair.Create(kv.Key, kv.Value.Count))
                 .ToDictionary(kv => kv.Key, kv => kv.Value),
-            currentDrawAmount: stateUpdate.OverrideStateUpdate?.CurrentDrawAmount
+            currentDrawAmount: stateUpdate.NewState.Ui.CurrentDrawAmount
          );
         _gameState = stateUpdate.NewState;
-
 
         GameEvent? isFinishedEvent = IsGameFinished(_gameState);
         if (isFinishedEvent.HasValue)

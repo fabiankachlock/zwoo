@@ -57,23 +57,13 @@ internal class BaseDrawRule : BaseRule
         List<Card> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+        state.Ui.CurrentDrawAmount = null;
         events.Add(GameEvent.SendCards(payload.Player, newCards));
 
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.WithEvents(state, events);
     }
 
     // Rule utilities
-    /// <summary>
-    /// get the draw amount of a card
-    /// </summary>
-    /// <param name="card">card</param>
-    /// <returns>the amount of card a player should draw</returns>
-    protected int GetDrawAmount(Card card)
-    {
-        if (card.Type == CardType.DrawTwo) return 2;
-        else if (card.Type == CardType.WildFour) return 4;
-        else return 0;
-    }
 
     /// <summary>
     /// draw a certain amount of cards for a player
