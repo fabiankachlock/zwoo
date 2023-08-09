@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
 
@@ -45,7 +40,7 @@ internal class BaseCardRule : BaseRule
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
             state.Ui.CurrentDrawAmount = GetActiveDrawAmount(state.TopCard);
-            return GameStateUpdate.WithEvents(state, events);
+            return GameStateUpdate.New(state, events, new List<UIFeedback>() { UIFeedback.Individual(UIFeedbackType.Skipped, payload.Player) });
         }
 
         return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });

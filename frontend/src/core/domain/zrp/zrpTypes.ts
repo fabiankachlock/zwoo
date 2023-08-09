@@ -93,6 +93,7 @@ export enum ZRPOPCode {
 }
 
 export enum ZRPRole {
+  _System = -1,
   Host = 1,
   Player = 2,
   Spectator = 3,

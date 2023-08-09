@@ -143,6 +143,7 @@ export const useGameConfig = defineStore('game-config', {
         (await import('./game/feedback')).useGameFeedback().__init__();
         (await import('./game/util/keepAlive')).useKeepAlive().__init__();
         (await import('./game/features/chatBroadcast')).useChatBroadcast().__init__();
+        (await import('./game/features/feedback/consumer/feedbackChatAdapter')).useFeedbackChatAdapter().__init__();
         initializedGameModules = true;
       }
     },

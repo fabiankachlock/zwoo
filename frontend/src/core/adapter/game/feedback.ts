@@ -17,6 +17,7 @@ export const useGameFeedback = defineStore('game-feedback', () => {
   });
 
   const iterate = (feedback: ZRPFeedback[]) => {
+    if (feedback.length === 0) return;
     nextTick(() => {
       lastFeedback.value = feedback.shift();
       iterate(feedback);

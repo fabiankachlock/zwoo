@@ -17,6 +17,7 @@
               :is-own="messageItem.sender.id === lobbyId"
               :is-spectator="messageItem.sender.role === ZRPRole.Spectator"
               :is-host="messageItem.sender.role === ZRPRole.Host"
+              :is-system="messageItem.sender.role === ZRPRole._System"
               :name="messageItem.sender.name"
             />
           </div>
