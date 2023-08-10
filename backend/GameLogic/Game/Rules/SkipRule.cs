@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Feedback;
 
 namespace ZwooGameLogic.Game.Rules;
 
@@ -42,10 +37,10 @@ internal class SkipCardRule : BaseCardRule
             state = PlayPlayerCard(state, payload.Player, payload.Card);
             (state, events) = ChangeActivePlayerByAmount(state, playerOrder, 2);
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return GameStateUpdate.WithEvents(state, events);
+            return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.Skipped, payload.Player));
         }
 
-        return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+        return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
     }
 
     // Rule utilities

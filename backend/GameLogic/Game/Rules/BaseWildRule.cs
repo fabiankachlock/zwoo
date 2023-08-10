@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
 
@@ -57,7 +52,7 @@ internal class BaseWildCardRule : BaseCardRule
             }
             else
             {
-                return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+                return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
             }
         }
         return PerformHandleDecission(gameEvent, state, playerOrder);
