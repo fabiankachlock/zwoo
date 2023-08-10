@@ -4,6 +4,11 @@ using ZwooGameLogic.Game.Feedback;
 
 namespace ZwooGameLogic.ZRP;
 
+public static class Version
+{
+    public static readonly string CURRENT = "4.1.0";
+}
+
 /// <summary>
 /// ZRPCode: 100 
 /// </summary>

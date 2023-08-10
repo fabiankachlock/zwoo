@@ -30,4 +30,10 @@ public struct UIFeedback
     {
         return new UIFeedback(type, UIFeedbackKind.Unaffected, new Dictionary<string, long>());
     }
+
+    public UIFeedback WithArg(string argKey, long value)
+    {
+        Args[argKey] = value;
+        return this;
+    }
 }

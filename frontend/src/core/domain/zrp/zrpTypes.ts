@@ -11,7 +11,7 @@ export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> 
 
 export type ZRPPayload<T extends ZRPOPCode> = ZRPPayloadMap[T];
 
-export const ZRP_VERSION = '4.0.0';
+export const ZRP_VERSION = '4.1.0';
 
 export enum ZRPOPCode {
   // General
@@ -297,7 +297,7 @@ export type ZRPCardListPayload = {
 export type ZRPFeedback = {
   type: ZRPFeedbackType;
   kind: ZRPFeedbackKind;
-  args: Record<'target' | 'origin', number>;
+  args: Record<string, number>;
 };
 
 export type ZRPStateUpdatePayload = {
