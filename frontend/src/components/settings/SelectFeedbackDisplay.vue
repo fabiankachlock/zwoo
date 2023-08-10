@@ -9,7 +9,7 @@
       :value="selectedConsumer"
       class="bg-light p-1 rounded tc-main-dark"
     >
-      <option v-for="opt in availableConsumer" :key="opt" :value="opt">{{ t('feedbackConsumer.option.' + opt) }}</option>
+      <option v-for="opt in availableConsumer" :key="opt" :value="opt">{{ t('feedback.consumer.option.' + opt) }}</option>
     </select>
   </div>
 </template>

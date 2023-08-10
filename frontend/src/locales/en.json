@@ -448,16 +448,25 @@
     "email": "E-Mail",
     "emailPlaceholder": "Your E-Mail address"
   },
-  "feedbackRange": {
-    "option": {
-      "self": "Only mine",
-      "all": "All",
-      "none": "None"
-    }
-  },
-  "feedbackConsumer": {
-    "option": {
-      "chat": "Chat"
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Only mine",
+        "all": "All",
+        "none": "None"
+      }
+    },
+    "consumer": {
+      "option": {
+        "chat": "Chat"
+      }
+    },
+    "chat": {
+      "1": "{target} was skipped",
+      "2": "direction changed!",
+      "3": "{target} had to draw {amount} Card(s)",
+      "4": "{target} forgot to end its turn",
+      "5": "{target} and {origin} swapped cards"
     }
   }
 }

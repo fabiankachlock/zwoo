@@ -2,11 +2,11 @@
   <div :class="{ 'justify-end': isOwn, 'justify-center': isSystem }" class="flex justify-start w-full my-0.5 max-w-full relative">
     <p
       :class="{
-        'w-full rounded-none  text-center mb-0 border-transparent bg-darkest': isSystem,
+        'w-full rounded-none  text-center mb-0 border-transparent bg-transparent italic text-xs tc-main-secondary': isSystem,
         'rounded-bl-none border-transparent mb-3': !isOwn && !isSystem,
         'rounded-br-none bc-primary': isOwn,
         'bc-secondary': isHost,
-        'bg-dark tc-main-secondary': isSpectator || isSystem,
+        'bg-dark tc-main-secondary': isSpectator,
         'bg-main tc-main-light': !isSpectator && !isSystem
       }"
       class="px-2 py-0.5 rounded-2xl border break-all"

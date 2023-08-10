@@ -9,7 +9,7 @@
       :value="selectedRange"
       class="bg-light p-1 rounded tc-main-dark"
     >
-      <option v-for="opt in availableRanges" :key="opt" :value="opt">{{ t('feedbackRange.option.' + opt) }}</option>
+      <option v-for="opt in availableRanges" :key="opt" :value="opt">{{ t('feedback.range.option.' + opt) }}</option>
     </select>
   </div>
 </template>

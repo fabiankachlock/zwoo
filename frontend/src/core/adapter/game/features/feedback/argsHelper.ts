@@ -19,19 +19,12 @@ export const resolveFeedbackArgs = <stringify extends boolean>(
   const keys = getFeedbackArgsKeysForKind(feedback.kind);
   const extraKeys = Object.keys(feedback.args).filter(key => !keys.includes(key));
 
-  const targetArgs: Record<string, number> = keys.reduce(
-    (args, currentKey) => ({
-      ...args,
-      [currentKey]: feedback.args[currentKey]
-    }),
-    {}
-  );
-
   const resolvedArgs: Record<string, string | number> = {};
-  for (const key in targetArgs) {
+  for (const key of keys) {
     resolvedArgs[key] = resolveName(feedback.args[key]);
   }
-  for (const key in extraKeys) {
+
+  for (const key of extraKeys) {
     if (stringifyAll) {
       resolvedArgs[key] = feedback.args[key].toString();
     } else {

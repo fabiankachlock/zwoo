@@ -448,16 +448,25 @@
     "email": "E-Mail",
     "emailPlaceholder": "Deine E-Mail Adresse"
   },
-  "feedbackRange": {
-    "option": {
-      "self": "Nur meine",
-      "all": "Alle",
-      "none": "Keine"
-    }
-  },
-  "feedbackConsumer": {
-    "option": {
-      "chat": "Chat"
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Nur meine",
+        "all": "Alle",
+        "none": "Keine"
+      }
+    },
+    "consumer": {
+      "option": {
+        "chat": "Chat"
+      }
+    },
+    "chat": {
+      "1": "{target} musste aussetzen",
+      "2": "Richtungswechsel!",
+      "3": "{target} musste {amount} Karte(n) ziehen",
+      "4": "{target} hat vergessen seinen Zug zu beenden",
+      "5": "{target} und {origin} haben Karten getauscht"
     }
   }
 }
