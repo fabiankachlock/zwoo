@@ -26,7 +26,7 @@ const config = useConfig();
 const selection = ref<HTMLSelectElement>();
 const availableRanges = Object.values(FeedbackConsumingRange);
 const selectedRange = computed(() => {
-  const raw = config.get(ZwooConfigKey.FeedbackDisplay);
+  const raw = config.get(ZwooConfigKey.FeedbackRange);
   return getFeedbackRange(raw);
 });
 

@@ -1,4 +1,5 @@
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
+import { useGameConfig } from '@/core/adapter/game';
 // import { useGameConfig } from '@/core/adapter/game';
 import { ZRPFeedback } from '@/core/domain/zrp/zrpTypes';
 
@@ -18,16 +19,15 @@ export const isFeedbackReasonEnabled = (reason: FeedbackConsumerReason) => {
   return consumers.includes(reason);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const shouldShowFeedback = (feedback: ZRPFeedback) => {
   const config = useConfig();
-  // const {  lobbyId } = useGameConfig(); // TODO: implement when lobby id branch is merged
+  const { lobbyId } = useGameConfig();
+
   const range = getFeedbackRange(config.get(ZwooConfigKey.FeedbackRange));
   if (range === FeedbackConsumingRange.All) {
     return true;
   } else if (range === FeedbackConsumingRange.OnlySelf) {
-    // feedback.args.target === lobbyId || feedback.args.origin === lobbyId
-    return true;
+    return feedback.args.target === lobbyId || feedback.args.origin === lobbyId;
   }
   // range === FeedbackConsumingRange.None
   return false;
