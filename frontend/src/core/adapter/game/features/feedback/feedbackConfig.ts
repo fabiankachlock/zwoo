@@ -4,26 +4,33 @@ import { useGameConfig } from '@/core/adapter/game';
 import { ZRPFeedback } from '@/core/domain/zrp/zrpTypes';
 
 export enum FeedbackConsumerReason {
-  Chat = 'chat'
+  Chat = 'chat',
+  Snackbar = 'snackbar'
 }
 
 export enum FeedbackConsumingRange {
-  OnlySelf = 'self',
   All = 'all',
+  OnlySelf = 'self',
   None = 'none'
 }
 
-export const isFeedbackReasonEnabled = (reason: FeedbackConsumerReason) => {
-  const config = useConfig();
-  const consumers = getAllowedConsumers(config.get(ZwooConfigKey.FeedbackDisplay));
-  return consumers.includes(reason);
+export const getConfigKeyForFeedbackReason = (reason: FeedbackConsumerReason): ZwooConfigKey => {
+  switch (reason) {
+    case FeedbackConsumerReason.Chat:
+      return ZwooConfigKey.FeedbackChat;
+    case FeedbackConsumerReason.Snackbar:
+      return ZwooConfigKey.FeedbackSnackbar;
+  }
 };
 
-export const shouldShowFeedback = (feedback: ZRPFeedback) => {
-  const config = useConfig();
+export const shouldShowFeedback = (feedback: ZRPFeedback, reason: FeedbackConsumerReason) => {
+  const configKey = getConfigKeyForFeedbackReason(reason);
+  if (!configKey) return false;
+
+  const config = useConfig().get(configKey);
   const { lobbyId } = useGameConfig();
 
-  const range = getFeedbackRange(config.get(ZwooConfigKey.FeedbackRange));
+  const range = getFeedbackRange(config as FeedbackConsumingRange);
   if (range === FeedbackConsumingRange.All) {
     return true;
   } else if (range === FeedbackConsumingRange.OnlySelf) {
@@ -33,15 +40,7 @@ export const shouldShowFeedback = (feedback: ZRPFeedback) => {
   return false;
 };
 
-export const getAllowedConsumers = (storedConfig: string): FeedbackConsumerReason[] => {
-  const allowed: string[] = Object.values(FeedbackConsumerReason);
-  return storedConfig
-    .split(',')
-    .map(consumer => (allowed.includes(consumer) ? (consumer as FeedbackConsumerReason) : (null as unknown as FeedbackConsumerReason)))
-    .filter(consumer => consumer);
-};
-
-export const getFeedbackRange = (storedConfig: string): FeedbackConsumingRange => {
+export const getFeedbackRange = (storedConfig: string | undefined): FeedbackConsumingRange => {
   switch (storedConfig) {
     case FeedbackConsumingRange.All:
       return FeedbackConsumingRange.All;

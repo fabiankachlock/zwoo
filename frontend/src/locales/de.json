@@ -41,8 +41,8 @@
     "logout": "Abmelden",
     "localLogs": "Lokal gespeicherte Logs",
     "clearLogs": "Logs zurücksetzen",
-    "feedbackRange": "Feedback Nachrichten",
-    "feedbackConsumer": "Feedback Darstellung"
+    "feedbackChat": "Feedback Nachrichten im Chat",
+    "feedbackSnackbar": "Feedback Mitteilungen"
   },
   "lng": {
     "de": "Deutsch",
@@ -457,9 +457,8 @@
       }
     },
     "consumer": {
-      "option": {
-        "chat": "Chat"
-      }
+      "chat": "Chat",
+      "snackbar": "Mitteilungen"
     },
     "chat": {
       "1": "{target} musste aussetzen",

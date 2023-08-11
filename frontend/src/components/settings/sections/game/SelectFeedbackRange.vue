@@ -15,19 +15,32 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-import { FeedbackConsumingRange, getFeedbackRange, stringifyFeedbackRange } from '@/core/adapter/game/features/feedback/feedbackConfig';
+import { useConfig } from '@/core/adapter/config';
+import {
+  FeedbackConsumerReason,
+  FeedbackConsumingRange,
+  getConfigKeyForFeedbackReason,
+  getFeedbackRange,
+  stringifyFeedbackRange
+} from '@/core/adapter/game/features/feedback/feedbackConfig';
+
+const props = defineProps<{
+  reason: FeedbackConsumerReason;
+}>();
+
+const { reason } = toRefs(props);
 
 const { t } = useI18n();
 const config = useConfig();
 const selection = ref<HTMLSelectElement>();
 const availableRanges = Object.values(FeedbackConsumingRange);
+const configKey = computed(() => getConfigKeyForFeedbackReason(reason.value));
 const selectedRange = computed(() => {
-  const raw = config.get(ZwooConfigKey.FeedbackRange);
-  return getFeedbackRange(raw);
+  const raw = config.get(configKey.value);
+  return getFeedbackRange(raw as string);
 });
 
 onMounted(() => {
@@ -36,7 +49,7 @@ onMounted(() => {
     if (!range) {
       return;
     }
-    config.set(ZwooConfigKey.FeedbackRange, stringifyFeedbackRange(range as FeedbackConsumingRange));
+    config.set(configKey.value, stringifyFeedbackRange(range as FeedbackConsumingRange));
   });
 });
 </script>

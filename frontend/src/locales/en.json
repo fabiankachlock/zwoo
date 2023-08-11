@@ -41,8 +41,8 @@
     "logout": "Abmelden",
     "localLogs": "Locally saved logs",
     "clearLogs": "Clear logs",
-    "feedbackRange": "Feedback Messages",
-    "feedbackConsumer": "Feedback Visualization"
+    "feedbackChat": "Feedback messages in chat",
+    "feedbackSnackbar": "Feedback notifications"
   },
   "lng": {
     "de": "German",
@@ -457,9 +457,8 @@
       }
     },
     "consumer": {
-      "option": {
-        "chat": "Chat"
-      }
+      "chat": "Chat",
+      "snackbar": "Notifications"
     },
     "chat": {
       "1": "{target} was skipped",
