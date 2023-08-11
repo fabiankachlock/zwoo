@@ -46,17 +46,16 @@
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import Form from '@/components/forms/Form.vue';
+import FormActions from '@/components/forms/FormActions.vue';
+import FormError from '@/components/forms/FormError.vue';
+import FormSubmit from '@/components/forms/FormSubmit.vue';
+import FormTitle from '@/components/forms/FormTitle.vue';
+import TextInput from '@/components/forms/TextInput.vue';
+import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { useAuth } from '@/core/adapter/auth';
 import { PasswordValidator } from '@/core/services/validator/password';
 import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
-
-import Form from '../forms/Form.vue';
-import FormActions from '../forms/FormActions.vue';
-import FormError from '../forms/FormError.vue';
-import FormSubmit from '../forms/FormSubmit.vue';
-import FormTitle from '../forms/FormTitle.vue';
-import TextInput from '../forms/TextInput.vue';
-import FloatingDialog from '../misc/FloatingDialog.vue';
 
 const auth = useAuth();
 const { t } = useI18n();

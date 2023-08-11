@@ -30,15 +30,14 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import SelectFeedbackDisplay from '@/components/settings/sections/game/SelectFeedbackDisplay.vue';
+import SelectFeedbackRange from '@/components/settings/sections/game/SelectFeedbackRange.vue';
+import SelectTheme from '@/components/settings/sections/game/SelectTheme.vue';
+import ShowCardDetailSwitch from '@/components/settings/sections/game/ShowCardDetailSwitch.vue';
+import SortCardsSwitch from '@/components/settings/sections/game/SortCardsSwitch.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-
-import SettingsRow from '../common/SettingsRow.vue';
-import SettingsSection from '../common/SettingsSection.vue';
-import SelectFeedbackDisplay from '../SelectFeedbackDisplay.vue';
-import SelectFeedbackRange from '../SelectFeedbackRange.vue';
-import SelectTheme from '../SelectTheme.vue';
-import ShowCardDetailSwitch from '../ShowCardDetailSwitch.vue';
-import SortCardsSwitch from '../SortCardsSwitch.vue';
 
 const { t } = useI18n();
 const config = useConfig();

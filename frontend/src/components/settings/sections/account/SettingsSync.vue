@@ -10,10 +10,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import { Icon } from '@/components/misc/Icon';
+import SettingsSwitch from '@/components/settings/SettingsSwitch.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-
-import { Icon } from '../misc/Icon';
-import SettingsSwitch from './common/SettingsSwitch.vue';
 
 const config = useConfig();
 const value = computed(() => config.get(ZwooConfigKey.Sync));

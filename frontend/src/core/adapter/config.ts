@@ -190,6 +190,14 @@ export const useConfig = defineStore('config', {
         return this._createDefaultConfig();
       }
       // do migrations
+      // ...
+      // auto migrate:
+      // ATTENTION this may migrates config implicitly
+      for (const [key, value] of Object.entries(DefaultConfig as Omit<Partial<ZwooConfig>, '_ignore'>)) {
+        if (this.get(key as ZwooConfigKey) === undefined) {
+          this.set(key as ZwooConfigKey, value, false);
+        }
+      }
       config['#v'] = AppConfig.Version;
       return config;
     },
