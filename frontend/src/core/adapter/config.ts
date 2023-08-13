@@ -57,7 +57,7 @@ const DefaultConfig: ZwooConfig = {
     variant: '@auto'
   },
   fc: 'all',
-  fs: 'onlySelf',
+  fs: 'none',
   'dev-settings': false,
   logging: '',
   ud: '',
