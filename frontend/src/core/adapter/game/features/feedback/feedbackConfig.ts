@@ -1,7 +1,8 @@
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useGameConfig } from '@/core/adapter/game';
-// import { useGameConfig } from '@/core/adapter/game';
 import { ZRPFeedback } from '@/core/domain/zrp/zrpTypes';
+
+import { feedbackIncludesPlayer } from './argsHelper';
 
 export enum FeedbackConsumerReason {
   Chat = 'chat',
@@ -33,8 +34,8 @@ export const shouldShowFeedback = (feedback: ZRPFeedback, reason: FeedbackConsum
   const range = getFeedbackRange(config as FeedbackConsumingRange);
   if (range === FeedbackConsumingRange.All) {
     return true;
-  } else if (range === FeedbackConsumingRange.OnlySelf) {
-    return feedback.args.target === lobbyId || feedback.args.origin === lobbyId;
+  } else if (range === FeedbackConsumingRange.OnlySelf && lobbyId) {
+    return feedbackIncludesPlayer(feedback, lobbyId);
   }
   // range === FeedbackConsumingRange.None
   return false;

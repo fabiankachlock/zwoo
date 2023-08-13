@@ -11,7 +11,7 @@ const chatFeedbackWatcher = new FeedbackWatcher(FeedbackConsumerReason.Chat);
 
 export const useFeedbackChatAdapter = defineStore('feedback-to-chat', () => {
   const chat = useChatStore();
-  const translate = getFeedbackTranslator(FeedbackConsumerReason.Chat);
+  const translate = getFeedbackTranslator();
 
   chatFeedbackWatcher.onMessage(feedback => {
     chat._pushMessage(translate(feedback), {

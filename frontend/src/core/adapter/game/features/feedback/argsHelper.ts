@@ -11,6 +11,10 @@ export const getFeedbackArgsKeysForKind = (kind: ZRPFeedbackKind): string[] => {
   }
 };
 
+export const feedbackIncludesPlayer = (feedback: ZRPFeedback, lobbyId: number) => {
+  return feedback.args.target === lobbyId || feedback.args.origin === lobbyId;
+};
+
 export const resolveFeedbackArgs = <stringify extends boolean>(
   feedback: ZRPFeedback,
   resolveName: (lobbyId: number) => string,

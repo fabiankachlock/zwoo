@@ -460,11 +460,15 @@
       "chat": "Chat",
       "snackbar": "Mitteilungen"
     },
-    "selfName": "Du",
     "1": "{target} musste aussetzen",
+    "1-self": "Du musstest aussetzen",
     "2": "Richtungswechsel!",
     "3": "{target} musste {amount} Karte(n) ziehen",
+    "3-self": "Du musstest {amount} Karte(n) ziehen",
     "4": "{target} hat vergessen seinen Zug zu beenden",
-    "5": "{target} und {origin} haben Karten getauscht"
+    "4-self": "Du hast vergessen deinen Zug zu beenden",
+    "5": "{target} und {origin} haben Karten getauscht",
+    "5-self+origin": "Du hast mit {other} Karten getauscht",
+    "5-self+target": "{other} hat mir dir Karten getauscht"
   }
 }
