@@ -35,5 +35,7 @@ public class Beta10012User : DocumentMigration<UserDao>
     public override void Down(BsonDocument document)
     {
         document.Remove("accepted_terms");
+        document.Remove("verified_at");
+        document.Remove("accepted_terms_at");
     }
 }

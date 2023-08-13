@@ -104,7 +104,7 @@ onMounted(() => {
 //   cookies.didShowDialog();
 // };
 
-const close = () => cookies.didShowDialog();
+const close = () => cookies.rejectAll();
 </script>
 
 <style scoped>
