@@ -131,6 +131,8 @@ public interface IUserService
     /// </summary>
     /// <param name="id">the users id</param>
     public void ClearAllUserData(ulong id);
+    public void ClearAllUserData(DeletedUserDao data);
+
 
     /// <summary>
     /// clean up unverified users and reset password reset codes
@@ -418,8 +420,19 @@ public class UserService : IUserService
         var user = _db.Users.AsQueryable().FirstOrDefault(user => user.Id == id);
         if (user == null) return;
 
-        _db.AccountEvents.DeleteMany(e => e.PlayerID == user.Id);
-        var p = _audits.GetProtocol(_audits.GetAuditId(user));
+        ClearAllUserData(user.Id, user.Username);
+    }
+
+    public void ClearAllUserData(DeletedUserDao data)
+    {
+        ClearAllUserData(data.Id, data.Username);
+    }
+
+    private void ClearAllUserData(ulong id, string username)
+    {
+        _db.Users.DeleteOne(u => u.Id == id);
+        _db.AccountEvents.DeleteMany(e => e.PlayerID == id);
+        var p = _audits.GetProtocol(_audits.GetAuditId(id));
         if (p != null)
         {
             _db.AuditTrails.DeleteOne(t => t.Id == p.Id);
@@ -427,7 +440,7 @@ public class UserService : IUserService
             {
                 if (e.NewValue is GameInfoDao info)
                 {
-                    var score = info.Scores.Find(score => score.PlayerUsername == user.Username);
+                    var score = info.Scores.Find(score => score.PlayerUsername == username);
                     if (score != null)
                     {
                         score.PlayerUsername = "-/-";

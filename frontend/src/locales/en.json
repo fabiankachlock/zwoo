@@ -269,7 +269,7 @@
       "title": "Missing Cookies",
       "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
     },
-    "__close": "Close",
+    "__close": "Ok",
     "__info": "Cookie notice"
   },
   "share": {

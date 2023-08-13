@@ -256,7 +256,7 @@
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
-        "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
+        "name": "Authentifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
       }
     },
@@ -269,7 +269,7 @@
       "title": "Fehlende Cookies",
       "info": "Die Login- und Accounterstellungsfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
     },
-    "__close": "Schließen",
+    "__close": "Ok",
     "__info": "Cookie Informationen"
   },
   "share": {
