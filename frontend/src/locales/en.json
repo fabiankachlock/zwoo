@@ -460,6 +460,7 @@
       "chat": "Chat",
       "snackbar": "Notifications"
     },
+    "selfName": "You",
     "chat": {
       "1": "{target} was skipped",
       "2": "direction changed!",
