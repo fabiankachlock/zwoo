@@ -101,7 +101,7 @@ internal class BaseWildCardRule : BaseCardRule
             events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
             state.Ui.CurrentDrawAmount = GetActiveDrawAmount(state.TopCard);
             _storedEvent = null;
-            return GameStateUpdate.WithEvents(state, events);
+            return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.ColorChanged, payload.Player));
         }
         return GameStateUpdate.None(state);
     }
