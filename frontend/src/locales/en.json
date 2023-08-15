@@ -469,6 +469,8 @@
     "4-self": "You forgot to end your turn",
     "5": "{target} and {origin} swapped cards",
     "5-self+origin": "You swapped cards with {other}",
-    "5-self+target": "{other} swapped cards with you"
+    "5-self+target": "{other} swapped cards with you",
+    "6": "{target} changed the color",
+    "6-self": "You changed the color"
   }
 }

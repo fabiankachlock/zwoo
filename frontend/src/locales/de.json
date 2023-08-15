@@ -469,6 +469,8 @@
     "4-self": "Du hast vergessen deinen Zug zu beenden",
     "5": "{target} und {origin} haben Karten getauscht",
     "5-self+origin": "Du hast mit {other} Karten getauscht",
-    "5-self+target": "{other} hat mir dir Karten getauscht"
+    "5-self+target": "{other} hat mir dir Karten getauscht",
+    "6": "{target} hat die Farbe gewechselt",
+    "6-self": "Du hast die Farbe gewechselt"
   }
 }

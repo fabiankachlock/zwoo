@@ -116,7 +116,8 @@ export enum ZRPFeedbackType {
   DirectionChanged = 2,
   PlayerHasDrawn = 3,
   MissedLast = 4,
-  DeckSwapped = 5
+  DeckSwapped = 5,
+  ColorChanged = 6
 }
 
 export type ZRPPlayerState = 'disconnected' | 'connected';
