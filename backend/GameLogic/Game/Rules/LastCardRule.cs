@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
 
@@ -108,6 +103,7 @@ internal class LastCardRule : BaseDrawRule
     {
         if (!IsResponsibleForInterrupt(interrupt, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new();
+        List<UIFeedback> feedback = new();
 
         foreach (var player in interrupt.TargetPlayers)
         {
@@ -115,9 +111,11 @@ internal class LastCardRule : BaseDrawRule
             List<Card> newCards;
             (state, newCards) = DrawCardsForPlayer(state, player, _penaltyCards, cardPile);
             events.Add(GameEvent.SendCards(player, newCards));
+            feedback.Add(UIFeedback.Individual(UIFeedbackType.MissedLast, player));
+            feedback.Add(UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, player).WithArg(UIFeedbackArgKey.DrawAmount, newCards.Count));
         }
 
-        return GameStateUpdate.WithEvents(state, events);
+        return GameStateUpdate.New(state, events, feedback);
     }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
@@ -128,7 +126,6 @@ internal class LastCardRule : BaseDrawRule
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
         ClientEvent.RequestEndTurnEvent payload = gameEvent.CastPayload<ClientEvent.RequestEndTurnEvent>();
 
         if (_pendingTimeouts.ContainsKey(payload.Player))

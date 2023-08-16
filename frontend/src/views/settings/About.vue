@@ -30,11 +30,10 @@ import { useI18n } from 'vue-i18n';
 import Environment from '@/components/misc/Environment.vue';
 import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
 import Version from '@/components/misc/Version.vue';
-import SettingsRow from '@/components/settings/common/SettingsRow.vue';
+import VersionHistory from '@/components/settings/sections/about/VersionHistory.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-
-import SettingsSection from '../common/SettingsSection.vue';
-import VersionHistory from '../VersionHistory.vue';
 
 const { t } = useI18n();
 const config = useConfig();

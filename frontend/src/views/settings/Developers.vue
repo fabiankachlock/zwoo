@@ -15,10 +15,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
-import ClearLocalLogs from '../ClearLocalLogs.vue';
-import SettingsRow from '../common/SettingsRow.vue';
-import SettingsSection from '../common/SettingsSection.vue';
-import LoggingSettings from '../LoggingSettings.vue';
+import ClearLocalLogs from '@/components/settings/sections/developers/ClearLocalLogs.vue';
+import LoggingSettings from '@/components/settings/sections/developers/LoggingSettings.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
 
 const { t } = useI18n();
 const did = window.DEVICE_ID;

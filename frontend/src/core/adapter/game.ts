@@ -139,8 +139,12 @@ export const useGameConfig = defineStore('game-config', {
         (await import('./game/rules')).useRules().__init__();
         (await import('./game/summary')).useGameSummary().__init__();
         (await import('./game/botManager')).useBotManager().__init__();
+        (await import('./game/modal')).useGameModal().__init__();
+        (await import('./game/feedback')).useGameFeedback().__init__();
         (await import('./game/util/keepAlive')).useKeepAlive().__init__();
         (await import('./game/features/chatBroadcast')).useChatBroadcast().__init__();
+        (await import('./game/features/feedback/consumer/feedbackChatAdapter')).useFeedbackChatAdapter().__init__();
+        (await import('./game/features/feedback/consumer/feedbackSnackbarAdapter')).useFeedbackSnackbarAdapter().__init__();
         initializedGameModules = true;
       }
     },

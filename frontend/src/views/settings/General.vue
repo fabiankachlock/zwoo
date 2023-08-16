@@ -33,15 +33,14 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Environment from '@/components/misc/Environment.vue';
-import SettingsRow from '@/components/settings/common/SettingsRow.vue';
-import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
-import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
-import LanguageSelection from '@/components/settings/LanguageSelection.vue';
-import QuickMenuSwitch from '@/components/settings/QuickMenuSwitch.vue';
+import DarkModeSwitch from '@/components/settings/sections/general/DarkModeSwitch.vue';
+import FullScreenSwitch from '@/components/settings/sections/general/FullScreenSwitch.vue';
+import LanguageSelection from '@/components/settings/sections/general/LanguageSelection.vue';
+import ManageCookies from '@/components/settings/sections/general/ManageCookies.vue';
+import QuickMenuSwitch from '@/components/settings/sections/general/QuickMenuSwitch.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-
-import SettingsSection from '../common/SettingsSection.vue';
-import ManageCookies from '../ManageCookies.vue';
 
 const { t } = useI18n();
 const config = useConfig();

@@ -2,6 +2,7 @@
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Helper;
 using ZwooGameLogic.Logging;
 
@@ -146,6 +147,7 @@ public sealed class GameStateManager
                         topCard: newState.TopCard.Card,
                         activePlayer: newState.CurrentPlayer,
                         cardAmounts: new Dictionary<long, int>(),
+                        feedback: new List<UIFeedback>(),
                         currentDrawAmount: null
                     )
                 };
@@ -209,6 +211,7 @@ public sealed class GameStateManager
                 .Where(kv => _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count)
                 .Select(kv => KeyValuePair.Create(kv.Key, kv.Value.Count))
                 .ToDictionary(kv => kv.Key, kv => kv.Value),
+            feedback: stateUpdate.Feedback,
             currentDrawAmount: stateUpdate.NewState.Ui.CurrentDrawAmount
          );
         _gameState = stateUpdate.NewState;
@@ -269,6 +272,7 @@ public sealed class GameStateManager
                         stateUpdateEvent.TopCard,
                         stateUpdateEvent.ActivePlayer,
                         stateUpdateEvent.CardAmounts,
+                        stateUpdateEvent.Feedback,
                         stateUpdateEvent.CurrentDrawAmount
                     ));
                     break;

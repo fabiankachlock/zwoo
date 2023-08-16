@@ -82,6 +82,7 @@ public class GameEventTranslator : IGameEventManager
                 new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type),
                 data.ActivePlayer,
                 data.CardAmounts,
+                data.Feedback.Select(f => new StateUpdate_FeedbackDTO(f.Type, f.Kind, f.Args)).ToList(),
                 data.CurrentDrawAmount
             )
         );
