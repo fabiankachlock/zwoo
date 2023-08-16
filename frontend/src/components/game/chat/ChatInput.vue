@@ -9,8 +9,8 @@
         @keyup.enter="sendMessage"
       />
     </div>
-    <div class="flex justify-center items-center bg-light px-3 py-0.5 rounded transition hover:bg-main">
-      <button class="tc-primary" @click="sendMessage">
+    <div class="flex justify-center items-center bg-light rounded transition hover:bg-main">
+      <button class="block tc-primary px-3 py-0.5 h-full" @click="sendMessage">
         <Icon icon="teenyicons:send-outline" />
       </button>
     </div>
