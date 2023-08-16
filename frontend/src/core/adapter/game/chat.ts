@@ -65,7 +65,7 @@ export const useChatStore = defineStore('game-chat', () => {
   };
 
   chatWatcher.onMessage(_receiveMessage);
-  chatWatcher.onReset(reset);
+  // chatWatcher.onReset(reset); <- dont reset after game, only on leave
   chatWatcher.onClose(reset);
 
   return {
