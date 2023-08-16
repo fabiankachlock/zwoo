@@ -58,6 +58,11 @@ export const useChatStore = defineStore('game-chat', () => {
     }
   };
 
+  const clearChat = () => {
+    messages.value = [];
+    lastMessage.value = undefined;
+  };
+
   const reset = () => {
     messages.value = [];
     lastMessage.value = undefined;
@@ -71,6 +76,7 @@ export const useChatStore = defineStore('game-chat', () => {
   return {
     allMessages: computed(() => messages.value.filter(msg => !muted.value[msg.sender.id])),
     lastMessage,
+    clearChat,
     _pushMessage: pushMessage,
     sendChatMessage,
     mutePlayer,
