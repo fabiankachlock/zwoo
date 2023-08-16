@@ -40,7 +40,9 @@
     "contact": "Contact",
     "logout": "Abmelden",
     "localLogs": "Locally saved logs",
-    "clearLogs": "Clear logs"
+    "clearLogs": "Clear logs",
+    "feedbackChat": "Feedback messages in chat",
+    "feedbackSnackbar": "Feedback notifications"
   },
   "lng": {
     "de": "German",
@@ -444,7 +446,31 @@
     "send": "Send!",
     "thanks": "Your request was sent successfully!",
     "email": "E-Mail",
-    "emailPlaceholder": "Your E-Mail address",
-    "acceptTerms": "TODO [I accept the terms and conditions...]"
+    "emailPlaceholder": "Your E-Mail address"
+  },
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Only mine",
+        "all": "All",
+        "none": "None"
+      }
+    },
+    "consumer": {
+      "chat": "Chat",
+      "snackbar": "Notifications"
+    },
+    "1": "{target} was skipped",
+    "1-self": "You were skipped",
+    "2": "direction changed!",
+    "3": "{target} had to draw {amount} Card(s)",
+    "3-self": "You had to draw {amount} Card(s)",
+    "4": "{target} forgot to end its turn",
+    "4-self": "You forgot to end your turn",
+    "5": "{target} and {origin} swapped cards",
+    "5-self+origin": "You swapped cards with {other}",
+    "5-self+target": "{other} swapped cards with you",
+    "6": "{target} changed the color",
+    "6-self": "You changed the color"
   }
 }

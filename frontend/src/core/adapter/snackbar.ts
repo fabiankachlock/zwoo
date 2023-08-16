@@ -32,6 +32,7 @@ export type SnackbarItem = {
   force?: boolean;
   position: SnackBarPosition;
   showClose?: boolean;
+  hideProgress?: boolean;
   color?: 'primary' | 'secondary';
   mode: 'static' | 'loading';
   onClosed: () => void;

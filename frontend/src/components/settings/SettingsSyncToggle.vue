@@ -8,9 +8,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import { Icon } from '@/components/misc/Icon';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-
-import { Icon } from '../../misc/Icon';
 
 // eslint-disable-next-line no-undef
 const props = defineProps<{

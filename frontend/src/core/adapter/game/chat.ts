@@ -71,6 +71,7 @@ export const useChatStore = defineStore('game-chat', () => {
   return {
     allMessages: computed(() => messages.value.filter(msg => !muted.value[msg.sender.id])),
     lastMessage,
+    _pushMessage: pushMessage,
     sendChatMessage,
     mutePlayer,
     muted,

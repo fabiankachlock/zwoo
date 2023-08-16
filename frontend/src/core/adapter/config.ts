@@ -20,6 +20,8 @@ export enum ZwooConfigKey {
   ShowCardsDetail = 'cd',
   CardsTheme = 'th',
   UserDefaults = 'ud',
+  FeedbackChat = 'fc',
+  FeedbackSnackbar = 'fs',
   DevSettings = 'dev-settings',
   Logging = 'logging',
   _Version = '#v'
@@ -35,6 +37,8 @@ export type ZwooConfig = {
   [ZwooConfigKey.ShowCardsDetail]: boolean;
   [ZwooConfigKey.CardsTheme]: CardThemeIdentifier;
   [ZwooConfigKey.UserDefaults]: string;
+  [ZwooConfigKey.FeedbackChat]: string;
+  [ZwooConfigKey.FeedbackSnackbar]: string;
   [ZwooConfigKey.DevSettings]: boolean;
   [ZwooConfigKey.Logging]: string;
   [ZwooConfigKey._Version]: string;
@@ -52,6 +56,8 @@ const DefaultConfig: ZwooConfig = {
     name: '__default__',
     variant: '@auto'
   },
+  fc: 'all',
+  fs: 'none',
   'dev-settings': false,
   logging: '',
   ud: '',
@@ -184,6 +190,14 @@ export const useConfig = defineStore('config', {
         return this._createDefaultConfig();
       }
       // do migrations
+      // ...
+      // auto migrate:
+      // ATTENTION this may migrates config implicitly
+      for (const [key, value] of Object.entries(DefaultConfig as Omit<Partial<ZwooConfig>, '_ignore'>)) {
+        if (this.get(key as ZwooConfigKey) === undefined) {
+          this.set(key as ZwooConfigKey, value, false);
+        }
+      }
       config['#v'] = AppConfig.Version;
       return config;
     },

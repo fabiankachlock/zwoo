@@ -17,6 +17,12 @@
     >
       <SortCardsSwitch />
     </SettingsRow>
+    <SettingsRow :title="t('settings.feedbackChat')" :settings-key="ZwooConfigKey.FeedbackChat">
+      <SelectFeedbackRange :reason="FeedbackConsumerReason.Chat" />
+    </SettingsRow>
+    <SettingsRow :title="t('settings.feedbackSnackbar')" :settings-key="ZwooConfigKey.FeedbackSnackbar">
+      <SelectFeedbackRange :reason="FeedbackConsumerReason.Snackbar" />
+    </SettingsRow>
   </SettingsSection>
 </template>
 
@@ -24,13 +30,14 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import SelectFeedbackRange from '@/components/settings/sections/game/SelectFeedbackRange.vue';
+import SelectTheme from '@/components/settings/sections/game/SelectTheme.vue';
+import ShowCardDetailSwitch from '@/components/settings/sections/game/ShowCardDetailSwitch.vue';
+import SortCardsSwitch from '@/components/settings/sections/game/SortCardsSwitch.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
-
-import SettingsRow from '../common/SettingsRow.vue';
-import SettingsSection from '../common/SettingsSection.vue';
-import SelectTheme from '../SelectTheme.vue';
-import ShowCardDetailSwitch from '../ShowCardDetailSwitch.vue';
-import SortCardsSwitch from '../SortCardsSwitch.vue';
+import { FeedbackConsumerReason } from '@/core/adapter/game/features/feedback/feedbackConfig';
 
 const { t } = useI18n();
 const config = useConfig();

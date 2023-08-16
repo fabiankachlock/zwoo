@@ -11,7 +11,7 @@ export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> 
 
 export type ZRPPayload<T extends ZRPOPCode> = ZRPPayloadMap[T];
 
-export const ZRP_VERSION = '4.0.0';
+export const ZRP_VERSION = '4.1.0';
 
 export enum ZRPOPCode {
   // General
@@ -93,6 +93,7 @@ export enum ZRPOPCode {
 }
 
 export enum ZRPRole {
+  _System = -1,
   Host = 1,
   Player = 2,
   Spectator = 3,
@@ -102,6 +103,21 @@ export enum ZRPRole {
 export enum ZRPDecisionType {
   ColorPicker = 1,
   PlayerSelector = 2
+}
+
+export enum ZRPFeedbackKind {
+  Individual = 1,
+  Interaction = 2,
+  Unaffected = 3
+}
+
+export enum ZRPFeedbackType {
+  Skipped = 1,
+  DirectionChanged = 2,
+  PlayerHasDrawn = 3,
+  MissedLast = 4,
+  DeckSwapped = 5,
+  ColorChanged = 6
 }
 
 export type ZRPPlayerState = 'disconnected' | 'connected';
@@ -279,6 +295,12 @@ export type ZRPCardListPayload = {
   cards: ZRPCardPayload[];
 };
 
+export type ZRPFeedback = {
+  type: ZRPFeedbackType;
+  kind: ZRPFeedbackKind;
+  args: Record<string, number>;
+};
+
 export type ZRPStateUpdatePayload = {
   pileTop: {
     type: number;
@@ -286,6 +308,7 @@ export type ZRPStateUpdatePayload = {
   };
   activePlayer: number;
   cardAmounts: Record<number, number>;
+  feedback: ZRPFeedback[];
   currentDrawAmount?: number;
 };
 

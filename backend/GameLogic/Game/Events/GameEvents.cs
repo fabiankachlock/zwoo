@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Cards;
+﻿using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Feedback;
 
 namespace ZwooGameLogic.Game.Events;
 
@@ -116,20 +112,22 @@ public struct GameEvent
         public readonly Card TopCard;
         public readonly long ActivePlayer;
         public readonly Dictionary<long, int> CardAmounts;
+        public readonly List<UIFeedback> Feedback;
         public readonly int? CurrentDrawAmount;
 
-        public StateUpdateEvent(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, int? currentDrawAmount)
+        public StateUpdateEvent(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<UIFeedback> feedback, int? currentDrawAmount)
         {
             TopCard = topCard;
             ActivePlayer = activePlayer;
             CardAmounts = cardAmounts;
+            Feedback = feedback;
             CurrentDrawAmount = currentDrawAmount;
         }
     }
 
-    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, int? currentDrawAmount)
+    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<UIFeedback> feedback, int? currentDrawAmount)
     {
-        return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, cardAmounts, currentDrawAmount));
+        return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, cardAmounts, feedback, currentDrawAmount));
     }
 
     // PlayerDecisionEvent

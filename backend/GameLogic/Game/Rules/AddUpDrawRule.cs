@@ -1,6 +1,6 @@
 using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 
 namespace ZwooGameLogic.Game.Rules;
@@ -98,12 +98,12 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
                     int currentDrawAmount = GetRecursiveDrawAmount(state.CardStack);
                     state.Ui.CurrentDrawAmount = currentDrawAmount == 0 ? null : currentDrawAmount;
                     events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-                    return GameStateUpdate.WithEvents(state, events);
+                    return GameStateUpdate.New(state, events);
                 }
             }
             else
             {
-                return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+                return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
             }
         }
         return PerformHandleDecission(gameEvent, state, playerOrder);
@@ -143,9 +143,9 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
+        List<GameEvent> events;
+        int amount;
 
-        int amount = 0;
         ClientEvent.DrawCardEvent payload = gameEvent.CastPayload<ClientEvent.DrawCardEvent>();
 
 
@@ -172,7 +172,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
         state.Ui.CurrentDrawAmount = null;
         events.Add(GameEvent.SendCards(payload.Player, newCards));
 
-        return GameStateUpdate.WithEvents(state, events);
+        return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, payload.Player).WithArg(UIFeedbackArgKey.DrawAmount, amount));
     }
 
     protected int GetRecursiveDrawAmount(List<StackCard> stack)

@@ -23,13 +23,12 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import ChangePassword from '@/components/settings/sections/account/ChangePassword.vue';
+import DeleteAccount from '@/components/settings/sections/account/DeleteAccount.vue';
+import SettingsSync from '@/components/settings/sections/account/SettingsSync.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
 import { useAuth } from '@/core/adapter/auth';
-
-import ChangePassword from '../ChangePassword.vue';
-import SettingsRow from '../common/SettingsRow.vue';
-import SettingsSection from '../common/SettingsSection.vue';
-import DeleteAccount from '../DeleteAccount.vue';
-import SettingsSync from '../SettingsSync.vue';
 
 const { t } = useI18n();
 const auth = useAuth();

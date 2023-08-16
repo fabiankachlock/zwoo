@@ -1,7 +1,13 @@
 ﻿using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.Feedback;
 
 namespace ZwooGameLogic.ZRP;
+
+public static class Version
+{
+    public static readonly string CURRENT = "4.1.0";
+}
 
 /// <summary>
 /// ZRPCode: 100 
@@ -229,6 +235,9 @@ public readonly record struct RemoveCardNotification(RemoveCard_CardDTO[] Cards)
 /// <see cref="StateUpdateNotification" />
 public readonly record struct StateUpdate_PileTopDTO(CardColor Type, CardType Symbol);
 
+/// <see cref="StateUpdateNotification" />
+public readonly record struct StateUpdate_FeedbackDTO(UIFeedbackType Type, UIFeedbackKind Kind, Dictionary<string, long> Args);
+
 /// <summary>
 /// ZRPCode: 308
 /// </summary>
@@ -236,6 +245,7 @@ public readonly record struct StateUpdateNotification(
     StateUpdate_PileTopDTO PileTop,
     long ActivePlayer,
     Dictionary<long, int> CardAmounts,
+    List<StateUpdate_FeedbackDTO> Feedback,
     int? CurrentDrawAmount
 );
 
