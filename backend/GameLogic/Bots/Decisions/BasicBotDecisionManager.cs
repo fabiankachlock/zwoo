@@ -40,7 +40,6 @@ public class BasicBotDecisionManager : IBotDecisionHandler
                 return;
             default:
                 _stateManager.AggregateNotification(message);
-                checkLastCard();
                 break;
         }
 
@@ -50,14 +49,6 @@ public class BasicBotDecisionManager : IBotDecisionHandler
             _logger.Info("starting turn");
             placedCard = -1;
             placeCard();
-        }
-    }
-
-    private void checkLastCard()
-    {
-        if (_stateManager.GetState().Deck.Count < 2)
-        {
-            OnEvent.Invoke(ZRPCode.RequestEndTurn, new RequestEndTurnEvent());
         }
     }
 
@@ -79,6 +70,12 @@ public class BasicBotDecisionManager : IBotDecisionHandler
                 (int)state.Deck[placedCard].Color,
                 (int)state.Deck[placedCard].Type
             ));
+            if (state.Deck.Count == 2 && _rand.Next(10) > 4)
+            {
+                Console.WriteLine("BOT ENDING TURN");
+                // after placing this card only on card will be left + 50% chance to miss
+                OnEvent.Invoke(ZRPCode.RequestEndTurn, new RequestEndTurnEvent());
+            }
         }
         catch (Exception ex)
         {
