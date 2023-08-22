@@ -60,5 +60,5 @@ public static class Globals
     public static string? WebsiteDatabaseName;
     public static string WebsiteDatabaseCollection;
     public static string LogrushDashboardUrl;
-    public static readonly string Version = "1.0.0-beta.11";
+    public static readonly string Version = "1.0.0-beta.12";
 }
