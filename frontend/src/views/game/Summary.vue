@@ -7,7 +7,7 @@
         <div class="h-full flex-1 flex flex-nowrap items-center justify-start">
           <img src="/img/logo/zwoo_logo_simple_none.png" alt="" class="max-h-full mr-3" />
           <p class="tc-main text-xl">{{ winner.username }}</p>
-          <template v-if="winner.id.startsWith('b_')">
+          <template v-if="winner.isBot">
             <span class="tc-primary text-2xl ml-2">
               <Icon icon="fluent:bot-24-regular" />
             </span>
@@ -25,7 +25,7 @@
           <span class="mr-2">{{ player.position }}.</span>
           {{ player.username }}
         </p>
-        <template v-if="player.id.startsWith('b_')">
+        <template v-if="player.isBot">
           <span class="tc-primary text-lg ml-2">
             <Icon icon="fluent:bot-24-regular" />
           </span>

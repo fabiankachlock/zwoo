@@ -39,6 +39,10 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> CreateAccount([FromBody] CreateAccount body)
     {
+        if (!body.acceptedTerms)
+        {
+            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.NEEDS_TERMS, "Needs terms to be accepted!"));
+        }
         if (!StringHelper.IsValidEmail(body.email))
         {
             return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_EMAIL, "Email Invalid!"));
@@ -74,7 +78,7 @@ public class AuthenticationController : Controller
             return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
         }
 
-        var user = _userService.CreateUser(body.username, body.email, body.password, body.code);
+        var user = _userService.CreateUser(body.username, body.email, body.password, body.acceptedTerms, body.code);
         var recipient = _emailService.CreateRecipient(body.email, body.username, _languageService.ResolveFormQuery(HttpContext.Request.Query["lng"].FirstOrDefault() ?? ""));
         _emailService.SendVerifyMail(recipient, user.Id, user.ValidationCode);
         return Ok(new MessageDTO() { Message = "account created" });

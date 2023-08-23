@@ -1,20 +1,31 @@
-﻿@inject NavigationManager UriHelper
+﻿@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.Extensions.Hosting;
+
+@inject NavigationManager UriHelper
+@inject IWebHostEnvironment Env
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                 <NotAuthorized>
-                     @{
-                         var returnUrl = UriHelper.ToBaseRelativePath(UriHelper.Uri);
-                         UriHelper.NavigateTo($"login?redirectUri={returnUrl}", forceLoad: true);
-                     }
-                 </NotAuthorized>
-                 <Authorizing>
-                     Loading...
-                 </Authorizing>
-            </AuthorizeRouteView>
-            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            @if (Env.IsDevelopment())
+            {
+                <RouteView DefaultLayout="@typeof(DevLayout)" RouteData="@routeData" />
+            }
+            else
+            {
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        @{
+                            var returnUrl = UriHelper.ToBaseRelativePath(UriHelper.Uri);
+                            UriHelper.NavigateTo($"login?redirectUri={returnUrl}", forceLoad: true);
+                        }
+                    </NotAuthorized>
+                    <Authorizing>
+                        Loading...
+                    </Authorizing>
+                </AuthorizeRouteView>
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            }
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>

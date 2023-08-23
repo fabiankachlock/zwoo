@@ -5,7 +5,7 @@
         {{ t('createGame.title') }}
       </FormTitle>
       <TextInput id="game-name" v-model="name" label-key="createGame.name" :placeholder="t('createGame.name')" :validator="nameValidator" />
-      <Checkbox v-model="isPublic" styles="tc-primary mx-3">
+      <Checkbox v-model="isPublic" position="end">
         {{ t('createGame.isPublic') }}
       </Checkbox>
       <TextInput v-if="!isPublic" id="game-password" v-model="password" label-key="createGame.password" is-password placeholder="******" />

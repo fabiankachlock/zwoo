@@ -5,8 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using ZwooGameLogic.Game.Cards;
 
-
 namespace ZwooGameLogic.Game.State;
+
+internal struct UiHints
+{
+    public int? CurrentDrawAmount;
+}
 
 internal struct GameState
 {
@@ -15,6 +19,7 @@ internal struct GameState
     public StackCard TopCard;
     public List<StackCard> CardStack;
     public Dictionary<long, List<Card>> PlayerDecks;
+    public UiHints Ui;
 
     public GameState()
     {
@@ -23,6 +28,7 @@ internal struct GameState
         TopCard = new StackCard(new Card(CardColor.None, CardType.None));
         CardStack = new List<StackCard>() { TopCard };
         PlayerDecks = new Dictionary<long, List<Card>>();
+        Ui = new UiHints();
     }
 
     public GameState(
@@ -30,7 +36,8 @@ internal struct GameState
         long currentPlayer,
         StackCard topCard,
         List<StackCard> cardStack,
-        Dictionary<long, List<Card>> playerDecks
+        Dictionary<long, List<Card>> playerDecks,
+        UiHints ui
     )
     {
         Direction = direction;
@@ -38,10 +45,18 @@ internal struct GameState
         TopCard = topCard;
         CardStack = cardStack;
         PlayerDecks = playerDecks;
+        Ui = ui;
     }
 
     public GameState Clone()
     {
-        return new GameState(Direction, CurrentPlayer, TopCard, CardStack, PlayerDecks);
+        return new GameState(
+            Direction,
+            CurrentPlayer,
+            new StackCard(TopCard.Card, TopCard.EventActivated),
+            new List<StackCard>(CardStack),
+            PlayerDecks.ToDictionary(kv => kv.Key, kv => new List<Card>(kv.Value)),
+            Ui
+        );
     }
 }

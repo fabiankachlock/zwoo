@@ -1,5 +1,6 @@
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Events;
 using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Bots;
@@ -8,7 +9,7 @@ namespace ZwooGameLogic.Bots;
 /// <summary>
 /// an object managing multiple bot instances within a game
 /// </summary>
-public class BotManager : INotificationAdapter, IUserEventEmitter
+public class BotManager : INotificationAdapter, IRoutableNotificationAdapter, IUserEventEmitter
 {
 
     private readonly Game.Game _game;
@@ -23,6 +24,11 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
 
     public event IUserEventEmitter.EventHandler OnEvent = delegate { };
+
+    public long TargetId
+    {
+        get => Bot.MOCK_REAL_ID;
+    }
 
     public BotManager(Game.Game game, ILoggerFactory loggerFactory)
     {
@@ -40,19 +46,19 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
 
     public Bot? GetBot(long id)
     {
-        return _bots.Where(bot => bot.PlayerId == id).FirstOrDefault();
+        return _bots.Where(bot => bot.LobbyId == id).FirstOrDefault();
     }
 
     public bool HasBotWithName(string name)
     {
-        return _bots.Where(bot => bot.Username == name).Count() > 0;
+        return _bots.Where(bot => bot.Username == name).Any();
     }
 
-    public Bot CreateBot(string username, BotConfig config)
+    public Bot CreateBot(long lobbyId, string username, BotConfig config)
     {
         _logger.Info($"creating bot {username}");
         var botLogger = _loggerFactory.CreateLogger($"Bot-{username}");
-        Bot bot = new Bot(_game.Id, username, config, botLogger, (BotZRPEvent evt) =>
+        Bot bot = new Bot(_game.Id, lobbyId, username, config, botLogger, (BotZRPEvent evt) =>
         {
             botLogger.Debug($"sending event {evt.Code} {evt.Payload}");
             OnEvent.Invoke(evt);
@@ -62,36 +68,14 @@ public class BotManager : INotificationAdapter, IUserEventEmitter
         return bot;
     }
 
-    public void RemoveBot(string publicId)
+    public void RemoveBot(long lobbyId)
     {
-        _logger.Info($"removing bot {publicId}");
-        Bot? botToRemove = _bots.Find(bot => bot.AsPlayer().PublicId == publicId);
+        _logger.Info($"removing bot {lobbyId}");
+        Bot? botToRemove = _bots.Find(bot => bot.LobbyId == lobbyId);
         if (botToRemove != null)
         {
             _bots.Remove(botToRemove);
             _notificationManager.RemoveTarget(botToRemove);
-        }
-    }
-
-    /// <summary>
-    /// since there is no reserved space for bot ids and bot ids should not collide with player ids
-    /// bots get a dynamic id assigned before each game starts
-    ///  
-    /// these dynamic ids get selected based on the current players of the game
-    /// </summary>
-    public void PrepareBotsForGame()
-    {
-        _logger.Info($"preparing bots for game");
-        long i = 1;
-        foreach (Bot bot in _bots)
-        {
-            while (_game.HasPlayer(i))
-            {
-                i++;
-            }
-            _logger.Info($"assigning id {i} to bot {bot.Username}");
-            bot.PrepareForGame(i);
-            i++;
         }
     }
 

@@ -13,7 +13,7 @@
           <Icon icon="akar-icons:cross" class="text-xs" />
         </button>
       </div>
-      <div class="snackbar-progress absolute bottom-0 left-0 right-0 h-1 rounded-b overflow-hidden">
+      <div v-if="!msg.hideProgress" class="snackbar-progress absolute bottom-0 left-0 right-0 h-1 rounded-b overflow-hidden">
         <div
           class="h-full relative"
           :class="msg.color ? `bg-${msg.color}` : 'bg-_bg-dark-lightest dark:bg-_bg-light-darkest'"

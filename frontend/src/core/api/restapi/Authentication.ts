@@ -114,6 +114,7 @@ export class AuthenticationService {
         email: data.email,
         password: data.password,
         code: data.beta,
+        acceptedTerms: data.acceptedTerms,
         captchaToken: data.captchaToken
       })
     });

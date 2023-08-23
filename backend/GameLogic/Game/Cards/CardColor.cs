@@ -22,6 +22,6 @@ public class CardColorHelper
 
     public static CardColor Random()
     {
-        return (CardColor)(_random.Next(4) + 1);
+        return (CardColor)(_random.Next(4));
     }
 }
