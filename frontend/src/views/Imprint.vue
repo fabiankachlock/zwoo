@@ -1,5 +1,5 @@
 <template>
-  <MaxWidthLayout size="normal" class="imprint tc-main-secondary">
+  <MaxWidthLayout size="normal" class="imprint tc-main-secondary break-words">
     <h1 class="tc-main">Impressum</h1>
 
     <p>Angaben gemäß § 5 TMG</p>

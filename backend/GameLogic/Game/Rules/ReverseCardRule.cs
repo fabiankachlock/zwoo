@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
 
@@ -14,17 +9,12 @@ internal class ReverseCardRule : BaseCardRule
 {
     public override int Priority
     {
-        get => RulePriorirty.DefaultRule;
+        get => RulePriority.DefaultRule;
     }
 
     public override string Name
     {
-        get => "BaseCardRule";
-    }
-
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
+        get => "ReverseCardRule";
     }
 
     public ReverseCardRule() : base() { }
@@ -48,10 +38,10 @@ internal class ReverseCardRule : BaseCardRule
             state.Direction = state.Direction == GameDirection.Left ? GameDirection.Rigth : GameDirection.Left;
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return new GameStateUpdate(state, events);
+            return GameStateUpdate.New(state, events, UIFeedback.Unaffected(UIFeedbackType.DirectionChanged));
         }
 
-        return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+        return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
     }
 
     // TODO: add PerformReversDirection() method as ApplyRule wrapper

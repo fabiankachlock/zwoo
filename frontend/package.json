@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.0.0-beta.11",
+  "version": "1.0.0-beta.12",
   "private": true,
   "scripts": {
     "serve": "vite --mode preview",
@@ -81,7 +81,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-vue": "^9.13.0",
-    "fs-extra": "^10.1.0",
+    "fs-extra": "^11.1.1",
     "http-proxy": "^1.18.1",
     "husky": "^8.0.1",
     "jest": "^27.1.0",
@@ -93,7 +93,7 @@
     "ts-jest": "^27.0.4",
     "typescript": "^5.0.4",
     "vite": "^4.1.4",
-    "vite-plugin-pwa": "^0.14.4",
+    "vite-plugin-pwa": "^0.16.4",
     "vue-jest": "^5.0.0-0",
     "vue-tsc": "^1.0.9",
     "workbox-precaching": "^7.0.0",

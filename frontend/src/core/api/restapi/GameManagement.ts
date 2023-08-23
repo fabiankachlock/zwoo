@@ -14,10 +14,10 @@ export class GameManagementService {
       Logger.Api.debug('mocking create game response');
     }
 
-    const response = await WrappedFetch<{ guid: number }>(Backend.getUrl(Endpoint.JoinGame), {
+    const response = await WrappedFetch<{ guid: number; ownId: number }>(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
-      fallbackValue: { guid: 1 },
+      fallbackValue: { guid: 1, ownId: 0 },
       requestOptions: {
         withCredentials: true
       },
@@ -37,7 +37,8 @@ export class GameManagementService {
     }
 
     return {
-      id: response.data!.guid,
+      id: response.data?.guid ?? 0,
+      ownId: response.data?.ownId ?? 0,
       isRunning: false,
       role: ZRPRole.Host
     };
@@ -71,7 +72,7 @@ export class GameManagementService {
       };
     }
 
-    return response.data!.games;
+    return response.data?.games ?? [];
   };
 
   static getJoinMeta = async (gameId: number): Promise<BackendErrorAble<GameMeta>> => {
@@ -104,13 +105,14 @@ export class GameManagementService {
   static joinGame = async (gameId: number, role: ZRPRole, password: string): Promise<GameJoinResponse> => {
     Logger.Api.log(`send join game ${gameId} request as ${role}`);
 
-    const response = await WrappedFetch<{ guid: number; isRunning: boolean; role: ZRPRole }>(Backend.getUrl(Endpoint.JoinGame), {
+    const response = await WrappedFetch<{ guid: number; isRunning: boolean; role: ZRPRole; ownId: number }>(Backend.getUrl(Endpoint.JoinGame), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       fallbackValue: {
         guid: gameId,
         isRunning: false,
-        role: role
+        role: role,
+        ownId: 0
       },
       requestOptions: {
         withCredentials: true
@@ -130,9 +132,10 @@ export class GameManagementService {
     }
 
     return {
-      id: response.data!.guid,
-      isRunning: response.data!.isRunning,
-      role: response.data!.role
+      id: response.data?.guid ?? 0,
+      isRunning: response.data?.isRunning ?? false,
+      role: response.data?.role ?? role,
+      ownId: response.data?.ownId ?? 0
     };
   };
 }

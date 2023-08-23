@@ -3,28 +3,32 @@ import { RouteRecordRaw } from 'vue-router';
 export const SettingsRoutes: Array<RouteRecordRaw> = [
   {
     path: '/settings',
-    component: () => import('../views/settings/Settings.vue'),
+    component: () => import('../views/settings/_Layout.vue'),
     redirect: '/settings/general',
     children: [
       {
         path: 'general',
-        component: () => import('../components/settings/sections/SettingsSectionGeneral.vue')
+        component: () => import('../views/settings/General.vue')
       },
       {
         path: 'account',
-        component: () => import('../components/settings/sections/SettingsSectionAccount.vue')
+        component: () => import('../views/settings/Account.vue'),
+        meta: {
+          onlineOnly: true,
+          offlineRedirect: '/settings'
+        }
       },
       {
         path: 'game',
-        component: () => import('../components/settings/sections/SettingsSectionGame.vue')
+        component: () => import('../views/settings/Game.vue')
       },
       {
         path: 'developers',
-        component: () => import('../components/settings/sections/SettingsSectionDevelopers.vue')
+        component: () => import('../views/settings/Developers.vue')
       },
       {
         path: 'about',
-        component: () => import('../components/settings/sections/SettingsSectionAbout.vue')
+        component: () => import('../views/settings/About.vue')
       }
     ]
   },
