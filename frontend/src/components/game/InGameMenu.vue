@@ -60,12 +60,12 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { Icon } from '@/components/misc/Icon';
-import DarkModeSwitch from '@/components/settings/DarkModeSwitch.vue';
-import FullScreenSwitch from '@/components/settings/FullScreenSwitch.vue';
+import ShowCardDetailSwitch from '@/components/settings/sections/game/ShowCardDetailSwitch.vue';
+import SortCardsSwitch from '@/components/settings/sections/game/SortCardsSwitch.vue';
+import DarkModeSwitch from '@/components/settings/sections/general/DarkModeSwitch.vue';
+import FullScreenSwitch from '@/components/settings/sections/general/FullScreenSwitch.vue';
 import { useGameConfig } from '@/core/adapter/game';
 
-import ShowCardDetailSwitch from '../settings/ShowCardDetailSwitch.vue';
-import SortCardsSwitch from '../settings/SortCardsSwitch.vue';
 import ChatInput from './chat/ChatInput.vue';
 import GameChat from './chat/GameChat.vue';
 import EndTurnButton from './EndTurnButton.vue';

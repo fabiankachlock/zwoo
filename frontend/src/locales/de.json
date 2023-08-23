@@ -40,7 +40,9 @@
     "contact": "Kontakt",
     "logout": "Abmelden",
     "localLogs": "Lokal gespeicherte Logs",
-    "clearLogs": "Logs zurücksetzen"
+    "clearLogs": "Logs zurücksetzen",
+    "feedbackChat": "Feedback Nachrichten im Chat",
+    "feedbackSnackbar": "Feedback Mitteilungen"
   },
   "lng": {
     "de": "Deutsch",
@@ -230,18 +232,6 @@
   "rules": {
     "widget": {
       "numberPlaceholder": "Zahl"
-    },
-    "maxPlayers": {
-      "title": "Spieleranzahl",
-      "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."
-    },
-    "addUpDraw": {
-      "title": "Ziehkarten addieren",
-      "info": "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."
-    },
-    "initialCards": {
-      "title": "Anzahl an Karten",
-      "info": "Lege eine Anzahl an Karten fest, die ein Spieler am Anfang bekommt."
     }
   },
   "ingame": {
@@ -341,6 +331,10 @@
     "selectColor": {
       "title": "Wähle eine Farbe",
       "info": "Wähle die Farbe, mit der weiter gespielt werden soll."
+    },
+    "selectPlayer": {
+      "title": "Wähle einen Spieler",
+      "info": "Wähle einen Spieler, auf den die Aktion der gerade gelegten Karten angewendet werden soll."
     }
   },
   "reassureDialog": {
@@ -452,7 +446,31 @@
     "send": "Absenden!",
     "thanks": "Deine Anfrage wurde erfolgreich versendet!",
     "email": "E-Mail",
-    "emailPlaceholder": "Deine E-Mail Adresse",
-    "acceptTerms": "TODO [Hiermit stimme ich der Verarbeitung meiner Personenbezogegenen Daten im Rahmen einer Antwort auf meine Anfrage zu.]"
+    "emailPlaceholder": "Deine E-Mail Adresse"
+  },
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Nur meine",
+        "all": "Alle",
+        "none": "Keine"
+      }
+    },
+    "consumer": {
+      "chat": "Chat",
+      "snackbar": "Mitteilungen"
+    },
+    "1": "{target} musste aussetzen",
+    "1-self": "Du musstest aussetzen",
+    "2": "Richtungswechsel!",
+    "3": "{target} musste {amount} Karte(n) ziehen",
+    "3-self": "Du musstest {amount} Karte(n) ziehen",
+    "4": "{target} hat vergessen seinen Zug zu beenden",
+    "4-self": "Du hast vergessen deinen Zug zu beenden",
+    "5": "{target} und {origin} haben Karten getauscht",
+    "5-self+origin": "Du hast mit {other} Karten getauscht",
+    "5-self+target": "{other} hat mir dir Karten getauscht",
+    "6": "{target} hat die Farbe gewechselt",
+    "6-self": "Du hast die Farbe gewechselt"
   }
 }

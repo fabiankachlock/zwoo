@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Cards;
+﻿using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Feedback;
 
 namespace ZwooGameLogic.Game.Events;
 
@@ -89,18 +85,24 @@ public struct GameEvent
     public struct RemoveCardEvent
     {
         public readonly long Player;
-        public readonly Card Card;
+        public readonly List<Card> Cards;
 
-        public RemoveCardEvent(long player, Card card)
+        public RemoveCardEvent(long player, List<Card> cards)
         {
             Player = player;
-            Card = card;
+            Cards = cards;
         }
     }
 
+    public static GameEvent RemoveCard(long player, List<Card> cards)
+    {
+        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, cards));
+    }
+
+    // added for compatibility reasons
     public static GameEvent RemoveCard(long player, Card card)
     {
-        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, card));
+        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, new List<Card>() { card }));
     }
 
 
@@ -109,41 +111,43 @@ public struct GameEvent
     {
         public readonly Card TopCard;
         public readonly long ActivePlayer;
-        public readonly int ActivePlayerCardAmount;
-        public readonly long LastPlayer;
-        public readonly int LastPlayerCardAmount;
+        public readonly Dictionary<long, int> CardAmounts;
+        public readonly List<UIFeedback> Feedback;
+        public readonly int? CurrentDrawAmount;
 
-        public StateUpdateEvent(Card topCard, long activePlayer, int activePlayerCardAmount, long lastPlayer, int lastPlayerCardAmount)
+        public StateUpdateEvent(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<UIFeedback> feedback, int? currentDrawAmount)
         {
             TopCard = topCard;
             ActivePlayer = activePlayer;
-            ActivePlayerCardAmount = activePlayerCardAmount;
-            LastPlayer = lastPlayer;
-            LastPlayerCardAmount = lastPlayerCardAmount;
+            CardAmounts = cardAmounts;
+            Feedback = feedback;
+            CurrentDrawAmount = currentDrawAmount;
         }
     }
 
-    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, int activePlayerCardAmount, long lastPlayer, int lastPlayerCardAmount)
+    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<UIFeedback> feedback, int? currentDrawAmount)
     {
-        return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, activePlayerCardAmount, lastPlayer, lastPlayerCardAmount));
+        return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, cardAmounts, feedback, currentDrawAmount));
     }
 
-    // PlayerDecissionEvent
+    // PlayerDecisionEvent
     public struct PlayerDecisionEvent
     {
         public readonly long Player;
         public readonly PlayerDecision Decision;
+        public readonly List<string> Options;
 
-        public PlayerDecisionEvent(long player, PlayerDecision decission)
+        public PlayerDecisionEvent(long player, PlayerDecision decision, List<string> options)
         {
             Player = player;
-            Decision = decission;
+            Decision = decision;
+            Options = options;
         }
     }
 
-    public static GameEvent GetPlayerDecission(long player, PlayerDecision decission)
+    public static GameEvent GetPlayerDecision(long player, PlayerDecision decision, List<string> options)
     {
-        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decission));
+        return new GameEvent(GameEventType.GetPlayerDecision, new PlayerDecisionEvent(player, decision, options));
     }
 
     // PlayerWonEvent

@@ -6,6 +6,7 @@ export type GameJoinResponse = BackendErrorAble<{
   id: number;
   isRunning: boolean;
   role: ZRPRole;
+  ownId: number;
 }>;
 
 export type GameMeta = {

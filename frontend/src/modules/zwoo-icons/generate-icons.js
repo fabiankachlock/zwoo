@@ -60,7 +60,8 @@ const icons = [
   'ic:baseline-wifi-off',
   'akar-icons:settings-horizontal',
   'material-symbols:keyboard-double-arrow-right-rounded',
-  'akar-icons:circle-chevron-up'
+  'akar-icons:circle-chevron-up',
+  'akar-icons:trash-can'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

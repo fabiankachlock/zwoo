@@ -65,7 +65,7 @@ internal class BasicBotStateManager
             case ZRPCode.StateUpdated:
                 aggregateStateUpdate((StateUpdateNotification)message.Payload);
                 break;
-            case ZRPCode.RemoveCard:
+            case ZRPCode.RemoveCards:
                 aggregateRemoveCard((RemoveCardNotification)message.Payload);
                 break;
             case ZRPCode.SendHand:
@@ -101,10 +101,13 @@ internal class BasicBotStateManager
 
     private void aggregateRemoveCard(RemoveCardNotification data)
     {
-        int index = _state.Deck.FindIndex(c => c.Color == data.Type && c.Type == data.Symbol);
-        if (index >= 0)
+        foreach (var card in data.Cards)
         {
-            _state.Deck.RemoveAt(index);
+            int index = _state.Deck.FindIndex(c => c.Color == card.Type && c.Type == card.Symbol);
+            if (index >= 0)
+            {
+                _state.Deck.RemoveAt(index);
+            }
         }
     }
 

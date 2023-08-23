@@ -1,5 +1,6 @@
 <template>
-  <FloatingDialog @click-outside="closeModal">
+  <!-- TODO tmp(beta): @click-outside="closeModal" -->
+  <FloatingDialog :content-class="contentClass">
     <div class="mb-2 flex justify-between items-center">
       <h1 class="tc-main text-2xl">
         {{ t(title ?? '') }}
@@ -22,19 +23,18 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
-import { useGameModal } from '@/core/adapter/game/modal';
-
 import FloatingDialog from '../../misc/FloatingDialog.vue';
 
 const { t } = useI18n();
-const modalState = useGameModal();
+// const modalState = useGameModal();
 
 defineProps<{
   title?: string;
   info?: string;
+  contentClass?: string;
 }>();
 
-const closeModal = () => {
-  modalState.closeSelf(undefined);
-};
+// const closeModal = () => {
+//   modalState.closeSelf(undefined);
+// };
 </script>
