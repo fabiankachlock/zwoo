@@ -198,7 +198,7 @@ public sealed class GameStateManager
         }
         _logger.Debug($"selected interrupt rule: {rule.Name}");
 
-        GameStateUpdate stateUpdate = rule.ApplyInterrupt(interrupt, _gameState, _cardPile, _playerCycle);
+        GameStateUpdate stateUpdate = rule.ApplyInterrupt(interrupt, newState, _cardPile, _playerCycle);
         _postExecute(stateUpdate);
     }
 
