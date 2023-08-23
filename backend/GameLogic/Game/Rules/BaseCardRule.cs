@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
 
@@ -14,7 +9,7 @@ internal class BaseCardRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.BaseRule;
+        get => RulePriority.BaseRule;
     }
 
     public override string Name
@@ -22,10 +17,7 @@ internal class BaseCardRule : BaseRule
         get => "BaseCardRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
-    }
+    public override RuleMeta? Setting => null;
 
     public BaseCardRule() : base() { }
 
@@ -38,7 +30,7 @@ internal class BaseCardRule : BaseRule
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
+        List<GameEvent> events;
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
         bool isAllowed = IsAllowedCard(state.TopCard, payload.Card);
@@ -47,10 +39,11 @@ internal class BaseCardRule : BaseRule
             state = PlayPlayerCard(state, payload.Player, payload.Card);
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return new GameStateUpdate(state, events);
+            state.Ui.CurrentDrawAmount = GetActiveDrawAmount(state.TopCard);
+            return GameStateUpdate.WithEvents(state, events);
         }
 
-        return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+        return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
     }
 
     // Rule utilities

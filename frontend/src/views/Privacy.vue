@@ -1,5 +1,5 @@
 <template>
-  <MaxWidthLayout size="normal" class="dataprotection tc-main-secondary">
+  <MaxWidthLayout size="normal" class="dataprotection tc-main-secondary break-words">
     <h1 class="tc-main">Datenschutzerklärung</h1>
 
     <p>

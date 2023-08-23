@@ -98,7 +98,7 @@
 
     private async void InsertRow()
     {
-        _newPlayer = _userService.CreateUser("NewUser", "example@test.com", "", null, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("created user in admin dashboard"));
+        _newPlayer = _userService.CreateUser("NewUser", "example@test.com", "", true, null, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("created user in admin dashboard"));
         await _playerGrid.InsertRow(_newPlayer);
     }
     

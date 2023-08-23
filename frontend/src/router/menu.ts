@@ -3,11 +3,13 @@ import { RouteRecordRaw } from 'vue-router';
 export const MenuRoutes: Array<RouteRecordRaw> = [
   {
     path: 'imprint',
-    component: () => import('../views/Imprint.vue')
+    component: () => import('../views/Imprint.vue'),
+    alias: ['impressum']
   },
   {
     path: 'privacy',
-    component: () => import('../views/Privacy.vue')
+    component: () => import('../views/Privacy.vue'),
+    alias: ['datenschutz']
   },
   {
     path: 'contact',

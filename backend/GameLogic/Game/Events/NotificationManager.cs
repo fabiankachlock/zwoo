@@ -1,4 +1,5 @@
 ﻿using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Feedback;
 
 namespace ZwooGameLogic.Game.Events;
 
@@ -9,20 +10,21 @@ public readonly record struct SendCardDTO(
 
 public readonly record struct RemoveCardDTO(
     long Player,
-    Card Card
+    List<Card> Cards
 );
 
 public readonly record struct StateUpdateDTO(
     Card PileTop,
     long ActivePlayer,
-    int ActivePlayerCardAmount,
-    long LastPlayer,
-    int LastPlayerCardAmount
+    Dictionary<long, int> CardAmounts,
+    List<UIFeedback> Feedback,
+    int? CurrentDrawAmount
 );
 
 public readonly record struct PlayerDecisionDTO(
     long Player,
-    PlayerDecision Decision
+    PlayerDecision Decision,
+    List<string> Options
 );
 
 public readonly record struct PlayerWonDTO(long Winner,

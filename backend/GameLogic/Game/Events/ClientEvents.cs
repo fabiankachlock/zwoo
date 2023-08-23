@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.ZRP;
 
 namespace ZwooGameLogic.Game.Events;
 
@@ -12,7 +13,7 @@ public enum ClientEventType
     RequestEndTurn = 303,
     PlaceCard = 304,
     DrawCard = 305,
-    SendPlayerDecission = 317
+    SendPlayerDecision = 317
 }
 
 public struct ClientEvent
@@ -43,7 +44,7 @@ public struct ClientEvent
 
     public static ClientEvent RequestEndTurn(long player)
     {
-        return new ClientEvent(ClientEventType.DrawCard, new RequestEndTurnEvent(player));
+        return new ClientEvent(ClientEventType.RequestEndTurn, new RequestEndTurnEvent(player));
     }
 
     public struct PlaceCardEvent
@@ -94,7 +95,7 @@ public struct ClientEvent
 
     public static ClientEvent PlayerDecision(long player, PlayerDecision decission, int value)
     {
-        return new ClientEvent(ClientEventType.SendPlayerDecission, new PlayerDecissionEvent(player, decission, value));
+        return new ClientEvent(ClientEventType.SendPlayerDecision, new PlayerDecissionEvent(player, decission, value));
     }
 
 }

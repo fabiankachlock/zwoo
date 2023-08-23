@@ -40,7 +40,9 @@
     "contact": "Kontakt",
     "logout": "Abmelden",
     "localLogs": "Lokal gespeicherte Logs",
-    "clearLogs": "Logs zurücksetzen"
+    "clearLogs": "Logs zurücksetzen",
+    "feedbackChat": "Feedback Nachrichten im Chat",
+    "feedbackSnackbar": "Feedback Mitteilungen"
   },
   "lng": {
     "de": "Deutsch",
@@ -82,7 +84,9 @@
     "beta": "BETA Code",
     "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden.",
     "resendVerifyEmail": "Email neu senden",
-    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen."
+    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
+    "terms": "Ich willige in die Verarbeitung und Speicherung meiner oben angegebenen personenbezogenen Daten zur Nutzung von ZWOO ein. Weitere Infos unter:",
+    "nameInfo": "Dein Benutzername ist für andere Spieler im Spiel einsehbar. Wähle daher am besten einen fiktiven Namen."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -162,6 +166,7 @@
       "116": "Der Benutzername ist ungültig.",
       "117": "Das Passwort ist ungültig.",
       "118": "Der BETA-Code ist ungültig.",
+      "119": "Die Einwilligung zur Datenverarbeitung wird benötigt.",
       "120": "Die Email wird bereits genutzt.",
       "121": "Der Benutzername wird bereits genutzt.",
       "122": "Der Account konnte nicht verifiziert werden.",
@@ -227,18 +232,6 @@
   "rules": {
     "widget": {
       "numberPlaceholder": "Zahl"
-    },
-    "maxPlayers": {
-      "title": "Spieleranzahl",
-      "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."
-    },
-    "addUpDraw": {
-      "title": "Ziehkarten addieren",
-      "info": "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."
-    },
-    "initialCards": {
-      "title": "Anzahl an Karten",
-      "info": "Lege eine Anzahl an Karten fest, die ein Spieler am Anfang bekommt."
     }
   },
   "ingame": {
@@ -260,10 +253,12 @@
   },
   "cookies": {
     "title": "Cookie Zustimmungen",
+    "userInformation": "Da uns die Privatsphäre unserer Spieler sehr am Herzen liegt, verzichten wir komplett auf Tracking-Cookies und setzen stattdessen ausschließlich technisch notwendige Cookies ein.",
+    "privacyLink": "Weiter Informationen unter:",
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
-        "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
+        "name": "Authentifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
       }
     },
@@ -275,7 +270,9 @@
     "disallowed": {
       "title": "Fehlende Cookies",
       "info": "Die Login- und Accounterstellungsfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
-    }
+    },
+    "__close": "Ok",
+    "__info": "Cookie Informationen"
   },
   "share": {
     "facebook": "Auf Facebook teilen",
@@ -334,6 +331,10 @@
     "selectColor": {
       "title": "Wähle eine Farbe",
       "info": "Wähle die Farbe, mit der weiter gespielt werden soll."
+    },
+    "selectPlayer": {
+      "title": "Wähle einen Spieler",
+      "info": "Wähle einen Spieler, auf den die Aktion der gerade gelegten Karten angewendet werden soll."
     }
   },
   "reassureDialog": {
@@ -445,7 +446,31 @@
     "send": "Absenden!",
     "thanks": "Deine Anfrage wurde erfolgreich versendet!",
     "email": "E-Mail",
-    "emailPlaceholder": "Deine E-Mail Adresse",
-    "acceptTerms": "TODO [Hiermit stimme ich der Verarbeitung meiner Personenbezogegenen Daten im Rahmen einer Antwort auf meine Anfrage zu.]"
+    "emailPlaceholder": "Deine E-Mail Adresse"
+  },
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Nur meine",
+        "all": "Alle",
+        "none": "Keine"
+      }
+    },
+    "consumer": {
+      "chat": "Chat",
+      "snackbar": "Mitteilungen"
+    },
+    "1": "{target} musste aussetzen",
+    "1-self": "Du musstest aussetzen",
+    "2": "Richtungswechsel!",
+    "3": "{target} musste {amount} Karte(n) ziehen",
+    "3-self": "Du musstest {amount} Karte(n) ziehen",
+    "4": "{target} hat vergessen seinen Zug zu beenden",
+    "4-self": "Du hast vergessen deinen Zug zu beenden",
+    "5": "{target} und {origin} haben Karten getauscht",
+    "5-self+origin": "Du hast mit {other} Karten getauscht",
+    "5-self+target": "{other} hat mir dir Karten getauscht",
+    "6": "{target} hat die Farbe gewechselt",
+    "6-self": "Du hast die Farbe gewechselt"
   }
 }
