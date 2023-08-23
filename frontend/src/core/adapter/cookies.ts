@@ -4,14 +4,6 @@ type CookiesConfig = {
   // recaptcha: boolean;
 };
 
-// const PreferredSelection: CookiesConfig = {
-//   recaptcha: true
-// };
-
-const DefaultSelection: CookiesConfig = {
-  // recaptcha: false
-};
-
 const cookiesKey = 'zwoo:cookies';
 
 const saveCookies = (selection: CookiesConfig) => {
@@ -37,7 +29,7 @@ export const useCookies = defineStore('cookies', {
   state: () => ({
     popupShowed: false,
     popupOpen: false,
-    cookies: DefaultSelection
+    cookies: {}
   }),
 
   getters: {
@@ -50,10 +42,7 @@ export const useCookies = defineStore('cookies', {
         const selection = readCookies();
         if (selection) {
           this.popupShowed = true;
-          this.cookies = {
-            ...DefaultSelection,
-            ...selection
-          };
+          this.cookies = selection;
         } else {
           this.popupOpen = true;
         }
@@ -69,6 +58,7 @@ export const useCookies = defineStore('cookies', {
     // },
     rejectAll() {
       // this.cookies.recaptcha = false;
+      this.didShowDialog();
     },
     async loadRecaptcha() {
       // if (this.cookies.recaptcha) {

@@ -6,16 +6,16 @@ namespace ZwooBackend.Services;
 
 public class DatabaseCleanupJob : IJob
 {
-    private IDatabase _db { get; set; }
+    private readonly IUserService _users;
 
-    public DatabaseCleanupJob(IDatabase db)
+    public DatabaseCleanupJob(IUserService users)
     {
-        _db = db;
+        _users = users;
     }
 
     public Task Execute(IJobExecutionContext context)
     {
-        _db.CleanDatabase();
+        _users.CleanUpUsers();
         return Task.CompletedTask;
     }
 }

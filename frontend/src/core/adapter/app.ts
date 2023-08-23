@@ -41,7 +41,7 @@ export const useRootApp = defineStore('app', {
       environment: 'online' as AppEnv,
       // versions
       serverVersion: new Awaiter() as string | Awaiter<string>,
-      clientVersion: AppConfig.Version,
+      clientVersion: AppConfig.VersionOverride || AppConfig.Version,
       // updates
       updateAvailable: false,
       offlineReady: false,
@@ -70,7 +70,7 @@ export const useRootApp = defineStore('app', {
         console.warn('### zwoo entered offline mode');
         useAuth().applyOfflineConfig();
         RouterService.getRouter().push('/offline');
-      } else if (version !== AppConfig.Version) {
+      } else if (version !== AppConfig.Version && version !== AppConfig.VersionOverride) {
         RouterService.getRouter().push('/invalid-version');
       }
 
@@ -85,7 +85,7 @@ export const useRootApp = defineStore('app', {
         this.serverVersion = AppConfig.Version;
       }
 
-      MigrationRunner.run(MigrationRunner.lastVersion, this.clientVersion);
+      MigrationRunner.run(MigrationRunner.lastVersion, AppConfig.Version);
       this.isLoading = false;
     },
 

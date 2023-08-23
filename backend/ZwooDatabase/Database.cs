@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using ZwooDatabase.Dao;
+using ZwooDatabase.Legacy;
 using MongoDB.Driver;
 using log4net;
 
@@ -53,11 +54,6 @@ public interface IDatabase
     /// </summary>
     public IMongoCollection<ContactRequest> ContactRequests { get; }
 
-
-    /// <summary>
-    /// Delete unverified users & unused password reset codes & delete expired delete account events
-    /// </summary>
-    public void CleanDatabase();
 
     /// <summary>
     /// register bson class mappers
@@ -123,32 +119,13 @@ public class Database : IDatabase
         ContactRequests = MongoDB.GetCollection<ContactRequest>("contact_request");
     }
 
-    public void CleanDatabase()
-    {
-
-        var unverifiedUsers = Users.AsQueryable().Where(x => !x.Verified);
-        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} unverified user(s).");
-        foreach (var user in unverifiedUsers)
-        {
-            Users.DeleteOne(x => x.Id == user.Id);
-        }
-
-
-        var usersWithPasswordReset = Users.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
-        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} password reset codes.");
-        foreach (var user in unverifiedUsers)
-        {
-            Users.UpdateOne(x => x.Id == user.Id, Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
-        }
-    }
-
     public void InitializeClasses()
     {
         BsonClassMap.RegisterClassMap<UserDao>(cm =>
         {
             cm.AutoMap();
             cm.MapCreator(p =>
-                new UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified));
+                new UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified, p.AcceptedTerms));
         });
 
         BsonClassMap.RegisterClassMap<BetaCodeDao>(cm =>
@@ -198,6 +175,13 @@ public class Database : IDatabase
             cm.AutoMap();
             cm.MapCreator(p =>
                 new ContactRequest(p.Id, p.Timestamp, p.Name, p.Email, p.Message, p.CaptchaScore, p.Origin));
+        });
+
+        BsonClassMap.RegisterClassMap<Beta11UserDao>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new Beta11UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified));
         });
 
         // setup object serializer for AuditTrailEventDaos `object` properties

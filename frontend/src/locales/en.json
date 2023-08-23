@@ -82,7 +82,9 @@
     "beta": "BETA Code",
     "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account.",
     "resendVerifyEmail": "Resend email",
-    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account."
+    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account.",
+    "terms": "I consent to the processing and storage of my personal data provided above for the use of ZWOO. More info at:",
+    "nameInfo": "Your username is visible to other players in the game. Therefore, it is best to choose a fictitious name."
   },
   "createGame": {
     "title": "Create Game",
@@ -162,6 +164,7 @@
       "116": "The username is invalid.",
       "117": "The password is invalid.",
       "118": "The BETA-Code is invalid.",
+      "119": "The Consent to data processing is required.",
       "120": "The email is already used.",
       "121": "The username is already used.",
       "122": "The account could not be verified.",
@@ -260,11 +263,13 @@
   },
   "cookies": {
     "title": "Cookie Consent",
+    "userInformation": "Since the privacy of our players is very important to us, we completely dispense with tracking cookies and instead use only technically necessary cookies.",
+    "privacyLink": "More info at:",
     "functional": {
       "title": "Functional Cookies",
       "auth": {
         "name": "Authentication Cookies (Strictly necessary)",
-        "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
+        "description": "We use cookies to store your login across multiple browser sessions, so that you don't have to re-enter your credentials every time you visit."
       }
     },
     "active": "Active",
@@ -275,7 +280,9 @@
     "disallowed": {
       "title": "Missing Cookies",
       "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
-    }
+    },
+    "__close": "Ok",
+    "__info": "Cookie notice"
   },
   "share": {
     "facebook": "Share on Facebook",

@@ -168,6 +168,7 @@ public class EmailService : IHostedService, IEmailService
     {
         _logger.Info("start sending emails");
         var client = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort);
+        client.EnableSsl = true;
         client.Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword);
 
         while (_emailQueue.TryDequeue(out var message))
