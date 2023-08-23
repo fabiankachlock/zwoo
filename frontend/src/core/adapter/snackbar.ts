@@ -32,6 +32,7 @@ export type SnackbarItem = {
   force?: boolean;
   position: SnackBarPosition;
   showClose?: boolean;
+  hideProgress?: boolean;
   color?: 'primary' | 'secondary';
   mode: 'static' | 'loading';
   onClosed: () => void;
@@ -72,6 +73,7 @@ export const useSnackbar = defineStore('snackbar', () => {
 
       activeMessage.value.onClosed();
       activeMessage.value = undefined;
+      messageStack.value = messageStack.value.filter(msg => msg.mode === 'static'); // remove any loading snackbars when force pushing
       setTimeout(() => {
         // wait until the next event loop, so that the animation can be reset before
         showMessage(msg);

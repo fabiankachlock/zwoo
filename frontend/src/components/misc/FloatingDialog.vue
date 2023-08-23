@@ -1,9 +1,9 @@
 <template>
-  <div class="fixed inset-0 z-10" @click="handleClick">
+  <div class="fixed inset-0 z-40" @click="handleClick">
     <div class="relative grid place-items-center w-full h-full">
       <div class="absolute inset-0 backdrop-blur"></div>
       <div class="absolute inset-0 backdrop-color z-10"></div>
-      <div class="w-full mx-auto z-20" :class="contentClass ?? 'sm:max-w-3xl'">
+      <div class="w-full mx-auto z-50" :class="contentClass ?? 'sm:max-w-3xl'">
         <div
           class="frame bg-lightest shadow-md sm:rounded-xl m-3 relative overflow-y-auto"
           :class="{ 'p-5': !withoutPadding }"

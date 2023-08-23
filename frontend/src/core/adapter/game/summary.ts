@@ -2,16 +2,18 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
-import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
+import { ZRPOPCode, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import { RouterService } from '@/core/global/Router';
 
+import { usePlayerManager } from './playerManager';
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type GameSummaryEntry = {
-  id: string;
+  id: number;
   username: string;
   score: number;
   position: number;
+  isBot: boolean;
 };
 
 const summaryWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerWon);
@@ -19,15 +21,17 @@ const summaryWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerWon);
 export const useGameSummary = defineStore('game-summary', () => {
   const summary = ref<GameSummaryEntry[]>([]);
   const dispatchEvent = useGameEventDispatch();
+  const playerManager = usePlayerManager();
 
   const _receiveMessage: (typeof summaryWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.PlayerWon) {
       summary.value = msg.data.summary
         .map(e => ({
           id: e.id,
-          username: e.username,
+          username: playerManager.getPlayerName(e.id),
           position: e.position,
-          score: e.score
+          score: e.score,
+          isBot: playerManager.getPlayerRole(e.id) === ZRPRole.Bot
         }))
         .sort((a, b) => a.score - b.score);
     }

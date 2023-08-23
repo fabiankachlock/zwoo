@@ -2,6 +2,7 @@
 using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Rules;
 using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Helper;
 using ZwooGameLogic.Logging;
 
@@ -62,13 +63,14 @@ public sealed class GameStateManager
         (_playerCycle, _playerOrder) = _playerManager.ComputeOrder();
         _cardPile = new Pile();
         _actionsQueue.Start();
-        _ruleManager.Configure();
+        _ruleManager.Configure(HandleInterrupt);
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
             topCard: new StackCard(DrawSaveCard()),
             cardStack: new List<StackCard>(),
-            playerDecks: GeneratePlayerDecks(_playerManager.Players)
+            playerDecks: GeneratePlayerDecks(_playerManager.Players),
+            ui: new UiHints()
         );
     }
 
@@ -144,9 +146,9 @@ public sealed class GameStateManager
                     GameEvent.CreateStateUpdate(
                         topCard: newState.TopCard.Card,
                         activePlayer: newState.CurrentPlayer,
-                        activePlayerCardAmount: newState.PlayerDecks[newState.CurrentPlayer].Count,
-                        lastPlayer: _gameState.CurrentPlayer,
-                        lastPlayerCardAmount: _gameState.CurrentPlayer == id ? 0 : newState.PlayerDecks[_gameState.CurrentPlayer].Count
+                        cardAmounts: new Dictionary<long, int>(),
+                        feedback: new List<UIFeedback>(),
+                        currentDrawAmount: null
                     )
                 };
                 SendEvents(events);
@@ -161,10 +163,17 @@ public sealed class GameStateManager
         var _ = _actionsQueue.Enqueue(() => ExecuteEvent(clientEvent));
     }
 
+    internal void HandleInterrupt(GameInterrupt interrupt)
+    {
+        _logger.Debug($"game interrupted scheduled");
+        // these calls don't need to be awaited, because the caller doesn't care when the event is executed
+        var _ = _actionsQueue.Intercept(() => ExecuteInterrupt(interrupt));
+    }
+
     private void ExecuteEvent(ClientEvent clientEvent)
     {
         GameState newState = _gameState.Clone();
-        BaseRule? rule = _ruleManager.getRule(clientEvent, newState);
+        BaseRule? rule = _ruleManager.GetRule(clientEvent, newState);
 
         if (rule == null)
         {
@@ -173,18 +182,41 @@ public sealed class GameStateManager
         }
         _logger.Debug($"selected rule: {rule.Name}");
 
-        GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, _gameState, _cardPile, _playerCycle);
+        GameStateUpdate stateUpdate = rule.ApplyRule(clientEvent, newState, _cardPile, _playerCycle);
+        _postExecute(stateUpdate);
+    }
+
+    private void ExecuteInterrupt(GameInterrupt interrupt)
+    {
+        GameState newState = _gameState.Clone();
+        BaseRule? rule = _ruleManager.GetRuleForInterrupt(interrupt, newState);
+
+        if (rule == null)
+        {
+            _logger.Error($"cant find rule for interrupt ${interrupt}");
+            return;
+        }
+        _logger.Debug($"selected interrupt rule: {rule.Name}");
+
+        GameStateUpdate stateUpdate = rule.ApplyInterrupt(interrupt, newState, _cardPile, _playerCycle);
+        _postExecute(stateUpdate);
+    }
+
+    private void _postExecute(GameStateUpdate stateUpdate)
+    {
         GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
             topCard: stateUpdate.NewState.TopCard.Card,
             activePlayer: stateUpdate.NewState.CurrentPlayer,
-            activePlayerCardAmount: stateUpdate.NewState.PlayerDecks[stateUpdate.NewState.CurrentPlayer].Count,
-            lastPlayer: _gameState.CurrentPlayer,
-            lastPlayerCardAmount: stateUpdate.NewState.PlayerDecks[_gameState.CurrentPlayer].Count
+            cardAmounts: stateUpdate.NewState.PlayerDecks
+                .Where(kv => _gameState.PlayerDecks[kv.Key].Count != kv.Value.Count)
+                .Select(kv => KeyValuePair.Create(kv.Key, kv.Value.Count))
+                .ToDictionary(kv => kv.Key, kv => kv.Value),
+            feedback: stateUpdate.Feedback,
+            currentDrawAmount: stateUpdate.NewState.Ui.CurrentDrawAmount
          );
         _gameState = stateUpdate.NewState;
 
         GameEvent? isFinishedEvent = IsGameFinished(_gameState);
-
         if (isFinishedEvent.HasValue)
         {
             _actionsQueue.Clear();
@@ -192,11 +224,11 @@ public sealed class GameStateManager
             SendEvents(new List<GameEvent>() { isFinishedEvent.Value });
             GameEvent.PlayerWonEvent playerWonEvent = isFinishedEvent.Value.CastPayload<GameEvent.PlayerWonEvent>();
             OnFinished.Invoke(playerWonEvent, Meta);
+            return;
         }
-        else
-        {
-            SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
-        }
+
+        SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
+        _ruleManager.OnGameUpdate(stateUpdate.NewState, stateUpdate.Events);
     }
 
     private GameEvent? IsGameFinished(GameState state)
@@ -232,21 +264,21 @@ public sealed class GameStateManager
                     break;
                 case GameEventType.RemoveCard:
                     GameEvent.RemoveCardEvent removeCardEvent = evt.CastPayload<GameEvent.RemoveCardEvent>();
-                    _notificationManager.RemoveCard(new RemoveCardDTO(removeCardEvent.Player, removeCardEvent.Card));
+                    _notificationManager.RemoveCard(new RemoveCardDTO(removeCardEvent.Player, removeCardEvent.Cards));
                     break;
                 case GameEventType.StateUpdate:
                     GameEvent.StateUpdateEvent stateUpdateEvent = evt.CastPayload<GameEvent.StateUpdateEvent>();
                     _notificationManager.StateUpdate(new StateUpdateDTO(
                         stateUpdateEvent.TopCard,
                         stateUpdateEvent.ActivePlayer,
-                        stateUpdateEvent.ActivePlayerCardAmount,
-                        stateUpdateEvent.LastPlayer,
-                        stateUpdateEvent.LastPlayerCardAmount
+                        stateUpdateEvent.CardAmounts,
+                        stateUpdateEvent.Feedback,
+                        stateUpdateEvent.CurrentDrawAmount
                     ));
                     break;
                 case GameEventType.GetPlayerDecision:
                     GameEvent.PlayerDecisionEvent playerDecisionEvent = evt.CastPayload<GameEvent.PlayerDecisionEvent>();
-                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecisionEvent.Player, playerDecisionEvent.Decision));
+                    _notificationManager.GetPlayerDecision(new PlayerDecisionDTO(playerDecisionEvent.Player, playerDecisionEvent.Decision, playerDecisionEvent.Options));
                     break;
                 case GameEventType.PlayerWon:
                     GameEvent.PlayerWonEvent playerWonEvent = evt.CastPayload<GameEvent.PlayerWonEvent>();

@@ -38,7 +38,11 @@
     "settingsSync": "Sync settings",
     "reportBug": "Report a Bug",
     "contact": "Contact",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "localLogs": "Locally saved logs",
+    "clearLogs": "Clear logs",
+    "feedbackChat": "Feedback messages in chat",
+    "feedbackSnackbar": "Feedback notifications"
   },
   "lng": {
     "de": "German",
@@ -80,7 +84,9 @@
     "beta": "BETA Code",
     "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account.",
     "resendVerifyEmail": "Resend email",
-    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account."
+    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account.",
+    "terms": "I consent to the processing and storage of my personal data provided above for the use of ZWOO. More info at:",
+    "nameInfo": "Your username is visible to other players in the game. Therefore, it is best to choose a fictitious name."
   },
   "createGame": {
     "title": "Create Game",
@@ -160,6 +166,7 @@
       "116": "The username is invalid.",
       "117": "The password is invalid.",
       "118": "The BETA-Code is invalid.",
+      "119": "The Consent to data processing is required.",
       "120": "The email is already used.",
       "121": "The username is already used.",
       "122": "The account could not be verified.",
@@ -225,18 +232,6 @@
   "rules": {
     "widget": {
       "numberPlaceholder": "Number"
-    },
-    "maxPlayers": {
-      "title": "Amount of Players",
-      "info": "Change maximum amount of players for your game."
-    },
-    "addUpDraw": {
-      "title": "Add draw amounts",
-      "info": "On top of a draw card, further draw cards can be placed. The number of cards to be drawn is added. You can put +2 cards on top of +4 cards, as well as +4 cards on top of +2 cards."
-    },
-    "initialCards": {
-      "title": "Amount Of Cards",
-      "info": "Choose the amount of cards each player is supplied with at the start of a game.."
     }
   },
   "ingame": {
@@ -258,11 +253,13 @@
   },
   "cookies": {
     "title": "Cookie Consent",
+    "userInformation": "Since the privacy of our players is very important to us, we completely dispense with tracking cookies and instead use only technically necessary cookies.",
+    "privacyLink": "More info at:",
     "functional": {
       "title": "Functional Cookies",
       "auth": {
         "name": "Authentication Cookies (Strictly necessary)",
-        "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
+        "description": "We use cookies to store your login across multiple browser sessions, so that you don't have to re-enter your credentials every time you visit."
       }
     },
     "active": "Active",
@@ -273,7 +270,9 @@
     "disallowed": {
       "title": "Missing Cookies",
       "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
-    }
+    },
+    "__close": "Ok",
+    "__info": "Cookie notice"
   },
   "share": {
     "facebook": "Share on Facebook",
@@ -332,6 +331,10 @@
     "selectColor": {
       "title": "Choose a color",
       "info": "Choose the color, that should be played with from now on."
+    },
+    "selectPlayer": {
+      "title": "Choose a player",
+      "info": "Select a player to whom the action of the cards just laid should be applied."
     }
   },
   "reassureDialog": {
@@ -359,7 +362,8 @@
     "storedCount": "no logs stored | 1 entry | {count} entries",
     "clearStore": "Clear Store",
     "reloadLogs": "Reload Logs",
-    "storedLogs": "Stored Logs"
+    "storedLogs": "Stored Logs",
+    "logsCleared": "Logs cleared"
   },
   "shortcuts": {
     "title": "Keyboard shortcuts",
@@ -442,7 +446,31 @@
     "send": "Send!",
     "thanks": "Your request was sent successfully!",
     "email": "E-Mail",
-    "emailPlaceholder": "Your E-Mail address",
-    "acceptTerms": "TODO [I accept the terms and conditions...]"
+    "emailPlaceholder": "Your E-Mail address"
+  },
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Only mine",
+        "all": "All",
+        "none": "None"
+      }
+    },
+    "consumer": {
+      "chat": "Chat",
+      "snackbar": "Notifications"
+    },
+    "1": "{target} was skipped",
+    "1-self": "You were skipped",
+    "2": "direction changed!",
+    "3": "{target} had to draw {amount} Card(s)",
+    "3-self": "You had to draw {amount} Card(s)",
+    "4": "{target} forgot to end its turn",
+    "4-self": "You forgot to end your turn",
+    "5": "{target} and {origin} swapped cards",
+    "5-self+origin": "You swapped cards with {other}",
+    "5-self+target": "{other} swapped cards with you",
+    "6": "{target} changed the color",
+    "6-self": "You changed the color"
   }
 }

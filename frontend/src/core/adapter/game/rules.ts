@@ -2,18 +2,19 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
-import { AllRules, EditableRules, RuleType, RuleTypeDefinitions } from '@/core/domain/game/GameRules';
-import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
+import { SettingsType, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
 export type DisplayRule = {
   id: string;
+  title: Record<string, string>;
+  description: Record<string, string>;
   value: number;
-  ruleType: RuleType;
   isReadonly: boolean;
-  title: string;
-  description: string;
+  ruleType: SettingsType;
+  min?: number;
+  max?: number;
 };
 
 const settingsWatcher = new MonolithicEventWatcher(ZRPOPCode.AllSettings, ZRPOPCode.SettingChanged);
@@ -24,16 +25,16 @@ export const useRules = defineStore('game-rules', () => {
 
   const _receiveMessage: (typeof settingsWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.AllSettings) {
-      rules.value = msg.data.settings
-        .filter(setting => AllRules.includes(setting.setting))
-        .map(setting => ({
-          id: setting.setting,
-          title: `rules.${setting.setting}.title`,
-          description: `rules.${setting.setting}.info`,
-          value: setting.value,
-          isReadonly: !EditableRules.includes(setting.setting),
-          ruleType: RuleTypeDefinitions[setting.setting] as RuleType
-        }));
+      rules.value = msg.data.settings.map(setting => ({
+        id: setting.setting,
+        title: setting.title, // `rules.${setting.setting}.title`,
+        description: setting.description, //`rules.${setting.setting}.info`,
+        value: setting.value,
+        isReadonly: setting.isReadonly,
+        ruleType: setting.type,
+        min: setting.min,
+        max: setting.max
+      }));
     } else if (msg.code === ZRPOPCode.SettingChanged) {
       for (const setting of rules.value) {
         if (setting.id === msg.data.setting) {

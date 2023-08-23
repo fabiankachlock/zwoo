@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+﻿using ZwooGameLogic.Game.Events;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
 
@@ -14,7 +9,7 @@ internal class BaseDrawRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.BaseRule;
+        get => RulePriority.BaseRule;
     }
 
     public override string Name
@@ -22,10 +17,7 @@ internal class BaseDrawRule : BaseRule
         get => "BaseDrawRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
-    {
-        get => GameSettingsKey.DEFAULT_RULE_SET;
-    }
+    public override RuleMeta? Setting => null;
 
     public BaseDrawRule() : base() { }
 
@@ -34,15 +26,13 @@ internal class BaseDrawRule : BaseRule
         return gameEvent.Type == ClientEventType.DrawCard;
     }
 
-
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
+        List<GameEvent> events;
+        int amount;
 
-        int amount = 0;
         ClientEvent.DrawCardEvent payload = gameEvent.CastPayload<ClientEvent.DrawCardEvent>();
-
         if (!IsActivePlayer(state, payload.Player))
         {
             return GameStateUpdate.None(state);
@@ -61,24 +51,13 @@ internal class BaseDrawRule : BaseRule
         List<Card> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+        state.Ui.CurrentDrawAmount = null;
         events.Add(GameEvent.SendCards(payload.Player, newCards));
 
-
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, payload.Player).WithArg(UIFeedbackArgKey.DrawAmount, newCards.Count));
     }
 
     // Rule utilities
-    /// <summary>
-    /// get the draw amount of a card
-    /// </summary>
-    /// <param name="card">card</param>
-    /// <returns>the amount of card a player should draw</returns>
-    protected int GetDrawAmount(Card card)
-    {
-        if (card.Type == CardType.DrawTwo) return 2;
-        else if (card.Type == CardType.WildFour) return 4;
-        else return 0;
-    }
 
     /// <summary>
     /// draw a certain amount of cards for a player

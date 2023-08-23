@@ -1,9 +1,11 @@
 <template>
-  <div class="m-2 mb-4 flex no-wrap items-center">
-    <label class="tc-main-secondary text-sm font-bold my-2 relative">
+  <div class="m-2 my-4 flex no-wrap" :class="{ 'flex-row-reverse': position === 'start', [`items-${align}`]: true }">
+    <label class="tc-main-secondary text-sm font-bold relative">
       <slot></slot>
     </label>
-    <button :class="styles" class="hover:bc-primary border border-transparent rounded" @click.prevent="toggle">
+    <!-- keep this next div, otherwise items-`x` might not be available when it is not used anywhere else -->
+    <div class="items-start items-center items-end"></div>
+    <button :class="styles" class="hover:bc-primary border border-transparent rounded tc-primary mx-3 my-1" @click.prevent="toggle">
       <Icon v-show="!checked" icon="akar-icons:box" />
       <Icon v-show="checked" icon="akar-icons:check" />
     </button>
@@ -18,8 +20,10 @@ import { Icon } from '@/components/misc/Icon';
 const checked = ref(false);
 
 const props = defineProps<{
-  styles: string;
+  styles?: string;
   modelValue: boolean;
+  align?: 'start' | 'center' | 'end';
+  position?: 'start' | 'end';
 }>();
 
 const { modelValue } = toRefs(props);

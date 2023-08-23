@@ -14,10 +14,11 @@
               v-for="messageItem in messages"
               :key="messageItem.id"
               :message="messageItem.message"
-              :is-own="messageItem.sender.id === username"
+              :is-own="messageItem.sender.id === lobbyId"
               :is-spectator="messageItem.sender.role === ZRPRole.Spectator"
               :is-host="messageItem.sender.role === ZRPRole.Host"
-              :name="messageItem.sender.id"
+              :is-system="messageItem.sender.role === ZRPRole._System"
+              :name="messageItem.sender.name"
             />
           </div>
         </div>
@@ -65,7 +66,7 @@ const { t } = useI18n();
 const message = ref('');
 const messages = computed(() => chat.allMessages);
 const isActive = computed(() => chat.isActive);
-const username = computed(() => chat.ownName);
+const lobbyId = computed(() => chat.ownId);
 const gameName = computed(() => chat.gameName);
 const container = ref<HTMLDivElement | undefined>(undefined);
 

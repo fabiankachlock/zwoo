@@ -3114,7 +3114,7 @@ dependencies = [
 
 [[package]]
 name = "zwoo"
-version = "1.0.0-beta.11"
+version = "1.0.0-beta.12"
 dependencies = [
  "serde",
  "serde_json",

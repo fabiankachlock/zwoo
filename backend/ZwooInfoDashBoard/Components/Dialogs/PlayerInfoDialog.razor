@@ -23,6 +23,16 @@
     <p>@($"Email: {_player.Email}")</p>
     <p>@($"Games: {_gamesPlayed.Count()}")</p>
     <p>@($"Wins: {_player.Wins}")</p>
+    @if (_player.AcceptedTerms && _player.AcceptedTermsAt != null)
+    {
+        <p>@($"Terms: Accepted {DateTimeOffset.FromUnixTimeMilliseconds(_player.AcceptedTermsAt.Value).ToString("dd.MM.yy HH:mm:ss")}")</p>
+    } else if (_player.AcceptedTerms) {
+        <p>Terms: Accepted (beta)</p>
+    }
+    @if (_player.Verified && _player.VerifiedAt != null)
+    {
+        <p>@($"Verified: {DateTimeOffset.FromUnixTimeMilliseconds(_player.VerifiedAt.Value).ToString("dd.MM.yy HH:mm:ss")}")</p>
+    }
     @if (_player.BetaCode != null)
     {
         <p>@($"Betacode: {_player.BetaCode}")</p>

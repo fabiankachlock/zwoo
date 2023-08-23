@@ -1,7 +1,10 @@
 <template>
   <div class="w-full mb-4">
     <div class="m-2">
-      <label class="block tc-main-secondary text-sm font-bold mb-2" :for="id">{{ t(labelKey) }}</label>
+      <label class="block tc-main-secondary text-sm font-bold mb-2" :for="id">
+        {{ labelKey && t(labelKey) }}
+        <slot></slot>
+      </label>
       <div class="relative">
         <input
           :id="id"
@@ -47,7 +50,7 @@ import Error from '../misc/Error.vue';
 
 const props = defineProps<{
   id: string;
-  labelKey: string;
+  labelKey?: string;
   modelValue: string;
   validator?: Validator<string>;
   placeholder?: string;

@@ -1,6 +1,6 @@
 using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Settings;
+using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 
 namespace ZwooGameLogic.Game.Rules;
@@ -9,7 +9,7 @@ internal class AddUpDrawRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriorirty.GameLogicExtendions;
+        get => RulePriority.GameLogicExtendions;
     }
 
     public override string Name
@@ -17,10 +17,19 @@ internal class AddUpDrawRule : BaseRule
         get => "AddUpDrawRule";
     }
 
-    public override GameSettingsKey? AssociatedOption
+    public override RuleMeta? Setting => new RuleMeta()
     {
-        get => GameSettingsKey.AddUpDraw;
-    }
+        SettingsKey = "addUpDraw",
+        Title = new Dictionary<string, string>(){
+            {"de", "Ziehkarten addieren"},
+            {"en", "Add draw amounts"},
+        },
+        Description = new Dictionary<string, string>(){
+            {"de", "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."},
+            {"en", "On top of a draw card, further draw cards can be placed. The number of cards to be drawn is added. You can put +2 cards on top of +4 cards, as well as +4 cards on top of +2 cards."},
+        },
+        DefaultValue = 1
+    };
 
     private BaseRule _placeCardRule;
     private BaseRule _drawRule;
@@ -86,16 +95,33 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
                     List<GameEvent> events = new List<GameEvent>();
                     state = PlayPlayerCard(state, payload.Player, payload.Card);
                     (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+                    int currentDrawAmount = GetRecursiveDrawAmount(state.CardStack);
+                    state.Ui.CurrentDrawAmount = currentDrawAmount == 0 ? null : currentDrawAmount;
                     events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-                    return new GameStateUpdate(state, events);
+                    return GameStateUpdate.New(state, events);
                 }
             }
             else
             {
-                return GameStateUpdate.WithEvents(state, new List<GameEvent>() { GameEvent.Error(payload.Player, GameError.CantPlaceCard) });
+                return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
             }
         }
         return PerformHandleDecission(gameEvent, state, playerOrder);
+    }
+
+    // TODO: duplicated code
+    protected int GetRecursiveDrawAmount(List<StackCard> stack)
+    {
+        int amount = 0;
+        for (int i = stack.Count - 1; i >= 0; i--)
+        {
+            if (stack[i].EventActivated || !CardUtilities.IsDraw(stack[i].Card))
+            {
+                break;
+            }
+            amount += GetDrawAmount(stack[i].Card);
+        }
+        return amount;
     }
 }
 
@@ -117,9 +143,9 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
+        List<GameEvent> events;
+        int amount;
 
-        int amount = 0;
         ClientEvent.DrawCardEvent payload = gameEvent.CastPayload<ClientEvent.DrawCardEvent>();
 
 
@@ -131,7 +157,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
         if (CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated)
         {
             amount = GetRecursiveDrawAmount(state.CardStack);
-            state.CardStack = ActiveCardsRecursive(state.CardStack);
+            state.CardStack = ActivateCardsRecursive(state.CardStack);
             state.TopCard.ActivateEvent();
         }
         else
@@ -143,9 +169,10 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
         List<Card> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
+        state.Ui.CurrentDrawAmount = null;
         events.Add(GameEvent.SendCards(payload.Player, newCards));
 
-        return new GameStateUpdate(state, events);
+        return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, payload.Player).WithArg(UIFeedbackArgKey.DrawAmount, amount));
     }
 
     protected int GetRecursiveDrawAmount(List<StackCard> stack)
@@ -162,7 +189,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
         return amount;
     }
 
-    protected List<StackCard> ActiveCardsRecursive(List<StackCard> stack)
+    protected List<StackCard> ActivateCardsRecursive(List<StackCard> stack)
     {
         for (int i = stack.Count - 1; i >= 0; i--)
         {
@@ -170,7 +197,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
             {
                 break;
             }
-            stack[i].ActivateEvent();
+            stack[i] = new StackCard(stack[i].Card, true);
         }
         return stack;
     }

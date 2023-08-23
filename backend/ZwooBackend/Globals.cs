@@ -42,6 +42,7 @@ public static class Globals
         SmtpHostEmail = ReturnIfValidEnvVar("SMTP_HOST_EMAIL");
         SmtpUsername = ReturnIfValidEnvVar("SMTP_USERNAME");
         SmtpPassword = ReturnIfValidEnvVar("SMTP_PASSWORD");
+        ContactEmail = ReturnIfValidEnvVar("ZWOO_CONTACT_EMAIL");
 
         RecaptchaSideSecret = ReturnIfValidEnvVar("ZWOO_RECAPTCHA_SIDESECRET");
         UseLogRush = Convert.ToBoolean(Environment.GetEnvironmentVariable("ZWOO_USE_LOGRUSH"));
@@ -108,6 +109,7 @@ public static class Globals
     public static readonly string SmtpHostEmail;
     public static readonly string SmtpUsername;
     public static readonly string SmtpPassword;
+    public static readonly string ContactEmail;
 
     public static readonly bool UseLogRush;
     public static readonly string LogRushUrl;
@@ -118,6 +120,6 @@ public static class Globals
 
     public static readonly string RecaptchaSideSecret;
 
-    public static readonly string Version = "1.0.0-beta.11";
+    public static readonly string Version = "1.0.0-beta.12";
     public static readonly string ApiVersion = Version;
 }

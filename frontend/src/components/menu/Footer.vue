@@ -13,10 +13,10 @@
       <div class="flex justify-center items-center">
         <!-- <span class="footer-item">© {{ year }}</span> -->
         <router-link to="/imprint" class="footer-item">{{ t('nav.imprint') }}</router-link>
+        <router-link to="/privacy" class="footer-item">{{ t('nav.privacy') }}</router-link>
         <Environment show="online">
           <router-link to="/contact" class="footer-item">{{ t('nav.contact') }}</router-link>
         </Environment>
-        <!-- <router-link to="/privacy" class="footer-item">{{ t('nav.privacy') }}</router-link> -->
       </div>
       <!-- TODO: implement
         <button class="help flex items-center">

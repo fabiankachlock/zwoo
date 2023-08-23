@@ -29,6 +29,7 @@ export const useGameConfig = defineStore('game-config', {
     gameId: undefined as number | undefined,
     name: '',
     role: undefined as ZRPRole | undefined,
+    lobbyId: undefined as number | undefined,
     inActiveGame: false,
     _connection: undefined as ZRPWebsocketAdapter | undefined,
     _wakeLock: () => {
@@ -59,6 +60,7 @@ export const useGameConfig = defineStore('game-config', {
           inActiveGame: true,
           role: game.role,
           gameId: game.id,
+          lobbyId: game.ownId,
           name: name
         });
         this.connect();
@@ -80,6 +82,7 @@ export const useGameConfig = defineStore('game-config', {
         this.$patch({
           inActiveGame: true,
           role: game.role,
+          lobbyId: game.ownId,
           gameId: game.id,
           name: data?.name ?? 'error'
         });
@@ -87,13 +90,15 @@ export const useGameConfig = defineStore('game-config', {
         this._saveConfig({ id: game.id, role: game.role });
       }
     },
-    leave(): void {
+    leave(keepSavedGame = false): void {
       if (this.inActiveGame) {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
         this._wakeLock(); // relief wakelock
         useGameEvents().clear();
-        this.clearStoredConfig();
+        if (!keepSavedGame) {
+          this.clearStoredConfig();
+        }
         this.$patch({
           inActiveGame: false,
           gameId: undefined,
@@ -134,8 +139,12 @@ export const useGameConfig = defineStore('game-config', {
         (await import('./game/rules')).useRules().__init__();
         (await import('./game/summary')).useGameSummary().__init__();
         (await import('./game/botManager')).useBotManager().__init__();
+        (await import('./game/modal')).useGameModal().__init__();
+        (await import('./game/feedback')).useGameFeedback().__init__();
         (await import('./game/util/keepAlive')).useKeepAlive().__init__();
         (await import('./game/features/chatBroadcast')).useChatBroadcast().__init__();
+        (await import('./game/features/feedback/consumer/feedbackChatAdapter')).useFeedbackChatAdapter().__init__();
+        (await import('./game/features/feedback/consumer/feedbackSnackbarAdapter')).useFeedbackSnackbarAdapter().__init__();
         initializedGameModules = true;
       }
     },
@@ -153,7 +162,16 @@ export const useGameConfig = defineStore('game-config', {
         });
 
         if (isRunning) {
-          events.pushEvent(ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {}));
+          events.pushEvent(
+            ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {
+              hand: [],
+              pile: {
+                symbol: 0,
+                type: 0
+              },
+              players: []
+            })
+          );
         }
       }, 0);
     },
@@ -161,7 +179,7 @@ export const useGameConfig = defineStore('game-config', {
       Logger.RouterGuard.warn('routing out of active game');
       if (this._connection) {
         Logger.RouterGuard.warn('force closing game connection');
-        this.leave();
+        this.leave(true);
       }
     },
     async sendEvent<C extends ZRPOPCode>(code: C, payload: ZRPPayload<C>) {

@@ -9,4 +9,5 @@ namespace ZwooGameLogic.Game.Events;
 public enum PlayerDecision
 {
     SelectColor = 1,
+    SelectPlayer = 2,
 }

@@ -56,7 +56,7 @@
         >
           <div class="flex justify-start items-center">
             <p class="text-lg tc-main-dark">
-              <span :class="{ 'tc-primary': publicId === player.id }">
+              <span :class="{ 'tc-primary': lobbyId === player.id }">
                 {{ player.username }}
               </span>
             </p>
@@ -75,13 +75,13 @@
           </div>
           <div class="flex items-center h-full justify-end">
             <!-- display player actions for player -->
-            <template v-if="!isHost && publicId === player.id && player.role !== ZRPRole.Bot">
+            <template v-if="!isHost && lobbyId === player.id && player.role !== ZRPRole.Bot">
               <button v-tooltip="t('wait.spectate')" class="tc-primary h-full bg-light hover:bg-main rounded p-1" @click="handleChangeToSpectator()">
                 <Icon icon="iconoir:eye-alt" />
               </button>
             </template>
             <!-- display player actions for host -->
-            <template v-else-if="isHost && publicId !== player.id && player.role !== ZRPRole.Bot">
+            <template v-else-if="isHost && lobbyId !== player.id && player.role !== ZRPRole.Bot">
               <button
                 v-tooltip="t('wait.spectate')"
                 class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
@@ -114,6 +114,7 @@
             </template>
           </div>
         </div>
+        <!-- wins info section -->
         <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-main">
           <div class="flex justify-between items-center">
             <p class="tc-main-secondary">
@@ -122,7 +123,7 @@
             <Icon v-if="!winsInfoOpen" icon="akar-icons:info" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="winsInfoOpen = true" />
             <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="winsInfoOpen = false" />
           </div>
-          <div class="grid overflow-hidden grid-rows-[1fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[0fr]': !winsInfoOpen }">
+          <div class="grid overflow-hidden grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': winsInfoOpen }">
             <Environment show="online">
               <p class="min-h-0 tc-main-secondary">
                 {{ t('wait.noWinsOnlineInfo') }}
@@ -152,7 +153,6 @@ import QRCode from '@/components/misc/QRCode.vue';
 import ReassureDialog from '@/components/misc/ReassureDialog.vue';
 import { useIsOffline } from '@/composables/useEnvironment';
 import { useUserDefaults } from '@/composables/userDefaults';
-import { useAuth } from '@/core/adapter/auth';
 import { useGameConfig } from '@/core/adapter/game';
 import { useLobbyStore } from '@/core/adapter/game/lobby';
 import { useIsHost } from '@/core/adapter/game/util/userRoles';
@@ -166,13 +166,12 @@ const { generateJoinUrl } = useApi();
 const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);
 const lobby = useLobbyStore();
 const gameConfig = useGameConfig();
-const auth = useAuth();
 const joinUrl = computed(() => generateJoinUrl(gameConfig.gameId?.toString() ?? ''));
 const { isHost } = useIsHost();
-const publicId = computed(() => auth.publicId);
+const lobbyId = computed(() => gameConfig.lobbyId);
 const gameHost = computed(() => lobby.host);
-const playerToPromote = ref<string | undefined>(undefined);
-const playerToKick = ref<string | undefined>(undefined);
+const playerToPromote = ref<number | undefined>(undefined);
+const playerToKick = ref<number | undefined>(undefined);
 const shareSheetOpen = ref(false);
 const winsInfoOpen = ref(false);
 const qrCodeOpen = ref(false);
@@ -180,33 +179,33 @@ const players = computed(() => lobby.players);
 const isOffline = useIsOffline();
 const showWinsWarning = computed(() => players.value.filter(player => player.role !== ZRPRole.Bot).length <= 1 || isOffline.value);
 
-const handlePromotePlayer = (id: string, allowed: boolean) => {
+const handlePromotePlayer = (id: number, allowed: boolean) => {
   if (allowed) {
     lobby.promotePlayer(id);
   }
   playerToPromote.value = undefined;
 };
 
-const askPromotePlayer = (id: string) => {
+const askPromotePlayer = (id: number) => {
   playerToPromote.value = id;
 };
 
-const handleKickPlayer = (id: string, allowed: boolean) => {
+const handleKickPlayer = (id: number, allowed: boolean) => {
   if (allowed) {
     lobby.kickPlayer(id);
   }
   playerToKick.value = undefined;
 };
 
-const askKickPlayer = (id: string) => {
+const askKickPlayer = (id: number) => {
   playerToKick.value = id;
 };
 
 const handleChangeToSpectator = () => {
-  lobby.changeToSpectator(publicId.value);
+  lobbyId.value && lobby.changeToSpectator(lobbyId.value);
 };
 
-const handlePlayerToSpectator = (id: string) => {
+const handlePlayerToSpectator = (id: number) => {
   lobby.changeToSpectator(id);
 };
 </script>
