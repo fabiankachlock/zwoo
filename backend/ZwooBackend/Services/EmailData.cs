@@ -25,21 +25,30 @@ public class EmailData
         { "en.resetPassword", "Change your ZWOO password" },
     };
 
+    private static string evaluateTemplate(string tmpl, Dictionary<string, string> args)
+    {
+        foreach (var key in args.Keys)
+        {
+            tmpl = tmpl.Replace(key, args[key]);
+        }
+        return tmpl;
+    }
+
     public static MailMessage PasswordChangeRequestEmail(string language, string username, string resetCode)
     {
         string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/reset-password?code={resetCode}";
         string domain = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}";
+        Dictionary<string, string> args = new Dictionary<string, string>() {
+            {"{{username}}", username},
+            {"{{link}}", link},
+            {"{{year}}", DateTime.Now.Year.ToString()},
+            {"{{domain}}", domain},
+        };
 
         string txtBody = _readTemplate($"{language}.resetPassword.txt");
-        txtBody = txtBody.Replace("{{username}}", username);
-        txtBody = txtBody.Replace("{{link}}", link);
-        txtBody = txtBody.Replace("{{year}}", DateTime.Now.Year.ToString());
-        txtBody = txtBody.Replace("{{domain}}", domain);
+        txtBody = evaluateTemplate(txtBody, args);
         string htmlBody = _readTemplate($"{language}.resetPassword.html");
-        htmlBody = htmlBody.Replace("{{username}}", username);
-        htmlBody = htmlBody.Replace("{{link}}", link);
-        htmlBody = htmlBody.Replace("{{year}}", DateTime.Now.Year.ToString());
-        htmlBody = htmlBody.Replace("{{domain}}", domain);
+        htmlBody = evaluateTemplate(htmlBody, args);
 
         var mail = new MailMessage();
         mail.Subject = _subjectsMap[$"{language}.resetPassword"];
@@ -52,17 +61,17 @@ public class EmailData
     {
         string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/verify-account?id={puid}&code={code}";
         string domain = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}";
+        Dictionary<string, string> args = new Dictionary<string, string>() {
+            {"{{username}}", username},
+            {"{{link}}", link},
+            {"{{year}}", DateTime.Now.Year.ToString()},
+            {"{{domain}}", domain},
+        };
 
-        string txtBody = _readTemplate($"{language}.verifyAccount.txt");
-        txtBody = txtBody.Replace("{{username}}", username);
-        txtBody = txtBody.Replace("{{link}}", link);
-        txtBody = txtBody.Replace("{{year}}", DateTime.Now.Year.ToString());
-        txtBody = txtBody.Replace("{{domain}}", domain);
-        string htmlBody = _readTemplate($"{language}.verifyAccount.html");
-        htmlBody = htmlBody.Replace("{{username}}", username);
-        htmlBody = htmlBody.Replace("{{link}}", link);
-        htmlBody = htmlBody.Replace("{{year}}", DateTime.Now.Year.ToString());
-        htmlBody = htmlBody.Replace("{{domain}}", domain);
+        string txtBody = _readTemplate($"{language}.resetPassword.txt");
+        txtBody = evaluateTemplate(txtBody, args);
+        string htmlBody = _readTemplate($"{language}.resetPassword.html");
+        htmlBody = evaluateTemplate(htmlBody, args);
 
         var mail = new MailMessage();
         mail.Subject = _subjectsMap[$"{language}.verify"];
