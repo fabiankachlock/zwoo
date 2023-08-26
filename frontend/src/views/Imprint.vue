@@ -2,7 +2,7 @@
   <MaxWidthLayout size="normal" class="imprint tc-main-secondary break-words">
     <h1 class="tc-main">Impressum</h1>
 
-    <p class="pb-4 italic">ZWOO ist ein Produkt der IGD 2.0 UG (haftungsbeschränkt)</p>
+    <p class="pb-4 italic">ZWOO ist eine Marke der IGD 2.0 UG (haftungsbeschränkt)</p>
 
     <p>Angaben gemäß § 5 TMG</p>
 
