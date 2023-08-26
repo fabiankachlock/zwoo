@@ -103,7 +103,7 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
             }
             else
             {
-                return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
+                return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
             }
         }
         return PerformHandleDecission(gameEvent, state, playerOrder);

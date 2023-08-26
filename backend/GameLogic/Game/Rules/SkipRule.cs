@@ -28,7 +28,7 @@ internal class SkipCardRule : BaseCardRule
     public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
-        List<GameEvent> events = new List<GameEvent>();
+        List<GameEvent> events;
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
         bool isAllowed = IsFittingCard(state.TopCard.Card, payload.Card) && !(CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated);
@@ -42,7 +42,7 @@ internal class SkipCardRule : BaseCardRule
             return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.Skipped, skippedPlayer));
         }
 
-        return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
+        return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
     }
 
     // Rule utilities

@@ -43,7 +43,7 @@ internal class BaseCardRule : BaseRule
             return GameStateUpdate.WithEvents(state, events);
         }
 
-        return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
+        return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
     }
 
     // Rule utilities
