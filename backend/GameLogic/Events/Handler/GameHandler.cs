@@ -7,59 +7,21 @@ namespace ZwooGameLogic.Events.Handler;
 
 public class GameHandler : IUserEventHandler
 {
-    private INotificationAdapter _webSocketManager;
-
-    public GameHandler(INotificationAdapter websocketManager)
+    public Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>> GetHandles()
     {
-        _webSocketManager = websocketManager;
+        return new Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>>() {
+            { ZRPCode.StartGame, StartGame},
+            { ZRPCode.GetHand, SendHand},
+            { ZRPCode.GetPileTop, SendPileTop},
+            { ZRPCode.GetCardAmount, SendCardAmount},
+            { ZRPCode.PlaceCard, HandleCardPlace},
+            { ZRPCode.DrawCard, HandleCardDraw},
+            { ZRPCode.ReceiveDecision, HandleSendDecision},
+            { ZRPCode.RequestEndTurn, HandleRequestEndTurn},
+        };
     }
 
-    public bool HandleMessage(UserContext context, IIncomingEvent message)
-    {
-        if (message.Code == ZRPCode.StartGame)
-        {
-            StartGame(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.GetHand)
-        {
-            SendHand(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.GetPileTop)
-        {
-            SendPileTop(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.GetCardAmount)
-        {
-            SendCardAmount(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.PlaceCard)
-        {
-            HandleCardPlace(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.DrawCard)
-        {
-            HandleCardDraw(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.ReceiveDecision)
-        {
-            HandleSendDecision(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.RequestEndTurn)
-        {
-            HandleRequestEndTurn(context, message);
-            return true;
-        }
-        return false;
-    }
-
-    private void StartGame(UserContext context, IIncomingEvent message)
+    private void StartGame(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         try
         {
@@ -74,16 +36,16 @@ public class GameHandler : IUserEventHandler
             }
             context.Game.Start();
 
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.GameStarted, new GameStartedNotification());
-            _webSocketManager.SendPlayer(context.Game.State.ActivePlayer(), ZRPCode.StartTurn, new StartTurnNotification());
+            websocketManager.BroadcastGame(context.GameId, ZRPCode.GameStarted, new GameStartedNotification());
+            websocketManager.SendPlayer(context.Game.State.ActivePlayer(), ZRPCode.StartTurn, new StartTurnNotification());
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void HandleCardPlace(UserContext context, IIncomingEvent message)
+    private void HandleCardPlace(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try
@@ -93,11 +55,11 @@ public class GameHandler : IUserEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void HandleCardDraw(UserContext context, IIncomingEvent message)
+    private void HandleCardDraw(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try
@@ -107,11 +69,11 @@ public class GameHandler : IUserEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void HandleSendDecision(UserContext context, IIncomingEvent message)
+    private void HandleSendDecision(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try
@@ -121,24 +83,24 @@ public class GameHandler : IUserEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void SendHand(UserContext context, IIncomingEvent message)
+    private void SendHand(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         try
         {
             if (context.Role == ZRPRole.Spectator) return;
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.SendHand, new SendDeckNotification(context.Game.State.GetPlayerDeck(context.LobbyId)!.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendHand, new SendDeckNotification(context.Game.State.GetPlayerDeck(context.LobbyId)!.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray()));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void SendCardAmount(UserContext context, IIncomingEvent message)
+    private void SendCardAmount(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         try
         {
@@ -159,28 +121,28 @@ public class GameHandler : IUserEventHandler
                 }
             }
 
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.SendCardAmount, new SendPlayerStateNotification(amounts.ToArray()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendCardAmount, new SendPlayerStateNotification(amounts.ToArray()));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void SendPileTop(UserContext context, IIncomingEvent message)
+    private void SendPileTop(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         try
         {
             var top = context.Game.State.GetPileTop();
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.SendPileTop, new SendPileTopNotification(top.Color, top.Type));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendPileTop, new SendPileTopNotification(top.Color, top.Type));
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 
-    private void HandleRequestEndTurn(UserContext context, IIncomingEvent message)
+    private void HandleRequestEndTurn(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         if (context.Role == ZRPRole.Spectator) return;
         try
@@ -190,7 +152,7 @@ public class GameHandler : IUserEventHandler
         }
         catch (Exception e)
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
         }
     }
 }

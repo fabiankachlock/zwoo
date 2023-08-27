@@ -7,19 +7,35 @@ namespace ZwooGameLogic.Events;
 public class UserEventDistributer : IUserEventReceiver
 {
     private readonly ZwooRoom _room;
-    private readonly IUserEventHandler[] _handlers;
+    private static Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>> _handles
+    {
+        get
+        {
+            Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>> allHandles = new();
+
+            var handlers = new IUserEventHandler[] {
+                new ChatHandler(),
+                new LobbyHandler(),
+                new SettingsHandler(),
+                new GameHandler(),
+                new BotsHandler(),
+            };
+
+            foreach (var handler in handlers)
+            {
+                foreach (var handle in handler.GetHandles())
+                {
+                    allHandles[handle.Key] = handle.Value;
+                }
+            }
+            return allHandles;
+        }
+    }
 
 
     public UserEventDistributer(ZwooRoom room)
     {
         _room = room;
-        _handlers = new IUserEventHandler[] {
-            new ChatHandler(room.NotificationDistributer),
-            new LobbyHandler(room.NotificationDistributer),
-            new SettingsHandler(room.NotificationDistributer),
-            new GameHandler(room.NotificationDistributer),
-            new BotsHandler(room.NotificationDistributer),
-        };
     }
 
     public void DistributeEvent(IIncomingZRPMessage message)
@@ -28,13 +44,9 @@ public class UserEventDistributer : IUserEventReceiver
         if (player == null) return;
 
         var context = new UserContext(player.RealId, player.LobbyId, player.Username, player.Role, _room.Id, _room);
-        foreach (IUserEventHandler handler in _handlers)
-        {
-            if (handler.HandleMessage(context, message))
-            {
-                break;
-            }
-        }
+        if (!_handles.ContainsKey(message.Code)) return;
+
+        _handles[message.Code](context, message, _room.NotificationDistributer);
     }
 
     public void DistributeEvent(ILocalZRPMessage message)
@@ -43,12 +55,8 @@ public class UserEventDistributer : IUserEventReceiver
         if (player == null) return;
 
         var context = new UserContext(player.RealId, player.LobbyId, player.Username, player.Role, _room.Id, _room);
-        foreach (IUserEventHandler handler in _handlers)
-        {
-            if (handler.HandleMessage(context, message))
-            {
-                break;
-            }
-        }
+        if (!_handles.ContainsKey(message.Code)) return;
+
+        _handles[message.Code](context, message, _room.NotificationDistributer);
     }
 }
