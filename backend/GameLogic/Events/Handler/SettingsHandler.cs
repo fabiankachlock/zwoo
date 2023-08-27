@@ -16,37 +16,23 @@ public class SettingsHandler : IUserEventHandler
 
     private void GetSettings(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
-        {
-            AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
-            websocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, payload);
-        }
-        catch (Exception e)
-        {
-            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
+        AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
+        websocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, payload);
     }
 
     private void UpdateSettings(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
+        UpdateSettingEvent payload = message.DecodePayload<UpdateSettingEvent>();
+
+        if (context.Role != ZRPRole.Host)
         {
-            UpdateSettingEvent payload = message.DecodePayload<UpdateSettingEvent>();
-
-            if (context.Role != ZRPRole.Host)
-            {
-                websocketManager.SendPlayer(context.LobbyId, ZRPCode.AccessDeniedError, new Error((int)ZRPCode.AccessDeniedError, "you are not the host"));
-                return;
-            }
-
-            if (context.Game.Settings.Set(payload.Setting, payload.Value))
-            {
-                websocketManager.BroadcastGame(context.GameId, ZRPCode.SettingChanged, new SettingChangedNotification(payload.Setting, payload.Value));
-            }
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.AccessDeniedError, new Error((int)ZRPCode.AccessDeniedError, "you are not the host"));
+            return;
         }
-        catch (Exception e)
+
+        if (context.Game.Settings.Set(payload.Setting, payload.Value))
         {
-            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.BroadcastGame(context.GameId, ZRPCode.SettingChanged, new SettingChangedNotification(payload.Setting, payload.Value));
         }
     }
 }

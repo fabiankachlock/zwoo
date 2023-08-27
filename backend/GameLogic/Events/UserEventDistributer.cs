@@ -44,9 +44,7 @@ public class UserEventDistributer : IUserEventReceiver
         if (player == null) return;
 
         var context = new UserContext(player.RealId, player.LobbyId, player.Username, player.Role, _room.Id, _room);
-        if (!_handles.ContainsKey(message.Code)) return;
-
-        _handles[message.Code](context, message, _room.NotificationDistributer);
+        distribute(context, message);
     }
 
     public void DistributeEvent(ILocalZRPMessage message)
@@ -55,8 +53,20 @@ public class UserEventDistributer : IUserEventReceiver
         if (player == null) return;
 
         var context = new UserContext(player.RealId, player.LobbyId, player.Username, player.Role, _room.Id, _room);
+        distribute(context, message);
+    }
+
+    private void distribute(UserContext context, IIncomingEvent message)
+    {
         if (!_handles.ContainsKey(message.Code)) return;
 
-        _handles[message.Code](context, message, _room.NotificationDistributer);
+        try
+        {
+            _handles[message.Code](context, message, _room.NotificationDistributer);
+        }
+        catch (Exception e)
+        {
+            _room.NotificationDistributer.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+        }
     }
 }

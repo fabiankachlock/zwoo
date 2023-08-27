@@ -10,20 +10,12 @@ public class ChatHandler : IUserEventHandler
     {
         return new Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>>() {
             { ZRPCode.CreateChatMessage, HandleMessage},
-
         };
     }
 
     public void HandleMessage(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
-        {
-            ChatMessageEvent payload = message.DecodePayload<ChatMessageEvent>();
-            websocketManager.BroadcastGame(context.GameId, ZRPCode.SendChatMessage, new ChatMessageNotification(context.LobbyId, payload.Message));
-        }
-        catch (Exception e)
-        {
-            websocketManager.BroadcastGame(context.GameId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
+        ChatMessageEvent payload = message.DecodePayload<ChatMessageEvent>();
+        websocketManager.BroadcastGame(context.GameId, ZRPCode.SendChatMessage, new ChatMessageNotification(context.LobbyId, payload.Message));
     }
 }

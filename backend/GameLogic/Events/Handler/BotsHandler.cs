@@ -19,67 +19,39 @@ public class BotsHandler : IUserEventHandler
 
     private void CreateBot(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
+        CreateBotEvent data = message.DecodePayload<CreateBotEvent>();
+        if (context.BotManager.HasBotWithName(data.Username))
         {
-            CreateBotEvent data = message.DecodePayload<CreateBotEvent>();
-            if (context.BotManager.HasBotWithName(data.Username))
-            {
-                websocketManager.SendPlayer(context.LobbyId, ZRPCode.BotNameExistsError, new Error((int)ZRPCode.BotNameExistsError, "bot name already exists"));
-                return;
-            }
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.BotNameExistsError, new Error((int)ZRPCode.BotNameExistsError, "bot name already exists"));
+            return;
+        }
 
-            Bot newBot = context.BotManager.CreateBot(context.Room.NextId(), data.Username, new BotConfig()
-            {
-                Type = data.Config.Type
-            });
-            websocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.AsPlayer().LobbyId, newBot.Username, 0));
-        }
-        catch (Exception e)
+        Bot newBot = context.BotManager.CreateBot(context.Room.NextId(), data.Username, new BotConfig()
         {
-            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
+            Type = data.Config.Type
+        });
+        websocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.AsPlayer().LobbyId, newBot.Username, 0));
     }
 
     private void UpdateBot(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
+        UpdateBotEvent data = message.DecodePayload<UpdateBotEvent>();
+        Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.AsPlayer().LobbyId == data.Id);
+        botToUpdate?.SetConfig(new BotConfig()
         {
-            UpdateBotEvent data = message.DecodePayload<UpdateBotEvent>();
-            Bot? botToUpdate = context.BotManager.ListBots().Find(b => b.AsPlayer().LobbyId == data.Id);
-            botToUpdate?.SetConfig(new BotConfig()
-            {
-                Type = data.Config.Type
-            });
-        }
-        catch (Exception e)
-        {
-            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
+            Type = data.Config.Type
+        });
     }
 
     private void DeleteBot(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
-        {
-            DeleteBotEvent data = message.DecodePayload<DeleteBotEvent>();
-            context.BotManager.RemoveBot(data.Id);
-            websocketManager.BroadcastGame(context.GameId, ZRPCode.BotLeft, new BotLeftNotification(data.Id));
-        }
-        catch (Exception e)
-        {
-            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
+        DeleteBotEvent data = message.DecodePayload<DeleteBotEvent>();
+        context.BotManager.RemoveBot(data.Id);
+        websocketManager.BroadcastGame(context.GameId, ZRPCode.BotLeft, new BotLeftNotification(data.Id));
     }
 
     private void GetBots(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
-        {
-            websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().LobbyId, bot.Username, new BotConfigDTO(bot.Config.Type), 0)).ToArray()));
-        }
-        catch (Exception e)
-        {
-            websocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().LobbyId, bot.Username, new BotConfigDTO(bot.Config.Type), 0)).ToArray()));
     }
 }
