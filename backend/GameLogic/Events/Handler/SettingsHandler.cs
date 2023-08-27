@@ -17,7 +17,7 @@ public class SettingsHandler : IUserEventHandler
     private void GetSettings(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
-        websocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, payload);
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendAllSettings, payload);
     }
 
     private void UpdateSettings(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
