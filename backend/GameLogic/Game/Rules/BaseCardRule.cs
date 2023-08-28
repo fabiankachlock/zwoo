@@ -82,8 +82,7 @@ internal class BaseCardRule : BaseRule
     /// <returns>updated game state</returns>
     protected GameState AddCardToStack(GameState state, Card card)
     {
-        state.TopCard = new StackCard(card);
-        state.CardStack.Add(state.TopCard);
+        state.CardStack.Add(new StackCard(card));
         return state;
     }
 
