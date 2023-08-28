@@ -17,7 +17,7 @@
         @click="drawCard()"
       >
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
-        <div class="absolute text-2xl -top-6 right-0 md:top-1/2 md:right-3 md:text-3xl -translate-y-1/2 select-none z-10">
+        <div class="absolute text-2xl -top-6 -right-3 md:top-1/2 md:right-3 md:text-3xl -translate-y-1/2 select-none z-10">
           <p class="tc-main">{{ drawAmount ? `+${drawAmount}` : '' }}</p>
         </div>
       </div>
