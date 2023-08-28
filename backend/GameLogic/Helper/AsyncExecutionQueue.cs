@@ -138,7 +138,14 @@ public sealed class AsyncExecutionQueue
         // execute item if exists
         if (item != null)
         {
-            item();
+            try
+            {
+                item();
+            }
+            catch (Exception)
+            {
+                // discard exception
+            }
         }
 
         // start next execution
