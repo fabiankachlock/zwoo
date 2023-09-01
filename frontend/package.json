@@ -74,7 +74,7 @@
     "autoprefixer": "^10",
     "babel-jest": "^27",
     "cross-env": "^7.0.3",
-    "cypress": "^12.7.0",
+    "cypress": "^13.1.0",
     "dependency-cruiser": "^13.0.1",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
