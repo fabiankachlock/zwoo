@@ -67,8 +67,7 @@ public sealed class GameStateManager
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
-            topCard: new StackCard(DrawSaveCard()),
-            cardStack: new List<StackCard>(),
+            cardStack: new List<StackCard>() { new StackCard(DrawSaveCard()) },
             playerDecks: GeneratePlayerDecks(_playerManager.Players),
             ui: new UiHints()
         );
