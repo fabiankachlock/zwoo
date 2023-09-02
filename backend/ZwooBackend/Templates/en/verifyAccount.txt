@@ -11,3 +11,12 @@ The link expires with the end of this day (UTC + 01:00).
 
 
 Ⓒ ZWOO {{year}}
+
+
+
+A trademark of IGD 2.0 UG (haftungsbeschränkt).
+
+info@igd20.de | Alnpeckstraße 4, 01239 Dresden
+
+Imprint: {{domain}}/imprint
+Privacy: {{domain}}/privacy
