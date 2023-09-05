@@ -49,7 +49,7 @@ public class GameInfoDao : IDocument
     /// time in unix seconds
     /// </summary>
     [BsonElement("timestamp")]
-    public ulong TimeStamp { set; get; } = 0;
+    public ulong TimeStamp { set; get; } = (ulong)DateTimeOffset.Now.ToUnixTimeSeconds();
 
     [BsonElement("version")]
     [BsonSerializer(typeof(DocumentVersionSerializer))]
