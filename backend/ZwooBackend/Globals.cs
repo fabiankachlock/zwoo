@@ -12,7 +12,7 @@ public static class Globals
 {
     static Globals()
     {
-        string ReturnIfValidEnvVar(string s)
+        string GetEnvOrExit(string s)
         {
             if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(s)))
             {
@@ -24,27 +24,28 @@ public static class Globals
 
         IsBeta = Convert.ToBoolean(Environment.GetEnvironmentVariable("ZWOO_BETA"));
         UseSsl = Convert.ToBoolean(Environment.GetEnvironmentVariable("USE_SSL"));
-        Cors = ReturnIfValidEnvVar("ZWOO_CORS");
-        ZwooDomain = ReturnIfValidEnvVar("ZWOO_DOMAIN");
+        Cors = GetEnvOrExit("ZWOO_CORS");
+        ZwooDomain = GetEnvOrExit("ZWOO_DOMAIN");
         ZwooCookieDomain = Environment.GetEnvironmentVariable("ZWOO_COOKIE_DOMAIN") ?? ZwooDomain;
 
         var extraCors = Environment.GetEnvironmentVariable("ZWOO_CORS_CONTACT_FORM");
         ContactFormExtraCorsOrigin = (extraCors ?? "").Split(',').Append(Cors).Where(host => host != "").ToArray();
 
-        ConnectionString = ReturnIfValidEnvVar("ZWOO_DATABASE_CONNECTION_STRING");
-        DatabaseName = ReturnIfValidEnvVar("ZWOO_DATABASE_NAME");
-        SmtpHostUrl = ReturnIfValidEnvVar("SMTP_HOST_URL");
-        if (!int.TryParse(ReturnIfValidEnvVar("SMTP_HOST_PORT").Trim(), out SmtpHostPort))
+        ConnectionString = GetEnvOrExit("ZWOO_DATABASE_CONNECTION_STRING");
+        DatabaseName = GetEnvOrExit("ZWOO_DATABASE_NAME");
+        SmtpHostUrl = GetEnvOrExit("SMTP_HOST_URL");
+        if (!int.TryParse(GetEnvOrExit("SMTP_HOST_PORT").Trim(), out SmtpHostPort))
         {
             Logger.Error($"SMTP_HOST_PORT ({Environment.GetEnvironmentVariable("SMTP_HOST_PORT")}) isn't a Number");
             Environment.Exit(1);
         }
-        SmtpHostEmail = ReturnIfValidEnvVar("SMTP_HOST_EMAIL");
-        SmtpUsername = ReturnIfValidEnvVar("SMTP_USERNAME");
-        SmtpPassword = ReturnIfValidEnvVar("SMTP_PASSWORD");
-        ContactEmail = ReturnIfValidEnvVar("ZWOO_CONTACT_EMAIL");
+        SmtpHostEmail = GetEnvOrExit("SMTP_HOST_EMAIL");
+        SmtpUsername = GetEnvOrExit("SMTP_USERNAME");
+        SmtpPassword = GetEnvOrExit("SMTP_PASSWORD");
+        SmtpUseSsl = Environment.GetEnvironmentVariable("SMTP_USE_SSL") != "false";
+        ContactEmail = GetEnvOrExit("ZWOO_CONTACT_EMAIL");
 
-        RecaptchaSideSecret = ReturnIfValidEnvVar("ZWOO_RECAPTCHA_SIDESECRET");
+        RecaptchaSideSecret = GetEnvOrExit("ZWOO_RECAPTCHA_SIDESECRET");
         UseLogRush = Convert.ToBoolean(Environment.GetEnvironmentVariable("ZWOO_USE_LOGRUSH"));
         LogRushUrl = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_URL") ?? "";
         LogRushAlias = Environment.GetEnvironmentVariable("ZWOO_LOGRUSH_ALIAS") ?? "";
@@ -71,12 +72,14 @@ public static class Globals
 
         if (UseLogRush)
         {
-            LogRushLogger logRushAppender = new LogRushLogger();
-            logRushAppender.Layout = layout;
-            logRushAppender.Alias = LogRushAlias;
-            logRushAppender.Server = LogRushUrl;
-            logRushAppender.Key = LogRushKey;
-            logRushAppender.Id = LogRushId;
+            LogRushLogger logRushAppender = new LogRushLogger
+            {
+                Layout = layout,
+                Alias = LogRushAlias,
+                Server = LogRushUrl,
+                Key = LogRushKey,
+                Id = LogRushId
+            };
             logRushAppender.ActivateOptions();
             hierarchy.Root.AddAppender(logRushAppender);
             Console.WriteLine($"using log rush as '{LogRushAlias}'");
@@ -109,6 +112,7 @@ public static class Globals
     public static readonly string SmtpHostEmail;
     public static readonly string SmtpUsername;
     public static readonly string SmtpPassword;
+    public static readonly bool SmtpUseSsl;
     public static readonly string ContactEmail;
 
     public static readonly bool UseLogRush;
