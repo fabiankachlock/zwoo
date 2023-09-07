@@ -123,6 +123,7 @@ export enum ZRPFeedbackType {
 export type ZRPPlayerState = 'disconnected' | 'connected';
 
 export enum SettingsType {
+  Readonly = 0,
   Numeric = 1,
   Boolean = 2
 }

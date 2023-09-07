@@ -1,7 +1,7 @@
 <template>
   <div
     v-tooltip="t(isOpen ? 'wait.collapse' : 'wait.expand')"
-    class="px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest cursor-pointer"
+    class="px-2 py-1 my-1 border-b bc-lightest transition mouse:hover:bc-primary mouse:hover:bg-dark cursor-pointer"
     @click.stop="toggleOpenState"
   >
     <div class="flex flex-row flex-nowrap justify-between items-center">
@@ -12,13 +12,10 @@
     </div>
     <div class="rule-body overflow-hidden transition duration-300" :class="{ open: isOpen }">
       <div class="divider w-full my-2 bc-invert-darkest border-b"></div>
-      <div class="mb-2">
+      <div class="content">
         <p class="text-sm italic tc-main-secondary">
           {{ translatedDescription }}
         </p>
-      </div>
-      <div class="flex flex-col pl-2">
-        <slot name="subrules"></slot>
       </div>
     </div>
   </div>

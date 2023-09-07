@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
-import { SettingsType, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
+import { SettingsType, ZRPOPCode, ZRPSettingsPayload } from '@/core/domain/zrp/zrpTypes';
 
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
@@ -15,6 +15,7 @@ export type DisplayRule = {
   ruleType: SettingsType;
   min?: number;
   max?: number;
+  children: DisplayRule[];
 };
 
 const settingsWatcher = new MonolithicEventWatcher(ZRPOPCode.AllSettings, ZRPOPCode.SettingChanged);
@@ -25,16 +26,7 @@ export const useRules = defineStore('game-rules', () => {
 
   const _receiveMessage: (typeof settingsWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.AllSettings) {
-      rules.value = msg.data.settings.map(setting => ({
-        id: setting.setting,
-        title: setting.title, // `rules.${setting.setting}.title`,
-        description: setting.description, //`rules.${setting.setting}.info`,
-        value: setting.value,
-        isReadonly: setting.isReadonly,
-        ruleType: setting.type,
-        min: setting.min,
-        max: setting.max
-      }));
+      rules.value = transformRules(msg.data.settings);
     } else if (msg.code === ZRPOPCode.SettingChanged) {
       for (const setting of rules.value) {
         if (setting.id === msg.data.setting) {
@@ -43,6 +35,54 @@ export const useRules = defineStore('game-rules', () => {
         }
       }
     }
+  };
+
+  const transformRules = (settings: ZRPSettingsPayload['settings']): DisplayRule[] => {
+    const groups: Record<string, { root?: DisplayRule; children: DisplayRule[] }> = {};
+
+    settings.forEach(setting => {
+      const displayRule: DisplayRule = {
+        id: setting.setting,
+        title: setting.title, // `rules.${setting.setting}.title`,
+        description: setting.description, //`rules.${setting.setting}.info`,
+        value: setting.value,
+        isReadonly: setting.isReadonly,
+        ruleType: setting.type,
+        min: setting.min,
+        max: setting.max,
+        children: []
+      };
+
+      const stem = displayRule.id.split('.')[0];
+      if (stem === displayRule.id) {
+        if (!groups[stem]) {
+          groups[stem] = {
+            root: displayRule,
+            children: []
+          };
+        } else {
+          groups[stem].root = displayRule;
+        }
+      } else if (displayRule.id.length > stem.length) {
+        if (!groups[stem]) {
+          groups[stem] = {
+            root: undefined,
+            children: [displayRule]
+          };
+        } else {
+          groups[stem].children.push(displayRule);
+        }
+      }
+    });
+
+    return Object.values(groups)
+      .filter(g => g.root !== undefined)
+      .map(g => {
+        if (g.root) {
+          g.root.children = g.root.children.concat(g.children);
+        }
+        return g.root as DisplayRule;
+      });
   };
 
   const updateRule = <K extends string>(key: K, value: number): void => {
