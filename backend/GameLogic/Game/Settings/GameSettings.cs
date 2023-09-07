@@ -13,7 +13,7 @@ public static class GameSettingsKey
     public static readonly string NumberOfCards = "initialCards";
 }
 
-public class GameSettings
+public class GameSettings : IGameSettingsStore
 {
     public static readonly List<GameSetting> BaseSettings = new List<GameSetting>()
     {

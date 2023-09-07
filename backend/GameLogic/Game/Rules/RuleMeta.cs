@@ -10,6 +10,23 @@ public struct RuleMeta
 {
     public GameSetting RootSetting;
     public GameSetting[] AllSettings;
+    private IGameSettingsStore _currentSettings;
+
+    public void ConfigureWith(IGameSettingsStore settings)
+    {
+        _currentSettings = settings;
+    }
+
+    public int GetParameter(string key)
+    {
+        return GetParameter(_currentSettings, key);
+    }
+
+    public int GetParameter(IGameSettingsStore settings, string key)
+    {
+        if (RootSetting.Key == key || key.StartsWith(RootSetting.Key)) return _currentSettings.Get(key);
+        return _currentSettings.Get(RootSetting.Key + "." + key);
+    }
 }
 
 public class RuleMetaBuilder

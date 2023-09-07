@@ -44,7 +44,7 @@ internal class RuleManager
 
         foreach (var rule in _activeRules)
         {
-            rule.SetupRule(interruptHandler, _loggerFactory.CreateLogger($"Game-{GameId}"));
+            rule.SetupRule(interruptHandler, _settings, _loggerFactory.CreateLogger($"Game-{GameId}"));
             Console.WriteLine(rule.Name);
         }
     }
