@@ -37,8 +37,8 @@ internal class RuleManager
         _activeRules = AllRules()
             .Where(rule =>
             {
-                if (rule.Setting == null) return true;
-                return _settings.Get(rule.Setting.Value.SettingsKey) > 0;
+                if (rule.Meta == null || rule.Meta.Value.RootSetting.Type != GameSettingsType.Boolean) return true;
+                return _settings.Get(rule.Meta.Value.RootSetting.Key) > 0;
             })
             .ToList();
 

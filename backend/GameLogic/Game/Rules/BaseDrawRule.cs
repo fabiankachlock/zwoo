@@ -17,7 +17,7 @@ internal class BaseDrawRule : BaseRule
         get => "BaseDrawRule";
     }
 
-    public override RuleMeta? Setting => null;
+    public override RuleMeta? Meta => null;
 
     public BaseDrawRule() : base() { }
 

@@ -12,7 +12,7 @@ internal abstract class BaseRule
 
     public abstract string Name { get; }
 
-    public abstract RuleMeta? Setting { get; }
+    public abstract RuleMeta? Meta { get; }
 
     protected ILogger _logger;
     private Action<GameInterrupt> _interrupt;
