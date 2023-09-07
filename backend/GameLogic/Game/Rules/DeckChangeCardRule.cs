@@ -52,7 +52,7 @@ internal class DeckChangeRule : BaseCardRule
             }
             else
             {
-                return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
+                return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
             }
         }
         return PerformHandleDecission(gameEvent, state, playerOrder);
@@ -89,7 +89,7 @@ internal class DeckChangeRule : BaseCardRule
     /// <returns></returns>
     protected GameStateUpdate PerformHandleDecission(ClientEvent gameEvent, GameState state, PlayerCycle playerOrder)
     {
-        List<GameEvent> events = new List<GameEvent>();
+        List<GameEvent> events;
         ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();
 
         if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
@@ -97,11 +97,13 @@ internal class DeckChangeRule : BaseCardRule
             long targetPlayer = _storedEvent.Value.Options[payload.Value];
             state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
 
-            List<GameEvent> swapEvents = new List<GameEvent>();
-            swapEvents.Add(GameEvent.RemoveCard(targetPlayer, state.PlayerDecks[targetPlayer]));
-            swapEvents.Add(GameEvent.SendCards(targetPlayer, state.PlayerDecks[payload.Player]));
-            swapEvents.Add(GameEvent.RemoveCard(payload.Player, state.PlayerDecks[payload.Player]));
-            swapEvents.Add(GameEvent.SendCards(payload.Player, state.PlayerDecks[targetPlayer]));
+            List<GameEvent> swapEvents = new List<GameEvent>
+            {
+                GameEvent.RemoveCard(targetPlayer, state.PlayerDecks[targetPlayer]),
+                GameEvent.SendCards(targetPlayer, state.PlayerDecks[payload.Player]),
+                GameEvent.RemoveCard(payload.Player, state.PlayerDecks[payload.Player]),
+                GameEvent.SendCards(payload.Player, state.PlayerDecks[targetPlayer])
+            };
 
             var targetPlayerDeck = state.PlayerDecks[targetPlayer];
             state.PlayerDecks[targetPlayer] = state.PlayerDecks[payload.Player];

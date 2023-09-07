@@ -43,7 +43,7 @@ internal class BaseCardRule : BaseRule
             return GameStateUpdate.WithEvents(state, events);
         }
 
-        return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
+        return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
     }
 
     // Rule utilities
@@ -82,8 +82,7 @@ internal class BaseCardRule : BaseRule
     /// <returns>updated game state</returns>
     protected GameState AddCardToStack(GameState state, Card card)
     {
-        state.TopCard = new StackCard(card);
-        state.CardStack.Add(state.TopCard);
+        state.CardStack.Add(new StackCard(card));
         return state;
     }
 

@@ -6,62 +6,33 @@ namespace ZwooGameLogic.Events.Handler;
 
 public class SettingsHandler : IUserEventHandler
 {
-    private INotificationAdapter _webSocketManager;
-
-    public SettingsHandler(INotificationAdapter websocketManager)
+    public Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>> GetHandles()
     {
-        _webSocketManager = websocketManager;
+        return new Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>>() {
+            { ZRPCode.GetAllSettings, GetSettings},
+            { ZRPCode.UpdateSetting, UpdateSettings},
+        };
     }
 
-    public bool HandleMessage(UserContext context, IIncomingEvent message)
+    private void GetSettings(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        if (message.Code == ZRPCode.GetAllSettings)
-        {
-            GetSettings(context, message);
-            return true;
-        }
-        else if (message.Code == ZRPCode.UpdateSetting)
-        {
-            UpdateSettings(context, message);
-            return true;
-        }
-        return false;
+        AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendAllSettings, payload);
     }
 
-
-    private void GetSettings(UserContext context, IIncomingEvent message)
+    private void UpdateSettings(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        try
-        {
-            AllSettingsNotification payload = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
-            _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, payload);
-        }
-        catch (Exception e)
-        {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
-        }
-    }
+        UpdateSettingEvent payload = message.DecodePayload<UpdateSettingEvent>();
 
-    private void UpdateSettings(UserContext context, IIncomingEvent message)
-    {
-        try
+        if (context.Role != ZRPRole.Host)
         {
-            UpdateSettingEvent payload = message.DecodePayload<UpdateSettingEvent>();
-
-            if (context.Role != ZRPRole.Host)
-            {
-                _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.AccessDeniedError, new Error((int)ZRPCode.AccessDeniedError, "you are not the host"));
-                return;
-            }
-
-            if (context.Game.Settings.Set(payload.Setting, payload.Value))
-            {
-                _webSocketManager.BroadcastGame(context.GameId, ZRPCode.SettingChanged, new SettingChangedNotification(payload.Setting, payload.Value));
-            }
+            websocketManager.SendPlayer(context.LobbyId, ZRPCode.AccessDeniedError, new Error((int)ZRPCode.AccessDeniedError, "you are not the host"));
+            return;
         }
-        catch (Exception e)
+
+        if (context.Game.Settings.Set(payload.Setting, payload.Value))
         {
-            _webSocketManager.SendPlayer(context.LobbyId, ZRPCode.GeneralError, new Error((int)ZRPCode.GeneralError, e.ToString()));
+            websocketManager.BroadcastGame(context.GameId, ZRPCode.SettingChanged, new SettingChangedNotification(payload.Setting, payload.Value));
         }
     }
 }
