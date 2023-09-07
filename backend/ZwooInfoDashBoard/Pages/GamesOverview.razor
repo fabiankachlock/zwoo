@@ -5,22 +5,21 @@
 
 <h1>Games Overview</h1>
 
-<RadzenDataGrid AllowPaging="true" PageSize="25"
-                ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
-                TItem="GameInfoDao" Data="_gameInfos" @ref="_gamesDataGrid" AllowVirtualization="true">
+<RadzenDataGrid AllowPaging="true" PageSize="25" ExpandMode="DataGridExpandMode.Single" RowRender="@RenderRow"
+    TItem="GameInfoDao" Data="_gameInfos" @ref="_gamesDataGrid" AllowVirtualization="true">
     <Template Context="info">
         <p>Scoreboard:</p>
-        <RadzenDataGrid TItem="PlayerScoreDao" Data="info.Scores">
+        <RadzenDataGrid TItem="PlayerScoreDao" Data="info.Scores.OrderBy(s => s.Score)">
             <Columns>
-                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="Score" Title="Score"/>
-                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="PlayerUsername" Title="Name"/>
-                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="IsBot" Title="IsBot"/>
+                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="Score" Title="Score" />
+                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="PlayerUsername" Title="Name" />
+                <RadzenDataGridColumn TItem="PlayerScoreDao" Property="IsBot" Title="IsBot" />
             </Columns>
         </RadzenDataGrid>
     </Template>
     <Columns>
-        <RadzenDataGridColumn TItem="GameInfoDao" Property="GameId" Title="ID"/>
-        <RadzenDataGridColumn TItem="GameInfoDao" Property="GameName" Title="Name"/>
+        <RadzenDataGridColumn TItem="GameInfoDao" Property="GameId" Title="ID" />
+        <RadzenDataGridColumn TItem="GameInfoDao" Property="GameName" Title="Name" />
         <RadzenDataGridColumn TItem="GameInfoDao" Property="TimeStamp" Title="Time">
             <Template Context="info">
                 @DateTimeOffset.FromUnixTimeSeconds((long)info.TimeStamp).ToString("dd.MM.yy HH:mm:ss")
@@ -28,7 +27,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="GameInfoDao" Property="IsPublic" Title="Public">
             <Template Context="info">
-                <RadzenCheckBox Disabled="true" Value="info.IsPublic"/>
+                <RadzenCheckBox Disabled="true" Value="info.IsPublic" />
             </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="GameInfoDao" Title="Winner" Sortable="false" Filterable="false">
@@ -40,13 +39,21 @@
 </RadzenDataGrid>
 
 @code {
-    private IQueryable<GameInfoDao> _gameInfos  = new List<GameInfoDao>().AsQueryable();
+    private IQueryable<GameInfoDao> _gameInfos = new List<GameInfoDao>().AsQueryable();
+
     private RadzenDataGrid<GameInfoDao> _gamesDataGrid = new RadzenDataGrid<GameInfoDao>();
-    
+
+
+
     protected override void OnInitialized()
+
     {
+
         _gameInfos = _db.GamesInfo.AsQueryable();
+
     }
+
+
 
     private void RenderRow(RowRenderEventArgs<GameInfoDao> args) => args.Expandable = true;
 }
