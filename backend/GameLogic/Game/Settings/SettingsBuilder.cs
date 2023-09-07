@@ -6,7 +6,7 @@ using ZwooGameLogic.Logging;
 
 namespace ZwooGameLogic.Game.Settings;
 
-public struct GameSettingBuilder
+public class GameSettingBuilder
 {
     public readonly string Key;
     public Dictionary<string, string> Title;
