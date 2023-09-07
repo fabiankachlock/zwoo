@@ -17,6 +17,11 @@ internal class SkipCardRule : BaseCardRule
         get => "SkipCardRule";
     }
 
+    public override RuleMeta? Meta => RuleMetaBuilder.New("skip")
+    .Localize("de", "Dumme", "Regel")
+    .Localize("en", "Dummy", "Rule")
+    .ToMeta();
+
     public SkipCardRule() : base() { }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)

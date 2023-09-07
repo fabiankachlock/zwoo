@@ -23,6 +23,24 @@ internal class AddUpDrawRule : BaseRule
         .Default(GameSettingsValue.On)
         .Localize("de", "Ziehkarten addieren", "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden.")
         .Localize("en", "Add draw amounts", "On top of a draw card, further draw cards can be placed. The number of cards to be drawn is added. You can put +2 cards on top of +4 cards, as well as +4 cards on top of +2 cards.")
+        .ConfigureParameter("test1", setting =>
+        {
+            setting.Type = GameSettingsType.Readonly;
+            setting.Localize("de", "testde", "longde");
+            setting.Localize("en", "testen", "longen");
+        })
+        .ConfigureParameter("test2", setting =>
+        {
+            setting.Type = GameSettingsType.Boolean;
+            setting.Localize("de", "bool", "longde");
+            setting.Localize("en", "bool", "longen");
+        })
+        .ConfigureParameter("test3", setting =>
+        {
+            setting.Type = GameSettingsType.Numeric;
+            setting.Localize("de", "number", "longde");
+            setting.Localize("en", "number", "longen");
+        })
         .ToMeta();
 
     private BaseRule _placeCardRule;
