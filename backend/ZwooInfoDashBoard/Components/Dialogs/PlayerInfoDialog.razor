@@ -82,7 +82,7 @@
                             TItem="GameInfoDao" Data="_gamesPlayed" AllowVirtualization="true">
                 <Template Context="info">
                     <p>Scoreboard:</p>
-                    <RadzenDataGrid TItem="PlayerScoreDao" Data="info.Scores">
+                    <RadzenDataGrid TItem="PlayerScoreDao" Data="info.Scores.OrderBy(s => s.Score)">
                         <Columns>
                             <RadzenDataGridColumn TItem="PlayerScoreDao" Property="Score" Title="Score"/>
                             <RadzenDataGridColumn TItem="PlayerScoreDao" Property="PlayerUsername" Title="Name"/>
@@ -102,7 +102,11 @@
                             <RadzenCheckBox Disabled="true" Value="info.IsPublic"/>
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="GameInfoDao" Property="Winner" Title="Winner" Sortable="false" Filterable="false"/>
+                    <RadzenDataGridColumn TItem="GameInfoDao" Title="Winner" Sortable="false" Filterable="false">
+                        <Template Context="info">
+                            @info.Scores.FirstOrDefault(p => p.Score == 0)?.PlayerUsername
+                        </Template>
+                    </RadzenDataGridColumn>
                 </Columns>
             </RadzenDataGrid>
         </RadzenTabsItem>
