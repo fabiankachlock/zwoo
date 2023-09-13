@@ -167,9 +167,11 @@ public class EmailService : IHostedService, IEmailService
     private void SendMails()
     {
         _logger.Info("start sending emails");
-        var client = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort);
-        client.EnableSsl = false;
-        client.Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword);
+        var client = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort)
+        {
+            EnableSsl = Globals.SmtpUseSsl,
+            Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword)
+        };
 
         while (_emailQueue.TryDequeue(out var message))
         {
