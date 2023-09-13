@@ -68,9 +68,9 @@ public class EmailData
             {"{{domain}}", domain},
         };
 
-        string txtBody = _readTemplate($"{language}.resetPassword.txt");
+        string txtBody = _readTemplate($"{language}.verifyAccount.txt");
         txtBody = evaluateTemplate(txtBody, args);
-        string htmlBody = _readTemplate($"{language}.resetPassword.html");
+        string htmlBody = _readTemplate($"{language}.verifyAccount.html");
         htmlBody = evaluateTemplate(htmlBody, args);
 
         var mail = new MailMessage();
