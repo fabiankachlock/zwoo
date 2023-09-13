@@ -9,6 +9,7 @@ internal struct GameStateUpdate
     public GameState NewState;
     public List<GameEvent> Events;
     public List<UIFeedback> Feedback;
+    public bool DiscardExplicitly = false;
 
     private GameStateUpdate(GameState newState, List<GameEvent> events, List<UIFeedback> feedback)
     {
@@ -29,7 +30,26 @@ internal struct GameStateUpdate
 
     public static GameStateUpdate None(GameState state)
     {
-        return new GameStateUpdate(state, new List<GameEvent>(), new List<UIFeedback>());
+        return new GameStateUpdate(state, new List<GameEvent>(), new List<UIFeedback>())
+        {
+            DiscardExplicitly = true
+        };
+    }
+
+    public static GameStateUpdate NoneWithEvents(GameState state, params GameEvent[] events)
+    {
+        return new GameStateUpdate(state, events.ToList(), new List<UIFeedback>())
+        {
+            DiscardExplicitly = true
+        };
+    }
+
+    public static GameStateUpdate NoneWithFeedback(GameState state, params UIFeedback[] feedback)
+    {
+        return new GameStateUpdate(state, new List<GameEvent>(), feedback.ToList())
+        {
+            DiscardExplicitly = true
+        };
     }
 
     public static GameStateUpdate WithEvents(GameState state, List<GameEvent> events)

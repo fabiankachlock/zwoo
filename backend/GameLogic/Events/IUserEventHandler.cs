@@ -1,8 +1,9 @@
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Notifications;
 
 namespace ZwooGameLogic.Events;
 
 public interface IUserEventHandler
 {
-    bool HandleMessage(UserContext context, IIncomingEvent message);
+    Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>> GetHandles();
 }
