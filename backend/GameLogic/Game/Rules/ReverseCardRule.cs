@@ -18,29 +18,6 @@ internal class ReverseCardRule : BaseCardRule
         get => "ReverseCardRule";
     }
 
-    public override RuleMeta? Meta => RuleMetaBuilder.New("reverse")
-    .Localize("de", "DummeR", "Regel")
-    .Localize("en", "DummyR", "Rule")
-            .ConfigureParameter("test1", setting =>
-        {
-            setting.Type = GameSettingsType.Readonly;
-            setting.Localize("de", "testde", "longde");
-            setting.Localize("en", "testen", "longen");
-        })
-        .ConfigureParameter("test2", setting =>
-        {
-            setting.Type = GameSettingsType.Boolean;
-            setting.Localize("de", "bool", "longde");
-            setting.Localize("en", "bool", "longen");
-        })
-        .ConfigureParameter("test3", setting =>
-        {
-            setting.Type = GameSettingsType.Numeric;
-            setting.Localize("de", "number", "longde");
-            setting.Localize("en", "number", "longen");
-        })
-    .ToMeta();
-
     public ReverseCardRule() : base() { }
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
