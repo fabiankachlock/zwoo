@@ -32,6 +32,13 @@ export const useRules = defineStore('game-rules', () => {
         if (setting.id === msg.data.setting) {
           setting.value = msg.data.value;
           break;
+        } else if (msg.data.setting.startsWith(setting.id)) {
+          for (const subSetting of setting.children) {
+            if (subSetting.id === msg.data.setting) {
+              subSetting.value = msg.data.value;
+              break;
+            }
+          }
         }
       }
     }
