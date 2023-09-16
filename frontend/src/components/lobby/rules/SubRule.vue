@@ -1,19 +1,20 @@
 <template>
-  <div
-    v-tooltip="t(isOpen ? 'wait.collapse' : 'wait.expand')"
-    class="px-2 py-1 my-1 border-b bc-lightest transition mouse:hover:bc-primary mouse:hover:bg-dark cursor-pointer"
-    @click.stop="toggleOpenState"
-  >
-    <div class="flex flex-row flex-nowrap justify-between items-center">
-      <p class="text-lg tc-main-dark">{{ translatedTitle }}</p>
-      <div>
+  <div class="px-2 py-1 bg-light border bc-dark rounded-lg">
+    <div class="flex flex-row flex-nowrap justify-between items-center gap-2">
+      <div class="flex items-center justify-start gap-2 flex-grow cursor-pointer" @click.stop="toggleOpenState">
+        <button class="rounded-lg transition group active:scale-95">
+          <Icon v-if="!isOpen" icon="akar-icons:circle-plus" class="tc-main group-hover:tc-primary text-xl" />
+          <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main group-hover:tc-primary text-xl" />
+        </button>
+        <p class="text-lg tc-main-dark flex-grow">{{ translatedTitle }}</p>
+      </div>
+      <div class="relative">
         <slot></slot>
       </div>
     </div>
-    <div class="rule-body overflow-hidden transition duration-300" :class="{ open: isOpen }">
-      <div class="divider w-full my-2 bc-invert-darkest border-b"></div>
-      <div class="content">
-        <p class="text-sm italic tc-main-secondary">
+    <div class="grid grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': isOpen }">
+      <div class="relative overflow-hidden px-1">
+        <p class="text-sm tc-main-secondary">
           {{ translatedDescription }}
         </p>
       </div>
@@ -25,6 +26,7 @@
 import { computed, ref, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { Icon } from '@/components/misc/Icon';
 import { defaultLanguage } from '@/i18n';
 
 const props = defineProps<{
@@ -34,7 +36,7 @@ const props = defineProps<{
 
 const { title, description } = toRefs(props);
 
-const { t, locale } = useI18n();
+const { locale } = useI18n();
 const isOpen = ref(false);
 const translatedTitle = computed(() => getTranslationOrFallback(title.value, locale.value));
 const translatedDescription = computed(() => getTranslationOrFallback(description.value, locale.value));
@@ -48,14 +50,3 @@ const getTranslationOrFallback = (translateAble: Record<string, string>, locale:
   return translateAble[defaultLanguage];
 };
 </script>
-
-<style scoped>
-.rule-body {
-  transition-property: max-height;
-  max-height: 0;
-}
-.rule-body.open {
-  transition-property: max-height;
-  max-height: 2000px;
-}
-</style>

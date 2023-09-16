@@ -1,24 +1,25 @@
 <template>
-  <div
-    v-tooltip="t(isOpen ? 'wait.collapse' : 'wait.expand')"
-    class="px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest cursor-pointer"
-    @click.stop="toggleOpenState"
-  >
-    <div class="flex flex-row flex-nowrap justify-between items-center">
-      <p class="text-lg tc-main-dark">{{ translatedTitle }}</p>
-      <div>
+  <div class="py-1 px-2 my-1 bg-lightest border bc-main rounded-lg">
+    <div class="flex flex-row flex-nowrap justify-between items-center gap-2">
+      <div class="flex items-center justify-start gap-2 flex-grow cursor-pointer" @click.stop="toggleOpenState">
+        <button class="rounded-lg transition group active:scale-95">
+          <Icon v-if="!isOpen" icon="akar-icons:circle-plus" class="tc-main group-hover:tc-primary text-xl" />
+          <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main group-hover:tc-primary text-xl" />
+        </button>
+        <p class="text-lg tc-main-dark flex-grow">{{ translatedTitle }}</p>
+      </div>
+      <div class="relative">
         <slot></slot>
       </div>
     </div>
-    <div class="rule-body overflow-hidden transition duration-300" :class="{ open: isOpen }">
-      <div class="divider w-full my-2 bc-invert-darkest border-b"></div>
-      <div class="mb-2">
-        <p class="text-sm italic tc-main-secondary">
-          {{ translatedDescription }}
-        </p>
-      </div>
-      <div class="flex flex-col pl-2">
-        <slot name="subrules"></slot>
+    <div class="grid grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': isOpen }">
+      <div class="relative overflow-hidden">
+        <div class="flex flex-col gap-1 mt-2">
+          <p class="text-sm tc-main-secondary px-1">
+            {{ translatedDescription }}
+          </p>
+          <slot name="subrules"></slot>
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +29,7 @@
 import { computed, ref, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { Icon } from '@/components/misc/Icon';
 import { defaultLanguage } from '@/i18n';
 
 const props = defineProps<{
@@ -37,7 +39,7 @@ const props = defineProps<{
 
 const { title, description } = toRefs(props);
 
-const { t, locale } = useI18n();
+const { locale } = useI18n();
 const isOpen = ref(false);
 const translatedTitle = computed(() => getTranslationOrFallback(title.value, locale.value));
 const translatedDescription = computed(() => getTranslationOrFallback(description.value, locale.value));
@@ -51,14 +53,3 @@ const getTranslationOrFallback = (translateAble: Record<string, string>, locale:
   return translateAble[defaultLanguage];
 };
 </script>
-
-<style scoped>
-.rule-body {
-  transition-property: max-height;
-  max-height: 0;
-}
-.rule-body.open {
-  transition-property: max-height;
-  max-height: 2000px;
-}
-</style>
