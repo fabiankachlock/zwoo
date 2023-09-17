@@ -1,17 +1,30 @@
-import { reactive, Ref, ref, toRefs, watch } from 'vue';
+import { computed, Ref, ref, watch } from 'vue';
 
-const StateObject = reactive(JSON.parse(atob(localStorage.getItem('zwoo:ud') ?? btoa('{}'))));
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 
-watch(StateObject, newValue => {
-  localStorage.setItem('zwoo:ud', btoa(JSON.stringify(newValue)));
-});
+const serializeState = (state: Record<string, unknown>): string => {
+  return btoa(JSON.stringify(state));
+};
+
+const deserializeState = (state: string): Record<string, unknown> => {
+  return JSON.parse(atob(state));
+};
 
 export const useUserDefaults = <T>(key: string, defaultValue: T): Ref<T> => {
-  const refs = toRefs(StateObject);
-  const value: Ref<T> = key in refs ? refs[key] : ref(defaultValue);
+  const config = useConfig();
+  const state = computed(() => config.get(ZwooConfigKey.UserDefaults));
+  const stateObject = deserializeState(config.get(ZwooConfigKey.UserDefaults) || btoa('{}'));
+  const value = ref(key in stateObject ? (stateObject[key] as T) : defaultValue) as Ref<T>;
+
+  watch(state, newState => {
+    const stateObject = deserializeState(newState);
+    value.value = stateObject[key] as T;
+  });
 
   watch(value, newValue => {
-    StateObject[key] = newValue;
+    const stateObject = deserializeState(config.get(ZwooConfigKey.UserDefaults) || btoa('{}'));
+    stateObject[key] = newValue;
+    config.set(ZwooConfigKey.UserDefaults, serializeState(stateObject));
   });
 
   return value;
