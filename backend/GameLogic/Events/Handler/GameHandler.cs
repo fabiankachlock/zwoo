@@ -34,9 +34,20 @@ public class GameHandler : IUserEventHandler
         }
         context.Game.Start();
 
-        websocketManager.BroadcastGame(context.GameId, ZRPCode.GameStarted, new GameStartedNotification());
-        websocketManager.SendPlayer(context.Game.State.ActivePlayer(), ZRPCode.StartTurn, new StartTurnNotification());
+        List<SendPlayerState_PlayerDTO> amounts = GetCardAmounts(context);
+        var top = context.Game.State.GetPileTop();
+        var pileTopNotification = new SendPileTopNotification(top.Color, top.Type);
 
+        foreach (var player in context.Game.AllPlayers)
+        {
+            websocketManager.SendPlayer(player, ZRPCode.GameStarted, new GameStartedNotification(
+                context.Game.State.GetPlayerDeck(player)?.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray() ?? new List<SendDeck_CardDTO>().ToArray(),
+                amounts.ToArray(),
+                pileTopNotification
+            ));
+        }
+
+        websocketManager.SendPlayer(context.Game.State.ActivePlayer(), ZRPCode.StartTurn, new StartTurnNotification());
     }
 
     private void HandleCardPlace(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
@@ -71,6 +82,25 @@ public class GameHandler : IUserEventHandler
 
     private void SendCardAmount(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
+        List<SendPlayerState_PlayerDTO> amounts = GetCardAmounts(context);
+
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendCardAmount, new SendPlayerStateNotification(amounts.ToArray()));
+    }
+
+    private void SendPileTop(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        var top = context.Game.State.GetPileTop();
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendPileTop, new SendPileTopNotification(top.Color, top.Type));
+    }
+
+    private void HandleRequestEndTurn(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role == ZRPRole.Spectator) return;
+
+        context.Game.HandleEvent(ClientEvent.RequestEndTurn(context.LobbyId));
+    }
+    private List<SendPlayerState_PlayerDTO> GetCardAmounts(UserContext context)
+    {
         List<SendPlayerState_PlayerDTO> amounts = new List<SendPlayerState_PlayerDTO>();
 
         foreach (long playerId in context.Game.AllPlayers)
@@ -88,19 +118,6 @@ public class GameHandler : IUserEventHandler
             }
         }
 
-        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendCardAmount, new SendPlayerStateNotification(amounts.ToArray()));
-    }
-
-    private void SendPileTop(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
-    {
-        var top = context.Game.State.GetPileTop();
-        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendPileTop, new SendPileTopNotification(top.Color, top.Type));
-    }
-
-    private void HandleRequestEndTurn(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
-    {
-        if (context.Role == ZRPRole.Spectator) return;
-
-        context.Game.HandleEvent(ClientEvent.RequestEndTurn(context.LobbyId));
+        return amounts;
     }
 }

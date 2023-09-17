@@ -21,6 +21,16 @@ export const useGameCardDeck = defineStore('game-cards', () => {
 
   const _receiveMessage: (typeof deckWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.GameStarted) {
+      if (msg.data.hand && msg.data.hand.length > 0) {
+        setState(
+          msg.data.hand.map(c => ({
+            color: c.type,
+            type: c.symbol
+          }))
+        );
+        return;
+      }
+      // no initial hand --> request one
       dispatchEvent(ZRPOPCode.RequestHand, {});
     } else if (msg.code === ZRPOPCode.GetCards) {
       for (const card of msg.data.cards) {

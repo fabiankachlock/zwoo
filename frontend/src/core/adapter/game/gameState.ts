@@ -46,7 +46,20 @@ export const useGameState = defineStore('game-state', () => {
 
   const _receiveMessage: (typeof gameWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.GameStarted) {
-      initialSetup();
+      if (msg.data.pile && msg.data.pile.symbol > 0 && msg.data.pile.type > 0) {
+        updatePile({
+          type: msg.data.pile.symbol,
+          color: msg.data.pile.type
+        });
+      } else {
+        dispatchEvent(ZRPOPCode.RequestPileTop, {});
+      }
+
+      if (msg.data.players && msg.data.players.length > 0) {
+        updatePlayers(msg.data);
+      } else {
+        dispatchEvent(ZRPOPCode.RequestPlayerCardAmount, {});
+      }
     } else if (msg.code === ZRPOPCode.StartTurn) {
       activateSelf();
     } else if (msg.code === ZRPOPCode.EndTurn) {
@@ -69,11 +82,6 @@ export const useGameState = defineStore('game-state', () => {
     } else if (msg.code === ZRPOPCode.PlayerReconnected) {
       playerManager.setPlayerConnected(msg.data.id);
     }
-  };
-
-  const initialSetup = () => {
-    dispatchEvent(ZRPOPCode.RequestPileTop, {});
-    dispatchEvent(ZRPOPCode.RequestPlayerCardAmount, {});
   };
 
   const activateSelf = () => {

@@ -73,6 +73,7 @@ export const useSnackbar = defineStore('snackbar', () => {
 
       activeMessage.value.onClosed();
       activeMessage.value = undefined;
+      messageStack.value.forEach(msg => msg.mode === 'loading' && msg.onClosed()); // remove any loading snackbars when force pushing
       messageStack.value = messageStack.value.filter(msg => msg.mode === 'static'); // remove any loading snackbars when force pushing
       setTimeout(() => {
         // wait until the next event loop, so that the animation can be reset before
@@ -99,6 +100,7 @@ export const useSnackbar = defineStore('snackbar', () => {
   const evaluateNext = () => {
     // wait until the next event loop, so that the animation can be reset before
     setTimeout(() => {
+      console.warn('next', messageStack.value);
       if (!activeMessage.value) {
         const msg = messageStack.value.shift();
         if (msg) {

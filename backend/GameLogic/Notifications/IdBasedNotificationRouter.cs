@@ -52,9 +52,9 @@ public class IdBasedNotificationRouter : INotificationAdapter
         return !result.Contains(false) && defaultResult;
     }
 
-    public async Task<bool> DisconnectPlayer(long playerId)
+    public async Task<bool> DisconnectPlayer(long lobbyId)
     {
-        var player = _room.GetPlayer(playerId);
+        var player = _room.GetPlayer(lobbyId);
         if (player == null) return false;
 
         foreach (var target in _targets)
