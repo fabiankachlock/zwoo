@@ -66,9 +66,21 @@ public class ZRPPlayerManager
         else
         {
             _logger.Info($"{playerId} removed from lobby");
+            var previousRole = player.Role;
             playerRemoveResult = _game.Lobby.RemovePlayer(player.LobbyId);
 
-            if (player.Role == ZRPRole.Spectator)
+            if (previousRole == ZRPRole.Host)
+            {
+                IPlayer? newHost = _game.Lobby.GetHost();
+                if (newHost != null)
+                {
+                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.LobbyId, ZRPRole.Host, 0));
+                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.HostChanged, new NewHostNotification(newHost.LobbyId));
+                    await _webSocketManager.SendPlayer(newHost.LobbyId, ZRPCode.PromotedToHost, new YouAreHostNotification());
+                    await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.LobbyId));
+                }
+            }
+            else if (previousRole == ZRPRole.Spectator)
             {
                 await _webSocketManager.BroadcastGame(_game.Id, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.LobbyId));
             }
@@ -78,7 +90,7 @@ public class ZRPPlayerManager
             }
         }
 
-        if (_game.Lobby.ActivePlayerCount() == 0 || _game.Game.IsRunning && _game.Lobby.PlayerCount() < 2 || playerRemoveResult == LobbyResult.Error)
+        if (_game.ShouldClose() || playerRemoveResult == LobbyResult.Error)
         {
             _logger.Info($"force closing game {_game.Id} due to a lack of players");
             _game.Close();
