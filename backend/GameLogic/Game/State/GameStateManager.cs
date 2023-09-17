@@ -67,8 +67,7 @@ public sealed class GameStateManager
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
-            topCard: new StackCard(DrawSaveCard()),
-            cardStack: new List<StackCard>(),
+            cardStack: new List<StackCard>() { new StackCard(DrawSaveCard()) },
             playerDecks: GeneratePlayerDecks(_playerManager.Players),
             ui: new UiHints()
         );
@@ -204,6 +203,8 @@ public sealed class GameStateManager
 
     private void _postExecute(GameStateUpdate stateUpdate)
     {
+        var filteredEvents = stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate);
+
         GameEvent stateUpdateEvent = GameEvent.CreateStateUpdate(
             topCard: stateUpdate.NewState.TopCard.Card,
             activePlayer: stateUpdate.NewState.CurrentPlayer,
@@ -216,6 +217,11 @@ public sealed class GameStateManager
          );
         _gameState = stateUpdate.NewState;
 
+        if (!stateUpdate.DiscardExplicitly)
+        {
+            filteredEvents = filteredEvents.Append(stateUpdateEvent);
+        }
+
         GameEvent? isFinishedEvent = IsGameFinished(_gameState);
         if (isFinishedEvent.HasValue)
         {
@@ -227,7 +233,7 @@ public sealed class GameStateManager
             return;
         }
 
-        SendEvents(stateUpdate.Events.Where(evt => evt.Type != GameEventType.StateUpdate).Append(stateUpdateEvent).ToList());
+        SendEvents(filteredEvents.ToList());
         _ruleManager.OnGameUpdate(stateUpdate.NewState, stateUpdate.Events);
     }
 

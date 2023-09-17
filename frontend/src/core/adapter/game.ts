@@ -6,7 +6,7 @@ import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiEr
 import { ZRPMessageBuilder } from '@/core/domain/zrp/zrpBuilder';
 import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
 import { ZRPWebsocketAdapter } from '@/core/domain/zrp/ZRPMessageDistributer';
-import { ZRPOPCode, ZRPPayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
+import { ZRPCardPayload, ZRPOPCode, ZRPPayload, ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import { RouterService } from '@/core/global/Router';
 import Logger from '@/core/services/logging/logImport';
 import { GameNameValidator } from '@/core/services/validator/gameName';
@@ -165,10 +165,7 @@ export const useGameConfig = defineStore('game-config', {
           events.pushEvent(
             ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {
               hand: [],
-              pile: {
-                symbol: 0,
-                type: 0
-              },
+              pile: undefined as unknown as ZRPCardPayload,
               players: []
             })
           );

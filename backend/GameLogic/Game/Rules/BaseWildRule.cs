@@ -52,7 +52,7 @@ internal class BaseWildCardRule : BaseCardRule
             }
             else
             {
-                return GameStateUpdate.WithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
+                return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
             }
         }
         return PerformHandleDecission(gameEvent, state, playerOrder);
@@ -88,7 +88,7 @@ internal class BaseWildCardRule : BaseCardRule
     /// <returns></returns>
     protected GameStateUpdate PerformHandleDecission(ClientEvent gameEvent, GameState state, PlayerCycle playerOrder)
     {
-        List<GameEvent> events = new List<GameEvent>();
+        List<GameEvent> events;
         ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();
 
         if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
