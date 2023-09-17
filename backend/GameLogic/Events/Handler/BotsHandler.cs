@@ -31,6 +31,8 @@ public class BotsHandler : IUserEventHandler
             Type = data.Config.Type
         });
         websocketManager.BroadcastGame(context.GameId, ZRPCode.BotJoined, new BotJoinedNotification(newBot.AsPlayer().LobbyId, newBot.Username, 0));
+        // FIXME: notify to host (ZWOO-373)
+        GetBots(context, message, websocketManager);
     }
 
     private void UpdateBot(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)

@@ -70,7 +70,7 @@ public class LobbyHandler : IUserEventHandler
     private void KickPlayer(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         KickPlayerEvent payload = message.DecodePayload<KickPlayerEvent>();
-        var player = context.Lobby.GetPlayerByUserId(payload.Id);
+        var player = context.Lobby.GetPlayer(payload.Id);
 
         // remove player from  active game
         if (context.Game.IsRunning && player != null)
@@ -84,14 +84,6 @@ public class LobbyHandler : IUserEventHandler
             }
         }
 
-        // remove player from lobby
-        LobbyResult result = context.Lobby.RemovePlayer(payload.Id);
-        if (context.Lobby.ActivePlayerCount() == 0)
-        {
-            // stop game if lobby is empty
-            context.Room.Close();
-            return;
-        }
 
         if (player != null && player.Role == ZRPRole.Spectator)
         {
@@ -102,6 +94,15 @@ public class LobbyHandler : IUserEventHandler
         {
             websocketManager.DisconnectPlayer(player.LobbyId);
             websocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.LobbyId));
+        }
+
+        // remove player from lobby
+        LobbyResult result = context.Lobby.RemovePlayer(payload.Id);
+        if (context.Lobby.ActivePlayerCount() == 0)
+        {
+            // stop game if lobby is empty
+            context.Room.Close();
+            return;
         }
     }
 
