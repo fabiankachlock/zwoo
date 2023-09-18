@@ -39,3 +39,20 @@ public class Beta10012User : DocumentMigration<UserDao>
         document.Remove("accepted_terms_at");
     }
 }
+
+public class Beta10015User : DocumentMigration<UserDao>
+{
+    public Beta10015User() : base("1.0.0-beta.15")
+    {
+    }
+
+    public override void Up(BsonDocument document)
+    {
+        document.Set("sid", new BsonArray());
+    }
+
+    public override void Down(BsonDocument document)
+    {
+        document.Set("sid", new BsonArray());
+    }
+}

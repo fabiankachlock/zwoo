@@ -3,36 +3,15 @@ using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ZwooDatabase.Dao;
+namespace ZwooDatabase.Legacy;
 
-public class UserSessionDao
-{
-    [BsonElement("_id")]
-    public string Id { get; set; } = "";
-
-    [BsonElement("expires")]
-    public long Expires { get; set; }
-
-    public UserSessionDao() { }
-
-    [BsonConstructor]
-    public UserSessionDao(string id, long expires)
-    {
-        Id = id;
-        Expires = expires;
-    }
-}
-
-[RuntimeVersion("1.0.0-beta.15")]
-[StartUpVersion("1.0.0-beta.15")]
-[CollectionLocation("users")]
-public class UserDao : IDocument
+public class Beta12UserDao : IDocument
 {
 
-    public UserDao() { }
+    public Beta12UserDao() { }
 
     [BsonConstructor]
-    public UserDao(ulong id, List<UserSessionDao> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified, bool acceptedTerms)
+    public Beta12UserDao(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified, bool acceptedTerms)
     {
         Id = id;
         Sid = sid;
@@ -51,7 +30,7 @@ public class UserDao : IDocument
 
     [BsonElement("sid")]
     [BsonIgnoreIfDefault]
-    public List<UserSessionDao> Sid { set; get; } = new();
+    public List<string> Sid { set; get; } = new();
 
     [BsonElement("username")]
     public string Username { set; get; } = "";
