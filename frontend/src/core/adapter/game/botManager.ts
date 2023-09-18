@@ -34,12 +34,6 @@ export const useBotManager = defineStore('bot-manager', () => {
 
   const addBot = (name: string, config: ZRPBotConfig) => {
     dispatchEvent(ZRPOPCode.CreateBot, { username: name, config: config });
-    // TODO: Bot created callback???
-    // bots.value[`b_${name}`] = {
-    //   id: `b_${name}`,
-    //   name: name,
-    //   config: config
-    // };
   };
 
   const updateBot = (id: number, config: ZRPBotConfig) => {

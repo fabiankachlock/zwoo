@@ -18,7 +18,7 @@ export class OfflineGuard implements RouterInterceptor {
           next('/offline');
         }
       } else {
-        next();
+        return false;
       }
       return true;
     } else {
