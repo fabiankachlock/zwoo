@@ -36,6 +36,7 @@
     "changePassword": "Passwort ändern",
     "versionHistory": "Versionverlauf",
     "settingsSync": "Einstellungen synchronisieren",
+    "userDefaultsSync": "UI Zustand synchronisieren",
     "reportBug": "Fehler melden",
     "contact": "Kontakt",
     "logout": "Abmelden",
