@@ -73,10 +73,11 @@ public class GameLogicService : IGameLogicService
 
             if (scores.Where(score => !score.IsBot).Count() > 1)
             {
-                if (room.GetPlayer(data.Winner)?.Role != ZRPRole.Bot)
+                var winner = room.GetPlayer(data.Winner);
+                if (winner != null && winner.Role != ZRPRole.Bot)
                 {
-                    _logger.Info($"[{gameMeta.Id}] incrementing win of winner {data.Winner}");
-                    _userService.IncrementWin((ulong)data.Winner);
+                    _logger.Info($"[{gameMeta.Id}] incrementing win of winner {winner.RealId}");
+                    _userService.IncrementWin((ulong)winner.RealId);
                 }
             }
             else
