@@ -91,7 +91,7 @@ const performJoinRequest = async () => {
     snackbar.pushMessage({
       message: 'errors.zrp.loading',
       needsTranslation: true,
-      showClose: false,
+      showClose: true,
       position: SnackBarPosition.Top,
       mode: 'loading',
       onClosed() {
