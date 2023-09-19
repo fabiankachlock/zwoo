@@ -66,17 +66,14 @@ internal class BaseWildCardRule : BaseCardRule
     /// <returns>the game state update to return to the client</returns>
     protected GameStateUpdate PerformHandlePlaceWild(ClientEvent gameEvent, GameState state)
     {
-        List<GameEvent> events = new List<GameEvent>();
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-
         _storedEvent = new StoredEvent(payload.Player, payload.Card);
-        events.Add(GameEvent.GetPlayerDecision(
+
+        return GameStateUpdate.NoneWithEvents(state, GameEvent.GetPlayerDecision(
             state.CurrentPlayer,
             PlayerDecision.SelectColor,
             _optionsMapper.Select(k => ((int)k).ToString()).ToList()
         ));
-
-        return GameStateUpdate.WithEvents(state, events);
     }
 
     /// <summary>
