@@ -92,7 +92,7 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
                 }
                 else
                 {
-                    List<GameEvent> events = new List<GameEvent>();
+                    List<GameEvent> events;
                     state = PlayPlayerCard(state, payload.Player, payload.Card);
                     (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
                     int currentDrawAmount = GetRecursiveDrawAmount(state.CardStack);
@@ -106,7 +106,10 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
                 return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));
             }
         }
-        return PerformHandleDecission(gameEvent, state, playerOrder);
+        // override draw amount to recursive one
+        var stateUpdate = PerformHandleDecission(gameEvent, state, playerOrder);
+        stateUpdate.NewState.Ui.CurrentDrawAmount = GetRecursiveDrawAmount(stateUpdate.NewState.CardStack);
+        return stateUpdate;
     }
 
     // TODO: duplicated code
