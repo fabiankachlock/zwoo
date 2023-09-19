@@ -28,6 +28,7 @@ export class MigrationRunner {
   static async run(from: string | null, to: string) {
     if (!from) {
       Logger.info('skipping migrations (fresh start)');
+      localStorage.setItem(migrationVersionKey, to);
       return;
     }
     if (from === to) {
