@@ -102,12 +102,6 @@ public class LobbyHandler : IUserEventHandler
 
     private void LeavePlayer(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        // remove player from  active game
-        if (context.Game.IsRunning)
-        {
-            context.Game.RemovePlayer(context.LobbyId);
-        }
-
         // remove player from lobby
         LobbyResult result = context.Lobby.RemovePlayer(context.LobbyId);
         if (context.Room.ShouldClose() || result == LobbyResult.Error)
@@ -116,6 +110,13 @@ public class LobbyHandler : IUserEventHandler
             context.Room.Close();
             return;
         }
+
+        // remove player from  active game
+        if (context.Game.IsRunning)
+        {
+            context.Game.RemovePlayer(context.LobbyId);
+        }
+
 
         if (context.Role == ZRPRole.Host)
         {
