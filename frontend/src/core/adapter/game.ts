@@ -69,7 +69,7 @@ export const useGameConfig = defineStore('game-config', {
     },
     async join(id: number, password: string, asPlayer: boolean, asSpectator: boolean) {
       if (asPlayer && asSpectator) {
-        throw new Error('cant join as player & spectator');
+        throw new Error('cant join as player || spectator');
       }
 
       const data = await this.getGameMeta(id);
@@ -162,7 +162,8 @@ export const useGameConfig = defineStore('game-config', {
         });
 
         if (isRunning) {
-          events.pushEvent(
+          events.pushAfter(
+            evt => evt.code === ZRPOPCode._Connected,
             ZRPMessageBuilder.build(ZRPOPCode.GameStarted, {
               hand: [],
               pile: undefined as unknown as ZRPCardPayload,

@@ -64,6 +64,21 @@ public class ZwooRoom
         return Lobby.GetPlayerByUserId(lobbyId);
     }
 
+    public bool ShouldClose()
+    {
+        if (Game.IsRunning)
+        {
+            return
+                Lobby.ActivePlayerCount() == 0
+                || Lobby.PlayerCount() == 0
+                || (Lobby.PlayerCount() == 1 && BotManager.ListBots().Count == 0);
+        }
+        else
+        {
+            return Lobby.PlayerCount() == 0;
+        }
+    }
+
     public void Close()
     {
         Game.Stop();
