@@ -1,5 +1,5 @@
 <template>
-  <div class="py-1 px-2 my-1 bg-lightest border bc-main rounded-lg">
+  <div class="px-2 py-1 bg-light border bc-dark rounded-lg">
     <div class="flex flex-row flex-nowrap justify-between items-center gap-2">
       <div class="flex items-center justify-start gap-2 flex-grow cursor-pointer" @click.stop="toggleOpenState">
         <button class="rounded-lg transition group active:scale-95">
@@ -13,13 +13,10 @@
       </div>
     </div>
     <div class="grid grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': isOpen }">
-      <div class="relative overflow-hidden">
-        <div class="flex flex-col gap-1 mt-2">
-          <p class="text-sm tc-main-secondary px-1">
-            {{ translatedDescription }}
-          </p>
-          <slot name="subrules"></slot>
-        </div>
+      <div class="relative overflow-hidden px-1">
+        <p class="text-sm tc-main-secondary">
+          {{ translatedDescription }}
+        </p>
       </div>
     </div>
   </div>
