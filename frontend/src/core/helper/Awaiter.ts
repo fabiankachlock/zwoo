@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Awaiter<T = any> {
   private invoker: (data: T | undefined | null) => void;
 
@@ -13,6 +14,7 @@ export class Awaiter<T = any> {
 
   constructor(extraCallback?: (data: T | undefined | null) => boolean | Promise<boolean>) {
     let resolve: (data: T) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let reject: (reason: any) => void;
     this.awaiter = new Promise((res, rej) => {
       resolve = res;

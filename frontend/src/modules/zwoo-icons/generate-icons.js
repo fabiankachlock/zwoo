@@ -61,7 +61,8 @@ const icons = [
   'akar-icons:settings-horizontal',
   'material-symbols:keyboard-double-arrow-right-rounded',
   'akar-icons:circle-chevron-up',
-  'akar-icons:trash-can'
+  'akar-icons:trash-can',
+  'akar-icons:circle-plus'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

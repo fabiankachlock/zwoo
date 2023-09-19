@@ -13,7 +13,7 @@ public static class GameSettingsKey
     public static readonly string NumberOfCards = "initialCards";
 }
 
-public class GameSettings
+public class GameSettings : IGameSettingsStore
 {
     public static readonly List<GameSetting> BaseSettings = new List<GameSetting>()
     {
@@ -88,15 +88,8 @@ public class GameSettings
     private static List<GameSetting> GetFromRules()
     {
         return RuleManager.AllRules()
-            .Where(r => r.Setting != null)
-            .Select(r => new GameSetting()
-            {
-                Key = r.Setting!.Value.SettingsKey,
-                Title = r.Setting.Value.Title,
-                Description = r.Setting.Value.Description,
-                Type = GameSettingsType.Boolean,
-                Value = r.Setting!.Value.DefaultValue ?? 0
-            }).ToList();
+            .Where(r => r.Meta != null)
+            .SelectMany(r => r.Meta!.Value.AllSettings).ToList();
     }
 
     public List<GameSetting> GetSettings()
@@ -111,14 +104,20 @@ public class GameSettings
 
     public static GameSettings FromDefaults()
     {
-        Dictionary<string, int> settings = new Dictionary<string, int>();
-        settings.Add(GameSettingsKey.MaxAmountOfPlayers, 5);
-        settings.Add(GameSettingsKey.NumberOfCards, 7);
+        Dictionary<string, int> settings = new Dictionary<string, int>
+        {
+            { GameSettingsKey.MaxAmountOfPlayers, 5 },
+            { GameSettingsKey.NumberOfCards, 7 }
+        };
+
         foreach (var rule in RuleManager.AllRules())
         {
-            if (rule.Setting != null)
+            if (rule.Meta != null)
             {
-                settings.Add(rule.Setting.Value.SettingsKey, rule.Setting.Value.DefaultValue ?? 0);
+                foreach (var setting in rule.Meta.Value.AllSettings)
+                {
+                    settings.Add(setting.Key, setting.Value);
+                }
             }
         }
         return new GameSettings(settings);

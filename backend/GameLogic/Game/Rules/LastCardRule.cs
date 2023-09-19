@@ -2,6 +2,7 @@ using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Game.Rules;
 
@@ -17,19 +18,12 @@ internal class LastCardRule : BaseDrawRule
         get => "LastCardRule";
     }
 
-    public override RuleMeta? Setting => new RuleMeta()
-    {
-        SettingsKey = "explicitLastCard",
-        Title = new Dictionary<string, string>(){
-            {"de", "Letzt Karte"},
-            {"en", "Last Card"},
-        },
-        Description = new Dictionary<string, string>(){
-            {"de", "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten."},
-            {"en", "If a player has only one card left, he has to press the zwoo button or else he will ge two penalty cards."},
-        },
-        DefaultValue = 0,
-    };
+    public override RuleMeta? Meta => RuleMetaBuilder.New("explicitLastCard")
+        .IsTogglable()
+        .Default(GameSettingsValue.Off)
+        .Localize("de", "Letzte Karte", "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten.")
+        .Localize("en", "Last card", "If a player has only one card left, he has to press the zwoo button or else he will ge two penalty cards.")
+        .ToMeta();
 
     public LastCardRule() : base() { }
 

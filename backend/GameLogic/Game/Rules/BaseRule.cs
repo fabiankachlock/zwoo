@@ -12,7 +12,7 @@ internal abstract class BaseRule
 
     public abstract string Name { get; }
 
-    public abstract RuleMeta? Setting { get; }
+    public abstract RuleMeta? Meta { get; }
 
     protected ILogger _logger;
     private Action<GameInterrupt> _interrupt;
@@ -25,10 +25,14 @@ internal abstract class BaseRule
         _interrupt = interruptHandler ?? _voidInterrupt;
     }
 
-    internal void SetupRule(Action<GameInterrupt>? interruptHandler, ILogger? logger)
+    internal void SetupRule(Action<GameInterrupt>? interruptHandler, IGameSettingsStore settings, ILogger? logger)
     {
         _logger = logger ?? _logger;
         _interrupt = interruptHandler ?? _interrupt;
+        if (Meta != null)
+        {
+            Meta.Value.ConfigureWith(settings);
+        }
     }
 
     //Base Rule Stuff

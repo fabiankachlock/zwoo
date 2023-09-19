@@ -12,3 +12,9 @@ public enum GameSettingsType
     Numeric = 1,
     Boolean = 2
 }
+
+public sealed class GameSettingsValue
+{
+    public static int On = 1;
+    public static int Off = 0;
+}
