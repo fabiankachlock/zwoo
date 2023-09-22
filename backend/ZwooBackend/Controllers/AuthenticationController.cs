@@ -134,7 +134,7 @@ public class AuthenticationController : Controller
             return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
         }
 
-        if (user.Sid.Contains(sessionId))
+        if (user.Sid.Any(session => session.Id == sessionId))
         {
             return Ok(user.ToDTO());
         }

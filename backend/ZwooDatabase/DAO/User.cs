@@ -10,6 +10,9 @@ public class UserSessionDao
     [BsonElement("_id")]
     public string Id { get; set; } = "";
 
+    /// <summary>
+    /// session expiry date in unix seconds
+    /// </summary>
     [BsonElement("expires")]
     public long Expires { get; set; }
 
