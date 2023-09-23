@@ -184,6 +184,13 @@ public class Database : IDatabase
                 new Beta11UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified));
         });
 
+        BsonClassMap.RegisterClassMap<Beta12UserDao>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new Beta12UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified, p.AcceptedTerms));
+        });
+
         // setup object serializer for AuditTrailEventDaos `object` properties
         var objectSerializer = new ObjectSerializer(type => ObjectSerializer.DefaultAllowedTypes(type) || type.FullName?.StartsWith("ZwooDatabase") != false);
         BsonSerializer.RegisterSerializer(objectSerializer);
