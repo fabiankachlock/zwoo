@@ -67,8 +67,15 @@ public interface IUserService
     /// login a user
     /// </summary>
     /// <param name="email">the user email</param>
-    /// <param name="password">teh users password</param>
+    /// <param name="password">the users password</param>
     public UserLoginResult LoginUser(string email, string password, AuditOptions? auditOptions = null);
+
+    /// <summary>
+    /// check whether a user has an active session
+    /// </summary>
+    /// <param name="id">the users id</param>
+    /// <param name="sid">the current session id</param>
+    public UserLoginResult IsUserLoggedIn(ulong id, string sid, AuditOptions? auditOptions = null);
 
     /// <summary>
     /// logout a user
@@ -312,6 +319,31 @@ public class UserService : IUserService
         _logger.Warn($"logging in {user.Id} failed - {(user.Verified ? "wrong password" : "not verified")}");
         _accountEvents.LoginAttempt(user, false);
         return new UserLoginResult(user, null, user.Verified ? ErrorCode.WrongPassword : ErrorCode.NotVerified);
+    }
+    public UserLoginResult IsUserLoggedIn(ulong id, string sid, AuditOptions? auditOptions = null)
+    {
+        var user = GetUserById(id);
+        if (user == null) return new UserLoginResult(null, null, ErrorCode.UserNotFound);
+
+        var session = user.Sid.FirstOrDefault(session => session.Id == sid);
+        if (session == null || session.Expires < DateTimeOffset.Now.ToUnixTimeSeconds())
+        {
+            _cleanUpUserSessions(user, auditOptions);
+            return new UserLoginResult(null, null, ErrorCode.SessionExpired);
+        }
+
+        _cleanUpUserSessions(user, auditOptions);
+        return new UserLoginResult(user, session.Id, null);
+    }
+
+    private void _cleanUpUserSessions(UserDao user, AuditOptions? auditOptions = null)
+    {
+        var cleanedSessions = user.Sid.Where(session => session.Expires > DateTimeOffset.Now.ToUnixTimeSeconds()).ToList();
+        if (cleanedSessions.Count != user.Sid.Count)
+        {
+            user.Sid = cleanedSessions;
+            UpdateUser(user, AuditOptions.WithMessage("user session clean up").Merge(auditOptions));
+        }
     }
 
     public bool LogoutUser(UserDao user, string sessionId, AuditOptions? auditOptions = null)
