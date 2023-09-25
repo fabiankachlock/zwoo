@@ -128,6 +128,13 @@ public class Database : IDatabase
                 new UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified, p.AcceptedTerms));
         });
 
+        BsonClassMap.RegisterClassMap<UserSessionDao>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new UserSessionDao(p.Id, p.Expires));
+        });
+
         BsonClassMap.RegisterClassMap<BetaCodeDao>(cm =>
         {
             cm.AutoMap();

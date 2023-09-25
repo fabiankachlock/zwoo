@@ -309,7 +309,7 @@ public class UserService : IUserService
             user.Sid.Add(new UserSessionDao()
             {
                 Id = sid,
-                Expires = DateTimeOffset.Now.ToUnixTimeSeconds()
+                Expires = DateTimeOffset.Now.ToUnixTimeSeconds() + 60 * 24
             });
             UpdateUser(user, AuditOptions.WithMessage("logged user in").Merge(auditOptions));
             _accountEvents.LoginAttempt(user, true);
@@ -402,7 +402,7 @@ public class UserService : IUserService
         // reset session to only current one - logs out all other devices
         user.Sid = new List<UserSessionDao>() { new UserSessionDao() {
                 Id = currentSession,
-                Expires = DateTimeOffset.Now.ToUnixTimeSeconds()
+                Expires = DateTimeOffset.Now.ToUnixTimeSeconds() + 24 * 60
         }};
         user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
 
