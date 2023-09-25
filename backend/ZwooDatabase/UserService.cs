@@ -165,6 +165,8 @@ public class UserService : IUserService
         _logger = logger ?? LogManager.GetLogger("UserService");
     }
 
+    private long _getSessionExpiryDate() => DateTimeOffset.Now.ToUnixTimeSeconds() + 60 * 60 * 24 * 30; // now + 30 days
+
     public UserDao CreateUser(string username, string email, string password, bool acceptedTerms, string? betaCode, AuditOptions? auditOptions = null)
     {
         var code = StringHelper.GenerateNDigitString(6);
@@ -309,7 +311,7 @@ public class UserService : IUserService
             user.Sid.Add(new UserSessionDao()
             {
                 Id = sid,
-                Expires = DateTimeOffset.Now.ToUnixTimeSeconds() + 60 * 24
+                Expires = _getSessionExpiryDate()
             });
             UpdateUser(user, AuditOptions.WithMessage("logged user in").Merge(auditOptions));
             _accountEvents.LoginAttempt(user, true);
@@ -402,7 +404,7 @@ public class UserService : IUserService
         // reset session to only current one - logs out all other devices
         user.Sid = new List<UserSessionDao>() { new UserSessionDao() {
                 Id = currentSession,
-                Expires = DateTimeOffset.Now.ToUnixTimeSeconds() + 24 * 60
+                Expires = _getSessionExpiryDate()
         }};
         user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
 
