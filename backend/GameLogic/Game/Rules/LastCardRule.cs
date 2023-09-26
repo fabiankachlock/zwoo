@@ -23,6 +23,24 @@ internal class LastCardRule : BaseDrawRule
         .Default(GameSettingsValue.Off)
         .Localize("de", "Letzte Karte", "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten.")
         .Localize("en", "Last card", "If a player has only one card left, he has to press the zwoo button or else he will ge two penalty cards.")
+        .ConfigureParameter("timeout", setting =>
+        {
+            setting.Type = GameSettingsType.Numeric;
+            setting.Min = 1;
+            setting.Max = 20;
+            setting.DefaultValue = 3;
+            setting.Localize("de", "Reaktionszeit (s)", "Die Zeit, die ein Spieler hat, um den letzte Karte Button zu drücken");
+            setting.Localize("en", "Reaction timeout (s)", "The time a player has to press the last card button");
+        })
+        .ConfigureParameter("penaltyCards", setting =>
+        {
+            setting.Type = GameSettingsType.Numeric;
+            setting.Min = 1;
+            setting.Max = 20;
+            setting.DefaultValue = 2;
+            setting.Localize("de", "Anzahl Strafkarten", "Wie viele Karten der Spieler ziehen muss, wenn er nicht Rechtzeitig reagiert.");
+            setting.Localize("en", "Amount penalty cards", "The amount of cards the player receives when he does not react in time.");
+        })
         .ToMeta();
 
     public LastCardRule() : base() { }
@@ -40,8 +58,8 @@ internal class LastCardRule : BaseDrawRule
     }
 
     private const string _interruptReason = "lastCardExpire";
-    private const int _timeoutMs = 2000;
-    private const int _penaltyCards = 2;
+    // private const int _timeoutMs = 2000;
+    // private const int _penaltyCards = 2;
 
     private Dictionary<long, Timeout> _pendingTimeouts = new();
 
@@ -78,8 +96,7 @@ internal class LastCardRule : BaseDrawRule
         CancellationTokenSource cts = new CancellationTokenSource();
         return new Timeout(Task.Run(async () =>
         {
-            // TODO: configure waiting amount
-            await Task.Delay(_timeoutMs, cts.Token);
+            await Task.Delay(Meta!.Value.GetParameter("timeout") * 1000, cts.Token);
             _logger.Info($"timeout expired for {player}");
             if (!cts.IsCancellationRequested)
             {
@@ -103,7 +120,7 @@ internal class LastCardRule : BaseDrawRule
         {
             _pendingTimeouts.Remove(player);
             List<Card> newCards;
-            (state, newCards) = DrawCardsForPlayer(state, player, _penaltyCards, cardPile);
+            (state, newCards) = DrawCardsForPlayer(state, player, Meta!.Value.GetParameter("penaltyCards"), cardPile);
             events.Add(GameEvent.SendCards(player, newCards));
             feedback.Add(UIFeedback.Individual(UIFeedbackType.MissedLast, player));
             feedback.Add(UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, player).WithArg(UIFeedbackArgKey.DrawAmount, newCards.Count));

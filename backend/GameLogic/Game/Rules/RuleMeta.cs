@@ -24,8 +24,8 @@ public struct RuleMeta
 
     public int GetParameter(IGameSettingsStore settings, string key)
     {
-        if (RootSetting.Key == key || key.StartsWith(RootSetting.Key)) return _currentSettings.Get(key);
-        return _currentSettings.Get(RootSetting.Key + "." + key);
+        if (RootSetting.Key == key || key.StartsWith(RootSetting.Key)) return settings.Get(key);
+        return settings.Get(RootSetting.Key + "." + key);
     }
 }
 

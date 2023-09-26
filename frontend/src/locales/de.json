@@ -236,7 +236,7 @@
     }
   },
   "ingame": {
-    "endTurn": "Zug beenden",
+    "endTurn": "XXZug beendenXX",
     "options": "Optionen",
     "actions": "Aktionen",
     "leave": "Spiel Verlassen",

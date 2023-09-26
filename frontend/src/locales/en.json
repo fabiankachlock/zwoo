@@ -236,7 +236,7 @@
     }
   },
   "ingame": {
-    "endTurn": "End turn",
+    "endTurn": "XXEnd turnXX",
     "options": "Options",
     "actions": "Actions",
     "leave": "Leave Game",

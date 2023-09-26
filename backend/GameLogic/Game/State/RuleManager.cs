@@ -14,7 +14,7 @@ internal class RuleManager
         new SkipCardRule(),
         new ReverseCardRule(),
         new AddUpDrawRule(),
-        // new LastCardRule(),
+        new LastCardRule(),
         new DeckChangeRule()
     };
 
