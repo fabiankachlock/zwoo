@@ -2,6 +2,7 @@ using ZwooGameLogic.Game.Events;
 using ZwooGameLogic.Game.Feedback;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Game.Cards;
+using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Game.Rules;
 
@@ -17,19 +18,13 @@ internal class DeckChangeRule : BaseCardRule
         get => "DeckChangeRule";
     }
 
-    public override RuleMeta? Setting => new RuleMeta()
-    {
-        SettingsKey = "deckChange",
-        Title = new Dictionary<string, string>(){
-            {"de", "Hand-Tausch"},
-            {"en", "Deck-Swap"},
-        },
-        Description = new Dictionary<string, string>(){
-            {"de", "Wenn ein Spieler eine 2 legt, kann er sich einen beliebigen Spieler aussuchen, mit dem dieser alle Karten tauscht."},
-            {"en", "When a player lays a 2, he can choose any player with whom to exchange all cards."},
-        },
-        DefaultValue = 0,
-    };
+    public override RuleMeta? Meta => RuleMetaBuilder.New("deckChange")
+        .IsTogglable()
+        .Default(GameSettingsValue.Off)
+        .Localize("de", "Hand-Tausch", "Wenn ein Spieler eine 2 legt, kann er sich einen beliebigen Spieler aussuchen, mit dem dieser alle Karten tauscht.")
+        .Localize("en", "Deck-swap", "When a player lays a 2, he can choose any player with whom to exchange all cards.")
+        .ToMeta();
+
     private record struct StoredEvent(long Player, List<long> Options, Card Card);
 
     private StoredEvent? _storedEvent = null;

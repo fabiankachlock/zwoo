@@ -17,7 +17,7 @@ internal class BaseCardRule : BaseRule
         get => "BaseCardRule";
     }
 
-    public override RuleMeta? Setting => null;
+    public override RuleMeta? Meta => null;
 
     public BaseCardRule() : base() { }
 

@@ -127,8 +127,9 @@ public class GameController : Controller
                 }
             }
 
-            var player = game.Lobby.GetPreparedPlayerByUserId((long)activeSession.User.Id);
+            var player = game.Lobby.GetPossiblyPreparedPlayerByUserId((long)activeSession.User.Id);
             Globals.Logger.Info($"{activeSession.User.Id} joined game {game.Game.Id}");
+
             // the players opcode may changed based on rejoin
             return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, player == null ? body.Opcode : player.Role, player?.LobbyId ?? 0)));
         }

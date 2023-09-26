@@ -100,7 +100,6 @@ export const useSnackbar = defineStore('snackbar', () => {
   const evaluateNext = () => {
     // wait until the next event loop, so that the animation can be reset before
     setTimeout(() => {
-      console.warn('next', messageStack.value);
       if (!activeMessage.value) {
         const msg = messageStack.value.shift();
         if (msg) {

@@ -71,34 +71,28 @@ public class LobbyHandler : IUserEventHandler
     {
         KickPlayerEvent payload = message.DecodePayload<KickPlayerEvent>();
         var player = context.Lobby.GetPlayer(payload.Id);
+        if (player == null) return;
 
         // remove player from  active game
-        if (context.Game.IsRunning && player != null)
+        if (context.Game.IsRunning)
         {
             context.Game.RemovePlayer(player.LobbyId);
-            if (context.Game.PlayerCount == 1)
-            {
-                // stop game when it has no active players
-                context.Room.Close();
-                return;
-            }
         }
 
 
+        websocketManager.DisconnectPlayer(player.LobbyId);
         if (player != null && player.Role == ZRPRole.Spectator)
         {
-            websocketManager.DisconnectPlayer(player.LobbyId);
             websocketManager.BroadcastGame(context.GameId, ZRPCode.SpectatorLeft, new SpectatorLeftNotification(player.LobbyId));
         }
         else if (player != null)
         {
-            websocketManager.DisconnectPlayer(player.LobbyId);
             websocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerLeft, new PlayerLeftNotification(player.LobbyId));
         }
 
         // remove player from lobby
         LobbyResult result = context.Lobby.RemovePlayer(payload.Id);
-        if (context.Lobby.ActivePlayerCount() == 0)
+        if (context.Room.ShouldClose() || result == LobbyResult.Error)
         {
             // stop game if lobby is empty
             context.Room.Close();
@@ -108,26 +102,21 @@ public class LobbyHandler : IUserEventHandler
 
     private void LeavePlayer(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        // remove player from  active game
-        if (context.Game.IsRunning)
-        {
-            context.Game.RemovePlayer(context.LobbyId);
-            if (context.Game.PlayerCount <= 1)
-            {
-                // stop game when it has no active players
-                context.Room.Close();
-                return;
-            }
-        }
-
         // remove player from lobby
         LobbyResult result = context.Lobby.RemovePlayer(context.LobbyId);
-        if (context.Lobby.ActivePlayerCount() == 0)
+        if (context.Room.ShouldClose() || result == LobbyResult.Error)
         {
             // stop game when it has no active players
             context.Room.Close();
             return;
         }
+
+        // remove player from  active game
+        if (context.Game.IsRunning)
+        {
+            context.Game.RemovePlayer(context.LobbyId);
+        }
+
 
         if (context.Role == ZRPRole.Host)
         {
@@ -137,12 +126,6 @@ public class LobbyHandler : IUserEventHandler
                 websocketManager.BroadcastGame(context.GameId, ZRPCode.PlayerChangedRole, new PlayerChangedRoleNotification(newHost.LobbyId, ZRPRole.Host, 0));
                 websocketManager.BroadcastGame(context.GameId, ZRPCode.HostChanged, new NewHostNotification(newHost.LobbyId));
                 websocketManager.SendPlayer(newHost.LobbyId, ZRPCode.PromotedToHost, new YouAreHostNotification());
-            }
-            else
-            {
-                // a game without host cant exist
-                context.Room.Close();
-                return;
             }
         }
 

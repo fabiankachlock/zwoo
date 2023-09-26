@@ -85,7 +85,7 @@ export const useRootApp = defineStore('app', {
         this.serverVersion = AppConfig.Version;
       }
 
-      MigrationRunner.run(MigrationRunner.lastVersion, AppConfig.Version);
+      MigrationRunner.migrateTo(AppConfig.Version);
       this.isLoading = false;
     },
 

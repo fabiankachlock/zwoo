@@ -21,9 +21,21 @@ const migrationVersionKey = 'zwoo:migrate.version';
 export class MigrationRunner {
   static lastVersion = localStorage.getItem(migrationVersionKey);
 
+  static async migrateTo(to: string) {
+    MigrationRunner.run(MigrationRunner.lastVersion, to);
+  }
+
   static async run(from: string | null, to: string) {
-    Logger.info('running migrations...');
-    from = from || 'v0.0.0';
+    if (!from) {
+      Logger.info('skipping migrations (fresh start)');
+      localStorage.setItem(migrationVersionKey, to);
+      return;
+    }
+    if (from === to) {
+      Logger.info('skipping migrations (up to date)');
+      return;
+    }
+    Logger.info(`migrating ${from} to ${to}...`);
     for (const migration of allMigrations) {
       if (semverCompare(to, migration.version) >= 0 && semverCompare(from, migration.version) === -1) {
         try {
