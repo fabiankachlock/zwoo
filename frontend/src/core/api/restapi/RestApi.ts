@@ -27,7 +27,7 @@ export const RestApi: ApiAdapter = {
   logoutUser: AuthenticationService.performLogout,
   requestUserPasswordReset: AccountService.requestPasswordReset,
   resendVerificationEmail: AuthenticationService.resendVerificationEmail,
-  resetUserPassword: AccountService.requestPasswordReset,
+  resetUserPassword: AccountService.performResetPassword,
   storeUserSettings: AccountService.storeSettings,
   submitContactForm: MiscApiService.submitContactForm,
   verifyUserAccount: AuthenticationService.verifyAccount,
