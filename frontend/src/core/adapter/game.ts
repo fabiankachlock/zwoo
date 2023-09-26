@@ -95,7 +95,7 @@ export const useGameConfig = defineStore('game-config', {
         useGameEventDispatch()(ZRPOPCode.LeaveGame, {});
         this._connection?.close();
         this._wakeLock(); // relief wakelock
-        useGameEvents().clear();
+        queueMicrotask(() => useGameEvents().clear());
         if (!keepSavedGame) {
           this.clearStoredConfig();
         }

@@ -58,11 +58,11 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
   chatBroadcastWatcher.onMessage(msg => {
     if (msg.code === ZRPOPCode.PlayerWon) {
       // reset chat
-      channel.postMessage(ResetMessage);
+      // channel.postMessage(ResetMessage);
     }
   });
   chatBroadcastWatcher.onOpen(() => channel.postMessage(`${SetupMessage}${JSON.stringify(createSetupPayload())}`));
-  chatBroadcastWatcher.onReset(() => channel.postMessage(ResetMessage));
+  // chatBroadcastWatcher.onReset(() => channel.postMessage(ResetMessage));
   chatBroadcastWatcher.onClose(() => channel.postMessage(ResetMessage));
 
   /*
@@ -77,7 +77,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
 
     try {
       const msg = (message.data || '') as string;
-      console.log(msg);
+
       if (msg.startsWith(ResetMessage)) {
         // reset pop-out
         isActive.value = false;
