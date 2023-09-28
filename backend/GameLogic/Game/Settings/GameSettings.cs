@@ -102,7 +102,7 @@ public class GameSettings : IGameSettingsStore
     {
         return BaseSettings.ToList().Concat(GetFromRules()).Concat(GetFromPile()).Select(s =>
         {
-            // add actual value
+            // set actual value
             s.Value = _settingValues[s.Key];
             return s;
         }).ToList();

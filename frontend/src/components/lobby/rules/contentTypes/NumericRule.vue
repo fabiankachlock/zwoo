@@ -19,10 +19,11 @@
 </template>
 
 <script setup lang="ts">
+import { toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-defineProps<{
+const props = defineProps<{
   modelValue: number;
   name?: string;
   placeholder?: string;
@@ -30,14 +31,26 @@ defineProps<{
   min?: number;
   max?: number;
 }>();
+const { min, max } = toRefs(props);
 
 const emit = defineEmits<{
   (event: 'update:modelValue', enabled: number): void;
 }>();
 
 const update = (event: Event) => {
-  const num = new Number((event.target as unknown as { value: number }).value).valueOf();
-  // TODO: make min & max dynamic
-  emit('update:modelValue', num < 1 ? 1 : num > 20 ? 20 : num);
+  const target = event.target as unknown as { value: string };
+  let num = new Number(target.value).valueOf();
+  if (max?.value !== undefined && num > max.value) {
+    num = max.value;
+  }
+  if (min?.value !== undefined && num < min.value) {
+    num = min.value;
+  }
+
+  emit('update:modelValue', num);
+  // "allow" empty values
+  if (target.value !== '') {
+    target.value = num.toString();
+  }
 };
 </script>
