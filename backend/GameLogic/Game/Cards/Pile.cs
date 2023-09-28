@@ -92,4 +92,22 @@ internal sealed class Pile
         return cards;
     }
 
+    public Card DrawSaveCard()
+    {
+        if (AvailableCards.Count == 0)
+        {
+            PopulateStack();
+        }
+
+        int idx = AvailableCards.FindIndex(0, card => card.Color != CardColor.Black && card.Type <= CardType.Nine);
+        if (idx == -1)
+        {
+            // fall back to first card
+            idx = 0;
+        }
+        Card card = AvailableCards[idx];
+        AvailableCards.RemoveAt(idx);
+        return card;
+    }
+
 }

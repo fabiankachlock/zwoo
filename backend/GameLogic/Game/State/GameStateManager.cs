@@ -300,14 +300,7 @@ public sealed class GameStateManager
 
     private Card DrawSaveCard()
     {
-        while (true)
-        {
-            Card card = _cardPile.DrawCard();
-            if (card.Color != CardColor.Black && card.Type <= CardType.Nine)
-            {
-                return card;
-            }
-        }
+        return _cardPile.DrawSaveCard();
     }
 
     /* Game State Info Getters */
