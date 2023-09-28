@@ -39,7 +39,7 @@ public sealed class GameStateManager
         _playerManager = playerManager;
         _notificationManager = notification;
         _isRunning = false;
-        _cardPile = new Pile();
+        _cardPile = new Pile(_gameSettings);
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
         _playerOrder = new Dictionary<long, int>();
@@ -61,7 +61,7 @@ public sealed class GameStateManager
         }
         _isRunning = true;
         (_playerCycle, _playerOrder) = _playerManager.ComputeOrder();
-        _cardPile = new Pile();
+        _cardPile = new Pile(_gameSettings);
         _actionsQueue.Start();
         _ruleManager.Configure(HandleInterrupt);
         _gameState = new GameState(
@@ -116,7 +116,7 @@ public sealed class GameStateManager
         }
         _isRunning = false;
         _gameState = new GameState();
-        _cardPile = new Pile();
+        _cardPile = new Pile(_gameSettings);
         _playerCycle = new PlayerCycle(new List<long>());
         _actionsQueue = new AsyncExecutionQueue();
     }

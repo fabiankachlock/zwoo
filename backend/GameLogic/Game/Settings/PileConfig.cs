@@ -38,6 +38,11 @@ public class PileSettings
         { CardType.WildFour, "wildFour" },
     };
 
+    public static string GetKeyForType(CardType type)
+    {
+        return "pile." + TypeMapper[type];
+    }
+
     public static readonly List<GameSetting> Config = new List<GameSetting>()
     {
         GameSettingBuilder.New(GameSettingsKey.Pile).Configure(setting =>
@@ -53,7 +58,7 @@ public class PileSettings
             .Localize("de", "Eins", "")
             .Localize("en", "One", "")
             .ToSetting(),
-        PileSettingBuilder.New(CardType.Two, 2)
+        PileSettingBuilder.New(CardType.Two, 50)
             .Localize("de", "Zwei", "")
             .Localize("en", "Two", "")
             .ToSetting(),
@@ -97,11 +102,11 @@ public class PileSettings
             .Localize("de", "2-Ziehen", "")
             .Localize("en", "Draw two", "")
             .ToSetting(),
-        PileSettingBuilder.New(CardType.Wild, 2)
+        PileSettingBuilder.New(CardType.Wild, 4)
             .Localize("de", "Wünscher", "")
             .Localize("en", "Wild", "")
             .ToSetting(),
-        PileSettingBuilder.New(CardType.WildFour, 2)
+        PileSettingBuilder.New(CardType.WildFour, 4)
             .Localize("de", "Wünscher + 4 Ziehen", "")
             .Localize("en", "Wild draw 4", "")
             .ToSetting(),
