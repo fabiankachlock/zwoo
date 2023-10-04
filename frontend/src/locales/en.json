@@ -186,6 +186,7 @@
       "420": "Missing Authorization",
       "421": "Game full",
       "425": "Bot with this name already exists",
+      "426": "The card stack is empty",
       "434": "Card not allowed",
       "900": "Error occurred",
       "901": "Connection error",

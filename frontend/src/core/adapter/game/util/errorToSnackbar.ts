@@ -21,7 +21,8 @@ const errorWatcher = new MonolithicEventWatcher(
   ZRPOPCode.AccessDeniedError,
   ZRPOPCode.PlaceCardError,
   ZRPOPCode.LobbyFullError,
-  ZRPOPCode.BotNameExistsError
+  ZRPOPCode.BotNameExistsError,
+  ZRPOPCode.PileEmptyError
 );
 
 export const useInGameErrorWatcher = defineStore('game-error-to-snackbar', () => {
