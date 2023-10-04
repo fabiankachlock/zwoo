@@ -1,6 +1,7 @@
 ﻿using ZwooGameLogic.Events.Handler;
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
+using ZwooGameLogic.Game.Cards;
 
 namespace ZwooGameLogic.Events;
 
@@ -63,6 +64,10 @@ public class UserEventDistributer : IUserEventReceiver
         try
         {
             _handles[message.Code](context, message, _room.NotificationDistributer);
+        }
+        catch (EmptyPileException)
+        {
+            _room.NotificationDistributer.SendPlayer(context.LobbyId, ZRPCode.EmptyPileError, new EmptyPileError((int)ZRPCode.EmptyPileError, "the pile is empty"));
         }
         catch (Exception e)
         {

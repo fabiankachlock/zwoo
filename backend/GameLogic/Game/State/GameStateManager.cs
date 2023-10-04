@@ -64,10 +64,11 @@ public sealed class GameStateManager
         _cardPile = new Pile(_gameSettings);
         _actionsQueue.Start();
         _ruleManager.Configure(HandleInterrupt);
+        var topCard = _cardPile.DrawSaveCard();
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
-            cardStack: new List<StackCard>() { new StackCard(DrawSaveCard()) },
+            cardStack: new List<StackCard>() { new StackCard(topCard) },
             playerDecks: GeneratePlayerDecks(_playerManager.Players),
             ui: new UiHints()
         );
@@ -296,11 +297,6 @@ public sealed class GameStateManager
                     break;
             }
         }
-    }
-
-    private Card DrawSaveCard()
-    {
-        return _cardPile.DrawSaveCard();
     }
 
     /* Game State Info Getters */

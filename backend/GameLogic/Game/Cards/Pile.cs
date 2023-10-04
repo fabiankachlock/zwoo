@@ -7,6 +7,8 @@ using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Game.Cards;
 
+public class EmptyPileException : Exception { }
+
 internal sealed class Pile
 {
 
@@ -76,6 +78,7 @@ internal sealed class Pile
         {
             PopulateStack();
         }
+        if (AvailableCards.Count == 0) throw new EmptyPileException();
 
         Card card = AvailableCards[0];
         AvailableCards.RemoveAt(0);
@@ -98,6 +101,7 @@ internal sealed class Pile
         {
             PopulateStack();
         }
+        if (AvailableCards.Count == 0) throw new EmptyPileException();
 
         int idx = AvailableCards.FindIndex(0, card => card.Color != CardColor.Black && card.Type <= CardType.Nine);
         if (idx == -1)
