@@ -91,8 +91,8 @@ else
     # dont record when the key is not supplied
     docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser edge
 fi
-mv /app/frontend/tests /app/frontend/tests/edge
 ED_EXIT_CODE=$?
+mv /app/frontend/tests /app/frontend/tests/edge
 echo "edge tests ran!"
 shutdown_app
 
