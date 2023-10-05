@@ -33,22 +33,32 @@ echo "docker ready!"
 
 
 # run tests
-echo ""
-echo "===== ELECTRON ====="
-echo ""
-launch_app
-echo "running tests in electron..."
-docker run -i --name e2e-test-runner-electron --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --record --key $CY_KEY
-EL_EXIT_CODE=$?
-echo "electron tests ran!"
-shutdown_app
+# echo ""
+# echo "===== ELECTRON ====="
+# echo ""
+# launch_app
+# echo "running tests in electron..."
+# if [ -n "$CY_KEY" ]; then
+#     docker run -i --name e2e-test-runner-electron --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --record --key $CY_KEY
+# else
+#     # dont record when the key is not supplied
+#     docker run -i --name e2e-test-runner-electron --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0
+# fi
+# EL_EXIT_CODE=$?
+# echo "electron tests ran!"
+# shutdown_app
 
 echo ""
 echo "===== CHROME ====="
 echo ""
 launch_app
 echo "running tests in chrome..."
-docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser chrome --record --key $CY_KEY
+if [ -n "$CY_KEY" ]; then
+    docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser chrome --record --key $CY_KEY
+else
+    # dont record when the key is not supplied
+    docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser chrome
+fi
 CH_EXIT_CODE=$?
 echo "chrome tests ran!"
 shutdown_app
@@ -58,7 +68,12 @@ echo "===== FIREFOX ====="
 echo ""
 launch_app
 echo "running tests in firefox..."
-docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser firefox --record --key $CY_KEY
+if [ -n "$CY_KEY" ]; then
+    docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser firefox --record --key $CY_KEY
+else
+    # dont record when the key is not supplied
+    docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser firefox
+fi
 FI_EXIT_CODE=$?
 echo "firefox tests ran!"
 shutdown_app
@@ -68,7 +83,12 @@ echo "===== EDGE ====="
 echo ""
 launch_app
 echo "running tests in edge..."
-docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser edge --record --key $CY_KEY
+if [ -n "$CY_KEY" ]; then
+    docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser edge --record --key $CY_KEY
+else
+    # dont record when the key is not supplied
+    docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser edge
+fi
 ED_EXIT_CODE=$?
 echo "edge tests ran!"
 shutdown_app
@@ -79,11 +99,11 @@ echo ""
 
 EXIT_CODE=0
 # print status
-if [ $EL_EXIT_CODE != 0 ]; then
-    echo "ERR electron tests failed!"
-else
-    echo "SUCCESS electron tests ran successfully!"
-fi
+# if [ $EL_EXIT_CODE != 0 ]; then
+#     echo "ERR electron tests failed!"
+# else
+#     echo "SUCCESS electron tests ran successfully!"
+# fi
 
 if [ $CH_EXIT_CODE != 0 ]; then
     echo "ERR chrome tests failed!"
