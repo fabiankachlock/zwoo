@@ -76,7 +76,7 @@
     "cross-env": "^7.0.3",
     "cypress": "^12.7.0",
     "dependency-cruiser": "^14.1.1",
-    "eslint": "^8.49.0",
+    "eslint": "^8.51.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^8.0.0",
