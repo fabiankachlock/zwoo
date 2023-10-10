@@ -69,7 +69,7 @@
     "@vitejs/plugin-vue": "^4.3.4",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^12.0.0",
-    "@vue/test-utils": "^2.2.1",
+    "@vue/test-utils": "^2.4.1",
     "@vue/vue3-jest": "^27.0.0-alpha.4",
     "autoprefixer": "^10",
     "babel-jest": "^27",
