@@ -1,5 +1,5 @@
 <template>
-  <div id="changelog" :ref="r => changelogWrapper = (r as HTMLDivElement)" class="py-1 px-5"></div>
+  <div id="changelog" :ref="r => (changelogWrapper = r as HTMLDivElement)" class="py-1 px-5"></div>
 </template>
 
 <script setup lang="ts">
