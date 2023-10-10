@@ -61,7 +61,7 @@
     "@intlify/vue-i18n-loader": "^4.2.0",
     "@tauri-apps/cli": "^1.2.1",
     "@types/jest": "^29.2.2",
-    "@types/node": "^18.11.7",
+    "@types/node": "^20.8.4",
     "@types/semver": "^7.3.12",
     "@types/vue-router": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
