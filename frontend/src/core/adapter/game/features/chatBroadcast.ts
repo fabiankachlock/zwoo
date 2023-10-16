@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 
-import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
-
 import { useGameConfig } from '../../game';
 import { ChatMessage as ChatMessageType, useChatStore } from '../chat';
 import { MonolithicEventWatcher } from '../util/MonolithicEventWatcher';
@@ -20,7 +18,7 @@ type SetupPayload = {
   gameName?: string;
 };
 
-const chatBroadcastWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerWon);
+const chatBroadcastWatcher = new MonolithicEventWatcher();
 
 export const useChatBroadcast = defineStore('chat-broadcast', () => {
   const chatStore = useChatStore();
@@ -55,14 +53,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
   });
 
   // ZRP Events
-  chatBroadcastWatcher.onMessage(msg => {
-    if (msg.code === ZRPOPCode.PlayerWon) {
-      // reset chat
-      channel.postMessage(ResetMessage);
-    }
-  });
   chatBroadcastWatcher.onOpen(() => channel.postMessage(`${SetupMessage}${JSON.stringify(createSetupPayload())}`));
-  chatBroadcastWatcher.onReset(() => channel.postMessage(ResetMessage));
   chatBroadcastWatcher.onClose(() => channel.postMessage(ResetMessage));
 
   /*
@@ -77,7 +68,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
 
     try {
       const msg = (message.data || '') as string;
-      console.log(msg);
+
       if (msg.startsWith(ResetMessage)) {
         // reset pop-out
         isActive.value = false;

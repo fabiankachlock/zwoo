@@ -9,7 +9,7 @@
           <p class="ml-2 tc-main text-xl" style="text-overflow: ellipsis; overflow: hidden">{{ gameName }}</p>
         </div>
         <div v-if="messages.length > 0" class="mx-auto px-2 max-w-xl overflow-y-auto w-full">
-          <div :ref="r => container = (r as HTMLDivElement)" class="h-full py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto">
+          <div :ref="r => (container = r as HTMLDivElement)" class="h-full py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto">
             <ChatMessage
               v-for="messageItem in messages"
               :key="messageItem.id"

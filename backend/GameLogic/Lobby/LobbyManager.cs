@@ -97,9 +97,9 @@ public class LobbyManager
     /// return a prepared player if present
     /// </summary>
     /// <param name="id">the players real id</param>
-    public LobbyEntry? GetPreparedPlayerByUserId(long id)
+    public LobbyEntry? GetPossiblyPreparedPlayerByUserId(long id)
     {
-        return _preparedPlayers.FirstOrDefault(p => p.RealId == id);
+        return _preparedPlayers.FirstOrDefault(p => p.RealId == id) ?? GetPlayerByUserId(id);
     }
 
     /// <summary>
