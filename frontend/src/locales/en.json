@@ -130,6 +130,7 @@
     "private": "Private",
     "reload": "Update",
     "nothingFound": "No game could be found.",
+    "noFit": "Didn't find a suitable game?",
     "spectate": "Spectate",
     "play": "Play",
     "savedGame": "Saved Game",

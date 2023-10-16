@@ -87,13 +87,10 @@
             </div>
           </router-link>
         </div>
-        <div
-          v-if="games.length === 0"
-          class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-default"
-        >
+        <div class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-default">
           <div>
             <p class="text-center tc-main my-1">
-              {{ t('list.nothingFound') }}
+              {{ t(games.length === 0 ? 'list.nothingFound' : 'list.noFit') }}
             </p>
             <div class="flex flex-row justify-center">
               <button class="nothing-found-btn bg-main hover:bg-light">

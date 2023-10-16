@@ -130,6 +130,7 @@
     "private": "Privat",
     "reload": "Aktualisieren",
     "nothingFound": "Es konnte kein Spiel gefunden werden.",
+    "noFit": "Kein passendes Spiel gefunden?",
     "spectate": "Zuschauen",
     "play": "Spielen",
     "savedGame": "Gespeichertes Spiel",
