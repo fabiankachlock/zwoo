@@ -26,8 +26,8 @@ public class UserSessionDao
     }
 }
 
-[RuntimeVersion("1.0.0-beta.15")]
-[StartUpVersion("1.0.0-beta.15")]
+[RuntimeVersion("1.0.0-beta.16")]
+[StartUpVersion("1.0.0-beta.16")]
 [CollectionLocation("users")]
 public class UserDao : IDocument
 {

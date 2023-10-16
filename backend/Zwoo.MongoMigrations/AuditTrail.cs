@@ -42,9 +42,9 @@ public class Beta10012AuditTrail : DocumentMigration<AuditTrailDao>
 }
 
 
-public class Beta10015AuditTrail : DocumentMigration<AuditTrailDao>
+public class Beta10016AuditTrail : DocumentMigration<AuditTrailDao>
 {
-    public Beta10015AuditTrail() : base("1.0.0-beta.15")
+    public Beta10016AuditTrail() : base("1.0.0-beta.16")
     {
     }
 

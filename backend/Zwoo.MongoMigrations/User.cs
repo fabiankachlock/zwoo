@@ -40,9 +40,9 @@ public class Beta10012User : DocumentMigration<UserDao>
     }
 }
 
-public class Beta10015User : DocumentMigration<UserDao>
+public class Beta10016User : DocumentMigration<UserDao>
 {
-    public Beta10015User() : base("1.0.0-beta.15")
+    public Beta10016User() : base("1.0.0-beta.16")
     {
     }
 
