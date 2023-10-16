@@ -23,7 +23,8 @@ shutdown_app() {
     echo ""
 }
 
-mkdir -p /app/frontend/uploads
+mkdir -p /app/frontend/uploads/screenshots
+mkdir -p /app/frontend/uploads/videos
 
 echo "waiting for docker..."
 # wait for docker
@@ -62,7 +63,8 @@ else
     docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser chrome
 fi
 CH_EXIT_CODE=$?
-mv /app/frontend/tests /app/frontend/uploads/chrome
+cp /app/frontend/tests/e2e/screenshots /app/frontend/uploads/screenshots/chrome
+cp /app/frontend/tests/e2e/videos /app/frontend/uploads/videos/chrome
 echo "chrome tests ran!"
 shutdown_app
 
@@ -78,7 +80,8 @@ else
     docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser firefox
 fi
 FI_EXIT_CODE=$?
-mv /app/frontend/tests /app/frontend/uploads/firefox
+cp /app/frontend/tests/e2e/screenshots /app/frontend/uploads/screenshots/firefox
+cp /app/frontend/tests/e2e/videos /app/frontend/uploads/videos/firefox
 echo "firefox tests ran!"
 shutdown_app
 
@@ -94,7 +97,8 @@ else
     docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:12.7.0 --browser edge
 fi
 ED_EXIT_CODE=$?
-mv /app/frontend/tests /app/frontend/uploads/edge
+cp /app/frontend/tests/e2e/screenshots /app/frontend/uploads/screenshots/egde
+cp /app/frontend/tests/e2e/videos /app/frontend/uploads/videos/egde
 echo "edge tests ran!"
 shutdown_app
 
