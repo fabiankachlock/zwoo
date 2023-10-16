@@ -115,6 +115,7 @@ public enum ZRPCode
     AccessDeniedError = 420, // send
     LobbyFullError = 421, // send
     BotNameExistsError = 425, // send
+    EmptyPileError = 426, // send
     EndTurnError = 433, // send
     PlaceCardError = 434, // send
 }

@@ -17,7 +17,7 @@ public class GameSettingBuilder
     public int? Min;
     public int? Max;
 
-    private GameSettingBuilder(string key)
+    protected GameSettingBuilder(string key)
     {
         Key = key;
         Title = new();
