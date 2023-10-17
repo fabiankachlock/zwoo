@@ -13,17 +13,17 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.x'
-    - name: Install dependencies
-      working-directory: ./backend
-      run: dotnet restore "./ZwooBackend/ZwooBackend.csproj"
-    - name: Build
-      working-directory: ./backend
-      run: dotnet build "./ZwooBackend/ZwooBackend.csproj" -c Release --no-restore
-    - name: Test
-      working-directory: ./backend
-      run: dotnet test "./GameLogic/GameLogic.csproj" -c Release --no-restore --verbosity normal
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
+      - name: Install dependencies
+        working-directory: ./backend
+        run: dotnet restore "./ZwooBackend/ZwooBackend.csproj"
+      - name: Build
+        working-directory: ./backend
+        run: dotnet build "./ZwooBackend/ZwooBackend.csproj" -c Release --no-restore
+      - name: Test
+        working-directory: ./backend
+        run: dotnet test "./GameLogic/GameLogic.csproj" -c Release --no-restore --verbosity normal

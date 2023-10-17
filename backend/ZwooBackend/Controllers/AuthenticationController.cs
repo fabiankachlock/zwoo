@@ -128,15 +128,16 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult GetUser()
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
-        if (user.Sid.Contains(sessionId))
+        if (activeSession.User.Sid.Any(session => session.Id == activeSession.SessionId))
         {
-            return Ok(user.ToDTO());
+            return Ok(activeSession.User.ToDTO());
         }
         return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
     }
@@ -146,13 +147,14 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult Logout()
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
-        if (_userService.LogoutUser(user, sessionId))
+        if (_userService.LogoutUser(activeSession.User, activeSession.SessionId))
         {
             HttpContext.SignOutAsync().Wait();
             return Ok(new MessageDTO() { Message = "logged out" });
@@ -165,13 +167,14 @@ public class AuthenticationController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult Delete([FromBody] Delete body)
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
-        if (_userService.DeleteUser(user, body.password, AuditOptions.WithActor(AuditActor.User(user.Id, sessionId))))
+        if (_userService.DeleteUser(activeSession.User, body.password, AuditOptions.WithActor(AuditActor.User(activeSession.User.Id, activeSession.SessionId))))
         {
             HttpContext.SignOutAsync().Wait();
             return Ok(new MessageDTO() { Message = "account deleted out" });

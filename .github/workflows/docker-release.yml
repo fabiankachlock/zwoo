@@ -1,28 +1,27 @@
-
 name: Zwoo Release Pipeline
 
 on:
   push:
-    tags:        
-      - '**'  
+    tags:
+      - "**"
 
 jobs:
   frontend-release:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v3
-        - name: Set env
-          run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-        - name: Show ref
-          run: echo "$GITHUB_REF"
-        - name: Build Image
-          run: 'docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }} .'
-        - name: Log into JFrog
-          run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
-        - name: Push Image (version latest)
-          run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest'
-        - name: Push Image (actual version)
-          run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }}'
+      - uses: actions/checkout@v3
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Show ref
+        run: echo "$GITHUB_REF"
+      - name: Build Image
+        run: "docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }} ."
+      - name: Log into JFrog
+        run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
+      - name: Push Image (version latest)
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest"
+      - name: Push Image (actual version)
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }}"
 
   backend-release:
     runs-on: ubuntu-latest
@@ -34,13 +33,13 @@ jobs:
         run: echo "$GITHUB_REF"
       - name: Build Backend Image
         working-directory: ./backend
-        run: 'docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ env.RELEASE_VERSION }}'
+        run: "docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ env.RELEASE_VERSION }}"
       - name: Log into JFrog
-        run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
+        run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
       - name: Push Image (version latest)
-        run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest'
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest"
       - name: Push Image (actual version)
-        run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ env.RELEASE_VERSION }}'
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ env.RELEASE_VERSION }}"
 
   dashboard-release:
     runs-on: ubuntu-latest
@@ -52,10 +51,10 @@ jobs:
         run: echo "$GITHUB_REF"
       - name: Build Backend Image
         working-directory: ./backend
-        run: 'docker build . -f ./DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:${{ env.RELEASE_VERSION }}'
+        run: "docker build . -f ./DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:${{ env.RELEASE_VERSION }}"
       - name: Log into JFrog
-        run: 'docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}'
+        run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
       - name: Push Image (version latest)
-        run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:latest'
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:latest"
       - name: Push Image (actual version)
-        run: 'docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:${{ env.RELEASE_VERSION }}'
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:${{ env.RELEASE_VERSION }}"
