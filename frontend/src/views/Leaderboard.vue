@@ -5,7 +5,7 @@
         <h2 class="tc-main text-4xl py-2">{{ t('leaderboard.leaderboard') }}</h2>
       </div>
       <div class="relative flex flex-col flex-nowrap">
-        <div v-if="playerEntries">
+        <div v-if="playerEntries && playerEntries.length > 0">
           <div
             v-for="(player, index) in playerEntries"
             :key="index"

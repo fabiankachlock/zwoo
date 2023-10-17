@@ -31,13 +31,14 @@ public class AccountController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult GetSettings()
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
-        return Ok(new UserSettings() { Settings = user.Settings });
+        return Ok(new UserSettings() { Settings = activeSession.User.Settings });
     }
 
     [HttpPost("settings")]
@@ -45,14 +46,15 @@ public class AccountController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult PostSettings([FromBody] SetSettings body)
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
-        user.Settings = body.settings;
-        _userService.UpdateUser(user, AuditOptions.WithActor(AuditActor.User(user.Id, sessionId)).AddMessage("updated settings"));
+        activeSession.User.Settings = body.settings;
+        _userService.UpdateUser(activeSession.User, AuditOptions.WithActor(AuditActor.User(activeSession.User.Id, activeSession.SessionId)).AddMessage("updated settings"));
         return Ok(new MessageDTO() { Message = "updated settings" });
     }
 
@@ -67,13 +69,14 @@ public class AccountController : Controller
             return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_PASSWORD, "New Password Invalid!"));
         }
 
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "session id not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
-        if (!_userService.ChangePassword(user, body.oldPassword, body.newPassword, sessionId))
+        if (!_userService.ChangePassword(activeSession.User, body.oldPassword, body.newPassword, activeSession.SessionId))
         {
             return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.PASSWORD_NOT_MATCHING, "Password did not match"));
         }
