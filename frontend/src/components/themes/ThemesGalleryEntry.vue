@@ -43,7 +43,7 @@
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>
     <div class="relative px-2 flex flex-row w-full max-w-full overflow-x-auto">
       <div v-for="card in theme.previews" :key="card" class="card-preview max-h-full w-full mr-2">
-        <Card :card="card" :override-theme="(previewTheme as CardTheme)" />
+        <Card :card="card" :override-theme="previewTheme as CardTheme" />
       </div>
     </div>
     <div class="divider bc-darkest h-0 my-2 border-2 border-solid border-t-0"></div>

@@ -128,6 +128,13 @@ public class Database : IDatabase
                 new UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified, p.AcceptedTerms));
         });
 
+        BsonClassMap.RegisterClassMap<UserSessionDao>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new UserSessionDao(p.Id, p.Expires));
+        });
+
         BsonClassMap.RegisterClassMap<BetaCodeDao>(cm =>
         {
             cm.AutoMap();
@@ -182,6 +189,13 @@ public class Database : IDatabase
             cm.AutoMap();
             cm.MapCreator(p =>
                 new Beta11UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified));
+        });
+
+        BsonClassMap.RegisterClassMap<Beta12UserDao>(cm =>
+        {
+            cm.AutoMap();
+            cm.MapCreator(p =>
+                new Beta12UserDao(p.Id, p.Sid, p.Username, p.Email, p.Password, p.Wins, p.Settings, p.ValidationCode, p.Verified, p.AcceptedTerms));
         });
 
         // setup object serializer for AuditTrailEventDaos `object` properties

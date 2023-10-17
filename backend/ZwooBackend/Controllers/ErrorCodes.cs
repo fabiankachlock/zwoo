@@ -49,6 +49,8 @@ public static class ErrorCodes
                 return Errors.USER_NOT_FOUND;
             case ErrorCode.WrongPassword:
                 return Errors.PASSWORD_NOT_MATCHING;
+            case ErrorCode.SessionExpired:
+                return Errors.SESSION_ID_NOT_MATCHING;
         }
         return Errors.NONE;
     }

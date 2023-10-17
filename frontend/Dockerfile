@@ -1,5 +1,5 @@
 ### Frontend Setup
-FROM node:16-alpine as base
+FROM node:18-alpine as base
 
 # setup frontend
 WORKDIR /src/frontend
@@ -37,7 +37,7 @@ COPY ./backend .
 RUN dotnet publish -c Release -p:RunAOTCompilation=true ./ZwooWasmAdapter/ZwooWasmAdapter.csproj
 
 ### Build Frontend
-FROM node:16-alpine as builder
+FROM node:18-alpine as builder
 
 # copy spurces + compiled wasm
 COPY --from=dotnet-builder /src ./src
