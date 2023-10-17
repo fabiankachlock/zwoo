@@ -4,5 +4,6 @@ public enum ErrorCode
 {
     UserNotFound,
     WrongPassword,
-    NotVerified
+    NotVerified,
+    SessionExpired
 }

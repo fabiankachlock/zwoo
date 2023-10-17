@@ -47,10 +47,11 @@ public class WebSocketController : Controller
             return BadRequest(new ErrorDTO() { Message = "only ws requests accepted" });
         }
 
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "activeSession.User not logged in"));
         }
 
         ZwooRoom? game = _gamesService.GetGame(gameId);
@@ -59,7 +60,7 @@ public class WebSocketController : Controller
             return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "game not found"));
         }
 
-        LobbyResult result = game.Lobby.IsPlayerAllowedToConnect((long)user.Id);
+        LobbyResult result = game.Lobby.IsPlayerAllowedToConnect((long)activeSession.User.Id);
         if (result != LobbyResult.Success)
         {
             if (result == LobbyResult.ErrorLobbyFull)
@@ -73,46 +74,46 @@ public class WebSocketController : Controller
             return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.JOIN_FAILED, "not allowed to join"));
         }
 
-        _logger.Info($"[{user.Id}] accepting websocket");
+        _logger.Info($"[{activeSession.User.Id}] accepting websocket");
         WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
         CancellationTokenSource shouldStop = new CancellationTokenSource();
         TaskCompletionSource finished = new TaskCompletionSource();
 
-        _logger.Info($"[{user.Id}] adding connection");
-        bool success = _wsManager.AddConnection(gameId, (long)user.Id, webSocket, shouldStop);
+        _logger.Info($"[{activeSession.User.Id}] adding connection");
+        bool success = _wsManager.AddConnection(gameId, (long)activeSession.User.Id, webSocket, shouldStop);
         if (!success)
         {
-            _logger.Error($"[{user.Id}] cant add connection");
+            _logger.Error($"[{activeSession.User.Id}] cant add connection");
             return StatusCode(StatusCodes.Status500InternalServerError, "internal error while handling the connection");
         }
 
-        _logger.Info($"[{user.Id}] notify playermanager");
-        await game.PlayerManager.ConnectPlayer((long)user.Id);
+        _logger.Info($"[{activeSession.User.Id}] notify playermanager");
+        await game.PlayerManager.ConnectPlayer((long)activeSession.User.Id);
 
-        _logger.Info($"[{user.Id}] handle");
+        _logger.Info($"[{activeSession.User.Id}] handle");
         try
         {
-            _wsHandler.Handle(gameId, (long)user.Id, webSocket, shouldStop.Token, finished);
+            _wsHandler.Handle(gameId, (long)activeSession.User.Id, webSocket, shouldStop.Token, finished);
         }
         catch (TaskCanceledException)
         {
-            _logger.Info($"[{user.Id}] task cancelled");
+            _logger.Info($"[{activeSession.User.Id}] task cancelled");
         }
         catch (Exception ex)
         {
-            _logger.Warn($"[{user.Id}] an error happened while handling a socket", ex);
+            _logger.Warn($"[{activeSession.User.Id}] an error happened while handling a socket", ex);
         }
         await finished.Task;
 
-        _logger.Info($"[{user.Id}] remove connection");
-        success = _wsManager.RemoveConnection(gameId, (long)user.Id);
+        _logger.Info($"[{activeSession.User.Id}] remove connection");
+        success = _wsManager.RemoveConnection(gameId, (long)activeSession.User.Id);
         if (!success)
         {
-            _logger.Error($"[{user.Id}] cant remove connection");
+            _logger.Error($"[{activeSession.User.Id}] cant remove connection");
         }
 
-        _logger.Info($"[{user.Id}] disconnect");
-        await game.PlayerManager.DisconnectPlayer((long)user.Id);
+        _logger.Info($"[{activeSession.User.Id}] disconnect");
+        await game.PlayerManager.DisconnectPlayer((long)activeSession.User.Id);
         return new EmptyResult();
     }
 }

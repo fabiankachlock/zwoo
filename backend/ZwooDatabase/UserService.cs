@@ -67,8 +67,15 @@ public interface IUserService
     /// login a user
     /// </summary>
     /// <param name="email">the user email</param>
-    /// <param name="password">teh users password</param>
+    /// <param name="password">the users password</param>
     public UserLoginResult LoginUser(string email, string password, AuditOptions? auditOptions = null);
+
+    /// <summary>
+    /// check whether a user has an active session
+    /// </summary>
+    /// <param name="id">the users id</param>
+    /// <param name="sid">the current session id</param>
+    public UserLoginResult IsUserLoggedIn(ulong id, string sid, AuditOptions? auditOptions = null);
 
     /// <summary>
     /// logout a user
@@ -157,6 +164,8 @@ public class UserService : IUserService
         _betaCodes = betaCodes;
         _logger = logger ?? LogManager.GetLogger("UserService");
     }
+
+    private long _getSessionExpiryDate() => DateTimeOffset.Now.ToUnixTimeSeconds() + 60 * 60 * 24 * 30; // now + 30 days
 
     public UserDao CreateUser(string username, string email, string password, bool acceptedTerms, string? betaCode, AuditOptions? auditOptions = null)
     {
@@ -299,7 +308,11 @@ public class UserService : IUserService
         {
             _logger.Debug($"logging in {user.Id}");
             string sid = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
-            user.Sid.Add(sid);
+            user.Sid.Add(new UserSessionDao()
+            {
+                Id = sid,
+                Expires = _getSessionExpiryDate()
+            });
             UpdateUser(user, AuditOptions.WithMessage("logged user in").Merge(auditOptions));
             _accountEvents.LoginAttempt(user, true);
             return new UserLoginResult(user, sid, null);
@@ -309,11 +322,36 @@ public class UserService : IUserService
         _accountEvents.LoginAttempt(user, false);
         return new UserLoginResult(user, null, user.Verified ? ErrorCode.WrongPassword : ErrorCode.NotVerified);
     }
+    public UserLoginResult IsUserLoggedIn(ulong id, string sid, AuditOptions? auditOptions = null)
+    {
+        var user = GetUserById(id);
+        if (user == null) return new UserLoginResult(null, null, ErrorCode.UserNotFound);
+
+        var session = user.Sid.FirstOrDefault(session => session.Id == sid);
+        if (session == null || session.Expires < DateTimeOffset.Now.ToUnixTimeSeconds())
+        {
+            _cleanUpUserSessions(user, auditOptions);
+            return new UserLoginResult(null, null, ErrorCode.SessionExpired);
+        }
+
+        _cleanUpUserSessions(user, auditOptions);
+        return new UserLoginResult(user, session.Id, null);
+    }
+
+    private void _cleanUpUserSessions(UserDao user, AuditOptions? auditOptions = null)
+    {
+        var cleanedSessions = user.Sid.Where(session => session.Expires > DateTimeOffset.Now.ToUnixTimeSeconds()).ToList();
+        if (cleanedSessions.Count != user.Sid.Count)
+        {
+            user.Sid = cleanedSessions;
+            UpdateUser(user, AuditOptions.WithMessage("user session clean up").Merge(auditOptions));
+        }
+    }
 
     public bool LogoutUser(UserDao user, string sessionId, AuditOptions? auditOptions = null)
     {
         _logger.Debug($"logging out {user.Id}");
-        user.Sid.Remove(sessionId);
+        user.Sid.RemoveAll(s => s.Id == sessionId);
         var res = UpdateUser(user, new AuditOptions(AuditActor.User(user.Id, sessionId), "logged out user").Merge(auditOptions));
         _accountEvents.LogoutAttempt(user, res != null);
         return res != null;
@@ -353,7 +391,7 @@ public class UserService : IUserService
         return newUser.Wins;
     }
 
-    public bool ChangePassword(UserDao user, string oldPassword, string newPassword, string sid, AuditOptions? auditOptions = null)
+    public bool ChangePassword(UserDao user, string oldPassword, string newPassword, string currentSession, AuditOptions? auditOptions = null)
     {
         _logger.Debug($"changing password of {user.Id}");
         if (!StringHelper.CheckPassword(oldPassword, user.Password))
@@ -363,10 +401,14 @@ public class UserService : IUserService
         }
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
-        user.Sid = new List<string> { sid };
+        // reset session to only current one - logs out all other devices
+        user.Sid = new List<UserSessionDao>() { new UserSessionDao() {
+                Id = currentSession,
+                Expires = _getSessionExpiryDate()
+        }};
         user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
 
-        var res = UpdateUser(user, new AuditOptions(AuditActor.User(user.Id, sid), "changed password").Merge(auditOptions));
+        var res = UpdateUser(user, new AuditOptions(AuditActor.User(user.Id, currentSession), "changed password").Merge(auditOptions));
         return res != null;
     }
 
@@ -375,7 +417,7 @@ public class UserService : IUserService
         _logger.Debug($"changing password of {user.Id} as admin");
         var salt = RandomNumberGenerator.GetBytes(16);
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(newPassword).Concat(salt).ToArray());
-        user.Sid = new List<string>();
+        user.Sid = new(); // reset all sessions
         user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
 
         var res = UpdateUser(user, AuditOptions.WithMessage("changed password as admin").Merge(auditOptions));
@@ -410,7 +452,7 @@ public class UserService : IUserService
         var pw = StringHelper.HashString(Encoding.ASCII.GetBytes(password).Concat(salt).ToArray());
 
         user.Password = $"sha512:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(pw)}";
-        user.Sid = new List<string>();
+        user.Sid = new(); // reset all sessions
         user.PasswordResetCode = "";
         return UpdateUser(user, AuditOptions.WithMessage("resetting user password").Merge(auditOptions));
     }

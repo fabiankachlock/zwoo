@@ -42,15 +42,16 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult GetLeaderBoardPosition()
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
         return Ok(new LeaderBoardPosition()
         {
-            Position = _gameInfo.GetPosition(user)
+            Position = _gameInfo.GetPosition(activeSession.User)
         });
     }
 
@@ -61,14 +62,15 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult JoinGame([FromBody] JoinGame body)
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
 
-        if (_wsManager.HasConnection((long)user.Id))
+        if (_wsManager.HasConnection((long)activeSession.User.Id))
         {
             return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.ALREADY_INGAME, ""));
         }
@@ -81,9 +83,9 @@ public class GameController : Controller
             }
 
             ZwooRoom game = _gamesService.CreateGame(body.Name, !body.UsePassword.Value);
-            game.Lobby.Initialize((long)user.Id, user.Username, body.Password ?? "", body.UsePassword.Value);
+            game.Lobby.Initialize((long)activeSession.User.Id, activeSession.User.Username, body.Password ?? "", body.UsePassword.Value);
 
-            Globals.Logger.Info($"{user.Id} created game {game.Id}");
+            Globals.Logger.Info($"{activeSession.User.Id} created game {game.Id}");
             // TODO send dynamic lobby id
             return Ok(new JoinGameResponse(game.Id, false, ZRPRole.Host, 1));
         }
@@ -100,14 +102,14 @@ public class GameController : Controller
                 return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "no game found for id"));
             }
 
-            if (game.Game.IsRunning && game.Lobby.GetPlayerByUserName(user.Username) == null)
+            if (game.Game.IsRunning && game.Lobby.GetPlayerByUserName(activeSession.User.Username) == null)
             {
                 // join as spectator when game is already running and its an new player
                 // don't make the player a spectator when he his already in the game, because then hes rejoining
                 body.Opcode = ZRPRole.Spectator;
             }
 
-            LobbyResult result = game.Lobby.AddPlayer((long)user.Id, game.NextId(), user.Username, body.Opcode, body.Password ?? "");
+            LobbyResult result = game.Lobby.AddPlayer((long)activeSession.User.Id, game.NextId(), activeSession.User.Username, body.Opcode, body.Password ?? "");
             // TODO: move into ErrorCodes helper method like db error
             if (LobbyResult.Success != result)
             {
@@ -125,8 +127,9 @@ public class GameController : Controller
                 }
             }
 
-            var player = game.Lobby.GetPossiblyPreparedPlayerByUserId((long)user.Id);
-            Globals.Logger.Info($"{user.Id} joined game {game.Game.Id}");
+            var player = game.Lobby.GetPossiblyPreparedPlayerByUserId((long)activeSession.User.Id);
+            Globals.Logger.Info($"{activeSession.User.Id} joined game {game.Game.Id}");
+
             // the players opcode may changed based on rejoin
             return Ok(JsonSerializer.Serialize(new JoinGameResponse(game.Game.Id, game.Game.IsRunning, player == null ? body.Opcode : player.Role, player?.LobbyId ?? 0)));
         }
@@ -139,10 +142,11 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
     public IActionResult ListGames()
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
         IEnumerable<ZwooRoom> games = _gamesService.ListAll();
@@ -156,10 +160,11 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
     public IActionResult GetGames(long id)
     {
-        var (user, sessionId) = CookieHelper.GetUser(_userService, HttpContext.User.FindFirst("auth")?.Value);
-        if (user == null || sessionId == null)
+        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
+        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
+        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
         {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.USER_NOT_FOUND, "user not found"));
+            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
         }
 
         ZwooRoom? game = _gamesService.GetGame(id);
