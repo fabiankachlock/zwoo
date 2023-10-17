@@ -6,7 +6,7 @@
       </button>
     </div>
     <div
-      :ref="r => container = (r as HTMLDivElement)"
+      :ref="r => (container = r as HTMLDivElement)"
       class="h-32 py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto"
       style="max-height: 60vh"
     >

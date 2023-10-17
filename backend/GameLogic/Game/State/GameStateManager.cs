@@ -39,7 +39,7 @@ public sealed class GameStateManager
         _playerManager = playerManager;
         _notificationManager = notification;
         _isRunning = false;
-        _cardPile = new Pile();
+        _cardPile = new Pile(_gameSettings);
         _gameState = new GameState();
         _playerCycle = new PlayerCycle(new List<long>());
         _playerOrder = new Dictionary<long, int>();
@@ -61,13 +61,14 @@ public sealed class GameStateManager
         }
         _isRunning = true;
         (_playerCycle, _playerOrder) = _playerManager.ComputeOrder();
-        _cardPile = new Pile();
+        _cardPile = new Pile(_gameSettings);
         _actionsQueue.Start();
         _ruleManager.Configure(HandleInterrupt);
+        var topCard = _cardPile.DrawSaveCard();
         _gameState = new GameState(
             direction: GameDirection.Left,
             currentPlayer: _playerCycle.ActivePlayer,
-            cardStack: new List<StackCard>() { new StackCard(DrawSaveCard()) },
+            cardStack: new List<StackCard>() { new StackCard(topCard) },
             playerDecks: GeneratePlayerDecks(_playerManager.Players),
             ui: new UiHints()
         );
@@ -116,7 +117,7 @@ public sealed class GameStateManager
         }
         _isRunning = false;
         _gameState = new GameState();
-        _cardPile = new Pile();
+        _cardPile = new Pile(_gameSettings);
         _playerCycle = new PlayerCycle(new List<long>());
         _actionsQueue = new AsyncExecutionQueue();
     }
@@ -294,18 +295,6 @@ public sealed class GameStateManager
                     GameEvent.GameErrorEvent errorEvent = evt.CastPayload<GameEvent.GameErrorEvent>();
                     _notificationManager.Error(new ErrorDto(errorEvent.Player, errorEvent.Error, errorEvent.Message));
                     break;
-            }
-        }
-    }
-
-    private Card DrawSaveCard()
-    {
-        while (true)
-        {
-            Card card = _cardPile.DrawCard();
-            if (card.Color != CardColor.Black && card.Type <= CardType.Nine)
-            {
-                return card;
             }
         }
     }

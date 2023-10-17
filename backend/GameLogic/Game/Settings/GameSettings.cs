@@ -11,6 +11,7 @@ public static class GameSettingsKey
 {
     public static readonly string MaxAmountOfPlayers = "maxPlayers";
     public static readonly string NumberOfCards = "initialCards";
+    public static readonly string Pile = "pile";
 }
 
 public class GameSettings : IGameSettingsStore
@@ -92,11 +93,16 @@ public class GameSettings : IGameSettingsStore
             .SelectMany(r => r.Meta!.Value.AllSettings).ToList();
     }
 
+    private static List<GameSetting> GetFromPile()
+    {
+        return PileSettings.Config;
+    }
+
     public List<GameSetting> GetSettings()
     {
-        return BaseSettings.ToList().Concat(GetFromRules()).Select(s =>
+        return BaseSettings.ToList().Concat(GetFromRules()).Concat(GetFromPile()).Select(s =>
         {
-            // add actual value
+            // set actual value
             s.Value = _settingValues[s.Key];
             return s;
         }).ToList();
@@ -107,7 +113,7 @@ public class GameSettings : IGameSettingsStore
         Dictionary<string, int> settings = new Dictionary<string, int>
         {
             { GameSettingsKey.MaxAmountOfPlayers, 5 },
-            { GameSettingsKey.NumberOfCards, 7 }
+            { GameSettingsKey.NumberOfCards, 7 },
         };
 
         foreach (var rule in RuleManager.AllRules())
@@ -119,6 +125,11 @@ public class GameSettings : IGameSettingsStore
                     settings.Add(setting.Key, setting.Value);
                 }
             }
+        }
+
+        foreach (var rule in GetFromPile())
+        {
+            settings.Add(rule.Key, rule.Value);
         }
         return new GameSettings(settings);
     }

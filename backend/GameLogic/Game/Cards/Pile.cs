@@ -3,39 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZwooGameLogic.Game.Settings;
 
 namespace ZwooGameLogic.Game.Cards;
+
+public class EmptyPileException : Exception { }
 
 internal sealed class Pile
 {
 
     private List<Card> AvailableCards;
     private Random random = new Random();
+    private IGameSettingsStore _settings;
 
 
-    public Pile()
+    public Pile(IGameSettingsStore settings)
     {
+        _settings = settings;
         AvailableCards = new List<Card>();
         PopulateStack();
     }
 
     private List<Card> GetScrambeledCardSet()
     {
+        int amount;
         List<Card> cards = new List<Card>();
         for (int color = 1; color <= 4; color++)
         {
             for (int type = 1; type <= 13; type++)
             {
-                cards.Add(new Card(color, type));
-                cards.Add(new Card(color, type));
+                amount = _settings.Get(PileSettings.GetKeyForType((CardType)type));
+                for (int i = 0; i < amount; i++)
+                {
+                    cards.Add(new Card(color, type));
+                }
             }
         }
 
-        for (int i = 0; i < 4; i++)
+
+        amount = _settings.Get(PileSettings.GetKeyForType(CardType.Wild));
+        for (int i = 0; i < amount; i++)
         {
             cards.Add(new Card(CardColor.Black, CardType.Wild));
+        }
+
+        amount = _settings.Get(PileSettings.GetKeyForType(CardType.WildFour));
+        for (int i = 0; i < amount; i++)
+        {
             cards.Add(new Card(CardColor.Black, CardType.WildFour));
         }
+
 
         int n = cards.Count;
         while (n > 1)
@@ -61,6 +78,7 @@ internal sealed class Pile
         {
             PopulateStack();
         }
+        if (AvailableCards.Count == 0) throw new EmptyPileException();
 
         Card card = AvailableCards[0];
         AvailableCards.RemoveAt(0);
@@ -75,6 +93,25 @@ internal sealed class Pile
             cards.Add(DrawCard());
         }
         return cards;
+    }
+
+    public Card DrawSaveCard()
+    {
+        if (AvailableCards.Count == 0)
+        {
+            PopulateStack();
+        }
+        if (AvailableCards.Count == 0) throw new EmptyPileException();
+
+        int idx = AvailableCards.FindIndex(0, card => card.Color != CardColor.Black && card.Type <= CardType.Nine);
+        if (idx == -1)
+        {
+            // fall back to first card
+            idx = 0;
+        }
+        Card card = AvailableCards[idx];
+        AvailableCards.RemoveAt(idx);
+        return card;
     }
 
 }
