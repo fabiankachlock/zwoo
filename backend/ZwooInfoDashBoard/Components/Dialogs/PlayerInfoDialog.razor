@@ -62,10 +62,15 @@
         </RadzenTabsItem>
         <RadzenTabsItem Text="Sessions">
             <RadzenDataGrid AllowFiltering="false" AllowGrouping="false" AllowSorting="false" AllowPaging="true" PageSize="20"
-                            TItem="string" Data="_player?.Sid" AllowVirtualization="true">
+                            TItem="UserSessionDao" Data="_player?.Sid" AllowVirtualization="true">
                 <Columns>
-                    <RadzenDataGridColumn TItem="string" Property="this" Title="Session ID"/>
-                    <RadzenDataGridColumn TItem="string" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+                    <RadzenDataGridColumn TItem="string" Property="Id" Title="Session ID"/>
+                    <RadzenDataGridColumn TItem="UserSessionDao" Property="Expires" Title="Expiry Date">
+                        <Template Context="session">
+                            @DateTimeOffset.FromUnixTimeSeconds((long)session.Expires).ToString("dd.MM.yy HH:mm:ss")
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="UserSessionDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
                         <Template Context="sid">
                             <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(sid))"  @onclick:stopPropagation="true" />
                         </Template>
@@ -170,13 +175,13 @@
     }
     
     
-    private async void DeleteRow(string sid)
+    private async void DeleteRow(UserSessionDao sid)
     {
         if (_player == null) return;
         var res = await DialogService.Confirm($"Are you sure that you want to delete the session id {sid} of user {_player.Username}", "Delete Session ID", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
         if (res != true) return;
 
-        _userService.LogoutUser(_player, sid,  AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("deleted user session"));
+        _userService.LogoutUser(_player, sid.Id,  AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("deleted user session"));
         _load();
     }
     
