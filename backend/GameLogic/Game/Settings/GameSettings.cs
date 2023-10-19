@@ -133,4 +133,15 @@ public class GameSettings : IGameSettingsStore
         }
         return new GameSettings(settings);
     }
+
+
+    public PersistedGameSettings SaveCurrent()
+    {
+        throw new NotImplementedException("TODO");
+    }
+
+    public void ApplySettings(PersistedGameSettings settings)
+    {
+        throw new NotImplementedException("TODO");
+    }
 }
