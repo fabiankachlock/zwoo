@@ -58,7 +58,7 @@ public class PileSettings
             .Localize("de", "Eins", "")
             .Localize("en", "One", "")
             .ToSetting(),
-        PileSettingBuilder.New(CardType.Two, 50)
+        PileSettingBuilder.New(CardType.Two, 2)
             .Localize("de", "Zwei", "")
             .Localize("en", "Two", "")
             .ToSetting(),
