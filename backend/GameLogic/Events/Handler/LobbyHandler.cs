@@ -9,13 +9,17 @@ public class LobbyHandler : IUserEventHandler
     public Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>> GetHandles()
     {
         return new Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>>() {
-        {ZRPCode.KeepAlive, HandleKeepAlive },
-        {ZRPCode.PlayerLeaves, LeavePlayer },
-        {ZRPCode.SpectatorToPlayer, SpectatorToPlayer },
-        {ZRPCode.PlayerToSpectator, PlayerToSpectator },
-        {ZRPCode.PlayerToHost, PlayerToHost },
-        {ZRPCode.KickPlayer, KickPlayer },
-        {ZRPCode.GetLobby, GetPlayers },
+            {ZRPCode.KeepAlive, HandleKeepAlive },
+            {ZRPCode.PlayerLeaves, LeavePlayer },
+            {ZRPCode.SpectatorToPlayer, SpectatorToPlayer },
+            {ZRPCode.PlayerToSpectator, PlayerToSpectator },
+            {ZRPCode.PlayerToHost, PlayerToHost },
+            {ZRPCode.KickPlayer, KickPlayer },
+            {ZRPCode.GetLobby, GetPlayers },
+            {ZRPCode.GetAllGameProfiles, GetGameProfiles },
+            {ZRPCode.SaveToGameProfile, SafeGameProfile },
+            {ZRPCode.UpdateGameProfile, UpdateGameProfile },
+            {ZRPCode.ApplyGameProfile, ApplyGameProfile },
         };
     }
 
@@ -158,21 +162,24 @@ public class LobbyHandler : IUserEventHandler
     private void SafeGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         if (context.Role != ZRPRole.Host) return;
+        SafeToGameProfileEvent payload = message.DecodePayload<SafeToGameProfileEvent>();
         var profile = context.Game.Settings.SaveCurrent();
-        context.Room.GameProfileProvider.SaveConfig(context, "<get from messsage>", profile);
+        context.Room.GameProfileProvider.SaveConfig(context, payload.Name, profile);
     }
 
     private void UpdateGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         if (context.Role != ZRPRole.Host) return;
+        UpdateGameProfileEvent payload = message.DecodePayload<UpdateGameProfileEvent>();
         var profile = context.Game.Settings.SaveCurrent();
-        context.Room.GameProfileProvider.UpdateConfig(context, "<get from messsage>", profile);
+        context.Room.GameProfileProvider.UpdateConfig(context, payload.Id, profile);
     }
 
-    private void ApplyGAmeProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    private void ApplyGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         if (context.Role != ZRPRole.Host) return;
-        var profile = context.Room.GameProfileProvider.GetConfigsOfPlayer(context).FirstOrDefault(p => p.Id == "<get from message>");
+        ApplyGameProfileEvent payload = message.DecodePayload<ApplyGameProfileEvent>();
+        var profile = context.Room.GameProfileProvider.GetConfigsOfPlayer(context).FirstOrDefault(p => p.Id == payload.Id);
         if (profile != null)
         {
             context.Game.Settings.ApplyProfile(profile.Settings);
