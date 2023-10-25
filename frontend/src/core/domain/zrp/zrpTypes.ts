@@ -1,5 +1,3 @@
-import { GameProfileGroup } from '@/core/adapter/game/features/gameProfiles.ts/GameProfileGroup';
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
   ? {
@@ -134,6 +132,11 @@ export enum SettingsType {
   Readonly = 0,
   Numeric = 1,
   Boolean = 2
+}
+
+export enum GameProfileGroup {
+  System = 1,
+  User = 2
 }
 
 export type ZRPPayloadMap = {
@@ -279,7 +282,7 @@ export type ZRPGameProfilesPayload = {
     id: string;
     name: string;
     group: GameProfileGroup;
-  };
+  }[];
 };
 
 export type ZRPSaveToProfilePayload = {
