@@ -1,4 +1,5 @@
 ﻿using ZwooGameLogic.Lobby;
+using ZwooGameLogic.Lobby.Features;
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
 
@@ -156,7 +157,9 @@ public class LobbyHandler : IUserEventHandler
     {
         if (context.Role != ZRPRole.Host) return;
         var profiles = context.Room.GameProfileProvider.GetConfigsOfPlayer(context);
-        // map to zrp
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendAllGameProfiles, new AllGameProfilesNotification(
+            profiles.Select(p => new AllGameProfiles_ProfileDTO(p.Id, p.Name, GameProfileGroup.System)).ToArray()
+        ));
     }
 
     private void SafeGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)

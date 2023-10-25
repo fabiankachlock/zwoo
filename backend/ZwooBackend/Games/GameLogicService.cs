@@ -4,6 +4,7 @@ using ZwooGameLogic;
 using log4net;
 using ZwooDatabase;
 using ZwooDatabase.Dao;
+using ZwooGameLogic.Lobby.Features;
 
 namespace ZwooBackend.Games;
 
@@ -30,15 +31,17 @@ public class GameLogicService : IGameLogicService
     // globally used GameLogic instance
     private readonly GameManager _gameManager;
     private readonly IWebSocketManager _wsManager;
+    private readonly IExternalGameProfileProvider _gameProfileProvider;
     private readonly IUserService _userService;
     private readonly IGameInfoService _gameInfo;
     private ILog _logger = LogManager.GetLogger("GamesService");
 
 
-    public GameLogicService(IWebSocketManager wsManager, IGameInfoService gameInfo, IUserService userService)
+    public GameLogicService(IWebSocketManager wsManager, IExternalGameProfileProvider gameProfileProvider, IGameInfoService gameInfo, IUserService userService)
     {
         _wsManager = wsManager;
-        _gameManager = new GameManager(wsManager, new Log4NetFactory());
+        _gameProfileProvider = gameProfileProvider;
+        _gameManager = new GameManager(wsManager, gameProfileProvider, new Log4NetFactory());
         _gameInfo = gameInfo;
         _userService = userService;
     }
