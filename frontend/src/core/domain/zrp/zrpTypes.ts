@@ -1,3 +1,5 @@
+import { GameProfileGroup } from '@/core/adapter/game/features/gameProfiles.ts/GameProfileGroup';
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> = T extends ZRPOPCode
   ? {
@@ -11,7 +13,7 @@ export type ZRPMessage<T extends unknown | ZRPOPCode = Record<string, unknown>> 
 
 export type ZRPPayload<T extends ZRPOPCode> = ZRPPayloadMap[T];
 
-export const ZRP_VERSION = '4.1.0';
+export const ZRP_VERSION = '4.3.0';
 
 export enum ZRPOPCode {
   // General
@@ -45,6 +47,11 @@ export enum ZRPOPCode {
   SettingChanged = 201, // receiver
   GetAllSettings = 202, // sender
   AllSettings = 203, // receiver
+  GetAllGameProfiles = 204, // sender(host)
+  AllGameProfiles = 205, // receiver
+  SaveToProfile = 206, // send(host)
+  UpdateGameProfile = 207, // send(host)
+  ApplyGameProfile = 208, // send(host)
   StartGame = 210, // sender (host)
   // Bots
   CreateBot = 230, // sender(host)
@@ -160,6 +167,12 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.SettingChanged]: ZRPSettingsChangePayload;
   [ZRPOPCode.GetAllSettings]: Record<string, never>;
   [ZRPOPCode.AllSettings]: ZRPSettingsPayload;
+  [ZRPOPCode.GetAllGameProfiles]: Record<string, never>;
+  [ZRPOPCode.AllGameProfiles]: ZRPGameProfilesPayload;
+  [ZRPOPCode.SaveToProfile]: ZRPSaveToProfilePayload;
+  [ZRPOPCode.UpdateGameProfile]: ZRPGameProfileIdPayload;
+  [ZRPOPCode.ApplyGameProfile]: ZRPGameProfileIdPayload;
+  [ZRPOPCode.AllSettings]: ZRPSettingsPayload;
   [ZRPOPCode.StartGame]: Record<string, never>;
   // Bots
   [ZRPOPCode.CreateBot]: ZRPCreateBotPayload;
@@ -259,6 +272,22 @@ export type ZRPSettingsPayload = {
     min?: number;
     max?: number;
   }[];
+};
+
+export type ZRPGameProfilesPayload = {
+  profiles: {
+    id: string;
+    name: string;
+    group: GameProfileGroup;
+  };
+};
+
+export type ZRPSaveToProfilePayload = {
+  name: string;
+};
+
+export type ZRPGameProfileIdPayload = {
+  id: string;
 };
 
 export type ZRPBotConfig = {
