@@ -26,8 +26,30 @@ public class UserSessionDao
     }
 }
 
-[RuntimeVersion("1.0.0-beta.16")]
-[StartUpVersion("1.0.0-beta.16")]
+public class UserGameProfileDao
+{
+    [BsonElement("_id")]
+    public string Id { get; set; } = "";
+
+    [BsonElement("expires")]
+    public string Name { get; set; } = "";
+
+    [BsonElement("settings")]
+    public Dictionary<string, int> Settings { get; set; } = new();
+
+    public UserGameProfileDao() { }
+
+    [BsonConstructor]
+    public UserGameProfileDao(string id, string name, Dictionary<string, int> settings)
+    {
+        Id = id;
+        Name = name;
+        Settings = settings;
+    }
+}
+
+[RuntimeVersion("1.0.0-beta.18")]
+[StartUpVersion("1.0.0-beta.18")]
 [CollectionLocation("users")]
 public class UserDao : IDocument
 {
@@ -35,7 +57,7 @@ public class UserDao : IDocument
     public UserDao() { }
 
     [BsonConstructor]
-    public UserDao(ulong id, List<UserSessionDao> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified, bool acceptedTerms)
+    public UserDao(ulong id, List<UserSessionDao> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified, bool acceptedTerms, List<UserGameProfileDao> gameProfiles)
     {
         Id = id;
         Sid = sid;
@@ -47,6 +69,7 @@ public class UserDao : IDocument
         ValidationCode = validationCode;
         Verified = verified;
         AcceptedTerms = acceptedTerms;
+        GameProfiles = gameProfiles;
     }
 
     [BsonElement("_id")]
@@ -81,6 +104,9 @@ public class UserDao : IDocument
 
     [BsonElement("accepted_terms")]
     public bool AcceptedTerms { get; set; }
+
+    [BsonElement("game_profiles")]
+    public List<UserGameProfileDao> GameProfiles { get; set; } = new();
 
     [BsonElement("verified_at")]
     [BsonIgnoreIfDefault]

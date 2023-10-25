@@ -56,3 +56,20 @@ public class Beta10016User : DocumentMigration<UserDao>
         document.Set("sid", new BsonArray());
     }
 }
+
+public class Beta10018User : DocumentMigration<UserDao>
+{
+    public Beta10018User() : base("1.0.0-beta.18")
+    {
+    }
+
+    public override void Up(BsonDocument document)
+    {
+        document.Set("game_profiles", new BsonArray());
+    }
+
+    public override void Down(BsonDocument document)
+    {
+        document.Set("game_profiles", new BsonArray());
+    }
+}
