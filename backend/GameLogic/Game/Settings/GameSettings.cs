@@ -135,12 +135,12 @@ public class GameSettings : IGameSettingsStore
     }
 
 
-    public PersistedGameSettings SaveCurrent()
+    public GameProfile SaveCurrent()
     {
         throw new NotImplementedException("TODO");
     }
 
-    public void ApplySettings(PersistedGameSettings settings)
+    public void ApplyProfile(GameProfile settings)
     {
         throw new NotImplementedException("TODO");
     }

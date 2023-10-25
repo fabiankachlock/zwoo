@@ -147,4 +147,35 @@ public class LobbyHandler : IUserEventHandler
         GetLobbyNotification payload = new GetLobbyNotification(players.Concat(bots).ToArray());
         websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendLobby, payload);
     }
+
+    private void GetGameProfiles(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        var profiles = context.Room.GameProfileProvider.GetConfigsOfPlayer(context);
+        // map to zrp
+    }
+
+    private void SafeGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        var profile = context.Game.Settings.SaveCurrent();
+        context.Room.GameProfileProvider.SaveConfig(context, "<get from messsage>", profile);
+    }
+
+    private void UpdateGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        var profile = context.Game.Settings.SaveCurrent();
+        context.Room.GameProfileProvider.UpdateConfig(context, "<get from messsage>", profile);
+    }
+
+    private void ApplyGAmeProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        var profile = context.Room.GameProfileProvider.GetConfigsOfPlayer(context).FirstOrDefault(p => p.Id == "<get from message>");
+        if (profile != null)
+        {
+            context.Game.Settings.ApplyProfile(profile.Settings);
+        }
+    }
 }
