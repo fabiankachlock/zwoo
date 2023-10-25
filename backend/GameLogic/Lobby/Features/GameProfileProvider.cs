@@ -8,12 +8,15 @@ public class ExternalGameProfile
 
     public string Name { get; set; }
 
+    public GameProfileGroup Group { get; set; }
+
     public GameProfile Settings { get; set; }
 
-    public ExternalGameProfile(string id, string name, GameProfile settings)
+    public ExternalGameProfile(string id, string name, GameProfileGroup group, GameProfile settings)
     {
         Id = id;
         Name = name;
+        Group = group;
         Settings = settings;
     }
 }
@@ -48,7 +51,8 @@ public class GameProfileProvider
 
     public IEnumerable<ExternalGameProfile> GetConfigsOfPlayer(IPlayer player)
     {
-        return _provider.GetConfigsOfPlayer(player.RealId)
-            .Select(config => new ExternalGameProfile(_createScopedId(player, config.Id), config.Name, config.Settings));
+        var userProfiles = _provider.GetConfigsOfPlayer(player.RealId)
+            .Select(config => new ExternalGameProfile(_createScopedId(player, config.Id), config.Name, GameProfileGroup.User, config.Settings));
+        return SystemGameProfiles.All.Concat(userProfiles);
     }
 }

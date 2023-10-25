@@ -158,7 +158,7 @@ public class LobbyHandler : IUserEventHandler
         if (context.Role != ZRPRole.Host) return;
         var profiles = context.Room.GameProfileProvider.GetConfigsOfPlayer(context);
         websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendAllGameProfiles, new AllGameProfilesNotification(
-            profiles.Select(p => new AllGameProfiles_ProfileDTO(p.Id, p.Name, GameProfileGroup.System)).ToArray()
+            profiles.Select(p => new AllGameProfiles_ProfileDTO(p.Id, p.Name, p.Group)).ToArray()
         ));
     }
 
