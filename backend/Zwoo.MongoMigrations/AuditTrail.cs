@@ -78,3 +78,40 @@ public class Beta10016AuditTrail : DocumentMigration<AuditTrailDao>
         }
     }
 }
+
+public class Beta10018AuditTrail : DocumentMigration<AuditTrailDao>
+{
+    public Beta10018AuditTrail() : base("1.0.0-beta.18")
+    {
+    }
+
+    public override void Up(BsonDocument document)
+    {
+        foreach (var e in document["events"].AsBsonArray)
+        {
+            if (e["newValue"].BsonType != BsonType.Null && e["newValue"]["_t"] == "UserDao")
+            {
+                e["newValue"]["_t"] = "Beta17UserDao";
+            }
+            if (e["oldValue"].BsonType != BsonType.Null && e["oldValue"]["_t"] == "UserDao")
+            {
+                e["oldValue"]["_t"] = "Beta17UserDao";
+            }
+        }
+    }
+
+    public override void Down(BsonDocument document)
+    {
+        foreach (var e in document["events"].AsBsonArray)
+        {
+            if (e["newValue"].BsonType != BsonType.Null && e["newValue"]["_t"] == "Beta17UserDao")
+            {
+                e["newValue"]["_t"] = "UserDao";
+            }
+            if (e["oldValue"].BsonType != BsonType.Null && e["oldValue"]["_t"] == "Beta17UserDao")
+            {
+                e["oldValue"]["_t"] = "UserDao";
+            }
+        }
+    }
+}

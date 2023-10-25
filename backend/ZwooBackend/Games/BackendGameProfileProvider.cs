@@ -34,7 +34,7 @@ public class BackendGameProfileProvider : IExternalGameProfileProvider
     {
         var user = _userService.GetUserById((ulong)playerId);
         if (user == null) return new List<BackendGameProfile>();
-        return user.GameProfiles.Select(p => new BackendGameProfile(p.Id, p.Name, new GameProfile(p.Settings)));
+        return user.GameProfiles.Select(p => new BackendGameProfile(p.Id.ToString(), p.Name, new GameProfile(new Dictionary<string, int>(p.Settings))));
     }
 
     public void SaveConfig(long playerId, string name, GameProfile config)
@@ -53,7 +53,7 @@ public class BackendGameProfileProvider : IExternalGameProfileProvider
     {
         var user = _userService.GetUserById((ulong)playerId);
         if (user == null) return;
-        var profile = user.GameProfiles.FirstOrDefault(p => p.Id == id);
+        var profile = user.GameProfiles.FirstOrDefault(p => p.Id.ToString() == id);
         if (profile == null) return;
         profile.Settings = config.Settings;
         _userService.UpdateUser(user, AuditOptions.WithMessage("updated game profile"));

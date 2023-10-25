@@ -6,8 +6,8 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ZwooDatabase.Dao;
 
-[RuntimeVersion("1.0.0-beta.16")]
-[StartUpVersion("1.0.0-beta.16")]
+[RuntimeVersion("1.0.0-beta.18")]
+[StartUpVersion("1.0.0-beta.18")]
 [CollectionLocation("audit_trails")]
 public partial class AuditTrailDao : IDocument
 {

@@ -137,11 +137,26 @@ public class GameSettings : IGameSettingsStore
 
     public GameProfile SaveCurrent()
     {
-        throw new NotImplementedException("TODO");
+        var changes = new Dictionary<string, int>();
+        var allSettings = FromDefaults().GetSettings();
+
+        foreach (var setting in allSettings)
+        {
+            // if not default value --> save
+            if (setting.Value != _settingValues[setting.Key])
+            {
+                changes[setting.Key] = _settingValues[setting.Key];
+            }
+        }
+
+        return new GameProfile(changes);
     }
 
     public void ApplyProfile(GameProfile settings)
     {
-        throw new NotImplementedException("TODO");
+        foreach (var key in settings.Settings.Keys)
+        {
+            _settingValues[key] = settings.Settings[key];
+        }
     }
 }
