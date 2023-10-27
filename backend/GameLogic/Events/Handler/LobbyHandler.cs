@@ -21,6 +21,7 @@ public class LobbyHandler : IUserEventHandler
             {ZRPCode.SaveToGameProfile, SafeGameProfile },
             {ZRPCode.UpdateGameProfile, UpdateGameProfile },
             {ZRPCode.ApplyGameProfile, ApplyGameProfile },
+            {ZRPCode.DeleteGameProfile, DeleteGameProfile },
         };
     }
 
@@ -187,5 +188,12 @@ public class LobbyHandler : IUserEventHandler
         {
             context.Game.Settings.ApplyProfile(profile.Settings);
         }
+    }
+
+    private void DeleteGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        DeleteGameProfileEvent payload = message.DecodePayload<DeleteGameProfileEvent>();
+        context.Room.GameProfileProvider.DeleteConfig(context, payload.Id);
     }
 }

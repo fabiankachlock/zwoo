@@ -10,6 +10,7 @@ public interface IExternalGameProfileProvider
 {
     public void SaveConfig(long playerId, string name, GameProfile config);
     public void UpdateConfig(long playerId, string id, GameProfile config);
+    public void DeleteConfig(long playerId, string id);
     public IEnumerable<IExternalGameProfile> GetConfigsOfPlayer(long playerId);
 }
 

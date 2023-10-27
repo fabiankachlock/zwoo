@@ -58,4 +58,12 @@ public class BackendGameProfileProvider : IExternalGameProfileProvider
         profile.Settings = config.Settings;
         _userService.UpdateUser(user, AuditOptions.WithMessage("updated game profile"));
     }
+
+    public void DeleteConfig(long playerId, string id)
+    {
+        var user = _userService.GetUserById((ulong)playerId);
+        if (user == null) return;
+        user.GameProfiles = user.GameProfiles.Where(p => p.Id.ToString() != id).ToList();
+        _userService.UpdateUser(user, AuditOptions.WithMessage("updated game profile"));
+    }
 }

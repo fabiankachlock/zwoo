@@ -49,6 +49,12 @@ public class GameProfileProvider
         _provider.UpdateConfig(player.RealId, rawId, config);
     }
 
+    public void DeleteConfig(IPlayer player, string id)
+    {
+        var rawId = _extractRawId(id);
+        _provider.DeleteConfig(player.RealId, rawId);
+    }
+
     public IEnumerable<ExternalGameProfile> GetConfigsOfPlayer(IPlayer player)
     {
         var userProfiles = _provider.GetConfigsOfPlayer(player.RealId)

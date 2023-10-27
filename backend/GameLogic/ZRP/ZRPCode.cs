@@ -67,6 +67,8 @@ public enum ZRPCode
     /// <summary>receive</summary>
     ApplyGameProfile = 208,
     /// <summary>receive</summary>
+    DeleteGameProfile = 209,
+    /// <summary>receive</summary>
     StartGame = 210,
     /// <summary>receive</summary>
     CreateBot = 230,

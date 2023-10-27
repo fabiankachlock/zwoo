@@ -168,6 +168,11 @@ public readonly record struct UpdateGameProfileEvent(string Id);
 public readonly record struct ApplyGameProfileEvent(string Id);
 
 /// <summary>
+/// ZRPCode: 209
+/// </summary>
+public readonly record struct DeleteGameProfileEvent(string Id);
+
+/// <summary>
 /// ZRPCode: 210
 /// </summary>
 public readonly record struct StartGameEvent(); // empty
