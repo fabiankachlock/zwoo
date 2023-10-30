@@ -63,7 +63,6 @@
                 :profile="profile"
                 @apply="applyProfile(profile.id)"
                 @delete="deleteProfile(profile.id)"
-                @rename="renameProfile()"
               />
               <h4>{{ t('rules.groupUser') }}</h4>
               <GameProfileVue
@@ -72,7 +71,6 @@
                 :profile="profile"
                 @apply="applyProfile(profile.id)"
                 @delete="deleteProfile(profile.id)"
-                @rename="renameProfile()"
               />
             </div>
           </div>
@@ -133,11 +131,6 @@ const openManageDialog = () => {
 const applyProfile = (id: string) => {
   gameProfiles.applyProfile(id);
   activeProfile.value = gameProfiles.profiles.find(p => p.id === id);
-  manageProfilesOpen.value = false;
-};
-
-const renameProfile = () => {
-  // toodo
   manageProfilesOpen.value = false;
 };
 

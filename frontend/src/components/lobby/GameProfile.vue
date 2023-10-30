@@ -12,7 +12,6 @@ defineProps<{
 
 const emit = defineEmits<{
   (event: 'apply'): void;
-  (event: 'rename'): void;
   (event: 'delete'): void;
 }>();
 
@@ -29,11 +28,6 @@ const { t } = useI18n();
         <p class="mr-1">
           {{ t('rules.applyProfile') }}
         </p>
-      </button>
-      <button v-if="profile.group === GameProfileGroup.User" class="rounded m-1 bg-dark hover:bg-darkest tc-main-light" @click="emit('rename')">
-        <div class="transform transition-transform hover:scale-110 p-1">
-          <Icon icon="iconoir:edit-pencil" class="icon text-xl"></Icon>
-        </div>
       </button>
       <button v-if="profile.group === GameProfileGroup.User" class="rounded m-1 bg-dark hover:bg-darkest tc-main-light" @click="emit('delete')">
         <div class="transform transition-transform hover:scale-110 p-1">
