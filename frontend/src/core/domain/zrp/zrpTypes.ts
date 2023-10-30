@@ -50,6 +50,7 @@ export enum ZRPOPCode {
   SaveToProfile = 206, // send(host)
   UpdateGameProfile = 207, // send(host)
   ApplyGameProfile = 208, // send(host)
+  DeleteGameProfile = 209, // send(host)
   StartGame = 210, // sender (host)
   // Bots
   CreateBot = 230, // sender(host)
@@ -175,6 +176,7 @@ export type ZRPPayloadMap = {
   [ZRPOPCode.SaveToProfile]: ZRPSaveToProfilePayload;
   [ZRPOPCode.UpdateGameProfile]: ZRPGameProfileIdPayload;
   [ZRPOPCode.ApplyGameProfile]: ZRPGameProfileIdPayload;
+  [ZRPOPCode.DeleteGameProfile]: ZRPGameProfileIdPayload;
   [ZRPOPCode.AllSettings]: ZRPSettingsPayload;
   [ZRPOPCode.StartGame]: Record<string, never>;
   // Bots
