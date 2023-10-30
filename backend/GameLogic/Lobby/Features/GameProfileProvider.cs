@@ -30,7 +30,7 @@ public class GameProfileProvider
         _provider = provider;
     }
 
-    private string _createScopedId(IPlayer player, string profileId) => $"{player.LobbyId}::${profileId}";
+    private string _createScopedId(IPlayer player, string profileId) => $"{player.LobbyId}::{profileId}";
 
     private string _extractRawId(string internalId)
     {

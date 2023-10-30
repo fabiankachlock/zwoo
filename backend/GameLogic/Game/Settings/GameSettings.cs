@@ -86,6 +86,12 @@ public class GameSettings : IGameSettingsStore
         return 0;
     }
 
+    public void Reset()
+    {
+        var settings = FromDefaults();
+        _settingValues = settings._settingValues;
+    }
+
     private static List<GameSetting> GetFromRules()
     {
         return RuleManager.AllRules()
@@ -154,6 +160,7 @@ public class GameSettings : IGameSettingsStore
 
     public void ApplyProfile(GameProfile settings)
     {
+        Reset();
         foreach (var key in settings.Settings.Keys)
         {
             _settingValues[key] = settings.Settings[key];

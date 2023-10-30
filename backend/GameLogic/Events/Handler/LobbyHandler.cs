@@ -187,6 +187,8 @@ public class LobbyHandler : IUserEventHandler
         if (profile != null)
         {
             context.Game.Settings.ApplyProfile(profile.Settings);
+            AllSettingsNotification newSettings = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
+            websocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, newSettings);
         }
     }
 
