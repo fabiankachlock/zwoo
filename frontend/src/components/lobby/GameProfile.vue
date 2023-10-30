@@ -21,7 +21,7 @@ const { t } = useI18n();
 <template>
   <div class="flex justify-between items-center my-1 bg-light rounded bc-dark border">
     <p class="pl-2">
-      {{ profile.name }}
+      {{ profile.group === GameProfileGroup.System ? t(profile.name) : profile.name }}
     </p>
     <div class="flex">
       <button class="rounded m-1 bg-dark hover:bg-darkest tc-main-light flex px-2 items-center group" @click="emit('apply')">

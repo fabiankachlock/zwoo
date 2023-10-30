@@ -4,7 +4,7 @@
       <div v-if="isHost" class="flex flex-row items-center">
         <div v-if="activeProfile" class="tc-main m1 mr-2 py-0.5 px-1 border bc-darkest bg-lightest rounded flex items-center">
           <p>
-            {{ activeProfile.name }}
+            {{ activeProfile.group === GameProfileGroup.System ? t(activeProfile.name) : activeProfile.name }}
           </p>
           <button class="p-1 ml-1 transform transition-transform hover:scale-110" @click="activeProfile = undefined">
             <Icon icon="gg:close" />

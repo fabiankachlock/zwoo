@@ -233,6 +233,19 @@
     "noWinsOfflineInfo": "Wins of offline games do not count in the leaderboard."
   },
   "rules": {
+    "manageProfiles": "Manage profiles",
+    "groupSystem": "Prepared profiles",
+    "groupUser": "Your profiles",
+    "applyProfile": "Apply",
+    "newProfile": "Create new profile",
+    "profileInfo": "Game Profiles are a possibility to save and reuse your game settings.",
+    "profileName": "Profile name",
+    "profilePlaceholder": "My profile",
+    "createProfile": "Create",
+    "profiles": {
+      "default": "Defaults",
+      "full": "All rules"
+    },
     "widget": {
       "numberPlaceholder": "Number"
     }
