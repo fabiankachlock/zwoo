@@ -20,7 +20,7 @@ public partial class GameManager
 
     public GameManager()
     {
-        _gameManager = new ZwooGameLogic.GameManager(LocalNotificationAdapter.Instance, WasmLoggerFactory.Instance);
+        _gameManager = new ZwooGameLogic.GameManager(LocalNotificationAdapter.Instance, LocalGameProfileProvider.Instance, WasmLoggerFactory.Instance);
         _logger = WasmLoggerFactory.Instance.CreateLogger("LocalGameManager");
     }
 
