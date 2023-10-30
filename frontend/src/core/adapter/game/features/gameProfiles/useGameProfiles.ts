@@ -36,6 +36,11 @@ export const useGameProfiles = defineStore('game-profiles', () => {
     dispatchEvent(ZRPOPCode.ApplyGameProfile, { id });
   };
 
+  const deleteProfile = (id: string) => {
+    profiles.value = profiles.value.filter(p => p.id !== id);
+    dispatchEvent(ZRPOPCode.DeleteGameProfile, { id });
+  };
+
   const loadProfiles = () => {
     dispatchEvent(ZRPOPCode.GetAllGameProfiles, {});
   };
@@ -64,6 +69,7 @@ export const useGameProfiles = defineStore('game-profiles', () => {
     updateGameProfile,
     applyProfile,
     loadProfiles,
+    deleteProfile,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };

@@ -65,8 +65,7 @@ const icons = [
   'akar-icons:circle-plus',
   'iconoir:folder',
   'iconoir:save-floppy-disk',
-  'iconoir:edit-pencil',
-  'iconoir:download'
+  'iconoir:edit-pencil'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');
