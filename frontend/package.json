@@ -64,7 +64,7 @@
     "@types/node": "^20.8.4",
     "@types/semver": "^7.3.12",
     "@types/vue-router": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.7.0",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/eslint-config-prettier": "^8.0.0",
