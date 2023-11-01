@@ -75,7 +75,7 @@
     "babel-jest": "^27",
     "cross-env": "^7.0.3",
     "cypress": "^12.7.0",
-    "dependency-cruiser": "^14.1.1",
+    "dependency-cruiser": "^15.1.1",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^5.0.0",
