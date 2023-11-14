@@ -1,5 +1,8 @@
 export class ValidationResult {
-  constructor(public isValid: boolean, private error: string | string[]) {}
+  constructor(
+    public isValid: boolean,
+    private error: string | string[]
+  ) {}
 
   public getErrors = (): string[] => {
     if (this.isValid) return [];
