@@ -62,7 +62,7 @@
     "@tauri-apps/cli": "^1.5.2",
     "@types/jest": "^29.2.2",
     "@types/node": "^20.8.4",
-    "@types/semver": "^7.3.12",
+    "@types/semver": "^7.5.4",
     "@types/vue-router": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
