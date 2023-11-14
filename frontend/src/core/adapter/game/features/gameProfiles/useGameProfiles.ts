@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
 import { GameProfileGroup, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
+import { LocalGameProfileManager } from '@/core/services/gameProfileCache/LocalGameProfileManager';
 
 import { MonolithicEventWatcher } from '../../util/MonolithicEventWatcher';
 import { useGameEventDispatch } from '../../util/useGameEventDispatch';
@@ -17,10 +19,12 @@ export type GameProfile = {
 export const useGameProfiles = defineStore('game-profiles', () => {
   const profiles = ref<GameProfile[]>([]);
   const dispatchEvent = useGameEventDispatch();
+  let profileManager: LocalGameProfileManager;
 
   const _receiveMessage: (typeof gameProfilesWatcher)['_msgHandler'] = msg => {
     if (msg.code === ZRPOPCode.AllGameProfiles) {
       profiles.value = msg.data.profiles;
+      profileManager.syncProfiles(ZRPCoder.encodePayload(msg.data.profiles));
     }
   };
 
@@ -71,6 +75,8 @@ export const useGameProfiles = defineStore('game-profiles', () => {
     loadProfiles,
     deleteProfile,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    __init__: () => {}
+    __init__: async () => {
+      profileManager = await LocalGameProfileManager.create();
+    }
   };
 });

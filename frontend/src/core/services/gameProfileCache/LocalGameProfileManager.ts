@@ -1,13 +1,5 @@
 import type { BaseLogger } from '@/core/services/logging/logTypes';
 
-export type LocalGameProfile = {
-  Id: string;
-  Name: string;
-  Settings: {
-    Settings: Record<string, number>;
-  };
-};
-
 export class LocalGameProfileManager {
   private static StorageKey = 'zwoo:gameProfiles';
   private logger: BaseLogger;
@@ -23,7 +15,7 @@ export class LocalGameProfileManager {
     return new LocalGameProfileManager(loggerModule.Logger);
   }
 
-  public saveProfiles(content: string) {
+  public syncProfiles(content: string) {
     localStorage.setItem(LocalGameProfileManager.StorageKey, content);
     this.logger.info('synced local game profiles');
   }
