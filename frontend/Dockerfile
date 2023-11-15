@@ -12,7 +12,7 @@ RUN yarn
 COPY ./frontend/ ./
 
 ### Build WASM
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dotnet-builder
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet-builder
 
 # copy sources
 COPY --from=base /src ./src

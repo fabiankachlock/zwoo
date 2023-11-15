@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "7.0.x"
+          dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
         run: dotnet restore "./ZwooBackend/ZwooBackend.csproj"
@@ -35,7 +35,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "7.0.x"
+          dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
         run: dotnet restore "./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj"
@@ -50,7 +50,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "7.0.x"
+          dotnet-version: "8"
       - name: Install workloads
         working-directory: ./backend
         run: dotnet workload restore
