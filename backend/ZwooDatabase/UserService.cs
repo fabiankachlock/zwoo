@@ -503,8 +503,8 @@ public class UserService : IUserService
         }
 
         var usersWithPasswordReset = _db.Users.AsQueryable().Where(x => !String.IsNullOrEmpty(x.PasswordResetCode));
-        _logger.Info($"[CleanUp] deleted {unverifiedUsers.Count()} password reset codes.");
-        foreach (var user in unverifiedUsers)
+        _logger.Info($"[CleanUp] deleted {usersWithPasswordReset.Count()} password reset codes.");
+        foreach (var user in usersWithPasswordReset)
         {
             _db.Users.UpdateOne(x => x.Id == user.Id, Builders<UserDao>.Update.Set(u => u.PasswordResetCode, ""));
         }
