@@ -20,6 +20,7 @@ WORKDIR /src/backend
 
 # install python
 RUN apt-get update -y
+RUN apt-get install -y libatomic1
 RUN apt-get install -y python3
 
 # install wasm tools
