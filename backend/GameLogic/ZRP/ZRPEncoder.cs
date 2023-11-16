@@ -12,7 +12,12 @@ public class ZRPEncoder
 
     static public string Encode<T>(ZRPCode code, T payload)
     {
-        return $"{(int)code},{JsonSerializer.Serialize(payload, ZRPEncoder._options)}";
+        return $"{(int)code},{EncodePayload(payload)}";
+    }
+
+    static public string EncodePayload<T>(T payload)
+    {
+        return JsonSerializer.Serialize(payload, _options);
     }
 
     static public byte[] EncodeToBytes<T>(ZRPCode code, T payload)

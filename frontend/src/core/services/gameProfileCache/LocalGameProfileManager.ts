@@ -16,11 +16,13 @@ export class LocalGameProfileManager {
   }
 
   public syncProfiles(content: string) {
+    console.log(content);
     localStorage.setItem(LocalGameProfileManager.StorageKey, content);
     this.logger.info('synced local game profiles');
   }
 
   public getProfiles(): string {
+    console.log(localStorage.getItem(LocalGameProfileManager.StorageKey));
     return localStorage.getItem(LocalGameProfileManager.StorageKey) ?? '[]';
   }
 

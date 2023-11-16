@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ZwooGameLogic.Game.State;
 using ZwooGameLogic.Lobby.Features;
+using ZwooGameLogic.ZRP;
 
 namespace ZwooWasm;
 
@@ -36,12 +37,12 @@ public partial class LocalGameProfileProvider : IExternalGameProfileProvider
     #region Interface Implementation
     public void SaveConfig(long playerId, string name, GameProfile config)
     {
-        _saveHandler(name, JsonSerializer.Serialize(config));
+        _saveHandler(name, ZRPEncoder.EncodePayload(config));
     }
 
     public void UpdateConfig(long playerId, string id, GameProfile config)
     {
-        _updateHandler(id, JsonSerializer.Serialize(config));
+        _updateHandler(id, ZRPEncoder.EncodePayload(config));
     }
 
     public void DeleteConfig(long playerId, string id)
@@ -53,9 +54,10 @@ public partial class LocalGameProfileProvider : IExternalGameProfileProvider
     {
         try
         {
-            var rawData = _getProfiles();
-            var profiles = JsonSerializer.Deserialize<List<LocalGameProfile>>(rawData);
-            return profiles ?? new List<LocalGameProfile>();
+            // var rawData = _getProfiles();
+            // var profiles = ZRPDecoder.DecodePayload<AllGameProfilesNotification>(rawData);
+            // return profiles.Profiles.Select(p => new LocalGameProfile(p.Id, p.Name, p.)) ?? 
+            return new List<LocalGameProfile>();
         }
         catch
         {

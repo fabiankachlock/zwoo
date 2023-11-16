@@ -10,16 +10,18 @@
             <Icon icon="gg:close" />
           </button>
         </div>
-        <button class="rounded m-1 bg-main hover:bg-dark tc-main-light" @click="saveProfile">
-          <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="iconoir:save-floppy-disk" class="icon text-2xl"></Icon>
-          </div>
-        </button>
-        <button class="rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light" @click="openManageDialog">
-          <div class="transform transition-transform hover:scale-110 p-1">
-            <Icon icon="iconoir:folder" class="icon text-2xl"></Icon>
-          </div>
-        </button>
+        <Environment show="online">
+          <button class="rounded m-1 bg-main hover:bg-dark tc-main-light" @click="saveProfile">
+            <div class="transform transition-transform hover:scale-110 p-1">
+              <Icon icon="iconoir:save-floppy-disk" class="icon text-2xl"></Icon>
+            </div>
+          </button>
+          <button class="rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light" @click="openManageDialog">
+            <div class="transform transition-transform hover:scale-110 p-1">
+              <Icon icon="iconoir:folder" class="icon text-2xl"></Icon>
+            </div>
+          </button>
+        </Environment>
       </div>
       <div v-if="safeNewProfileOpen">
         <FloatingDialog content-class="sm:max-w-lg">
@@ -87,6 +89,7 @@ import { useI18n } from 'vue-i18n';
 
 import { Form, FormActions, FormSubmit, FormTitle, TextInput } from '@/components/forms';
 import Rules from '@/components/lobby/rules/Rules.vue';
+import Environment from '@/components/misc/Environment.vue';
 import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useUserDefaults } from '@/composables/userDefaults';
