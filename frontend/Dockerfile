@@ -12,7 +12,7 @@ RUN yarn
 COPY ./frontend/ ./
 
 ### Build WASM
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dotnet-builder
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet-builder
 
 # copy sources
 COPY --from=base /src ./src
@@ -20,6 +20,7 @@ WORKDIR /src/backend
 
 # install python
 RUN apt-get update -y
+RUN apt-get install -y libatomic1
 RUN apt-get install -y python3
 
 # install wasm tools
