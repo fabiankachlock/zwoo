@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{Menu, MenuItem, Submenu};
+// use tauri::{Menu, MenuItem, Submenu};
 
 fn main() {
     // let system_menu = Submenu::new(
