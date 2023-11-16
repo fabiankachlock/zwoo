@@ -15,6 +15,11 @@ const versionFiles = [
     replace: '"version": "###"',
   },
   {
+    path: "/frontend/src-tauri/tauri.conf.json",
+    regex: /"version": "(.*)"/,
+    replace: '"version": "###"',
+  },
+  {
     path: "/frontend/src-tauri/Cargo.toml",
     regex: /version = "(.*)"/,
     replace: 'version = "###"',

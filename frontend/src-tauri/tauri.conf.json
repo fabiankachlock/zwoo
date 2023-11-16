@@ -22,7 +22,7 @@
     "bundle": {
       "active": true,
       "category": "CardGame",
-      "copyright": "",
+      "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2023",
       "deb": {
         "depends": []
       },
@@ -35,7 +35,7 @@
         "icons/icon.ico",
         "icons/icon.png"
       ],
-      "identifier": "zwoo.igd20.de",
+      "identifier": "de.igd20ug.zwoo",
       "longDescription": "zwoo",
       "macOS": {
         "entitlements": null,
@@ -45,7 +45,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "",
+      "shortDescription": "zwoo - The Second Challenge",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
