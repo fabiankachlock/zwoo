@@ -9,10 +9,7 @@ fn main() {
     let system_menu = Submenu::new(
         "zwoo",
         Menu::new()
-            .add_native_item(MenuItem::EnterFullScreen)
-            .add_native_item(MenuItem::Separator)
             .add_native_item(MenuItem::Hide)
-            .add_native_item(MenuItem::ShowAll)
             .add_native_item(MenuItem::Separator)
             .add_native_item(MenuItem::CloseWindow)
             .add_native_item(MenuItem::Quit),
