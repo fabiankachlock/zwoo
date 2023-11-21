@@ -5,7 +5,7 @@ using Zwoo.Backend.Games;
 using System.Net.WebSockets;
 using ZwooGameLogic;
 using ZwooGameLogic.Lobby;
-using ZwooDatabase;
+using Zwoo.Database;
 using Zwoo.Backend.Controllers.DTO;
 
 

@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ZwooDatabase.Dao;
+namespace Zwoo.Database.Dao;
 
 public class AuditEventDao
 {

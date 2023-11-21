@@ -7,7 +7,7 @@ using Mongo.Migration.Startup.DotNetCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using ZwooInfoDashBoard;
-using ZwooDatabase;
+using Zwoo.Database;
 using Radzen;
 using Microsoft.IdentityModel.Logging;
 
@@ -70,7 +70,7 @@ builder.Services.AddAuthentication(options =>
 
 
 // database
-var db = new ZwooDatabase.Database(Globals.ConnectionString, Globals.DatabaseName);
+var db = new Zwoo.Database.Database(Globals.ConnectionString, Globals.DatabaseName);
 
 builder.Services.AddSingleton<IDatabase>(db);
 builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();

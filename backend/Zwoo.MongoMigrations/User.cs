@@ -1,6 +1,6 @@
 using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
-using ZwooDatabase.Dao;
+using Zwoo.Database.Dao;
 
 namespace Zwoo.MongoMigrations;
 

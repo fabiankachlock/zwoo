@@ -1,4 +1,4 @@
-namespace ZwooDatabase.Dao;
+namespace Zwoo.Database.Dao;
 
 public class LeaderBoardDao
 {

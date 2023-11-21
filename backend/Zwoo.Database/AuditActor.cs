@@ -1,4 +1,4 @@
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 public static class AuditActor
 {

@@ -1,16 +1,17 @@
 using Mongo.Migration.Documents;
-using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration;
 using MongoDB.Bson.Serialization.Attributes;
+using Zwoo.Database.Dao;
 
-namespace ZwooDatabase.Legacy;
+namespace Zwoo.Database.Legacy;
 
-public class Beta11UserDao : IDocument
+public class Beta17UserDao : IDocument
 {
-    public Beta11UserDao() { }
+
+    public Beta17UserDao() { }
 
     [BsonConstructor]
-    public Beta11UserDao(ulong id, List<string> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified)
+    public Beta17UserDao(ulong id, List<UserSessionDao> sid, string username, string email, string password, uint wins, string settings, string validationCode, bool verified, bool acceptedTerms)
     {
         Id = id;
         Sid = sid;
@@ -21,14 +22,15 @@ public class Beta11UserDao : IDocument
         Settings = settings;
         ValidationCode = validationCode;
         Verified = verified;
+        AcceptedTerms = acceptedTerms;
     }
 
     [BsonElement("_id")]
-    public UInt64 Id { set; get; }
+    public ulong Id { set; get; }
 
     [BsonElement("sid")]
     [BsonIgnoreIfDefault]
-    public List<string> Sid { set; get; } = new();
+    public List<UserSessionDao> Sid { set; get; } = new();
 
     [BsonElement("username")]
     public string Username { set; get; } = "";
@@ -52,6 +54,17 @@ public class Beta11UserDao : IDocument
 
     [BsonElement("verified")]
     public bool Verified { set; get; }
+
+    [BsonElement("accepted_terms")]
+    public bool AcceptedTerms { get; set; }
+
+    [BsonElement("verified_at")]
+    [BsonIgnoreIfDefault]
+    public long? VerifiedAt { get; set; }
+
+    [BsonElement("accepted_terms_at")]
+    [BsonIgnoreIfDefault]
+    public long? AcceptedTermsAt { get; set; }
 
     [BsonElement("beta_code")]
     [BsonIgnoreIfDefault]

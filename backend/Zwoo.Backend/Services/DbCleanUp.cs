@@ -1,5 +1,5 @@
 using Quartz;
-using ZwooDatabase;
+using Zwoo.Database;
 
 namespace Zwoo.Backend.Services;
 

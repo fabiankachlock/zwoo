@@ -1,5 +1,5 @@
-using ZwooDatabase;
-using ZwooDatabase.Dao;
+using Zwoo.Database;
+using Zwoo.Database.Dao;
 
 namespace Zwoo.Backend;
 

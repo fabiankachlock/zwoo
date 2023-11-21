@@ -1,11 +1,11 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using ZwooDatabase.Dao;
-using ZwooDatabase.Legacy;
+using Zwoo.Database.Dao;
+using Zwoo.Database.Legacy;
 using MongoDB.Driver;
 using log4net;
 
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 public interface IDatabase
 {
@@ -213,7 +213,7 @@ public class Database : IDatabase
         });
 
         // setup object serializer for AuditTrailEventDaos `object` properties
-        var objectSerializer = new ObjectSerializer(type => ObjectSerializer.DefaultAllowedTypes(type) || type.FullName?.StartsWith("ZwooDatabase") != false);
+        var objectSerializer = new ObjectSerializer(type => ObjectSerializer.DefaultAllowedTypes(type) || type.FullName?.StartsWith("Zwoo.Database") != false);
         BsonSerializer.RegisterSerializer(objectSerializer);
     }
 

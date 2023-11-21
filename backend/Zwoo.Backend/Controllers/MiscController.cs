@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Controllers.DTO;
 using Zwoo.Backend.Services;
-using ZwooDatabase;
+using Zwoo.Database;
 using static Zwoo.Backend.Globals;
 
 namespace Zwoo.Backend.Controllers;
@@ -68,7 +68,7 @@ public class MiscController : Controller
             return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
         }
 
-        var request = new ZwooDatabase.Dao.ContactRequest()
+        var request = new Zwoo.Database.Dao.ContactRequest()
         {
             Name = body.Name,
             Email = body.Email,

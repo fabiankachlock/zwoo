@@ -8,7 +8,7 @@ using Zwoo.Backend;
 using Zwoo.Backend.Websockets;
 using Zwoo.Backend.Games;
 using Zwoo.Backend.Services;
-using ZwooDatabase;
+using Zwoo.Database;
 using ZwooGameLogic.Lobby.Features;
 
 
@@ -47,7 +47,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 // database
-var db = new ZwooDatabase.Database(Globals.ConnectionString, Globals.DatabaseName, Globals.DatabaseLogger);
+var db = new Zwoo.Database.Database(Globals.ConnectionString, Globals.DatabaseName, Globals.DatabaseLogger);
 
 builder.Services.AddSingleton<IDatabase>(db);
 builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();

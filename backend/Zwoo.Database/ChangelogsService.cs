@@ -1,7 +1,7 @@
 using MongoDB.Driver;
-using ZwooDatabase.Dao;
+using Zwoo.Database.Dao;
 
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 /// <summary>
 /// a service for executing changelog related database operations

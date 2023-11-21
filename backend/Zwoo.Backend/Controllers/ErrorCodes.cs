@@ -1,5 +1,5 @@
 using Zwoo.Backend.Controllers.DTO;
-using ZwooDatabase;
+using Zwoo.Database;
 
 namespace Zwoo.Backend.Controllers;
 

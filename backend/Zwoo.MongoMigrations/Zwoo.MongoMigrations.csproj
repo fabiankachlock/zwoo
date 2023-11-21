@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ZwooDatabase\ZwooDatabase.csproj" />
+    <ProjectReference Include="..\Zwoo.Database\Zwoo.Database.csproj" />
   </ItemGroup>
 
 </Project>

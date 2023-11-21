@@ -3,7 +3,7 @@ using Mongo.Migration.Documents.Attributes;
 using Mongo.Migration;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ZwooDatabase.Legacy;
+namespace Zwoo.Database.Legacy;
 
 public class Beta12UserDao : IDocument
 {

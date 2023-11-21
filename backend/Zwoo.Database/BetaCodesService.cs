@@ -1,7 +1,7 @@
 using MongoDB.Driver;
 using log4net;
 
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 /// <summary>
 /// a service for executing beta code related database operations

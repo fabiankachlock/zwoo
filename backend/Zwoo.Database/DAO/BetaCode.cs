@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Mongo.Migration.Documents.Attributes;
 
 
-namespace ZwooDatabase.Dao;
+namespace Zwoo.Database.Dao;
 
 [CollectionLocation("betacodes")]
 public partial class BetaCodeDao

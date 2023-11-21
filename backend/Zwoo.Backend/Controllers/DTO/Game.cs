@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using ZwooGameLogic.ZRP;
-using ZwooDatabase.Dao;
+using Zwoo.Database.Dao;
 
 namespace Zwoo.Backend.Controllers.DTO;
 

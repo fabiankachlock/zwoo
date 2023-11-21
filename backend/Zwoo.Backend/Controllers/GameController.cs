@@ -7,7 +7,7 @@ using Zwoo.Backend.Games;
 using ZwooGameLogic;
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic.Lobby;
-using ZwooDatabase;
+using Zwoo.Database;
 
 namespace Zwoo.Backend.Controllers;
 

@@ -1,6 +1,6 @@
-using ZwooDatabase.Dao;
+using Zwoo.Database.Dao;
 
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 
 public struct AuditOptions

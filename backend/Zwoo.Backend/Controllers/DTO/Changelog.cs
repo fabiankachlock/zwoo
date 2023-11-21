@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using ZwooDatabase.Dao;
+using Zwoo.Database.Dao;
 
 namespace Zwoo.Backend.Controllers.DTO;
 

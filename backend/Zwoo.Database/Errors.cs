@@ -1,4 +1,4 @@
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 public enum ErrorCode
 {

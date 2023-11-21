@@ -1,8 +1,8 @@
 using MongoDB.Driver;
-using ZwooDatabase.Dao;
+using Zwoo.Database.Dao;
 using log4net;
 
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 /// <summary>
 /// a service for executing audit trails related database operations

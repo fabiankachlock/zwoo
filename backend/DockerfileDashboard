@@ -6,7 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj", "./ZwooInfoDashBoard/"]
-COPY ["./ZwooDatabase/ZwooDatabase.csproj", "./ZwooDatabase/"]
+COPY ["./Zwoo.Database/Zwoo.Database.csproj", "./Zwoo.Database/"]
 RUN dotnet restore "./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj"
 COPY . .
 WORKDIR "/src/"

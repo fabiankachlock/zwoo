@@ -2,8 +2,8 @@
 using ZwooGameLogic.ZRP;
 using ZwooGameLogic;
 using log4net;
-using ZwooDatabase;
-using ZwooDatabase.Dao;
+using Zwoo.Database;
+using Zwoo.Database.Dao;
 using ZwooGameLogic.Lobby.Features;
 
 namespace Zwoo.Backend.Games;

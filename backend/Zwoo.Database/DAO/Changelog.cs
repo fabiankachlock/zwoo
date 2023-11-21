@@ -4,7 +4,7 @@ using Mongo.Migration.Documents.Attributes;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ZwooDatabase.Dao;
+namespace Zwoo.Database.Dao;
 
 [RuntimeVersion("1.0.0-beta.7")]
 [StartUpVersion("1.0.0-beta.7")]

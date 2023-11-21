@@ -1,11 +1,11 @@
 using System.Text;
 using System.Security.Cryptography;
 using MongoDB.Driver;
-using ZwooDatabase.Dao;
+using Zwoo.Database.Dao;
 using BackendHelper;
 using log4net;
 
-namespace ZwooDatabase;
+namespace Zwoo.Database;
 
 /// <summary>
 /// a service for executing user related database operations
