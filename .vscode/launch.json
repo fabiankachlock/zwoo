@@ -22,9 +22,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dashboard build",
-      "program": "${workspaceFolder}/backend/ZwooInfoDashboard/bin/Debug/net7.0/ZwooInfoDashboard.dll",
+      "program": "${workspaceFolder}/backend/Zwoo.Dashboard/bin/Debug/net7.0/Zwoo.Dashboard.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/backend/ZwooInfoDashboard",
+      "cwd": "${workspaceFolder}/backend/Zwoo.Dashboard",
       "stopAtEntry": false,
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"

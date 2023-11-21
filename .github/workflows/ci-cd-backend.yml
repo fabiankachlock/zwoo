@@ -38,10 +38,10 @@ jobs:
           dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj"
+        run: dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet build "./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj" -c Release --no-restore
+        run: dotnet build "./Zwoo.Dashboard/Zwoo.Dashboard.csproj" -c Release --no-restore
 
   wasm-gamelogic:
     runs-on: ubuntu-latest

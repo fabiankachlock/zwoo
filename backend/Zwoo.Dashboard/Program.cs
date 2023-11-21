@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using ZwooInfoDashBoard.Data;
+using Zwoo.Dashboard.Data;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
-using ZwooInfoDashBoard;
+using Zwoo.Dashboard;
 using Zwoo.Database;
 using Radzen;
 using Microsoft.IdentityModel.Logging;

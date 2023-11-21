@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "GameLogic\Game
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendHelper", "BackendHelper\BackendHelper.csproj", "{38DE1F6C-DC47-495A-BDFF-2155866B2FFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwooInfoDashBoard", "ZwooInfoDashBoard\ZwooInfoDashBoard.csproj", "{2CB14D74-A614-44BF-8B7E-CF1472F39543}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.Dashboard", "Zwoo.Dashboard\Zwoo.Dashboard.csproj", "{2CB14D74-A614-44BF-8B7E-CF1472F39543}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.Migrations", "Zwoo.Migrations\Zwoo.Migrations.csproj", "{7EC0B1A0-37EA-4C14-B2B8-4EF068A3102D}"
 EndProject

@@ -1,4 +1,4 @@
-namespace ZwooInfoDashBoard.Data;
+namespace Zwoo.Dashboard.Data;
 
 public interface IAuthService
 {

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ZwooInfoDashBoard.Pages;
+namespace Zwoo.Dashboard.Pages;
 
 public class LogoutModel : PageModel
 {

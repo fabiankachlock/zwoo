@@ -1,4 +1,4 @@
-@using ZwooInfoDashBoard.Data;
+@using Zwoo.Dashboard.Data;
 @inject IDatabase _db;
 
 <RadzenPanelMenu>
@@ -10,12 +10,17 @@
     <RadzenPanelMenuItem Text="Account Events" Icon="event" Path="account-events" />
     <RadzenPanelMenuItem Text="Changelog" Icon="edit_square" Path="changelog-editor" />
     @if (_db.BetaCodes.AsQueryable().Count() != 0)
+
+
+
     {
         <RadzenPanelMenuItem Text="Beta Codes" Icon="qr_code" Path="betacodes" />
     }
     @if (Globals.LogrushDashboardUrl != "")
+
+
+
     {
         <RadzenPanelMenuItem Text="Logrush Dashboard" Icon="dashboard" Path="logrush-dashboard" />
     }
-</RadzenPanelMenu>
-
+    </RadzenPanelMenu>

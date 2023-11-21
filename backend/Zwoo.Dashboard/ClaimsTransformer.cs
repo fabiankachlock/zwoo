@@ -1,9 +1,9 @@
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
-using ZwooInfoDashBoard.Data;
+using Zwoo.Dashboard.Data;
 
-namespace ZwooInfoDashBoard;
+namespace Zwoo.Dashboard;
 
 public class KeycloakRolesClaimsTransformation : IClaimsTransformation
 {
