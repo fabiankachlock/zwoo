@@ -17,12 +17,12 @@ namespace Zwoo.Backend.Controllers;
 public class GameController : Controller
 {
 
-    private IGameLogicService _gamesService;
+    private IGameEngineService _gamesService;
     private IWebSocketManager _wsManager;
     private IGameInfoService _gameInfo;
     private IUserService _userService;
 
-    public GameController(IGameLogicService gamesService, IWebSocketManager wsManager, IGameInfoService gameInfo, IUserService userService)
+    public GameController(IGameEngineService gamesService, IWebSocketManager wsManager, IGameInfoService gameInfo, IUserService userService)
     {
         _gamesService = gamesService;
         _wsManager = wsManager;

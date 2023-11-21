@@ -18,10 +18,10 @@ public class WebSocketHandler : IWebSocketHandler
 {
 
     private ILog _logger;
-    private IGameLogicService _gamesService;
+    private IGameEngineService _gamesService;
     private bool disposedValue;
 
-    public WebSocketHandler(IGameLogicService gamesService)
+    public WebSocketHandler(IGameEngineService gamesService)
     {
         _gamesService = gamesService;
         _logger = LogManager.GetLogger("WebSocketHandler");

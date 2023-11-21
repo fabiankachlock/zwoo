@@ -28,7 +28,7 @@ RUN dotnet workload install wasm-tools
 
 # copy project configs into /src/backend/<project>/<config>.csproj
 COPY ["./backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj", "./Zwoo.GameEngine.Wasm/"]
-COPY ["./backend/GameLogic/GameLogic.csproj", "./GameLogic/"]
+COPY ["./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj", "./Zwoo.GameEngine/"]
 RUN dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
 
 # copy all backend projects into /src/backend (/src/backend/<project>)

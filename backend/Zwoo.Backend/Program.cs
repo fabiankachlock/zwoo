@@ -75,7 +75,7 @@ builder.Services.AddMigration(new MongoMigrationSettings
 
 // backend services
 builder.Services.AddSingleton<IExternalGameProfileProvider, BackendGameProfileProvider>();
-builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
+builder.Services.AddSingleton<IGameEngineService, GameEngineService>();
 builder.Services.AddSingleton<IWebSocketManager, Zwoo.Backend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
 builder.Services.AddSingleton<IEmailService, EmailService>();

@@ -17,13 +17,13 @@ public class WebSocketController : Controller
 {
     private IWebSocketManager _wsManager;
     private IWebSocketHandler _wsHandler;
-    private IGameLogicService _gamesService;
+    private IGameEngineService _gamesService;
     private IUserService _userService;
 
 
     private ILog _logger;
 
-    public WebSocketController(IWebSocketManager wsManager, IWebSocketHandler wsHandler, IGameLogicService gamesService, IUserService userService)
+    public WebSocketController(IWebSocketManager wsManager, IWebSocketHandler wsHandler, IGameEngineService gamesService, IUserService userService)
     {
         _wsHandler = wsHandler;
         _wsManager = wsManager;

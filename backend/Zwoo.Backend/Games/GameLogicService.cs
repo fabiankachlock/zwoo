@@ -8,7 +8,7 @@ using Zwoo.GameEngine.Lobby.Features;
 
 namespace Zwoo.Backend.Games;
 
-public interface IGameLogicService
+public interface IGameEngineService
 {
     public bool HasGame(long gameId);
 
@@ -26,9 +26,9 @@ public interface IGameLogicService
 
 }
 
-public class GameLogicService : IGameLogicService
+public class GameEngineService : IGameEngineService
 {
-    // globally used GameLogic instance
+    // globally used Zwoo.GameEngine instance
     private readonly GameManager _gameManager;
     private readonly IWebSocketManager _wsManager;
     private readonly IExternalGameProfileProvider _gameProfileProvider;
@@ -37,7 +37,7 @@ public class GameLogicService : IGameLogicService
     private ILog _logger = LogManager.GetLogger("GamesService");
 
 
-    public GameLogicService(IWebSocketManager wsManager, IExternalGameProfileProvider gameProfileProvider, IGameInfoService gameInfo, IUserService userService)
+    public GameEngineService(IWebSocketManager wsManager, IExternalGameProfileProvider gameProfileProvider, IGameInfoService gameInfo, IUserService userService)
     {
         _wsManager = wsManager;
         _gameProfileProvider = gameProfileProvider;

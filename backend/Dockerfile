@@ -8,7 +8,7 @@ WORKDIR /src
 
 # copy project configs into /src/<project>/<config>.csproj
 COPY ["./Zwoo.Backend/Zwoo.Backend.csproj", "./Zwoo.Backend/"]
-COPY ["./GameLogic/GameLogic.csproj", "./GameLogic/"]
+COPY ["./Zwoo.GameEngine/Zwoo.GameEngine.csproj", "./Zwoo.GameEngine/"]
 COPY ["./BackendHelper/BackendHelper.csproj", "./BackendHelper/"]
 COPY ["./Zwoo.Database/Zwoo.Database.csproj", "./Zwoo.Database/"]
 RUN dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"

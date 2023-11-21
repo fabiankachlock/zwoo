@@ -2,7 +2,7 @@ namespace Zwoo.GameEngine.Game.State;
 
 /// <summary>
 /// A game profile is a partial subset of game settings, that 
-/// can be persisted somewhere outside the gamelogic for players
+/// can be persisted somewhere outside the Zwoo.GameEngine for players
 /// to reuse existing game configurations 
 /// </summary>
 public class GameProfile
