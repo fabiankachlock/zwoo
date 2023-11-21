@@ -43,7 +43,7 @@ jobs:
         working-directory: ./backend
         run: dotnet build "./Zwoo.Dashboard/Zwoo.Dashboard.csproj" -c Release --no-restore
 
-  wasm-Zwoo.GameEngine:
+  wasm-gamelogic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
