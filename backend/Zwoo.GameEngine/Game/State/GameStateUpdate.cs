@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.Game.Events;
+using Zwoo.GameEngine.Game.Events;
 using Zwoo.GameEngine.Game.Feedback;
 
 namespace Zwoo.GameEngine.Game.State;

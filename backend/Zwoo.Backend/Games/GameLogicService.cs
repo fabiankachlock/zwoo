@@ -1,4 +1,4 @@
-﻿using Zwoo.Backend.Websockets;
+using Zwoo.Backend.Websockets;
 using Zwoo.GameEngine.ZRP;
 using Zwoo.GameEngine;
 using log4net;

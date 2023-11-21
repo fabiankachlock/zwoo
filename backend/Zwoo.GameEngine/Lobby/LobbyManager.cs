@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.ZRP;
+using Zwoo.GameEngine.ZRP;
 using Zwoo.GameEngine.Game.Settings;
 
 namespace Zwoo.GameEngine.Lobby;

@@ -1,4 +1,4 @@
-﻿namespace Zwoo.GameEngine.ZRP;
+namespace Zwoo.GameEngine.ZRP;
 
 public enum ZRPCode
 {

@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.Events;
+using Zwoo.GameEngine.Events;
 
 namespace Zwoo.GameEngine.ZRP;
 

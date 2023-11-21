@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.Notifications;
+using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.ZRP;
 
 

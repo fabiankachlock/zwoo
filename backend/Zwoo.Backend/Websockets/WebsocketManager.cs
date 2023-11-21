@@ -1,4 +1,4 @@
-﻿using log4net;
+using log4net;
 using System.Net.WebSockets;
 using System.Text;
 using Zwoo.GameEngine.ZRP;

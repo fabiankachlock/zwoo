@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.ZRP;
+using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.Backend.ZRP;
 

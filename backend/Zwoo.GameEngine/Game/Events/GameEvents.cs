@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.Game.Cards;
+using Zwoo.GameEngine.Game.Cards;
 using Zwoo.GameEngine.Game.Feedback;
 
 namespace Zwoo.GameEngine.Game.Events;

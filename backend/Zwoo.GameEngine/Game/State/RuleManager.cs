@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.Game.Rules;
+using Zwoo.GameEngine.Game.Rules;
 using Zwoo.GameEngine.Game.Events;
 using Zwoo.GameEngine.Game.Settings;
 using Zwoo.GameEngine.Logging;

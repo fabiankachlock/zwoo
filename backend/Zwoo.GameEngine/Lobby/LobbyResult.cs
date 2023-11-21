@@ -1,4 +1,4 @@
-﻿namespace Zwoo.GameEngine.Lobby;
+namespace Zwoo.GameEngine.Lobby;
 
 public enum LobbyResult : int
 {

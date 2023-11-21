@@ -1,4 +1,4 @@
-﻿namespace Zwoo.GameEngine.Game.Cards;
+namespace Zwoo.GameEngine.Game.Cards;
 
 public struct Card
 {

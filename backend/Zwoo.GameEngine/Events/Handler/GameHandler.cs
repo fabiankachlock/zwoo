@@ -1,4 +1,4 @@
-﻿using Zwoo.GameEngine.Game.Events;
+using Zwoo.GameEngine.Game.Events;
 using Zwoo.GameEngine.Game.Cards;
 using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.ZRP;

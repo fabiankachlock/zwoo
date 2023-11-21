@@ -1,4 +1,4 @@
-﻿using log4net;
+using log4net;
 using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Websockets;
 using Zwoo.Backend.Games;
