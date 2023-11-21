@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zwoo.Backend", "Zwoo.Backend\Zwoo.Backend.csproj", "{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "GameLogic\GameLogic.csproj", "{E02CDC91-0F9D-4F48-9015-103B938E4E81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zwoo.GameEngine", "Zwoo.GameEngine\Zwoo.GameEngine.csproj", "{E02CDC91-0F9D-4F48-9015-103B938E4E81}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendHelper", "BackendHelper\BackendHelper.csproj", "{38DE1F6C-DC47-495A-BDFF-2155866B2FFC}"
 EndProject
@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.Migrations", "Zwoo.Mig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration", "Mongo.Migration\Mongo.Migration.csproj", "{EF01BBD9-0415-4071-B23E-15585A6EE1BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwooWasmAdapter", "ZwooWasmAdapter\ZwooWasmAdapter.csproj", "{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.GameEngine.Wasm", "Zwoo.GameEngine.Wasm\Zwoo.GameEngine.Wasm.csproj", "{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Tests", "GameLogic.Tests\GameLogic.Tests.csproj", "{98E4BE8F-0602-4F5D-8682-71F07F321472}"
 EndProject

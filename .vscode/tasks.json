@@ -58,7 +58,7 @@
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+        "${workspaceFolder}/backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       ],
       "problemMatcher": "$msCompile",
       "isBackground": true

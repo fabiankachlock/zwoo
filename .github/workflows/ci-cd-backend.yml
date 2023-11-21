@@ -56,7 +56,7 @@ jobs:
         run: dotnet workload restore
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+        run: dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet publish -c Release -p:RunAOTCompilation=true "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+        run: dotnet publish -c Release -p:RunAOTCompilation=true "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"

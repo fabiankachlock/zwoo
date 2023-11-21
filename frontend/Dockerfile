@@ -27,15 +27,15 @@ RUN apt-get install -y python3
 RUN dotnet workload install wasm-tools
 
 # copy project configs into /src/backend/<project>/<config>.csproj
-COPY ["./backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj", "./ZwooWasmAdapter/"]
+COPY ["./backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj", "./Zwoo.GameEngine.Wasm/"]
 COPY ["./backend/GameLogic/GameLogic.csproj", "./GameLogic/"]
-RUN dotnet restore "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+RUN dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
 
 # copy all backend projects into /src/backend (/src/backend/<project>)
 COPY ./backend .
 
 # build wasm project
-RUN dotnet publish -c Release -p:RunAOTCompilation=true ./ZwooWasmAdapter/ZwooWasmAdapter.csproj
+RUN dotnet publish -c Release -p:RunAOTCompilation=true ./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj
 
 ### Build Frontend
 FROM node:18-alpine as builder
