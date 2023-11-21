@@ -13,7 +13,8 @@
         <Environment show="online">
           <button class="rounded m-1 bg-main hover:bg-dark tc-main-light" @click="saveProfile">
             <div class="transform transition-transform hover:scale-110 p-1">
-              <Icon icon="iconoir:save-floppy-disk" class="icon text-2xl"></Icon>
+              <Icon v-if="activeProfile" icon="iconoir:floppy-disk-arrow-in" class="icon text-2xl"></Icon>
+              <Icon v-else icon="iconoir:save-floppy-disk" class="icon text-2xl"></Icon>
             </div>
           </button>
           <button class="rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light" @click="openManageDialog">
