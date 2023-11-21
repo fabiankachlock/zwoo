@@ -86,6 +86,12 @@ public class GameSettings : IGameSettingsStore
         return 0;
     }
 
+    public void Reset()
+    {
+        var settings = FromDefaults();
+        _settingValues = settings._settingValues;
+    }
+
     private static List<GameSetting> GetFromRules()
     {
         return RuleManager.AllRules()
@@ -132,5 +138,32 @@ public class GameSettings : IGameSettingsStore
             settings.Add(rule.Key, rule.Value);
         }
         return new GameSettings(settings);
+    }
+
+
+    public GameProfile SaveCurrent()
+    {
+        var changes = new Dictionary<string, int>();
+        var allSettings = FromDefaults().GetSettings();
+
+        foreach (var setting in allSettings)
+        {
+            // if not default value --> save
+            if (setting.Value != _settingValues[setting.Key])
+            {
+                changes[setting.Key] = _settingValues[setting.Key];
+            }
+        }
+
+        return new GameProfile(changes);
+    }
+
+    public void ApplyProfile(GameProfile settings)
+    {
+        Reset();
+        foreach (var key in settings.Settings.Keys)
+        {
+            _settingValues[key] = settings.Settings[key];
+        }
     }
 }

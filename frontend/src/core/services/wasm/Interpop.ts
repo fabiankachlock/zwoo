@@ -12,6 +12,12 @@ export type CSharpExport = {
     OnMessage: (callback: (message: string) => void) => void;
     OnDisconnect: (callback: () => void) => void;
   };
+  LocalGameProfileProvider: {
+    OnGetProfiles: (callback: () => string) => void;
+    OnSave: (callback: (name: string, profile: string) => void) => void;
+    OnUpdate: (callback: (id: string, profile: string) => void) => void;
+    OnDelete: (callback: (id: string) => void) => void;
+  };
   Logging: {
     WasmLoggerFactory: {
       OnDebug: (callback: (msg: string) => void) => void;

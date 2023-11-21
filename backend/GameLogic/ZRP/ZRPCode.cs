@@ -57,6 +57,18 @@ public enum ZRPCode
     /// <summary>send</summary>
     SendAllSettings = 203,
     /// <summary>receive</summary>
+    GetAllGameProfiles = 204,
+    /// <summary>send</summary>
+    SendAllGameProfiles = 205,
+    /// <summary>receive</summary>
+    SaveToGameProfile = 206,
+    /// <summary>receive</summary>
+    UpdateGameProfile = 207,
+    /// <summary>receive</summary>
+    ApplyGameProfile = 208,
+    /// <summary>receive</summary>
+    DeleteGameProfile = 209,
+    /// <summary>receive</summary>
     StartGame = 210,
     /// <summary>receive</summary>
     CreateBot = 230,

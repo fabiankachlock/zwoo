@@ -1,4 +1,5 @@
 ﻿using ZwooGameLogic.Lobby;
+using ZwooGameLogic.Lobby.Features;
 using ZwooGameLogic.Notifications;
 using ZwooGameLogic.ZRP;
 
@@ -9,13 +10,18 @@ public class LobbyHandler : IUserEventHandler
     public Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>> GetHandles()
     {
         return new Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>>() {
-        {ZRPCode.KeepAlive, HandleKeepAlive },
-        {ZRPCode.PlayerLeaves, LeavePlayer },
-        {ZRPCode.SpectatorToPlayer, SpectatorToPlayer },
-        {ZRPCode.PlayerToSpectator, PlayerToSpectator },
-        {ZRPCode.PlayerToHost, PlayerToHost },
-        {ZRPCode.KickPlayer, KickPlayer },
-        {ZRPCode.GetLobby, GetPlayers },
+            {ZRPCode.KeepAlive, HandleKeepAlive },
+            {ZRPCode.PlayerLeaves, LeavePlayer },
+            {ZRPCode.SpectatorToPlayer, SpectatorToPlayer },
+            {ZRPCode.PlayerToSpectator, PlayerToSpectator },
+            {ZRPCode.PlayerToHost, PlayerToHost },
+            {ZRPCode.KickPlayer, KickPlayer },
+            {ZRPCode.GetLobby, GetPlayers },
+            {ZRPCode.GetAllGameProfiles, GetGameProfiles },
+            {ZRPCode.SaveToGameProfile, SafeGameProfile },
+            {ZRPCode.UpdateGameProfile, UpdateGameProfile },
+            {ZRPCode.ApplyGameProfile, ApplyGameProfile },
+            {ZRPCode.DeleteGameProfile, DeleteGameProfile },
         };
     }
 
@@ -146,5 +152,50 @@ public class LobbyHandler : IUserEventHandler
         var bots = context.BotManager.ListBots().Select(b => new GetLobby_PlayerDTO(b.AsPlayer().LobbyId, b.Username, ZRPRole.Bot, ZRPPlayerState.Connected, 0));
         GetLobbyNotification payload = new GetLobbyNotification(players.Concat(bots).ToArray());
         websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendLobby, payload);
+    }
+
+    private void GetGameProfiles(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        var profiles = context.Room.GameProfileProvider.GetConfigsOfPlayer(context);
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendAllGameProfiles, new AllGameProfilesNotification(
+            profiles.Select(p => new AllGameProfiles_ProfileDTO(p.Id, p.Name, p.Group)).ToArray()
+        ));
+    }
+
+    private void SafeGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        SafeToGameProfileEvent payload = message.DecodePayload<SafeToGameProfileEvent>();
+        var profile = context.Game.Settings.SaveCurrent();
+        context.Room.GameProfileProvider.SaveConfig(context, payload.Name, profile);
+    }
+
+    private void UpdateGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        UpdateGameProfileEvent payload = message.DecodePayload<UpdateGameProfileEvent>();
+        var profile = context.Game.Settings.SaveCurrent();
+        context.Room.GameProfileProvider.UpdateConfig(context, payload.Id, profile);
+    }
+
+    private void ApplyGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        ApplyGameProfileEvent payload = message.DecodePayload<ApplyGameProfileEvent>();
+        var profile = context.Room.GameProfileProvider.GetConfigsOfPlayer(context).FirstOrDefault(p => p.Id == payload.Id);
+        if (profile != null)
+        {
+            context.Game.Settings.ApplyProfile(profile.Settings);
+            AllSettingsNotification newSettings = new AllSettingsNotification(context.Game.Settings.GetSettings().Select(s => new AllSettings_SettingDTO(s.Key, s.Value, s.Title, s.Description, s.Type, false, s.Min, s.Max)).ToArray());
+            websocketManager.BroadcastGame(context.GameId, ZRPCode.SendAllSettings, newSettings);
+        }
+    }
+
+    private void DeleteGameProfile(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
+    {
+        if (context.Role != ZRPRole.Host) return;
+        DeleteGameProfileEvent payload = message.DecodePayload<DeleteGameProfileEvent>();
+        context.Room.GameProfileProvider.DeleteConfig(context, payload.Id);
     }
 }

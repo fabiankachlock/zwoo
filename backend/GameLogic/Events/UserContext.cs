@@ -3,14 +3,19 @@ using ZwooGameLogic.Bots;
 
 namespace ZwooGameLogic.ZRP;
 
-public class UserContext
+public class UserContext : IPlayer
 {
-    public readonly long RealId;
-    public readonly long LobbyId;
-    public readonly string Username;
-    public readonly ZRPRole Role;
+    public long RealId { get; }
+    public long LobbyId { get; }
+    public string Username { get; }
+    public ZRPRole Role { get; }
     public readonly long GameId;
     public readonly ZwooRoom Room;
+
+    /// <summary>
+    /// THIS IS UNUSED
+    /// </summary>
+    public ZRPPlayerState State { get; }
 
     public Game.Game Game
     {

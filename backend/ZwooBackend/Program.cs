@@ -9,6 +9,7 @@ using ZwooBackend.Websockets;
 using ZwooBackend.Games;
 using ZwooBackend.Services;
 using ZwooDatabase;
+using ZwooGameLogic.Lobby.Features;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,6 +74,7 @@ builder.Services.AddMigration(new MongoMigrationSettings
 });
 
 // backend services
+builder.Services.AddSingleton<IExternalGameProfileProvider, BackendGameProfileProvider>();
 builder.Services.AddSingleton<IGameLogicService, GameLogicService>();
 builder.Services.AddSingleton<IWebSocketManager, ZwooBackend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();

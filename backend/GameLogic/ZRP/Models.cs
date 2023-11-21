@@ -1,12 +1,13 @@
 ﻿using ZwooGameLogic.Game.Cards;
 using ZwooGameLogic.Game.Settings;
 using ZwooGameLogic.Game.Feedback;
+using ZwooGameLogic.Lobby.Features;
 
 namespace ZwooGameLogic.ZRP;
 
 public static class Version
 {
-    public static readonly string CURRENT = "4.1.0";
+    public static readonly string CURRENT = "4.3.0";
 }
 
 /// <summary>
@@ -136,6 +137,40 @@ public readonly record struct AllSettings_SettingDTO(string Setting, int Value, 
 /// ZRPCode: 203
 /// </summary>
 public readonly record struct AllSettingsNotification(AllSettings_SettingDTO[] Settings);
+
+
+/// <summary>
+/// ZRPCode: 204
+/// </summary>
+public readonly record struct GetAllGameProfilesEvent(); // empty
+
+/// <see cref="AllGameProfilesNotification" /> 
+public readonly record struct AllGameProfiles_ProfileDTO(string Id, string Name, GameProfileGroup Group);
+
+/// <summary>
+/// ZRPCode: 205
+/// </summary>
+public readonly record struct AllGameProfilesNotification(AllGameProfiles_ProfileDTO[] Profiles);
+
+/// <summary>
+/// ZRPCode: 206
+/// </summary>
+public readonly record struct SafeToGameProfileEvent(string Name);
+
+/// <summary>
+/// ZRPCode: 207
+/// </summary>
+public readonly record struct UpdateGameProfileEvent(string Id);
+
+/// <summary>
+/// ZRPCode: 208
+/// </summary>
+public readonly record struct ApplyGameProfileEvent(string Id);
+
+/// <summary>
+/// ZRPCode: 209
+/// </summary>
+public readonly record struct DeleteGameProfileEvent(string Id);
 
 /// <summary>
 /// ZRPCode: 210
