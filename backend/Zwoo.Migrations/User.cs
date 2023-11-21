@@ -2,7 +2,7 @@ using Mongo.Migration.Migrations.Document;
 using MongoDB.Bson;
 using Zwoo.Database.Dao;
 
-namespace Zwoo.MongoMigrations;
+namespace Zwoo.Migrations;
 
 public class Beta1007User : DocumentMigration<UserDao>
 {

@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
-    <ProjectReference Include="..\Zwoo.MongoMigrations\Zwoo.MongoMigrations.csproj" />
+    <ProjectReference Include="..\Zwoo.Migrations\Zwoo.Migrations.csproj" />
   </ItemGroup>
 
   <ItemGroup>
