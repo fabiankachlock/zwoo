@@ -10,7 +10,7 @@ internal class AddUpDrawRule : BaseRule
 {
     public override int Priority
     {
-        get => RulePriority.Zwoo.GameEngineExtendions;
+        get => RulePriority.GamLogicExtensions;
     }
 
     public override string Name
