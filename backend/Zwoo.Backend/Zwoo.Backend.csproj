@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
+    <ProjectReference Include="..\Zwoo.GameEngine\Zwoo.GameEngine.csproj" />
     <ProjectReference Include="..\Zwoo.Migrations\Zwoo.Migrations.csproj" />
   </ItemGroup>
 
