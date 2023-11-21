@@ -1,4 +1,4 @@
-using ZwooGameLogic.ZRP;
+using Zwoo.GameEngine.ZRP;
 
 namespace ZwooWasm;
 

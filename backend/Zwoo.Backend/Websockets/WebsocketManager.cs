@@ -1,9 +1,9 @@
 ﻿using log4net;
 using System.Net.WebSockets;
 using System.Text;
-using ZwooGameLogic.ZRP;
+using Zwoo.GameEngine.ZRP;
 using Zwoo.Backend.ZRP;
-using ZwooGameLogic.Notifications;
+using Zwoo.GameEngine.Notifications;
 
 
 namespace Zwoo.Backend.Websockets;

@@ -2,16 +2,16 @@ using log4net;
 
 namespace Zwoo.Backend.Games;
 
-public class Log4NetFactory : ZwooGameLogic.Logging.ILoggerFactory
+public class Log4NetFactory : Zwoo.GameEngine.Logging.ILoggerFactory
 {
-    public ZwooGameLogic.Logging.ILogger CreateLogger(string name)
+    public Zwoo.GameEngine.Logging.ILogger CreateLogger(string name)
     {
         return new Log4NetLogger(name);
     }
 }
 
 
-public class Log4NetLogger : ZwooGameLogic.Logging.ILogger
+public class Log4NetLogger : Zwoo.GameEngine.Logging.ILogger
 {
     private readonly ILog _logger;
 

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Controllers.DTO;
 using Zwoo.Backend.Websockets;
 using Zwoo.Backend.Games;
-using ZwooGameLogic;
-using ZwooGameLogic.ZRP;
-using ZwooGameLogic.Lobby;
+using Zwoo.GameEngine;
+using Zwoo.GameEngine.ZRP;
+using Zwoo.GameEngine.Lobby;
 using Zwoo.Database;
 
 namespace Zwoo.Backend.Controllers;

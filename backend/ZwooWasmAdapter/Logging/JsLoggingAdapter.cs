@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Versioning;
 using System.Runtime.InteropServices.JavaScript;
-using ZwooGameLogic.Logging;
+using Zwoo.GameEngine.Logging;
 
 namespace ZwooWasm.Logging;
 

@@ -6,9 +6,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Versioning;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ZwooGameLogic.Game.State;
-using ZwooGameLogic.Lobby.Features;
-using ZwooGameLogic.ZRP;
+using Zwoo.GameEngine.Game.State;
+using Zwoo.GameEngine.Lobby.Features;
+using Zwoo.GameEngine.ZRP;
 
 namespace ZwooWasm;
 

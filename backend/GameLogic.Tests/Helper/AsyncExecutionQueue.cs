@@ -1,6 +1,6 @@
-using ZwooGameLogic.Helper;
+using Zwoo.GameEngine.Helper;
 
-namespace ZwooGameLogic.Tests.Helper;
+namespace Zwoo.GameEngine.Tests.Helper;
 
 public class AsyncExecutionQueueTests
 {

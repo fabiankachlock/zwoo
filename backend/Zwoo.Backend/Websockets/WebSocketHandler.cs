@@ -3,7 +3,7 @@ using System.Net.WebSockets;
 using System.Text;
 using Zwoo.Backend.Games;
 using Zwoo.Backend.ZRP;
-using ZwooGameLogic.ZRP;
+using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.Backend.Websockets;
 

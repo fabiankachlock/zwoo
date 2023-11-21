@@ -2,8 +2,8 @@ using System;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices.JavaScript;
-using ZwooGameLogic.Notifications;
-using ZwooGameLogic.ZRP;
+using Zwoo.GameEngine.Notifications;
+using Zwoo.GameEngine.ZRP;
 
 namespace ZwooWasm;
 

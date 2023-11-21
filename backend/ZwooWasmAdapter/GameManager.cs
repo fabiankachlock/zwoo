@@ -1,6 +1,6 @@
-using ZwooGameLogic;
-using ZwooGameLogic.ZRP;
-using ZwooGameLogic.Logging;
+using Zwoo.GameEngine;
+using Zwoo.GameEngine.ZRP;
+using Zwoo.GameEngine.Logging;
 using ZwooWasm.Logging;
 using System.Runtime.Versioning;
 using System.Runtime.InteropServices.JavaScript;
@@ -12,7 +12,7 @@ public partial class GameManager
 {
     public readonly static GameManager Instance = new GameManager();
 
-    private ZwooGameLogic.GameManager _gameManager;
+    private Zwoo.GameEngine.GameManager _gameManager;
 
     private ZwooRoom? _activeGame = null;
 
@@ -20,7 +20,7 @@ public partial class GameManager
 
     public GameManager()
     {
-        _gameManager = new ZwooGameLogic.GameManager(LocalNotificationAdapter.Instance, LocalGameProfileProvider.Instance, WasmLoggerFactory.Instance);
+        _gameManager = new Zwoo.GameEngine.GameManager(LocalNotificationAdapter.Instance, LocalGameProfileProvider.Instance, WasmLoggerFactory.Instance);
         _logger = WasmLoggerFactory.Instance.CreateLogger("LocalGameManager");
     }
 

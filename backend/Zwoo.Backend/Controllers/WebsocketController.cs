@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Websockets;
 using Zwoo.Backend.Games;
 using System.Net.WebSockets;
-using ZwooGameLogic;
-using ZwooGameLogic.Lobby;
+using Zwoo.GameEngine;
+using Zwoo.GameEngine.Lobby;
 using Zwoo.Database;
 using Zwoo.Backend.Controllers.DTO;
 

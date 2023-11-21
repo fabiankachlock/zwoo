@@ -9,7 +9,7 @@ using Zwoo.Backend.Websockets;
 using Zwoo.Backend.Games;
 using Zwoo.Backend.Services;
 using Zwoo.Database;
-using ZwooGameLogic.Lobby.Features;
+using Zwoo.GameEngine.Lobby.Features;
 
 
 var builder = WebApplication.CreateBuilder(args);

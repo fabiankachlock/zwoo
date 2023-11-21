@@ -1,7 +1,7 @@
 using Zwoo.Database;
 using Zwoo.Database.Dao;
-using ZwooGameLogic.Game.State;
-using ZwooGameLogic.Lobby.Features;
+using Zwoo.GameEngine.Game.State;
+using Zwoo.GameEngine.Lobby.Features;
 
 namespace Zwoo.Backend.Games;
 

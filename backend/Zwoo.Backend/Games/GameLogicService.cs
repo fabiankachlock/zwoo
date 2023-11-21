@@ -1,10 +1,10 @@
 ﻿using Zwoo.Backend.Websockets;
-using ZwooGameLogic.ZRP;
-using ZwooGameLogic;
+using Zwoo.GameEngine.ZRP;
+using Zwoo.GameEngine;
 using log4net;
 using Zwoo.Database;
 using Zwoo.Database.Dao;
-using ZwooGameLogic.Lobby.Features;
+using Zwoo.GameEngine.Lobby.Features;
 
 namespace Zwoo.Backend.Games;
 
