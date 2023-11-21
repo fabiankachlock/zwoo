@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZwooBackend", "ZwooBackend\ZwooBackend.csproj", "{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zwoo.Backend", "Zwoo.Backend\Zwoo.Backend.csproj", "{D09BBAE7-7B72-4BE0-B6A6-19C70A511AEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "GameLogic\GameLogic.csproj", "{E02CDC91-0F9D-4F48-9015-103B938E4E81}"
 EndProject

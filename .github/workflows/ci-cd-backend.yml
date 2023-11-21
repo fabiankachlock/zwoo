@@ -20,10 +20,10 @@ jobs:
           dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./ZwooBackend/ZwooBackend.csproj"
+        run: dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet build "./ZwooBackend/ZwooBackend.csproj" -c Release --no-restore
+        run: dotnet build "./Zwoo.Backend/Zwoo.Backend.csproj" -c Release --no-restore
       # - name: Test
       #   working-directory: ./backend
       #   run: dotnet test "./GameLogic/GameLogic.csproj" -c Release --no-restore --verbosity normal
