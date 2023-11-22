@@ -13,7 +13,7 @@ public static class DiscoverEndpoint
         {
             if (_service.CanConnect(client))
             {
-                return Results.BadRequest(new ProblemDetails());
+                return Results.BadRequest(ErrorCode.Example.ToProblem(new ProblemDetails()));
             }
             return Results.Ok();
         })
