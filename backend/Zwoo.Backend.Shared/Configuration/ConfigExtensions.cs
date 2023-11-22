@@ -34,7 +34,6 @@ public static class ZwooConfigurationExtensions
             .AddCommandLine(args, argMappings)
             .Build();
 
-        Console.WriteLine(config.GetDebugView());
         var value = config.GetSection("ZWOO").Get<ZwooOptions>();
         value!.App = staticConfig;
         builder.Services.Configure<ZwooOptions>(config.GetSection("ZWOO"));

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
-using Zwoo.Backend.Shared;
+using Zwoo.Backend.Shared.Api;
+using Zwoo.Backend.Shared.Api.Discover;
+using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,9 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
     AppVersion = "test"
 });
+builder.AddZwooCors(conf);
+
+builder.Services.AddSingleton<IDiscoverService, TestImpl>();
 
 var app = builder.Build();
 
@@ -26,6 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseZwooCors();
 app.UseDiscover();
 
 app.MapGet("/test", (IOptionsSnapshot<ZwooOptions> conf) =>
@@ -35,3 +41,10 @@ app.MapGet("/test", (IOptionsSnapshot<ZwooOptions> conf) =>
 
 app.Run();
 
+class TestImpl : IDiscoverService
+{
+    public bool CanConnect(ClientInfo client)
+    {
+        return Random.Shared.NextSingle() < 0.5;
+    }
+}
