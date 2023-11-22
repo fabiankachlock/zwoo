@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Options;
 using Zwoo.Backend.Shared;
+using Zwoo.Backend.Shared.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
+{
+    AppVersion = "test"
+});
 
 var app = builder.Build();
 
@@ -19,6 +27,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseDiscover();
+
+app.MapGet("/test", (IOptionsSnapshot<ZwooOptions> conf) =>
+{
+    return Results.Ok(conf.Value);
+});
 
 app.Run();
 
