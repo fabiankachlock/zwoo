@@ -4,7 +4,9 @@ using Zwoo.Database.Dao;
 
 namespace Zwoo.Backend.Shared.Authentication;
 
-
+/// <summary>
+/// Represents the data stored in a user session
+/// </summary>
 public class UserSessionData
 {
     public static string ClaimsTypeUserId = "uid";
@@ -19,17 +21,31 @@ public class UserSessionData
         SessionId = sessionId;
     }
 
+    /// <summary>
+    /// Create a list of Claims with the current session data 
+    /// </summary>
+    /// <returns></returns>
     public IEnumerable<Claim> ToClaims() => new List<Claim> {
         new Claim(ClaimsTypeUserId, UserId.ToString()),
         new Claim(ClaimsTypeSessionId, SessionId),
     };
 
+    /// <summary>
+    /// Create a ClaimsPrincipal with the current session data 
+    /// </summary>
+    /// <param name="scheme">the authentication scheme of the ClaimsIdentity</param>
+    /// <returns>the created principal</returns>
     public ClaimsPrincipal ToPrincipal(string? scheme)
     {
         var identity = new ClaimsIdentity(ToClaims(), scheme);
         return new ClaimsPrincipal(identity);
     }
 
+    /// <summary>
+    /// Extract session data from a list of claims
+    /// </summary>
+    /// <param name="claims">the list of claims from the identity</param>
+    /// <returns>the extracted session data</returns>
     public static UserSessionData? FromClaims(IEnumerable<Claim> claims)
     {
         var session = new UserSessionData(0, "");
@@ -57,6 +73,9 @@ public class UserSessionData
     }
 }
 
+/// <summary>
+/// Represents the data of an active (verified) session
+/// </summary>
 public class ActiveUserSession
 {
     public UserDao User { get; set; }

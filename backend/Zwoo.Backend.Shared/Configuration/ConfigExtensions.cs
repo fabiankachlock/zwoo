@@ -26,6 +26,10 @@ public static class ZwooConfigurationExtensions
         {"--server-cookie-domain", "zwoo:server:cookieDomain"},
     };
 
+    /// <summary>
+    /// add the default zwoo configuration mechanism to the api
+    /// </summary>
+    /// <param name="builder">the web application builder</param>
     public static ZwooOptions AddZwooConfiguration(this WebApplicationBuilder builder, string[] args, ZwooAppConfiguration staticConfig)
     {
         IConfigurationRoot config = builder.Configuration

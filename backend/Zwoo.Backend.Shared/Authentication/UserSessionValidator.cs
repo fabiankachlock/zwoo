@@ -25,19 +25,21 @@ public class ZwooCookieAuthenticationEvents : CookieAuthenticationEvents
             var loginResult = _userService.IsUserLoggedIn(session.UserId, session.SessionId);
             if (loginResult.User != null && loginResult.SessionId != null && loginResult.Error == null)
             {
+                // save the current data to the http context for use in route handlers
                 context.HttpContext.Items.Add(HttpContextExtensions.UserContextKey, loginResult.User);
                 context.HttpContext.Items.Add(HttpContextExtensions.SessionIdContextKey, loginResult.SessionId);
                 return;
             }
         }
 
-        // default: sign out
+        // default: sign out if session is invalid or expired
         context.RejectPrincipal();
         await context.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
     public override async Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)
     {
+        // disable default redirect to login behavior
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
         // TODO: send full details response
         await context.Response.WriteAsJsonAsync(new ProblemDetails()
