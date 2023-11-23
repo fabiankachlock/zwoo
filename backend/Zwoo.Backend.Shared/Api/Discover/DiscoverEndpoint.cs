@@ -1,3 +1,4 @@
+using System.Security.Principal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,13 @@ public static class DiscoverEndpoint
 {
     public static void Map(this WebApplication app)
     {
-        app.MapPost("/server/discover", ([FromBody] ClientInfo client, IDiscoverService _service) =>
+        app.MapPost("/server/discover", ([FromBody] ClientInfo client, IDiscoverService _service, HttpContext context) =>
         {
             if (_service.CanConnect(client))
             {
                 return Results.BadRequest(ErrorCode.Example.ToProblem(new ProblemDetails()));
             }
             return Results.Ok();
-        })
-            .WithName("discover")
-            .AllowAnonymous();
+        });
     }
 }

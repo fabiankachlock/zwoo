@@ -11,5 +11,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Zwoo.GameEngine\Zwoo.GameEngine.csproj" />
+    <ProjectReference Include="..\Zwoo.Migrations\Zwoo.Migrations.csproj" />
+    <ProjectReference Include="..\Zwoo.Database\Zwoo.Database.csproj" />
+  </ItemGroup>
+
 
 </Project>
