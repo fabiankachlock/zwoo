@@ -8,6 +8,7 @@ using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Configuration;
+using Zwoo.Backend.Shared.Services;
 using Zwoo.Database;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,37 +23,14 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
     AppVersion = "1.0.0-beta.17"
 });
 builder.AddZwooCors(conf);
+builder.AddZwooDatabase(conf, new ZwooDatabaseOptions
+{
+    EnableMigrations = false
+});
 builder.AddZwooAuthentication(conf);
 
 builder.Services.AddSingleton<IDiscoverService, TestImpl>();
 
-var db = new Database(conf.Database.ConnectionUri, conf.Database.DBName);
-
-builder.Services.AddSingleton<IDatabase>(db);
-builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
-builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
-builder.Services.AddSingleton<IChangelogService, ChangelogService>();
-builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
-builder.Services.AddSingleton<IContactRequestService, ContactRequestService>();
-
-// migrations
-builder.Services.AddSingleton(db.Client);
-builder.Services.Configure<MongoMigrationSettings>(options =>
-{
-    options.ConnectionString = conf.Database.ConnectionUri;
-    options.Database = conf.Database.DBName;
-    options.DatabaseMigrationVersion = new DocumentVersion(conf.App.AppVersion);
-});
-builder.Services.AddMigration(new MongoMigrationSettings
-{
-    ConnectionString = conf.Database.ConnectionUri,
-    Database = conf.Database.DBName,
-    DatabaseMigrationVersion = new DocumentVersion(conf.App.AppVersion)
-});
-
-Mongo.Migration.DocumentVersionSerializer.DefaultVersion = conf.App.AppVersion;
 
 
 var app = builder.Build();

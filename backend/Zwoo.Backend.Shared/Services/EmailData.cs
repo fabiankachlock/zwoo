@@ -1,5 +1,7 @@
 using System.Reflection;
 using System.Net.Mail;
+using Microsoft.Extensions.Options;
+using Zwoo.Backend.Shared.Configuration;
 
 namespace Zwoo.Backend.Services;
 
@@ -34,10 +36,10 @@ public class EmailData
         return tmpl;
     }
 
-    public static MailMessage PasswordChangeRequestEmail(string language, string username, string resetCode)
+    public static MailMessage PasswordChangeRequestEmail(string language, string username, string resetCode, ZwooOptions options)
     {
-        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/reset-password?code={resetCode}";
-        string domain = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}";
+        string link = $"{(options.Server.UseSsl ? "https://" : "http://")}{options.Server.Domain}/reset-password?code={resetCode}";
+        string domain = $"{(options.Server.UseSsl ? "https://" : "http://")}{options.Server.Domain}";
         Dictionary<string, string> args = new Dictionary<string, string>() {
             {"{{username}}", username},
             {"{{link}}", link},
@@ -57,10 +59,10 @@ public class EmailData
         return mail;
     }
 
-    public static MailMessage VerifyEmail(string language, string username, string puid, string code)
+    public static MailMessage VerifyEmail(string language, string username, string puid, string code, ZwooOptions options)
     {
-        string link = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}/verify-account?id={puid}&code={code}";
-        string domain = $"{(Globals.UseSsl ? "https://" : "http://")}{Globals.ZwooDomain}";
+        string link = $"{(options.Server.UseSsl ? "https://" : "http://")}{options.Server.Domain}/verify-account?id={puid}&code={code}";
+        string domain = $"{(options.Server.UseSsl ? "https://" : "http://")}{options.Server.Domain}";
         Dictionary<string, string> args = new Dictionary<string, string>() {
             {"{{username}}", username},
             {"{{link}}", link},

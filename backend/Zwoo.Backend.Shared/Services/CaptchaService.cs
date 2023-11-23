@@ -1,8 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using log4net;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Zwoo.Backend.Shared.Configuration;
 
-namespace Zwoo.Backend.Services;
+namespace Zwoo.Backend.Shared.Services;
 
 /// <summary>
 /// a service for verifying captcha challenges
@@ -40,8 +42,14 @@ public class CaptchaResponse
 
 public class CaptchaService : ICaptchaService
 {
-    private readonly string _secret = Globals.RecaptchaSideSecret;
-    private ILog _logger = LogManager.GetLogger("EmailService");
+    private readonly string _secret;
+    private ILogger _logger;
+
+    public CaptchaService(IOptions<ZwooOptions> options, ILogger logger)
+    {
+        _secret = options.Value.Features.CaptchaSecret;
+        _logger = logger;
+    }
 
     public async Task<CaptchaResponse?> Verify(string token)
     {
@@ -65,7 +73,7 @@ public class CaptchaService : ICaptchaService
         }
         catch (Exception ex)
         {
-            _logger.Warn("cant verify captcha token", ex);
+            _logger.LogWarning($"cant verify captcha token: {ex}");
             return null;
         }
     }

@@ -1,9 +1,11 @@
-using System;
 using System.Net.Mail;
 using System.Net;
 using System.Collections.Concurrent;
 using Zwoo.Database.Dao;
-using log4net;
+using Microsoft.Extensions.Hosting;
+using Zwoo.Backend.Shared.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace Zwoo.Backend.Services;
 
@@ -57,13 +59,16 @@ public class EmailService : IHostedService, IEmailService
     private ConcurrentQueue<MailMessage> _emailQueue;
     private Thread? _activeEmailThread = null;
     private object _threadLock = new Object();
-    private ILog _logger = LogManager.GetLogger("EmailService");
+    private ILogger _logger;
     private ILanguageService _languageService;
+    private ZwooOptions _options;
 
-    public EmailService(ILanguageService languageService)
+    public EmailService(ILanguageService languageService, IOptions<ZwooOptions> options, ILogger logger)
     {
         _emailQueue = new ConcurrentQueue<MailMessage>();
         _languageService = languageService;
+        _options = options.Value;
+        _logger = logger;
     }
 
     private struct Recipient : IRecipient
@@ -85,8 +90,8 @@ public class EmailService : IHostedService, IEmailService
 
     public void SendPasswordResetMail(IRecipient recipient, string resetCode)
     {
-        MailMessage mail = EmailData.PasswordChangeRequestEmail(_languageService.CodeToString(recipient.PreferredLanguage), recipient.Username, resetCode);
-        mail.From = new MailAddress(Globals.SmtpHostEmail);
+        MailMessage mail = EmailData.PasswordChangeRequestEmail(_languageService.CodeToString(recipient.PreferredLanguage), recipient.Username, resetCode, _options);
+        mail.From = new MailAddress(_options.Email.Email);
         mail.To.Add(new MailAddress(recipient.Email));
         _emailQueue.Enqueue(mail);
         TryStartWork();
@@ -94,8 +99,8 @@ public class EmailService : IHostedService, IEmailService
 
     public void SendVerifyMail(IRecipient recipient, ulong userId, string code)
     {
-        MailMessage mail = EmailData.VerifyEmail(_languageService.CodeToString(recipient.PreferredLanguage), recipient.Username, $"{userId}", code);
-        mail.From = new MailAddress(Globals.SmtpHostEmail);
+        MailMessage mail = EmailData.VerifyEmail(_languageService.CodeToString(recipient.PreferredLanguage), recipient.Username, $"{userId}", code, _options);
+        mail.From = new MailAddress(_options.Email.Email);
         mail.To.Add(new MailAddress(recipient.Email));
         _emailQueue.Enqueue(mail);
         TryStartWork();
@@ -109,7 +114,7 @@ public class EmailService : IHostedService, IEmailService
         mail.Body += $"Submitted: {request.Origin} at {DateTimeOffset.FromUnixTimeMilliseconds(request.Timestamp).ToString("dd.MM.yy HH:mm:ss")}\n";
         mail.Body += $"Captcha Score: {request.CaptchaScore} / 1\n";
         mail.Body += $"Message:\n{request.Message}\n\n";
-        mail.From = new MailAddress(Globals.SmtpHostEmail);
+        mail.From = new MailAddress(_options.Email.Email);
         mail.To.Add(new MailAddress(recipient.Email));
         _emailQueue.Enqueue(mail);
         TryStartWork();
@@ -135,7 +140,7 @@ public class EmailService : IHostedService, IEmailService
         }
         catch (Exception ex)
         {
-            _logger.Warn("an error happened while stopping the service", ex);
+            _logger.LogWarning($"an error happened while stopping the service: {ex}");
         }
         return Task.CompletedTask;
     }
@@ -160,17 +165,17 @@ public class EmailService : IHostedService, IEmailService
         }
         catch (Exception ex)
         {
-            _logger.Error("cant start email thread", ex);
+            _logger.LogError($"cant start email thread: {ex}");
         }
     }
 
     private void SendMails()
     {
-        _logger.Info("start sending emails");
-        var client = new SmtpClient(Globals.SmtpHostUrl, Globals.SmtpHostPort)
+        _logger.LogInformation("start sending emails");
+        var client = new SmtpClient(_options.Email.Host, _options.Email.Port)
         {
-            EnableSsl = Globals.SmtpUseSsl,
-            Credentials = new NetworkCredential(Globals.SmtpUsername, Globals.SmtpPassword)
+            EnableSsl = _options.Email.UseSsl,
+            Credentials = new NetworkCredential(_options.Email.Username, _options.Email.Password)
         };
 
         while (_emailQueue.TryDequeue(out var message))
@@ -181,9 +186,9 @@ public class EmailService : IHostedService, IEmailService
             }
             catch (Exception ex)
             {
-                _logger.Error("cant send email", ex);
+                _logger.LogError($"cant send email: {ex}");
             }
         }
-        _logger.Info("email queue finished");
+        _logger.LogInformation("email queue finished");
     }
 }
