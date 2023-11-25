@@ -6,7 +6,7 @@ namespace Zwoo.Backend.Shared.Services;
 
 public static class QuarzExtensions
 {
-    public static void AddZwooScheduler(this WebApplicationBuilder builder)
+    public static void AddZwooScheduler(this WebApplicationBuilder builder, Action<IServiceCollectionQuartzConfigurator>? configurator = null)
     {
         builder.Services.AddQuartz(q =>
         {
@@ -16,16 +16,17 @@ public static class QuarzExtensions
                 c.MaxConcurrency = 1;
             });
             q.UseMicrosoftDependencyInjectionJobFactory();
-            // q.ScheduleJob<DatabaseCleanupJob>(t => t
-            //     .WithIdentity("cleanup", "db")
-            //     .WithCronSchedule("0 1 1 1/1 * ? *"));
+
+            if (configurator != null)
+            {
+                configurator(q);
+            }
         });
+
 
         builder.Services.AddQuartzHostedService(options =>
         {
             options.WaitForJobsToComplete = true;
         });
-
-        // builder.Services.AddTransient<DatabaseCleanupJob>();
     }
 }
