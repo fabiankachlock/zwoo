@@ -8,13 +8,13 @@ namespace Zwoo.Backend.Shared.Api.Discover;
 
 public static class DiscoverEndpoint
 {
-    public static void Map(this WebApplication app)
+    public static void Map(WebApplication app)
     {
-        app.MapPost("/server/discover", ([FromBody] ClientInfo client, IDiscoverService _service, HttpContext context) =>
+        app.MapPost("/discover", ([FromBody] ClientInfo client, IDiscoverService _service, HttpContext context) =>
         {
             if (_service.CanConnect(client))
             {
-                return Results.BadRequest(ErrorCode.Example.ToProblem(new ProblemDetails()));
+                return Results.BadRequest(ApiError.Example.ToProblem(new ProblemDetails()));
             }
             return Results.Ok();
         });

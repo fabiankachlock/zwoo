@@ -56,47 +56,6 @@ public static class AppExtensions
 
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.MapPost("/auth/login", async ([FromBody] Login body, HttpContext context, IUserService _userService) =>
-        {
-            // TODO: captcha
-            var result = _userService.LoginUser(body.Email, body.Password);
-            if (result.User == null || result.SessionId == null)
-            {
-                return Results.Unauthorized();
-            }
-
-            var sessionData = new UserSessionData(result.User.Id, result.SessionId);
-            var scheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            await context.SignInAsync(scheme, sessionData.ToPrincipal(scheme));
-            return Results.Ok();
-        }).AllowAnonymous();
-
-        app.MapGet("/auth/logout", async (HttpContext context, IUserService _userService) =>
-        {
-            var user = context.GetActiveUser();
-            if (_userService.LogoutUser(user.User, user.ActiveSession))
-            {
-                await context.SignOutAsync();
-                return Results.Ok();
-            }
-
-            return Results.Problem(new ProblemDetails()
-            {
-                Detail = "sign out operation errored",
-                Status = StatusCodes.Status500InternalServerError
-            });
-        });
-
-        app.MapGet("/auth/user", (HttpContext context) =>
-        {
-            var user = context.GetActiveUser();
-            return Results.Ok(new UserSession()
-            {
-                Email = user.Email,
-                Username = user.Username,
-                Wins = (int)user.Wins
-            });
-        });
+        AuthenticationEndpoints.Map(app);
     }
 }
