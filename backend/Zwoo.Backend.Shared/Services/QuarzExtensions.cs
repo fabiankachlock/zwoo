@@ -4,7 +4,7 @@ using Quartz.Simpl;
 
 namespace Zwoo.Backend.Shared.Services;
 
-public static class AppExtensions
+public static class QuarzExtensions
 {
     public static void AddZwooScheduler(this WebApplicationBuilder builder)
     {
