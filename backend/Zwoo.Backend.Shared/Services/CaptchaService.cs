@@ -43,9 +43,9 @@ public class CaptchaResponse
 public class CaptchaService : ICaptchaService
 {
     private readonly string _secret;
-    private ILogger _logger;
+    private ILogger<CaptchaService> _logger;
 
-    public CaptchaService(IOptions<ZwooOptions> options, ILogger logger)
+    public CaptchaService(IOptions<ZwooOptions> options, ILogger<CaptchaService> logger)
     {
         _secret = options.Value.Features.CaptchaSecret;
         _logger = logger;
@@ -73,7 +73,7 @@ public class CaptchaService : ICaptchaService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning($"cant verify captcha token: {ex}");
+            _logger.LogWarning(ex, "cant verify captcha token");
             return null;
         }
     }

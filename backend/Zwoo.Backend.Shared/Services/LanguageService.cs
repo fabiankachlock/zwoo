@@ -1,4 +1,4 @@
-namespace Zwoo.Backend.Services;
+namespace Zwoo.Backend.Shared.Services;
 
 /// <summary>
 /// a service for parsing language query parameter

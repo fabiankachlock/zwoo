@@ -3,7 +3,7 @@ using System.Net.Mail;
 using Microsoft.Extensions.Options;
 using Zwoo.Backend.Shared.Configuration;
 
-namespace Zwoo.Backend.Services;
+namespace Zwoo.Backend.Shared.Services;
 
 public class EmailData
 {

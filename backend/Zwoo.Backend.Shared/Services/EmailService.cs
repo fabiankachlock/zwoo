@@ -7,7 +7,7 @@ using Zwoo.Backend.Shared.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
-namespace Zwoo.Backend.Services;
+namespace Zwoo.Backend.Shared.Services;
 
 public interface IRecipient
 {
@@ -59,11 +59,11 @@ public class EmailService : IHostedService, IEmailService
     private ConcurrentQueue<MailMessage> _emailQueue;
     private Thread? _activeEmailThread = null;
     private object _threadLock = new Object();
-    private ILogger _logger;
+    private ILogger<EmailService> _logger;
     private ILanguageService _languageService;
     private ZwooOptions _options;
 
-    public EmailService(ILanguageService languageService, IOptions<ZwooOptions> options, ILogger logger)
+    public EmailService(ILanguageService languageService, IOptions<ZwooOptions> options, ILogger<EmailService> logger)
     {
         _emailQueue = new ConcurrentQueue<MailMessage>();
         _languageService = languageService;
@@ -140,7 +140,7 @@ public class EmailService : IHostedService, IEmailService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning($"an error happened while stopping the service: {ex}");
+            _logger.LogWarning(ex, "an error happened while stopping the service");
         }
         return Task.CompletedTask;
     }
@@ -165,7 +165,7 @@ public class EmailService : IHostedService, IEmailService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"cant start email thread: {ex}");
+            _logger.LogError(ex, "cant start email thread");
         }
     }
 
@@ -186,7 +186,7 @@ public class EmailService : IHostedService, IEmailService
             }
             catch (Exception ex)
             {
-                _logger.LogError($"cant send email: {ex}");
+                _logger.LogError(ex, "cant send email");
             }
         }
         _logger.LogInformation("email queue finished");
