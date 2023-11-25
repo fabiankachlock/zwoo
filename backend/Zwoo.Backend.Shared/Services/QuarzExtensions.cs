@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Simpl;
 
@@ -6,9 +6,9 @@ namespace Zwoo.Backend.Shared.Services;
 
 public static class QuarzExtensions
 {
-    public static void AddZwooScheduler(this WebApplicationBuilder builder, Action<IServiceCollectionQuartzConfigurator>? configurator = null)
+    public static void AddZwooScheduler(this IServiceCollection services, Action<IServiceCollectionQuartzConfigurator>? configurator = null)
     {
-        builder.Services.AddQuartz(q =>
+        services.AddQuartz(q =>
         {
             q.SchedulerId = "zwoo-scheduler";
             q.UseThreadPool<DefaultThreadPool>(c =>
@@ -24,7 +24,7 @@ public static class QuarzExtensions
         });
 
 
-        builder.Services.AddQuartzHostedService(options =>
+        services.AddQuartzHostedService(options =>
         {
             options.WaitForJobsToComplete = true;
         });

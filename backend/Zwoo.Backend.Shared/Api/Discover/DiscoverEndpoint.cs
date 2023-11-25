@@ -14,7 +14,7 @@ public static class DiscoverEndpoint
         {
             if (_service.CanConnect(client))
             {
-                return Results.BadRequest(ApiError.Example.ToProblem(new ProblemDetails()));
+                return Results.BadRequest(ApiError.None.ToProblem(new ProblemDetails()));
             }
             return Results.Ok();
         });

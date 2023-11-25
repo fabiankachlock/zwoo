@@ -6,9 +6,9 @@ namespace Zwoo.Backend.Shared.Api;
 
 public static class AppExtensions
 {
-    public static void AddZwooCors(this WebApplicationBuilder builder, ZwooOptions config)
+    public static void AddZwooCors(this IServiceCollection services, ZwooOptions config)
     {
-        builder.Services.AddCors(s =>
+        services.AddCors(s =>
         {
             s.AddDefaultPolicy(b => b
                 .WithOrigins(config.Server.Cors)

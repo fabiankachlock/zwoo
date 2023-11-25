@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Controllers.DTO;
 using Zwoo.Backend.Services;
+using Zwoo.Backend.Shared.Services;
 using Zwoo.Database;
 
 namespace Zwoo.Backend.Controllers;

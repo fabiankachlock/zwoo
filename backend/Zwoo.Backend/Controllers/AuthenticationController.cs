@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Controllers.DTO;
 using Zwoo.Backend.Services;
+using Zwoo.Backend.Shared.Services;
 using Zwoo.Database;
 
 namespace Zwoo.Backend.Controllers;
@@ -95,71 +96,6 @@ public class AuthenticationController : Controller
         }
 
         return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.ACCOUNT_FAILED_TO_VERIFIED, "could not verify the account!"));
-    }
-
-    [HttpPost("login")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    public async Task<IActionResult> Login([FromBody] Login body)
-    {
-        var captchaResponse = await _captcha.Verify(body.captchaToken);
-        if (captchaResponse == null || !captchaResponse.Success)
-        {
-            return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.CAPTCHA_INVALID, "Operation needs valid captcha token"));
-        }
-
-        var result = _userService.LoginUser(body.email, body.password);
-        if (result.User == null || result.SessionId == null)
-        {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(result.Error), "could not log in"));
-        }
-
-        var claims = new List<Claim>
-        {
-            new Claim("auth", CookieHelper.CreateCookieValue(result.User.Id, result.SessionId)),
-        };
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity)).Wait();
-        return Ok(new MessageDTO() { Message = "user logged in!" });
-    }
-
-    [HttpGet("user")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    public IActionResult GetUser()
-    {
-        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
-        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
-        {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
-        }
-
-        if (activeSession.User.Sid.Any(session => session.Id == activeSession.SessionId))
-        {
-            return Ok(activeSession.User.ToDTO());
-        }
-        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "Session ID not Matching"));
-    }
-
-    [HttpGet("logout")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageDTO))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    public IActionResult Logout()
-    {
-        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
-        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
-        {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
-        }
-
-        if (_userService.LogoutUser(activeSession.User, activeSession.SessionId))
-        {
-            HttpContext.SignOutAsync().Wait();
-            return Ok(new MessageDTO() { Message = "logged out" });
-        }
-        return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.Errors.SESSION_ID_NOT_MATCHING, "cant logout session"));
     }
 
     [HttpPost("delete")]

@@ -17,10 +17,10 @@ public static class AppExtensions
     /// </summary>
     /// <param name="builder">the web application builder</param>
     /// <param name="options">the current configuration</param>
-    public static void AddZwooAuthentication(this WebApplicationBuilder builder, ZwooOptions options)
+    public static void AddZwooAuthentication(this IServiceCollection services, ZwooOptions options)
     {
         // configure cookie based authentication
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
         {
             // Dont use SlidingExpiration, because its an security issue!
             o.ExpireTimeSpan = TimeSpan.FromDays(90);
@@ -38,13 +38,13 @@ public static class AppExtensions
             o.Cookie.Domain = options.Server.CookieDomain;
         });
         // add authorization
-        builder.Services.AddAuthorization(o =>
+        services.AddAuthorization(o =>
         {
             // require an active cookie session as default policy
             o.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
         });
         // register cookie authentication events handler in di container 
-        builder.Services.AddScoped<ZwooCookieAuthenticationEvents>();
+        services.AddScoped<ZwooCookieAuthenticationEvents>();
     }
 
     /// <summary>

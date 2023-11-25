@@ -15,21 +15,21 @@ public class ZwooDatabaseOptions
 
 public static class DatabaseExtensions
 {
-    public static void AddZwooDatabase(this WebApplicationBuilder builder, ZwooOptions conf, ZwooDatabaseOptions options)
+    public static void AddZwooDatabase(this IServiceCollection services, ZwooOptions conf, ZwooDatabaseOptions options)
     {
         var db = new Database.Database(conf.Database.ConnectionUri, conf.Database.DBName);
 
-        builder.Services.AddSingleton<IDatabase>(db);
-        builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
-        builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
-        builder.Services.AddSingleton<IUserService, UserService>();
-        builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
-        builder.Services.AddSingleton<IChangelogService, ChangelogService>();
-        builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
-        builder.Services.AddSingleton<IContactRequestService, ContactRequestService>();
+        services.AddSingleton<IDatabase>(db);
+        services.AddSingleton<IAuditTrailService, AuditTrailService>();
+        services.AddSingleton<IAccountEventService, AccountEventService>();
+        services.AddSingleton<IUserService, UserService>();
+        services.AddSingleton<IBetaCodesService, BetaCodesService>();
+        services.AddSingleton<IChangelogService, ChangelogService>();
+        services.AddSingleton<IGameInfoService, GameInfoService>();
+        services.AddSingleton<IContactRequestService, ContactRequestService>();
 
-        builder.Services.AddSingleton(db.Client);
-        builder.Services.Configure<MongoMigrationSettings>(options =>
+        services.AddSingleton(db.Client);
+        services.Configure<MongoMigrationSettings>(options =>
         {
             options.ConnectionString = conf.Database.ConnectionUri;
             options.Database = conf.Database.DBName;
@@ -38,7 +38,7 @@ public static class DatabaseExtensions
 
         if (options.EnableMigrations)
         {
-            builder.Services.AddMigration(new MongoMigrationSettings
+            services.AddMigration(new MongoMigrationSettings
             {
                 ConnectionString = conf.Database.ConnectionUri,
                 Database = conf.Database.DBName,

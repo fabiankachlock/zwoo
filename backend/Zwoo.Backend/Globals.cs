@@ -17,7 +17,8 @@ public static class Globals
             if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(s)))
             {
                 Console.WriteLine($"{s} is required! please set it as Environment variable");
-                Environment.Exit(1);
+                // Environment.Exit(1);
+                return "";
             }
             return Environment.GetEnvironmentVariable(s)!;
         }
@@ -37,7 +38,7 @@ public static class Globals
         if (!int.TryParse(GetEnvOrExit("SMTP_HOST_PORT").Trim(), out SmtpHostPort))
         {
             Logger.Error($"SMTP_HOST_PORT ({Environment.GetEnvironmentVariable("SMTP_HOST_PORT")}) isn't a Number");
-            Environment.Exit(1);
+            // Environment.Exit(1);
         }
         SmtpHostEmail = GetEnvOrExit("SMTP_HOST_EMAIL");
         SmtpUsername = GetEnvOrExit("SMTP_USERNAME");

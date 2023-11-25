@@ -34,12 +34,13 @@ public static class ZwooConfigurationExtensions
     {
         IConfigurationRoot config = builder.Configuration
             .AddJsonFile("zwoo.json", optional: true)
-            .AddEnvironmentVariables("ZWOO_")
+            .AddEnvironmentVariables()
             .AddCommandLine(args, argMappings)
             .Build();
 
         var value = config.GetSection("ZWOO").Get<ZwooOptions>();
-        value!.App = staticConfig;
+        if (value == null) throw new Exception("no zwoo configuration found");
+        value.App = staticConfig;
         builder.Services.Configure<ZwooOptions>(config.GetSection("ZWOO"));
         return value;
     }

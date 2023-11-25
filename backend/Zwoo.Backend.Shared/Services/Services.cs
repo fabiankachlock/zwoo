@@ -6,12 +6,12 @@ namespace Zwoo.Backend.Shared.Services;
 
 public static class ServicesExtensions
 {
-    public static void AddZwooServices(this WebApplicationBuilder builder)
+    public static void AddZwooServices(this IServiceCollection services)
     {
-        builder.Services.AddSingleton<IEmailService, EmailService>();
-        builder.Services.AddSingleton<ILanguageService, LanguageService>();
-        builder.Services.AddSingleton<ICaptchaService, CaptchaService>();
+        services.AddSingleton<IEmailService, EmailService>();
+        services.AddSingleton<ILanguageService, LanguageService>();
+        services.AddSingleton<ICaptchaService, CaptchaService>();
 
-        builder.Services.AddHostedService<EmailService>();
+        services.AddHostedService<EmailService>();
     }
 }

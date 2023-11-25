@@ -1,5 +1,4 @@
 using Quartz;
-using Quartz.Simpl;
 using Zwoo.Backend;
 using Zwoo.Backend.Websockets;
 using Zwoo.Backend.Games;
@@ -12,31 +11,31 @@ using Zwoo.Backend.Shared.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddZwooLogging();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddZwooLogging();
 var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
     AppVersion = "1.0.0-beta.17"
 });
-builder.AddZwooCors(conf);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.AddZwooAuthentication(conf);
-builder.AddZwooDatabase(conf, new ZwooDatabaseOptions()
+builder.Services.AddZwooCors(conf);
+builder.Services.AddZwooAuthentication(conf);
+builder.Services.AddZwooDatabase(conf, new ZwooDatabaseOptions()
 {
     EnableMigrations = true
 });
 
 // backend services
-builder.AddZwooServices();
+builder.Services.AddZwooServices();
 builder.Services.AddSingleton<IExternalGameProfileProvider, BackendGameProfileProvider>();
 builder.Services.AddSingleton<IGameEngineService, GameEngineService>();
 builder.Services.AddSingleton<IWebSocketManager, Zwoo.Backend.Websockets.WebSocketManager>();
 builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
 
 // scheduler
-builder.AddZwooScheduler(q =>
+builder.Services.AddZwooScheduler(q =>
 {
     q.ScheduleJob<DatabaseCleanupJob>(t => t
                 .WithIdentity("cleanup", "db")
@@ -45,6 +44,9 @@ builder.AddZwooScheduler(q =>
 builder.Services.AddTransient<DatabaseCleanupJob>();
 
 var app = builder.Build();
+
+app.UseZwooCors();
+app.UseZwooAuthentication();
 
 // http logging
 app.Use(async (context, next) =>
@@ -71,7 +73,7 @@ if (app.Environment.IsDevelopment())
 
 var webSocketOptions = new WebSocketOptions
 {
-    KeepAliveInterval = TimeSpan.FromMinutes(2),
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
 webSocketOptions.AllowedOrigins.Add(Globals.Cors);
 
