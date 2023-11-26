@@ -1,5 +1,8 @@
 using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +18,7 @@ public static class LoggingExtensions
         {
             options.AddSimpleConsole(c =>
             {
-                c.SingleLine = true;
+                // c.SingleLine = true;
                 c.UseUtcTimestamp = true;
                 c.TimestampFormat = "[yyyy-MM-ddTHH:mm:ss] ";
             });
@@ -29,22 +32,53 @@ public static class LoggingExtensions
         {
             var watch = new Stopwatch();
             var log = "";
+            var warning = false;
             if (context.Request.Method != "OPTIONS")
             {
                 watch.Start();
-                log += $"{context.Connection.RemoteIpAddress} {context.Request.Protocol} {context.Request.Path}{context.Request.QueryString}";
+                log += $"{context.TraceIdentifier} | {context.Connection.RemoteIpAddress} {context.Request.Protocol} {context.Request.Path}{context.Request.QueryString}";
             }
-            await next.Invoke();
+
+            try
+            {
+                await next.Invoke(context);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"internal error occurred while processing request {context.Request.Path} of {context.TraceIdentifier}");
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                await context.Response.WriteAsJsonAsync(new ProblemDetails()
+                {
+                    Title = "shit happened",
+                    Detail = "shit happened",
+                    Status = 500,
+                    Instance = context.Request.Path,
+                    Type = "example.com/internal-server-error",
+                }, new JsonSerializerOptions()
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                }, "application/problem+json; charset=utf-8");
+            }
+
             if (context.Response.StatusCode >= 300)
             {
                 log += $" sending error response: {context.Response.StatusCode}";
+                warning = true;
             }
             if (context.Request.Method != "OPTIONS")
             {
                 watch.Stop();
                 log += $" ({watch.ElapsedMilliseconds}ms)";
             }
-            logger.LogInformation(log);
+
+            if (warning)
+            {
+                logger.LogWarning(log);
+            }
+            else
+            {
+                logger.LogInformation(log);
+            }
         });
     }
 }
