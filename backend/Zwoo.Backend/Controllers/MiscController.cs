@@ -16,46 +16,13 @@ public class MiscController : Controller
 {
     private IEmailService _emailService;
     private IContactRequestService _contactRequests;
-    private IChangelogService _changelogs;
     private ICaptchaService _captcha;
 
-    public MiscController(IEmailService emailService, IChangelogService changelogs, IContactRequestService contactRequests, ICaptchaService captcha)
+    public MiscController(IEmailService emailService, IContactRequestService contactRequests, ICaptchaService captcha)
     {
         _emailService = emailService;
-        _changelogs = changelogs;
         _contactRequests = contactRequests;
         _captcha = captcha;
-    }
-
-    [HttpGet("version")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    public IActionResult GetVersion()
-    {
-        return Ok(Globals.ApiVersion);
-    }
-
-    [HttpGet("changelog")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
-    public IActionResult GetChangelog([FromQuery] string version)
-    {
-        var changelog = _changelogs.GetChangelog(version);
-        if (changelog == null)
-        {
-            return NotFound("changelog for version not present");
-        }
-        return Ok(changelog.ChangelogText);
-    }
-
-    [HttpGet("versionHistory")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(VersionHistory))]
-    public IActionResult GetChangelogs()
-    {
-        var versions = _changelogs.GetChangelogs().Select(c => c.ChangelogVersion);
-        return Ok(new VersionHistory()
-        {
-            Versions = versions.ToList(),
-        });
     }
 
     [EnableCors("ContactForm")]
