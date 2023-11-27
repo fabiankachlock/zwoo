@@ -1,5 +1,4 @@
 using Quartz;
-using Zwoo.Backend;
 using Zwoo.Backend.Websockets;
 using Zwoo.Backend.Games;
 using Zwoo.Backend.Services;
@@ -8,6 +7,7 @@ using Zwoo.Backend.Shared.Services;
 using Zwoo.Backend.Shared.Api;
 using Zwoo.Backend.Shared.Configuration;
 using Zwoo.Backend.Shared.Authentication;
+using Zwoo.Backend.Shared.Api.Discover;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,26 +45,12 @@ builder.Services.AddTransient<DatabaseCleanupJob>();
 
 var app = builder.Build();
 
+app.UseZwooHttpLogging();
 app.UseZwooCors();
 app.UseZwooAuthentication();
 
-// http logging
-app.Use(async (context, next) =>
-{
-    if (context.Request.Method != "OPTIONS")
-    {
-        Globals.HttpLogger.Info($"[{context.Request.Method}] {context.Request.Path}");
-    }
-    await next.Invoke();
-    if (context.Response.StatusCode >= 300)
-    {
-        Globals.HttpLogger.Info($"sending error response: {context.Response.StatusCode} ([{context.Request.Method}] {context.Request.Path})");
-    }
-});
-
 if (app.Environment.IsDevelopment())
 {
-    Globals.Logger.Debug("adding swagger");
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
@@ -75,13 +61,11 @@ var webSocketOptions = new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
-webSocketOptions.AllowedOrigins.Add(Globals.Cors);
+webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 
-app.UseCors("Zwoo");
 app.UseWebSockets(webSocketOptions);
-app.UseAuthentication();
-app.UseAuthorization();
 app.MapControllers();
+app.UseDiscover();
 
 app.Run();
 

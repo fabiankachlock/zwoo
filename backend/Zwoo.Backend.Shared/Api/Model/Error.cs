@@ -24,6 +24,7 @@ public enum ApiError
     EmailTaken = 120,
     UsernameTaken = 121,
     VerifyFailed = 122,
+    AlreadyVerified = 123,
 
     CantDeleteUser = 135,
 
@@ -65,5 +66,35 @@ public static class ErrorCodeExtensions
             ErrorCode.SessionExpired => ApiError.SessionIdMismatch,
             _ => ApiError.BackendError
         };
+    }
+
+    public static IActionResult BadRequest(this ControllerBase controller, ApiError code, string title, string detail)
+    {
+        return controller.BadRequest(code.ToProblem(new ProblemDetails()
+        {
+            Title = title,
+            Detail = detail,
+            Instance = controller.HttpContext.Request.Path
+        }));
+    }
+
+    public static IActionResult NotFound(this ControllerBase controller, ApiError code, string title, string detail)
+    {
+        return controller.NotFound(code.ToProblem(new ProblemDetails()
+        {
+            Title = title,
+            Detail = detail,
+            Instance = controller.HttpContext.Request.Path
+        }));
+    }
+
+    public static IActionResult Unauthorized(this ControllerBase controller, ApiError code, string title, string detail)
+    {
+        return controller.Unauthorized(code.ToProblem(new ProblemDetails()
+        {
+            Title = title,
+            Detail = detail,
+            Instance = controller.HttpContext.Request.Path
+        }));
     }
 }

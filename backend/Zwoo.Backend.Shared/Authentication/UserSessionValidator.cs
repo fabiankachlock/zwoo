@@ -41,10 +41,12 @@ public class ZwooCookieAuthenticationEvents : CookieAuthenticationEvents
     {
         // disable default redirect to login behavior
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        // TODO: send full details response
         await context.Response.WriteAsJsonAsync(new ProblemDetails()
         {
-            Detail = "You need to be logged in"
+            Title = "Access unauthorized",
+            Detail = "You need to be logged in",
+            Status = StatusCodes.Status401Unauthorized,
+            Instance = context.Request.Path
         });
     }
 }

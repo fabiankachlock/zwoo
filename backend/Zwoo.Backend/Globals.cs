@@ -88,7 +88,7 @@ public static class Globals
 
         hierarchy.Configured = true;
 
-        Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
+        // Mongo.Migration.DocumentVersionSerializer.DefaultVersion = Globals.Version;
     }
 
     public static readonly ILog Logger = LogManager.GetLogger("Global");
