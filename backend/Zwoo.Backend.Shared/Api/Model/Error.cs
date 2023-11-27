@@ -9,6 +9,7 @@ public enum ApiError
 
     BackendError = 100,
     InvalidCaptcha = 101,
+    InvalidClient = 101,
 
     UnverifiedUser = 110,
     MissingCookie = 111,

@@ -14,7 +14,12 @@ public static class DiscoverEndpoint
         {
             if (_service.CanConnect(client))
             {
-                return Results.BadRequest(ApiError.None.ToProblem(new ProblemDetails()));
+                return Results.BadRequest(ApiError.InvalidClient.ToProblem(new ProblemDetails()
+                {
+                    Title = "Cant discover this server",
+                    Detail = "The versions of this client are incompatible with this server",
+                    Instance = "/discover"
+                }));
             }
             return Results.Ok();
         });
