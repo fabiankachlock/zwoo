@@ -8,6 +8,7 @@ using Zwoo.Backend.Shared.Api;
 using Zwoo.Backend.Shared.Configuration;
 using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Api.Discover;
+using Zwoo.Backend.Shared.Api.Contact;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,7 @@ webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 app.UseWebSockets(webSocketOptions);
 app.MapControllers();
 app.UseDiscover();
+app.UseContactRequests();
 
 app.Run();
 

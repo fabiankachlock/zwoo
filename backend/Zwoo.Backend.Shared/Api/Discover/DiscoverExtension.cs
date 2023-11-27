@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Zwoo.Backend.Shared.Api.Model;
 
 namespace Zwoo.Backend.Shared.Api.Discover;
 
