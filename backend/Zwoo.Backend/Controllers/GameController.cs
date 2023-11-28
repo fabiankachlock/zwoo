@@ -110,44 +110,4 @@ public class GameController : Controller
 
         return BadRequest(ErrorCodes.GetResponse(ErrorCodes.Errors.INVALID_OPCODE, "invalid opcode"));
     }
-
-    [HttpGet("games")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GamesListResponse))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    public IActionResult ListGames()
-    {
-        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
-        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
-        {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
-        }
-
-        IEnumerable<ZwooRoom> games = _gamesService.ListAll();
-        GamesListResponse response = new GamesListResponse(games.Select(game => new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount())).ToArray());
-        return Ok(response);
-    }
-
-    [HttpGet("games/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GameMetaResponse))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDTO))]
-    public IActionResult GetGames(long id)
-    {
-        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
-        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
-        {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
-        }
-
-        ZwooRoom? game = _gamesService.GetGame(id);
-        if (game == null)
-        {
-            return NotFound(ErrorCodes.GetResponse(ErrorCodes.Errors.GAME_NOT_FOUND, "game Not found"));
-        }
-
-        GameMetaResponse response = new GameMetaResponse(game.Game.Id, game.Game.Name, game.Game.IsPublic, game.Lobby.PlayerCount());
-        return Ok(response);
-    }
 }

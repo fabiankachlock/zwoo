@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Zwoo.Database;
+using Zwoo.GameEngine.Lobby;
 
 namespace Zwoo.Backend.Shared.Api.Model;
 
@@ -34,7 +35,6 @@ public enum ApiError
     CantJoinGame = 142,
     NoOpCode = 143,
     OpCodeMissing = 144,
-    InvalidGameId = 145,
     AlreadyInGame = 146,
     GameIsFull = 147,
 }
@@ -65,6 +65,19 @@ public static class ErrorCodeExtensions
             ErrorCode.UserNotFound => ApiError.UserNotFound,
             ErrorCode.WrongPassword => ApiError.PasswordMismatch,
             ErrorCode.SessionExpired => ApiError.SessionIdMismatch,
+            _ => ApiError.BackendError
+        };
+    }
+
+    public static ApiError ToApi(this LobbyResult code)
+    {
+        return code switch
+        {
+            LobbyResult.ErrorLobbyFull => ApiError.GameIsFull,
+            LobbyResult.ErrorInvalidPlayer => ApiError.UserNotFound,
+            LobbyResult.ErrorWrongPassword => ApiError.PasswordMismatch,
+            LobbyResult.ErrorAlreadyInGame => ApiError.AlreadyInGame,
+            LobbyResult.ErrorAlreadyInitialized => ApiError.CantJoinGame,
             _ => ApiError.BackendError
         };
     }
