@@ -30,32 +30,6 @@ public class GameController : Controller
         _userService = userService;
     }
 
-    [HttpGet("leaderboard")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LeaderBoard))]
-    public IActionResult GetLeaderBoard()
-    {
-        return Ok(_gameInfo.GetLeaderBoard().ToDTO());
-    }
-
-    [HttpGet("leaderboard/position")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LeaderBoardPosition))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorDTO))]
-    public IActionResult GetLeaderBoardPosition()
-    {
-        var cookie = CookieHelper.ParseCookie(HttpContext.User.FindFirst("auth")?.Value ?? "");
-        var activeSession = _userService.IsUserLoggedIn(cookie.UserId, cookie.SessionId);
-        if (activeSession.User == null || activeSession.SessionId == null || activeSession.Error != null)
-        {
-            return Unauthorized(ErrorCodes.GetResponse(ErrorCodes.FromDatabaseError(activeSession.Error), "user not logged in"));
-        }
-
-        return Ok(new LeaderBoardPosition()
-        {
-            Position = _gameInfo.GetPosition(activeSession.User)
-        });
-    }
-
-
     [HttpPost("join")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JoinGameResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
