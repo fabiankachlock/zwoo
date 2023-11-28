@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Controllers.DTO;
@@ -10,6 +11,7 @@ using static Zwoo.Backend.Globals;
 namespace Zwoo.Backend.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("changelog")]
 public class ChangelogController : Controller
 {

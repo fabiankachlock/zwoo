@@ -1,10 +1,9 @@
 using BackendHelper;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Zwoo.Backend.Controllers.DTO;
-using Zwoo.Backend.Services;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Configuration;
@@ -34,6 +33,7 @@ public class AccountController : Controller
         _isBeta = options.Value.Features.IsBeta;
     }
 
+    [AllowAnonymous]
     [HttpPost("create")]
     public async Task<IActionResult> CreateAccount([FromBody] CreateAccount body)
     {
@@ -95,6 +95,7 @@ public class AccountController : Controller
         return this.Unauthorized(ApiError.PasswordMismatch, "Cant delete account", "The passwords did not match.");
     }
 
+    [AllowAnonymous]
     [HttpGet("verify")]
     public IActionResult VerifyAccount([FromQuery(Name = "id")] ulong id, [FromQuery(Name = "code")] string code)
     {
@@ -105,6 +106,7 @@ public class AccountController : Controller
         return this.BadRequest(ApiError.VerifyFailed, "Cant verify account", "The account could not be verified.");
     }
 
+    [AllowAnonymous]
     [HttpPost("verify/resend")]
     public IActionResult ResendVerificationEmail([FromBody] VerifyEmail body)
     {
@@ -159,6 +161,7 @@ public class AccountController : Controller
         return Ok();
     }
 
+    [AllowAnonymous]
     [HttpPost("password/request-reset")]
     public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPassword body)
     {
@@ -179,6 +182,7 @@ public class AccountController : Controller
         return Ok();
     }
 
+    [AllowAnonymous]
     [HttpPost("password/reset")]
     public IActionResult ResetPassword([FromBody] ResetPassword body)
     {

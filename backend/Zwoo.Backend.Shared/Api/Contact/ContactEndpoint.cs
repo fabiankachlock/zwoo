@@ -53,6 +53,6 @@ public class ContactEndpoint
                 _logger.LogWarning("skip sending contact email because captcha score is too low");
             }
             return Results.Ok();
-        });
+        }).AllowAnonymous();
     }
 }

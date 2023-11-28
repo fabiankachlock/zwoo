@@ -22,6 +22,6 @@ public static class DiscoverEndpoint
                 }));
             }
             return Results.Ok();
-        });
+        }).AllowAnonymous();
     }
 }
