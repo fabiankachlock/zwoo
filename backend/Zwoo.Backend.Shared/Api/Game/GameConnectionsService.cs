@@ -36,6 +36,16 @@ public interface IGameConnectionsService
     public int ConnectionsCount(long gameId);
 
     /// <summary>
+    /// handle a websocket connect
+    /// </summary>
+    /// <param name="gameId">the associated games id</param>
+    /// <param name="userId">the associated users id</param>
+    /// <param name="ws">the websocket object</param>
+    /// <param name="token">the connection cancellation token</param>
+    /// <param name="source">a task completion source waiting until the connection is closed</param>
+    public void Handle(long gameId, long userId, WebSocket ws, CancellationToken token, TaskCompletionSource source);
+
+    /// <summary>
     /// send a message to an individual player
     /// </summary>
     /// <param name="playerId">the players id</param>

@@ -1,3 +1,4 @@
+using System.Net.WebSockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -141,6 +142,89 @@ public class GameEndpoints
                 OwnId = lobbyEntry?.LobbyId ?? 0,
                 Role = lobbyEntry?.Role ?? ZRPRole.Player
             });
+        });
+
+        app.MapGet("/game/{id}/connect", async ([FromRoute] long id,
+            HttpContext context,
+            IGameConnectionsService _connections,
+            IGameEngineService _games,
+            ILogger<GameEndpoints> _logger) =>
+        {
+            if (!context.WebSockets.IsWebSocketRequest)
+            {
+                return Results.BadRequest(new ProblemDetails()
+                {
+                    Title = "Needs websocket request",
+                    Detail = "This endpoint needs to be access via a websocket connection.",
+                    Instance = context.Request.Path
+                });
+            }
+
+
+            var activeSession = context.GetActiveUser();
+            var game = _games.GetGame(id);
+            if (game == null)
+            {
+                return Results.NotFound(ApiError.GameNotFound.ToProblem(new ProblemDetails()
+                {
+                    Title = "Game not found",
+                    Detail = "A game with this id cannot be found",
+                    Instance = context.Request.Path
+                }));
+            }
+
+            LobbyResult result = game.Lobby.IsPlayerAllowedToConnect((long)activeSession.User.Id);
+            if (result != LobbyResult.Success)
+            {
+                return Results.BadRequest(result.ToApi().ToProblem(new ProblemDetails()
+                {
+                    Title = "Cant connect to game",
+                    Detail = "The request to connect was rejected by the lobby.",
+                    Instance = context.Request.Path
+                }));
+            }
+
+            _logger.LogInformation($"[{activeSession.User.Id}] accepting websocket");
+            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            CancellationTokenSource shouldStop = new CancellationTokenSource();
+            TaskCompletionSource finished = new TaskCompletionSource();
+
+            _logger.LogInformation($"[{activeSession.User.Id}] adding connection");
+            bool success = _connections.AddConnection(id, (long)activeSession.User.Id, webSocket, shouldStop);
+            if (!success)
+            {
+                _logger.LogError($"[{activeSession.User.Id}] cant add connection");
+                throw new Exception("cant connect user");
+            }
+
+            _logger.LogInformation($"[{activeSession.User.Id}] notify playermanager");
+            await game.PlayerManager.ConnectPlayer((long)activeSession.User.Id);
+
+            _logger.LogInformation($"[{activeSession.User.Id}] handle");
+            try
+            {
+                _connections.Handle(id, (long)activeSession.User.Id, webSocket, shouldStop.Token, finished);
+            }
+            catch (TaskCanceledException)
+            {
+                _logger.LogInformation($"[{activeSession.User.Id}] task cancelled");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"[{activeSession.User.Id}] an error happened while handling a socket", ex);
+            }
+            await finished.Task;
+
+            _logger.LogInformation($"[{activeSession.User.Id}] remove connection");
+            success = _connections.RemoveConnection(id, (long)activeSession.User.Id);
+            if (!success)
+            {
+                _logger.LogError($"[{activeSession.User.Id}] cant remove connection");
+            }
+
+            _logger.LogInformation($"[{activeSession.User.Id}] disconnect");
+            await game.PlayerManager.DisconnectPlayer((long)activeSession.User.Id);
+            return Results.Empty;
         });
     }
 }
