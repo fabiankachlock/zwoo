@@ -91,7 +91,7 @@
     "rollup-plugin-visualizer": "^5.8.3",
     "tailwindcss": "^3",
     "ts-jest": "^27.0.4",
-    "typescript": "^5.1.6",
+    "typescript": "^5.3.2",
     "vite": "^4.5.0",
     "vite-plugin-pwa": "^0.16.4",
     "vue-jest": "^5.0.0-0",
