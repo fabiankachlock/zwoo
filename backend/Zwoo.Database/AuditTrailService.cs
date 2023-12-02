@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 using Zwoo.Database.Dao;
-using log4net;
+using Microsoft.Extensions.Logging;
 
 namespace Zwoo.Database;
 
@@ -46,19 +46,19 @@ public interface IAuditTrailService
 public class AuditTrailService : IAuditTrailService
 {
     private readonly IDatabase _db;
-    private readonly ILog _logger;
+    private readonly ILogger<AuditTrailService> _logger;
 
-    public AuditTrailService(IDatabase db, ILog? logger = null)
+    public AuditTrailService(IDatabase db, ILogger<AuditTrailService> logger)
     {
         _db = db;
-        _logger = LogManager.GetLogger("AuditTrailService");
+        _logger = logger;
     }
 
     private void ensureDao(string id)
     {
         if (_db.AuditTrails.AsQueryable().FirstOrDefault(dao => dao.Id == id) == null)
         {
-            _logger.Info($"creating audit trail for {id}");
+            _logger.LogInformation($"creating audit trail for {id}");
             _db.AuditTrails.InsertOne(new AuditTrailDao()
             {
                 Id = id,
@@ -70,7 +70,7 @@ public class AuditTrailService : IAuditTrailService
     public void Protocol(string id, string actor, string message, object newValue, object? oldValue)
     {
         ensureDao(id);
-        _logger.Debug($"creating audit trail event for {id}");
+        _logger.LogDebug($"creating audit trail event for {id}");
         var newEvent = new AuditEventDao(actor, message, DateTimeOffset.Now.ToUnixTimeMilliseconds(), newValue, oldValue);
         _db.AuditTrails.UpdateOne(trail => trail.Id == id, Builders<AuditTrailDao>.Update.Push(trail => trail.Events, newEvent));
     }
@@ -78,7 +78,7 @@ public class AuditTrailService : IAuditTrailService
     public void Protocol(string id, AuditEventDao data)
     {
         ensureDao(id);
-        _logger.Debug($"creating audit trail event for {id}");
+        _logger.LogDebug($"creating audit trail event for {id}");
         _db.AuditTrails.UpdateOne(trail => trail.Id == id, Builders<AuditTrailDao>.Update.Push(trail => trail.Events, data));
     }
 
