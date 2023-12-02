@@ -1,6 +1,6 @@
 using Zwoo.GameEngine.ZRP;
 
-namespace Zwoo.Backend.ZRP;
+namespace Zwoo.Backend.Shared.Api.Game.Adapter;
 
 public struct ZRPMessage : IIncomingZRPMessage
 {

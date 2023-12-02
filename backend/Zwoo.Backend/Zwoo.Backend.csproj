@@ -11,11 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="log4net.config" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
     <PackageReference Include="LogRushClient" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="MongoDB.Driver" Version="2.19.0" />

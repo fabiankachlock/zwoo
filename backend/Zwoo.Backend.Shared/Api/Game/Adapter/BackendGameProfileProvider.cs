@@ -3,7 +3,7 @@ using Zwoo.Database.Dao;
 using Zwoo.GameEngine.Game.State;
 using Zwoo.GameEngine.Lobby.Features;
 
-namespace Zwoo.Backend.Games;
+namespace Zwoo.Backend.Shared.Api.Game;
 
 public class BackendGameProfile : IExternalGameProfile
 {

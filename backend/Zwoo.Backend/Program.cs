@@ -1,14 +1,12 @@
 using Quartz;
-using Zwoo.Backend.Websockets;
-using Zwoo.Backend.Games;
 using Zwoo.Backend.Services;
-using Zwoo.GameEngine.Lobby.Features;
 using Zwoo.Backend.Shared.Services;
 using Zwoo.Backend.Shared.Api;
 using Zwoo.Backend.Shared.Configuration;
 using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Contact;
+using Zwoo.Backend.Shared.Api.Game;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +28,7 @@ builder.Services.AddZwooDatabase(conf, new ZwooDatabaseOptions()
 
 // backend services
 builder.Services.AddZwooServices();
-builder.Services.AddSingleton<IExternalGameProfileProvider, BackendGameProfileProvider>();
-builder.Services.AddSingleton<IGameEngineService, GameEngineService>();
-builder.Services.AddSingleton<IWebSocketManager, Zwoo.Backend.Websockets.WebSocketManager>();
-builder.Services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
+builder.Services.AddGameServices();
 
 // scheduler
 builder.Services.AddZwooScheduler(q =>
@@ -68,6 +63,7 @@ app.UseWebSockets(webSocketOptions);
 app.MapControllers();
 app.UseDiscover();
 app.UseContactRequests();
+app.UseGame();
 
 app.Run();
 

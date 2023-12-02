@@ -71,6 +71,7 @@ public static class LoggingExtensions
                 log += $" ({watch.ElapsedMilliseconds}ms)";
             }
 
+            if (log.Count() == 0) return;
             if (warning)
             {
                 logger.LogWarning(log);

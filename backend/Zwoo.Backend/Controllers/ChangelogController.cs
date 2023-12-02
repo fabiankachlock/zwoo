@@ -1,12 +1,7 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Zwoo.Backend.Controllers.DTO;
-using Zwoo.Backend.Services;
-using Zwoo.Backend.Shared.Services;
 using Zwoo.Database;
-using static Zwoo.Backend.Globals;
 
 namespace Zwoo.Backend.Controllers;
 
