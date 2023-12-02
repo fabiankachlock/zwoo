@@ -1,8 +1,7 @@
 import { AppConfig } from '@/config';
 import { Logger } from '@/core/services/logging/logImport';
 
-import { BackendErrorAble } from '../ApiError';
-import { AuthenticationStatus, NewUser, UserInfo, UserLogin } from '../entities/Authentication';
+import { AuthenticationStatus, UserInfo, UserLogin } from '../entities/Authentication';
 import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
@@ -95,121 +94,5 @@ export class AuthenticationService {
     return {
       isLoggedIn: false
     };
-  };
-
-  static performCreateAccount = async (data: NewUser, lng: string | null = null): Promise<AuthenticationStatus> => {
-    Logger.Api.log(`performing create account action of ${data.username} with ${data.email}`);
-
-    const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.CreateAccount, { lng: lng }), {
-      method: 'POST',
-      useBackend: AppConfig.UseBackend,
-      requestOptions: {
-        withCredentials: true
-      },
-      responseOptions: {
-        decodeJson: false
-      },
-      body: JSON.stringify({
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        code: data.beta,
-        acceptedTerms: data.acceptedTerms,
-        captchaToken: data.captchaToken
-      })
-    });
-
-    if (response.error) {
-      Logger.Api.warn('received erroneous response while creating an account');
-      return {
-        isLoggedIn: false,
-        error: response.error
-      };
-    }
-
-    return {
-      isLoggedIn: false // users can only log in, when the account is verified
-    };
-  };
-
-  static performDeleteAccount = async (password: string): Promise<AuthenticationStatus> => {
-    Logger.Api.log('performing delete account action');
-
-    const response = await WrappedFetch(Backend.getUrl(Endpoint.DeleteAccount), {
-      method: 'POST',
-      useBackend: AppConfig.UseBackend,
-      requestOptions: {
-        withCredentials: true
-      },
-      responseOptions: {
-        decodeJson: false
-      },
-      body: JSON.stringify({
-        password: password
-      })
-    });
-
-    if (response.error) {
-      Logger.Api.warn('received erroneous response while deleting account');
-      return {
-        isLoggedIn: false,
-        error: response.error
-      };
-    }
-
-    return {
-      isLoggedIn: false
-    };
-  };
-
-  static verifyAccount = async (id: string, code: string): Promise<BackendErrorAble<boolean>> => {
-    Logger.Api.log(`verifying account ${id} with code ${code}`);
-
-    const response = await WrappedFetch(
-      Backend.getDynamicUrl(Endpoint.AccountVerify, {
-        code,
-        id
-      }),
-      {
-        useBackend: AppConfig.UseBackend,
-        method: 'GET',
-        responseOptions: {
-          decodeJson: false
-        }
-      }
-    );
-
-    if (response.error) {
-      Logger.Api.warn('cant verify account');
-      return {
-        error: response.error
-      };
-    }
-
-    return true;
-  };
-
-  static resendVerificationEmail = async (email: string, lng: string | null = null): Promise<BackendErrorAble<boolean>> => {
-    Logger.Api.log(`resending verification email of ${email}`);
-
-    const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.ResendVerificationEmail, { lng: lng }), {
-      method: 'POST',
-      useBackend: AppConfig.UseBackend,
-      responseOptions: {
-        decodeJson: false
-      },
-      body: JSON.stringify({
-        email: email
-      })
-    });
-
-    if (response.error) {
-      Logger.Api.warn('cant resend verification email');
-      return {
-        error: response.error
-      };
-    }
-
-    return true;
   };
 }

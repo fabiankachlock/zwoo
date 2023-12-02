@@ -8,15 +8,20 @@ import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class ConfigService {
-  static fetchVersion = async (): Promise<BackendErrorAble<string>> => {
+  static checkVersion = async (version: string, zrp: string): Promise<BackendErrorAble<boolean>> => {
     Logger.Api.log(`fetching version`);
 
-    const response = await WrappedFetch<string>(`${Backend.getUrl(Endpoint.Version)}?t=${Date.now()}`, {
+    const response = await WrappedFetch(`${Backend.getUrl(Endpoint.Discover)}?t=${Date.now()}`, {
       useBackend: AppConfig.UseBackend,
-      fallbackValue: AppConfig.Version,
+      fallbackValue: true,
+      method: 'POST',
       responseOptions: {
         decodeJson: false
-      }
+      },
+      body: JSON.stringify({
+        version: version,
+        zrpVersion: zrp
+      })
     });
 
     if (response.error) {
@@ -26,7 +31,7 @@ export class ConfigService {
       };
     }
 
-    return response.data!;
+    return true;
   };
 
   static fetchVersionHistory = async (): Promise<BackendErrorAble<string[]>> => {

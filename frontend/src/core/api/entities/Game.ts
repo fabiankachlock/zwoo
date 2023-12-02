@@ -3,7 +3,7 @@ import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import { BackendErrorAble } from '../ApiError';
 
 export type GameJoinResponse = BackendErrorAble<{
-  id: number;
+  gameId: number;
   isRunning: boolean;
   role: ZRPRole;
   ownId: number;
@@ -16,4 +16,6 @@ export type GameMeta = {
   playerCount: number;
 };
 
-export type GamesList = GameMeta[];
+export type GamesList = {
+  games: GameMeta[];
+};

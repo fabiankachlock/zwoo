@@ -11,7 +11,7 @@ import { RouterService } from '@/core/global/Router';
 import Logger from '@/core/services/logging/logImport';
 import { GameNameValidator } from '@/core/services/validator/gameName';
 
-import { GameMeta, GamesList } from '../api/entities/Game';
+import { GameMeta } from '../api/entities/Game';
 import { useGameEvents } from './game/events';
 import { useApi } from './helper/useApi';
 
@@ -25,7 +25,7 @@ const lastGameKey = 'zwoo:lg';
 
 export const useGameConfig = defineStore('game-config', {
   state: () => ({
-    allGames: [] as GamesList,
+    allGames: [] as GameMeta[],
     gameId: undefined as number | undefined,
     name: '',
     role: undefined as ZRPRole | undefined,
@@ -59,12 +59,12 @@ export const useGameConfig = defineStore('game-config', {
         this.$patch({
           inActiveGame: true,
           role: game.role,
-          gameId: game.id,
+          gameId: game.gameId,
           lobbyId: game.ownId,
           name: name
         });
         this.connect();
-        this._saveConfig({ id: game.id, role: game.role });
+        this._saveConfig({ id: game.gameId, role: game.role });
       }
     },
     async join(id: number, password: string, asPlayer: boolean, asSpectator: boolean) {
@@ -83,11 +83,11 @@ export const useGameConfig = defineStore('game-config', {
           inActiveGame: true,
           role: game.role,
           lobbyId: game.ownId,
-          gameId: game.id,
+          gameId: game.gameId,
           name: data?.name ?? 'error'
         });
         this.connect(game.isRunning);
-        this._saveConfig({ id: game.id, role: game.role });
+        this._saveConfig({ id: game.gameId, role: game.role });
       }
     },
     leave(keepSavedGame = false): void {
@@ -109,12 +109,12 @@ export const useGameConfig = defineStore('game-config', {
         RouterService.getRouter().replace('/available-games');
       }
     },
-    async listGames(): Promise<GamesList> {
+    async listGames(): Promise<GameMeta[]> {
       const response = await useApi().loadAvailableGames();
       const [games, error] = unwrapBackendError(response);
       if (!error) {
-        this.allGames = games;
-        return games;
+        this.allGames = games.games;
+        return games.games;
       }
       return [];
     },

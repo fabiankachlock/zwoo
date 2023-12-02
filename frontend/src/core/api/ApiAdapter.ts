@@ -86,8 +86,10 @@ export interface ApiAdapter {
 
   /**
    * Load the servers current version
+   * @param version the own application version
+   * @param zrp the running zrp version
    */
-  loadVersion(): Promise<BackendErrorAble<string>>;
+  checkVersion(version: string, zrp: string): Promise<BackendErrorAble<boolean>>;
 
   /**
    * Load the versions with available changelogs from the server

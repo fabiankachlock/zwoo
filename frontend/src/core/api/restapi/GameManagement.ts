@@ -37,7 +37,7 @@ export class GameManagementService {
     }
 
     return {
-      id: response.data?.guid ?? 0,
+      gameId: response.data?.guid ?? 0,
       ownId: response.data?.ownId ?? 0,
       isRunning: false,
       role: ZRPRole.Host
@@ -47,7 +47,7 @@ export class GameManagementService {
   static listAll = async (): Promise<BackendErrorAble<GamesList>> => {
     Logger.Api.log('fetching all games');
 
-    const response = await WrappedFetch<{ games: GamesList }>(Backend.getUrl(Endpoint.Games), {
+    const response = await WrappedFetch<GamesList>(Backend.getUrl(Endpoint.Games), {
       method: 'GET',
       useBackend: AppConfig.UseBackend,
       fallbackValue: {
@@ -72,7 +72,7 @@ export class GameManagementService {
       };
     }
 
-    return response.data?.games ?? [];
+    return response.data ?? { games: [] };
   };
 
   static getJoinMeta = async (gameId: number): Promise<BackendErrorAble<GameMeta>> => {
@@ -132,7 +132,7 @@ export class GameManagementService {
     }
 
     return {
-      id: response.data?.guid ?? 0,
+      gameId: response.data?.guid ?? 0,
       isRunning: response.data?.isRunning ?? false,
       role: response.data?.role ?? role,
       ownId: response.data?.ownId ?? 0

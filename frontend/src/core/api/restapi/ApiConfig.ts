@@ -20,27 +20,28 @@ type ExtractRouteParams<str extends string> = str extends ''
   : {};
 
 export enum Endpoint {
-  CreateAccount = 'auth/create',
-  AccountVerify = 'auth/verify?id=:id:&code=:code:',
+  Discover = 'discover',
   AccountLogin = 'auth/login',
   AccountLogout = 'auth/logout',
   UserInfo = 'auth/user',
-  DeleteAccount = 'auth/delete',
-  JoinGame = 'game/join',
-  Websocket = 'game/join/:id:',
-  LeaderBoard = 'game/leaderboard',
-  LeaderBoardPosition = 'game/leaderboard/position',
-  Games = 'game/games',
-  Game = 'game/games/:id:',
-  Version = 'version',
-  Changelog = 'changelog?version=:version:',
-  ChangePassword = 'account/changePassword',
-  RequestPasswordReset = 'account/requestPasswordReset',
-  ResetPassword = 'account/resetPassword',
-  ResendVerificationEmail = 'auth/resendVerificationEmail',
-  VersionHistory = 'versionHistory',
+  CreateAccount = 'account/create',
+  DeleteAccount = 'account/delete',
+  AccountVerify = 'account/verify?id=:id:&code=:code:',
+  ResendVerificationEmail = 'auth/verify/resend',
   UserSettings = 'account/settings',
-  ContactFormSubmission = 'contactForm'
+  ChangePassword = 'account/password/change',
+  RequestPasswordReset = 'account/password/request-reset',
+  ResetPassword = 'account/password/reset',
+  LeaderBoard = 'leaderboard',
+  LeaderBoardPosition = 'leaderboard/self',
+  Games = 'game/list?recommended=:recommended:&offset=:offset:&limit=:limit:&filter=:filter:&publicOnly=:public:',
+  CreateGame = 'game/create',
+  JoinGame = 'game/join',
+  Game = 'game/:id:',
+  Websocket = 'game/:id:/connect',
+  VersionHistory = 'changelog',
+  Changelog = 'changelog/:version:',
+  ContactFormSubmission = 'contact'
 }
 
 export class Backend {
