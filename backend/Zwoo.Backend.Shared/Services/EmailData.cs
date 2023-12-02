@@ -7,7 +7,7 @@ namespace Zwoo.Backend.Shared.Services;
 
 public class EmailData
 {
-    private static string _TemplatesPrefix = "Zwoo.Backend.Templates";
+    private static string _TemplatesPrefix = "Zwoo.Backend.Shared.Templates";
 
     private static string _readTemplate(string templateName)
     {

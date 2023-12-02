@@ -66,4 +66,3 @@ app.UseContactRequests();
 app.UseGame();
 
 app.Run();
-

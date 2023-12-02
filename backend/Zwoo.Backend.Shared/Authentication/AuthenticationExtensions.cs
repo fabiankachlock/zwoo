@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Zwoo.Backend.Shared.Configuration;
-using Zwoo.Database;
 
 namespace Zwoo.Backend.Shared.Authentication;
 
@@ -15,7 +13,7 @@ public static class AppExtensions
     /// <summary>
     /// add the default zwoo authentication mechanism to the api
     /// </summary>
-    /// <param name="builder">the web application builder</param>
+    /// <param name="services">a service collection</param>
     /// <param name="options">the current configuration</param>
     public static void AddZwooAuthentication(this IServiceCollection services, ZwooOptions options)
     {
