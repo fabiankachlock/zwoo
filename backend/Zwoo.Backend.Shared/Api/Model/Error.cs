@@ -52,7 +52,7 @@ public static class ErrorCodeExtensions
             Instance = problem.Instance,
             Extensions = problem.Extensions.Concat(new Dictionary<string, object?>() {
                 {"errorCode", (int)code},
-                {"errorCodeName", code},
+                {"errorCodeName", code.ToString()},
             }).ToDictionary()
         };
     }

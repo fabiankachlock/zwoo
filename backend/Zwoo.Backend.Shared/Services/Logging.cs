@@ -10,11 +10,16 @@ namespace Zwoo.Backend.Shared.Services;
 
 public class HttpLogger { }
 
+enum RollingInterval
+{
+    Day = 1
+}
+
 public static class LoggingExtensions
 {
-    public static void AddZwooLogging(this IServiceCollection services)
+    public static void AddZwooLogging(this WebApplicationBuilder builder)
     {
-        services.AddLogging(options =>
+        builder.Services.AddLogging(options =>
         {
             options.AddSimpleConsole(c =>
             {
@@ -22,12 +27,14 @@ public static class LoggingExtensions
                 c.UseUtcTimestamp = true;
                 c.TimestampFormat = "[yyyy-MM-ddTHH:mm:ss] ";
             });
+            options.AddFile(builder.Configuration.GetSection("Logging"));
         });
     }
 
     public static void UseZwooHttpLogging(this WebApplication app)
     {
         ILogger<HttpLogger> logger = app.Services.GetService<ILogger<HttpLogger>>()!;
+        logger.LogTrace("TEST");
         app.Use(async (context, next) =>
         {
             var watch = new Stopwatch();
