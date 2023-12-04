@@ -54,7 +54,7 @@ public class GameEndpoints
             IGameEngineService _games,
             ILogger<GameEndpoints> _logger) =>
         {
-            if (string.IsNullOrEmpty(body.Name) || body.Name.Count() < 3 || (body.IsPublic == false && string.IsNullOrEmpty(body.Password)))
+            if (string.IsNullOrEmpty(body.Name) || body.Name.Count() < 3 || (body.UsePassword && string.IsNullOrEmpty(body.Password)))
             {
                 return Results.BadRequest(ApiError.InvalidGameName.ToProblem(new ProblemDetails()
                 {
@@ -75,8 +75,8 @@ public class GameEndpoints
                 }));
             }
 
-            var game = _games.CreateGame(body.Name, body.IsPublic);
-            game.Lobby.Initialize((long)activeSession.User.Id, activeSession.Username, body.Password ?? "", !body.IsPublic);
+            var game = _games.CreateGame(body.Name, !body.UsePassword);
+            game.Lobby.Initialize((long)activeSession.User.Id, activeSession.Username, body.Password ?? "", !body.UsePassword);
             _logger.LogInformation($"{activeSession.User.Id} created game {game.Id}");
             var lobbyEntry = game.Lobby.GetPossiblyPreparedPlayerByUserId((long)activeSession.User.Id);
             return Results.Ok(new JoinedGame()
@@ -147,6 +147,7 @@ public class GameEndpoints
         app.MapGet("/game/{id}/connect", async ([FromRoute] long id,
             HttpContext context,
             IGameConnectionsService _connections,
+            IGameConnectionHandlerService _handler,
             IGameEngineService _games,
             ILogger<GameEndpoints> _logger) =>
         {
@@ -203,7 +204,7 @@ public class GameEndpoints
             _logger.LogInformation($"[{activeSession.User.Id}] handle");
             try
             {
-                _connections.Handle(id, (long)activeSession.User.Id, webSocket, shouldStop.Token, finished);
+                _handler.Handle(id, (long)activeSession.User.Id, webSocket, shouldStop.Token, finished);
             }
             catch (TaskCanceledException)
             {

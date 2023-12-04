@@ -12,6 +12,7 @@ public static partial class AppExtensions
     public static void AddGameServices(this IServiceCollection services)
     {
         services.AddSingleton<IGameConnectionsService, GameConnectionsService>();
+        services.AddSingleton<IGameConnectionHandlerService, GameConnectionHandlerService>();
         services.AddSingleton<IGameEngineService, GameEngineService>();
         services.AddSingleton<GameEngineService>();
         services.AddSingleton<IGameProviderService, GameProviderService>();

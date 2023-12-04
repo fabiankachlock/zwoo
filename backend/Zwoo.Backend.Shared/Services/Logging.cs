@@ -34,7 +34,6 @@ public static class LoggingExtensions
     public static void UseZwooHttpLogging(this WebApplication app)
     {
         ILogger<HttpLogger> logger = app.Services.GetService<ILogger<HttpLogger>>()!;
-        logger.LogTrace("TEST");
         app.Use(async (context, next) =>
         {
             var watch = new Stopwatch();
@@ -43,7 +42,7 @@ public static class LoggingExtensions
             if (context.Request.Method != "OPTIONS")
             {
                 watch.Start();
-                log += $"{context.TraceIdentifier} | {context.Connection.RemoteIpAddress} {context.Request.Protocol} {context.Request.Path}{context.Request.QueryString}";
+                log += $"{context.Connection.RemoteIpAddress} {context.Request.Protocol} {context.Request.Path}{context.Request.QueryString}";
             }
 
             try
