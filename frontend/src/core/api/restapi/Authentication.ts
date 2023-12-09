@@ -1,15 +1,16 @@
 import { AppConfig } from '@/config';
 import { Logger } from '@/core/services/logging/logImport';
 
-import { AuthenticationStatus, UserInfo, UserLogin } from '../entities/Authentication';
+import { FetchResponse } from '../ApiEntities';
+import { Login, UserSession } from '../entities/Authentication';
 import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class AuthenticationService {
-  static getUserInfo = async (): Promise<AuthenticationStatus> => {
+  static getUserInfo = async (): FetchResponse<UserSession> => {
     Logger.Api.log('fetching user auth status');
 
-    const response = await WrappedFetch<UserInfo>(Backend.getUrl(Endpoint.UserInfo), {
+    const response = await WrappedFetch<UserSession>(Backend.getUrl(Endpoint.UserInfo), {
       useBackend: AppConfig.UseBackend,
       method: 'GET',
       fallbackValue: {
@@ -22,25 +23,16 @@ export class AuthenticationService {
       }
     });
 
-    if (response.error || !response.data) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while fetching user auth status');
-      return {
-        isLoggedIn: false,
-        error: response.error
-      };
+      return response;
     }
 
-    const data = response.data;
-    return {
-      isLoggedIn: true,
-      username: data.username,
-      email: data.email,
-      wins: data.wins
-    };
+    return response;
   };
 
-  static performLogin = async (data: UserLogin): Promise<AuthenticationStatus> => {
-    Logger.Api.log(`logging in as ${data.login}`);
+  static performLogin = async (data: Login): FetchResponse<UserSession> => {
+    Logger.Api.log(`logging in as ${data.email}`);
 
     const response = await WrappedFetch(Backend.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
@@ -52,24 +44,21 @@ export class AuthenticationService {
         decodeJson: false
       },
       body: JSON.stringify({
-        email: data.login,
+        email: data.email,
         password: data.password,
         captchaToken: data.captchaToken
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while logging in');
-      return {
-        isLoggedIn: false,
-        error: response.error
-      };
+      return response;
     }
 
     return await AuthenticationService.getUserInfo();
   };
 
-  static performLogout = async (): Promise<AuthenticationStatus> => {
+  static performLogout = async (): FetchResponse<undefined> => {
     Logger.Api.log('performing logout action');
 
     const response = await WrappedFetch(Backend.getUrl(Endpoint.AccountLogout), {
@@ -83,16 +72,11 @@ export class AuthenticationService {
       }
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while logging out');
-      return {
-        isLoggedIn: false,
-        error: response.error
-      };
+      return response;
     }
 
-    return {
-      isLoggedIn: false
-    };
+    return response;
   };
 }

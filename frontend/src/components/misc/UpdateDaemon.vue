@@ -25,7 +25,7 @@ import ZwooIcon from '@/modules/zwoo-icons/ZwooIcon.vue';
 const app = useRootApp();
 const { t } = useI18n();
 
-const updateExists = computed(() => app.clientVersion !== app.serverVersion);
+const updateExists = computed(() => !app.serverVersionMatches);
 const isReady = computed(() => app.updateAvailable);
 
 const reload = () => {

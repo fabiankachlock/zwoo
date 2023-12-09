@@ -5,11 +5,10 @@ import { FetchResponse } from '../ApiEntities';
 
 import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
-import { BackendErrorAble } from '../ApiError';
-import { AuthenticationStatus, NewUser } from '../entities/Authentication';
+import { CreateAccount, UserSettings } from '../entities/Authentication';
 
 export class AccountService {
-  static performChangePassword = async (oldPassword: string, newPassword: string): Promise<FetchResponse<undefined>> => {
+  static performChangePassword = async (oldPassword: string, newPassword: string): FetchResponse<undefined> => {
     Logger.Api.log('performing change password action');
 
     const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.ChangePassword), {
@@ -27,14 +26,14 @@ export class AccountService {
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while changing password');
     }
 
     return response;
   };
 
-  static requestPasswordReset = async (email: string, captchaToken: string, lng: string | null = null): Promise<FetchResponse<undefined>> => {
+  static requestPasswordReset = async (email: string, captchaToken: string, lng: string | null = null): FetchResponse<undefined> => {
     Logger.Api.log('performing request password reset action');
 
     const response = await WrappedFetch<undefined>(Backend.getUrlWithQuery(Endpoint.RequestPasswordReset, { lng: lng }), {
@@ -52,14 +51,14 @@ export class AccountService {
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while requesting password reset');
     }
 
     return response;
   };
 
-  static performResetPassword = async (code: string, password: string, captchaToken: string): Promise<FetchResponse<undefined>> => {
+  static performResetPassword = async (code: string, password: string, captchaToken: string): FetchResponse<undefined> => {
     Logger.Api.log('performing reset password action');
 
     const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.ResetPassword), {
@@ -78,17 +77,17 @@ export class AccountService {
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while resetting password');
     }
 
     return response;
   };
 
-  static loadSettings = async (): Promise<string | undefined> => {
+  static loadSettings = async (): FetchResponse<UserSettings> => {
     Logger.Api.log('loading user settings');
 
-    const response = await WrappedFetch<{ settings: string }>(Backend.getUrl(Endpoint.UserSettings), {
+    const response = await WrappedFetch<UserSettings>(Backend.getUrl(Endpoint.UserSettings), {
       method: 'GET',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -96,14 +95,14 @@ export class AccountService {
       }
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while loading settings');
-      return undefined;
     }
-    return response.data?.settings;
+
+    return response;
   };
 
-  static storeSettings = async (settings: string): Promise<FetchResponse<undefined>> => {
+  static storeSettings = async (settings: string): FetchResponse<undefined> => {
     Logger.Api.log('storing user settings');
 
     const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.UserSettings), {
@@ -118,14 +117,14 @@ export class AccountService {
       body: JSON.stringify({ settings: settings })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while loading settings');
     }
 
     return response;
   };
 
-  static performCreateAccount = async (data: NewUser, lng: string | null = null): Promise<AuthenticationStatus> => {
+  static performCreateAccount = async (data: CreateAccount, lng: string | null = null): FetchResponse<undefined> => {
     Logger.Api.log(`performing create account action of ${data.username} with ${data.email}`);
 
     const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.CreateAccount, { lng: lng }), {
@@ -141,26 +140,21 @@ export class AccountService {
         username: data.username,
         email: data.email,
         password: data.password,
-        code: data.beta,
+        code: data.code,
         acceptedTerms: data.acceptedTerms,
         captchaToken: data.captchaToken
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while creating an account');
-      return {
-        isLoggedIn: false,
-        error: response.error
-      };
+      return response;
     }
 
-    return {
-      isLoggedIn: false // users can only log in, when the account is verified
-    };
+    return response;
   };
 
-  static performDeleteAccount = async (password: string): Promise<AuthenticationStatus> => {
+  static performDeleteAccount = async (password: string): FetchResponse<undefined> => {
     Logger.Api.log('performing delete account action');
 
     const response = await WrappedFetch(Backend.getUrl(Endpoint.DeleteAccount), {
@@ -177,20 +171,15 @@ export class AccountService {
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while deleting account');
-      return {
-        isLoggedIn: false,
-        error: response.error
-      };
+      return response;
     }
 
-    return {
-      isLoggedIn: false
-    };
+    return response;
   };
 
-  static verifyAccount = async (id: string, code: string): Promise<BackendErrorAble<boolean>> => {
+  static verifyAccount = async (id: string, code: string): FetchResponse<undefined> => {
     Logger.Api.log(`verifying account ${id} with code ${code}`);
 
     const response = await WrappedFetch(
@@ -207,17 +196,15 @@ export class AccountService {
       }
     );
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('cant verify account');
-      return {
-        error: response.error
-      };
+      return response;
     }
 
-    return true;
+    return response;
   };
 
-  static resendVerificationEmail = async (email: string, lng: string | null = null): Promise<BackendErrorAble<boolean>> => {
+  static resendVerificationEmail = async (email: string, lng: string | null = null): FetchResponse<undefined> => {
     Logger.Api.log(`resending verification email of ${email}`);
 
     const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.ResendVerificationEmail, { lng: lng }), {
@@ -231,13 +218,11 @@ export class AccountService {
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('cant resend verification email');
-      return {
-        error: response.error
-      };
+      return response;
     }
 
-    return true;
+    return response;
   };
 }

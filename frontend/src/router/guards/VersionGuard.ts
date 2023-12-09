@@ -25,15 +25,13 @@ export class VersionGuard implements RouterInterceptor {
     }
 
     const app = useRootApp();
-    let version: string;
-
-    if (typeof app.serverVersion !== 'string') {
-      version = await app.serverVersion.promise;
+    if (typeof app.serverVersionMatches !== 'boolean') {
+      this.versionMatches = await app.serverVersionMatches.promise;
     } else {
-      version = app.serverVersion;
+      this.versionMatches = app.serverVersionMatches;
     }
-    this.Logger.debug(`version lock initialized; client: ${app.clientVersion}, server: ${version}`);
-    this.versionMatches = app.versionInfo.version === version || app.versionInfo.override === version;
+
+    this.Logger.debug(`version lock initialized; client: ${app.clientVersion}, server: ${this.versionMatches ? 'compatible' : 'incompatible'}`);
     this.Logger.debug(`version match: ${this.versionMatches}`);
     return this.beforeEach(to, _from, next);
   };

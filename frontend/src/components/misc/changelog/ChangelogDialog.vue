@@ -22,7 +22,6 @@ import { onMounted, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useApi } from '@/core/adapter/helper/useApi';
-import { unwrapBackendError } from '@/core/api/ApiError';
 
 import FloatingDialog from '../FloatingDialog.vue';
 import Changelog from './Changelog.vue';
@@ -51,12 +50,11 @@ watch(version, newVersion => {
 const loadVersion = async (version: string) => {
   try {
     const result = await loadChangelog(version);
-    const [changelogHtml, error] = unwrapBackendError(result);
 
-    if (error) {
+    if (result.isError) {
       changelog.value = undefined;
     } else {
-      changelog.value = changelogHtml;
+      changelog.value = result.data;
     }
   } catch {
     changelog.value = undefined;

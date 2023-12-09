@@ -14,10 +14,15 @@ export const WasmApi: ApiAdapter & GameAdapter = {
     await instance.GameManager.CreateGame(name, isPublic);
     await instance.GameManager.AddPlayer(I18nInstance.t('offline.playerName'));
     return {
-      gameId: 1,
-      isRunning: false,
-      role: ZRPRole.Host,
-      ownId: 1
+      isFallback: false,
+      isError: false,
+      wasSuccessful: true,
+      data: {
+        gameId: 1,
+        isRunning: false,
+        role: ZRPRole.Host,
+        ownId: 1
+      }
     };
   },
   createConnection() {

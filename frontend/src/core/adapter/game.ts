@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 import { useGameEventDispatch } from '@/core/adapter/game/util/useGameEventDispatch';
 import { useWakeLock } from '@/core/adapter/helper/useWakeLock';
-import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { getBackendErrorTranslation } from '@/core/api/ApiError';
 import { ZRPMessageBuilder } from '@/core/domain/zrp/zrpBuilder';
 import { ZRPCoder } from '@/core/domain/zrp/zrpCoding';
 import { ZRPWebsocketAdapter } from '@/core/domain/zrp/ZRPMessageDistributer';
@@ -52,19 +52,18 @@ export const useGameConfig = defineStore('game-config', {
       if (!nameValid.isValid) throw nameValid.getErrors();
 
       const status = await useApi().createGame(name, isPublic, isPublic ? '' : password);
-      const [game, error] = unwrapBackendError(status);
-      if (error) {
-        throw getBackendErrorTranslation(error);
-      } else if (game) {
+      if (status.isError) {
+        throw getBackendErrorTranslation(status.error);
+      } else {
         this.$patch({
           inActiveGame: true,
-          role: game.role,
-          gameId: game.gameId,
-          lobbyId: game.ownId,
+          role: status.data.role,
+          gameId: status.data.gameId,
+          lobbyId: status.data.ownId,
           name: name
         });
         this.connect();
-        this._saveConfig({ id: game.gameId, role: game.role });
+        this._saveConfig({ id: status.data.gameId, role: status.data.role });
       }
     },
     async join(id: number, password: string, asPlayer: boolean, asSpectator: boolean) {
@@ -75,19 +74,18 @@ export const useGameConfig = defineStore('game-config', {
       const data = await this.getGameMeta(id);
 
       const status = await useApi().joinGame(id, asPlayer ? ZRPRole.Player : ZRPRole.Spectator, password);
-      const [game, error] = unwrapBackendError(status);
-      if (error) {
-        throw getBackendErrorTranslation(error);
-      } else if (game) {
+      if (status.isError) {
+        throw getBackendErrorTranslation(status.error);
+      } else {
         this.$patch({
           inActiveGame: true,
-          role: game.role,
-          lobbyId: game.ownId,
-          gameId: game.gameId,
+          role: status.data.role,
+          lobbyId: status.data.ownId,
+          gameId: status.data.gameId,
           name: data?.name ?? 'error'
         });
-        this.connect(game.isRunning);
-        this._saveConfig({ id: game.gameId, role: game.role });
+        this.connect(status.data.isRunning);
+        this._saveConfig({ id: status.data.gameId, role: status.data.role });
       }
     },
     leave(keepSavedGame = false): void {
@@ -111,10 +109,9 @@ export const useGameConfig = defineStore('game-config', {
     },
     async listGames(): Promise<GameMeta[]> {
       const response = await useApi().loadAvailableGames();
-      const [games, error] = unwrapBackendError(response);
-      if (!error) {
-        this.allGames = games.games;
-        return games.games;
+      if (response.wasSuccessful) {
+        this.allGames = response.data.games;
+        return response.data.games;
       }
       return [];
     },
@@ -125,7 +122,7 @@ export const useGameConfig = defineStore('game-config', {
       }
 
       const response = await useApi().loadGameMeta(id);
-      return unwrapBackendError(response)[0];
+      return response.wasSuccessful ? response.data : undefined;
     },
     async _initGameModules(): Promise<void> {
       if (!initializedGameModules) {

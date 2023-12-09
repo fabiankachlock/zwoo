@@ -59,7 +59,6 @@ import { useI18n } from 'vue-i18n';
 import Changelog from '@/components/misc/changelog/Changelog.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { unwrapBackendError } from '@/core/api/ApiError';
 
 const { t } = useI18n();
 const { loadVersionHistory, loadChangelog } = useApi();
@@ -69,9 +68,8 @@ const openVersions = ref<Record<string, boolean>>({});
 
 onMounted(async () => {
   const res = await loadVersionHistory();
-  const [data, error] = unwrapBackendError(res);
-  if (!error && data) {
-    versions.value = data;
+  if (res.wasSuccessful) {
+    versions.value = res.data.versions;
   }
 });
 
@@ -87,9 +85,8 @@ const loadChangelogOfVersion = async (version: string) => {
     return;
   }
   const changelogResponse = await loadChangelog(version);
-  const [changelog] = unwrapBackendError(changelogResponse);
-  if (changelog) {
-    versionChangelogs.value[version] = changelog;
+  if (changelogResponse.wasSuccessful) {
+    versionChangelogs.value[version] = changelogResponse.data;
   }
 };
 </script>

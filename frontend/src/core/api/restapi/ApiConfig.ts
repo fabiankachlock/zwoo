@@ -27,7 +27,7 @@ export enum Endpoint {
   CreateAccount = 'account/create',
   DeleteAccount = 'account/delete',
   AccountVerify = 'account/verify?id=:id:&code=:code:',
-  ResendVerificationEmail = 'auth/verify/resend',
+  ResendVerificationEmail = 'account/verify/resend',
   UserSettings = 'account/settings',
   ChangePassword = 'account/password/change',
   RequestPasswordReset = 'account/password/request-reset',

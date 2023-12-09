@@ -59,10 +59,10 @@ export const useRuntimeConfig = defineStore('runtime-config', {
           decodeJson: false
         }
       });
-      if (config.data) {
+      if (config.wasSuccessful) {
         this._loadConfig(config.data);
         localStorage.setItem(configKey, config.data);
-      } else if (config.error) {
+      } else {
         const storedConfig = localStorage.getItem(configKey);
         if (storedConfig) {
           this._loadConfig(storedConfig);

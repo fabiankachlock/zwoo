@@ -1,6 +1,6 @@
 import { CacheTTL, useDebounce } from '@/core/adapter/helper/useDebounce';
 
-import { LeaderBoardPositionResponse, LeaderBoardResponse } from '../../api/entities/Leaderboard';
+import { Leaderboard } from '../../api/entities/Game';
 import { useApi } from '../helper/useApi';
 
 export type LeaderBoardEntry = {
@@ -12,11 +12,11 @@ export type LeaderBoardEntry = {
 const leaderBoardStore = {
   getLeaderBoard: useDebounce<LeaderBoardEntry[]>(async () => {
     const response = await useApi().loadLeaderBoard();
-    if ('error' in response) {
+    if (response.isError) {
       return [];
     }
-    const leaderboard = (response as LeaderBoardResponse).leaderboard;
-    const groups: Record<number, LeaderBoardResponse['leaderboard']> = {};
+    const leaderboard = response.data.leaderboard;
+    const groups: Record<number, Leaderboard['leaderboard']> = {};
 
     for (let i = 0; i < leaderboard.length; i++) {
       if (groups[leaderboard[i].wins]) {
@@ -42,10 +42,10 @@ const leaderBoardStore = {
 
   getOwnPosition: useDebounce<number>(async () => {
     const response = await useApi().loadOwnLeaderBoardPosition();
-    if ('error' in response) {
+    if (response.isError) {
       return -1;
     }
-    return (response as LeaderBoardPositionResponse).position;
+    return response.data.position;
   }, CacheTTL.minute * 5)
 };
 

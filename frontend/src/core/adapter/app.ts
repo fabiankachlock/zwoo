@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@/config';
-import { unwrapBackendError } from '@/core/api/ApiError';
 import { RouterService } from '@/core/global/Router';
 import { Awaiter } from '@/core/helper/Awaiter';
 
@@ -40,7 +39,7 @@ export const useRootApp = defineStore('app', {
       isLoading: true,
       environment: 'online' as AppEnv,
       // versions
-      serverVersion: new Awaiter() as string | Awaiter<string>,
+      serverVersionMatches: new Awaiter() as boolean | Awaiter<boolean>,
       clientVersion: AppConfig.VersionOverride || AppConfig.Version,
       // updates
       updateAvailable: false,
@@ -63,26 +62,25 @@ export const useRootApp = defineStore('app', {
   actions: {
     async configure() {
       const response = await this.api.checkVersion(AppConfig.Version, '');
-      const [ok, err] = unwrapBackendError(response);
-      if (err && AppConfig.UseBackend) {
+      if (response.isError && AppConfig.UseBackend) {
         // enable offline mode
         this.environment = 'offline';
         console.warn('### zwoo entered offline mode');
         useAuth().applyOfflineConfig();
         RouterService.getRouter().push(window.location.pathname);
-      } else if (!ok) {
+      } else {
         RouterService.getRouter().push('/invalid-version');
       }
 
-      if (typeof response === 'string') {
-        if (typeof this.serverVersion === 'string') {
-          this.serverVersion = response;
+      if (typeof response === 'boolean') {
+        if (typeof this.serverVersionMatches === 'boolean') {
+          this.serverVersionMatches = response;
         } else {
-          this.serverVersion.callback(response);
-          this.serverVersion = response;
+          this.serverVersionMatches.callback(response);
+          this.serverVersionMatches = response;
         }
       } else {
-        this.serverVersion = AppConfig.Version;
+        this.serverVersionMatches = true;
       }
 
       MigrationRunner.migrateTo(AppConfig.Version);

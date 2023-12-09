@@ -135,8 +135,8 @@ export const useConfig = defineStore('config', {
     async loadProfile() {
       Logger.info(`loading config for the current user`);
       const config = await useApi().loadUserSettings();
-      if (config) {
-        const parsedConfig = this._deserializeConfig(config);
+      if (config.wasSuccessful) {
+        const parsedConfig = this._deserializeConfig(config.data.settings);
         this.applyConfig(parsedConfig ?? {});
       }
     },

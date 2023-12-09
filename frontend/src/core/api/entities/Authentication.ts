@@ -1,33 +1,48 @@
-import { WithBackendError } from '../ApiError';
-
-export type NewUser = {
-  username: string;
-  email: string;
-  password: string;
-  acceptedTerms: boolean;
-  beta?: string;
-  captchaToken: string;
-};
-
-export type UserLogin = {
-  login: string;
-  password: string;
-  captchaToken: string;
-};
-
-export type UserInfo = {
+export type UserSession = {
   username: string;
   email: string;
   wins: number;
 };
 
-export type AuthenticationStatus =
-  | {
-      username: string;
-      email: string;
-      isLoggedIn: true;
-      wins?: number;
-    }
-  | WithBackendError<{
-      isLoggedIn?: false;
-    }>;
+export type CreateAccount = {
+  username: string;
+  email: string;
+  password: string;
+  acceptedTerms: boolean;
+  code: string;
+  captchaToken: string;
+};
+
+export type Login = {
+  email: string;
+  password: string;
+  captchaToken: string;
+};
+
+export type DeleteAccount = {
+  password: string;
+};
+
+export type VerifyEmail = {
+  email: string;
+};
+
+export type UserSettings = {
+  settings: string;
+};
+
+export type ChangePassword = {
+  oldPassword: string;
+  newPassword: string;
+};
+
+export type RequestPasswordReset = {
+  email: string;
+  captchaToken: string;
+};
+
+export type ResetPassword = {
+  code: string;
+  password: string;
+  captchaToken: string;
+};
