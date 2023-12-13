@@ -29,6 +29,7 @@ builder.Services.AddZwooDatabase(conf, new ZwooDatabaseOptions()
 // backend services
 builder.Services.AddZwooServices();
 builder.Services.AddGameServices();
+builder.Services.AddGameDatabaseAdapter();
 
 // scheduler
 builder.Services.AddZwooScheduler(q =>
