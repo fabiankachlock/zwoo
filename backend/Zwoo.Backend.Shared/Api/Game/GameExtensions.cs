@@ -16,7 +16,6 @@ public static partial class AppExtensions
         services.AddSingleton<IGameEngineService, GameEngineService>();
         services.AddSingleton<GameEngineService>();
         services.AddSingleton<IGameProviderService, GameProviderService>();
-        services.AddSingleton<IExternalGameProfileProvider, BackendGameProfileProvider>();
         services.AddSingleton(sp =>
         {
             var connections = sp.GetRequiredService<IGameConnectionsService>();
@@ -24,6 +23,12 @@ public static partial class AppExtensions
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
             return new GameManager(connections, gameProfileProvider, new BackendLoggerFactory(loggerFactory));
         });
+    }
+
+    public static void AddGameDatabaseAdapter(this IServiceCollection services)
+    {
+        services.AddSingleton<IGameDatabaseAdapter, GameDatabaseAdapter>();
+        services.AddSingleton<IExternalGameProfileProvider, BackendGameProfileProvider>();
     }
 
     public static void UseGame(this WebApplication app)

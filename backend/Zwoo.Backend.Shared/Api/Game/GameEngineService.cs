@@ -51,16 +51,14 @@ public interface IGameEngineService
 public class GameEngineService : IGameEngineService
 {
     private readonly GameManager _gameManager;
-    private readonly IUserService _userService;
-    private readonly IGameInfoService _gameInfo;
+    private readonly IGameDatabaseAdapter _db;
     private ILogger<GameEngineService> _logger;
 
 
-    public GameEngineService(GameManager gameManager, IGameInfoService gameInfo, IUserService userService, ILoggerFactory loggerFactory)
+    public GameEngineService(GameManager gameManager, IGameDatabaseAdapter db, ILoggerFactory loggerFactory)
     {
         _gameManager = gameManager;
-        _gameInfo = gameInfo;
-        _userService = userService;
+        _db = db;
         _logger = loggerFactory.CreateLogger<GameEngineService>();
     }
 
@@ -88,7 +86,7 @@ public class GameEngineService : IGameEngineService
             }
         }
 
-        _gameInfo.SaveGame(new GameInfoDao()
+        _db.SaveGame(new GameInfoDao()
         {
             GameId = gameMeta.Id,
             GameName = gameMeta.Name,
@@ -102,7 +100,7 @@ public class GameEngineService : IGameEngineService
             if (winner != null && winner.Role != ZRPRole.Bot)
             {
                 _logger.LogDebug($"[Game-{gameMeta.Id}] incrementing win of winner {winner.RealId}");
-                _userService.IncrementWin((ulong)winner.RealId);
+                _db.IncrementUserWin(winner.RealId);
             }
         }
         else
