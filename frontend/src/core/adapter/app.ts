@@ -5,6 +5,7 @@ import { RouterService } from '@/core/global/Router';
 import { Awaiter } from '@/core/helper/Awaiter';
 
 import { ApiAdapter } from '../api/ApiAdapter';
+import { BackendError } from '../api/ApiError';
 import { GameAdapter } from '../api/GameAdapter';
 import { RestApi } from '../api/restapi/RestApi';
 import { WasmApi } from '../api/wasmapi/WasmApi';
@@ -40,6 +41,7 @@ export const useRootApp = defineStore('app', {
       environment: 'online' as AppEnv,
       // versions
       serverVersionMatches: new Awaiter() as boolean | Awaiter<boolean>,
+      serverVersion: new Awaiter() as string | Awaiter<string>,
       clientVersion: AppConfig.VersionOverride || AppConfig.Version,
       // updates
       updateAvailable: false,
@@ -62,31 +64,44 @@ export const useRootApp = defineStore('app', {
   actions: {
     async configure() {
       const response = await this.api.checkVersion(AppConfig.Version, '');
-      if (response.isError && AppConfig.UseBackend) {
+      if (response.isError && response.error.code === BackendError.InvalidClient) {
+        // backend marked client as invalid
+        RouterService.getRouter().push('/invalid-version');
+        this._setServerVersion(response.error.problem['version']?.toString() || '');
+        this._setServerVersionMatches(false);
+      } else if (response.isError && AppConfig.UseBackend) {
         // enable offline mode
         this.environment = 'offline';
         console.warn('### zwoo entered offline mode');
         useAuth().applyOfflineConfig();
         RouterService.getRouter().push(window.location.pathname);
-      } else {
-        RouterService.getRouter().push('/invalid-version');
-      }
-
-      if (typeof response === 'boolean') {
-        if (typeof this.serverVersionMatches === 'boolean') {
-          this.serverVersionMatches = response;
-        } else {
-          this.serverVersionMatches.callback(response);
-          this.serverVersionMatches = response;
-        }
-      } else {
-        this.serverVersionMatches = true;
+        this._setServerVersion(this.clientVersion);
+        this._setServerVersionMatches(true);
+      } else if (response.wasSuccessful) {
+        // TODO: check version
+        this._setServerVersion(response.data.version);
+        this._setServerVersionMatches(true);
       }
 
       MigrationRunner.migrateTo(AppConfig.Version);
       this.isLoading = false;
     },
-
+    _setServerVersion(version: string) {
+      if (typeof this.serverVersion === 'string') {
+        this.serverVersion = version;
+      } else {
+        this.serverVersion.callback(version);
+        this.serverVersion = version;
+      }
+    },
+    _setServerVersionMatches(matches: boolean) {
+      if (typeof this.serverVersionMatches === 'boolean') {
+        this.serverVersionMatches = matches;
+      } else {
+        this.serverVersionMatches.callback(matches);
+        this.serverVersionMatches = matches;
+      }
+    },
     _setUpdateFunc(func: (reload: boolean) => Promise<void>) {
       this._updateFunc = func;
     },

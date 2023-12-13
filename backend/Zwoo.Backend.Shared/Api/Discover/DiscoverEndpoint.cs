@@ -1,4 +1,3 @@
-using System.Security.Principal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +11,22 @@ public static class DiscoverEndpoint
     {
         app.MapPost("/discover", ([FromBody] ClientInfo client, IDiscoverService _service, HttpContext context) =>
         {
-            if (_service.CanConnect(client))
+            ClientInfo value = _service.GetVersion();
+            if (!_service.CanConnect(client))
             {
                 return Results.BadRequest(ApiError.InvalidClient.ToProblem(new ProblemDetails()
                 {
                     Title = "Cant discover this server",
                     Detail = "The versions of this client are incompatible with this server",
-                    Instance = "/discover"
+                    Instance = "/discover",
+                    Extensions = new Dictionary<string, object?>()
+                    {
+                        {"version", value.Version},
+                        {"zrpVersion", value.ZRPVersion},
+                    }.ToDictionary()
                 }));
             }
-            return Results.Ok();
+            return Results.Ok(value);
         }).AllowAnonymous();
     }
 }

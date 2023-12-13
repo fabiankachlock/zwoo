@@ -4,7 +4,8 @@ export type Problem = {
   status: number;
   detail: string;
   instance?: string;
-};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} & Record<string, any>;
 
 export type BackendErrorType = {
   problem: Problem;
@@ -16,6 +17,8 @@ export enum BackendError {
   _InternalError = -2,
   _UnknownError = -1,
   BackendError = 100,
+  InvalidCaptcha = 101,
+  InvalidClient = 102,
 
   UserNotVerified = 110,
   MissingCookie = 111,
@@ -25,10 +28,13 @@ export enum BackendError {
   InvalidEmail = 115,
   InvalidUsername = 116,
   InvalidPassword = 117,
+  InvalidBetaCode = 118,
+  InvalidTerms = 119,
 
   EmailAlreadyTaken = 120,
   UsernameAlreadyTaken = 121,
   AccountFailedToVerify = 122,
+  AlreadyVerified = 123,
 
   DeletingUserFailed = 135,
 
@@ -37,7 +43,6 @@ export enum BackendError {
   JoinFailed = 142,
   OpcodeMissing = 143,
   InvalidOpcode = 144,
-  InvalidGameId = 145,
   AlreadyPlaying = 146,
   GameIsFull = 147
 }
@@ -56,11 +61,7 @@ export const parseBackendError = (text: string): BackendErrorType => {
     return {
       code: content.errorCode ?? BackendError._UnknownError,
       problem: {
-        title: content.title,
-        detail: content.detail,
-        type: content.type,
-        status: content.status,
-        instance: content.instance
+        ...content
       },
       type: content.errorCodeName ?? ''
     };

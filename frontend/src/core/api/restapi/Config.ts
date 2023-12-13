@@ -19,9 +19,6 @@ export class ConfigService {
         zrpVersion: '' // TODO: use real zrp version
       },
       method: 'POST',
-      responseOptions: {
-        decodeJson: false
-      },
       body: JSON.stringify({
         version: version,
         zrpVersion: zrp

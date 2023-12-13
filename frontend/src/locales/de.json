@@ -398,7 +398,7 @@
   },
   "wrongVersion": {
     "title": "Falsche Version",
-    "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden. (Client: {0}, Server: inkompatibel)",
+    "info": "Um zwoo spielen zu können, muss zwoo auf die aktuelle Version geupdated werden. (Client: {0}, Server: {1})",
     "reload": "Seite neu laden",
     "toSettings": "Zu den Einstellungen",
     "loading": "Update wird herunterladen..."
