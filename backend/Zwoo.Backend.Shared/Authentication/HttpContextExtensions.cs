@@ -9,6 +9,19 @@ public static class HttpContextExtensions
     public static string SessionIdContextKey => "zwoo__user_session";
 
     /// <summary>
+    /// store the currently authenticated user in the context
+    /// </summary>
+    /// <param name="context">the current http context</param>
+    /// <param name="user">the currently authenticated user</param>
+    /// <param name="sessionId">the current session id</param>
+    public static void StoreUserSession(this HttpContext context, UserDao user, string sessionId)
+    {
+        context.Items.Add(UserContextKey, user);
+        context.Items.Add(SessionIdContextKey, sessionId);
+    }
+
+
+    /// <summary>
     /// retrieve the currently authenticated user from the context
     /// </summary>
     /// <param name="context">the current http context</param>

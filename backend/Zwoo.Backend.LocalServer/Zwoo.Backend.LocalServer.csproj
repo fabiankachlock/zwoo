@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Zwoo.GameEngine\Zwoo.GameEngine.csproj" />
-    <ProjectReference Include="..\Zwoo.Migrations\Zwoo.Migrations.csproj" />
     <ProjectReference Include="..\BackendHelper\BackendHelper.csproj" />
     <ProjectReference Include="..\Zwoo.Database\Zwoo.Database.csproj" />
     <ProjectReference Include="..\Zwoo.Backend.Shared\Zwoo.Backend.Shared.csproj" />

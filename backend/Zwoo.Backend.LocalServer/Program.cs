@@ -1,12 +1,13 @@
 using System.Text.Json.Serialization;
+using Zwoo.Backend.LocalServer.Authentication;
+using Zwoo.Backend.LocalServer.Services;
 using Zwoo.Backend.Shared.Api;
-using Zwoo.Backend.Shared.Api.Contact;
 using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Game;
 using Zwoo.Backend.Shared.Configuration;
 using Zwoo.Backend.Shared.Services;
-using Zwoo.Database;
 using Zwoo.Database.Dao;
+using Zwoo.GameEngine.Lobby.Features;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -22,8 +23,11 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
     AppVersion = "1.0.0-beta.17"
 });
 builder.Services.AddZwooCors(conf);
+builder.Services.AddLocalAuthentication(conf, "TODO: get server id");
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
+builder.Services.AddSingleton<IExternalGameProfileProvider, EmptyGameProfileProvider>();
+builder.Services.AddSingleton<ILocalUserManager, LocalUserManager>();
 
 // backend services
 builder.Services.AddZwooServices();
@@ -33,6 +37,7 @@ var app = builder.Build();
 
 app.UseZwooHttpLogging();
 app.UseZwooCors();
+app.UseLocalAuthentication();
 
 if (app.Environment.IsDevelopment())
 {
@@ -52,12 +57,10 @@ app.UseGame();
 
 app.Run();
 
-public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
 
-[JsonSerializable(typeof(Todo[]))]
+[JsonSerializable(typeof(GuestLogin))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
-
 }
 
 class Mock : IGameDatabaseAdapter
