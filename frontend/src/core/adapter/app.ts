@@ -124,6 +124,11 @@ export const useRootApp = defineStore('app', {
     },
     updateApp() {
       this._updateFunc(true);
+    },
+    enterLocalMode(serverUrl: string) {
+      // TODO: handle ws url
+      apiMap.local.api = RestApi(serverUrl, AppConfig.WsUrl);
+      this.environment = 'local';
     }
   }
 });

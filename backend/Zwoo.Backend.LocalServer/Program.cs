@@ -22,8 +22,16 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
     AppVersion = "1.0.0-beta.17"
 });
-builder.Services.AddZwooCors(conf);
-builder.Services.AddLocalAuthentication(conf, "TODO: get server id");
+builder.Services.AddCors(s =>
+{
+    s.AddDefaultPolicy(b => b
+        .WithOrigins("localhost", "zwoo.igd20.de")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+});
+// TODO: get server id
+builder.Services.AddLocalAuthentication("server");
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
 builder.Services.AddSingleton<IExternalGameProfileProvider, EmptyGameProfileProvider>();

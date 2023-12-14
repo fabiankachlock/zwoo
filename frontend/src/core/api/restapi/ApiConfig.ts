@@ -22,6 +22,7 @@ type ExtractRouteParams<str extends string> = str extends ''
 export enum Endpoint {
   Discover = 'discover',
   AccountLogin = 'auth/login',
+  GuestLogin = 'auth/login-guest',
   AccountLogout = 'auth/logout',
   UserInfo = 'auth/user',
   CreateAccount = 'account/create',

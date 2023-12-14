@@ -39,7 +39,10 @@ public static class ZwooConfigurationExtensions
             .Build();
 
         var value = config.GetSection("ZWOO").Get<ZwooOptions>();
-        if (value == null) throw new Exception("no zwoo configuration found");
+        if (value == null)
+        {
+            value = new ZwooOptions();
+        }
         value.App = staticConfig;
         builder.Services.Configure<ZwooOptions>(config.GetSection("ZWOO"));
         builder.Services.AddSingleton(value);

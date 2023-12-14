@@ -24,6 +24,10 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: 'login-local',
+    component: () => import('../views/LoginLocal.vue')
+  },
+  {
     path: 'logout',
     component: () => import('../views/Logout.vue'),
     meta: {

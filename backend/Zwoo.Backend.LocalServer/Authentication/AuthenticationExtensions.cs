@@ -10,23 +10,18 @@ namespace Zwoo.Backend.LocalServer.Authentication;
 
 public static class AppExtensions
 {
-    public static void AddLocalAuthentication(this IServiceCollection services, ZwooOptions options, string serverId)
+    public static void AddLocalAuthentication(this IServiceCollection services, string serverId)
     {
         // configure cookie based authentication
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
         {
-            // Dont use SlidingExpiration, because its an security issue!
-            o.ExpireTimeSpan = TimeSpan.FromDays(90);
+            o.ExpireTimeSpan = TimeSpan.FromDays(1);
             o.EventsType = typeof(LocalServerAuthenticationEvents);
-            o.Cookie.Name = $"localSever#{serverId}";
+            o.Cookie.Name = $"localSever__{serverId}";
             o.Cookie.HttpOnly = true;
             o.Cookie.MaxAge = o.ExpireTimeSpan;
-            if (options.Server.UseSsl)
-            {
-                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                o.Cookie.SameSite = SameSiteMode.None;
-            }
-            o.Cookie.Domain = options.Server.CookieDomain;
+            o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            o.Cookie.SameSite = SameSiteMode.None;
         });
         services.AddAuthorization(o =>
         {

@@ -1,13 +1,17 @@
 import { defineStore } from 'pinia';
 
+import { AppConfig } from '@/config';
 import { getBackendErrorTranslation } from '@/core/api/ApiError';
+import { Backend, Endpoint } from '@/core/api/restapi/ApiConfig';
+import { CaptchaValidator } from '@/core/services/validator/captcha';
+import { EmailValidator } from '@/core/services/validator/email';
+import { PasswordValidator } from '@/core/services/validator/password';
+import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+import { UsernameValidator } from '@/core/services/validator/username';
 import { I18nInstance } from '@/i18n';
 
-import { CaptchaValidator } from '../services/validator/captcha';
-import { EmailValidator } from '../services/validator/email';
-import { PasswordValidator } from '../services/validator/password';
-import { PasswordMatchValidator } from '../services/validator/passwordMatch';
-import { UsernameValidator } from '../services/validator/username';
+import { UserSession } from '../api/entities/Authentication';
+import { useRootApp } from './app';
 import { useConfig, ZwooConfigKey } from './config';
 import { useApi } from './helper/useApi';
 
@@ -40,6 +44,51 @@ export const useAuth = defineStore('auth', {
       } else {
         this.isLoggedIn = false;
         throw status.error;
+      }
+    },
+    async loginToLocalServer(username: string, serverUrl: string) {
+      const api = useApi();
+      const backend = Backend.from(serverUrl, '');
+
+      // first the version compatibility and server reachability needs to be checked
+      const result = await api.fetchRaw(backend.getUrl(Endpoint.Discover), {
+        useBackend: AppConfig.UseBackend,
+        fallbackValue: {
+          version: AppConfig.Version,
+          zrpVersion: '' // TODO: use real zrp version
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          version: AppConfig.Version,
+          zrpVersion: ''
+        })
+      });
+
+      if (result.isError) throw result.error;
+
+      // now the login can be performed
+      const response = await api.fetchRaw<UserSession>(backend.getUrl(Endpoint.GuestLogin), {
+        method: 'POST',
+        useBackend: AppConfig.UseBackend,
+        requestOptions: {
+          withCredentials: true
+        },
+        responseOptions: {
+          decodeJson: false
+        },
+        body: JSON.stringify({
+          username: username
+        })
+      });
+
+      if (response.wasSuccessful) {
+        useRootApp().enterLocalMode(serverUrl);
+        queueMicrotask(async () => {
+          await this.askStatus();
+        });
+      } else {
+        this.isLoggedIn = false;
+        throw response.error;
       }
     },
     async logout() {
