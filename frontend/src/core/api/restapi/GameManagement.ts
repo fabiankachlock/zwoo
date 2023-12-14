@@ -8,13 +8,19 @@ import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class GameManagementService {
-  static createGame = async (name: string, isPublic: boolean, password: string): FetchResponse<GameJoinResponse> => {
+  private readonly api: Backend;
+
+  public constructor(api: Backend) {
+    this.api = api;
+  }
+
+  createGame = async (name: string, isPublic: boolean, password: string): FetchResponse<GameJoinResponse> => {
     Logger.Api.log(`creating ${isPublic ? 'public' : 'non-public'} game ${name}`);
     if (!AppConfig.UseBackend) {
       Logger.Api.debug('mocking create game response');
     }
 
-    const response = await WrappedFetch<{ gameId: number; ownId: number; isRunning: boolean; role: ZRPRole }>(Backend.getUrl(Endpoint.CreateGame), {
+    const response = await WrappedFetch<{ gameId: number; ownId: number; isRunning: boolean; role: ZRPRole }>(this.api.getUrl(Endpoint.CreateGame), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       fallbackValue: { gameId: 1, ownId: 2, isRunning: false, role: ZRPRole.Host },
@@ -36,11 +42,11 @@ export class GameManagementService {
     return response;
   };
 
-  static listAll = async (): FetchResponse<GamesList> => {
+  listAll = async (): FetchResponse<GamesList> => {
     Logger.Api.log('fetching all games');
 
     const response = await WrappedFetch<GamesList>(
-      Backend.getDynamicUrl(Endpoint.Games, {
+      this.api.getDynamicUrl(Endpoint.Games, {
         filter: '',
         limit: '100',
         offset: '0',
@@ -74,10 +80,10 @@ export class GameManagementService {
     return response;
   };
 
-  static getJoinMeta = async (gameId: number): FetchResponse<GameMeta> => {
+  getJoinMeta = async (gameId: number): FetchResponse<GameMeta> => {
     Logger.Api.log(`fetching game ${gameId} meta`);
 
-    const response = await WrappedFetch<GameMeta>(Backend.getDynamicUrl(Endpoint.Game, { id: gameId.toString(10) }), {
+    const response = await WrappedFetch<GameMeta>(this.api.getDynamicUrl(Endpoint.Game, { id: gameId.toString(10) }), {
       method: 'GET',
       useBackend: AppConfig.UseBackend,
       fallbackValue: {
@@ -99,10 +105,10 @@ export class GameManagementService {
     return response;
   };
 
-  static joinGame = async (gameId: number, role: ZRPRole, password: string): FetchResponse<GameJoinResponse> => {
+  joinGame = async (gameId: number, role: ZRPRole, password: string): FetchResponse<GameJoinResponse> => {
     Logger.Api.log(`send join game ${gameId} request as ${role}`);
 
-    const response = await WrappedFetch<{ gameId: number; isRunning: boolean; role: ZRPRole; ownId: number }>(Backend.getUrl(Endpoint.JoinGame), {
+    const response = await WrappedFetch<{ gameId: number; isRunning: boolean; role: ZRPRole; ownId: number }>(this.api.getUrl(Endpoint.JoinGame), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       fallbackValue: {

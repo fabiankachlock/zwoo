@@ -9,10 +9,16 @@ import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class ConfigService {
-  static checkVersion = async (version: string, zrp: string): FetchResponse<ClientInfo> => {
+  private readonly api: Backend;
+
+  public constructor(api: Backend) {
+    this.api = api;
+  }
+
+  checkVersion = async (version: string, zrp: string): FetchResponse<ClientInfo> => {
     Logger.Api.log(`fetching version`);
 
-    const response = await WrappedFetch<ClientInfo>(`${Backend.getUrl(Endpoint.Discover)}?t=${Date.now()}`, {
+    const response = await WrappedFetch<ClientInfo>(`${this.api.getUrl(Endpoint.Discover)}?t=${Date.now()}`, {
       useBackend: AppConfig.UseBackend,
       fallbackValue: {
         version: AppConfig.Version,
@@ -33,10 +39,10 @@ export class ConfigService {
     return response;
   };
 
-  static fetchVersionHistory = async (): FetchResponse<VersionHistory> => {
+  fetchVersionHistory = async (): FetchResponse<VersionHistory> => {
     Logger.Api.log(`fetching version history`);
 
-    const response = await WrappedFetch<{ versions: string[] }>(Backend.getUrl(Endpoint.VersionHistory), {
+    const response = await WrappedFetch<{ versions: string[] }>(this.api.getUrl(Endpoint.VersionHistory), {
       useBackend: AppConfig.UseBackend,
       fallbackValue: { versions: ['v1.0.0'] }
     });
@@ -53,10 +59,10 @@ export class ConfigService {
     };
   };
 
-  static fetchChangelog = async (version: string): FetchResponse<string> => {
+  fetchChangelog = async (version: string): FetchResponse<string> => {
     Logger.Api.log(`fetching changelog for ${version}`);
 
-    const response = await WrappedFetch<string>(Backend.getDynamicUrl(Endpoint.Changelog, { version: version }), {
+    const response = await WrappedFetch<string>(this.api.getDynamicUrl(Endpoint.Changelog, { version: version }), {
       useBackend: AppConfig.UseBackend,
       fallbackValue: '<h1>Dev Build</h1>',
       responseOptions: {

@@ -14,7 +14,7 @@ import { useAuth } from './auth';
 import { MigrationRunner } from './migrations/MigrationRunner';
 import { SnackBarPosition, useSnackbar } from './snackbar';
 
-type AppEnv = 'offline' | 'online';
+type AppEnv = 'offline' | 'online' | 'local';
 
 const versionInfo = {
   override: AppConfig.VersionOverride,
@@ -24,12 +24,16 @@ const versionInfo = {
 
 const apiMap: Record<AppEnv, { api: ApiAdapter; realtime: GameAdapter }> = {
   online: {
-    api: RestApi,
-    realtime: WsGameAdapter
+    api: RestApi(AppConfig.ApiUrl, AppConfig.WsUrl),
+    realtime: WsGameAdapter(AppConfig.ApiUrl, AppConfig.WsUrl)
   },
   offline: {
     api: WasmApi,
     realtime: WasmApi
+  },
+  local: {
+    api: RestApi(AppConfig.ApiUrl, AppConfig.WsUrl),
+    realtime: WsGameAdapter(AppConfig.ApiUrl, AppConfig.WsUrl)
   }
 };
 

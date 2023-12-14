@@ -4,9 +4,9 @@ import { computed } from 'vue';
 import { useRootApp } from '@/core/adapter/app';
 
 const props = defineProps<{
-  show?: 'offline' | 'online';
-  exclude?: ('offline' | 'online')[];
-  include?: ('offline' | 'online')[];
+  show?: 'offline' | 'online' | 'local';
+  exclude?: ('offline' | 'online' | 'local')[];
+  include?: ('offline' | 'online' | 'local')[];
 }>();
 
 const app = useRootApp();

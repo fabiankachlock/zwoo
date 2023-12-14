@@ -45,23 +45,32 @@ export enum Endpoint {
 }
 
 export class Backend {
-  public static readonly isDev = AppConfig.IsDev;
-  public static readonly Url: string = AppConfig.ApiUrl;
-  public static readonly WsOverride: string | undefined = AppConfig.WsUrl;
+  public readonly isDev = AppConfig.IsDev;
+  public readonly apiUrl: string;
+  public readonly wsOverride: string;
 
-  public static getUrl(endpoint: Endpoint): string {
-    if (endpoint === Endpoint.Websocket) {
-      return Backend.WsOverride ? `${Backend.WsOverride}${endpoint}` : `${Backend.Url}${endpoint}`;
-    }
-    return `${Backend.Url}${endpoint}`;
+  public constructor(apiUrl: string = AppConfig.ApiUrl, wsUrl: string = AppConfig.WsUrl) {
+    this.apiUrl = apiUrl;
+    this.wsOverride = wsUrl;
   }
 
-  public static getDynamicUrl<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>): string {
+  public static from(apiUrl: string, wsUrl: string): Backend {
+    return new Backend(apiUrl, wsUrl);
+  }
+
+  public getUrl(endpoint: Endpoint): string {
+    if (endpoint === Endpoint.Websocket) {
+      return this.wsOverride ? `${this.wsOverride}${endpoint}` : `${this.apiUrl}${endpoint}`;
+    }
+    return `${this.apiUrl}${endpoint}`;
+  }
+
+  public getDynamicUrl<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>): string {
     let url = '';
     if (endpoint === Endpoint.Websocket) {
-      url = Backend.WsOverride ? `${Backend.WsOverride}${endpoint}` : `${Backend.Url}${endpoint}`;
+      url = this.wsOverride ? `${this.wsOverride}${endpoint}` : `${this.apiUrl}${endpoint}`;
     } else {
-      url = `${Backend.Url}${endpoint}`;
+      url = `${this.apiUrl}${endpoint}`;
     }
 
     for (const key in params) {
@@ -71,11 +80,11 @@ export class Backend {
     return url;
   }
 
-  public static getUrlWithQuery(endpoint: Endpoint, query: LocationQuery): string {
+  public getUrlWithQuery(endpoint: Endpoint, query: LocationQuery): string {
     return `${this.getUrl(endpoint)}?${joinQuery(query)}`;
   }
 
-  public static getDynamicUrlWithQuery<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>, query: LocationQuery): string {
+  public getDynamicUrlWithQuery<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>, query: LocationQuery): string {
     return `${this.getDynamicUrl(endpoint, params)}?${joinQuery(query)}`;
   }
 }

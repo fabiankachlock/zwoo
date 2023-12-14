@@ -7,10 +7,16 @@ import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class MiscApiService {
-  static submitContactForm = async (data: ContactForm): FetchResponse<void> => {
+  private readonly api: Backend;
+
+  public constructor(api: Backend) {
+    this.api = api;
+  }
+
+  submitContactForm = async (data: ContactForm): FetchResponse<void> => {
     Logger.Api.log(`submitting contact form`);
 
-    const response = await WrappedFetch(`${Backend.getUrl(Endpoint.ContactFormSubmission)}`, {
+    const response = await WrappedFetch(`${this.api.getUrl(Endpoint.ContactFormSubmission)}`, {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       responseOptions: {

@@ -8,10 +8,16 @@ import { WrappedFetch } from './FetchWrapper';
 import { CreateAccount, UserSettings } from '../entities/Authentication';
 
 export class AccountService {
-  static performChangePassword = async (oldPassword: string, newPassword: string): FetchResponse<undefined> => {
+  private readonly api: Backend;
+
+  public constructor(api: Backend) {
+    this.api = api;
+  }
+
+  performChangePassword = async (oldPassword: string, newPassword: string): FetchResponse<undefined> => {
     Logger.Api.log('performing change password action');
 
-    const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.ChangePassword), {
+    const response = await WrappedFetch<undefined>(this.api.getUrl(Endpoint.ChangePassword), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -33,10 +39,10 @@ export class AccountService {
     return response;
   };
 
-  static requestPasswordReset = async (email: string, captchaToken: string, lng: string | null = null): FetchResponse<undefined> => {
+  requestPasswordReset = async (email: string, captchaToken: string, lng: string | null = null): FetchResponse<undefined> => {
     Logger.Api.log('performing request password reset action');
 
-    const response = await WrappedFetch<undefined>(Backend.getUrlWithQuery(Endpoint.RequestPasswordReset, { lng: lng }), {
+    const response = await WrappedFetch<undefined>(this.api.getUrlWithQuery(Endpoint.RequestPasswordReset, { lng: lng }), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -58,10 +64,10 @@ export class AccountService {
     return response;
   };
 
-  static performResetPassword = async (code: string, password: string, captchaToken: string): FetchResponse<undefined> => {
+  performResetPassword = async (code: string, password: string, captchaToken: string): FetchResponse<undefined> => {
     Logger.Api.log('performing reset password action');
 
-    const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.ResetPassword), {
+    const response = await WrappedFetch<undefined>(this.api.getUrl(Endpoint.ResetPassword), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -84,10 +90,10 @@ export class AccountService {
     return response;
   };
 
-  static loadSettings = async (): FetchResponse<UserSettings> => {
+  loadSettings = async (): FetchResponse<UserSettings> => {
     Logger.Api.log('loading user settings');
 
-    const response = await WrappedFetch<UserSettings>(Backend.getUrl(Endpoint.UserSettings), {
+    const response = await WrappedFetch<UserSettings>(this.api.getUrl(Endpoint.UserSettings), {
       method: 'GET',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -102,10 +108,10 @@ export class AccountService {
     return response;
   };
 
-  static storeSettings = async (settings: string): FetchResponse<undefined> => {
+  storeSettings = async (settings: string): FetchResponse<undefined> => {
     Logger.Api.log('storing user settings');
 
-    const response = await WrappedFetch<undefined>(Backend.getUrl(Endpoint.UserSettings), {
+    const response = await WrappedFetch<undefined>(this.api.getUrl(Endpoint.UserSettings), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -124,10 +130,10 @@ export class AccountService {
     return response;
   };
 
-  static performCreateAccount = async (data: CreateAccount, lng: string | null = null): FetchResponse<undefined> => {
+  performCreateAccount = async (data: CreateAccount, lng: string | null = null): FetchResponse<undefined> => {
     Logger.Api.log(`performing create account action of ${data.username} with ${data.email}`);
 
-    const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.CreateAccount, { lng: lng }), {
+    const response = await WrappedFetch(this.api.getUrlWithQuery(Endpoint.CreateAccount, { lng: lng }), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -154,10 +160,10 @@ export class AccountService {
     return response;
   };
 
-  static performDeleteAccount = async (password: string): FetchResponse<undefined> => {
+  performDeleteAccount = async (password: string): FetchResponse<undefined> => {
     Logger.Api.log('performing delete account action');
 
-    const response = await WrappedFetch(Backend.getUrl(Endpoint.DeleteAccount), {
+    const response = await WrappedFetch(this.api.getUrl(Endpoint.DeleteAccount), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -179,11 +185,11 @@ export class AccountService {
     return response;
   };
 
-  static verifyAccount = async (id: string, code: string): FetchResponse<undefined> => {
+  verifyAccount = async (id: string, code: string): FetchResponse<undefined> => {
     Logger.Api.log(`verifying account ${id} with code ${code}`);
 
     const response = await WrappedFetch(
-      Backend.getDynamicUrl(Endpoint.AccountVerify, {
+      this.api.getDynamicUrl(Endpoint.AccountVerify, {
         code,
         id
       }),
@@ -204,10 +210,10 @@ export class AccountService {
     return response;
   };
 
-  static resendVerificationEmail = async (email: string, lng: string | null = null): FetchResponse<undefined> => {
+  resendVerificationEmail = async (email: string, lng: string | null = null): FetchResponse<undefined> => {
     Logger.Api.log(`resending verification email of ${email}`);
 
-    const response = await WrappedFetch(Backend.getUrlWithQuery(Endpoint.ResendVerificationEmail, { lng: lng }), {
+    const response = await WrappedFetch(this.api.getUrlWithQuery(Endpoint.ResendVerificationEmail, { lng: lng }), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       responseOptions: {

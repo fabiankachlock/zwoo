@@ -7,10 +7,16 @@ import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class AuthenticationService {
-  static getUserInfo = async (): FetchResponse<UserSession> => {
+  private readonly api: Backend;
+
+  public constructor(api: Backend) {
+    this.api = api;
+  }
+
+  getUserInfo = async (): FetchResponse<UserSession> => {
     Logger.Api.log('fetching user auth status');
 
-    const response = await WrappedFetch<UserSession>(Backend.getUrl(Endpoint.UserInfo), {
+    const response = await WrappedFetch<UserSession>(this.api.getUrl(Endpoint.UserInfo), {
       useBackend: AppConfig.UseBackend,
       method: 'GET',
       fallbackValue: {
@@ -31,10 +37,10 @@ export class AuthenticationService {
     return response;
   };
 
-  static performLogin = async (data: Login): FetchResponse<UserSession> => {
+  performLogin = async (data: Login): FetchResponse<UserSession> => {
     Logger.Api.log(`logging in as ${data.email}`);
 
-    const response = await WrappedFetch(Backend.getUrl(Endpoint.AccountLogin), {
+    const response = await WrappedFetch(this.api.getUrl(Endpoint.AccountLogin), {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
@@ -55,13 +61,13 @@ export class AuthenticationService {
       return response;
     }
 
-    return await AuthenticationService.getUserInfo();
+    return await this.getUserInfo();
   };
 
-  static performLogout = async (): FetchResponse<undefined> => {
+  performLogout = async (): FetchResponse<undefined> => {
     Logger.Api.log('performing logout action');
 
-    const response = await WrappedFetch(Backend.getUrl(Endpoint.AccountLogout), {
+    const response = await WrappedFetch(this.api.getUrl(Endpoint.AccountLogout), {
       method: 'GET',
       useBackend: AppConfig.UseBackend,
       requestOptions: {
