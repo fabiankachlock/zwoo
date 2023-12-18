@@ -48,22 +48,18 @@ var app = builder.Build();
 app.UseZwooHttpLogging();
 app.UseZwooCors();
 
-var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
-app.UseStaticFiles(new StaticFileOptions()
-{
-    FileProvider = provider,
-    ServeUnknownFileTypes = true,
-});
-
+// group all api endpoints under /api
 var api = app.MapGroup("/api");
 app.UseLocalAuthentication(api);
-
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseHttpsRedirection();
 }
+
+// require authentication for all api endpoints
+api.RequireAuthorization();
 
 var webSocketOptions = new WebSocketOptions
 {
@@ -73,18 +69,24 @@ webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 
 app.UseWebSockets(webSocketOptions);
 api.UseDiscover();
-app.UseGame();
+api.UseGame();
 
+// serve frontend files
+var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = provider,
+    ServeUnknownFileTypes = true,
+});
+
+// serve index.html for all other requests
 var index = provider.GetFileInfo("index.html");
-Console.WriteLine(index.Exists);
-Console.WriteLine(index.Name);
 app.MapGet("", async context =>
 {
     await context.Response.SendFileAsync(index);
-}).AllowAnonymous();
+});
 
 app.Run();
-
 
 [JsonSerializable(typeof(GuestLogin))]
 [JsonSerializable(typeof(ProblemDetails))]

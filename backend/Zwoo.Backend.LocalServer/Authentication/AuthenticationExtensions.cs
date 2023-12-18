@@ -23,10 +23,7 @@ public static class AppExtensions
             o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             o.Cookie.SameSite = SameSiteMode.None;
         });
-        services.AddAuthorization(o =>
-        {
-            o.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-        });
+        services.AddAuthorization();
         services.AddScoped<LocalServerAuthenticationEvents>();
     }
 
