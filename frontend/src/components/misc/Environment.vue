@@ -16,7 +16,7 @@ const include = computed(() => props.include);
 </script>
 
 <template>
-  <template v-if="show === env || (exclude && !(exclude ?? []).includes(env)) || (include ?? []).includes(env)">
+  <template v-if="(show === env || (include ?? []).includes(env)) && exclude && !(exclude ?? []).includes(env)">
     <slot></slot>
   </template>
 </template>

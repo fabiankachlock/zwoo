@@ -16,7 +16,7 @@ import Landing from '../views/Landing.vue';
 import Version from '../views/Version.vue';
 import { DeveloperRoute } from './developer';
 import { GameRoute } from './game';
-import { OfflineGuard } from './guards/OfflineGuard';
+import { EnvGuard } from './guards/EnvGuard';
 import { InternalRoute } from './internal';
 import { MenuRoutes } from './menu';
 import { SettingsRoutes } from './settings';
@@ -39,16 +39,16 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           requiresAuth: true,
           redirect: '/landing',
-          onlineOnly: true,
-          offlineRedirect: '/offline'
+          excludeEnv: 'offline',
+          envRedirect: '/offline'
         }
       },
       {
         path: '/landing',
         component: Landing,
         meta: {
-          onlineOnly: true,
-          offlineRedirect: '/offline'
+          excludeEnv: 'offline',
+          envRedirect: '/offline'
         }
       },
       ...MenuRoutes,
@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/invalid-version',
     component: Version,
     meta: {
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   AppConfig.IsBeta
@@ -71,7 +71,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/beta/:code',
         component: Beta,
         meta: {
-          onlineOnly: true
+          excludeEnv: 'offline'
         }
       }
     : {
@@ -90,7 +90,7 @@ const router = createRouter({
 });
 
 const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
-  new OfflineGuard().beforeEach,
+  new EnvGuard().beforeEach,
   new VersionGuard().beforeEach,
   new AuthGuard().beforeEach,
   new CookieGuard().beforeEach,

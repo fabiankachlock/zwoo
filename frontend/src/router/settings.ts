@@ -14,8 +14,8 @@ export const SettingsRoutes: Array<RouteRecordRaw> = [
         path: 'account',
         component: () => import('../views/settings/Account.vue'),
         meta: {
-          onlineOnly: true,
-          offlineRedirect: '/settings'
+          excludeEnv: 'offline',
+          envRedirect: '/settings'
         }
       },
       {
