@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Zwoo.Backend.Games;
@@ -31,7 +32,7 @@ public static partial class AppExtensions
         services.AddSingleton<IExternalGameProfileProvider, BackendGameProfileProvider>();
     }
 
-    public static void UseGame(this WebApplication app)
+    public static void UseGame(this IEndpointRouteBuilder app)
     {
         GameEndpoints.Map(app);
     }

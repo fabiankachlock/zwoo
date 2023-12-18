@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Zwoo.Backend.Shared.Api.Model;
@@ -13,7 +14,7 @@ namespace Zwoo.Backend.Shared.Api.Contact;
 
 public class ContactEndpoint
 {
-    public static void Map(WebApplication app)
+    public static void Map(IEndpointRouteBuilder app)
     {
         app.MapPost("/contact", async ([FromBody] ContactForm body,
             ICaptchaService _captcha,

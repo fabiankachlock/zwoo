@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Services;
 using Zwoo.Database;
@@ -11,7 +12,7 @@ namespace Zwoo.Backend.Shared.Authentication;
 
 public static class AuthenticationEndpoints
 {
-    public static void Map(WebApplication app)
+    public static void Map(IEndpointRouteBuilder app)
     {
         app.MapPost("/auth/login", async ([FromBody] Login body, HttpContext context, ICaptchaService _captchaService, IUserService _userService) =>
         {

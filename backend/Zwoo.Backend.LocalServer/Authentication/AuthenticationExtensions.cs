@@ -30,11 +30,11 @@ public static class AppExtensions
         services.AddScoped<LocalServerAuthenticationEvents>();
     }
 
-    public static void UseLocalAuthentication(this WebApplication app)
+    public static void UseLocalAuthentication(this WebApplication app, IEndpointRouteBuilder? route = null)
     {
 
         app.UseAuthentication();
         app.UseAuthorization();
-        LocalAuthenticationEndpoints.Map(app);
+        LocalAuthenticationEndpoints.Map(route ?? app);
     }
 }

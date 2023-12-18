@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Zwoo.Backend.Shared.Configuration;
 
@@ -49,11 +50,11 @@ public static class AppExtensions
     /// use the default zwoo authentication mechanism
     /// </summary>
     /// <param name="app">the current web application</param>
-    public static void UseZwooAuthentication(this WebApplication app)
+    public static void UseZwooAuthentication(this WebApplication app, IEndpointRouteBuilder? route = null)
     {
 
         app.UseAuthentication();
         app.UseAuthorization();
-        AuthenticationEndpoints.Map(app);
+        AuthenticationEndpoints.Map(route ?? app);
     }
 }

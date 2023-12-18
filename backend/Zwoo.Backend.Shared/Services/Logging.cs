@@ -66,7 +66,7 @@ public static class LoggingExtensions
                 }, "application/problem+json; charset=utf-8");
             }
 
-            if (context.Response.StatusCode >= 300)
+            if (context.Response.StatusCode >= 400)
             {
                 log += $" sending error response: {context.Response.StatusCode}";
                 warning = true;

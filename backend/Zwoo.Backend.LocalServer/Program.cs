@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using Zwoo.Backend.LocalServer.Authentication;
 using Zwoo.Backend.LocalServer.Services;
 using Zwoo.Backend.Shared.Api;
@@ -45,7 +47,17 @@ var app = builder.Build();
 
 app.UseZwooHttpLogging();
 app.UseZwooCors();
-app.UseLocalAuthentication();
+
+var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = provider,
+    ServeUnknownFileTypes = true,
+});
+
+var api = app.MapGroup("/api");
+app.UseLocalAuthentication(api);
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -60,13 +72,22 @@ var webSocketOptions = new WebSocketOptions
 webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 
 app.UseWebSockets(webSocketOptions);
-app.UseDiscover();
+api.UseDiscover();
 app.UseGame();
+
+var index = provider.GetFileInfo("index.html");
+Console.WriteLine(index.Exists);
+Console.WriteLine(index.Name);
+app.MapGet("", async context =>
+{
+    await context.Response.SendFileAsync(index);
+}).AllowAnonymous();
 
 app.Run();
 
 
 [JsonSerializable(typeof(GuestLogin))]
+[JsonSerializable(typeof(ProblemDetails))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 }

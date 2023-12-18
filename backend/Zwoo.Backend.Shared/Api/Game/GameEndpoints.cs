@@ -2,10 +2,10 @@ using System.Net.WebSockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Authentication;
-using Zwoo.GameEngine;
 using Zwoo.GameEngine.Lobby;
 using Zwoo.GameEngine.ZRP;
 
@@ -13,7 +13,7 @@ namespace Zwoo.Backend.Shared.Api.Game;
 
 public class GameEndpoints
 {
-    public static void Map(WebApplication app)
+    public static void Map(IEndpointRouteBuilder app)
     {
         app.MapGet("/game/list", ([FromQuery] bool recommended,
             [FromQuery] int offset,

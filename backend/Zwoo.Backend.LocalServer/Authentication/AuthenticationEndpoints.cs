@@ -10,7 +10,7 @@ namespace Zwoo.Backend.LocalServer.Authentication;
 
 public class LocalAuthenticationEndpoints
 {
-    public static void Map(WebApplication app)
+    public static void Map(IEndpointRouteBuilder app)
     {
         app.MapPost("/auth/login-guest", async ([FromBody] GuestLogin body, HttpContext context, ILocalUserManager _userService) =>
         {
