@@ -12,7 +12,7 @@ export class EnvGuard implements RouterInterceptor {
     const exclude = to.meta['excludeEnv'] ?? [];
     const normalizedInclude = Array.isArray(include) ? include : [include];
     const normalizedExclude = Array.isArray(exclude) ? exclude : [exclude];
-    debugger;
+
     if ((envOnly === env || normalizedInclude.includes(env) || (!envOnly && normalizedInclude.length === 0)) && !normalizedExclude.includes(env)) {
       // good to go
       return false;

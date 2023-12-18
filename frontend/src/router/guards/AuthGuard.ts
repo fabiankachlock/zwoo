@@ -12,7 +12,7 @@ export class AuthGuard implements RouterInterceptor {
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
     const auth = useAuth();
     const app = useRootApp();
-    debugger;
+
     if (to.meta['requiresAuth'] === true || to.meta['noAuth'] === true) {
       this.Logger.debug(to.meta['requiresAuth'] === true ? `${to.fullPath} needs auth` : `${to.fullPath} only available without auth`);
       if (!auth.isInitialized) {
