@@ -24,12 +24,17 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/Login.vue'),
     meta: {
       noAuth: true,
-      excludeEnv: 'offline'
+      includeEnv: 'online',
+      envRedirect: '/login-local'
     }
   },
   {
     path: 'login-local',
-    component: () => import('../views/LoginLocal.vue')
+    component: () => import('../views/LoginLocal.vue'),
+    meta: {
+      noAuth: true,
+      envOnly: 'local'
+    }
   },
   {
     path: 'logout',
@@ -44,7 +49,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/CreateAccount.vue'),
     meta: {
       noAuth: true,
-      excludeEnv: 'offline'
+      includeEnv: 'online'
     }
   },
   {
@@ -52,7 +57,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/RequestPasswordReset.vue'),
     meta: {
       noAuth: true,
-      excludeEnv: 'offline'
+      includeEnv: 'online'
     }
   },
   {
@@ -60,14 +65,14 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/ResetPassword.vue'),
     meta: {
       noAuth: true,
-      excludeEnv: 'offline'
+      includeEnv: 'online'
     }
   },
   {
     path: 'verify-account',
     component: () => import('../views/VerifyAccount.vue'),
     meta: {
-      excludeEnv: 'offline'
+      includeEnv: 'online'
     }
   },
   {

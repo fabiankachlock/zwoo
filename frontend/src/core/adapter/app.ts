@@ -42,7 +42,7 @@ export const useRootApp = defineStore('app', {
     return {
       // global app state
       isLoading: true,
-      environment: 'online' as AppEnv,
+      environment: 'local' as AppEnv,
       // versions
       serverVersionMatches: new Awaiter() as boolean | Awaiter<boolean>,
       serverVersion: new Awaiter() as string | Awaiter<string>,
