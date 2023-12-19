@@ -236,7 +236,7 @@ export const useAuth = defineStore('auth', {
         const session = GuestSessionManager.tryGetSession();
         if (session) {
           useRootApp().enterLocalMode(session.server);
-          return this.configure();
+          await this.askStatus();
         }
       }
 
