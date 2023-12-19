@@ -17,7 +17,7 @@ enum RollingInterval
 
 public static class LoggingExtensions
 {
-    public static void AddZwooLogging(this WebApplicationBuilder builder)
+    public static void AddZwooLogging(this WebApplicationBuilder builder, bool useFile)
     {
         builder.Services.AddLogging(options =>
         {
@@ -27,7 +27,10 @@ public static class LoggingExtensions
                 c.UseUtcTimestamp = true;
                 c.TimestampFormat = "[yyyy-MM-ddTHH:mm:ss] ";
             });
-            options.AddFile(builder.Configuration.GetSection("Logging"));
+            if (useFile)
+            {
+                options.AddFile(builder.Configuration.GetSection("Logging"));
+            }
         });
     }
 
