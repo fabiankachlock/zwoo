@@ -74,6 +74,13 @@
     "notVerifiedInfo": "You account seems to be not verified. If you did not get an email, you can resend the verification email to verify your account.",
     "resendVerifyEmail": "Resend email"
   },
+  "loginLocal": {
+    "title": "Guest Login",
+    "server": "Server URL",
+    "name": "Username",
+    "infoServer": "The guarantee of adequate data protection measures cannot be ensured on third-party servers. Therefore, the use and distribution of personal data on local servers should be avoided.",
+    "submit": "Sign In"
+  },
   "createAccount": {
     "title": "Create Account",
     "email": "E-Mail",

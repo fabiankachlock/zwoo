@@ -74,6 +74,13 @@
     "notVerifiedInfo": "Dein Account ist nicht verifiziert. Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
     "resendVerifyEmail": "Email neu senden"
   },
+  "loginLocal": {
+    "title": "Gast Anmeldung",
+    "server": "Server URL",
+    "name": "Benutzername",
+    "infoServer": "Die Gewährleistung angemessener Datenschutzmaßnahmen kann auf Servern von Dritten nicht garantiert werden. Daher sollte die Verwendung und Verbreitung von personenbezogenen Daten auf lokalen Server vermieden werden.",
+    "submit": "Anmelden"
+  },
   "createAccount": {
     "title": "Account Erstellen",
     "email": "E-Mail",
