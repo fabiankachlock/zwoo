@@ -47,8 +47,8 @@ const routes: Array<RouteRecordRaw> = [
         path: '/landing',
         component: Landing,
         meta: {
-          excludeEnv: 'offline',
-          envRedirect: '/offline'
+          excludeEnv: ['offline', 'local'],
+          envRedirect: '/login-local'
         }
       },
       ...MenuRoutes,

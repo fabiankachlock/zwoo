@@ -6,6 +6,7 @@
     "serve": "vite --mode preview",
     "serve:prod": "vite --mode dev",
     "serve:fe-proxy": "vite --mode dev-proxy",
+    "serve:local-server": "vite --mode local-server",
     "//": "echo is needed, so that vue-tsc dont picks up file path arguments passed by lint-staged, which breaks vue-tsc",
     "typecheck": "vue-tsc --noEmit && echo \"\"",
     "preview": "vite preview --mode preview",

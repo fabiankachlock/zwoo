@@ -27,7 +27,7 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 builder.Services.AddCors(s =>
 {
     s.AddDefaultPolicy(b => b
-        .WithOrigins("localhost", "zwoo.igd20.de")
+        .WithOrigins("http://localhost:8080", "zwoo.igd20.de")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials());
@@ -51,6 +51,8 @@ app.UseZwooCors();
 // group all api endpoints under /api
 var api = app.MapGroup("/api");
 app.UseLocalAuthentication(api);
+// require authentication only for all api endpoints
+api.RequireAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -58,8 +60,13 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-// require authentication for all api endpoints
-api.RequireAuthorization();
+// serve frontend files
+var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = provider,
+    ServeUnknownFileTypes = true,
+});
 
 var webSocketOptions = new WebSocketOptions
 {
@@ -70,14 +77,6 @@ webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 app.UseWebSockets(webSocketOptions);
 api.UseDiscover();
 api.UseGame();
-
-// serve frontend files
-var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
-app.UseStaticFiles(new StaticFileOptions()
-{
-    FileProvider = provider,
-    ServeUnknownFileTypes = true,
-});
 
 // serve index.html for all other requests
 var index = provider.GetFileInfo("index.html");
