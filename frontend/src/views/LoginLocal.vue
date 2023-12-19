@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -16,10 +16,16 @@ const router = useRouter();
 const { applyRedirectReplace } = useRedirect();
 
 const name = ref('Test');
-const server = ref('http://127.0.0.1:8001/');
+const server = ref('http://127.0.0.1:8001/api/');
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
-const isSubmitEnabled = computed(() => !isLoading.value && name.value?.trim() && server.value?.trim());
+const isSubmitEnabled = computed(() => !isLoading.value && !!name.value?.trim() && !!server.value?.trim());
+
+onMounted(() => {
+  if (auth.isLoggedIn) {
+    router.push('/home');
+  }
+});
 
 const logIn = async () => {
   error.value = [];

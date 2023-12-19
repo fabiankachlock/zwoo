@@ -11,6 +11,7 @@ import { UsernameValidator } from '@/core/services/validator/username';
 import { I18nInstance } from '@/i18n';
 
 import { UserSession } from '../api/entities/Authentication';
+import { GuestSessionManager } from '../services/localGames/guestSessionManager';
 import { useRootApp } from './app';
 import { useConfig, ZwooConfigKey } from './config';
 import { useApi } from './helper/useApi';
@@ -83,9 +84,22 @@ export const useAuth = defineStore('auth', {
 
       if (response.wasSuccessful) {
         useRootApp().enterLocalMode(serverUrl);
-        queueMicrotask(async () => {
-          await this.askStatus();
-        });
+        const authStatus = await useApi().loadUserInfo();
+        if (authStatus.wasSuccessful) {
+          GuestSessionManager.saveSession({
+            server: serverUrl,
+            started: Date.now()
+          });
+          this.$patch({
+            username: authStatus.data.username,
+            isLoggedIn: true,
+            wins: authStatus.data.wins ?? -1,
+            isInitialized: true
+          });
+        } else {
+          this.isLoggedIn = false;
+          throw authStatus.error;
+        }
       } else {
         this.isLoggedIn = false;
         throw response.error;
@@ -215,8 +229,17 @@ export const useAuth = defineStore('auth', {
         });
       }
     },
-    async configure() {
+    async configure(): Promise<void> {
       await this.askStatus();
+      // try to restore guest session
+      if (!this.isLoggedIn) {
+        const session = GuestSessionManager.tryGetSession();
+        if (session) {
+          useRootApp().enterLocalMode(session.server);
+          return this.configure();
+        }
+      }
+
       // setup initial config
       if (this.isLoggedIn) {
         useConfig().login();

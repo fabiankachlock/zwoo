@@ -22,21 +22,6 @@ const versionInfo = {
   hash: AppConfig.VersionHash
 };
 
-const apiMap: Record<AppEnv, { api: ApiAdapter; realtime: GameAdapter }> = {
-  online: {
-    api: RestApi(AppConfig.ApiUrl, AppConfig.WsUrl),
-    realtime: WsGameAdapter(AppConfig.ApiUrl, AppConfig.WsUrl)
-  },
-  offline: {
-    api: WasmApi,
-    realtime: WasmApi
-  },
-  local: {
-    api: RestApi(AppConfig.ApiUrl, AppConfig.WsUrl),
-    realtime: WsGameAdapter(AppConfig.ApiUrl, AppConfig.WsUrl)
-  }
-};
-
 export const useRootApp = defineStore('app', {
   state: () => {
     return {
@@ -51,7 +36,21 @@ export const useRootApp = defineStore('app', {
       updateAvailable: false,
       offlineReady: false,
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      _updateFunc: (() => {}) as unknown as (reload: boolean) => Promise<void>
+      _updateFunc: (() => {}) as unknown as (reload: boolean) => Promise<void>,
+      _apiMap: {
+        online: {
+          api: RestApi(AppConfig.ApiUrl, AppConfig.WsUrl),
+          realtime: WsGameAdapter(AppConfig.ApiUrl, AppConfig.WsUrl)
+        },
+        offline: {
+          api: WasmApi,
+          realtime: WasmApi
+        },
+        local: {
+          api: RestApi(AppConfig.ApiUrl, AppConfig.WsUrl),
+          realtime: WsGameAdapter(AppConfig.ApiUrl, AppConfig.WsUrl)
+        }
+      } as Record<AppEnv, { api: ApiAdapter; realtime: GameAdapter }>
     };
   },
   getters: {
@@ -59,10 +58,10 @@ export const useRootApp = defineStore('app', {
       return versionInfo;
     },
     api: state => {
-      return apiMap[state.environment].api;
+      return state._apiMap[state.environment].api;
     },
     realtimeApi: state => {
-      return apiMap[state.environment].realtime;
+      return state._apiMap[state.environment].realtime;
     }
   },
   actions: {
@@ -127,7 +126,7 @@ export const useRootApp = defineStore('app', {
     },
     enterLocalMode(serverUrl: string) {
       // TODO: handle ws url
-      apiMap.local.api = RestApi(serverUrl, AppConfig.WsUrl);
+      this._apiMap.local.api = RestApi(serverUrl, AppConfig.WsUrl);
       this.environment = 'local';
     }
   }

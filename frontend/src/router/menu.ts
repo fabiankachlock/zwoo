@@ -33,7 +33,8 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/LoginLocal.vue'),
     meta: {
       noAuth: true,
-      envOnly: 'local'
+      envOnly: 'local',
+      redirect: '/home'
     }
   },
   {
