@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Zwoo.Backend.LocalServer.Services;
-using Zwoo.Database.Dao;
 
 namespace Zwoo.Backend.LocalServer.Authentication;
 

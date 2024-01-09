@@ -12,8 +12,16 @@
   },
   "tauri": {
     "allowlist": {
+      "all": false,
       "globalShortcut": {
         "all": true
+      },
+      "fs": {
+        "scope": ["$RESOURCE/*"]
+      },
+      "shell": {
+        "all": false,
+        "open": true
       }
     },
     "bundle": {
@@ -41,7 +49,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "../../backend/Zwoo.Backend.LocalServer/bin/Release/net8.0/win-x64/native/Zwoo.Backend.LocalServer.exe"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {
