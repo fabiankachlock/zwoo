@@ -1,15 +1,13 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Zwoo.Dashboard.Data;
-using Mongo.Migration.Documents;
-using Mongo.Migration.Startup;
-using Mongo.Migration.Startup.DotNetCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using Zwoo.Dashboard;
-using Zwoo.Database;
 using Radzen;
 using Microsoft.IdentityModel.Logging;
+using Zwoo.Backend.Shared.Services;
+using Zwoo.Backend.Shared.Configuration;
 
 IdentityModelEventSource.ShowPII = true;
 var builder = WebApplication.CreateBuilder(args);
@@ -20,80 +18,69 @@ builder.Services.AddServerSideBlazor();
 builder.WebHost.UseStaticWebAssets();
 builder.Services.AddScoped<DialogService>();
 
+const string VERSION = "1.0.0-beta.17";
+builder.AddZwooLogging(false);
+var zwooConf = builder.AddZwooConfiguration(args, new() { });
+var conf = builder.AddZiadConfiguration(args, new ZiadAppConfiguration()
+{
+    AppVersion = VERSION
+});
+
+Console.WriteLine($"Zwoo Dashboard v{conf.App.AppVersion}");
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IClaimsTransformation, KeycloakRolesClaimsTransformation>();
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-})
-.AddCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-})
-.AddOpenIdConnect("oidc", options =>
-{
-    options.Authority = Globals.AuthenticationAuthority;
-    options.ClientId = Globals.AuthenticationClientId;
-    options.ClientSecret = Globals.AuthenticationClientSecret;
-
-    options.ResponseType = "code";
-    options.SaveTokens = true;
-    options.GetClaimsFromUserInfoEndpoint = true;
-    options.RequireHttpsMetadata = false;
-
-    options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
-
-    options.Scope.Add("openid");
-    options.Scope.Add("profile");
-    options.Scope.Add("roles");
-
-    options.TokenValidationParameters = new TokenValidationParameters
+builder.Services
+    .AddAuthentication(options =>
     {
-        NameClaimType = "name",
-    };
-
-    options.Events = new OpenIdConnectEvents
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
+    .AddCookie(options =>
     {
-        OnAccessDenied = context =>
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    })
+    .AddOpenIdConnect("oidc", options =>
+    {
+        options.Authority = conf.Auth.Authority;
+        options.ClientId = conf.Auth.ClientID;
+        options.ClientSecret = conf.Auth.ClientSecret;
+
+        options.ResponseType = "code";
+        options.SaveTokens = true;
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.RequireHttpsMetadata = false;
+
+        options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.Scope.Add("roles");
+
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            context.HandleResponse();
-            context.Response.Redirect("/");
-            return Task.CompletedTask;
-        },
-    };
-});
+            NameClaimType = "name",
+        };
+
+        options.Events = new OpenIdConnectEvents
+        {
+            OnAccessDenied = context =>
+            {
+                context.HandleResponse();
+                context.Response.Redirect("/");
+                return Task.CompletedTask;
+            },
+        };
+    });
 
 
-// database
-var db = new Zwoo.Database.Database(Globals.ConnectionString, Globals.DatabaseName);
-
-builder.Services.AddSingleton<IDatabase>(db);
-builder.Services.AddSingleton<IBetaCodesService, BetaCodesService>();
-builder.Services.AddSingleton<IAuditTrailService, AuditTrailService>();
-builder.Services.AddSingleton<IAccountEventService, AccountEventService>();
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IChangelogService, ChangelogService>();
-builder.Services.AddSingleton<IGameInfoService, GameInfoService>();
-builder.Services.AddSingleton<IContactRequestService, ContactRequestService>();
-
-// migrations
-builder.Services.AddSingleton(db.Client);
-builder.Services.Configure<MongoMigrationSettings>(options =>
+builder.Services.AddZwooDatabase(zwooConf, new ZwooDatabaseOptions()
 {
-    options.ConnectionString = Globals.ConnectionString;
-    options.Database = "zwoo";
-    options.DatabaseMigrationVersion = new DocumentVersion(Globals.Version);
-});
-builder.Services.AddMigration(new MongoMigrationSettings
-{
-    ConnectionString = Globals.ConnectionString,
-    Database = Globals.DatabaseName,
-    DatabaseMigrationVersion = new DocumentVersion(Globals.Version)
+    EnableMigrations = false
 });
 
 // services
