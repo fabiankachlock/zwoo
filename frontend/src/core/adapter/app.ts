@@ -127,6 +127,7 @@ export const useRootApp = defineStore('app', {
     enterLocalMode(serverUrl: string) {
       // TODO: handle ws url
       this._apiMap.local.api = RestApi(serverUrl, AppConfig.WsUrl);
+      console.warn('### zwoo entered local mode');
       this.environment = 'local';
     }
   }

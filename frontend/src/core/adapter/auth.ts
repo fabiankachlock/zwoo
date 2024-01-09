@@ -233,11 +233,12 @@ export const useAuth = defineStore('auth', {
       await this.askStatus();
       // try to restore guest session
       if (!this.isLoggedIn) {
-        const session = GuestSessionManager.tryGetSession();
-        if (session) {
-          useRootApp().enterLocalMode(session.server);
-          await this.askStatus();
-        }
+        // TODO: add better ui for seamless local mode
+        // const session = GuestSessionManager.tryGetSession();
+        // if (session) {
+        //   useRootApp().enterLocalMode(session.server);
+        //   await this.askStatus();
+        // }
       }
 
       // setup initial config

@@ -13,6 +13,15 @@
         <div class="divider bc-invert-main"></div>
       </div>
     </Environment>
+    <Environment show="local">
+      <div v-if="!isLoggedIn">
+        <router-link to="/login" class="link">
+          <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
+          {{ t('nav.login') }}
+        </router-link>
+        <div class="divider bc-invert-main"></div>
+      </div>
+    </Environment>
     <Environment show="offline">
       <router-link to="/home" class="link">
         <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
@@ -20,7 +29,7 @@
       </router-link>
       <div class="divider bc-invert-main"></div>
     </Environment>
-    <Environment show="online">
+    <Environment :include="['online', 'local']">
       <div v-if="isLoggedIn">
         <router-link to="/home" class="link">
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
@@ -48,7 +57,7 @@
         {{ t('nav.settings') }}
       </router-link>
     </div>
-    <Environment show="online">
+    <Environment :include="['online', 'local']">
       <div v-if="isLoggedIn">
         <div class="divider bc-invert-main"></div>
         <router-link to="/logout" class="link">
