@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Zwoo.GameEngine.Wasm": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:7214;http://localhost:5257",
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/debug?browser={browserInspectUri}"
+    }
+  }
+}

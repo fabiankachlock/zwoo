@@ -20,13 +20,13 @@ jobs:
           dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./ZwooBackend/ZwooBackend.csproj"
+        run: dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet build "./ZwooBackend/ZwooBackend.csproj" -c Release --no-restore
+        run: dotnet build "./Zwoo.Backend/Zwoo.Backend.csproj" -c Release --no-restore
       # - name: Test
       #   working-directory: ./backend
-      #   run: dotnet test "./GameLogic/GameLogic.csproj" -c Release --no-restore --verbosity normal
+      #   run: dotnet test "./Zwoo.GameEngine/Zwoo.GameEngine.csproj" -c Release --no-restore --verbosity normal
 
   ziad:
     runs-on: ubuntu-latest
@@ -38,10 +38,10 @@ jobs:
           dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj"
+        run: dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet build "./ZwooInfoDashBoard/ZwooInfoDashBoard.csproj" -c Release --no-restore
+        run: dotnet build "./Zwoo.Dashboard/Zwoo.Dashboard.csproj" -c Release --no-restore
 
   wasm-gamelogic:
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
         run: dotnet workload restore
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+        run: dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet publish -c Release -p:RunAOTCompilation=true "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+        run: dotnet publish -c Release -p:RunAOTCompilation=true "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"

@@ -7,24 +7,24 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # copy project configs into /src/<project>/<config>.csproj
-COPY ["./ZwooBackend/ZwooBackend.csproj", "./ZwooBackend/"]
-COPY ["./GameLogic/GameLogic.csproj", "./GameLogic/"]
+COPY ["./Zwoo.Backend/Zwoo.Backend.csproj", "./Zwoo.Backend/"]
+COPY ["./Zwoo.GameEngine/Zwoo.GameEngine.csproj", "./Zwoo.GameEngine/"]
 COPY ["./BackendHelper/BackendHelper.csproj", "./BackendHelper/"]
-RUN dotnet restore "./ZwooBackend/ZwooBackend.csproj"
+RUN dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
 
 # copy all projects into /src (/src/<project>)
 COPY . .
 WORKDIR "/src/"
 
 # build backend project
-RUN dotnet build "./ZwooBackend/ZwooBackend.csproj" -c Debug -o /app/build
+RUN dotnet build "./Zwoo.Backend/Zwoo.Backend.csproj" -c Debug -o /app/build
 
 FROM build AS publish
 # publish project
-RUN dotnet publish "./ZwooBackend/ZwooBackend.csproj" -c Debug -o /app/publish
+RUN dotnet publish "./Zwoo.Backend/Zwoo.Backend.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 # run project
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "./ZwooBackend.dll"]
+ENTRYPOINT ["dotnet", "./Zwoo.Backend.dll"]

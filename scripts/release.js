@@ -25,12 +25,12 @@ const versionFiles = [
     replace: '"zwoo"\nversion = "###"',
   },
   {
-    path: "/backend/ZwooBackend/Globals.cs",
+    path: "/backend/Zwoo.Backend/Globals.cs",
     regex: /public static readonly string Version = "(.*)";/,
     replace: 'public static readonly string Version = "###";',
   },
   {
-    path: "/backend/ZwooInfoDashBoard/Data/Globals.cs",
+    path: "/backend/Zwoo.Dashboard/Data/Globals.cs",
     regex: /public static readonly string Version = "(.*)";/,
     replace: 'public static readonly string Version = "###";',
   },
