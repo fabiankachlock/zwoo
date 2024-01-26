@@ -54,8 +54,8 @@ export class ShortcutManager implements RouterInterceptor {
       blacklist.length > 0 && whitelist.length > 0
         ? AllShortcuts.filter(shortcut => !!whitelist.find(s => s.id === shortcut.id)).filter(shortcut => !blacklist.find(s => s.id === shortcut.id))
         : whitelist.length > 0
-        ? AllShortcuts.filter(shortcut => !!whitelist.find(s => s.id === shortcut.id))
-        : AllShortcuts.filter(shortcut => !blacklist.find(s => s.id === shortcut.id));
+          ? AllShortcuts.filter(shortcut => !!whitelist.find(s => s.id === shortcut.id))
+          : AllShortcuts.filter(shortcut => !blacklist.find(s => s.id === shortcut.id));
     this.setKeyboardShortcuts(allowedShortcuts);
   }
 
