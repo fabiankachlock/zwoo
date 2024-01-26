@@ -1,4 +1,7 @@
-use std::process::{Child, Command};
+use std::{
+    io::{BufReader, Stdout},
+    process::{Child, Command},
+};
 
 pub struct Server {
     child: Option<Child>,
@@ -16,12 +19,20 @@ impl Server {
             return;
         }
 
-        self.child = Some(
-            Command::new(self.path.as_str())
-                .spawn()
-                .expect("failed to start server"),
-        );
-        println!("Server started")
+        let cmd = Command::new(self.path.as_str())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("failed to start server");
+        let out = cmd.stdout.unwrap();
+        self.child = Some(cmd);
+        println!("Server started");
+
+        let reader = BufReader::new(out);
+
+        reader
+            .lines()
+            .filter_map(|line| line.ok())
+            .for_each(|line| println!("[srv] {}", line))
     }
 
     pub fn stop(&mut self) {

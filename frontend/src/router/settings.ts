@@ -1,3 +1,4 @@
+import { AppConfig } from '@/config';
 import { RouteRecordRaw } from 'vue-router';
 
 export const SettingsRoutes: Array<RouteRecordRaw> = [
@@ -29,7 +30,15 @@ export const SettingsRoutes: Array<RouteRecordRaw> = [
       {
         path: 'about',
         component: () => import('../views/settings/About.vue')
-      }
+      },
+      ...(AppConfig.IsTauri
+        ? [
+            {
+              path: 'server',
+              component: () => import('../views/settings/LocalServer.vue')
+            }
+          ]
+        : [])
     ]
   },
   {
