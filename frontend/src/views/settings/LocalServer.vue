@@ -29,5 +29,5 @@ onMounted(async () => {
 const startServer = () => {};
 const stopServer = () => {};
 
-const loadServerStatus = (): Promise<unknown> => {};
+const loadServerStatus = (): void => {};
 </script>

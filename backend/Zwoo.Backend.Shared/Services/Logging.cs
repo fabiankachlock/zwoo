@@ -29,7 +29,7 @@ public static class LoggingExtensions
             });
             if (useFile)
             {
-                options.AddFile(builder.Configuration.GetSection("Logging"));
+                // options.AddFile(builder.Configuration.GetSection("Logging"));
             }
         });
     }
