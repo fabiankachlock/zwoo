@@ -1,3 +1,4 @@
+import { appWindow } from '@tauri-apps/api/window';
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@//config';
@@ -79,9 +80,17 @@ const changeUIMode = (mode: string) => {
 
 const changeFullscreen = (enabled: boolean) => {
   if (enabled) {
-    document.documentElement.requestFullscreen();
-  } else if (document.fullscreenElement) {
-    document.exitFullscreen();
+    if (AppConfig.IsTauri) {
+      appWindow.setFullscreen(true);
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+  } else {
+    if (AppConfig.IsTauri) {
+      appWindow.setFullscreen(false);
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
   }
 };
 
