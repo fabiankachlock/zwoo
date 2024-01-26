@@ -22,12 +22,15 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "window": {
+        "all": true
       }
     },
     "bundle": {
       "active": true,
       "category": "CardGame",
-      "copyright": "",
+      "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2024",
       "deb": {
         "depends": []
       },
@@ -40,7 +43,7 @@
         "icons/icon.ico",
         "icons/icon.png"
       ],
-      "identifier": "zwoo.igd20.de",
+      "identifier": "de.igd20ug.zwoo",
       "longDescription": "zwoo",
       "macOS": {
         "entitlements": null,
@@ -52,7 +55,7 @@
       "resources": [
         "../../backend/Zwoo.Backend.LocalServer/bin/Release/net8.0/win-x64/native/Zwoo.Backend.LocalServer.exe"
       ],
-      "shortDescription": "",
+      "shortDescription": "zwoo - The Second Challenge",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
@@ -72,7 +75,7 @@
         "height": 600,
         "resizable": true,
         "title": "zwoo",
-        "width": 800
+        "width": 900
       }
     ]
   }
