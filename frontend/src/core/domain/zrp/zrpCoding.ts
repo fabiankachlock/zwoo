@@ -27,7 +27,11 @@ export class ZRPCoder {
   }
 
   static encode(msg: ZRPMessage): string {
-    return `${msg.code.toString().padStart(3, '0')},${JSON.stringify(msg.data)}`;
+    return `${msg.code.toString().padStart(3, '0')},${ZRPCoder.encodePayload(msg.data)}`;
+  }
+
+  static encodePayload<T>(content: T): string {
+    return JSON.stringify(content);
   }
 
   static isInternalMessage(code: ZRPOPCode): boolean {

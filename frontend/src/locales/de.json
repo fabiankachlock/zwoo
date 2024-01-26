@@ -233,6 +233,19 @@
     "noWinsOfflineInfo": "Die Siege in Offline Spielen werden nicht in der Bestenliste gezählt."
   },
   "rules": {
+    "manageProfiles": "Profile verwalten",
+    "groupSystem": "Vorkonfigurierte Profile",
+    "groupUser": "Deine Profile",
+    "applyProfile": "Anwenden",
+    "newProfile": "Neues Profil erstellen",
+    "profileInfo": "Spiel-Profile sind eine Möglichkeit alle geänderten Einstellungen zu speichern und einfach wiederzuverwenden.",
+    "profileName": "Name des Profils",
+    "profilePlaceholder": "Mein Profil",
+    "createProfile": "Erstellen",
+    "profiles": {
+      "default": "Standartwerte",
+      "full": "Alle Regeln"
+    },
     "widget": {
       "numberPlaceholder": "Zahl"
     }

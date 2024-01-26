@@ -1,3 +1,5 @@
+import { LocalGameProfileManager } from '@/core/services/gameProfileCache/LocalGameProfileManager';
+
 import { CSharpExport } from './Interpop';
 import { WasmLoader } from './WasmLoader';
 
@@ -31,5 +33,11 @@ export class WasmManger {
     instance.Logging.WasmLoggerFactory.OnDebug(msg => loggerModule.Logger.debug(msg));
     instance.Logging.WasmLoggerFactory.OnWarn(msg => loggerModule.Logger.warn(msg));
     instance.Logging.WasmLoggerFactory.OnError(msg => loggerModule.Logger.error(msg));
+
+    const profiles = await LocalGameProfileManager.create();
+    instance.LocalGameProfileProvider.OnGetProfiles(() => profiles.getProfiles());
+    instance.LocalGameProfileProvider.OnSave((name, profile) => profiles.saveProfile(name, profile));
+    instance.LocalGameProfileProvider.OnUpdate((id, profile) => profiles.updateProfile(id, profile));
+    instance.LocalGameProfileProvider.OnDelete(id => profiles.deleteProfile(id));
   }
 }
