@@ -1,5 +1,5 @@
 <template>
-  <div id="icon" :ref="ref => (elementRef = ref as HTMLDivElement)" v-html="icon"></div>
+  <div id="icon" :ref="ref => (elementRef = ref as HTMLDivElement)" v-html="iconValue"></div>
 </template>
 
 <script setup lang="ts">
@@ -13,14 +13,14 @@ const props = defineProps<{
   svgClass?: string;
 }>();
 
-const icon = ref<string | undefined>(undefined);
+const iconValue = ref<string | undefined>(undefined);
 const elementRef = ref<HTMLDivElement | undefined>(undefined);
 
 watch(
   () => props.icon,
   async newIcon => {
     const result = await IconCache.getIcon(newIcon);
-    icon.value = result.icon;
+    iconValue.value = result.icon;
     setTimeout(() => {
       if (elementRef.value && elementRef.value.children.length > 0) {
         elementRef.value.children[0].setAttribute('class', props.svgClass ?? '');
