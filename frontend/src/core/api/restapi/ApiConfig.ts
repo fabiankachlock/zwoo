@@ -8,16 +8,16 @@ import { joinQuery } from '@/core/helper/utils';
 type ExtractRouteParams<str extends string> = str extends ''
   ? {}
   : str extends `/${infer rest}`
-  ? ExtractRouteParams<rest>
-  : str extends `:${infer front}:${infer rest}`
-  ? { [K in front]: string } & ExtractRouteParams<rest>
-  : str extends `${string}/${infer rest}`
-  ? ExtractRouteParams<rest>
-  : str extends `${string}?${string}=:${infer paramName}:${infer rest}`
-  ? { [K in paramName]: string } & ExtractRouteParams<rest>
-  : str extends `&${string}=:${infer paramName}:${infer rest}`
-  ? { [K in paramName]: string } & ExtractRouteParams<rest>
-  : {};
+    ? ExtractRouteParams<rest>
+    : str extends `:${infer front}:${infer rest}`
+      ? { [K in front]: string } & ExtractRouteParams<rest>
+      : str extends `${string}/${infer rest}`
+        ? ExtractRouteParams<rest>
+        : str extends `${string}?${string}=:${infer paramName}:${infer rest}`
+          ? { [K in paramName]: string } & ExtractRouteParams<rest>
+          : str extends `&${string}=:${infer paramName}:${infer rest}`
+            ? { [K in paramName]: string } & ExtractRouteParams<rest>
+            : {};
 
 export enum Endpoint {
   CreateAccount = 'auth/create',
