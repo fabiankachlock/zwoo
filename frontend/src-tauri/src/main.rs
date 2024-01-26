@@ -3,24 +3,21 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{Menu, MenuItem, Submenu};
+// use tauri::{Menu, MenuItem, Submenu};
 
 fn main() {
-    let system_menu = Submenu::new(
-        "zwoo",
-        Menu::new()
-            .add_native_item(MenuItem::EnterFullScreen)
-            .add_native_item(MenuItem::Separator)
-            .add_native_item(MenuItem::Hide)
-            .add_native_item(MenuItem::ShowAll)
-            .add_native_item(MenuItem::Separator)
-            .add_native_item(MenuItem::CloseWindow)
-            .add_native_item(MenuItem::Quit),
-    );
-    let menu = Menu::new().add_submenu(system_menu);
+    // let system_menu = Submenu::new(
+    //     "zwoo",
+    //     Menu::new()
+    //         .add_native_item(MenuItem::Hide)
+    //         .add_native_item(MenuItem::Separator)
+    //         .add_native_item(MenuItem::CloseWindow)
+    //         .add_native_item(MenuItem::Quit),
+    // );
+    // let menu = Menu::new().add_submenu(system_menu);
 
     tauri::Builder::default()
-        .menu(menu)
+        // .menu(menu)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

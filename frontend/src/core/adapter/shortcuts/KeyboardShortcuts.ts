@@ -1,4 +1,4 @@
-import { isRegistered, register, unregisterAll } from '@tauri-apps/api/globalShortcut';
+import { unregisterAll } from '@tauri-apps/api/globalShortcut';
 
 import { AppConfig } from '@/config';
 
@@ -12,17 +12,17 @@ export class KeyboardShortcuts {
   bind() {
     this.detach();
     if (AppConfig.IsTauri) {
-      this.setupTauri();
-    } else {
-      window.addEventListener('keyup', this.eventHandler);
+      // ATTENTION: these are global shortcuts
+      // this.setupTauri();
     }
+    window.addEventListener('keyup', this.eventHandler);
   }
 
   setShortcuts(shortcuts: Shortcut<KeyboardEvent>[]) {
+    this.shortcuts = shortcuts;
     if (AppConfig.IsTauri) {
-      this.setupTauri();
-    } else {
-      this.shortcuts = shortcuts;
+      // ATTENTION: these are global shortcuts
+      // this.setupTauri();
     }
   }
 
@@ -41,18 +41,19 @@ export class KeyboardShortcuts {
     }
   }
 
-  private async setupTauri() {
-    for (const shortcut of this.shortcuts) {
-      for (const key of Array.isArray(shortcut.keyCombination) ? shortcut.keyCombination : [shortcut.keyCombination]) {
-        if (await isRegistered(key)) continue;
-        await register(key, () => {
-          shortcut.execute(
-            new KeyboardEvent('', {
-              key: key
-            })
-          );
-        });
-      }
-    }
-  }
+  // private async setupTauri() {
+  //   console.log(this.shortcuts);
+  //   for (const shortcut of this.shortcuts) {
+  //     for (const key of Array.isArray(shortcut.keyCombination) ? shortcut.keyCombination : [shortcut.keyCombination]) {
+  //       if (await isRegistered(key)) continue;
+  //       await register(key, () => {
+  //         shortcut.execute(
+  //           new KeyboardEvent('', {
+  //             key: key
+  //           })
+  //         );
+  //       });
+  //     }
+  //   }
+  // }
 }

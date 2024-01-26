@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
+    <ProjectReference Include="..\Zwoo.GameEngine\Zwoo.GameEngine.csproj" />
   </ItemGroup>
 
 </Project>
