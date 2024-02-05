@@ -13,6 +13,7 @@ const result: FetchResponse<any> = Promise.resolve({
 });
 
 export const NoopApi: ApiAdapter = {
+  getServer: () => '',
   changeUserPassword: (..._args) => result,
   createGame: (..._args) => result,
   createUserAccount: (..._args) => result,

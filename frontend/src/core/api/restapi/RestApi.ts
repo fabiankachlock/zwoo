@@ -18,6 +18,7 @@ export const RestApi = (apiUrl: string, wsOverride: string): ApiAdapter => {
   const leaderBoardService = new LeaderBoardService(backend);
 
   return {
+    getServer: () => backend.apiUrl,
     changeUserPassword: accountService.performChangePassword,
     createGame: gameManagementService.createGame,
     createUserAccount: accountService.performCreateAccount,

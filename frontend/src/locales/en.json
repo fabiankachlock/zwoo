@@ -61,6 +61,7 @@
     "help": "Help",
     "contact": "Contact",
     "statusOffline": "Offline",
+    "statusLocal": "Connected",
     "createGame": "Create Game",
     "joinGame": "Join Game"
   },

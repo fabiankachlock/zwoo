@@ -4,6 +4,7 @@ import { GameAdapter } from '@/core/api/GameAdapter';
 import { useRootApp } from '../app';
 
 const ApiRef: ApiAdapter & GameAdapter = {
+  getServer: () => useRootApp().api.getServer(),
   changeUserPassword: (...args) => useRootApp().api.changeUserPassword(...args),
   createGame: (...args) => useRootApp().api.createGame(...args),
   createUserAccount: (...args) => useRootApp().api.createUserAccount(...args),

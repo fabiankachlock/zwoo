@@ -1,5 +1,6 @@
-import { AppConfig } from '@/config';
 import { RouteRecordRaw } from 'vue-router';
+
+import { AppConfig } from '@/config';
 
 export const SettingsRoutes: Array<RouteRecordRaw> = [
   {

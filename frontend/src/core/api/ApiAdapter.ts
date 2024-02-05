@@ -7,6 +7,11 @@ import { ClientInfo, VersionHistory } from './entities/Misc';
 
 export interface ApiAdapter {
   /**
+   * returns the url of the current backend
+   */
+  getServer(): string;
+
+  /**
    * Change the password of the current
    * @param oldPassword the users old password
    * @param newPassword the users new password
