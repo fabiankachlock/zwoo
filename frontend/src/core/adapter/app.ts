@@ -66,6 +66,8 @@ export const useRootApp = defineStore('app', {
   },
   actions: {
     async configure() {
+      // assume online mode by default
+      this.environment = 'online';
       const auth = useAuth();
       const hasLocalLogin = await auth.tryLocalLogin();
 

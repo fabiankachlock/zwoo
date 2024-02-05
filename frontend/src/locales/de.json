@@ -62,6 +62,7 @@
     "contact": "Kontakt",
     "statusOffline": "Offline",
     "statusLocal": "Verbunden",
+    "disconnect": "Verbindung trennen",
     "createGame": "Spiel erstellen",
     "joinGame": "Spiel beitreten"
   },
