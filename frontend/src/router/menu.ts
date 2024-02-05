@@ -31,11 +31,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   {
     path: 'login-local',
     component: () => import('../views/LoginLocal.vue'),
-    meta: {
-      noAuth: true,
-      envOnly: 'local',
-      redirect: '/home'
-    }
+    meta: {}
   },
   {
     path: 'logout',

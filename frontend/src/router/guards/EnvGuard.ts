@@ -18,8 +18,11 @@ export class EnvGuard implements RouterInterceptor {
       return false;
     }
 
-    if (to.meta['envRedirect']) {
-      next(keepRedirect(to.fullPath, to.meta['envRedirect'] as string));
+    const redirectConfig = to.meta['envRedirect'] as Record<string, string> | string;
+    if (redirectConfig && typeof redirectConfig === 'string') {
+      next(keepRedirect(to.fullPath, redirectConfig));
+    } else if (redirectConfig && typeof redirectConfig === 'object' && redirectConfig[env]) {
+      next(keepRedirect(to.fullPath, redirectConfig[env]));
     } else {
       next('/');
     }

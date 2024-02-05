@@ -66,6 +66,9 @@ export const useRootApp = defineStore('app', {
   },
   actions: {
     async configure() {
+      const auth = useAuth();
+      const hasLocalLogin = await auth.tryLocalLogin();
+
       const response = await this.api.checkVersion(AppConfig.Version, '');
       if (response.isError && response.error.code === BackendError.InvalidClient) {
         // backend marked client as invalid
@@ -74,14 +77,19 @@ export const useRootApp = defineStore('app', {
         this._setServerVersionMatches(false);
       } else if (response.isError && AppConfig.UseBackend) {
         // enable offline mode
-        this.environment = 'offline';
-        console.warn('### zwoo entered offline mode');
-        useAuth().applyOfflineConfig();
-        RouterService.getRouter().push(window.location.pathname);
+        if (!hasLocalLogin) {
+          this.environment = 'offline';
+          console.warn('### zwoo entered offline mode');
+          await auth.applyOfflineConfig();
+          RouterService.getRouter().push(window.location.pathname);
+        }
         this._setServerVersion(this.clientVersion);
         this._setServerVersionMatches(true);
       } else if (response.wasSuccessful) {
         // TODO: check version
+        if (!hasLocalLogin) {
+          await auth.configure();
+        }
         this._setServerVersion(response.data.version);
         this._setServerVersionMatches(true);
       }

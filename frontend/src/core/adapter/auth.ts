@@ -231,20 +231,23 @@ export const useAuth = defineStore('auth', {
     },
     async configure(): Promise<void> {
       await this.askStatus();
-      // try to restore guest session
-      if (!this.isLoggedIn) {
-        // TODO: add better ui for seamless local mode
-        // const session = GuestSessionManager.tryGetSession();
-        // if (session) {
-        //   useRootApp().enterLocalMode(session.server);
-        //   await this.askStatus();
-        // }
-      }
-
       // setup initial config
       if (this.isLoggedIn) {
         useConfig().login();
       }
+    },
+    async tryLocalLogin(): Promise<boolean> {
+      // try to restore guest session
+      const session = GuestSessionManager.tryGetSession();
+      if (session) {
+        useRootApp().enterLocalMode(session.server);
+        await this.askStatus();
+        if (!this.isLoggedIn) {
+          GuestSessionManager.destroySession();
+        }
+        return this.isLoggedIn;
+      }
+      return false;
     },
     async __FIX_resolveNameAsync(): Promise<string> {
       const username = I18nInstance.t('offline.playerName');
@@ -255,8 +258,8 @@ export const useAuth = defineStore('auth', {
       }
       return username;
     },
-    applyOfflineConfig() {
-      this.__FIX_resolveNameAsync().then(username => {
+    async applyOfflineConfig() {
+      await this.__FIX_resolveNameAsync().then(username => {
         this.$patch({
           isInitialized: true,
           isLoggedIn: false,

@@ -48,7 +48,10 @@ const routes: Array<RouteRecordRaw> = [
         component: Landing,
         meta: {
           excludeEnv: ['offline', 'local'],
-          envRedirect: '/login-local'
+          envRedirect: {
+            local: '/login-local',
+            offline: '/offline'
+          }
         }
       },
       ...MenuRoutes,
@@ -99,6 +102,7 @@ const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
 const BeforeEachAsyncGuards: RouterInterceptor['beforeEachAsync'][] = [];
 
 router.beforeEach(async (to, from, next) => {
+  console.debug('router.beforeEach', to.fullPath, from.fullPath);
   let called = false;
   for (const guard of BeforeEachSyncGuards) {
     if (guard) {
