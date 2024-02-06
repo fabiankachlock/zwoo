@@ -131,7 +131,8 @@
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
     "stats": "Statistiken zeigen",
-    "greeting": "Hallo, {name}!"
+    "greeting": "Hallo, {name}!",
+    "localGame": "Lokales Spiel"
   },
   "list": {
     "title": "Verfügbare Spiele",

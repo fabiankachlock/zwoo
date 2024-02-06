@@ -131,7 +131,8 @@
     "create": "Create Game",
     "join": "Join Game",
     "stats": "Show Statistic",
-    "greeting": "Hello, {name}!"
+    "greeting": "Hello, {name}!",
+    "localGame": "Local Game"
   },
   "list": {
     "title": "Available Games",
