@@ -23,7 +23,7 @@ services:
       - 8000:80
     environment:
       # SMTP Settings
-      - ZWOO__EMAIL__USESSL=x
+      - ZWOO__EMAIL__USESSL=True
       - ZWOO__EMAIL__PORT=1
       - ZWOO__EMAIL__HOST=x
       - ZWOO__EMAIL__USERNAME=x
