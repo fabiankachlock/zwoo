@@ -4,9 +4,9 @@ import { computed } from 'vue';
 import { useRootApp } from '@/core/adapter/app';
 
 const props = defineProps<{
-  show?: 'offline' | 'online';
-  exclude?: ('offline' | 'online')[];
-  include?: ('offline' | 'online')[];
+  show?: 'offline' | 'online' | 'local';
+  exclude?: ('offline' | 'online' | 'local')[];
+  include?: ('offline' | 'online' | 'local')[];
 }>();
 
 const app = useRootApp();
@@ -16,7 +16,7 @@ const include = computed(() => props.include);
 </script>
 
 <template>
-  <template v-if="show === env || (exclude && !(exclude ?? []).includes(env)) || (include ?? []).includes(env)">
+  <template v-if="(show === env || (include ?? []).includes(env)) && (!exclude || !(exclude ?? []).includes(env))">
     <slot></slot>
   </template>
 </template>

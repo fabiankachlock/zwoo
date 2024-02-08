@@ -1,16 +1,22 @@
 import { AppConfig } from '@/config';
 import Logger from '@/core/services/logging/logImport';
 
-import { BackendErrorAble } from '../ApiError';
+import { FetchResponse } from '../ApiEntities';
 import { ContactForm } from '../entities/ContactForm';
 import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class MiscApiService {
-  static submitContactForm = async (data: ContactForm): Promise<BackendErrorAble<string>> => {
+  private readonly api: Backend;
+
+  public constructor(api: Backend) {
+    this.api = api;
+  }
+
+  submitContactForm = async (data: ContactForm): FetchResponse<void> => {
     Logger.Api.log(`submitting contact form`);
 
-    const response = await WrappedFetch<string>(`${Backend.getUrl(Endpoint.ContactFormSubmission)}`, {
+    const response = await WrappedFetch(`${this.api.getUrl(Endpoint.ContactFormSubmission)}`, {
       method: 'POST',
       useBackend: AppConfig.UseBackend,
       responseOptions: {
@@ -25,13 +31,10 @@ export class MiscApiService {
       })
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while submitting contact form');
-      return {
-        error: response.error
-      };
+      return response;
     }
-
-    return response.data ?? '';
+    return response;
   };
 }

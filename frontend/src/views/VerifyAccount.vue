@@ -29,7 +29,6 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { Icon } from '@/components/misc/Icon';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { unwrapBackendError } from '@/core/api/ApiError';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const route = useRoute();
@@ -46,9 +45,8 @@ onMounted(async () => {
   const code = Array.isArray(route.query['code']) ? route.query['code'][0] : route.query['code'];
 
   const response = await verifyUserAccount(id ?? '', code ?? '');
-  const [success] = typeof response === 'object' ? unwrapBackendError(response) : [response, undefined];
   isLoading.value = false;
-  if (success) {
+  if (response.wasSuccessful) {
     isSuccess.value = true;
     displayText.value = 'success';
   } else {

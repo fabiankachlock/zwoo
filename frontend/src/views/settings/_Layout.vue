@@ -46,22 +46,29 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import { Icon } from '@/components/misc/Icon';
+import { AppConfig } from '@/config';
+import { useRootApp } from '@/core/adapter/app';
 import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();
+const app = useRootApp();
 const route = useRoute();
 const auth = useAuth();
 const config = useConfig();
 
-const allSections = ['general', 'account', 'game', 'developers', 'about'];
+const allSections = ['general', 'account', 'game', 'server', 'developers', 'about'];
 const isLoggedIn = computed(() => auth.isLoggedIn);
 const currentSection = ref('');
 const showDevSettings = computed(() => config.get(ZwooConfigKey.DevSettings));
 const isMenuOpen = ref(true);
 
-const blockedSections = computed(() => [...[isLoggedIn.value ? '-' : 'account'], ...[showDevSettings.value ? '-' : 'developers']]);
+const blockedSections = computed(() => [
+  ...[isLoggedIn.value && app.environment === 'online' ? '-' : 'account'],
+  ...[AppConfig.IsTauri ? '-' : 'server'],
+  ...[showDevSettings.value ? '-' : 'developers']
+]);
 const displaySections = computed(() => allSections.filter(section => !blockedSections.value.includes(section)));
 
 watch(

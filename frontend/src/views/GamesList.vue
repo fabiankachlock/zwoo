@@ -123,7 +123,7 @@ import FloatingDialog from '@/components/misc/FloatingDialog.vue';
 import { Icon } from '@/components/misc/Icon';
 import QRCodeReader from '@/components/misc/QRCodeReader.vue';
 import { SavedGame, useGameConfig } from '@/core/adapter/game';
-import { GameMeta, GamesList } from '@/core/api/entities/Game';
+import { GameMeta } from '@/core/api/entities/Game';
 import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
@@ -131,7 +131,7 @@ const { t } = useI18n();
 const gameConfig = useGameConfig();
 const router = useRouter();
 
-const games = ref<GamesList>([]);
+const games = ref<GameMeta[]>([]);
 const refreshing = ref(false);
 const scanDialogOpen = ref(false);
 const savedGame = ref<(GameMeta & SavedGame) | undefined>(undefined);

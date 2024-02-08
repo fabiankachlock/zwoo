@@ -1,7 +1,7 @@
 using MongoDB.Driver;
 using MongoDB.Bson;
 using Zwoo.Database.Dao;
-using log4net;
+using Microsoft.Extensions.Logging;
 
 namespace Zwoo.Database;
 
@@ -33,19 +33,19 @@ public class GameInfoService : IGameInfoService
 
     private readonly IDatabase _db;
     private readonly IAuditTrailService _audits;
-    private readonly ILog _logger;
+    private readonly ILogger<GameInfoService> _logger;
 
-    public GameInfoService(IDatabase db, IAuditTrailService audits, ILog? logger = null)
+    public GameInfoService(IDatabase db, IAuditTrailService audits, ILogger<GameInfoService> logger)
     {
         _db = db;
         _audits = audits;
-        _logger = logger ?? LogManager.GetLogger("GAmeInfoService");
+        _logger = logger;
     }
 
 
     public void SaveGame(GameInfoDao data, AuditOptions? auditOptions = null)
     {
-        _logger.Info($"saving game {data.GameId}");
+        _logger.LogInformation($"saving game {data.GameId}");
         _db.GamesInfo.InsertOne(data);
         foreach (var player in data.Scores)
         {

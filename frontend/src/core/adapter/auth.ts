@@ -1,13 +1,18 @@
 import { defineStore } from 'pinia';
 
-import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { AppConfig } from '@/config';
+import { getBackendErrorTranslation } from '@/core/api/ApiError';
+import { Backend, Endpoint } from '@/core/api/restapi/ApiConfig';
+import { CaptchaValidator } from '@/core/services/validator/captcha';
+import { EmailValidator } from '@/core/services/validator/email';
+import { PasswordValidator } from '@/core/services/validator/password';
+import { PasswordMatchValidator } from '@/core/services/validator/passwordMatch';
+import { UsernameValidator } from '@/core/services/validator/username';
 import { I18nInstance } from '@/i18n';
 
-import { CaptchaValidator } from '../services/validator/captcha';
-import { EmailValidator } from '../services/validator/email';
-import { PasswordValidator } from '../services/validator/password';
-import { PasswordMatchValidator } from '../services/validator/passwordMatch';
-import { UsernameValidator } from '../services/validator/username';
+import { UserSession } from '../api/entities/Authentication';
+import { GuestSessionManager } from '../services/localGames/guestSessionManager';
+import { useRootApp } from './app';
 import { useConfig, ZwooConfigKey } from './config';
 import { useApi } from './helper/useApi';
 
@@ -26,37 +31,89 @@ export const useAuth = defineStore('auth', {
       if (!captchaValid.isValid) throw captchaValid.getErrors();
 
       const status = await useApi().loginUser({
-        login: email,
+        email: email,
         password: password,
         captchaToken: captchaResponse ?? ''
       });
 
-      if (status.isLoggedIn) {
+      if (status.wasSuccessful) {
         this.$patch({
-          username: status.username,
-          isLoggedIn: status.isLoggedIn
+          username: status.data.username,
+          isLoggedIn: true
         });
         useConfig().login();
       } else {
         this.isLoggedIn = false;
-        const [, error] = unwrapBackendError(status);
-        if (error) {
-          throw error;
+        throw status.error;
+      }
+    },
+    async loginToLocalServer(username: string, serverUrl: string) {
+      const api = useApi();
+      const backend = Backend.from(serverUrl, '');
+
+      // first the version compatibility and server reachability needs to be checked
+      const result = await api.fetchRaw(backend.getUrl(Endpoint.Discover), {
+        useBackend: AppConfig.UseBackend,
+        fallbackValue: {
+          version: AppConfig.Version,
+          zrpVersion: '' // TODO: use real zrp version
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          version: AppConfig.Version,
+          zrpVersion: ''
+        })
+      });
+
+      if (result.isError) throw result.error;
+
+      // now the login can be performed
+      const response = await api.fetchRaw<UserSession>(backend.getUrl(Endpoint.GuestLogin), {
+        method: 'POST',
+        useBackend: AppConfig.UseBackend,
+        requestOptions: {
+          withCredentials: true
+        },
+        responseOptions: {
+          decodeJson: false
+        },
+        body: JSON.stringify({
+          username: username
+        })
+      });
+
+      if (response.wasSuccessful) {
+        useRootApp().enterLocalMode(serverUrl);
+        const authStatus = await useApi().loadUserInfo();
+        if (authStatus.wasSuccessful) {
+          GuestSessionManager.saveSession({
+            server: serverUrl,
+            started: Date.now()
+          });
+          this.$patch({
+            username: authStatus.data.username,
+            isLoggedIn: true,
+            wins: authStatus.data.wins ?? -1,
+            isInitialized: true
+          });
+        } else {
+          this.isLoggedIn = false;
+          throw authStatus.error;
         }
+      } else {
+        this.isLoggedIn = false;
+        throw response.error;
       }
     },
     async logout() {
       const status = await useApi().logoutUser();
-      if (!status.isLoggedIn) {
-        const [, error] = unwrapBackendError(status);
-        if (error) {
-          throw getBackendErrorTranslation(error);
-        }
+      if (status.isError) {
+        throw getBackendErrorTranslation(status.error);
       }
       useConfig().logout();
       this.$patch({
         username: '',
-        isLoggedIn: status.isLoggedIn,
+        isLoggedIn: false,
         wins: -1
       });
     },
@@ -91,34 +148,21 @@ export const useAuth = defineStore('auth', {
           username,
           email,
           password,
-          beta,
+          code: beta,
           acceptedTerms,
           captchaToken: captchaResponse ?? ''
         },
         useConfig().get(ZwooConfigKey.Language)
       );
 
-      if (status.isLoggedIn) {
-        this.$patch({
-          username: status.username,
-          isLoggedIn: status.isLoggedIn
-        });
-        this.askStatus();
-      } else {
-        this.isLoggedIn = false;
-        const [, error] = unwrapBackendError(status);
-        if (error) {
-          throw getBackendErrorTranslation(error);
-        }
+      if (status.isError) {
+        throw getBackendErrorTranslation(status.error);
       }
     },
     async deleteAccount(password: string) {
       const result = await useApi().deleteUserAccount(password);
-      if (!result.isLoggedIn) {
-        const [, error] = unwrapBackendError(result);
-        if (error) {
-          throw getBackendErrorTranslation(error);
-        }
+      if (result.isError) {
+        throw getBackendErrorTranslation(result.error);
       }
       useConfig().logout();
 
@@ -136,7 +180,7 @@ export const useAuth = defineStore('auth', {
 
       const response = await useApi().changeUserPassword(oldPassword, newPassword);
 
-      if (response.error) {
+      if (response.isError) {
         throw getBackendErrorTranslation(response.error);
       }
     },
@@ -149,7 +193,7 @@ export const useAuth = defineStore('auth', {
 
       const response = await useApi().requestUserPasswordReset(email, captchaResponse ?? '', useConfig().get(ZwooConfigKey.Language));
 
-      if (response.error) {
+      if (response.isError) {
         throw getBackendErrorTranslation(response.error);
       }
     },
@@ -165,32 +209,45 @@ export const useAuth = defineStore('auth', {
 
       const response = await useApi().resetUserPassword(code, password, captchaResponse ?? '');
 
-      if (response.error) {
+      if (response.isError) {
         throw getBackendErrorTranslation(response.error);
       }
     },
     async askStatus() {
       const response = await useApi().loadUserInfo();
-      if (response.isLoggedIn) {
+      if (response.wasSuccessful) {
         this.$patch({
-          username: response.username,
-          isLoggedIn: response.isLoggedIn,
-          wins: response.wins ?? -1,
+          username: response.data.username,
+          isLoggedIn: true,
+          wins: response.data.wins ?? -1,
           isInitialized: true
         });
       } else {
         this.$patch({
-          isLoggedIn: response.isLoggedIn,
+          isLoggedIn: false,
           isInitialized: true
         });
       }
     },
-    async configure() {
+    async configure(): Promise<void> {
       await this.askStatus();
       // setup initial config
       if (this.isLoggedIn) {
         useConfig().login();
       }
+    },
+    async tryLocalLogin(): Promise<boolean> {
+      // try to restore guest session
+      const session = GuestSessionManager.tryGetSession();
+      if (session) {
+        useRootApp().enterLocalMode(session.server);
+        await this.askStatus();
+        if (!this.isLoggedIn) {
+          GuestSessionManager.destroySession();
+        }
+        return this.isLoggedIn;
+      }
+      return false;
     },
     async __FIX_resolveNameAsync(): Promise<string> {
       const username = I18nInstance.t('offline.playerName');
@@ -201,8 +258,8 @@ export const useAuth = defineStore('auth', {
       }
       return username;
     },
-    applyOfflineConfig() {
-      this.__FIX_resolveNameAsync().then(username => {
+    async applyOfflineConfig() {
+      await this.__FIX_resolveNameAsync().then(username => {
         this.$patch({
           isInitialized: true,
           isLoggedIn: false,

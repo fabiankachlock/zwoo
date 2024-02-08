@@ -1,0 +1,47 @@
+{
+  "frontend": {
+    "$adapter": "vite-yarn",
+    "$fragments": {
+      "test:unit": "",
+      "test:e2e": "",
+      "test:e2e:ui": "",
+      "lint": "",
+      "lint:ci": "",
+      "i18n:check": "",
+      "format": "",
+      "format:ci": "",
+      "prepare": "",
+      "setup:version": "",
+      "postversion": "",
+      "deps:check": "",
+      "deps:viz": ""
+    },
+    "dev": {},
+    "prod": {},
+    "dev-instance": {},
+    "tauri": {},
+    "tauri-embedded": {},
+    "preview": {},
+    "analyze": {}
+  },
+  "backend": {
+    "$adapter": "dotnet",
+    "server": {
+      "project": "Zwoo.Backend"
+    },
+    "local": {
+      "project": "Zwoo.Backend.LocalServer"
+    },
+    "ziad": {
+      "project": "Zwoo.Dashboard"
+    },
+    "wasm": {
+      "project": "Zwoo.GameEngine.Wasm"
+    }
+  },
+  "$fragments": {
+    "docker": {
+      "$default": "docker compose -f ./docker-compose.local.yml up"
+    }
+  }
+}

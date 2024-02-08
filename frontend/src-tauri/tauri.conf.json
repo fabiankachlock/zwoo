@@ -12,8 +12,16 @@
   },
   "tauri": {
     "allowlist": {
+      "all": false,
       "globalShortcut": {
         "all": true
+      },
+      "fs": {
+        "scope": ["$RESOURCE/*"]
+      },
+      "shell": {
+        "all": false,
+        "open": true
       },
       "window": {
         "all": true
@@ -22,7 +30,7 @@
     "bundle": {
       "active": true,
       "category": "CardGame",
-      "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2023",
+      "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2024",
       "deb": {
         "depends": []
       },
@@ -44,7 +52,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "../../backend/Zwoo.Backend.LocalServer/bin/Release/net8.0/osx-x64/native/Zwoo.Backend.LocalServer.exe"
+      ],
       "shortDescription": "zwoo - The Second Challenge",
       "targets": "all",
       "windows": {

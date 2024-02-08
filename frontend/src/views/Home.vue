@@ -34,12 +34,20 @@
         </div>
         -->
       </div>
-      <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
-        <router-link class="flex flex-row items-center" to="/leaderboard">
-          <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
-          <p class="tc-main-light inline-block mx-1">{{ t('landing.leaderboard') }}</p>
-        </router-link>
-      </div>
+      <Environment show="online">
+        <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
+          <router-link class="flex flex-row items-center" to="/leaderboard">
+            <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
+            <p class="tc-main-light inline-block mx-1">{{ t('landing.leaderboard') }}</p>
+          </router-link>
+        </div>
+        <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
+          <router-link class="flex flex-row items-center" to="/login-local">
+            <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
+            <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
+          </router-link>
+        </div>
+      </Environment>
       <!-- TODO tmp(beta): <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
         <router-link class="flex flex-row items-center" to="/tutorial">
           <Icon class="icon tc-secondary" icon="mdi:arrow-right-bold-box-outline" />
@@ -54,6 +62,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
 import { useAuth } from '@/core/adapter/auth';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';

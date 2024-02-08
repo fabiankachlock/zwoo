@@ -1,9 +1,12 @@
 @using Zwoo.Dashboard.Data
 @using System.Security.Claims
+@using Microsoft.Extensions.Options
 
 @inherits LayoutComponentBase
 
 @inject NavigationManager UriHelper
+@inject ZiadOptions Options
+
 
 
 <PageTitle>ZIAD</PageTitle>
@@ -16,7 +19,7 @@
                 <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.Span" Class="rz-m-0">Zwoo Info Admin
                     Dashboard</RadzenText>
                 <RadzenText TextStyle="TextStyle.Caption" TagName="TagName.Span" Class="rz-m-0 rz-ml-2">@("@")
-                    @Globals.Version</RadzenText>
+                    @Options.App.AppVersion</RadzenText>
             </RadzenLabel>
             <RadzenProfileMenu style="margin-left: auto;">
                 <Template>

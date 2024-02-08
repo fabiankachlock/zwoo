@@ -2,7 +2,7 @@
   <MaxWidthLayout size="small" class="mt-8">
     <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 w-fit text-error-light-border dark:text-error-dark-border"></Icon>
     <h1 class="tc-main text-center text-4xl mb-2">{{ t('wrongVersion.title') }}</h1>
-    <p class="tc-main-secondary text-center">{{ t('wrongVersion.info', [config.clientVersion, config.serverVersion]) }}</p>
+    <p class="tc-main-secondary text-center">{{ t('wrongVersion.info', [config.clientVersion, serverVersion || 'unknown']) }}</p>
     <div v-if="!isReady" class="flex flex-row justify-center flex-nowrap items-center tc-main mt-4">
       <ZwooIcon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
       <p class="text-lg tc-main-secondary">{{ t('wrongVersion.loading') }}</p>
@@ -39,6 +39,7 @@ const router = useRouter();
 const app = useRootApp();
 const config = useRootApp();
 const isReady = computed(() => app.updateAvailable);
+const serverVersion = computed(() => app.serverVersion);
 
 watch(
   () => app.updateAvailable,

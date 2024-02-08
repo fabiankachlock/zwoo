@@ -7,6 +7,7 @@
     "serve:prod": "vite --mode dev",
     "serve:tauri": "cross-env VUE_APP_IS_TAURI=true vite --mode dev",
     "serve:fe-proxy": "vite --mode dev-proxy",
+    "serve:local-server": "vite --mode local-server",
     "//": "echo is needed, so that vue-tsc dont picks up file path arguments passed by lint-staged, which breaks vue-tsc",
     "typecheck": "vue-tsc --noEmit && echo \"\"",
     "preview": "vite preview --mode preview",
@@ -98,6 +99,11 @@
     "vue-tsc": "^1.8.27",
     "workbox-precaching": "^7.0.0",
     "ws": "^8.16.0"
+  },
+  "//1": "This solves an ERR_REQUIRE_ESM issue originated from cypress",
+  "//2": "seems to be an issue with specific to yarn v1, might upgrade or change to pnpm later",
+  "resolutions": {
+    "jackspeak": "2.1.1"
   },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [

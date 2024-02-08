@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using Zwoo.Database.Dao;
 using Zwoo.Database.Legacy;
 using MongoDB.Driver;
-using log4net;
+using Microsoft.Extensions.Logging;
 
 namespace Zwoo.Database;
 
@@ -81,18 +81,18 @@ public class Database : IDatabase
     public IMongoCollection<AuditTrailDao> AuditTrails { get; }
     public IMongoCollection<ContactRequest> ContactRequests { get; }
 
-    private readonly ILog _logger;
+    private readonly ILogger<Database> _logger;
 
-    public Database(string connectionString, string dbName, ILog? logger = null)
+    public Database(string connectionString, string dbName, ILogger<Database> logger)
     {
         Client = new MongoClient(connectionString);
-        _logger = logger ?? LogManager.GetLogger("Database");
-        _logger.Info($"trying to connect to db");
+        _logger = logger;
+        _logger.LogInformation($"trying to connect to db");
         MongoDB = Client.GetDatabase(dbName);
 
         if (MongoDB == null)
         {
-            _logger.Error("cant connect to database");
+            _logger.LogError("cant connect to database");
             Environment.Exit(1);
         }
 
@@ -102,13 +102,12 @@ public class Database : IDatabase
         }
         catch (Exception e)
         {
-            _logger.Error(e);
-            _logger.Fatal("failed to connect to database");
+            _logger.LogError(e, "cant connect to database");
             Environment.Exit(1);
         }
 
         InitializeClasses();
-        _logger.Info($"established connection with database");
+        _logger.LogInformation($"established connection with database");
 
         BetaCodes = MongoDB.GetCollection<BetaCodeDao>("betacodes");
         Users = MongoDB.GetCollection<UserDao>("users");

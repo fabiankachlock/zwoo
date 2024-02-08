@@ -12,6 +12,7 @@ export class AuthGuard implements RouterInterceptor {
   beforeEach = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext): Promise<boolean> => {
     const auth = useAuth();
     const app = useRootApp();
+
     if (to.meta['requiresAuth'] === true || to.meta['noAuth'] === true) {
       this.Logger.debug(to.meta['requiresAuth'] === true ? `${to.fullPath} needs auth` : `${to.fullPath} only available without auth`);
       if (!auth.isInitialized) {
@@ -20,7 +21,10 @@ export class AuthGuard implements RouterInterceptor {
       }
 
       // needs an exception for offline mode, because when offline this user is not officially logged in (e.g. has no account settings etc.)
-      if ((to.meta['requiresAuth'] === true && !auth.isLoggedIn && app.environment === 'online') || (to.meta['noAuth'] === true && auth.isLoggedIn)) {
+      if (
+        (to.meta['requiresAuth'] === true && !auth.isLoggedIn && app.environment !== 'offline') ||
+        (to.meta['noAuth'] === true && auth.isLoggedIn)
+      ) {
         this.Logger.warn(`not allowed to access ${to.fullPath}`);
         const redirect = to.meta['redirect'] as string | boolean | undefined;
 

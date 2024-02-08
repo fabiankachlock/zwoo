@@ -7,6 +7,7 @@ interface ImportMetaEnv {
 	readonly VUE_APP_VERSION: string;
 	readonly VUE_APP_VERSION_HASH: string;
 	readonly VUE_APP_USE_BACKEND: string;
+	readonly VUE_APP_DEFAULT_ENV: string;
 	readonly VUE_APP_DEVELOPMENT: string;
 	readonly VUE_APP_BACKEND: string;
 	readonly VUE_APP_WS_OVERRIDE: string;

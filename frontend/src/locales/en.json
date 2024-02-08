@@ -61,6 +61,8 @@
     "help": "Help",
     "contact": "Contact",
     "statusOffline": "Offline",
+    "statusLocal": "Connected",
+    "disconnect": "Disconnect",
     "createGame": "Create Game",
     "joinGame": "Join Game"
   },
@@ -73,6 +75,13 @@
     "resetPassword": "Reset Password",
     "notVerifiedInfo": "You account seems to be not verified. If you did not get an email, you can resend the verification email to verify your account.",
     "resendVerifyEmail": "Resend email"
+  },
+  "loginLocal": {
+    "title": "Guest Login",
+    "server": "Server URL",
+    "name": "Username",
+    "infoServer": "The guarantee of adequate data protection measures cannot be ensured on third-party servers. Therefore, the use and distribution of personal data on local servers should be avoided.",
+    "submit": "Sign In"
   },
   "createAccount": {
     "title": "Create Account",
@@ -122,7 +131,8 @@
     "create": "Create Game",
     "join": "Join Game",
     "stats": "Show Statistic",
-    "greeting": "Hello, {name}!"
+    "greeting": "Hello, {name}!",
+    "localGame": "Local Game"
   },
   "list": {
     "title": "Available Games",

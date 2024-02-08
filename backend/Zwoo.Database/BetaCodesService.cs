@@ -1,5 +1,5 @@
 using MongoDB.Driver;
-using log4net;
+using Microsoft.Extensions.Logging;
 
 namespace Zwoo.Database;
 
@@ -25,23 +25,23 @@ public interface IBetaCodesService
 public class BetaCodesService : IBetaCodesService
 {
     private readonly IDatabase _db;
-    private readonly ILog _logger;
+    private readonly ILogger<BetaCodesService> _logger;
 
-    public BetaCodesService(IDatabase db, ILog? logger = null)
+    public BetaCodesService(IDatabase db, ILogger<BetaCodesService> logger)
     {
         _db = db;
-        _logger = logger ?? LogManager.GetLogger("BetaCodesService");
+        _logger = logger;
     }
 
     public bool ExistsBetaCode(string betaCode)
     {
-        _logger.Debug($"checking beta code {betaCode}");
+        _logger.LogDebug($"checking beta code {betaCode}");
         return _db.BetaCodes.AsQueryable().FirstOrDefault(x => x.Code == betaCode) != null;
     }
 
     public bool RemoveBetaCode(string betaCode)
     {
-        _logger.Info($"removing beta code {betaCode}");
+        _logger.LogInformation($"removing beta code {betaCode}");
         return _db.BetaCodes.DeleteOne(x => betaCode == x.Code).DeletedCount != 0;
     }
 }

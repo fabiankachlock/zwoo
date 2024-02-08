@@ -61,6 +61,8 @@
     "help": "Hilfe",
     "contact": "Kontakt",
     "statusOffline": "Offline",
+    "statusLocal": "Verbunden",
+    "disconnect": "Verbindung trennen",
     "createGame": "Spiel erstellen",
     "joinGame": "Spiel beitreten"
   },
@@ -73,6 +75,13 @@
     "resetPassword": "Passwort zurücksetzten",
     "notVerifiedInfo": "Dein Account ist nicht verifiziert. Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
     "resendVerifyEmail": "Email neu senden"
+  },
+  "loginLocal": {
+    "title": "Gast Anmeldung",
+    "server": "Server URL",
+    "name": "Benutzername",
+    "infoServer": "Die Gewährleistung angemessener Datenschutzmaßnahmen kann auf Servern von Dritten nicht garantiert werden. Daher sollte die Verwendung und Verbreitung von personenbezogenen Daten auf lokalen Server vermieden werden.",
+    "submit": "Anmelden"
   },
   "createAccount": {
     "title": "Account Erstellen",
@@ -122,7 +131,8 @@
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
     "stats": "Statistiken zeigen",
-    "greeting": "Hallo, {name}!"
+    "greeting": "Hallo, {name}!",
+    "localGame": "Lokales Spiel"
   },
   "list": {
     "title": "Verfügbare Spiele",

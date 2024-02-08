@@ -4,6 +4,7 @@ import { GameAdapter } from '@/core/api/GameAdapter';
 import { useRootApp } from '../app';
 
 const ApiRef: ApiAdapter & GameAdapter = {
+  getServer: () => useRootApp().api.getServer(),
   changeUserPassword: (...args) => useRootApp().api.changeUserPassword(...args),
   createGame: (...args) => useRootApp().api.createGame(...args),
   createUserAccount: (...args) => useRootApp().api.createUserAccount(...args),
@@ -16,7 +17,7 @@ const ApiRef: ApiAdapter & GameAdapter = {
   loadOwnLeaderBoardPosition: (...args) => useRootApp().api.loadOwnLeaderBoardPosition(...args),
   loadUserInfo: (...args) => useRootApp().api.loadUserInfo(...args),
   loadUserSettings: (...args) => useRootApp().api.loadUserSettings(...args),
-  loadVersion: (...args) => useRootApp().api.loadVersion(...args),
+  checkVersion: (...args) => useRootApp().api.checkVersion(...args),
   loadVersionHistory: (...args) => useRootApp().api.loadVersionHistory(...args),
   loginUser: (...args) => useRootApp().api.loginUser(...args),
   logoutUser: (...args) => useRootApp().api.logoutUser(...args),
