@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   db:
@@ -23,29 +23,25 @@ services:
       - 8000:80
     environment:
       # SMTP Settings
-      - SMTP_HOST_URL=x
-      - SMTP_HOST_PORT=1
-      - SMTP_HOST_EMAIL=x
-      - SMTP_USERNAME=x
-      - SMTP_PASSWORD=x
-      - ZWOO_CONTACT_EMAIL=info@igd20.de
+      - ZWOO__EMAIL__USESSL=x
+      - ZWOO__EMAIL__PORT=1
+      - ZWOO__EMAIL__HOST=x
+      - ZWOO__EMAIL__USERNAME=x
+      - ZWOO__EMAIL__PASSWORD=x
+      - ZWOO__EMAIL__EMAIL=info@igd20.de
+      - ZWOO__EMAIL__CONTACTEMAIL=info@igd20.de
       # Database Settings
-      - ZWOO_DATABASE_CONNECTION_STRING=mongodb://db:27017
-      - ZWOO_DATABASE_NAME=zwoo
+      - ZWOO__DATABASE__CONNECTIONURI=mongodb://db:27017
+      - ZWOO__DATABASE__DBNAME=zwoo
       # Backend Config
-      - ZWOO_RECAPTCHA_SIDESECRET=0x0000000000000000000000000000000000000000
+      - ZWOO__FEATURES__CAPTCHASECRET=0x0000000000000000000000000000000000000000
       # SSL Settings
-      - USE_SSL=False
-      - ZWOO_CORS=https://zwoo.igd20.de
-      - ZWOO_DOMAIN=zwoo.igd20.de
-      - ZWOO_ENCRYPTION_KEY=x
-      - ZWOO_USE_LOGRUSH=False
-      - ZWOO_LOGRUSH_URL=http://host.docker.internal:7000
-      - ZWOO_LOGRUSH_ALIAS=Zwoo
-      - ZWOO_LOGRUSH_ID=x
-      - ZWOO_LOGRUSH_KEY=x
-      - ZWOO_BETA=True
-  
+      - ZWOO__SERVER__USESSL=False
+      - ZWOO__SERVER__CORS=https://zwoo.igd20.de
+      - ZWOO__SERVER__DOMAIN=zwoo.igd20.de
+      - ZWOO__SERVER__COOKIEDOMAIN=zwoo.igd20.de
+      - ZWOO__FEATURES__BETA=True
+
   testdata:
     build: ./testdata
     depends_on:
