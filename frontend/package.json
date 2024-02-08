@@ -100,6 +100,11 @@
     "workbox-precaching": "^7.0.0",
     "ws": "^8.16.0"
   },
+  "//1": "This solves an ERR_REQUIRE_ESM issue originated from cypress",
+  "//2": "seems to be an issue with specific to yarn v1, might upgrade or change to pnpm later",
+  "resolutions": {
+    "jackspeak": "2.1.1"
+  },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [
       "yarn lint",
