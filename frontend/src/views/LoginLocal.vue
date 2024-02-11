@@ -26,7 +26,9 @@ const logIn = async () => {
   isLoading.value = true;
 
   try {
-    await auth.loginToLocalServer(name.value, server.value);
+    const wasSuccess = await auth.loginToLocalServer(name.value, server.value);
+    if (!wasSuccess) return;
+
     if (!applyRedirectReplace()) {
       router.push('/home');
     }

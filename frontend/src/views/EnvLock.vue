@@ -11,7 +11,7 @@ const app = useRootApp();
 const target = new URLSearchParams(location.search).get('target');
 
 const reload = () => {
-  location.reload();
+  location.href = '/';
 };
 </script>
 

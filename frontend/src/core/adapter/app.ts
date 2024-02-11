@@ -124,7 +124,7 @@ export const useRootApp = defineStore('app', {
           this._setServerVersion(response.error.problem['version']?.toString() || 'unknown');
           this._setServerVersionMatches(false);
         } else {
-          RouterService.getRouter().push('/locked?target=online');
+          RouterService.getRouter().push('/locked?target=offline');
           this._setServerVersion(this.clientVersion);
           this._setServerVersionMatches(true);
         }
