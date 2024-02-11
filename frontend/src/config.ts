@@ -6,6 +6,7 @@ export const AppConfig = Object.freeze({
   VersionHash: import.meta.env.VUE_APP_VERSION_HASH,
   UseBackend: import.meta.env.VUE_APP_USE_BACKEND === 'true',
   DefaultEnv: import.meta.env.VUE_APP_DEFAULT_ENV,
+  LockEnv: import.meta.env.VUE_APP_LOCK_ENV === 'true',
   IsDev: import.meta.env.VUE_APP_DEVELOPMENT === 'true',
   ApiUrl: import.meta.env.VUE_APP_BACKEND,
   WsUrl: import.meta.env.VUE_APP_WS_OVERRIDE,

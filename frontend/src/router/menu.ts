@@ -134,5 +134,9 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
       envOnly: 'offline',
       onlineRedirect: '/home'
     }
+  },
+  {
+    path: 'locked',
+    component: () => import('../views/EnvLock.vue')
   }
 ];

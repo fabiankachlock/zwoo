@@ -240,7 +240,9 @@ export const useAuth = defineStore('auth', {
       // try to restore guest session
       const session = GuestSessionManager.tryGetSession();
       if (session) {
-        useRootApp().enterLocalMode(session.server);
+        const isAllowed = useRootApp().enterLocalMode(session.server);
+        if (!isAllowed) return false;
+
         await this.askStatus();
         if (!this.isLoggedIn) {
           GuestSessionManager.destroySession();
