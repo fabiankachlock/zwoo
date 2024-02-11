@@ -19,7 +19,7 @@ const reload = () => {
   <MaxWidthLayout size="small" class="mt-8">
     <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 w-fit text-error-light-border dark:text-error-dark-border"></Icon>
     <h1 class="tc-main text-center text-4xl mb-2">{{ t('envLock.title') }}</h1>
-    <p class="tc-main-secondary text-center">{{ t('envLock.info', [app.environment, target]) }}</p>
+    <p class="tc-main-secondary text-center">{{ t('envLock.info', [t('envLock.' + app.environment), t('envLock.' + target)]) }}</p>
 
     <div class="flex flex-wrap justify-center items-center my-2">
       <button

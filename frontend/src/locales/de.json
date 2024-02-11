@@ -498,5 +498,13 @@
     "5-self+target": "{other} hat mir dir Karten getauscht",
     "6": "{target} hat die Farbe gewechselt",
     "6-self": "Du hast die Farbe gewechselt"
+  },
+  "envLock": {
+    "title": "Ungültige Umgebung",
+    "info": "zwoo ist in dieser Umgebung auf den {0} beschränkt. Der {1} ist nicht verfügbar.",
+    "reload": "Seite neu laden",
+    "online": "Online Modus",
+    "offline": "Offline Modus",
+    "local": "Lokaler Modus"
   }
 }
