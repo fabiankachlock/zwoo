@@ -7,14 +7,15 @@ interface ImportMetaEnv {
 	readonly VUE_APP_VERSION: string;
 	readonly VUE_APP_VERSION_HASH: string;
 	readonly VUE_APP_USE_BACKEND: string;
-	readonly VUE_APP_DEFAULT_ENV: string;
+	readonly VUE_APP_DEFAULT_ENV?: string;
+	readonly VUE_APP_LOCK_ENV?: string;
 	readonly VUE_APP_DEVELOPMENT: string;
 	readonly VUE_APP_BACKEND: string;
 	readonly VUE_APP_WS_OVERRIDE: string;
 	readonly VUE_APP_DOMAIN: string;
 	readonly VUE_APP_LOG_RUSH_SERVER: string;
-	readonly VUE_APP_VERSION_OVERRIDE: string | undefined;
-	readonly VUE_APP_IS_TAURI: string | undefined;
+	readonly VUE_APP_VERSION_OVERRIDE?: string;
+	readonly VUE_APP_IS_TAURI?: string;
 }
 
 interface ImportMeta {

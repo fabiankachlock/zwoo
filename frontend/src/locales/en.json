@@ -498,5 +498,13 @@
     "5-self+target": "{other} swapped cards with you",
     "6": "{target} changed the color",
     "6-self": "You changed the color"
+  },
+  "envLock": {
+    "title": "Environment Lock",
+    "info": "zwoo is locked to {0} in this environment. The {1} is not available.",
+    "reload": "Reload",
+    "online": "online mode",
+    "offline": "offline mode",
+    "local": "local mode"
   }
 }

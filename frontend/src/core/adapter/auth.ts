@@ -47,7 +47,7 @@ export const useAuth = defineStore('auth', {
         throw status.error;
       }
     },
-    async loginToLocalServer(username: string, serverUrl: string) {
+    async loginToLocalServer(username: string, serverUrl: string): Promise<boolean> {
       const api = useApi();
       const backend = Backend.from(serverUrl, '');
 
@@ -83,7 +83,9 @@ export const useAuth = defineStore('auth', {
       });
 
       if (response.wasSuccessful) {
-        useRootApp().enterLocalMode(serverUrl);
+        const isAllowed = useRootApp().enterLocalMode(serverUrl);
+        if (!isAllowed) return false;
+
         const authStatus = await useApi().loadUserInfo();
         if (authStatus.wasSuccessful) {
           GuestSessionManager.saveSession({
@@ -104,6 +106,7 @@ export const useAuth = defineStore('auth', {
         this.isLoggedIn = false;
         throw response.error;
       }
+      return true;
     },
     async logout() {
       const status = await useApi().logoutUser();
@@ -240,7 +243,9 @@ export const useAuth = defineStore('auth', {
       // try to restore guest session
       const session = GuestSessionManager.tryGetSession();
       if (session) {
-        useRootApp().enterLocalMode(session.server);
+        const isAllowed = useRootApp().enterLocalMode(session.server);
+        if (!isAllowed) return false;
+
         await this.askStatus();
         if (!this.isLoggedIn) {
           GuestSessionManager.destroySession();

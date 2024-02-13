@@ -10,6 +10,7 @@ import { GameAdapter } from '../api/GameAdapter';
 import { RestApi } from '../api/restapi/RestApi';
 import { WasmApi } from '../api/wasmapi/WasmApi';
 import { WsGameAdapter } from '../api/wsgame/WsGameAdapter';
+import Logger from '../services/logging/logImport';
 import { useAuth } from './auth';
 import { MigrationRunner } from './migrations/MigrationRunner';
 import { SnackBarPosition, useSnackbar } from './snackbar';
@@ -66,8 +67,17 @@ export const useRootApp = defineStore('app', {
   },
   actions: {
     async configure() {
+      // if env is locked setup must run static
+      if (AppConfig.LockEnv && AppConfig.DefaultEnv) {
+        this.setupLocked();
+        MigrationRunner.migrateTo(AppConfig.Version);
+        this.isLoading = false;
+        return;
+      }
+
+      // otherwise setup dynamically
       // assume online mode by default
-      this.environment = 'online';
+      this.environment = (AppConfig.DefaultEnv as AppEnv) ?? 'online';
       const auth = useAuth();
       const hasLocalLogin = await auth.tryLocalLogin();
 
@@ -98,6 +108,40 @@ export const useRootApp = defineStore('app', {
 
       MigrationRunner.migrateTo(AppConfig.Version);
       this.isLoading = false;
+    },
+    async setupLocked() {
+      this.environment = AppConfig.DefaultEnv as AppEnv;
+      Logger.warn(`### zwoo statically entered ${this.environment} mode`);
+      if (AppConfig.DefaultEnv === 'online') {
+        // setup for online mode
+        const response = await this.api.checkVersion(AppConfig.Version, '');
+        if (response.wasSuccessful) {
+          this._setServerVersion(response.data.version);
+          this._setServerVersionMatches(true);
+        } else if (response.isError && response.error.code === BackendError.InvalidClient) {
+          // backend marked client as invalid
+          RouterService.getRouter().push('/invalid-version');
+          this._setServerVersion(response.error.problem['version']?.toString() || 'unknown');
+          this._setServerVersionMatches(false);
+        } else {
+          RouterService.getRouter().push('/locked?target=offline');
+          this._setServerVersion(this.clientVersion);
+          this._setServerVersionMatches(true);
+        }
+      } else if (AppConfig.DefaultEnv === 'offline') {
+        // setup for offline mode
+        this._setServerVersion(this.clientVersion);
+        this._setServerVersionMatches(true);
+        await useAuth().applyOfflineConfig();
+      } else if (AppConfig.DefaultEnv === 'local') {
+        // setup for local mode
+        this._setServerVersion(this.clientVersion);
+        this._setServerVersionMatches(true);
+        const hasLocalLogin = await useAuth().tryLocalLogin();
+        if (!hasLocalLogin) {
+          RouterService.getRouter().push('/login-local');
+        }
+      }
     },
     _setServerVersion(version: string) {
       if (typeof this.serverVersion === 'string') {
@@ -134,11 +178,18 @@ export const useRootApp = defineStore('app', {
     updateApp() {
       this._updateFunc(true);
     },
-    enterLocalMode(serverUrl: string) {
+    enterLocalMode(serverUrl: string): boolean {
+      if (AppConfig.LockEnv && AppConfig.DefaultEnv !== 'local') {
+        // cant switch to online mode
+        RouterService.getRouter().push('/locked?target=local');
+        return false;
+      }
+
       // TODO: handle ws url
       this._apiMap.local.api = RestApi(serverUrl, AppConfig.WsUrl);
-      console.warn('### zwoo entered local mode');
       this.environment = 'local';
+      Logger.warn('### zwoo entered local mode');
+      return true;
     }
   }
 });
