@@ -45,7 +45,7 @@ builder.Services.AddGameServices();
 
 var app = builder.Build();
 
-app.UseZwooHttpLogging();
+app.UseZwooHttpLogging("/api");
 app.UseZwooCors();
 
 // group all api endpoints under /api
