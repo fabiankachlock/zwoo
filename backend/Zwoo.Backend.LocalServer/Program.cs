@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
@@ -12,6 +13,30 @@ using Zwoo.Database.Dao;
 using Zwoo.GameEngine.Lobby.Features;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+
+var config = builder.AddServerConfiguration(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    var port = config.UseDynamicPort ? 0 : config.Port;
+
+    if (config.UseAllIPs)
+    {
+        options.ListenAnyIP(port);
+        return;
+    }
+
+    if (config.UseLocalhost)
+    {
+        options.ListenLocalhost(port);
+    }
+
+    if (IPAddress.TryParse(config.IP, out var ip))
+    {
+        options.Listen(ip, port);
+    }
+
+    options.Listen(new IPAddress(0), port);
+});
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
