@@ -34,11 +34,17 @@ public static class LoggingExtensions
         });
     }
 
-    public static void UseZwooHttpLogging(this WebApplication app)
+    public static void UseZwooHttpLogging(this WebApplication app, string subPath = "")
     {
         ILogger<HttpLogger> logger = app.Services.GetService<ILogger<HttpLogger>>()!;
         app.Use(async (context, next) =>
         {
+            if (!context.Request.Path.StartsWithSegments(subPath))
+            {
+                await next.Invoke(context);
+                return;
+            }
+
             var watch = new Stopwatch();
             var log = "";
             var warning = false;
