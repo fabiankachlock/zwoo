@@ -28,27 +28,38 @@
     "$adapter": "dotnet",
     "server": {
       "project": "Zwoo.Backend",
-      "args": {
-        "-c": "Release"
+      "build": {
+        "$pre": {
+          "command": "exit 1"
+        },
+        "args": {
+          "-c": "Release"
+        }
       }
     },
     "local": {
       "project": "Zwoo.Backend.LocalServer",
-      "args": {
-        "-c": "Release"
+      "build": {
+        "args": {
+          "-c": "Release"
+        }
       }
     },
     "ziad": {
       "project": "Zwoo.Dashboard",
-      "args": {
-        "-c": "Release"
+      "build": {
+        "args": {
+          "-c": "Release"
+        }
       }
     },
     "wasm": {
       "project": "Zwoo.GameEngine.Wasm",
-      "args": {
-        "-p:RunAOTCompilation=true": "",
-        "-c": "Release"
+      "build": {
+        "args": {
+          "-p:RunAOTCompilation=true": "",
+          "-c": "Release"
+        }
       }
     }
   },

@@ -26,7 +26,7 @@ jobs:
         run: dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build server --no-restore
+        run: zwooc build -o server --no-restore
       # - name: Test
       #   working-directory: ./backend
       #   run: dotnet test "./Zwoo.GameEngine/Zwoo.GameEngine.csproj" -c Release --no-restore --verbosity normal
@@ -47,7 +47,7 @@ jobs:
         run: dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build ziad --no-restore
+        run: zwooc build -o ziad --no-restore
 
   wasm-gamelogic:
     runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
         run: dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build wasm --no-restore
+        run: zwooc build -o wasm --no-restore
 
   local-server:
     runs-on: ubuntu-latest
@@ -86,4 +86,4 @@ jobs:
         run: dotnet restore "./Zwoo.Backend.LocalServer/Zwoo.Backend.LocalServer.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build local --no-restore
+        run: zwooc build -o local --no-restore
