@@ -40,4 +40,19 @@ public static class ServerConfigExtensions
         }
         return value;
     }
+
+    public static void PrintHelp(this ServerConfig config)
+    {
+        Console.WriteLine("Welcome to the local server of zwoo!");
+        Console.WriteLine("USAGE:");
+        Console.WriteLine("  -h                            Print this help");
+        Console.WriteLine("  --port <port>                 Port to listen on");
+        Console.WriteLine("  --ip <ip>                     IP to listen on");
+        Console.WriteLine("  --use-dynamic-port            Use a dynamic port");
+        Console.WriteLine("  --use-localhost               Listen on localhost");
+        Console.WriteLine("  --use-all-ips                 Listen on all IPs");
+        Console.WriteLine("  --server-id <id>              Server ID");
+        Console.WriteLine("  --strict-origins              Allow only access via built in website");
+        Console.WriteLine("  --allowed-origins <origins>   Allowed origins");
+    }
 }

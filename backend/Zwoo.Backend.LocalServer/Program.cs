@@ -12,12 +12,22 @@ using Zwoo.Backend.Shared.Services;
 using Zwoo.Database.Dao;
 using Zwoo.GameEngine.Lobby.Features;
 
+if (args.Length >= 1 && args[0] == "-h")
+{
+    new ServerConfig().PrintHelp();
+    return;
+}
+
 var builder = WebApplication.CreateSlimBuilder(args);
 
 var config = builder.AddServerConfiguration(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
-    var port = config.UseDynamicPort ? 0 : config.Port;
+    var port = config.Port == 0 ? 8001 : config.Port;
+    if (config.UseDynamicPort)
+    {
+        port = 0;
+    }
 
     if (config.UseAllIPs)
     {
@@ -67,7 +77,6 @@ app.UseZwooHttpLogging("/api");
 
 if (!config.UseStrictOrigins)
 {
-    Console.WriteLine("NOT Using strict origins");
     var allowedOrigins = config.AllowedOrigins == string.Empty ? null : config.AllowedOrigins;
     app.Use((context, next) =>
     {
@@ -80,7 +89,6 @@ if (!config.UseStrictOrigins)
         // check if preflight request
         if (context.Request.Method == "OPTIONS")
         {
-            Console.WriteLine($"Handling preflight request from {context.Request.Headers["Origin"]}");
             context.Response.StatusCode = 200;
             return Task.CompletedTask;
         }
