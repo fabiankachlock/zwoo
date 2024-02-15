@@ -49,14 +49,7 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
     AppVersion = "1.0.0-beta.17"
 });
-builder.Services.AddCors(s =>
-{
-    s.AddDefaultPolicy(b => b
-        .WithOrigins("http://localhost:8080", "zwoo.igd20.de")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials());
-});
+
 // TODO: get server id
 builder.Services.AddLocalAuthentication("server");
 
@@ -71,7 +64,24 @@ builder.Services.AddGameServices();
 var app = builder.Build();
 
 app.UseZwooHttpLogging("/api");
-app.UseZwooCors();
+app.Use((context, next) =>
+{
+    context.Response.Headers.Append("Access-Control-Allow-Origin", context.Request.Headers["Origin"]);
+    context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
+    context.Response.Headers.Append("Access-Control-Max-Age", "86400");
+
+    // check if preflight request
+    if (context.Request.Method == "OPTIONS")
+    {
+        Console.WriteLine($"Handling preflight request from {context.Request.Headers["Origin"]}");
+        context.Response.StatusCode = 200;
+        return Task.CompletedTask;
+    }
+    return next();
+});
+
 
 // group all api endpoints under /api
 var api = app.MapGroup("/api");
