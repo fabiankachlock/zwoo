@@ -27,16 +27,29 @@
   "backend": {
     "$adapter": "dotnet",
     "server": {
-      "project": "Zwoo.Backend"
+      "project": "Zwoo.Backend",
+      "args": {
+        "-c": "Release"
+      }
     },
     "local": {
-      "project": "Zwoo.Backend.LocalServer"
+      "project": "Zwoo.Backend.LocalServer",
+      "args": {
+        "-c": "Release"
+      }
     },
     "ziad": {
-      "project": "Zwoo.Dashboard"
+      "project": "Zwoo.Dashboard",
+      "args": {
+        "-c": "Release"
+      }
     },
     "wasm": {
-      "project": "Zwoo.GameEngine.Wasm"
+      "project": "Zwoo.GameEngine.Wasm",
+      "args": {
+        "-p:RunAOTCompilation=true": "",
+        "-c": "Release"
+      }
     }
   },
   "$fragments": {
