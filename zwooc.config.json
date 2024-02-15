@@ -33,7 +33,7 @@
           "command": "exit 1"
         },
         "args": {
-          "-c": "Release"
+          "configuration": "Release"
         }
       }
     },
@@ -41,7 +41,7 @@
       "project": "Zwoo.Backend.LocalServer",
       "build": {
         "args": {
-          "-c": "Release"
+          "configuration": "Release"
         }
       }
     },
@@ -49,7 +49,7 @@
       "project": "Zwoo.Dashboard",
       "build": {
         "args": {
-          "-c": "Release"
+          "configuration": "Release"
         }
       }
     },
@@ -58,7 +58,7 @@
       "build": {
         "args": {
           "-p:RunAOTCompilation=true": "",
-          "-c": "Release"
+          "configuration": "Release"
         }
       }
     }
