@@ -8,6 +8,9 @@ public class ServerConfig
     public bool UseDynamicPort { get; set; }
     public bool UseLocalhost { get; set; }
     public bool UseAllIPs { get; set; }
+    public string ServerId { get; set; } = "server"; // TODO: testing only
+    public bool UseStrictOrigins { get; set; }
+    public string AllowedOrigins { get; set; } = string.Empty;
 }
 
 public static class ServerConfigExtensions
@@ -19,6 +22,9 @@ public static class ServerConfigExtensions
         {"--use-dynamic-port", "server:useDynamicPort"},
         {"--use-localhost", "server:useLocalhost"},
         {"--use-all-ips", "server:useAllIPs"},
+        {"--server-id", "server:serverId"},
+        {"--strict-origins", "server:useStrictOrigins"},
+        {"--allowed-origins", "server:allowedOrigins"},
     };
 
     public static ServerConfig AddServerConfiguration(this WebApplicationBuilder builder, string[] args)

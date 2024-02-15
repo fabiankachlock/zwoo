@@ -51,7 +51,7 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 });
 
 // TODO: get server id
-builder.Services.AddLocalAuthentication("server");
+builder.Services.AddLocalAuthentication(config.ServerId);
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
 builder.Services.AddSingleton<IExternalGameProfileProvider, EmptyGameProfileProvider>();
@@ -64,23 +64,29 @@ builder.Services.AddGameServices();
 var app = builder.Build();
 
 app.UseZwooHttpLogging("/api");
-app.Use((context, next) =>
-{
-    context.Response.Headers.Append("Access-Control-Allow-Origin", context.Request.Headers["Origin"]);
-    context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
-    context.Response.Headers.Append("Access-Control-Max-Age", "86400");
 
-    // check if preflight request
-    if (context.Request.Method == "OPTIONS")
+if (!config.UseStrictOrigins)
+{
+    Console.WriteLine("NOT Using strict origins");
+    var allowedOrigins = config.AllowedOrigins == string.Empty ? null : config.AllowedOrigins;
+    app.Use((context, next) =>
     {
-        Console.WriteLine($"Handling preflight request from {context.Request.Headers["Origin"]}");
-        context.Response.StatusCode = 200;
-        return Task.CompletedTask;
-    }
-    return next();
-});
+        context.Response.Headers.Append("Access-Control-Allow-Origin", allowedOrigins ?? context.Request.Headers["Origin"]);
+        context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
+        context.Response.Headers.Append("Access-Control-Max-Age", "86400");
+
+        // check if preflight request
+        if (context.Request.Method == "OPTIONS")
+        {
+            Console.WriteLine($"Handling preflight request from {context.Request.Headers["Origin"]}");
+            context.Response.StatusCode = 200;
+            return Task.CompletedTask;
+        }
+        return next();
+    });
+}
 
 
 // group all api endpoints under /api
