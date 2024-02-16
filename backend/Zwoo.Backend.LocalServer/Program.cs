@@ -12,12 +12,22 @@ using Zwoo.Backend.Shared.Services;
 using Zwoo.Database.Dao;
 using Zwoo.GameEngine.Lobby.Features;
 
+if (args.Length >= 1 && args[0] == "-h")
+{
+    new ServerConfig().PrintHelp();
+    return;
+}
+
 var builder = WebApplication.CreateSlimBuilder(args);
 
 var config = builder.AddServerConfiguration(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
-    var port = config.UseDynamicPort ? 0 : config.Port;
+    var port = config.Port == 0 ? 8001 : config.Port;
+    if (config.UseDynamicPort)
+    {
+        port = 0;
+    }
 
     if (config.UseAllIPs)
     {
@@ -49,16 +59,9 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
     AppVersion = "1.0.0-beta.17"
 });
-builder.Services.AddCors(s =>
-{
-    s.AddDefaultPolicy(b => b
-        .WithOrigins("http://localhost:8080", "zwoo.igd20.de")
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials());
-});
+
 // TODO: get server id
-builder.Services.AddLocalAuthentication("server");
+builder.Services.AddLocalAuthentication(config.ServerId);
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
 builder.Services.AddSingleton<IExternalGameProfileProvider, EmptyGameProfileProvider>();
@@ -71,7 +74,28 @@ builder.Services.AddGameServices();
 var app = builder.Build();
 
 app.UseZwooHttpLogging("/api");
-app.UseZwooCors();
+
+if (!config.UseStrictOrigins)
+{
+    var allowedOrigins = config.AllowedOrigins == string.Empty ? null : config.AllowedOrigins;
+    app.Use((context, next) =>
+    {
+        context.Response.Headers.Append("Access-Control-Allow-Origin", allowedOrigins ?? context.Request.Headers["Origin"]);
+        context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
+        context.Response.Headers.Append("Access-Control-Max-Age", "86400");
+
+        // check if preflight request
+        if (context.Request.Method == "OPTIONS")
+        {
+            context.Response.StatusCode = 200;
+            return Task.CompletedTask;
+        }
+        return next();
+    });
+}
+
 
 // group all api endpoints under /api
 var api = app.MapGroup("/api");
