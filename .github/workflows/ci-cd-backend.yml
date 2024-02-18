@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-alpha.1
+          version: 1.0.0-alpha.2
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -26,17 +26,17 @@ jobs:
         run: dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o server --no-restore
+        run: zwooc build -o server
       # - name: Test
       #   working-directory: ./backend
-      #   run: dotnet test "./Zwoo.GameEngine/Zwoo.GameEngine.csproj" -c Release --no-restore --verbosity normal
+      #   run: dotnet test "./Zwoo.GameEngine/Zwoo.GameEngine.csproj" -c Release --verbosity normal
 
   ziad:
     runs-on: ubuntu-latest
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-alpha.1
+          version: 1.0.0-alpha.2
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -47,14 +47,14 @@ jobs:
         run: dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o ziad --no-restore
+        run: zwooc build -o ziad
 
   wasm-gamelogic:
     runs-on: ubuntu-latest
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-alpha.1
+          version: 1.0.0-alpha.2
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -68,14 +68,14 @@ jobs:
         run: dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o wasm --no-restore
+        run: zwooc build -o wasm
 
   local-server:
     runs-on: ubuntu-latest
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-alpha.1
+          version: 1.0.0-alpha.2
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -86,4 +86,4 @@ jobs:
         run: dotnet restore "./Zwoo.Backend.LocalServer/Zwoo.Backend.LocalServer.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o local --no-restore
+        run: zwooc build -o local
