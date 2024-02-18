@@ -13,50 +13,82 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: zwoo-hq/setup-zwooc@v1
+        with:
+          version: 1.0.0-alpha.3
+      - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
+        run: |
+          dotnet workload restore
+          dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet build "./Zwoo.Backend/Zwoo.Backend.csproj" -c Release --no-restore
+        run: zwooc build -o server
       # - name: Test
       #   working-directory: ./backend
-      #   run: dotnet test "./Zwoo.GameEngine/Zwoo.GameEngine.csproj" -c Release --no-restore --verbosity normal
+      #   run: dotnet test "./Zwoo.GameEngine/Zwoo.GameEngine.csproj" -c Release --verbosity normal
 
   ziad:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: zwoo-hq/setup-zwooc@v1
+        with:
+          version: 1.0.0-alpha.3
+      - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8"
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
+        run: |
+          dotnet workload restore
+          dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet build "./Zwoo.Dashboard/Zwoo.Dashboard.csproj" -c Release --no-restore
+        run: zwooc build -o ziad
 
   wasm-gamelogic:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: zwoo-hq/setup-zwooc@v1
+        with:
+          version: 1.0.0-alpha.3
+      - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8"
-      - name: Install workloads
-        working-directory: ./backend
-        run: dotnet workload restore
       - name: Install dependencies
         working-directory: ./backend
-        run: dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
+        run: |
+          dotnet workload restore
+          dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       - name: Build
         working-directory: ./backend
-        run: dotnet publish -c Release -p:RunAOTCompilation=true "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
+        run: zwooc build -o wasm
+
+  local-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: zwoo-hq/setup-zwooc@v1
+        with:
+          version: 1.0.0-alpha.3
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8"
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          dotnet workload restore
+          dotnet restore "./Zwoo.Backend.LocalServer/Zwoo.Backend.LocalServer.csproj"
+      - name: Build
+        working-directory: ./backend
+        run: zwooc build -o local
