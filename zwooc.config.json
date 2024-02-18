@@ -29,9 +29,6 @@
     "server": {
       "project": "Zwoo.Backend",
       "build": {
-        "$pre": {
-          "command": "exit 1"
-        },
         "args": {
           "configuration": "Release"
         }
