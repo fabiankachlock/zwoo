@@ -24,8 +24,8 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: |
-          dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
           dotnet workload restore
+          dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
       - name: Build
         working-directory: ./backend
         run: zwooc build -o server
@@ -47,8 +47,8 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: |
-          dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
           dotnet workload restore
+          dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
       - name: Build
         working-directory: ./backend
         run: zwooc build -o ziad
@@ -67,8 +67,8 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: |
-          dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
           dotnet workload restore
+          dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       - name: Build
         working-directory: ./backend
         run: zwooc build -o wasm
@@ -87,8 +87,8 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: |
-          dotnet restore "./Zwoo.Backend.LocalServer/Zwoo.Backend.LocalServer.csproj"
           dotnet workload restore
+          dotnet restore "./Zwoo.Backend.LocalServer/Zwoo.Backend.LocalServer.csproj"
       - name: Build
         working-directory: ./backend
         run: zwooc build -o local
