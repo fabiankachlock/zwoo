@@ -28,7 +28,7 @@ public class LocalEvent : IIncomingZRPMessage
         }
         catch
         {
-            return default(T?);
+            return default;
         }
     }
 
@@ -40,7 +40,7 @@ public class LocalEvent : IIncomingZRPMessage
         }
         catch
         {
-            return default(T?);
+            return default;
         }
     }
 }

@@ -4,6 +4,7 @@ using Zwoo.GameEngine.Logging;
 using ZwooWasm.Logging;
 using System.Runtime.Versioning;
 using System.Runtime.InteropServices.JavaScript;
+using System;
 
 namespace ZwooWasm;
 
@@ -72,6 +73,7 @@ public partial class GameManager
     [JSExport]
     public static void SendEvent([JSMarshalAs<JSType.String>] string msg)
     {
+
         if (Instance._activeGame != null)
         {
             Instance._logger.Debug($"received {msg}");

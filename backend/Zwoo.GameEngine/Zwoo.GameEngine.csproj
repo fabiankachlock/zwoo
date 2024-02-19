@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>12</LangVersion>
     <IsAotCompatible>true</IsAotCompatible>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
 </Project>

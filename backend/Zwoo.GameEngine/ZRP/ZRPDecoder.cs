@@ -7,7 +7,7 @@ public class ZRPDecoder
 {
     private static JsonSerializerOptions _options = new JsonSerializerOptions()
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
 
     static public (ZRPCode?, T?) Decode<T>(string msg)
@@ -15,6 +15,7 @@ public class ZRPDecoder
         int index = msg.IndexOf(",");
         int code = Convert.ToInt32(msg.Substring(0, index));
         string payload = msg.Substring(index + 1);
+        _options.TypeInfoResolverChain.Insert(0, new ZRPSerializerContext());
         return (Enum.IsDefined(typeof(ZRPCode), code) ? (ZRPCode)code : null, JsonSerializer.Deserialize<T>(payload, _options));
     }
 

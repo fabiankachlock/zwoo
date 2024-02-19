@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices.JavaScript;
 using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.ZRP;
+using Zwoo.GameEngine.Logging;
+using ZwooWasm.Logging;
 
 namespace ZwooWasm;
 
@@ -11,6 +13,9 @@ namespace ZwooWasm;
 public partial class LocalNotificationAdapter : INotificationAdapter
 {
     public static readonly LocalNotificationAdapter Instance = new LocalNotificationAdapter();
+
+    private ILogger _logger = WasmLoggerFactory.Instance.CreateLogger("LocalNotificationAdapter");
+
 
     #region Interface Implementation
     public Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)
@@ -33,9 +38,17 @@ public partial class LocalNotificationAdapter : INotificationAdapter
 
     public Task<bool> SendPlayer<T>(long playerId, ZRPCode code, T payload)
     {
+        _logger.Debug($"Sending message to player {playerId} {code} ");
         if (playerId == Constants.LocalUser)
         {
-            _messageHandler(ZRPEncoder.Encode(code, payload));
+            try
+            {
+                _messageHandler(ZRPEncoder.Encode(code, payload));
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+            }
         }
         return Task.FromResult(true);
     }

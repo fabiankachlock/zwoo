@@ -9,7 +9,7 @@ export class WasmLoader {
 
   public async load() {
     Logger.Wasm.info('loading webassembly');
-    let path = '/wasm/dotnet.js';
+    let path = '/wasm/_framework/dotnet.js';
     if (AppConfig.IsDev) {
       path = '../../../../public' + path;
     }

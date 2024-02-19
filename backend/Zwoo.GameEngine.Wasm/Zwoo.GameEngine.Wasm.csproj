@@ -11,5 +11,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WasmAppDir>../../frontend/public/wasm</WasmAppDir>
     <NoWarn>IL2026</NoWarn>
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 </Project>
