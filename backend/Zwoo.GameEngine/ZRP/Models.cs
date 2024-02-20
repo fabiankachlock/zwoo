@@ -52,7 +52,7 @@ public readonly record struct LeaveEvent(); // empty
 public readonly record struct GetLobbyEvent(); // empty
 
 /// <see cref="GetLobbyNotification"/>
-public record struct GetLobby_PlayerDTO(long Id, string Username, ZRPRole Role, ZRPPlayerState State, int Wins);
+public readonly record struct GetLobby_PlayerDTO(long Id, string Username, ZRPRole Role, ZRPPlayerState State, int Wins);
 
 /// <summary>
 /// ZRPCode: 109
@@ -131,7 +131,7 @@ public readonly record struct SettingChangedNotification(string Setting, int Val
 public readonly record struct GetSettingsEvent(); // empty
 
 /// <see cref="AllSettingsNotification" />
-public record struct AllSettings_SettingDTO(string Setting, int Value, Dictionary<string, string> Title, Dictionary<string, string> Description, GameSettingsType Type, bool IsReadonly, int? Min, int? Max);
+public readonly record struct AllSettings_SettingDTO(string Setting, int Value, Dictionary<string, string> Title, Dictionary<string, string> Description, GameSettingsType Type, bool IsReadonly, int? Min, int? Max);
 
 /// <summary>
 /// ZRPCode: 203
@@ -145,7 +145,7 @@ public readonly record struct AllSettingsNotification(AllSettings_SettingDTO[] S
 public readonly record struct GetAllGameProfilesEvent(); // empty
 
 /// <see cref="AllGameProfilesNotification" /> 
-public record struct AllGameProfiles_ProfileDTO(string Id, string Name, GameProfileGroup Group);
+public readonly record struct AllGameProfiles_ProfileDTO(string Id, string Name, GameProfileGroup Group);
 
 /// <summary>
 /// ZRPCode: 205
@@ -213,7 +213,7 @@ public readonly record struct DeleteBotEvent(long Id);
 public readonly record struct GetBotsEvent();
 
 /// <see cref="AllBotsNotification" />
-public record struct AllBots_BotDTO(long Id, string Username, BotConfigDTO Config, int Wins);
+public readonly record struct AllBots_BotDTO(long Id, string Username, BotConfigDTO Config, int Wins);
 
 /// <summary>
 /// ZRPCode: 237
