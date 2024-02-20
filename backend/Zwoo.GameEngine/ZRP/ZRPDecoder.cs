@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 
@@ -10,16 +11,18 @@ public class ZRPDecoder
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
 
-    static public (ZRPCode?, T?) Decode<T>(string msg)
+    static public (ZRPCode?, T?) Decode<T>(string msg) where T : class
     {
         int index = msg.IndexOf(",");
         int code = Convert.ToInt32(msg.Substring(0, index));
         string payload = msg.Substring(index + 1);
         _options.TypeInfoResolverChain.Insert(0, new ZRPSerializerContext());
-        return (Enum.IsDefined(typeof(ZRPCode), code) ? (ZRPCode)code : null, JsonSerializer.Deserialize<T>(payload, _options));
+        var result = JsonSerializer.Deserialize(payload, typeof(T), new ZRPSerializerContext(_options));
+        ZRPCode? resultCode = Enum.IsDefined(typeof(ZRPCode), code) ? (ZRPCode)code : null;
+        return (resultCode, result as T);
     }
 
-    static public (ZRPCode?, T?) DecodeFromBytes<T>(byte[] msg)
+    static public (ZRPCode?, T?) DecodeFromBytes<T>(byte[] msg) where T : class
     {
         return Decode<T>(Encoding.UTF8.GetString(msg));
     }
@@ -37,14 +40,15 @@ public class ZRPDecoder
 
     }
 
-    static public T? DecodePayload<T>(string msg)
+    static public T? DecodePayload<T>(string msg) where T : class
     {
         int index = msg.IndexOf(",");
         string payload = msg.Substring(index + 1);
-        return JsonSerializer.Deserialize<T>(payload, _options);
+        var result = JsonSerializer.Deserialize(payload, typeof(T), new ZRPSerializerContext(_options));
+        return result as T;
     }
 
-    static public T? DecodePayloadFromBytes<T>(byte[] msg)
+    static public T? DecodePayloadFromBytes<T>(byte[] msg) where T : class
     {
         return DecodePayload<T>(Encoding.UTF8.GetString(msg));
     }

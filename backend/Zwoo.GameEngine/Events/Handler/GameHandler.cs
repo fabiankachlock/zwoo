@@ -47,7 +47,7 @@ public class GameHandler : IUserEventHandler
             ));
         }
 
-        websocketManager.BroadcastGame(context.GameId, ZRPCode.GameStarted, new GameStartedNotification());
+        // websocketManager.BroadcastGame(context.GameId, ZRPCode.GameStarted, new GameStartedNotification());
         websocketManager.SendPlayer(context.Game.State.ActivePlayer(), ZRPCode.StartTurn, new StartTurnNotification());
     }
 

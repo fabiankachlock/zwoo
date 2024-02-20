@@ -32,12 +32,12 @@ public readonly struct BotZRPEvent : ILocalZRPMessage
         Payload = payload;
     }
 
-    public T? CastPayload<T>()
+    public T? CastPayload<T>() where T : class
     {
         return (T)Payload;
     }
 
-    public T? DecodePayload<T>()
+    public T? DecodePayload<T>() where T : class
     {
         return (T)Payload;
     }

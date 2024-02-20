@@ -17,7 +17,7 @@ public class ZRPEncoder
 
     static public string EncodePayload<T>(T payload)
     {
-        return JsonSerializer.Serialize(payload, _options);
+        return JsonSerializer.Serialize(payload, typeof(T), new ZRPSerializerContext(_options));
     }
 
     static public byte[] EncodeToBytes<T>(ZRPCode code, T payload)
