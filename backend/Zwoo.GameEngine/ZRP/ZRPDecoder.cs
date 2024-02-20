@@ -11,17 +11,17 @@ public class ZRPDecoder
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     });
 
-    static public (ZRPCode?, T?) Decode<T>(string msg) where T : class
+    static public (ZRPCode?, T?) Decode<T>(string msg)
     {
         int index = msg.IndexOf(",");
         int code = Convert.ToInt32(msg.Substring(0, index));
         string payload = msg.Substring(index + 1);
         var result = JsonSerializer.Deserialize(payload, typeof(T), _context);
         ZRPCode? resultCode = Enum.IsDefined(typeof(ZRPCode), code) ? (ZRPCode)code : null;
-        return (resultCode, result as T);
+        return (resultCode, (T?)result);
     }
 
-    static public (ZRPCode?, T?) DecodeFromBytes<T>(byte[] msg) where T : class
+    static public (ZRPCode?, T?) DecodeFromBytes<T>(byte[] msg)
     {
         return Decode<T>(Encoding.UTF8.GetString(msg));
     }
@@ -39,15 +39,15 @@ public class ZRPDecoder
 
     }
 
-    static public T? DecodePayload<T>(string msg) where T : class
+    static public T? DecodePayload<T>(string msg)
     {
         int index = msg.IndexOf(",");
         string payload = msg.Substring(index + 1);
         var result = JsonSerializer.Deserialize(payload, typeof(T), _context);
-        return result as T;
+        return (T?)result;
     }
 
-    static public T? DecodePayloadFromBytes<T>(byte[] msg) where T : class
+    static public T? DecodePayloadFromBytes<T>(byte[] msg)
     {
         return DecodePayload<T>(Encoding.UTF8.GetString(msg));
     }

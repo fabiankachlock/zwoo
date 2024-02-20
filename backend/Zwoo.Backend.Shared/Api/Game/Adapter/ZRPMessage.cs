@@ -18,7 +18,7 @@ public struct ZRPMessage : IIncomingZRPMessage
         RawMessage = raw;
     }
 
-    public T? CastPayload<T>() where T : class
+    public T? CastPayload<T>()
     {
         try
         {
@@ -30,7 +30,7 @@ public struct ZRPMessage : IIncomingZRPMessage
         }
     }
 
-    public T? DecodePayload<T>() where T : class
+    public T? DecodePayload<T>()
     {
         try
         {

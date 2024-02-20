@@ -21,12 +21,12 @@ public interface IIncomingEvent
     /// </summary>
     /// <typeparam name="T">the type to cast the payload to</typeparam>
     /// <returns>the casted payload</returns>
-    public T? CastPayload<T>() where T : class;
+    public T? CastPayload<T>();
 
     /// <summary>
     /// decode the payload to a certain type
     /// </summary>
     /// <typeparam name="T">the type to decode into</typeparam>
     /// <returns>the decoded payload</returns>
-    public T? DecodePayload<T>() where T : class;
+    public T? DecodePayload<T>();
 }

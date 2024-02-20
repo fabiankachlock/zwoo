@@ -20,7 +20,7 @@ public class LocalEvent : IIncomingZRPMessage
         _rawMessage = message;
     }
 
-    public T? CastPayload<T>() where T : class
+    public T? CastPayload<T>()
     {
         try
         {
@@ -32,7 +32,7 @@ public class LocalEvent : IIncomingZRPMessage
         }
     }
 
-    public T? DecodePayload<T>() where T : class
+    public T? DecodePayload<T>()
     {
         try
         {
