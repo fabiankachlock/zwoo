@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 
@@ -5,17 +6,19 @@ namespace Zwoo.GameEngine.ZRP;
 
 public class ZRPDecoder
 {
-    private static JsonSerializerOptions _options = new JsonSerializerOptions()
+    private static ZRPSerializerContext _context = new ZRPSerializerContext(new JsonSerializerOptions()
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    });
 
     static public (ZRPCode?, T?) Decode<T>(string msg)
     {
         int index = msg.IndexOf(",");
         int code = Convert.ToInt32(msg.Substring(0, index));
         string payload = msg.Substring(index + 1);
-        return (Enum.IsDefined(typeof(ZRPCode), code) ? (ZRPCode)code : null, JsonSerializer.Deserialize<T>(payload, _options));
+        var result = JsonSerializer.Deserialize(payload, typeof(T), _context);
+        ZRPCode? resultCode = Enum.IsDefined(typeof(ZRPCode), code) ? (ZRPCode)code : null;
+        return (resultCode, (T?)result);
     }
 
     static public (ZRPCode?, T?) DecodeFromBytes<T>(byte[] msg)
@@ -40,7 +43,8 @@ public class ZRPDecoder
     {
         int index = msg.IndexOf(",");
         string payload = msg.Substring(index + 1);
-        return JsonSerializer.Deserialize<T>(payload, _options);
+        var result = JsonSerializer.Deserialize(payload, typeof(T), _context);
+        return (T?)result;
     }
 
     static public T? DecodePayloadFromBytes<T>(byte[] msg)

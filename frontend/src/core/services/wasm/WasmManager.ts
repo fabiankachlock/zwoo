@@ -29,10 +29,10 @@ export class WasmManger {
 
   private async setupInstance(instance: CSharpExport) {
     const loggerModule = await import('../logging/logImport');
-    instance.Logging.WasmLoggerFactory.OnInfo(msg => loggerModule.Logger.info(msg));
-    instance.Logging.WasmLoggerFactory.OnDebug(msg => loggerModule.Logger.debug(msg));
-    instance.Logging.WasmLoggerFactory.OnWarn(msg => loggerModule.Logger.warn(msg));
-    instance.Logging.WasmLoggerFactory.OnError(msg => loggerModule.Logger.error(msg));
+    instance.Logging.WasmLoggerFactory.OnInfo(msg => loggerModule.Logger.Wasm.info(msg));
+    instance.Logging.WasmLoggerFactory.OnDebug(msg => loggerModule.Logger.Wasm.debug(msg));
+    instance.Logging.WasmLoggerFactory.OnWarn(msg => loggerModule.Logger.Wasm.warn(msg));
+    instance.Logging.WasmLoggerFactory.OnError(msg => loggerModule.Logger.Wasm.error(msg));
 
     const profiles = await LocalGameProfileManager.create();
     instance.LocalGameProfileProvider.OnGetProfiles(() => profiles.getProfiles());

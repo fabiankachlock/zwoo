@@ -26,7 +26,7 @@ public struct ZRPMessage : IIncomingZRPMessage
         }
         catch
         {
-            return default(T?);
+            return default;
         }
     }
 
@@ -38,7 +38,7 @@ public struct ZRPMessage : IIncomingZRPMessage
         }
         catch
         {
-            return default(T?);
+            return default;
         }
     }
 }

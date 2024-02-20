@@ -5,10 +5,10 @@ namespace Zwoo.GameEngine.ZRP;
 
 public class ZRPEncoder
 {
-    private static JsonSerializerOptions _options = new JsonSerializerOptions()
+    private static ZRPSerializerContext _context = new ZRPSerializerContext(new JsonSerializerOptions()
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    });
 
     static public string Encode<T>(ZRPCode code, T payload)
     {
@@ -17,7 +17,7 @@ public class ZRPEncoder
 
     static public string EncodePayload<T>(T payload)
     {
-        return JsonSerializer.Serialize(payload, _options);
+        return JsonSerializer.Serialize(payload, typeof(T), _context);
     }
 
     static public byte[] EncodeToBytes<T>(ZRPCode code, T payload)
