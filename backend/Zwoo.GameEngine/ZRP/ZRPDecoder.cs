@@ -6,18 +6,17 @@ namespace Zwoo.GameEngine.ZRP;
 
 public class ZRPDecoder
 {
-    private static JsonSerializerOptions _options = new JsonSerializerOptions()
+    private static ZRPSerializerContext _context = new ZRPSerializerContext(new JsonSerializerOptions()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    };
+    });
 
     static public (ZRPCode?, T?) Decode<T>(string msg) where T : class
     {
         int index = msg.IndexOf(",");
         int code = Convert.ToInt32(msg.Substring(0, index));
         string payload = msg.Substring(index + 1);
-        _options.TypeInfoResolverChain.Insert(0, new ZRPSerializerContext());
-        var result = JsonSerializer.Deserialize(payload, typeof(T), new ZRPSerializerContext(_options));
+        var result = JsonSerializer.Deserialize(payload, typeof(T), _context);
         ZRPCode? resultCode = Enum.IsDefined(typeof(ZRPCode), code) ? (ZRPCode)code : null;
         return (resultCode, result as T);
     }
@@ -44,7 +43,7 @@ public class ZRPDecoder
     {
         int index = msg.IndexOf(",");
         string payload = msg.Substring(index + 1);
-        var result = JsonSerializer.Deserialize(payload, typeof(T), new ZRPSerializerContext(_options));
+        var result = JsonSerializer.Deserialize(payload, typeof(T), _context);
         return result as T;
     }
 
