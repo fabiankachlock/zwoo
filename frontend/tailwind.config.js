@@ -12,32 +12,42 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          light: '#336ECC',
-          DEFAULT: '#3066BE',
-          dark: '#2D60B3',
-          'text-dark': '#2659AB',
-          'text-light': '#679DF5'
+          light: '#2CAFF5',
+          DEFAULT: '#29A4E7',
+          dark: '#279CDB',
+          'text-dark': '#1F7AAB',
+          'text-light': '#2DB2FA'
+          // light: '#336ECC',
+          // DEFAULT: '#3066BE',
+          // dark: '#2D60B3',
+          // 'text-dark': '#2659AB',
+          // 'text-light': '#679DF5'
         },
         secondary: {
-          light: '#B32222',
-          DEFAULT: '#A61F1F',
-          dark: '#991D1D',
-          'text-dark': '#991A1A',
-          'text-light': '#FF6666'
+          light: '#3C3F8C',
+          DEFAULT: '#36397F',
+          dark: '#313473',
+          'text-dark': '#2F326E',
+          'text-light': '#5E62DB'
+          // light: '#B32222',
+          // DEFAULT: '#A61F1F',
+          // dark: '#991D1D',
+          // 'text-dark': '#991A1A',
+          // 'text-light': '#FF6666'
         },
         '_bg-light': {
           lightest: '#FFFFFC',
           light: '#F2F2F0',
-          DEFAULT: '#E6E5E3',
+          DEFAULT: '#D2D0D9',
           dark: '#D9D8D7',
-          darkest: '#CCCCCA'
+          darkest: '#EEEBF5'
         },
         '_bg-dark': {
           lightest: '#4A4C61',
           light: '#404254',
-          DEFAULT: '#363847',
+          DEFAULT: '#282530',
           dark: '#2D2E3B',
-          darkest: '#23242E'
+          darkest: '#15131C'
         },
         '_text-light': {
           light: '#EDECE8',
