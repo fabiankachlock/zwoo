@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/zwoo-hq/zwooc/main/zwooc.schema.json",
   "frontend": {
     "$adapter": "vite-yarn",
     "$fragments": {
@@ -27,35 +28,19 @@
   "backend": {
     "$adapter": "dotnet",
     "server": {
-      "project": "Zwoo.Backend",
-      "build": {
-        "args": {
-          "configuration": "Release"
-        }
-      }
+      "project": "Zwoo.Backend"
     },
     "local": {
-      "project": "Zwoo.Backend.LocalServer",
-      "build": {
-        "args": {
-          "configuration": "Release"
-        }
-      }
+      "project": "Zwoo.Backend.LocalServer"
     },
     "ziad": {
-      "project": "Zwoo.Dashboard",
-      "build": {
-        "args": {
-          "configuration": "Release"
-        }
-      }
+      "project": "Zwoo.Dashboard"
     },
     "wasm": {
       "project": "Zwoo.GameEngine.Wasm",
       "build": {
         "args": {
-          "-p:RunAOTCompilation=true": "",
-          "configuration": "Release"
+          "-p:RunAOTCompilation=true": ""
         }
       }
     }
