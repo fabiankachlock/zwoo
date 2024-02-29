@@ -133,6 +133,7 @@ export default defineConfig(
           : [])
       ],
       envPrefix: 'VUE_APP',
+      envDir: 'env',
       server: {
         port: 8080
       },

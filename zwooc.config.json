@@ -15,15 +15,34 @@
       "setup:version": "",
       "postversion": "",
       "deps:check": "",
-      "deps:viz": ""
+      "deps:viz": "",
+      "typecheck": "vue-tsc --noEmit && echo \"\""
     },
-    "dev": {},
-    "prod": {},
-    "dev-instance": {},
-    "tauri": {},
-    "tauri-embedded": {},
-    "preview": {},
-    "analyze": {}
+    "dev": {
+      "mode": "dev",
+      "env": []
+    },
+    "prod": {
+      "mode": "prod"
+    },
+    "dev-instance": {
+      "mode": "dev-instance"
+    },
+    "tauri": {
+      "mode": "tauri",
+      "env": ["VUE_APP_IS_TAURI=true"]
+    },
+    "tauri-embedded": {
+      "mode": "tauri-embedded"
+    },
+    "preview": {
+      "mode": "preview"
+    },
+    "analyze": {
+      "mode": "analyze",
+      "run": false,
+      "watch": false
+    }
   },
   "backend": {
     "$adapter": "dotnet",
