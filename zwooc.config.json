@@ -3,43 +3,71 @@
   "frontend": {
     "$adapter": "vite-yarn",
     "$fragments": {
-      "test:unit": "",
-      "test:e2e": "",
-      "test:e2e:ui": "",
-      "lint": "",
-      "lint:ci": "",
-      "i18n:check": "",
-      "format": "",
-      "format:ci": "",
-      "prepare": "",
-      "setup:version": "",
-      "postversion": "",
-      "deps:check": "",
-      "deps:viz": "",
-      "typecheck": "vue-tsc --noEmit && echo \"\""
+      "test:unit": "yarn jest",
+      "test:e2e": "yarn cypress run",
+      "test:e2e:ui": "yarn cypress open",
+      "lint": "yarn eslint \"src/**/*.{js,ts,vue,html}\" --fix",
+      "lint:ci": "yarn eslint \"src/**/*.{js,ts,vue,html}\" --max-warnings 50",
+      "i18n:check": "node ./scripts/checkI18nFiles.js",
+      "format": "yarn prettier --write \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
+      "format:ci": "yarn prettier --check \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
+      "setup:version": "node ./scripts/version.js",
+      "deps:check": "yarn depcruise -m --config .dependency-cruiser.js src",
+      "deps:viz": "yarn depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg",
+      "typecheck": "yarn vue-tsc --noEmit && echo \"\"",
+      "build:cards": "node ./scripts/buildCardAssets.js",
+      "build:icons": "node ./src/modules/zwoo-icons/generate-icons.js",
+      "XXpreview": "yarn vite preview --mode preview",
+      "XXpreview:prod": "yarn vite preview --mode dev"
+    },
+    "__base": {
+      "mode": "-",
+      "build": {
+        "$pre": {
+          "fragments": ["typecheck", "build:cards", "build:icons"],
+          "profiles": {
+            "wasm": "build"
+          }
+        }
+      }
     },
     "dev": {
+      "base": "__base",
       "mode": "dev",
       "env": []
     },
     "prod": {
+      "base": "__base",
       "mode": "prod"
     },
     "dev-instance": {
+      "base": "__base",
       "mode": "dev-instance"
     },
     "tauri": {
+      "base": "__base",
       "mode": "tauri",
-      "env": ["VUE_APP_IS_TAURI=true"]
+      "env": ["VUE_APP_IS_TAURI=true"],
+      "build": {
+        "args": {
+          "outDir": "dist-tmp"
+        }
+      }
     },
     "tauri-embedded": {
-      "mode": "tauri-embedded"
+      "base": "__base",
+      "mode": "tauri-embedded",
+      "args": {
+        "outDir": "dist-preview"
+      }
     },
     "preview": {
+      "base": "__base",
       "mode": "preview"
     },
     "analyze": {
-      "mode": "analyze",
+      "mode": "dev",
+      "env": ["ANALYZE=true"],
       "run": false,
       "watch": false
     }
@@ -65,8 +93,20 @@
     }
   },
   "$fragments": {
-    "docker": {
-      "$default": "docker compose -f ./docker-compose.local.yml up"
+    "docker": "docker compose -f ./docker-compose.local.yml up -d",
+    "docker:down": "docker compose -f ./docker-compose.local.yml down"
+  },
+  "$compounds": {
+    "dev": {
+      "$pre": {
+        "fragments": ["docker"]
+      },
+      "profiles": {
+        "dev": "watch",
+        "server": "watch",
+        "local": "watch",
+        "ziad": "watch"
+      }
     }
   }
 }
