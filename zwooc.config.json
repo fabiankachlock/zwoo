@@ -40,6 +40,15 @@
       "base": "__base",
       "mode": "prod"
     },
+    "local-server": {
+      "base": "__base",
+      "mode": "local-server",
+      "build": {
+        "args": {
+          "outDir": "../backend/Zwoo.Backend.LocalServer/frontend"
+        }
+      }
+    },
     "dev-instance": {
       "base": "__base",
       "mode": "dev-instance"

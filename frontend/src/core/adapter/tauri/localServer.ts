@@ -1,3 +1,4 @@
+import { invoke } from '@tauri-apps/api';
 import { defineStore } from 'pinia';
 import { reactive, ref, watch } from 'vue';
 
@@ -12,11 +13,11 @@ export const useLocalServer = defineStore('localServer', () => {
   });
 
   function startServer() {
-    // ...
+    invoke('start_local_server').then(() => console.log('Server started'));
   }
 
   function stopServer() {
-    // ...
+    invoke('stop_local_server').then(() => console.log('Server started'));
   }
 
   watch(config, newValue => {

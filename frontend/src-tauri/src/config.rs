@@ -11,7 +11,7 @@ pub struct LocalServerConfig {
     pub use_localhost: bool,
     pub use_all_ips: bool,
     pub use_strict_origins: bool,
-    pub allowed_origins: Vec<String>,
+    pub allowed_origins: String,
 
     #[serde(skip)]
     pub location: PathBuf,
@@ -38,7 +38,7 @@ fn create_default_config(id: String, path: PathBuf) -> LocalServerConfig {
         use_localhost: true,
         use_all_ips: false,
         use_strict_origins: false,
-        allowed_origins: vec![],
+        allowed_origins: String::from(""),
         location: path,
     }
 }
@@ -50,6 +50,10 @@ pub fn load_local_server_config(dir: PathBuf) -> LocalServerConfig {
         let config_str = std::fs::read_to_string(config_path).unwrap();
         let mut config: LocalServerConfig = serde_json::from_str(&config_str).unwrap();
         config.location = dir.clone();
+        if config.server_id != id {
+            config.server_id = id;
+            config.save();
+        }
         config
     } else {
         let default_config = create_default_config(id.clone(), dir.clone());

@@ -59,6 +59,7 @@
         "signingIdentity": null
       },
       "resources": [
+        "../../backend/Zwoo.Backend.LocalServer/bin/Release/net8.0/linux-x64/native/Zwoo.Backend.LocalServer"
       ],
       "shortDescription": "zwoo - The Second Challenge",
       "targets": "all",

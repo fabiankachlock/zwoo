@@ -18,13 +18,45 @@ impl Server {
         }
     }
 
+    fn build_args(&self) -> Vec<String> {
+        let mut args = vec![];
+        if self.config.port > 0 {
+            args.push(format!("--port {}", self.config.port));
+        }
+
+        if !self.config.ip.is_empty() {
+            args.push(format!("--server-id {}", self.config.server_id));
+        }
+
+        if !self.config.allowed_origins.is_empty() {
+            args.push(format!("--allowed-origin {}", self.config.allowed_origins));
+        }
+
+        if self.config.use_dynamic_port {
+            args.push("--use-dynamic-port".to_string());
+        }
+        if self.config.use_localhost {
+            args.push("--use-localhost".to_string());
+        }
+        if self.config.use_all_ips {
+            args.push("--use-all-ips".to_string());
+        }
+        if self.config.use_strict_origins {
+            args.push("--strict-origins".to_string());
+        }
+        args
+    }
+
     pub fn start(&mut self) {
         if let Some(_child) = self.child.take() {
             println!("Server is already running!");
             return;
         }
 
+        println!("Starting server with args: {:?}", self.build_args());
+
         let cmd = Command::new(self.path.as_str())
+            .args(self.build_args())
             .stdout(Stdio::piped())
             .spawn()
             .expect("failed to start server");

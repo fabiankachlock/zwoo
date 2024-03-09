@@ -75,7 +75,9 @@ fn main() {
         .setup(|app| {
             let resource_path = app
                 .path_resolver()
-                .resolve_resource("../src-server/bin/Release/net8.0/osx-x64/native/src-server")
+                .resolve_resource(
+                    "../../backend/Zwoo.Backend.LocalServer/bin/Release/net8.0/linux-x64/native/Zwoo.Backend.LocalServer",
+                )
                 .expect("failed to resolve resource");
             let server_path = resource_path.into_os_string().into_string().unwrap();
             println!("[app] located server executable {}", server_path);
