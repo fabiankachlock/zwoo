@@ -4,8 +4,9 @@
 )]
 
 use std::sync::Mutex;
-use tauri::{Manager, Menu, MenuItem, Submenu};
+use tauri::Manager;
 
+mod config;
 mod exec;
 
 #[derive(Default)]
@@ -37,6 +38,28 @@ fn stop_local_server(state: tauri::State<'_, State>) -> String {
     "Server stopped".to_string()
 }
 
+#[tauri::command]
+fn get_local_server_config(state: tauri::State<'_, State>) -> String {
+    let config = state.0.lock().unwrap().as_ref().unwrap().config.clone();
+    serde_json::to_string(&config).unwrap()
+}
+
+#[tauri::command]
+fn update_local_server_config(
+    state: tauri::State<'_, State>,
+    new_config: config::LocalServerConfig,
+) -> String {
+    state
+        .0
+        .lock()
+        .unwrap()
+        .as_mut()
+        .expect("Server not initialized")
+        .update_config(new_config);
+
+    "Server config updated".to_string()
+}
+
 fn main() {
     // let system_menu = Submenu::new(
     //     "zwoo",
@@ -54,19 +77,26 @@ fn main() {
                 .path_resolver()
                 .resolve_resource("../src-server/bin/Release/net8.0/osx-x64/native/src-server")
                 .expect("failed to resolve resource");
-
             let server_path = resource_path.into_os_string().into_string().unwrap();
+            println!("[app] located server executable {}", server_path);
 
-            println!("located server executable {}", server_path);
+            let id = config::load_app_id(app.path_resolver().app_data_dir().unwrap());
+            println!("[app] loaded server id: {}", id);
+
+            let config =
+                config::load_local_server_config(app.path_resolver().app_data_dir().unwrap());
+            println!("[app] loaded last server config: {:?}", config);
 
             let state = State(Default::default());
-            *state.0.lock().unwrap() = Some(exec::Server::new(server_path));
+            *state.0.lock().unwrap() = Some(exec::Server::new(server_path, config));
             app.manage(state);
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             start_local_server,
-            stop_local_server
+            stop_local_server,
+            get_local_server_config,
+            update_local_server_config
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

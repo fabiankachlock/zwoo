@@ -1,16 +1,21 @@
-use std::{
-    io::{BufReader, Stdout},
-    process::{Child, Command},
-};
+use std::process::Stdio;
+use std::process::{Child, Command};
+
+use crate::config::LocalServerConfig;
 
 pub struct Server {
     child: Option<Child>,
     path: String,
+    pub config: LocalServerConfig,
 }
 
 impl Server {
-    pub fn new(path: String) -> Server {
-        Server { child: None, path }
+    pub fn new(path: String, config: LocalServerConfig) -> Server {
+        Server {
+            child: None,
+            path,
+            config,
+        }
     }
 
     pub fn start(&mut self) {
@@ -23,16 +28,16 @@ impl Server {
             .stdout(Stdio::piped())
             .spawn()
             .expect("failed to start server");
-        let out = cmd.stdout.unwrap();
+        // let out = cmd.stdout.unwrap();
         self.child = Some(cmd);
         println!("Server started");
 
-        let reader = BufReader::new(out);
+        // let reader = BufReader::new(out);
 
-        reader
-            .lines()
-            .filter_map(|line| line.ok())
-            .for_each(|line| println!("[srv] {}", line))
+        // reader
+        //     .lines()
+        //     .filter_map(|line| line.ok())
+        //     .for_each(|line| println!("[srv] {}", line))
     }
 
     pub fn stop(&mut self) {
@@ -47,5 +52,16 @@ impl Server {
             println!("Server is not running");
         }
         self.child = None;
+    }
+
+    pub fn is_running(&self) -> bool {
+        self.child.is_some()
+    }
+
+    pub fn update_config(&mut self, new_config: LocalServerConfig) {
+        let old_location = self.config.location.clone();
+        self.config = new_config;
+        self.config.location = old_location;
+        self.config.save();
     }
 }
