@@ -63,13 +63,6 @@
         }
       }
     },
-    "tauri-embedded": {
-      "base": "__base",
-      "mode": "tauri-embedded",
-      "args": {
-        "outDir": "dist-preview"
-      }
-    },
     "preview": {
       "base": "__base",
       "mode": "preview"
@@ -81,13 +74,35 @@
       "watch": false
     }
   },
+  "app": {
+    "$dir": "frontend",
+    "$adapter": "vite-yarn",
+    "app": {
+      "$pre": {
+        "profiles": {
+          "local": "build",
+          "tauri": "build"
+        }
+      }
+    }
+  },
   "backend": {
     "$adapter": "dotnet",
     "server": {
       "project": "Zwoo.Backend"
     },
     "local": {
-      "project": "Zwoo.Backend.LocalServer"
+      "project": "Zwoo.Backend.LocalServer",
+      "build": {
+        "args": {
+          "output": "../../frontend/src-tauri/resources/server"
+        },
+        "$pre": {
+          "profiles": {
+            "local-server": "build"
+          }
+        }
+      }
     },
     "ziad": {
       "project": "Zwoo.Dashboard"
