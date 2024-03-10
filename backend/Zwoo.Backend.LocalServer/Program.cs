@@ -126,6 +126,14 @@ webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 app.UseWebSockets(webSocketOptions);
 api.UseDiscover();
 api.UseGame();
+api.MapGet("/stats", (HttpContext context) =>
+{
+    if (context.Request.Headers["X-Api-Secret"] != config.SecretKey)
+    {
+        return Results.Unauthorized();
+    }
+    return Results.Ok("##server stats");
+});
 
 // serve index.html for all other requests
 var index = provider.GetFileInfo("index.html");
