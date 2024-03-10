@@ -67,6 +67,7 @@ builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
 builder.Services.AddSingleton<IExternalGameProfileProvider, EmptyGameProfileProvider>();
 builder.Services.AddSingleton<ILocalUserManager, LocalUserManager>();
 
+
 // backend services
 builder.Services.AddZwooServices();
 builder.Services.AddGameServices();
@@ -133,7 +134,7 @@ api.MapGet("/stats", (HttpContext context) =>
         return Results.Unauthorized();
     }
     return Results.Ok("##server stats");
-});
+}).AllowAnonymous();
 
 // serve index.html for all other requests
 var index = provider.GetFileInfo("index.html");

@@ -91,16 +91,13 @@ fn main() {
         .setup(|app| {
             let resource_path = app
                 .path_resolver()
-                .resolve_resource(
-                    "../../backend/Zwoo.Backend.LocalServer/bin/Release/net8.0/linux-x64/native/Zwoo.Backend.LocalServer",
-                )
+                .resolve_resource("resources/server/Zwoo.Backend.LocalServer.exe")
                 .expect("failed to resolve resource");
             let server_path = resource_path.into_os_string().into_string().unwrap();
             println!("[app] located server executable {}", server_path);
 
-
             let config =
-            config::load_local_server_config(app.path_resolver().app_data_dir().unwrap());
+                config::load_local_server_config(app.path_resolver().app_data_dir().unwrap());
             println!("[app] loaded server id: {}", config.server_id);
             println!("[app] loaded last server config: {:?}", config);
 

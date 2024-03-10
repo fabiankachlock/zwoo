@@ -15,21 +15,23 @@ public class GameEndpoints
 {
     public static void Map(IEndpointRouteBuilder app)
     {
-        app.MapGet("/game/list", ([FromQuery] bool recommended,
-            [FromQuery] int offset,
-            [FromQuery] int limit,
-            [FromQuery] string filter,
-            [FromQuery] bool publicOnly,
+        app.MapGet("/game/list", (
+            // [FromQuery] bool recommended,
+            //     [FromQuery] int offset,
+            //     [FromQuery] int limit,
+            //     [FromQuery] string filter,
+            //     [FromQuery] bool publicOnly,
             IGameProviderService _games) =>
         {
             return Results.Ok(new GamesList()
             {
-                Games = _games.QueryGames(offset, limit, new GameQueryOptions()
-                {
-                    Filter = filter,
-                    PublicOnly = publicOnly,
-                    Recommended = recommended
-                })
+                // Games = _games.QueryGames(offset, limit, new GameQueryOptions()
+                // {
+                //     Filter = filter,
+                //     PublicOnly = publicOnly,
+                //     Recommended = recommended
+                // })
+                Games = new List<GameMeta>()
             });
         });
 

@@ -21,18 +21,22 @@ impl Server {
     fn build_args(&self) -> Vec<String> {
         let mut args = vec![];
         if self.config.port > 0 {
-            args.push(format!("--port {}", self.config.port));
+            args.push("--port".to_string());
+            args.push(format!("{}", self.config.port));
         }
 
-        if !self.config.ip.is_empty() {
-            args.push(format!("--server-id {}", self.config.server_id));
+        if !self.config.server_id.is_empty() {
+            args.push("--server-id".to_string());
+            args.push(self.config.server_id.to_string());
         }
-        if !self.config.ip.is_empty() {
-            args.push(format!("--secret-key {}", self.config.server_id));
+        if !self.config.secret_key.is_empty() {
+            args.push("--secret-key".to_string());
+            args.push(self.config.secret_key.to_string());
         }
 
         if !self.config.allowed_origins.is_empty() {
-            args.push(format!("--allowed-origin {}", self.config.allowed_origins));
+            args.push("--allowed-origin".to_string());
+            args.push(self.config.allowed_origins.to_string());
         }
 
         if self.config.use_dynamic_port {
