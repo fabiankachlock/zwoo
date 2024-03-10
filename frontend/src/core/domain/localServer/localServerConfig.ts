@@ -2,6 +2,7 @@ import { invoke } from '@tauri-apps/api';
 
 export type LocalServerConfig = {
   serverId: string;
+  secretKey: string;
   port: number;
   ip: string;
   useDynamicPort: boolean;
@@ -14,6 +15,7 @@ export type LocalServerConfig = {
 export class LocalServerConfigManager {
   public static defaultConfig: LocalServerConfig = {
     serverId: '',
+    secretKey: '',
     port: 0,
     ip: '',
     useDynamicPort: false,
