@@ -24,13 +24,13 @@ const toggleServer = () => {
     v-if="!isRunning"
     @click="toggleServer"
   >
-    <p class="tc-main-light text-center">{{ t('settings.sections.server.start') }}</p>
+    <p class="tc-main-light text-center">{{ t('settings.localServer.start') }}</p>
   </button>
   <button
     class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
     v-else
     @click="toggleServer"
   >
-    <p class="tc-main-light text-center">{{ t('settings.sections.server.stop') }}</p>
+    <p class="tc-main-light text-center">{{ t('settings.localServer.stop') }}</p>
   </button>
 </template>

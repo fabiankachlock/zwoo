@@ -1,7 +1,10 @@
 <template>
   <SettingsSection>
-    <SettingsRow :title="t('settings.sections.server.controls')">
+    <SettingsRow :title="t('settings.localServer.controls')">
       <LocalServerControls />
+    </SettingsRow>
+    <SettingsRow title="" v-if="serverIsRunning">
+      <LocalServerLogin />
     </SettingsRow>
     <LocalServerConfig />
     <LocalServerStats />
@@ -9,21 +12,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import LocalServerConfig from '@/components/settings/sections/local-server/LocalServerConfig.vue';
 import LocalServerControls from '@/components/settings/sections/local-server/LocalServerControls.vue';
+import LocalServerLogin from '@/components/settings/sections/local-server/LocalServerLogin.vue';
 import LocalServerStats from '@/components/settings/sections/local-server/LocalServerStats.vue';
 import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
+import { useLocalServer } from '@/core/adapter/tauri/localServer';
 
 const { t } = useI18n();
-const serverIsRunning = ref(false);
-
-onMounted(async () => {
-  const status = await loadServerStatus();
-  serverIsRunning.value = status != undefined;
-});
-
-const loadServerStatus = (): void => {};
+const localServer = useLocalServer();
+const serverIsRunning = computed(() => localServer.isRunning);
 </script>

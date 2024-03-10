@@ -12,11 +12,11 @@ const config = computed(() => server.config);
 <template>
   <div class="w-full flex flex-col bg-dark p-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest">
     <div class="h-full tc-main-light mb-2">
-      {{ t('settings.sections.server.config') }}
+      {{ t('settings.localServer.config') }}
     </div>
     <div v-if="config" class="flex flex-col">
       <div v-for="kv in Object.entries(server.config)" :key="kv[0]" class="flex justify-between items-center">
-        <p class="tc-main-light">{{ t(`settings.sections.server.config.${kv[0]}`) }}</p>
+        <p class="tc-main-light">{{ t(`settings.localServer.configKey.${kv[0]}`) }}</p>
         <div v-if="typeof kv[1] === 'boolean'" class="tc-main text-xl">
           <p v-show="kv[1]">#ON#</p>
           <p v-show="!kv[1]">#OFF#</p>
@@ -25,7 +25,7 @@ const config = computed(() => server.config);
       </div>
     </div>
     <div v-else>
-      <p class="tc-main-secondary">{{ t('settings.sections.server.noConfig') }}</p>
+      <p class="tc-main-secondary">{{ t('settings.localServer.noConfig') }}</p>
     </div>
   </div>
 </template>

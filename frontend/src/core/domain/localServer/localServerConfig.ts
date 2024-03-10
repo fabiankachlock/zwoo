@@ -7,7 +7,7 @@ export type LocalServerConfig = {
   ip: string;
   useDynamicPort: boolean;
   useLocalhost: boolean;
-  useAllIPs: boolean;
+  useAllIps: boolean;
   useStrictOrigins: boolean;
   allowedOrigins: string;
 };
@@ -20,7 +20,7 @@ export class LocalServerConfigManager {
     ip: '',
     useDynamicPort: false,
     useLocalhost: false,
-    useAllIPs: false,
+    useAllIps: false,
     allowedOrigins: '',
     useStrictOrigins: false
   };
