@@ -13,51 +13,67 @@ mod exec;
 struct State(Mutex<Option<exec::Server>>);
 
 #[tauri::command]
-fn start_local_server(state: tauri::State<'_, State>) -> String {
+fn start_local_server(state: tauri::State<'_, State>) -> Result<String, String> {
     state
         .0
         .lock()
         .unwrap()
         .as_mut()
-        .expect("Server not initialized")
+        .ok_or_else(|| "Server not initialized".to_string())?
         .start();
 
-    "Server started".to_string()
+    Ok("Server started".to_string())
 }
 
 #[tauri::command]
-fn stop_local_server(state: tauri::State<'_, State>) -> String {
+fn stop_local_server(state: tauri::State<'_, State>) -> Result<String, String> {
     state
         .0
         .lock()
         .unwrap()
         .as_mut()
-        .expect("Server not initialized")
+        .ok_or_else(|| "Server not initialized".to_string())?
         .stop();
 
-    "Server stopped".to_string()
+    Ok("Server stopped".to_string())
 }
 
 #[tauri::command]
-fn get_local_server_config(state: tauri::State<'_, State>) -> String {
-    let config = state.0.lock().unwrap().as_ref().unwrap().config.clone();
-    serde_json::to_string(&config).unwrap()
+fn get_local_server_config(state: tauri::State<'_, State>) -> Result<String, String> {
+    let config = state
+        .0
+        .lock()
+        .unwrap()
+        .as_mut()
+        .ok_or_else(|| "Server not initialized".to_string())?
+        .config
+        .clone();
+
+    Ok(serde_json::to_string(&config).unwrap())
 }
 
 #[tauri::command]
 fn update_local_server_config(
     state: tauri::State<'_, State>,
     new_config: config::LocalServerConfig,
-) -> String {
+) -> Result<String, String> {
     state
         .0
         .lock()
         .unwrap()
         .as_mut()
-        .expect("Server not initialized")
+        .ok_or_else(|| "Server not initialized".to_string())?
         .update_config(new_config);
 
-    "Server config updated".to_string()
+    Ok("Server config updated".to_string())
+}
+
+#[tauri::command]
+fn get_server_status(state: tauri::State<'_, State>) -> Result<bool, String> {
+    match state.0.lock().unwrap().as_mut() {
+        Some(server) => Ok(server.is_running()),
+        None => Err("Server not initialized".to_string()),
+    }
 }
 
 fn main() {
@@ -82,11 +98,10 @@ fn main() {
             let server_path = resource_path.into_os_string().into_string().unwrap();
             println!("[app] located server executable {}", server_path);
 
-            let id = config::load_app_id(app.path_resolver().app_data_dir().unwrap());
-            println!("[app] loaded server id: {}", id);
 
             let config =
-                config::load_local_server_config(app.path_resolver().app_data_dir().unwrap());
+            config::load_local_server_config(app.path_resolver().app_data_dir().unwrap());
+            println!("[app] loaded server id: {}", config.server_id);
             println!("[app] loaded last server config: {:?}", config);
 
             let state = State(Default::default());
@@ -98,7 +113,8 @@ fn main() {
             start_local_server,
             stop_local_server,
             get_local_server_config,
-            update_local_server_config
+            update_local_server_config,
+            get_server_status
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

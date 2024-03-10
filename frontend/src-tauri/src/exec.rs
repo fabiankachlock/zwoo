@@ -27,6 +27,9 @@ impl Server {
         if !self.config.ip.is_empty() {
             args.push(format!("--server-id {}", self.config.server_id));
         }
+        if !self.config.ip.is_empty() {
+            args.push(format!("--secret-key {}", self.config.server_id));
+        }
 
         if !self.config.allowed_origins.is_empty() {
             args.push(format!("--allowed-origin {}", self.config.allowed_origins));
