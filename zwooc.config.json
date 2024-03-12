@@ -75,8 +75,8 @@
     }
   },
   "app": {
-    "$dir": "frontend",
-    "$adapter": "vite-yarn",
+    "$dir": "frontend/src-tauri",
+    "$adapter": "tauri-yarn",
     "app": {
       "$pre": {
         "profiles": {
@@ -125,11 +125,20 @@
       "$pre": {
         "fragments": ["docker"]
       },
+      "$post": {
+        "fragments": ["docker:down"]
+      },
       "profiles": {
         "dev": "watch",
         "server": "watch",
         "local": "watch",
         "ziad": "watch"
+      }
+    },
+    "tauri": {
+      "profiles": {
+        "tauri": "watch",
+        "app": "watch"
       }
     }
   }

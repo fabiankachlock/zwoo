@@ -15,6 +15,7 @@ public class GameEndpoints
 {
     public static void Map(IEndpointRouteBuilder app)
     {
+
         app.MapGet("/game/list", (
             // [FromQuery] bool recommended,
             //     [FromQuery] int offset,
