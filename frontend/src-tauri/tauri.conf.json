@@ -17,7 +17,13 @@
         "all": true
       },
       "fs": {
-        "scope": ["$RESOURCE/*"]
+        "scope": ["$RESOURCE/*", "$APP/*"],
+        "readFile": true,
+        "writeFile": true,
+        "exists": true
+      },
+      "path": {
+        "all": true
       },
       "shell": {
         "all": false,
@@ -52,9 +58,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [
-        "../../backend/Zwoo.Backend.LocalServer/bin/Release/net8.0/osx-x64/native/Zwoo.Backend.LocalServer.exe"
-      ],
+      "resources": ["resources/*"],
       "shortDescription": "zwoo - The Second Challenge",
       "targets": "all",
       "windows": {

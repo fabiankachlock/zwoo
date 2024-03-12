@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-beta.4
+          version: 1.0.0-beta.5
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -28,7 +28,7 @@ jobs:
           dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o server
+        run: zwooc build server
       # - name: Test
       #   working-directory: ./backend
       #   run: dotnet test "./Zwoo.GameEngine/Zwoo.GameEngine.csproj" -c Release --verbosity normal
@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-beta.4
+          version: 1.0.0-beta.5
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -51,14 +51,14 @@ jobs:
           dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o ziad
+        run: zwooc build ziad
 
   wasm-gamelogic:
     runs-on: ubuntu-latest
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-beta.4
+          version: 1.0.0-beta.5
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -71,14 +71,14 @@ jobs:
           dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o wasm
+        run: zwooc build wasm
 
   local-server:
     runs-on: ubuntu-latest
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
         with:
-          version: 1.0.0-beta.4
+          version: 1.0.0-beta.5
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -91,4 +91,4 @@ jobs:
           dotnet restore "./Zwoo.Backend.LocalServer/Zwoo.Backend.LocalServer.csproj"
       - name: Build
         working-directory: ./backend
-        run: zwooc build -o local
+        run: zwooc build -e local-server local

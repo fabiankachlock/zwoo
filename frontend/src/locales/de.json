@@ -7,6 +7,7 @@
       "game": "Spiel",
       "account": "Account",
       "developers": "Entwickler",
+      "server": "Lokaler Server",
       "": "Fehler"
     },
     "update": {
@@ -43,7 +44,27 @@
     "localLogs": "Lokal gespeicherte Logs",
     "clearLogs": "Logs zurücksetzen",
     "feedbackChat": "Feedback Nachrichten im Chat",
-    "feedbackSnackbar": "Feedback Mitteilungen"
+    "feedbackSnackbar": "Feedback Mitteilungen",
+    "localServer": {
+      "controls": "Server Aktionen",
+      "start": "Server starten",
+      "stop": "Server stoppen",
+      "config": "Konfiguration",
+      "configKey": {
+        "serverId": "Server ID",
+        "secretKey": "Server Schlüssel",
+        "port": "Port",
+        "ip": "IP",
+        "useDynamicPort": "Nutzt dynamischen Port",
+        "useLocalhost": "Höre auf localhost",
+        "useAllIps": "Höre auf allen Adressen",
+        "allowedOrigins": "Erlaubt Origins",
+        "useStrictOrigins": "Sktrikte Origins Kontrolle"
+      },
+      "noConfig": "Server-Konfiguration nicht verfügbar",
+      "stats":"Statistiken",
+      "logIn": "Lokal spielen"
+    }
   },
   "lng": {
     "de": "Deutsch",
