@@ -38,7 +38,7 @@
     "i18n:check": "node ./scripts/checkI18nFiles.js",
     "format": "prettier --write \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
     "format:ci": "prettier --check \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
-    "prepare": "cd .. && husky install frontend/.husky",
+    "prepare": "cd .. && husky frontend/.husky",
     "postversion": "yarn setup:version && git add .env",
     "setup:version": "node ./scripts/version.js",
     "deps:check": "depcruise -m --config .dependency-cruiser.js src",
