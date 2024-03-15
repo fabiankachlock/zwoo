@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Authentication;
 using Zwoo.GameEngine.Lobby;
@@ -11,28 +12,41 @@ using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.Backend.Shared.Api.Game;
 
+public static class StringValuesExtensions
+{
+    public static int FirstInt(this StringValues values)
+    {
+        return int.Parse(values.FirstOrDefault() ?? "0");
+    }
+
+    public static string FirstString(this StringValues values)
+    {
+        return values.FirstOrDefault() ?? "";
+    }
+}
+
+
 public class GameEndpoints
 {
     public static void Map(IEndpointRouteBuilder app)
     {
 
-        app.MapGet("/game/list", (
-            // [FromQuery] bool recommended,
-            //     [FromQuery] int offset,
-            //     [FromQuery] int limit,
-            //     [FromQuery] string filter,
-            //     [FromQuery] bool publicOnly,
-            IGameProviderService _games) =>
+        app.MapGet("/game/list", (HttpContext context, IGameProviderService _games) =>
         {
+            bool recommended = context.Request.Query.ContainsKey("recommended");
+            int offset = context.Request.Query["offset"].FirstInt();
+            int limit = context.Request.Query["limit"].FirstInt();
+            string filter = context.Request.Query["filter"].FirstString();
+            bool publicOnly = context.Request.Query.ContainsKey("publicOnly");
+
             return Results.Ok(new GamesList()
             {
-                // Games = _games.QueryGames(offset, limit, new GameQueryOptions()
-                // {
-                //     Filter = filter,
-                //     PublicOnly = publicOnly,
-                //     Recommended = recommended
-                // })
-                Games = new List<GameMeta>()
+                Games = _games.QueryGames(offset, limit, new GameQueryOptions()
+                {
+                    Filter = filter,
+                    PublicOnly = publicOnly,
+                    Recommended = recommended
+                })
             });
         });
 
