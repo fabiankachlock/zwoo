@@ -40,6 +40,15 @@
       "base": "__base",
       "mode": "prod"
     },
+    "local-server": {
+      "base": "__base",
+      "mode": "local-server",
+      "build": {
+        "args": {
+          "outDir": "../backend/Zwoo.Backend.LocalServer/frontend"
+        }
+      }
+    },
     "dev-instance": {
       "base": "__base",
       "mode": "dev-instance"
@@ -54,13 +63,6 @@
         }
       }
     },
-    "tauri-embedded": {
-      "base": "__base",
-      "mode": "tauri-embedded",
-      "args": {
-        "outDir": "dist-preview"
-      }
-    },
     "preview": {
       "base": "__base",
       "mode": "preview"
@@ -72,13 +74,35 @@
       "watch": false
     }
   },
+  "app": {
+    "$dir": "frontend/src-tauri",
+    "$adapter": "tauri-yarn",
+    "app": {
+      "$pre": {
+        "profiles": {
+          "local": "build",
+          "tauri": "build"
+        }
+      }
+    }
+  },
   "backend": {
     "$adapter": "dotnet",
     "server": {
       "project": "Zwoo.Backend"
     },
     "local": {
-      "project": "Zwoo.Backend.LocalServer"
+      "project": "Zwoo.Backend.LocalServer",
+      "build": {
+        "args": {
+          "output": "../../frontend/src-tauri/resources/server"
+        },
+        "$pre": {
+          "profiles": {
+            "local-server": "build"
+          }
+        }
+      }
     },
     "ziad": {
       "project": "Zwoo.Dashboard"
@@ -101,11 +125,20 @@
       "$pre": {
         "fragments": ["docker"]
       },
+      "$post": {
+        "fragments": ["docker:down"]
+      },
       "profiles": {
         "dev": "watch",
         "server": "watch",
         "local": "watch",
         "ziad": "watch"
+      }
+    },
+    "tauri": {
+      "profiles": {
+        "tauri": "watch",
+        "app": "watch"
       }
     }
   }
