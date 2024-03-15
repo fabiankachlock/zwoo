@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useLocalServer } from '@/core/adapter/tauri/localServer';
 
 const { t } = useI18n();
 const server = useLocalServer();
-const isRunning = ref(false);
+const isRunning = computed(() => server.isRunning);
 
 const toggleServer = () => {
-  isRunning.value = !isRunning.value;
-  if (isRunning.value) {
+  if (!isRunning.value) {
     server.startServer();
   } else {
     server.stopServer();

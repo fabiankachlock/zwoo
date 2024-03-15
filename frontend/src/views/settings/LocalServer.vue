@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import LocalServerConfig from '@/components/settings/sections/local-server/LocalServerConfig.vue';
@@ -26,4 +26,8 @@ import { useLocalServer } from '@/core/adapter/tauri/localServer';
 const { t } = useI18n();
 const localServer = useLocalServer();
 const serverIsRunning = computed(() => localServer.isRunning);
+
+onMounted(() => {
+  localServer.loadStatus();
+});
 </script>

@@ -12,3 +12,4 @@ docker-compose.prod.yml
 backend/Zwoo.Backend.sln.DotSettings.user
 backend/Zwoo.Backend/Properties/launchSettings.json
 backend/Zwoo.Backend.LocalServer/Properties/launchSettings.json
+target

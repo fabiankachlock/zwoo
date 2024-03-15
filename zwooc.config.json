@@ -78,6 +78,7 @@
     "$dir": "frontend/src-tauri",
     "$adapter": "tauri-yarn",
     "app": {
+      "env": ["RUST_BACKTRACE=1"],
       "$pre": {
         "profiles": {
           "local": "build",
