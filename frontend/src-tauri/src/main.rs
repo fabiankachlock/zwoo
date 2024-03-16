@@ -13,29 +13,25 @@ mod exec;
 struct State(Mutex<Option<exec::Server>>);
 
 #[tauri::command]
-fn start_local_server(state: tauri::State<'_, State>) -> Result<String, String> {
-    state
+fn start_local_server(state: tauri::State<'_, State>) -> Result<bool, String> {
+    return state
         .0
         .lock()
         .unwrap()
         .as_mut()
-        .ok_or_else(|| "Server not initialized".to_string())?
+        .ok_or_else(|| "tauri.server.notInitialized".to_string())?
         .start();
-
-    Ok("Server started".to_string())
 }
 
 #[tauri::command]
-fn stop_local_server(state: tauri::State<'_, State>) -> Result<String, String> {
-    state
+fn stop_local_server(state: tauri::State<'_, State>) -> Result<bool, String> {
+    return state
         .0
         .lock()
         .unwrap()
         .as_mut()
-        .ok_or_else(|| "Server not initialized".to_string())?
+        .ok_or_else(|| "tauri.server.notInitialized".to_string())?
         .stop();
-
-    Ok("Server stopped".to_string())
 }
 
 #[tauri::command]
@@ -45,7 +41,7 @@ fn get_local_server_config(state: tauri::State<'_, State>) -> Result<String, Str
         .lock()
         .unwrap()
         .as_mut()
-        .ok_or_else(|| "Server not initialized".to_string())?
+        .ok_or_else(|| "tauri.server.notInitialized".to_string())?
         .config
         .clone();
 
@@ -56,16 +52,16 @@ fn get_local_server_config(state: tauri::State<'_, State>) -> Result<String, Str
 fn update_local_server_config(
     state: tauri::State<'_, State>,
     new_config: config::LocalServerConfig,
-) -> Result<String, String> {
+) -> Result<bool, String> {
     state
         .0
         .lock()
         .unwrap()
         .as_mut()
-        .ok_or_else(|| "Server not initialized".to_string())?
+        .ok_or_else(|| "tauri.server.notInitialized".to_string())?
         .update_config(new_config);
 
-    Ok("Server config updated".to_string())
+    Ok(true)
 }
 
 #[tauri::command]
@@ -76,7 +72,8 @@ fn get_server_status(state: tauri::State<'_, State>) -> Result<bool, String> {
     }
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // let system_menu = Submenu::new(
     //     "zwoo",
     //     Menu::new()

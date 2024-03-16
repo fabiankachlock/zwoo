@@ -1,3 +1,4 @@
+use std::io::{BufRead, BufReader};
 use std::process::Stdio;
 use std::process::{Child, Command};
 
@@ -54,43 +55,64 @@ impl Server {
         args
     }
 
-    pub fn start(&mut self) {
+    pub fn start(&mut self) -> Result<bool, String> {
         if let Some(_child) = self.child.take() {
-            println!("Server is already running!");
-            return;
+            println!("[app] server is already running!");
+            return Ok(false);
         }
 
-        println!("Starting server with args: {:?}", self.build_args());
+        println!("[app] starting server with args: {:?}", self.build_args());
 
-        let cmd = Command::new(self.path.as_str())
+        // strip unc path prefix
+        let stripped_path = self.path.strip_prefix("\\\\?\\");
+        if stripped_path != Some(self.path.as_str()) {
+            println!("[app] stripped path to: {:?}", stripped_path.unwrap());
+        }
+
+        let cmd = Command::new(stripped_path.unwrap())
             .args(self.build_args())
             .stdout(Stdio::piped())
-            .spawn()
-            .expect("failed to start server");
-        // let out = cmd.stdout.unwrap();
+            .spawn();
+
+        if let Err(e) = cmd {
+            println!("[app] error starting server: {}", e);
+            return Err("tauri.server.cantStart".to_string().to_string());
+        }
+
+        let mut cmd = cmd.unwrap();
+        let mut out = cmd.stdout.take();
+
         self.child = Some(cmd);
-        println!("Server started");
+        println!("[app] server started");
 
-        // let reader = BufReader::new(out);
+        tokio::spawn(async move {
+            if let Some(ref mut stdout) = out {
+                let reader = BufReader::new(stdout);
 
-        // reader
-        //     .lines()
-        //     .filter_map(|line| line.ok())
-        //     .for_each(|line| println!("[srv] {}", line))
+                let mut lines_stream = reader.lines().map(|line| line.unwrap());
+                while let Some(line) = lines_stream.next() {
+                    println!("[srv] {}", line);
+                }
+            }
+        });
+        Ok(true)
     }
 
-    pub fn stop(&mut self) {
+    pub fn stop(&mut self) -> Result<bool, String> {
         if let Some(mut child) = self.child.take() {
-            println!("Server is stopping!");
-            match child.kill() {
-                Ok(_) => println!("Server stopped!"),
-                Err(e) => println!("Error stopping server: {}", e),
+            println!("[app] server is stopping!");
+            if let Err(e) = child.kill() {
+                println!("[app] error stopping server: {}", e);
+                return Err("tauri.server.cantStop".to_string());
             }
-            return;
-        } else {
-            println!("Server is not running");
+
+            self.child = None;
+            println!("[app] server stopped!");
+            return Ok(true);
         }
-        self.child = None;
+
+        println!("[app] server is not running");
+        Ok(false)
     }
 
     pub fn is_running(&self) -> bool {

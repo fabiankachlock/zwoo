@@ -21,31 +21,22 @@ if (args.Length >= 1 && args[0] == "-h")
 var builder = WebApplication.CreateSlimBuilder(args);
 
 var config = builder.AddServerConfiguration(args);
+// resolve listening options
+int listeningPort = config.Port == 0 ? 8001 : config.Port;
+if (config.UseDynamicPort) listeningPort = 0;
+
+string listeningIp = "0.0.0.0";
+if (config.UseAllIPs) listeningIp = "127.0.0.1";
+else if (config.UseLocalhost) listeningIp = "127.0.0.1";
+else if (IPAddress.TryParse(config.IP, out var ip)) listeningIp = config.IP;
+
 builder.WebHost.ConfigureKestrel(options =>
 {
-    var port = config.Port == 0 ? 8001 : config.Port;
-    if (config.UseDynamicPort)
-    {
-        port = 0;
-    }
-
-    if (config.UseAllIPs)
-    {
-        options.ListenAnyIP(port);
-        return;
-    }
-
-    if (config.UseLocalhost)
-    {
-        options.ListenLocalhost(port);
-    }
-
-    if (IPAddress.TryParse(config.IP, out var ip))
-    {
-        options.Listen(ip, port);
-    }
-
-    options.Listen(new IPAddress(0), port);
+    Console.WriteLine($"[Config] Configuring Server to listen on {listeningIp}:{listeningPort}");
+    if (config.UseAllIPs) options.ListenAnyIP(listeningPort);
+    else if (config.UseLocalhost) options.ListenLocalhost(listeningPort);
+    else if (IPAddress.TryParse(config.IP, out var ip)) options.Listen(ip, listeningPort);
+    else options.Listen(new IPAddress(0), listeningPort);
 });
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -60,7 +51,6 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
     AppVersion = "1.0.0-beta.17"
 });
 
-// TODO: get server id
 builder.Services.AddLocalAuthentication(config.ServerId);
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
@@ -79,6 +69,7 @@ app.UseZwooHttpLogging("/api");
 if (!config.UseStrictOrigins)
 {
     var allowedOrigins = config.AllowedOrigins == string.Empty ? null : config.AllowedOrigins;
+    Console.WriteLine($"[Config] Allowing origins: {allowedOrigins ?? "*all*"}");
     app.Use((context, next) =>
     {
         context.Response.Headers.Append("Access-Control-Allow-Origin", allowedOrigins ?? context.Request.Headers["Origin"]);
@@ -122,7 +113,24 @@ var webSocketOptions = new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
-webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
+
+if (config.UseStrictOrigins)
+{
+    Console.WriteLine($"[Config] Restricting websockets to: http://{listeningIp}:{listeningPort}");
+    webSocketOptions.AllowedOrigins.Add($"http://{listeningIp}:{listeningPort}");
+}
+else if (config.AllowedOrigins != string.Empty)
+{
+    Console.WriteLine($"[Config] Allowing websockets from: {config.AllowedOrigins}");
+    foreach (var origin in config.AllowedOrigins.Split(','))
+    {
+        webSocketOptions.AllowedOrigins.Add(origin);
+    }
+}
+else
+{
+    Console.WriteLine($"[Config] Allowing websockets from: *everywhere*");
+}
 
 app.UseWebSockets(webSocketOptions);
 api.UseDiscover();

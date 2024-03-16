@@ -185,8 +185,10 @@ export const useRootApp = defineStore('app', {
         return false;
       }
 
-      // TODO: handle ws url
-      this._apiMap.local.api = RestApi(serverUrl, AppConfig.WsUrl);
+      const wsUrl = serverUrl.replace(/^http/, 'ws');
+
+      this._apiMap.local.api = RestApi(serverUrl, wsUrl);
+      this._apiMap.local.realtime = WsGameAdapter(serverUrl, wsUrl);
       this.environment = 'local';
       Logger.warn('### zwoo entered local mode');
       return true;

@@ -16,12 +16,24 @@ export const useLocalServer = defineStore('localServer', () => {
     Object.assign(config, initialConfig);
   });
 
-  function startServer() {
-    invoke('start_local_server').then(() => console.log('Server started'));
+  async function startServer() {
+    await invoke('start_local_server');
+    invoke<boolean>('get_server_status').then(status => {
+      isRunning.value = status;
+    });
   }
 
-  function stopServer() {
-    invoke('stop_local_server').then(() => console.log('Server started'));
+  async function stopServer() {
+    await invoke('stop_local_server');
+    invoke<boolean>('get_server_status').then(status => {
+      isRunning.value = status;
+    });
+  }
+
+  async function loadStatus() {
+    invoke<boolean>('get_server_status').then(status => {
+      isRunning.value = status;
+    });
   }
 
   watch(config, newValue => {
@@ -32,6 +44,7 @@ export const useLocalServer = defineStore('localServer', () => {
     isRunning,
     config,
     startServer,
-    stopServer
+    stopServer,
+    loadStatus
   };
 });
