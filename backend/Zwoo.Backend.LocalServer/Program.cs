@@ -51,7 +51,6 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
     AppVersion = "1.0.0-beta.17"
 });
 
-// TODO: get server id
 builder.Services.AddLocalAuthentication(config.ServerId);
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
@@ -120,13 +119,17 @@ if (config.UseStrictOrigins)
     Console.WriteLine($"[Config] Restricting websockets to: http://{listeningIp}:{listeningPort}");
     webSocketOptions.AllowedOrigins.Add($"http://{listeningIp}:{listeningPort}");
 }
-else
+else if (config.AllowedOrigins != string.Empty)
 {
-    Console.WriteLine($"[Config] Allowing websockets from: {(config.AllowedOrigins == string.Empty ? "*everywhere*" : config.AllowedOrigins)}");
+    Console.WriteLine($"[Config] Allowing websockets from: {config.AllowedOrigins}");
     foreach (var origin in config.AllowedOrigins.Split(','))
     {
         webSocketOptions.AllowedOrigins.Add(origin);
     }
+}
+else
+{
+    Console.WriteLine($"[Config] Allowing websockets from: *everywhere*");
 }
 
 app.UseWebSockets(webSocketOptions);
