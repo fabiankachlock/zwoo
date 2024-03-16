@@ -93,6 +93,7 @@ if (!config.UseStrictOrigins)
             context.Response.StatusCode = 200;
             return Task.CompletedTask;
         }
+        Console.WriteLine("Request to: " + context.Request.Path);
         return next();
     });
 }
@@ -122,7 +123,6 @@ var webSocketOptions = new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
-webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 
 app.UseWebSockets(webSocketOptions);
 api.UseDiscover();
