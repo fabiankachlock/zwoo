@@ -20,6 +20,12 @@
           </div>
         </div>
       </div>
+      <div class="action bg-dark hover:bg-darkest cursor-pointer">
+        <router-link class="flex flex-row items-center" to="/login-local">
+          <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
+          <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
+        </router-link>
+      </div>
     </div>
   </MaxWidthLayout>
 </template>
