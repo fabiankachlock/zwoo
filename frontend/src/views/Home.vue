@@ -41,13 +41,13 @@
             <p class="tc-main-light inline-block mx-1">{{ t('landing.leaderboard') }}</p>
           </router-link>
         </div>
-        <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
-          <router-link class="flex flex-row items-center" to="/login-local">
-            <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
-            <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
-          </router-link>
-        </div>
       </Environment>
+      <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
+        <router-link class="flex flex-row items-center" to="/login-local">
+          <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
+          <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
+        </router-link>
+      </div>
       <!-- TODO tmp(beta): <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
         <router-link class="flex flex-row items-center" to="/tutorial">
           <Icon class="icon tc-secondary" icon="mdi:arrow-right-bold-box-outline" />
