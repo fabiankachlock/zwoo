@@ -63,13 +63,9 @@ public static class LoggingExtensions
                     {
                         logger.LogError(ex, $"internal error occurred while processing request {context.Request.Path} of {context.TraceIdentifier}");
                     }
-                    Console.WriteLine("!!! after ws logger");
                     return;
                 }
-                else
-                {
-                    watch.Start();
-                }
+                else watch.Start();
             }
 
 

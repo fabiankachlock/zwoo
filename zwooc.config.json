@@ -99,7 +99,8 @@
       "project": "Zwoo.Backend.LocalServer",
       "build": {
         "args": {
-          "output": "../frontend/src-tauri/resources/server"
+          "output": "../frontend/src-tauri/resources/server",
+          "--self-contained": ""
         },
         "$pre": {
           "profiles": {
