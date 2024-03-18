@@ -1,18 +1,29 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import LocalServerConfigEditor from '@/components/settings/sections/local-server/LocalServerConfigEditor.vue';
 import { useLocalServer } from '@/core/adapter/tauri/localServer';
+import { LocalServerConfig } from '@/core/domain/localServer/localServerConfig';
 
 const { t } = useI18n();
 const server = useLocalServer();
 const config = computed(() => server.config);
+const editOpen = ref(false);
+
+const editDialogClosed = (newConfig: LocalServerConfig) => {
+  server.config = newConfig;
+};
 </script>
 
 <template>
   <div class="w-full flex flex-col bg-dark p-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest">
-    <div class="h-full tc-main-light mb-2">
-      {{ t('settings.localServer.config') }}
+    <LocalServerConfigEditor v-if="editOpen" :config="config" @close="editDialogClosed" />
+    <div class="flex flex-row justify-between items-center mb-2">
+      <p class="tc-main-light">
+        {{ t('settings.localServer.config') }}
+      </p>
+      <button @click="editOpen = true">Edit</button>
     </div>
     <div v-if="config" class="flex flex-col">
       <div v-for="kv in Object.entries(server.config)" :key="kv[0]" class="flex justify-between items-center">
