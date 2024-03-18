@@ -64,6 +64,31 @@ builder.Services.AddGameServices();
 
 var app = builder.Build();
 
+
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+
+if (config.UseStrictOrigins)
+{
+    Console.WriteLine($"[Config] Restricting websockets to: http://{listeningIp}:{listeningPort}");
+    webSocketOptions.AllowedOrigins.Add($"http://{listeningIp}:{listeningPort}");
+}
+else if (config.AllowedOrigins != string.Empty)
+{
+    Console.WriteLine($"[Config] Allowing websockets from: {config.AllowedOrigins}");
+    foreach (var origin in config.AllowedOrigins.Split(','))
+    {
+        webSocketOptions.AllowedOrigins.Add(origin);
+    }
+}
+else
+{
+    Console.WriteLine($"[Config] Allowing websockets from: *everywhere*");
+}
+app.UseWebSockets(webSocketOptions);
+
 app.UseZwooHttpLogging("/api");
 
 if (!config.UseStrictOrigins)
@@ -72,6 +97,8 @@ if (!config.UseStrictOrigins)
     Console.WriteLine($"[Config] Allowing origins: {allowedOrigins ?? "*all*"}");
     app.Use((context, next) =>
     {
+        if (context.WebSockets.IsWebSocketRequest) return next(context);
+
         context.Response.Headers.Append("Access-Control-Allow-Origin", allowedOrigins ?? context.Request.Headers["Origin"]);
         context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -84,7 +111,7 @@ if (!config.UseStrictOrigins)
             context.Response.StatusCode = 200;
             return Task.CompletedTask;
         }
-        return next();
+        return next(context);
     });
 }
 
@@ -109,30 +136,7 @@ app.UseStaticFiles(new StaticFileOptions()
     ServeUnknownFileTypes = true,
 });
 
-var webSocketOptions = new WebSocketOptions
-{
-    KeepAliveInterval = TimeSpan.FromMinutes(2)
-};
 
-if (config.UseStrictOrigins)
-{
-    Console.WriteLine($"[Config] Restricting websockets to: http://{listeningIp}:{listeningPort}");
-    webSocketOptions.AllowedOrigins.Add($"http://{listeningIp}:{listeningPort}");
-}
-else if (config.AllowedOrigins != string.Empty)
-{
-    Console.WriteLine($"[Config] Allowing websockets from: {config.AllowedOrigins}");
-    foreach (var origin in config.AllowedOrigins.Split(','))
-    {
-        webSocketOptions.AllowedOrigins.Add(origin);
-    }
-}
-else
-{
-    Console.WriteLine($"[Config] Allowing websockets from: *everywhere*");
-}
-
-app.UseWebSockets(webSocketOptions);
 api.UseDiscover();
 api.UseGame();
 api.MapGet("/stats", (HttpContext context) =>

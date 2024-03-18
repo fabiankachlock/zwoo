@@ -57,6 +57,9 @@
       "base": "__base",
       "mode": "tauri",
       "env": ["VUE_APP_IS_TAURI=true"],
+      "args": {
+        "port": "8070"
+      },
       "build": {
         "args": {
           "outDir": "dist-tmp"
@@ -96,7 +99,7 @@
       "project": "Zwoo.Backend.LocalServer",
       "build": {
         "args": {
-          "output": "../../frontend/src-tauri/resources/server"
+          "output": "../frontend/src-tauri/resources/server"
         },
         "$pre": {
           "profiles": {

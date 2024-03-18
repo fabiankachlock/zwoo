@@ -1,3 +1,71 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import ShareSheet from '@/components/lobby/ShareSheet.vue';
+import Environment from '@/components/misc/Environment.vue';
+import FloatingDialog from '@/components/misc/FloatingDialog.vue';
+import { Icon } from '@/components/misc/Icon';
+import QRCode from '@/components/misc/QRCode.vue';
+import ReassureDialog from '@/components/misc/ReassureDialog.vue';
+import { useIsOffline } from '@/composables/useEnvironment';
+import { useUserDefaults } from '@/composables/userDefaults';
+import { useGameConfig } from '@/core/adapter/game';
+import { useLobbyStore } from '@/core/adapter/game/lobby';
+import { useIsHost } from '@/core/adapter/game/util/userRoles';
+import { useServerUrl } from '@/core/adapter/helper/useServerUrl';
+import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
+
+import Widget from '../Widget.vue';
+
+const { t } = useI18n();
+const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);
+const lobby = useLobbyStore();
+const gameConfig = useGameConfig();
+const joinUrl = computed(() => useServerUrl(gameConfig.gameId?.toString() ?? ''));
+const { isHost } = useIsHost();
+const lobbyId = computed(() => gameConfig.lobbyId);
+const gameHost = computed(() => lobby.host);
+const playerToPromote = ref<number | undefined>(undefined);
+const playerToKick = ref<number | undefined>(undefined);
+const shareSheetOpen = ref(false);
+const winsInfoOpen = ref(false);
+const qrCodeOpen = ref(false);
+const players = computed(() => lobby.players);
+const isOffline = useIsOffline();
+const showWinsWarning = computed(() => players.value.filter(player => player.role !== ZRPRole.Bot).length <= 1 || isOffline.value);
+
+const handlePromotePlayer = (id: number, allowed: boolean) => {
+  if (allowed) {
+    lobby.promotePlayer(id);
+  }
+  playerToPromote.value = undefined;
+};
+
+const askPromotePlayer = (id: number) => {
+  playerToPromote.value = id;
+};
+
+const handleKickPlayer = (id: number, allowed: boolean) => {
+  if (allowed) {
+    lobby.kickPlayer(id);
+  }
+  playerToKick.value = undefined;
+};
+
+const askKickPlayer = (id: number) => {
+  playerToKick.value = id;
+};
+
+const handleChangeToSpectator = () => {
+  lobbyId.value && lobby.changeToSpectator(lobbyId.value);
+};
+
+const handlePlayerToSpectator = (id: number) => {
+  lobby.changeToSpectator(id);
+};
+</script>
+
 <template>
   <Widget v-model="isOpen" title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <template #actions>
@@ -140,72 +208,3 @@
     </template>
   </Widget>
 </template>
-
-<script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-
-import ShareSheet from '@/components/lobby/ShareSheet.vue';
-import Environment from '@/components/misc/Environment.vue';
-import FloatingDialog from '@/components/misc/FloatingDialog.vue';
-import { Icon } from '@/components/misc/Icon';
-import QRCode from '@/components/misc/QRCode.vue';
-import ReassureDialog from '@/components/misc/ReassureDialog.vue';
-import { useIsOffline } from '@/composables/useEnvironment';
-import { useUserDefaults } from '@/composables/userDefaults';
-import { useGameConfig } from '@/core/adapter/game';
-import { useLobbyStore } from '@/core/adapter/game/lobby';
-import { useIsHost } from '@/core/adapter/game/util/userRoles';
-import { useApi } from '@/core/adapter/helper/useApi';
-import { ZRPRole } from '@/core/domain/zrp/zrpTypes';
-
-import Widget from '../Widget.vue';
-
-const { t } = useI18n();
-const { generateJoinUrl } = useApi();
-const isOpen = useUserDefaults('lobby:widgetPlayersOpen', true);
-const lobby = useLobbyStore();
-const gameConfig = useGameConfig();
-const joinUrl = computed(() => generateJoinUrl(gameConfig.gameId?.toString() ?? ''));
-const { isHost } = useIsHost();
-const lobbyId = computed(() => gameConfig.lobbyId);
-const gameHost = computed(() => lobby.host);
-const playerToPromote = ref<number | undefined>(undefined);
-const playerToKick = ref<number | undefined>(undefined);
-const shareSheetOpen = ref(false);
-const winsInfoOpen = ref(false);
-const qrCodeOpen = ref(false);
-const players = computed(() => lobby.players);
-const isOffline = useIsOffline();
-const showWinsWarning = computed(() => players.value.filter(player => player.role !== ZRPRole.Bot).length <= 1 || isOffline.value);
-
-const handlePromotePlayer = (id: number, allowed: boolean) => {
-  if (allowed) {
-    lobby.promotePlayer(id);
-  }
-  playerToPromote.value = undefined;
-};
-
-const askPromotePlayer = (id: number) => {
-  playerToPromote.value = id;
-};
-
-const handleKickPlayer = (id: number, allowed: boolean) => {
-  if (allowed) {
-    lobby.kickPlayer(id);
-  }
-  playerToKick.value = undefined;
-};
-
-const askKickPlayer = (id: number) => {
-  playerToKick.value = id;
-};
-
-const handleChangeToSpectator = () => {
-  lobbyId.value && lobby.changeToSpectator(lobbyId.value);
-};
-
-const handlePlayerToSpectator = (id: number) => {
-  lobby.changeToSpectator(id);
-};
-</script>

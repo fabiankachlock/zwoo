@@ -31,7 +31,7 @@ onMounted(async () => {
   if (route.query['target']) {
     server.value = route.query['target'] as string;
   } else if (AppConfig.DefaultEnv === 'local') {
-    server.value = '/api';
+    server.value = '/api/';
   } else if (AppConfig.IsTauri) {
     const serverModule = await import('@/core/adapter/tauri/localServer');
     const localServer = serverModule.useLocalServer();

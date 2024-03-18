@@ -18,6 +18,7 @@ namespace Zwoo.Backend.Shared.Api;
 [JsonSerializable(typeof(ProblemDetails))]
 [JsonSerializable(typeof(IResult))]
 [JsonSerializable(typeof(Task<IResult>))]
+[JsonSerializable(typeof(Task))]
 public partial class ApiJsonSerializerContext : JsonSerializerContext
 {
 
