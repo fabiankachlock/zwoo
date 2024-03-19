@@ -21,11 +21,19 @@ const name = ref('');
 const server = ref('');
 const error = ref<string[]>([]);
 const isLoading = ref<boolean>(false);
+const serverHidden = ref<boolean>(false);
 const isSubmitEnabled = computed(() => !isLoading.value && !!name.value?.trim() && !!server.value?.trim());
+const isLocked = AppConfig.LockEnv;
 
 onMounted(async () => {
   if (auth.isLoggedIn) {
     name.value = auth.username;
+  }
+
+  if (isLocked && AppConfig.DefaultEnv === 'local') {
+    serverHidden.value = true;
+    server.value = '/api/';
+    return;
   }
 
   if (route.query['target']) {
@@ -63,7 +71,7 @@ const logIn = async () => {
   <FormLayout>
     <Form show-back-button>
       <FormTitle>{{ t('loginLocal.title') }}</FormTitle>
-      <TextInput v-model="server" id="serverUrl" label-key="loginLocal.server" placeholder="http://192.168.0.17/" />
+      <TextInput v-if="!serverHidden" v-model="server" id="serverUrl" label-key="loginLocal.server" placeholder="http://192.168.0.17/" />
       <TextInput v-model="name" id="username" label-key="loginLocal.name" placeholder="loginLocal.namePlaceholder" />
       <FormError :error="error" />
 
