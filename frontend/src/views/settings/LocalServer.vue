@@ -1,6 +1,6 @@
 <template>
   <SettingsSection>
-    <SettingsRow :title="t('settings.localServer.controls')">
+    <SettingsRow :title="t('localServer.controls')">
       <LocalServerControls />
     </SettingsRow>
     <SettingsRow title="" v-if="serverIsRunning">
