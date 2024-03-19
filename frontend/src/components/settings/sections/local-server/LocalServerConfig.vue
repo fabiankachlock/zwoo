@@ -21,13 +21,13 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
     <LocalServerConfigEditor v-if="editOpen" :config="config" @close="editDialogClosed" />
     <div class="flex flex-row justify-between items-center mb-2">
       <p class="tc-main-light">
-        {{ t('settings.localServer.config') }}
+        {{ t('localServer.config') }}
       </p>
-      <button @click="editOpen = true">Edit</button>
+      <button @click="editOpen = true">{{ t('localServer.editConfig') }}</button>
     </div>
     <div v-if="config" class="flex flex-col">
       <div v-for="kv in Object.entries(server.config)" :key="kv[0]" class="flex justify-between items-center">
-        <p class="tc-main-light">{{ t(`settings.localServer.configKey.${kv[0]}`) }}</p>
+        <p class="tc-main-light">{{ t(`localServer.configKey.${kv[0]}`) }}</p>
         <div v-if="typeof kv[1] === 'boolean'" class="tc-main text-xl">
           <p v-show="kv[1]">#ON#</p>
           <p v-show="!kv[1]">#OFF#</p>
@@ -36,7 +36,7 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
       </div>
     </div>
     <div v-else>
-      <p class="tc-main-secondary">{{ t('settings.localServer.noConfig') }}</p>
+      <p class="tc-main-secondary">{{ t('localServer.noConfig') }}</p>
     </div>
   </div>
 </template>

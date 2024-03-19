@@ -44,27 +44,7 @@
     "localLogs": "Lokal gespeicherte Logs",
     "clearLogs": "Logs zurücksetzen",
     "feedbackChat": "Feedback Nachrichten im Chat",
-    "feedbackSnackbar": "Feedback Mitteilungen",
-    "localServer": {
-      "controls": "Server Aktionen",
-      "start": "Server starten",
-      "stop": "Server stoppen",
-      "config": "Konfiguration",
-      "configKey": {
-        "serverId": "Server ID",
-        "secretKey": "Server Schlüssel",
-        "port": "Port",
-        "ip": "IP",
-        "useDynamicPort": "Nutzt dynamischen Port",
-        "useLocalhost": "Höre auf localhost",
-        "useAllIps": "Höre auf allen Adressen",
-        "allowedOrigins": "Erlaubt Origins",
-        "useStrictOrigins": "Sktrikte Origins Kontrolle"
-      },
-      "noConfig": "Server-Konfiguration nicht verfügbar",
-      "stats":"Statistiken",
-      "logIn": "Lokal spielen"
-    }
+    "feedbackSnackbar": "Feedback Mitteilungen"
   },
   "lng": {
     "de": "Deutsch",
@@ -527,5 +507,44 @@
     "online": "Online Modus",
     "offline": "Offline Modus",
     "local": "Lokaler Modus"
+  },
+  "localServer": {
+    "controls": "Server Aktionen",
+    "start": "Server starten",
+    "stop": "Server stoppen",
+    "config": "Konfiguration",
+    "configKey": {
+      "serverId": "Server ID",
+      "secretKey": "Server Schlüssel",
+      "port": "Port",
+      "ip": "IP",
+      "useDynamicPort": "Nutzt dynamischen Port",
+      "useLocalhost": "Höre auf localhost",
+      "useAllIps": "Höre auf allen Adressen",
+      "allowedOrigins": "Erlaubt Origins",
+      "useStrictOrigins": "Sktrikte Origins Kontrolle"
+    },
+    "noConfig": "Server-Konfiguration nicht verfügbar",
+    "stats": "Statistiken",
+    "logIn": "Lokal spielen",
+    "editConfig": "Bearbeiten",
+    "changeConfig": "Konfiguration ändern",
+    "save": "Speichern",
+    "ip": {
+      "title": "IP Adresse",
+      "custom": "Eigener Adapter",
+      "localhost": "localhost Adapter",
+      "all": "Alle Adapter"
+    },
+    "port": {
+      "title": "Port",
+      "dynamic": "Dynamischer Port",
+      "custom": "Eigener Port"
+    },
+    "security": {
+      "title": "Sicherheit",
+      "restricted": "Nur bestimmte Origins erlauben",
+      "open": "Alle Origins erlauben"
+    }
   }
 }

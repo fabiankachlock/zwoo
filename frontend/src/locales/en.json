@@ -44,27 +44,7 @@
     "localLogs": "Locally saved logs",
     "clearLogs": "Clear logs",
     "feedbackChat": "Feedback messages in chat",
-    "feedbackSnackbar": "Feedback notifications",
-    "localServer": {
-      "controls": "Server Controls",
-      "start": "Start server",
-      "stop": "Stop server",
-      "config": "Configuration",
-      "configKey": {
-        "serverId": "Server ID",
-        "secretKey": "Server Secret",
-        "port": "Port",
-        "ip": "IP",
-        "useDynamicPort": "Use dynamic Port",
-        "useLocalhost": "Listen on localhost",
-        "useAllIps": "Listen on all addresses",
-        "allowedOrigins": "Allowed origins",
-        "useStrictOrigins": "Strict origins check"
-      },
-      "noConfig": "Server configuration not available",
-      "stats":"Statistic",
-      "logIn": "Play local"
-    }
+    "feedbackSnackbar": "Feedback notifications"
   },
   "lng": {
     "de": "German",
@@ -527,5 +507,44 @@
     "online": "online mode",
     "offline": "offline mode",
     "local": "local mode"
+  },
+  "localServer": {
+    "controls": "Server Controls",
+    "start": "Start server",
+    "stop": "Stop server",
+    "config": "Configuration",
+    "configKey": {
+      "serverId": "Server ID",
+      "secretKey": "Server Secret",
+      "port": "Port",
+      "ip": "IP",
+      "useDynamicPort": "Use dynamic Port",
+      "useLocalhost": "Listen on localhost",
+      "useAllIps": "Listen on all addresses",
+      "allowedOrigins": "Allowed origins",
+      "useStrictOrigins": "Strict origins check"
+    },
+    "noConfig": "Server configuration not available",
+    "stats": "Statistic",
+    "logIn": "Play local",
+    "editConfig": "Edit",
+    "changeConfig": "Edit configuration",
+    "save": "Save",
+    "ip": {
+      "title": "IP Address",
+      "custom": "custom adapter",
+      "localhost": "localhost adapter",
+      "all": "all adapters"
+    },
+    "port": {
+      "title": "Port",
+      "dynamic": "dynamic port",
+      "custom": "custom port"
+    },
+    "security": {
+      "title": "Security",
+      "restricted": "allow only specific origins",
+      "open": "allow all origins"
+    }
   }
 }

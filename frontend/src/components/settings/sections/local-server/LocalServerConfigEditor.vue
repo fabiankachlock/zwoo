@@ -66,13 +66,13 @@ const save = () => {
     <div class="flex flex-col gap-2">
       <div class="flex flex-row justify-between">
         <h1 class="tc-main text-xl">
-          {{ t('localServer.config') }}
+          {{ t('localServer.changeConfig') }}
         </h1>
-        <button @click="save">Speichern</button>
+        <button @click="save">{{ t('localServer.save') }}</button>
       </div>
       <div class="flex flex-row justify-between mx-2">
         <p class="tx-secondary">
-          {{ t('localServer.ip') }}
+          {{ t('localServer.ip.title') }}
         </p>
         <select
           :ref="
@@ -92,7 +92,7 @@ const save = () => {
 
       <div class="flex flex-row justify-between mx-2">
         <p class="tx-secondary">
-          {{ t('localServer.port') }}
+          {{ t('localServer.port.title') }}
         </p>
         <select
           :ref="
@@ -111,7 +111,7 @@ const save = () => {
 
       <div class="flex flex-row justify-between mx-2">
         <p class="tx-secondary">
-          {{ t('localServer.security') }}
+          {{ t('localServer.security.title') }}
         </p>
         <select
           :ref="
