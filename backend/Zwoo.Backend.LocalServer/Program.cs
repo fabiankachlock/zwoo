@@ -130,6 +130,11 @@ if (app.Environment.IsDevelopment())
 
 // serve frontend files
 var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
+app.UseDefaultFiles(new DefaultFilesOptions
+{
+    FileProvider = provider,
+    DefaultFileNames = ["index.html"]
+});
 app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = provider,
@@ -148,11 +153,10 @@ api.MapGet("/stats", (HttpContext context) =>
     return Results.Ok("##server stats");
 }).AllowAnonymous();
 
-// serve index.html for all other requests
-var index = provider.GetFileInfo("index.html");
-app.MapGet("", async context =>
+app.MapFallbackToFile("index.html", new StaticFileOptions
 {
-    await context.Response.SendFileAsync(index);
+    FileProvider = provider,
+    ServeUnknownFileTypes = true,
 });
 
 app.Run();

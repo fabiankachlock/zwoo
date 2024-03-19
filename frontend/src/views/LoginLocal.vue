@@ -32,7 +32,7 @@ onMounted(async () => {
 
   if (isLocked && AppConfig.DefaultEnv === 'local') {
     serverHidden.value = true;
-    server.value = '/api/';
+    server.value = 'http://localhost:8001/api/'; //'/api/';
     return;
   }
 

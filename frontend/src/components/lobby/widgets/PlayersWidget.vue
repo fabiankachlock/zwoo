@@ -70,7 +70,7 @@ const handlePlayerToSpectator = (id: number) => {
   <Widget v-model="isOpen" title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark">
     <template #actions>
       <div class="flex flex-row">
-        <Environment show="online">
+        <Environment :exclude="['offline']">
           <button class="share rounded m-1 bg-main hover:bg-dark tc-main-light" @click="shareSheetOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
