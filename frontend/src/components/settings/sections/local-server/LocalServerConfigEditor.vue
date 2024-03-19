@@ -68,10 +68,7 @@ const save = () => {
         <h1 class="tc-main text-xl">
           {{ t('localServer.changeConfig') }}
         </h1>
-        <button
-          class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
-          @click="save"
-        >
+        <button class="bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none" @click="save">
           {{ t('localServer.save') }}
         </button>
       </div>

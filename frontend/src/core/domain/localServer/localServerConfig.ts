@@ -31,6 +31,6 @@ export class LocalServerConfigManager {
   }
 
   public static async save(config: LocalServerConfig): Promise<void> {
-    await invoke('update_local_server_config', config);
+    await invoke('update_local_server_config', { newConfig: config });
   }
 }

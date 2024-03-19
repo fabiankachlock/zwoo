@@ -13,6 +13,7 @@ const editOpen = ref(false);
 
 const editDialogClosed = (newConfig: LocalServerConfig) => {
   server.config = newConfig;
+  editOpen.value = false;
 };
 </script>
 
@@ -24,7 +25,7 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
         {{ t('localServer.config') }}
       </p>
       <button
-        class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
+        class="bg-light border-2 border-transparent px-2 rounded transition hover:bg-main select-none tc-main-secondary"
         @click="editOpen = true"
       >
         {{ t('localServer.editConfig') }}
@@ -33,10 +34,11 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
     <div v-if="config" class="flex flex-col">
       <div v-for="kv in Object.entries(server.config)" :key="kv[0]" class="flex justify-between items-center">
         <p class="tc-main-light">{{ t(`localServer.configKey.${kv[0]}`) }}</p>
-        <div v-if="typeof kv[1] === 'boolean'" class="tc-main text-xl">
+        <div v-if="typeof kv[1] === 'boolean'" class="tc-main">
           <p v-show="kv[1]">{{ t('controls.toggle.on') }}</p>
           <p v-show="!kv[1]">{{ t('controls.toggle.off') }}</p>
         </div>
+        <p v-else-if="kv[0] === 'secretKey'" class="tc-main-light">*********</p>
         <p v-else class="tc-main-light">{{ Array.isArray(kv[1]) ? kv[1].join(', ') : kv[1] ? kv[1] : '""' }}</p>
       </div>
     </div>
