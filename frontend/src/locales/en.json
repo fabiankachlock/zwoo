@@ -532,17 +532,20 @@
     "save": "Save",
     "ip": {
       "title": "IP Address",
+      "info": "The IP-Address of the adapter to listen on.",
       "custom": "custom adapter",
       "localhost": "localhost adapter",
       "all": "all adapters"
     },
     "port": {
       "title": "Port",
+      "info": "The port to listen on. The option dynamic port will choose a free port automatically.",
       "dynamic": "dynamic port",
       "custom": "custom port"
     },
     "security": {
       "title": "Security",
+      "info": "This options can limit which frontend can connect. To restrict access one can configure a CORS compatible list of origins. A blank list will allow only the built in frontend to connect.",
       "restricted": "allow only specific origins",
       "open": "allow all origins"
     }

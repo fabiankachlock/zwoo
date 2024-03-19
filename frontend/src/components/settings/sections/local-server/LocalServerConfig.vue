@@ -23,16 +23,21 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
       <p class="tc-main-light">
         {{ t('localServer.config') }}
       </p>
-      <button @click="editOpen = true">{{ t('localServer.editConfig') }}</button>
+      <button
+        class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
+        @click="editOpen = true"
+      >
+        {{ t('localServer.editConfig') }}
+      </button>
     </div>
     <div v-if="config" class="flex flex-col">
       <div v-for="kv in Object.entries(server.config)" :key="kv[0]" class="flex justify-between items-center">
         <p class="tc-main-light">{{ t(`localServer.configKey.${kv[0]}`) }}</p>
         <div v-if="typeof kv[1] === 'boolean'" class="tc-main text-xl">
-          <p v-show="kv[1]">#ON#</p>
-          <p v-show="!kv[1]">#OFF#</p>
+          <p v-show="kv[1]">{{ t('controls.toggle.on') }}</p>
+          <p v-show="!kv[1]">{{ t('controls.toggle.off') }}</p>
         </div>
-        <p v-else class="tc-main-light">{{ Array.isArray(kv[1]) ? kv[1].join(', ') : kv[1] }}</p>
+        <p v-else class="tc-main-light">{{ Array.isArray(kv[1]) ? kv[1].join(', ') : kv[1] ? kv[1] : '""' }}</p>
       </div>
     </div>
     <div v-else>

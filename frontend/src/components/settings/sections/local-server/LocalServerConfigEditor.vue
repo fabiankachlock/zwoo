@@ -63,14 +63,19 @@ const save = () => {
 
 <template>
   <FloatingDialog>
-    <div class="flex flex-col gap-2">
-      <div class="flex flex-row justify-between">
+    <div class="flex flex-col">
+      <div class="flex flex-row justify-between items-center mb-4">
         <h1 class="tc-main text-xl">
           {{ t('localServer.changeConfig') }}
         </h1>
-        <button @click="save">{{ t('localServer.save') }}</button>
+        <button
+          class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
+          @click="save"
+        >
+          {{ t('localServer.save') }}
+        </button>
       </div>
-      <div class="flex flex-row justify-between mx-2">
+      <div class="flex flex-row justify-between items-center mx-2">
         <p class="tx-secondary">
           {{ t('localServer.ip.title') }}
         </p>
@@ -88,9 +93,11 @@ const save = () => {
           <option value="all">{{ t('localServer.ip.all') }}</option>
         </select>
       </div>
+      <p class="tc-main-secondary mx-2">{{ t('localServer.ip.info') }}</p>
       <TextInput v-model="customIP" v-if="selectedIP === 'custom'" id="server-ip"></TextInput>
+      <div v-else class="h-2"></div>
 
-      <div class="flex flex-row justify-between mx-2">
+      <div class="flex flex-row justify-between items-center mx-2">
         <p class="tx-secondary">
           {{ t('localServer.port.title') }}
         </p>
@@ -107,9 +114,11 @@ const save = () => {
           <option value="custom">{{ t('localServer.port.custom') }}</option>
         </select>
       </div>
+      <p class="tc-main-secondary mx-2">{{ t('localServer.port.info') }}</p>
       <TextInput v-if="selectedPort === 'custom'" v-model="customPort" id="server-port"></TextInput>
+      <div v-else class="h-2"></div>
 
-      <div class="flex flex-row justify-between mx-2">
+      <div class="flex flex-row justify-between items-center mx-2">
         <p class="tx-secondary">
           {{ t('localServer.security.title') }}
         </p>
@@ -126,6 +135,7 @@ const save = () => {
           <option value="restricted">{{ t('localServer.security.restricted') }}</option>
         </select>
       </div>
+      <p class="tc-main-secondary mx-2">{{ t('localServer.security.info') }}</p>
       <TextInput v-model="customOrigins" v-if="selectedSecurity === 'restricted'" id="server-origins"></TextInput>
     </div>
   </FloatingDialog>
