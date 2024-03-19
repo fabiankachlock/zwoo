@@ -44,27 +44,7 @@
     "localLogs": "Lokal gespeicherte Logs",
     "clearLogs": "Logs zurücksetzen",
     "feedbackChat": "Feedback Nachrichten im Chat",
-    "feedbackSnackbar": "Feedback Mitteilungen",
-    "localServer": {
-      "controls": "Server Aktionen",
-      "start": "Server starten",
-      "stop": "Server stoppen",
-      "config": "Konfiguration",
-      "configKey": {
-        "serverId": "Server ID",
-        "secretKey": "Server Schlüssel",
-        "port": "Port",
-        "ip": "IP",
-        "useDynamicPort": "Nutzt dynamischen Port",
-        "useLocalhost": "Höre auf localhost",
-        "useAllIps": "Höre auf allen Adressen",
-        "allowedOrigins": "Erlaubt Origins",
-        "useStrictOrigins": "Sktrikte Origins Kontrolle"
-      },
-      "noConfig": "Server-Konfiguration nicht verfügbar",
-      "stats":"Statistiken",
-      "logIn": "Lokal spielen"
-    }
+    "feedbackSnackbar": "Feedback Mitteilungen"
   },
   "lng": {
     "de": "Deutsch",
@@ -527,5 +507,47 @@
     "online": "Online Modus",
     "offline": "Offline Modus",
     "local": "Lokaler Modus"
+  },
+  "localServer": {
+    "controls": "Server Aktionen",
+    "start": "Server starten",
+    "stop": "Server stoppen",
+    "config": "Konfiguration",
+    "configKey": {
+      "serverId": "Server ID",
+      "secretKey": "Server Schlüssel",
+      "port": "Port",
+      "ip": "IP",
+      "useDynamicPort": "Nutzt dynamischen Port",
+      "useLocalhost": "Höre auf localhost",
+      "useAllIps": "Höre auf allen Adressen",
+      "allowedOrigins": "Erlaubt Origins",
+      "useStrictOrigins": "Sktrikte Origins Kontrolle"
+    },
+    "noConfig": "Server-Konfiguration nicht verfügbar",
+    "stats": "Statistiken",
+    "logIn": "Lokal spielen",
+    "editConfig": "Bearbeiten",
+    "changeConfig": "Konfiguration ändern",
+    "save": "Speichern",
+    "ip": {
+      "title": "IP Adresse",
+      "info": "Die IP-Adresse des Adapter, auf dem der Server lauscht.",
+      "custom": "Eigener Adapter",
+      "localhost": "localhost Adapter",
+      "all": "Alle Adapter"
+    },
+    "port": {
+      "title": "Port",
+      "info": "Der Port, auf dem der Server lauscht. Die option dynamischer Port wählt selber einen freien Port aus.",
+      "dynamic": "Dynamischer Port",
+      "custom": "Eigener Port"
+    },
+    "security": {
+      "title": "Sicherheit",
+      "info": "Mit dieser Option lässt sich einschränken, von welchen Frontends auf den Server zugegriffen werden darf. Falls er Zugriff eingeschränkt werden soll, kann eine CORS compatible Liste an Origins konfiguriert werden. Eine leere Liste erlaubt ausschließlich das eingebaute Frontend.",
+      "restricted": "Nur bestimmte Origins erlauben",
+      "open": "Alle Origins erlauben"
+    }
   }
 }

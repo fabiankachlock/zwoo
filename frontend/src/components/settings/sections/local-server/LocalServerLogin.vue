@@ -15,6 +15,6 @@ const logIn = () => {
     class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
     @click="logIn"
   >
-    <p class="tc-main-light text-center">{{ t('settings.localServer.login') }}</p>
+    <p class="tc-main-light text-center">{{ t('localServer.logIn') }}</p>
   </button>
 </template>
