@@ -115,12 +115,6 @@ export interface ApiAdapter {
   createGame(name: string, isPublic: boolean, password: string): FetchResponse<GameJoinResponse>;
 
   /**
-   * Generate a url to join a game by id
-   * @param gameId id of the game to join
-   */
-  generateJoinUrl(gameId: string): string;
-
-  /**
    * Load all games that a currently available
    */
   loadAvailableGames(): FetchResponse<GamesList>;

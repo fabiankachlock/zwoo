@@ -1,6 +1,6 @@
 import { ApiAdapter } from '../ApiAdapter';
 import { AccountService } from './Account';
-import { Backend, Frontend } from './ApiConfig';
+import { Backend } from './ApiConfig';
 import { AuthenticationService } from './Authentication';
 import { ConfigService } from './Config';
 import { WrappedFetch } from './FetchWrapper';
@@ -41,7 +41,6 @@ export const RestApi = (apiUrl: string, wsOverride: string): ApiAdapter => {
     storeUserSettings: accountService.storeSettings,
     submitContactForm: miscApiService.submitContactForm,
     verifyUserAccount: accountService.verifyAccount,
-    fetchRaw: WrappedFetch,
-    generateJoinUrl: id => `${Frontend.url}/join/${id}`
+    fetchRaw: WrappedFetch
   };
 };

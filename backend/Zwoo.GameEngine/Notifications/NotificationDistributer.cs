@@ -29,8 +29,17 @@ public class NotificationDistributer : INotificationAdapter
 
     public async Task<bool> SendPlayer<T>(long playerId, ZRPCode code, T payload)
     {
-        var result = await Task.WhenAll(_targets.Select(target => target.SendPlayer(playerId, code, payload)));
-        return !result.Contains(false);
+        try
+        {
+            Console.WriteLine($"!!! Sending to {playerId} {code} {payload}");
+            var result = await Task.WhenAll(_targets.Select(target => target.SendPlayer(playerId, code, payload)));
+            return !result.Contains(false);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"!!! failed: {e}");
+            return false;
+        }
     }
 
     public async Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)

@@ -17,7 +17,7 @@ public interface IGameConnectionHandlerService
     /// <param name="ws">the websocket object</param>
     /// <param name="token">the connection cancellation token</param>
     /// <param name="source">a task completion source waiting until the connection is closed</param>
-    public void Handle(long gameId, long userId, WebSocket ws, CancellationToken token, TaskCompletionSource source);
+    public Task Handle(long gameId, long userId, WebSocket ws, CancellationToken token, TaskCompletionSource source);
 }
 
 public class GameConnectionHandlerService : IGameConnectionHandlerService
@@ -33,7 +33,7 @@ public class GameConnectionHandlerService : IGameConnectionHandlerService
         _applicationLifetime = applicationLifetime;
     }
 
-    public async void Handle(long gameId, long userId, WebSocket webSocket, CancellationToken token, TaskCompletionSource source)
+    public async Task Handle(long gameId, long userId, WebSocket webSocket, CancellationToken token, TaskCompletionSource source)
     {
 
         var buffer = new byte[1024 * 4];
@@ -57,7 +57,7 @@ public class GameConnectionHandlerService : IGameConnectionHandlerService
             }
             else
             {
-                _logger.LogWarning($"[{userId}] received message");
+                _logger.LogInformation($"[{userId}] received message");
                 _logger.LogTrace($"[{userId}] raw message: {Encoding.UTF8.GetString(buffer, 0, receiveResult.Count)}");
                 _distributeMessage(buffer, receiveResult.Count, gameId, userId);
             }
@@ -70,7 +70,8 @@ public class GameConnectionHandlerService : IGameConnectionHandlerService
             {
                 if (webSocket.State != WebSocketState.Closed)
                 {
-                    _logger.LogError($"[{userId}] error while receiving message", ex);
+                    _logger.LogError(ex, $"[{userId}] error while receiving message");
+                    break;
                 }
             }
         }
@@ -88,7 +89,7 @@ public class GameConnectionHandlerService : IGameConnectionHandlerService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"[{userId}] error while closing websocket", ex);
+            _logger.LogError(ex, $"[{userId}] error while closing websocket");
         }
 
         source.SetResult();
@@ -97,16 +98,24 @@ public class GameConnectionHandlerService : IGameConnectionHandlerService
 
     private void _distributeMessage(byte[] message, int length, long gameId, long userId)
     {
-        string stringMessage = Encoding.UTF8.GetString(message, 0, length);
-        ZRPCode? code = ZRPDecoder.GetCode(stringMessage);
-        if (code != null)
+        try
         {
-            ZRPMessage zrpMessage = new ZRPMessage(userId, code.Value, stringMessage);
-            _gamesService.DistributeEvent(gameId, zrpMessage);
+
+            string stringMessage = Encoding.UTF8.GetString(message, 0, length);
+            ZRPCode? code = ZRPDecoder.GetCode(stringMessage);
+            if (code != null)
+            {
+                ZRPMessage zrpMessage = new ZRPMessage(userId, code.Value, stringMessage);
+                _gamesService.DistributeEvent(gameId, zrpMessage);
+            }
+            else
+            {
+                _logger.LogWarning($"[{userId}] received invalid ZRP message");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _logger.LogWarning($"[{userId}] received invalid ZRP message");
+            _logger.LogError(ex, $"[{userId}] error while distributing message");
         }
     }
 }

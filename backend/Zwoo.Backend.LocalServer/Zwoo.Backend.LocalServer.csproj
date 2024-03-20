@@ -5,9 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <PublishAot>true</PublishAot>
+    <!-- <PublishAot>true</PublishAot> -->
+    <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <StripSymbols>true</StripSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +26,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="frontend/**/*.*" />
+    <Content Remove="frontend/**/*.*" />
   </ItemGroup>
 
 

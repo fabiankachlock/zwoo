@@ -64,50 +64,6 @@ builder.Services.AddGameServices();
 
 var app = builder.Build();
 
-app.UseZwooHttpLogging("/api");
-
-if (!config.UseStrictOrigins)
-{
-    var allowedOrigins = config.AllowedOrigins == string.Empty ? null : config.AllowedOrigins;
-    Console.WriteLine($"[Config] Allowing origins: {allowedOrigins ?? "*all*"}");
-    app.Use((context, next) =>
-    {
-        context.Response.Headers.Append("Access-Control-Allow-Origin", allowedOrigins ?? context.Request.Headers["Origin"]);
-        context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
-        context.Response.Headers.Append("Access-Control-Max-Age", "86400");
-
-        // check if preflight request
-        if (context.Request.Method == "OPTIONS")
-        {
-            context.Response.StatusCode = 200;
-            return Task.CompletedTask;
-        }
-        return next();
-    });
-}
-
-
-// group all api endpoints under /api
-var api = app.MapGroup("/api");
-app.UseLocalAuthentication(api);
-// require authentication only for all api endpoints
-api.RequireAuthorization();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseHttpsRedirection();
-}
-
-// serve frontend files
-var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
-app.UseStaticFiles(new StaticFileOptions()
-{
-    FileProvider = provider,
-    ServeUnknownFileTypes = true,
-});
 
 var webSocketOptions = new WebSocketOptions
 {
@@ -131,8 +87,61 @@ else
 {
     Console.WriteLine($"[Config] Allowing websockets from: *everywhere*");
 }
-
 app.UseWebSockets(webSocketOptions);
+
+app.UseZwooHttpLogging("/api");
+
+if (!config.UseStrictOrigins)
+{
+    var allowedOrigins = config.AllowedOrigins == string.Empty ? null : config.AllowedOrigins;
+    Console.WriteLine($"[Config] Allowing origins: {allowedOrigins ?? "*all*"}");
+    app.Use((context, next) =>
+    {
+        if (context.WebSockets.IsWebSocketRequest) return next(context);
+
+        context.Response.Headers.Append("Access-Control-Allow-Origin", allowedOrigins ?? context.Request.Headers["Origin"]);
+        context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
+        context.Response.Headers.Append("Access-Control-Max-Age", "86400");
+
+        // check if preflight request
+        if (context.Request.Method == "OPTIONS")
+        {
+            context.Response.StatusCode = 200;
+            return Task.CompletedTask;
+        }
+        return next(context);
+    });
+}
+
+
+// group all api endpoints under /api
+var api = app.MapGroup("/api");
+app.UseLocalAuthentication(api);
+// require authentication only for all api endpoints
+api.RequireAuthorization();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseHttpsRedirection();
+}
+
+// serve frontend files
+var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
+app.UseDefaultFiles(new DefaultFilesOptions
+{
+    FileProvider = provider,
+    DefaultFileNames = ["index.html"]
+});
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = provider,
+    ServeUnknownFileTypes = true,
+});
+
+
 api.UseDiscover();
 api.UseGame();
 api.MapGet("/stats", (HttpContext context) =>
@@ -144,11 +153,10 @@ api.MapGet("/stats", (HttpContext context) =>
     return Results.Ok("##server stats");
 }).AllowAnonymous();
 
-// serve index.html for all other requests
-var index = provider.GetFileInfo("index.html");
-app.MapGet("", async context =>
+app.MapFallbackToFile("index.html", new StaticFileOptions
 {
-    await context.Response.SendFileAsync(index);
+    FileProvider = provider,
+    ServeUnknownFileTypes = true,
 });
 
 app.Run();
