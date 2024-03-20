@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use std::sync::Mutex;
+use std::{env::consts::EXE_SUFFIX, sync::Mutex};
 use tauri::Manager;
 
 mod config;
@@ -88,7 +88,9 @@ async fn main() {
         .setup(|app| {
             let resource_path = app
                 .path_resolver()
-                .resolve_resource("resources/server/Zwoo.Backend.LocalServer")
+                .resolve_resource(
+                    "resources/server/Zwoo.Backend.LocalServer".to_owned() + EXE_SUFFIX,
+                )
                 .expect("failed to resolve resource");
             let server_path = resource_path.into_os_string().into_string().unwrap();
             println!("[app] located server executable {}", server_path);
