@@ -36,6 +36,20 @@ export const useLocalServer = defineStore('localServer', () => {
     });
   }
 
+  async function getUrl() {
+    const newConfig = await LocalServerConfigManager.load();
+    Object.assign(config, newConfig);
+
+    let listeningPort = config.port == 0 ? 8001 : config.port;
+    if (config.useDynamicPort) listeningPort = 0;
+
+    let listeningIp = '0.0.0.0';
+    if (config.useAllIps) listeningIp = '127.0.0.1';
+    else if (config.useLocalhost) listeningIp = '127.0.0.1';
+    else listeningIp = config.ip;
+    return `http://${listeningIp}:${listeningPort}/api/`;
+  }
+
   watch(config, newValue => {
     LocalServerConfigManager.save(newValue);
   });
@@ -45,6 +59,7 @@ export const useLocalServer = defineStore('localServer', () => {
     config,
     startServer,
     stopServer,
-    loadStatus
+    loadStatus,
+    getUrl
   };
 });

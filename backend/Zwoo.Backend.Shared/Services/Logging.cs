@@ -41,7 +41,7 @@ public static class LoggingExtensions
         {
             if (!context.Request.Path.StartsWithSegments(subPath))
             {
-                await next.Invoke(context);
+                await next(context);
                 return;
             }
 
@@ -50,13 +50,28 @@ public static class LoggingExtensions
             var warning = false;
             if (context.Request.Method != "OPTIONS")
             {
-                watch.Start();
                 log += $"{context.Connection.RemoteIpAddress} {context.Request.Protocol} {context.Request.Path}{context.Request.QueryString}";
+                if (context.WebSockets.IsWebSocketRequest)
+                {
+                    log += " (websocket)";
+                    logger.LogInformation(log);
+                    try
+                    {
+                        await next(context);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, $"internal error occurred while processing request {context.Request.Path} of {context.TraceIdentifier}");
+                    }
+                    return;
+                }
+                else watch.Start();
             }
+
 
             try
             {
-                await next.Invoke(context);
+                await next(context);
             }
             catch (Exception ex)
             {

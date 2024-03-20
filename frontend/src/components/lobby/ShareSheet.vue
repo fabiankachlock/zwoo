@@ -41,7 +41,7 @@ import { useI18n } from 'vue-i18n';
 import { Icon } from '@/components/misc/Icon';
 import { useShare } from '@/composables/useShare';
 import { useGameConfig } from '@/core/adapter/game';
-import { useApi } from '@/core/adapter/helper/useApi';
+import { useServerUrl } from '@/core/adapter/helper/useServerUrl';
 import Logger from '@/core/services/logging/logImport';
 
 import Error from '../misc/Error.vue';
@@ -51,7 +51,6 @@ const emit = defineEmits<{
 }>();
 
 const game = useGameConfig();
-const { generateJoinUrl } = useApi();
 const { t } = useI18n();
 const { share, canShare } = useShare();
 const url = ref('');
@@ -62,7 +61,7 @@ const error = ref<string | undefined>(undefined);
 onMounted(() => {
   title.value = t('share.join.title', [game.name]);
   text.value = t('share.join.text');
-  url.value = generateJoinUrl(game.gameId?.toString() ?? '');
+  url.value = useServerUrl(game.gameId?.toString() ?? '');
   if (canShare.value) {
     try {
       share({

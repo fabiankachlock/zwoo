@@ -36,6 +36,5 @@ export const NoopApi: ApiAdapter = {
   storeUserSettings: (..._args) => result,
   submitContactForm: (..._args) => result,
   verifyUserAccount: (..._args) => result,
-  generateJoinUrl: (..._args) => '',
   fetchRaw: (..._args) => result
 };
