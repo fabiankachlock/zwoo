@@ -88,7 +88,7 @@ async fn main() {
         .setup(|app| {
             let resource_path = app
                 .path_resolver()
-                .resolve_resource("resources/server/Zwoo.Backend.LocalServer.exe")
+                .resolve_resource("resources/server/Zwoo.Backend.LocalServer")
                 .expect("failed to resolve resource");
             let server_path = resource_path.into_os_string().into_string().unwrap();
             println!("[app] located server executable {}", server_path);
@@ -102,6 +102,13 @@ async fn main() {
             *state.0.lock().unwrap() = Some(exec::Server::new(server_path, config));
             app.manage(state);
             Ok(())
+        })
+        .on_window_event(|event| match event.event() {
+            tauri::WindowEvent::Destroyed => {
+                let state = event.window().state::<State>();
+                state.0.lock().unwrap().as_mut().unwrap().stop().unwrap();
+            }
+            _ => {}
         })
         .invoke_handler(tauri::generate_handler![
             start_local_server,
