@@ -9,7 +9,7 @@ import TextArea from '@/components/forms/TextArea.vue';
 import FlatDialog from '@/components/misc/FlatDialog.vue';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/ApiError';
 import { CaptchaValidator } from '@/core/services/validator/captcha';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
@@ -39,6 +39,12 @@ onMounted(() => {
 });
 
 const submitForm = async () => {
+  if (isLoading.value) return;
+  if (!message.value?.trim() || !senderEmail.value?.trim() || !senderName.value?.trim()) {
+    error.value = ['errors.fillIn'];
+    return;
+  }
+
   const captchaValid = captchaValidator.validate(captchaResponse.value);
   if (!captchaValid.isValid) {
     error.value = captchaValid.getErrors();
@@ -56,9 +62,8 @@ const submitForm = async () => {
       captchaToken: captchaResponse.value ?? '',
       site: window.location.href
     });
-    const [, err] = unwrapBackendError(result);
-    if (err) {
-      error.value = [getBackendErrorTranslation(err)];
+    if (result.isError) {
+      error.value = [getBackendErrorTranslation(result.error)];
     } else {
       wasSend.value = true;
     }

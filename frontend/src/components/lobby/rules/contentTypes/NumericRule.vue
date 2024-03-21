@@ -1,6 +1,5 @@
 <template>
   <p v-if="readonly" class="tc-main-light leading-tight">{{ modelValue }}</p>
-  <!-- TODO: make min & max danymic -->
   <input
     v-else
     :id="name ?? 'rule-input'"
@@ -8,8 +7,8 @@
     class="bg-dark shadow appearance-none border bc-main rounded w-20 h-full py-1 px-2 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
     :name="name ?? 'rule-input'"
     type="number"
-    min="1"
-    max="20"
+    :min="min"
+    :max="max"
     :placeholder="placeholder ?? t('rules.widget.numberPlaceholder')"
     :value="modelValue"
     :readonly="readonly"
@@ -20,23 +19,38 @@
 </template>
 
 <script setup lang="ts">
+import { toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-defineProps<{
+const props = defineProps<{
   modelValue: number;
   name?: string;
   placeholder?: string;
   readonly?: boolean;
+  min?: number;
+  max?: number;
 }>();
+const { min, max } = toRefs(props);
 
 const emit = defineEmits<{
   (event: 'update:modelValue', enabled: number): void;
 }>();
 
 const update = (event: Event) => {
-  const num = new Number((event.target as unknown as { value: number }).value).valueOf();
-  // TODO: make min & max dynamic
-  emit('update:modelValue', num < 1 ? 1 : num > 20 ? 20 : num);
+  const target = event.target as unknown as { value: string };
+  let num = new Number(target.value).valueOf();
+  if (max?.value !== undefined && num > max.value) {
+    num = max.value;
+  }
+  if (min?.value !== undefined && num < min.value) {
+    num = min.value;
+  }
+
+  emit('update:modelValue', num);
+  // "allow" empty values
+  if (target.value !== '') {
+    target.value = num.toString();
+  }
 };
 </script>

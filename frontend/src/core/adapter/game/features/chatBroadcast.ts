@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 
-import { useAuth } from '@/core/adapter/auth';
-import { ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
-
 import { useGameConfig } from '../../game';
 import { ChatMessage as ChatMessageType, useChatStore } from '../chat';
 import { MonolithicEventWatcher } from '../util/MonolithicEventWatcher';
@@ -16,23 +13,22 @@ const ChatMessage = '$recv:chat';
 const RequestSendMessage = '$send:send';
 
 type SetupPayload = {
-  ownName: string;
+  ownId: number;
   hasActiveGame: boolean;
   gameName?: string;
 };
 
-const chatBroadcastWatcher = new MonolithicEventWatcher(ZRPOPCode.PlayerWon);
+const chatBroadcastWatcher = new MonolithicEventWatcher();
 
 export const useChatBroadcast = defineStore('chat-broadcast', () => {
   const chatStore = useChatStore();
-  const authStore = useAuth();
   const gameConfigStore = useGameConfig();
   const channel = new BroadcastChannel(BroadcastChannelID);
 
   const messages = ref<ChatMessageType[]>([]);
   const isActive = ref(false);
   const gameName = ref('');
-  const ownName = ref('');
+  const ownId = ref(0);
   let isPublisher = true;
 
   /*
@@ -53,18 +49,11 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
   const createSetupPayload = (): SetupPayload => ({
     hasActiveGame: gameConfigStore.inActiveGame,
     gameName: gameConfigStore.inActiveGame ? gameConfigStore.name : undefined,
-    ownName: authStore.username
+    ownId: gameConfigStore.lobbyId ?? 0
   });
 
   // ZRP Events
-  chatBroadcastWatcher.onMessage(msg => {
-    if (msg.code === ZRPOPCode.PlayerWon) {
-      // reset chat
-      channel.postMessage(ResetMessage);
-    }
-  });
   chatBroadcastWatcher.onOpen(() => channel.postMessage(`${SetupMessage}${JSON.stringify(createSetupPayload())}`));
-  chatBroadcastWatcher.onReset(() => channel.postMessage(ResetMessage));
   chatBroadcastWatcher.onClose(() => channel.postMessage(ResetMessage));
 
   /*
@@ -79,7 +68,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
 
     try {
       const msg = (message.data || '') as string;
-      console.log(msg);
+
       if (msg.startsWith(ResetMessage)) {
         // reset pop-out
         isActive.value = false;
@@ -89,7 +78,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
         const payload = JSON.parse(msg.substring(SetupMessage.length)) as SetupPayload;
         isActive.value = payload.hasActiveGame;
         gameName.value = payload.gameName ?? '';
-        ownName.value = payload.ownName;
+        ownId.value = payload.ownId;
       } else if (msg.startsWith(ChatMessage)) {
         // add message to pop-out
         const payload = JSON.parse(msg.substring(ChatMessage.length)) as ChatMessageType;
@@ -121,7 +110,7 @@ export const useChatBroadcast = defineStore('chat-broadcast', () => {
   return {
     allMessages: messages,
     gameName,
-    ownName,
+    ownId,
     isActive,
     requireSetup,
     sendMessage,

@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/backend/ZwooBackend/ZwooBackend.csproj",
+        "${workspaceFolder}/backend/Zwoo.Backend/Zwoo.Backend.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -19,7 +19,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/backend/ZwooInfoDashboard/ZwooInfoDashboard.csproj",
+        "${workspaceFolder}/backend/Zwoo.Dashboard/Zwoo.Dashboard.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -31,7 +31,7 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/backend/ZwooBackend/ZwooBackend.csproj",
+        "${workspaceFolder}/backend/Zwoo.Backend/Zwoo.Backend.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -45,7 +45,7 @@
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/backend/ZwooBackend/ZwooBackend.csproj"
+        "${workspaceFolder}/backend/Zwoo.Backend/Zwoo.Backend.csproj"
       ],
       "problemMatcher": "$msCompile",
       "isBackground": true
@@ -58,7 +58,7 @@
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+        "${workspaceFolder}/backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
       ],
       "problemMatcher": "$msCompile",
       "isBackground": true

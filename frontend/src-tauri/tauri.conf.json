@@ -3,7 +3,7 @@
   "build": {
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
-    "devPath": "http://localhost:8080/",
+    "devPath": "http://localhost:8070/",
     "distDir": "../dist-tmp"
   },
   "package": {
@@ -12,14 +12,31 @@
   },
   "tauri": {
     "allowlist": {
+      "all": false,
       "globalShortcut": {
+        "all": true
+      },
+      "fs": {
+        "scope": ["$RESOURCE/*", "$APP/*"],
+        "readFile": true,
+        "writeFile": true,
+        "exists": true
+      },
+      "path": {
+        "all": true
+      },
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "window": {
         "all": true
       }
     },
     "bundle": {
       "active": true,
       "category": "CardGame",
-      "copyright": "",
+      "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2024",
       "deb": {
         "depends": []
       },
@@ -32,7 +49,7 @@
         "icons/icon.ico",
         "icons/icon.png"
       ],
-      "identifier": "zwoo.igd20.de",
+      "identifier": "de.igd20ug.zwoo",
       "longDescription": "zwoo",
       "macOS": {
         "entitlements": null,
@@ -41,8 +58,8 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
-      "shortDescription": "",
+      "resources": ["resources/*"],
+      "shortDescription": "zwoo - The Second Challenge",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
@@ -62,7 +79,7 @@
         "height": 600,
         "resizable": true,
         "title": "zwoo",
-        "width": 800
+        "width": 900
       }
     ]
   }

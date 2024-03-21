@@ -4,13 +4,20 @@
       <FormTitle>
         {{ t('createAccount.title') }}
       </FormTitle>
-      <TextInput
-        id="username"
-        v-model="username"
-        label-key="createAccount.username"
-        :placeholder="t('createAccount.username')"
-        :validator="usernameValidator"
-      />
+      <TextInput id="username" v-model="username" :placeholder="t('createAccount.username')" :validator="usernameValidator">
+        <div class="flex justify-between items-center">
+          <span>
+            {{ t('createAccount.username') }}
+          </span>
+          <Icon v-if="!nameInfoOpen" icon="akar-icons:info" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="nameInfoOpen = true" />
+          <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="nameInfoOpen = false" />
+        </div>
+        <div class="grid overflow-hidden grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': nameInfoOpen }">
+          <p class="min-h-0 tc-main-secondary font-normal ml-4 text-xs">
+            {{ t('createAccount.nameInfo') }}
+          </p>
+        </div>
+      </TextInput>
       <TextInput
         id="email"
         v-model="email"
@@ -32,6 +39,12 @@
         <TextInput id="beta-code" v-model="betaCode" label-key="createAccount.beta" placeholder="xxx-xxx" />
       </template>
       <CaptchaButton :validator="captchaValidator" :token="captchaResponse" @update:response="res => (captchaResponse = res)" />
+      <Checkbox v-model="acceptedTerms" align="end" position="start">
+        {{ t('createAccount.terms') }}
+        <router-link to="/privacy" class="underline">
+          {{ t('nav.privacy') }}
+        </router-link>
+      </Checkbox>
       <FormError :error="error" />
       <FormActions>
         <FormSubmit :disabled="!isSubmitEnabled || showInfo" @click="create">
@@ -59,14 +72,14 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import CaptchaButton from '@/components/forms/CaptchaButton.vue';
-import { Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
+import { Checkbox, Form, FormActions, FormAlternativeAction, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
 import { Icon } from '@/components/misc/Icon';
 import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { getBackendErrorTranslation } from '@/core/api/ApiError';
 import { joinQuery } from '@/core/helper/utils';
 import { CaptchaValidator } from '@/core/services/validator/captcha';
 import { EmailValidator } from '@/core/services/validator/email';
@@ -95,6 +108,8 @@ const email = ref('');
 const password = ref('');
 const passwordRepeat = ref('');
 const betaCode = ref('');
+const acceptedTerms = ref(false);
+const nameInfoOpen = ref(false);
 const matchError = ref<string[]>([]);
 const captchaResponse = ref<string | undefined>(undefined);
 const error = ref<string[]>([]);
@@ -104,6 +119,7 @@ const showResend = ref(true);
 const isSubmitEnabled = computed(
   () =>
     !isLoading.value &&
+    acceptedTerms.value &&
     captchaValidator.validate(captchaResponse.value).isValid &&
     emailValidator.validate(email.value).isValid &&
     passwordValidator.validate(password.value).isValid &&
@@ -131,7 +147,15 @@ const create = async () => {
   error.value = [];
   isLoading.value = true;
   try {
-    await auth.createAccount(username.value, email.value, password.value, passwordRepeat.value, captchaResponse.value, betaCode.value);
+    await auth.createAccount(
+      username.value,
+      email.value,
+      password.value,
+      passwordRepeat.value,
+      acceptedTerms.value,
+      captchaResponse.value,
+      betaCode.value
+    );
     showInfo.value = true;
   } catch (e: unknown) {
     captchaResponse.value = undefined;
@@ -146,9 +170,8 @@ const resendVerifyEmail = async () => {
   if (!showResend.value) return;
   showResend.value = false;
   const res = await resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
-  const [, err] = unwrapBackendError(res);
-  if (err !== undefined) {
-    error.value = [getBackendErrorTranslation(err)];
+  if (res.isError) {
+    error.value = [getBackendErrorTranslation(res.error)];
   }
 };
 </script>

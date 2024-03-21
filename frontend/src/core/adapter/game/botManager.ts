@@ -6,12 +6,12 @@ import { ZRPBotConfig, ZRPOPCode } from '@/core/domain/zrp/zrpTypes';
 
 import { MonolithicEventWatcher } from './util/MonolithicEventWatcher';
 
-export type BotType = { id: string; name: string; config: ZRPBotConfig };
+export type BotType = { id: number; name: string; config: ZRPBotConfig };
 
 const botsWatcher = new MonolithicEventWatcher(ZRPOPCode.ListBots, ZRPOPCode.PromotedToHost);
 
 export const useBotManager = defineStore('bot-manager', () => {
-  const bots = ref<Record<string, BotType>>({});
+  const bots = ref<Record<number, BotType>>({});
   const dispatchEvent = useGameEventDispatch();
 
   const _receiveMessage: (typeof botsWatcher)['_msgHandler'] = msg => {
@@ -34,20 +34,14 @@ export const useBotManager = defineStore('bot-manager', () => {
 
   const addBot = (name: string, config: ZRPBotConfig) => {
     dispatchEvent(ZRPOPCode.CreateBot, { username: name, config: config });
-    // TODO: ahhhhhh hardcoding
-    bots.value[`b_${name}`] = {
-      id: `b_${name}`,
-      name: name,
-      config: config
-    };
   };
 
-  const updateBot = (id: string, config: ZRPBotConfig) => {
+  const updateBot = (id: number, config: ZRPBotConfig) => {
     dispatchEvent(ZRPOPCode.UpdateBot, { id: id, config: config });
     bots.value[id].config = config;
   };
 
-  const deleteBot = (id: string) => {
+  const deleteBot = (id: number) => {
     dispatchEvent(ZRPOPCode.DeleteBot, { id: id });
     delete bots.value[id];
   };

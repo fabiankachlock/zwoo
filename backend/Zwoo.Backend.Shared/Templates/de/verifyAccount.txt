@@ -1,0 +1,22 @@
+Hallo {{username}},
+
+bitte verifiziere deinen Account über den Button oder den Link darunter.
+
+Mit aufrufen des Links stimmst du der Verarbeitung und Speicherung deiner zuvor angegebenen personenbezogenen Daten zur Nutzung von ZWOO zu.
+Falls du der Verarbeitung der Daten nicht zustimmen möchtest oder dich nicht registrieren möchtest, kannst du diese E-Mail ignorieren. Deine Daten werden dann in kürze aus unseren Systemen vollständig gelöscht.
+
+{{link}}
+
+Der Verifizierungslink läuft am Ende diesen Tages ab (UTC + 01:00).
+
+
+Ⓒ ZWOO {{year}}
+
+
+
+Eine Marke der IGD 2.0 UG (haftungsbeschränkt).
+
+info@igd20.de | Alnpeckstraße 4, 01239 Dresden
+
+Impressum: {{domain}}/impressum
+Datenschutz: {{domain}}/datenschutz

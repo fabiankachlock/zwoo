@@ -7,6 +7,7 @@
       "game": "Spiel",
       "account": "Account",
       "developers": "Entwickler",
+      "server": "Lokaler Server",
       "": "Fehler"
     },
     "update": {
@@ -36,9 +37,14 @@
     "changePassword": "Passwort ändern",
     "versionHistory": "Versionverlauf",
     "settingsSync": "Einstellungen synchronisieren",
+    "userDefaultsSync": "UI Zustand synchronisieren",
     "reportBug": "Fehler melden",
     "contact": "Kontakt",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "localLogs": "Lokal gespeicherte Logs",
+    "clearLogs": "Logs zurücksetzen",
+    "feedbackChat": "Feedback Nachrichten im Chat",
+    "feedbackSnackbar": "Feedback Mitteilungen"
   },
   "lng": {
     "de": "Deutsch",
@@ -56,6 +62,8 @@
     "help": "Hilfe",
     "contact": "Kontakt",
     "statusOffline": "Offline",
+    "statusLocal": "Verbunden",
+    "disconnect": "Verbindung trennen",
     "createGame": "Spiel erstellen",
     "joinGame": "Spiel beitreten"
   },
@@ -69,6 +77,13 @@
     "notVerifiedInfo": "Dein Account ist nicht verifiziert. Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
     "resendVerifyEmail": "Email neu senden"
   },
+  "loginLocal": {
+    "title": "Gast Anmeldung",
+    "server": "Server URL",
+    "name": "Benutzername",
+    "infoServer": "Die Gewährleistung angemessener Datenschutzmaßnahmen kann auf Servern von Dritten nicht garantiert werden. Daher sollte die Verwendung und Verbreitung von personenbezogenen Daten auf lokalen Server vermieden werden.",
+    "submit": "Anmelden"
+  },
   "createAccount": {
     "title": "Account Erstellen",
     "email": "E-Mail",
@@ -80,7 +95,9 @@
     "beta": "BETA Code",
     "info": "Dein Account wurde erstellt. Nachdem du deinen Account in der Email bestätigt hast, kannst du dich anmelden.",
     "resendVerifyEmail": "Email neu senden",
-    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen."
+    "emailInfo": "Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
+    "terms": "Ich willige in die Verarbeitung und Speicherung meiner oben angegebenen personenbezogenen Daten zur Nutzung von ZWOO ein. Weitere Infos unter:",
+    "nameInfo": "Dein Benutzername ist für andere Spieler im Spiel einsehbar. Wähle daher am besten einen fiktiven Namen."
   },
   "createGame": {
     "title": "Spiel Erstellen",
@@ -115,7 +132,8 @@
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
     "stats": "Statistiken zeigen",
-    "greeting": "Hallo, {name}!"
+    "greeting": "Hallo, {name}!",
+    "localGame": "Lokales Spiel"
   },
   "list": {
     "title": "Verfügbare Spiele",
@@ -123,6 +141,7 @@
     "private": "Privat",
     "reload": "Aktualisieren",
     "nothingFound": "Es konnte kein Spiel gefunden werden.",
+    "noFit": "Kein passendes Spiel gefunden?",
     "spectate": "Zuschauen",
     "play": "Spielen",
     "savedGame": "Gespeichertes Spiel",
@@ -160,6 +179,7 @@
       "116": "Der Benutzername ist ungültig.",
       "117": "Das Passwort ist ungültig.",
       "118": "Der BETA-Code ist ungültig.",
+      "119": "Die Einwilligung zur Datenverarbeitung wird benötigt.",
       "120": "Die Email wird bereits genutzt.",
       "121": "Der Benutzername wird bereits genutzt.",
       "122": "Der Account konnte nicht verifiziert werden.",
@@ -178,6 +198,7 @@
       "420": "Fehlende Berechtigung",
       "421": "Das Spiel ist voll",
       "425": "Ein Bot mit dem Name existiert bereits",
+      "426": "Der Kartenstapel ist leer",
       "434": "Karte nicht erlaubt",
       "900": "Fehler aufgetreten",
       "901": "Verbindungsfehler",
@@ -223,24 +244,21 @@
     "noWinsOfflineInfo": "Die Siege in Offline Spielen werden nicht in der Bestenliste gezählt."
   },
   "rules": {
+    "manageProfiles": "Profile verwalten",
+    "groupSystem": "Vorkonfigurierte Profile",
+    "groupUser": "Deine Profile",
+    "applyProfile": "Anwenden",
+    "newProfile": "Neues Profil erstellen",
+    "profileInfo": "Spiel-Profile sind eine Möglichkeit alle geänderten Einstellungen zu speichern und einfach wiederzuverwenden.",
+    "profileName": "Name des Profils",
+    "profilePlaceholder": "Mein Profil",
+    "createProfile": "Erstellen",
+    "profiles": {
+      "default": "Standartwerte",
+      "full": "Alle Regeln"
+    },
     "widget": {
       "numberPlaceholder": "Zahl"
-    },
-    "maxPlayers": {
-      "title": "Spieleranzahl",
-      "info": "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."
-    },
-    "addUpDraw": {
-      "title": "Ziehkarten addieren",
-      "info": "Auf eine Ziehkarte können weitere Ziehkarten gelegt werden. Dabei wird die Anzahl der zu ziehenden Karten addiert. Es können sowohl +2 Karten auf +4 Karten, als auch +4 Karten auf +2 Karten gelegt werden."
-    },
-    "initialCards": {
-      "title": "Anzahl an Karten",
-      "info": "Lege eine Anzahl an Karten fest, die ein Spieler am Anfang bekommt."
-    },
-    "explicitLastCard": {
-      "title": "Letzt Karte",
-      "info": "Wenn eine Spieler nur noch eine Karte hat, muss er schnell den zwoo Button drücken, sonst erhält er 2 Strafkarten."
     }
   },
   "ingame": {
@@ -262,10 +280,12 @@
   },
   "cookies": {
     "title": "Cookie Zustimmungen",
+    "userInformation": "Da uns die Privatsphäre unserer Spieler sehr am Herzen liegt, verzichten wir komplett auf Tracking-Cookies und setzen stattdessen ausschließlich technisch notwendige Cookies ein.",
+    "privacyLink": "Weiter Informationen unter:",
     "functional": {
       "title": "Funktionale Cookies",
       "auth": {
-        "name": "Authetifizierungs Cookies (unbedingt erforderlich)",
+        "name": "Authentifizierungs Cookies (unbedingt erforderlich)",
         "description": "Wir nutzen Cookies, um deinen Login-Status zu speichern, damit man sich nicht immer wieder neu einloggen muss, wenn man die Webseite besucht."
       }
     },
@@ -277,7 +297,9 @@
     "disallowed": {
       "title": "Fehlende Cookies",
       "info": "Die Login- und Accounterstellungsfunktion kann nur benutzt werden, wenn die Google reCAPTCHA Cookies erlaubt sind. Ändere bitte deine Einstellungen und versuche es erneut."
-    }
+    },
+    "__close": "Ok",
+    "__info": "Cookie Informationen"
   },
   "share": {
     "facebook": "Auf Facebook teilen",
@@ -336,6 +358,10 @@
     "selectColor": {
       "title": "Wähle eine Farbe",
       "info": "Wähle die Farbe, mit der weiter gespielt werden soll."
+    },
+    "selectPlayer": {
+      "title": "Wähle einen Spieler",
+      "info": "Wähle einen Spieler, auf den die Aktion der gerade gelegten Karten angewendet werden soll."
     }
   },
   "reassureDialog": {
@@ -363,7 +389,8 @@
     "storedCount": "keine Logs gespeichert | ein Eintrag | {count} Einträge",
     "clearStore": "Speicher leeren",
     "reloadLogs": "Logs neu laden",
-    "storedLogs": "Gespeicherte Logs"
+    "storedLogs": "Gespeicherte Logs",
+    "logsCleared": "Logs zurückgesetzt"
   },
   "shortcuts": {
     "title": "Tastenkombinationen",
@@ -446,7 +473,81 @@
     "send": "Absenden!",
     "thanks": "Deine Anfrage wurde erfolgreich versendet!",
     "email": "E-Mail",
-    "emailPlaceholder": "Deine E-Mail Adresse",
-    "acceptTerms": "TODO [Hiermit stimme ich der Verarbeitung meiner Personenbezogegenen Daten im Rahmen einer Antwort auf meine Anfrage zu.]"
+    "emailPlaceholder": "Deine E-Mail Adresse"
+  },
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Nur meine",
+        "all": "Alle",
+        "none": "Keine"
+      }
+    },
+    "consumer": {
+      "chat": "Chat",
+      "snackbar": "Mitteilungen"
+    },
+    "1": "{target} musste aussetzen",
+    "1-self": "Du musstest aussetzen",
+    "2": "Richtungswechsel!",
+    "3": "{target} musste {amount} Karte(n) ziehen",
+    "3-self": "Du musstest {amount} Karte(n) ziehen",
+    "4": "{target} hat vergessen seinen Zug zu beenden",
+    "4-self": "Du hast vergessen deinen Zug zu beenden",
+    "5": "{target} und {origin} haben Karten getauscht",
+    "5-self+origin": "Du hast mit {other} Karten getauscht",
+    "5-self+target": "{other} hat mir dir Karten getauscht",
+    "6": "{target} hat die Farbe gewechselt",
+    "6-self": "Du hast die Farbe gewechselt"
+  },
+  "envLock": {
+    "title": "Ungültige Umgebung",
+    "info": "zwoo ist in dieser Umgebung auf den {0} beschränkt. Der {1} ist nicht verfügbar.",
+    "reload": "Seite neu laden",
+    "online": "Online Modus",
+    "offline": "Offline Modus",
+    "local": "Lokaler Modus"
+  },
+  "localServer": {
+    "controls": "Server Aktionen",
+    "start": "Server starten",
+    "stop": "Server stoppen",
+    "config": "Konfiguration",
+    "configKey": {
+      "serverId": "Server ID",
+      "secretKey": "Server Schlüssel",
+      "port": "Port",
+      "ip": "IP",
+      "useDynamicPort": "Nutzt dynamischen Port",
+      "useLocalhost": "Höre auf localhost",
+      "useAllIps": "Höre auf allen Adressen",
+      "allowedOrigins": "Erlaubt Origins",
+      "useStrictOrigins": "Sktrikte Origins Kontrolle"
+    },
+    "noConfig": "Server-Konfiguration nicht verfügbar",
+    "stats": "Statistiken",
+    "logIn": "Lokal spielen",
+    "editConfig": "Bearbeiten",
+    "changeConfig": "Konfiguration ändern",
+    "save": "Speichern",
+    "ip": {
+      "title": "IP Adresse",
+      "info": "Die IP-Adresse des Adapter, auf dem der Server lauscht.",
+      "custom": "Eigener Adapter",
+      "localhost": "localhost Adapter",
+      "all": "Alle Adapter"
+    },
+    "port": {
+      "title": "Port",
+      "info": "Der Port, auf dem der Server lauscht. Die option dynamischer Port wählt selber einen freien Port aus.",
+      "dynamic": "Dynamischer Port",
+      "custom": "Eigener Port"
+    },
+    "security": {
+      "title": "Sicherheit",
+      "info": "Mit dieser Option lässt sich einschränken, von welchen Frontends auf den Server zugegriffen werden darf. Falls er Zugriff eingeschränkt werden soll, kann eine CORS compatible Liste an Origins konfiguriert werden. Eine leere Liste erlaubt ausschließlich das eingebaute Frontend.",
+      "restricted": "Nur bestimmte Origins erlauben",
+      "open": "Alle Origins erlauben"
+    }
   }
 }

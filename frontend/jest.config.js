@@ -5,13 +5,13 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
-  globals: {
-    'ts-jest': {
-      babelConfig: true
-    }
-  },
   transform: {
-    '^.+\\.vue$': 'vue-jest',
-    '^.+\\.ts$': 'ts-jest'
+    '^.+\\.vue$': '@vue/vue3-jest',
+    '^.+\\.ts$': [
+      'ts-jest',
+      {
+        babelConfig: true
+      }
+    ]
   }
 };

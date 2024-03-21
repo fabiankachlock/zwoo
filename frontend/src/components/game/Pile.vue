@@ -11,12 +11,15 @@
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
       </div>
       <div
-        class="pile-card draw-card absolute top-1/2 right-4 h-full transition-all -translate-y-1/2 x-delay-60"
-        :class="{ animating: isAnimating }"
+        class="pile-card draw-card absolute top-1/2 right-4 h-full transition-all -translate-y-1/2 x-delay-60 width-[110%]"
+        :class="{ animating: isAnimating, 'cursor-pointer': isActive }"
         style="max-height: 95%"
         @click="drawCard()"
       >
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
+        <div class="absolute text-2xl -top-6 -right-3 md:top-1/2 md:right-3 md:text-3xl -translate-y-1/2 select-none z-10">
+          <p class="tc-main">{{ drawAmount ? `+${drawAmount}` : '' }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -35,6 +38,7 @@ const deckState = useGameCardDeck();
 const gameState = useGameState();
 const isAnimating = ref(false);
 const isActive = computed(() => gameState.isActivePlayer);
+const drawAmount = computed(() => gameState.currentDrawAmount);
 
 const drawCard = () => {
   if (!isAnimating.value) {

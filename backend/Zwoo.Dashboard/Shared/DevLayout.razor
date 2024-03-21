@@ -1,0 +1,51 @@
+@using Zwoo.Dashboard.Data
+@using System.Security.Claims
+@using Microsoft.Extensions.Options
+
+@inherits LayoutComponentBase
+
+@inject NavigationManager UriHelper
+@inject ZiadOptions Options
+
+
+
+<PageTitle>ZIAD</PageTitle>
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+            <RadzenLabel>
+                <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.Span" Class="rz-m-0">Zwoo Info Admin
+                    Dashboard</RadzenText>
+                <RadzenText TextStyle="TextStyle.Caption" TagName="TagName.Span" Class="rz-m-0 rz-ml-2">@("@")
+                    @Options.App.AppVersion</RadzenText>
+            </RadzenLabel>
+            <RadzenProfileMenu style="margin-left: auto;">
+                <Template>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                        <RadzenText TagName="TagName.P" Class="rz-mr-4 rz-mb-0">
+                            DEV
+                        </RadzenText>
+                    </RadzenStack>
+                </Template>
+                <ChildContent>
+                    <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="logout"></RadzenProfileMenuItem>
+                </ChildContent>
+            </RadzenProfileMenu>
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@sidebarExpanded">
+        <NavMenu />
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+            @Body
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+<RadzenDialog />
+
+@code {
+    bool sidebarExpanded = true;
+}

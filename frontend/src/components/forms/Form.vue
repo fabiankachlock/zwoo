@@ -39,7 +39,7 @@ const router = useRouter();
 const goBack = () => router.go(-1);
 </script>
 
-<styles scoped lang="css">
+<style scoped lang="css">
 #back-button:hover #icon {
   @apply -translate-x-[2px];
 }
@@ -47,4 +47,4 @@ const goBack = () => router.go(-1);
 #close-button:hover #icon {
   @apply scale-110;
 }
-</styles>
+</style>

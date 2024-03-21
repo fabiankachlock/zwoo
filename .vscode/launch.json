@@ -6,9 +6,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "backend build",
-      "program": "${workspaceFolder}/backend/ZwooBackend/bin/Debug/net7.0/ZwooBackend.dll",
+      "program": "${workspaceFolder}/backend/Zwoo.Backend/bin/Debug/net8.0/Zwoo.Backend.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/backend/ZwooBackend",
+      "cwd": "${workspaceFolder}/backend/Zwoo.Backend",
       "stopAtEntry": false,
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -22,9 +22,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dashboard build",
-      "program": "${workspaceFolder}/backend/ZwooInfoDashboard/bin/Debug/net7.0/ZwooInfoDashboard.dll",
+      "program": "${workspaceFolder}/backend/Zwoo.Dashboard/bin/Debug/net8.0/Zwoo.Dashboard.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/backend/ZwooInfoDashboard",
+      "cwd": "${workspaceFolder}/backend/Zwoo.Dashboard",
       "stopAtEntry": false,
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"

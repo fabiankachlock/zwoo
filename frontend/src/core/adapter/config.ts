@@ -1,3 +1,4 @@
+import { appWindow } from '@tauri-apps/api/window';
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@//config';
@@ -20,6 +21,8 @@ export enum ZwooConfigKey {
   ShowCardsDetail = 'cd',
   CardsTheme = 'th',
   UserDefaults = 'ud',
+  FeedbackChat = 'fc',
+  FeedbackSnackbar = 'fs',
   DevSettings = 'dev-settings',
   Logging = 'logging',
   _Version = '#v'
@@ -35,6 +38,8 @@ export type ZwooConfig = {
   [ZwooConfigKey.ShowCardsDetail]: boolean;
   [ZwooConfigKey.CardsTheme]: CardThemeIdentifier;
   [ZwooConfigKey.UserDefaults]: string;
+  [ZwooConfigKey.FeedbackChat]: string;
+  [ZwooConfigKey.FeedbackSnackbar]: string;
   [ZwooConfigKey.DevSettings]: boolean;
   [ZwooConfigKey.Logging]: string;
   [ZwooConfigKey._Version]: string;
@@ -52,6 +57,8 @@ const DefaultConfig: ZwooConfig = {
     name: '__default__',
     variant: '@auto'
   },
+  fc: 'all',
+  fs: 'none',
   'dev-settings': false,
   logging: '',
   ud: '',
@@ -73,9 +80,17 @@ const changeUIMode = (mode: string) => {
 
 const changeFullscreen = (enabled: boolean) => {
   if (enabled) {
-    document.documentElement.requestFullscreen();
-  } else if (document.fullscreenElement) {
-    document.exitFullscreen();
+    if (AppConfig.IsTauri) {
+      appWindow.setFullscreen(true);
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+  } else {
+    if (AppConfig.IsTauri) {
+      appWindow.setFullscreen(false);
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
   }
 };
 
@@ -129,8 +144,8 @@ export const useConfig = defineStore('config', {
     async loadProfile() {
       Logger.info(`loading config for the current user`);
       const config = await useApi().loadUserSettings();
-      if (config) {
-        const parsedConfig = this._deserializeConfig(config);
+      if (config.wasSuccessful) {
+        const parsedConfig = this._deserializeConfig(config.data.settings);
         this.applyConfig(parsedConfig ?? {});
       }
     },
@@ -184,6 +199,14 @@ export const useConfig = defineStore('config', {
         return this._createDefaultConfig();
       }
       // do migrations
+      // ...
+      // auto migrate:
+      // ATTENTION this may migrates config implicitly
+      for (const [key, value] of Object.entries(DefaultConfig as Omit<Partial<ZwooConfig>, '_ignore'>)) {
+        if (this.get(key as ZwooConfigKey) === undefined) {
+          this.set(key as ZwooConfigKey, value, false);
+        }
+      }
       config['#v'] = AppConfig.Version;
       return config;
     },

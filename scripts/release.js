@@ -15,6 +15,11 @@ const versionFiles = [
     replace: '"version": "###"',
   },
   {
+    path: "/frontend/src-tauri/tauri.conf.json",
+    regex: /"version": "(.*)"/,
+    replace: '"version": "###"',
+  },
+  {
     path: "/frontend/src-tauri/Cargo.toml",
     regex: /version = "(.*)"/,
     replace: 'version = "###"',
@@ -25,14 +30,14 @@ const versionFiles = [
     replace: '"zwoo"\nversion = "###"',
   },
   {
-    path: "/backend/ZwooBackend/Globals.cs",
-    regex: /public static readonly string Version = "(.*)";/,
-    replace: 'public static readonly string Version = "###";',
+    path: "/backend/Zwoo.Backend/Globals.cs",
+    regex: /const string VERSION = "(.*)";/,
+    replace: 'const string VERSION = "###";',
   },
   {
-    path: "/backend/ZwooInfoDashBoard/Data/Globals.cs",
-    regex: /public static readonly string Version = "(.*)";/,
-    replace: 'public static readonly string Version = "###";',
+    path: "/backend/Zwoo.Dashboard/Data/Globals.cs",
+    regex: /const string VERSION = "(.*)";/,
+    replace: 'const string VERSION = "###";',
   },
 ];
 

@@ -1,0 +1,158 @@
+@page "/players"
+@using BackendHelper
+@inject IDatabase _db
+@inject IUserService _userService
+@inject IAuthService _auth
+@inject DialogService DialogService
+
+<PageTitle>Players</PageTitle>
+
+<h1>Players</h1>
+
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Player" Click="@InsertRow" Disabled=@(_newPlayer != null)/>
+<RadzenDataGrid AllowPaging="true" PageSize="25"
+                TItem="UserDao" Data="_players" AllowVirtualization="true" EditMode="DataGridEditMode.Single"
+                @ref="_playerGrid" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+    <Columns>
+        <RadzenDataGridColumn TItem="UserDao" Property="Id" Title="ID"/>
+        <RadzenDataGridColumn TItem="UserDao" Property="Username" Title="Username">
+            <Template Context="player">
+                @player.Username
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenTextBox @bind-Value="player.Username" Style="width:100%; display: block" Name="Name"/>
+                <RadzenRequiredValidator Component="Name" Text="Username is Required"/>
+                <RadzenLengthValidator Component="Name" Text="Username too short" Min="4"/>
+                <RadzenLengthValidator Component="Name" Text="Username too long" Max="20"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="UserDao" Property="Email" Title="Email">
+            <Template Context="player">
+                @player.Email
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenTextBox @bind-Value="player.Email" Style="width:100%; display: block" Name="Email"/>
+                <RadzenRequiredValidator Component="Email" Text="Email is Required"/>
+                <RadzenEmailValidator Component="Email" Text="Email is Invalid."/> 
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="UserDao" Property="Wins" Title="Wins"/>
+        <RadzenDataGridColumn TItem="UserDao" Property="Verified" Title="Verified">
+            <Template Context="player">
+                <RadzenCheckBox Disabled="true" Value="player.Verified"/>
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenCheckBox @bind-Value="player.Verified"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="UserDao" Property="BetaCode" Title="Betacode">
+            <Template Context="player">
+                @player.BetaCode
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenTextBox @bind-Value="player.BetaCode" Style="width:100%; display: block" Name="Name"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="UserDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="player">
+                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="info" Class="m-1" Click="@(() => OpenPlayer(player.Id))"/>
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="build" Class="m-1" Click="@(() => ChangePlayerPassword(player))"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="UserDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="120px">
+            <Template Context="player">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" class="m-1" Click="@(() => EditRow(player))" @onabort:stopPropagation="true"/>
+            </Template>
+            <EditTemplate Context="player">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(player))"/>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(player))"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="UserDao" Filterable="false" Sortable="false" Groupable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="player">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(player))"  @onclick:stopPropagation="true" />
+            </Template>
+            <EditTemplate Context="player">
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+
+@code {
+    private IQueryable<UserDao> _players = new List<UserDao>().AsQueryable();
+    private RadzenDataGrid<UserDao> _playerGrid = new RadzenDataGrid<UserDao>();
+    private UserDao? _newPlayer = null;
+
+    protected override void OnInitialized()
+    {
+        _players = _db.Users.AsQueryable();
+    }
+
+    
+    private async Task OpenPlayer(ulong playerId) => await DialogService.OpenAsync<PlayerInfoDialog>("Player Info", new Dictionary<string, object> { { "id", playerId } }, new DialogOptions { Width = "900px", Height = "730px", Resizable = true, Draggable = true });
+
+    private async Task EditRow(UserDao player) => await _playerGrid.EditRow(player);
+
+    private async void InsertRow()
+    {
+        _newPlayer = _userService.CreateUser("NewUser", "example@test.com", "", true, null, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("created user in admin dashboard"));
+        await _playerGrid.InsertRow(_newPlayer);
+    }
+    
+    private void SaveRow(UserDao player)
+    {
+        _playerGrid.UpdateRow(player);
+        _newPlayer = null;
+    }
+
+    private async Task CancelEdit(UserDao player)
+    {
+        if (_newPlayer != null)
+        {
+            await DeleteRow(player);
+        }
+
+        _newPlayer = null;
+        _playerGrid.CancelEditRow(player);
+        await _playerGrid.Reload();
+    }
+
+    private async Task DeleteRow(UserDao player)
+    {
+        var result = await DialogService.Confirm($"Are you sure that you want to delete {player.Username}?", "Delete", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (result == null || (bool)!result) return;
+
+        _userService.DeleteUserAdmin(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("deleted user in admin dashboard"));
+        await _playerGrid.Reload();
+    } 
+    
+    private void OnUpdateRow(UserDao player)
+    {
+        _userService.UpdateUser(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("updated user data in admin dashboard"));
+    }
+
+    private void OnCreateRow(UserDao player) 
+    {
+        _userService.UpdateUser(player, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("updated user data in admin dashboard"));
+        _newPlayer = null;
+    }
+
+    private async Task ChangePlayerPassword(UserDao player)
+    {
+        var result = await DialogService.OpenAsync<ChangeUserPasswordDialog>("Change Password", new Dictionary<string, object> { { "id", player.Id } }, new DialogOptions { Width = "470px", Height = "220px", Resizable = true, Draggable = true });
+        if (result is string newPassword)
+        {
+            if (!StringHelper.IsValidPassword(newPassword))
+            {
+                await DialogService.Confirm("Invalid Password");
+                return;
+            }
+            _userService.ChangePasswordAdmin(player, newPassword, AuditOptions.WithActor(AuditActor.Staff(_auth.Username)).AddMessage("changed password in admin dashboard"));
+        }
+    }
+
+}
+

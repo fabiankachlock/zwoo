@@ -94,26 +94,13 @@
 	}
 }
 
-:root {
-	--shadow-main: rgba(14, 30, 62, 0.3);
-	--shadow-dark: rgba(8, 19, 41, 0.4);
-	--shadow-light: rgba(44, 64, 102, 0.2);
-
-	--bp-xs: 576px;
-	--bp-m: 768px;
-	--bp-l: 992px;
-	--bp-xl: 1200px;
-	--bp-xxl: 1400px;
-}
-
-body.dark {
-	--shadow-main: rgba(121, 137, 168, 0.3);
-	--shadow-dark: rgba(114, 130, 163, 0.2);
-	--shadow-light: rgba(181, 195, 224, 0.4);
-}
-
 html {
+	color-scheme: light;
 	font-size: 16px;
+}
+
+html.dark {
+	color-scheme: dark;
 }
 
 @media screen and (min-width: 768px) {

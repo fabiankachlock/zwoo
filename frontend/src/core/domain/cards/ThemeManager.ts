@@ -35,7 +35,7 @@ export class CardThemeManager {
       this.meta = await this.loadThemes();
       themeAwaiter.callback();
       Logger.Theme.log('manager loaded config');
-      Logger.Theme.debug(`found ${this.meta.themes.length} theme(s)`);
+      Logger.Theme.debug(`found ${Object.keys(this.meta.themes).length} theme(s)`);
       this.themesLoader = undefined;
     })();
   }

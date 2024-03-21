@@ -103,3 +103,28 @@ export const useRedirect = () => {
 export const createRedirect = (to: string): string => {
   return `${redirectKey}=${to}`;
 };
+
+/**
+ * when redirecting again, reapply the redirect parameter to the new route
+ */
+export const keepRedirect = (from: string, to: string): string => {
+  const redirect = getRedirectFromUrl(from);
+  if (redirect) {
+    if (to.includes('?')) {
+      return `${to}&${redirectKey}=${redirect}`;
+    } else {
+      return `${to}?${redirectKey}=${redirect}`;
+    }
+  }
+
+  return to;
+};
+
+const getRedirectFromUrl = (url: string): string | null => {
+  const queryString = url.split('?')[1];
+  if (queryString) {
+    const params = new URLSearchParams(queryString);
+    return params.get(redirectKey);
+  }
+  return null;
+};

@@ -1,16 +1,22 @@
 import { AppConfig } from '@/config';
 import Logger from '@/core/services/logging/logImport';
 
-import { BackendErrorAble } from '../ApiError';
-import { LeaderBoardPositionResponse, LeaderBoardResponse } from '../entities/Leaderboard';
+import { FetchResponse } from '../ApiEntities';
+import { Leaderboard, LeaderboardPosition } from '../entities/Game';
 import { Backend, Endpoint } from './ApiConfig';
 import { WrappedFetch } from './FetchWrapper';
 
 export class LeaderBoardService {
-  static fetchLeaderBoard = async (): Promise<BackendErrorAble<LeaderBoardResponse>> => {
+  private readonly api: Backend;
+
+  public constructor(api: Backend) {
+    this.api = api;
+  }
+
+  fetchLeaderBoard = async (): FetchResponse<Leaderboard> => {
     Logger.Api.log(`fetching leaderboard`);
 
-    const response = await WrappedFetch<LeaderBoardResponse>(Backend.getUrl(Endpoint.LeaderBoard), {
+    const response = await WrappedFetch<Leaderboard>(this.api.getUrl(Endpoint.LeaderBoard), {
       useBackend: AppConfig.UseBackend,
       fallbackValue: {
         leaderboard: new Array(50).fill(null).map((_, index) => ({
@@ -20,20 +26,18 @@ export class LeaderBoardService {
       }
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while fetching leaderboard');
-      return {
-        error: response.error
-      };
+      return response;
     }
 
-    return response.data!;
+    return response;
   };
 
-  static fetchOwnLeaderBoardPosition = async (): Promise<BackendErrorAble<LeaderBoardPositionResponse>> => {
+  fetchOwnLeaderBoardPosition = async (): FetchResponse<LeaderboardPosition> => {
     Logger.Api.log(`fetching own leaderboard position`);
 
-    const response = await WrappedFetch<LeaderBoardPositionResponse>(Backend.getUrl(Endpoint.LeaderBoardPosition), {
+    const response = await WrappedFetch<LeaderboardPosition>(this.api.getUrl(Endpoint.LeaderBoardPosition), {
       method: 'GET',
       useBackend: AppConfig.UseBackend,
       fallbackValue: {
@@ -44,13 +48,11 @@ export class LeaderBoardService {
       }
     });
 
-    if (response.error) {
+    if (response.isError) {
       Logger.Api.warn('received erroneous response while fetching own leaderboard position');
-      return {
-        error: response.error
-      };
+      return response;
     }
 
-    return response.data!;
+    return response;
   };
 }

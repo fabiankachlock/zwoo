@@ -16,7 +16,7 @@ import Landing from '../views/Landing.vue';
 import Version from '../views/Version.vue';
 import { DeveloperRoute } from './developer';
 import { GameRoute } from './game';
-import { OfflineGuard } from './guards/OfflineGuard';
+import { EnvGuard } from './guards/EnvGuard';
 import { InternalRoute } from './internal';
 import { MenuRoutes } from './menu';
 import { SettingsRoutes } from './settings';
@@ -39,16 +39,19 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           requiresAuth: true,
           redirect: '/landing',
-          onlineOnly: true,
-          offlineRedirect: '/offline'
+          excludeEnv: 'offline',
+          envRedirect: '/offline'
         }
       },
       {
         path: '/landing',
         component: Landing,
         meta: {
-          onlineOnly: true,
-          offlineRedirect: '/offline'
+          excludeEnv: ['offline', 'local'],
+          envRedirect: {
+            local: '/login-local',
+            offline: '/offline'
+          }
         }
       },
       ...MenuRoutes,
@@ -63,7 +66,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/invalid-version',
     component: Version,
     meta: {
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   AppConfig.IsBeta
@@ -71,7 +74,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/beta/:code',
         component: Beta,
         meta: {
-          onlineOnly: true
+          excludeEnv: 'offline'
         }
       }
     : {
@@ -82,11 +85,15 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior() {
+    // always scroll to top
+    return { top: 0 };
+  }
 });
 
 const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
-  new OfflineGuard().beforeEach,
+  new EnvGuard().beforeEach,
   new VersionGuard().beforeEach,
   new AuthGuard().beforeEach,
   new CookieGuard().beforeEach,
@@ -95,6 +102,7 @@ const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
 const BeforeEachAsyncGuards: RouterInterceptor['beforeEachAsync'][] = [];
 
 router.beforeEach(async (to, from, next) => {
+  console.debug('router.beforeEach', to.fullPath, from.fullPath);
   let called = false;
   for (const guard of BeforeEachSyncGuards) {
     if (guard) {

@@ -7,6 +7,7 @@
       "game": "Game",
       "account": "Account",
       "developers": "Developer",
+      "server": "Local Server",
       "": "Error"
     },
     "update": {
@@ -36,9 +37,14 @@
     "changePassword": "Change Password",
     "versionHistory": "Version history",
     "settingsSync": "Sync settings",
+    "userDefaultsSync": "Sync UI state",
     "reportBug": "Report a Bug",
     "contact": "Contact",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "localLogs": "Locally saved logs",
+    "clearLogs": "Clear logs",
+    "feedbackChat": "Feedback messages in chat",
+    "feedbackSnackbar": "Feedback notifications"
   },
   "lng": {
     "de": "German",
@@ -56,6 +62,8 @@
     "help": "Help",
     "contact": "Contact",
     "statusOffline": "Offline",
+    "statusLocal": "Connected",
+    "disconnect": "Disconnect",
     "createGame": "Create Game",
     "joinGame": "Join Game"
   },
@@ -69,6 +77,13 @@
     "notVerifiedInfo": "You account seems to be not verified. If you did not get an email, you can resend the verification email to verify your account.",
     "resendVerifyEmail": "Resend email"
   },
+  "loginLocal": {
+    "title": "Guest Login",
+    "server": "Server URL",
+    "name": "Username",
+    "infoServer": "The guarantee of adequate data protection measures cannot be ensured on third-party servers. Therefore, the use and distribution of personal data on local servers should be avoided.",
+    "submit": "Sign In"
+  },
   "createAccount": {
     "title": "Create Account",
     "email": "E-Mail",
@@ -80,7 +95,9 @@
     "beta": "BETA Code",
     "info": "Your account was created! After you verified your account in the email we sent you, you can log into your account.",
     "resendVerifyEmail": "Resend email",
-    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account."
+    "emailInfo": "If you did not get an email, you can resend the verification email to verify your account.",
+    "terms": "I consent to the processing and storage of my personal data provided above for the use of ZWOO. More info at:",
+    "nameInfo": "Your username is visible to other players in the game. Therefore, it is best to choose a fictitious name."
   },
   "createGame": {
     "title": "Create Game",
@@ -115,7 +132,8 @@
     "create": "Create Game",
     "join": "Join Game",
     "stats": "Show Statistic",
-    "greeting": "Hello, {name}!"
+    "greeting": "Hello, {name}!",
+    "localGame": "Local Game"
   },
   "list": {
     "title": "Available Games",
@@ -123,6 +141,7 @@
     "private": "Private",
     "reload": "Update",
     "nothingFound": "No game could be found.",
+    "noFit": "Didn't find a suitable game?",
     "spectate": "Spectate",
     "play": "Play",
     "savedGame": "Saved Game",
@@ -160,6 +179,7 @@
       "116": "The username is invalid.",
       "117": "The password is invalid.",
       "118": "The BETA-Code is invalid.",
+      "119": "The Consent to data processing is required.",
       "120": "The email is already used.",
       "121": "The username is already used.",
       "122": "The account could not be verified.",
@@ -178,6 +198,7 @@
       "420": "Missing Authorization",
       "421": "Game full",
       "425": "Bot with this name already exists",
+      "426": "The card stack is empty",
       "434": "Card not allowed",
       "900": "Error occurred",
       "901": "Connection error",
@@ -223,24 +244,21 @@
     "noWinsOfflineInfo": "Wins of offline games do not count in the leaderboard."
   },
   "rules": {
+    "manageProfiles": "Manage profiles",
+    "groupSystem": "Prepared profiles",
+    "groupUser": "Your profiles",
+    "applyProfile": "Apply",
+    "newProfile": "Create new profile",
+    "profileInfo": "Game Profiles are a possibility to save and reuse your game settings.",
+    "profileName": "Profile name",
+    "profilePlaceholder": "My profile",
+    "createProfile": "Create",
+    "profiles": {
+      "default": "Defaults",
+      "full": "All rules"
+    },
     "widget": {
       "numberPlaceholder": "Number"
-    },
-    "maxPlayers": {
-      "title": "Amount of Players",
-      "info": "Change maximum amount of players for your game."
-    },
-    "addUpDraw": {
-      "title": "Add draw amounts",
-      "info": "On top of a draw card, further draw cards can be placed. The number of cards to be drawn is added. You can put +2 cards on top of +4 cards, as well as +4 cards on top of +2 cards."
-    },
-    "initialCards": {
-      "title": "Amount Of Cards",
-      "info": "Choose the amount of cards each player is supplied with at the start of a game.."
-    },
-    "explicitLastCard": {
-      "title": "Last Card",
-      "info": "If a player has only one card left, he has to press the zwoo button or else he will ge two penalty cards."
     }
   },
   "ingame": {
@@ -262,11 +280,13 @@
   },
   "cookies": {
     "title": "Cookie Consent",
+    "userInformation": "Since the privacy of our players is very important to us, we completely dispense with tracking cookies and instead use only technically necessary cookies.",
+    "privacyLink": "More info at:",
     "functional": {
       "title": "Functional Cookies",
       "auth": {
         "name": "Authentication Cookies (Strictly necessary)",
-        "description": "We use cookies to store your login session across multiple browser session, so that you don't have to re-enter your credentials every time you visit."
+        "description": "We use cookies to store your login across multiple browser sessions, so that you don't have to re-enter your credentials every time you visit."
       }
     },
     "active": "Active",
@@ -277,7 +297,9 @@
     "disallowed": {
       "title": "Missing Cookies",
       "info": "Login- and account-creation functionality needs Google reCAPTCHA cookies enabled. Please change your settings and try again."
-    }
+    },
+    "__close": "Ok",
+    "__info": "Cookie notice"
   },
   "share": {
     "facebook": "Share on Facebook",
@@ -336,6 +358,10 @@
     "selectColor": {
       "title": "Choose a color",
       "info": "Choose the color, that should be played with from now on."
+    },
+    "selectPlayer": {
+      "title": "Choose a player",
+      "info": "Select a player to whom the action of the cards just laid should be applied."
     }
   },
   "reassureDialog": {
@@ -363,7 +389,8 @@
     "storedCount": "no logs stored | 1 entry | {count} entries",
     "clearStore": "Clear Store",
     "reloadLogs": "Reload Logs",
-    "storedLogs": "Stored Logs"
+    "storedLogs": "Stored Logs",
+    "logsCleared": "Logs cleared"
   },
   "shortcuts": {
     "title": "Keyboard shortcuts",
@@ -446,7 +473,81 @@
     "send": "Send!",
     "thanks": "Your request was sent successfully!",
     "email": "E-Mail",
-    "emailPlaceholder": "Your E-Mail address",
-    "acceptTerms": "TODO [I accept the terms and conditions...]"
+    "emailPlaceholder": "Your E-Mail address"
+  },
+  "feedback": {
+    "range": {
+      "option": {
+        "self": "Only mine",
+        "all": "All",
+        "none": "None"
+      }
+    },
+    "consumer": {
+      "chat": "Chat",
+      "snackbar": "Notifications"
+    },
+    "1": "{target} was skipped",
+    "1-self": "You were skipped",
+    "2": "direction changed!",
+    "3": "{target} had to draw {amount} Card(s)",
+    "3-self": "You had to draw {amount} Card(s)",
+    "4": "{target} forgot to end its turn",
+    "4-self": "You forgot to end your turn",
+    "5": "{target} and {origin} swapped cards",
+    "5-self+origin": "You swapped cards with {other}",
+    "5-self+target": "{other} swapped cards with you",
+    "6": "{target} changed the color",
+    "6-self": "You changed the color"
+  },
+  "envLock": {
+    "title": "Environment Lock",
+    "info": "zwoo is locked to {0} in this environment. The {1} is not available.",
+    "reload": "Reload",
+    "online": "online mode",
+    "offline": "offline mode",
+    "local": "local mode"
+  },
+  "localServer": {
+    "controls": "Server Controls",
+    "start": "Start server",
+    "stop": "Stop server",
+    "config": "Configuration",
+    "configKey": {
+      "serverId": "Server ID",
+      "secretKey": "Server Secret",
+      "port": "Port",
+      "ip": "IP",
+      "useDynamicPort": "Use dynamic Port",
+      "useLocalhost": "Listen on localhost",
+      "useAllIps": "Listen on all addresses",
+      "allowedOrigins": "Allowed origins",
+      "useStrictOrigins": "Strict origins check"
+    },
+    "noConfig": "Server configuration not available",
+    "stats": "Statistic",
+    "logIn": "Play local",
+    "editConfig": "Edit",
+    "changeConfig": "Edit configuration",
+    "save": "Save",
+    "ip": {
+      "title": "IP Address",
+      "info": "The IP-Address of the adapter to listen on.",
+      "custom": "custom adapter",
+      "localhost": "localhost adapter",
+      "all": "all adapters"
+    },
+    "port": {
+      "title": "Port",
+      "info": "The port to listen on. The option dynamic port will choose a free port automatically.",
+      "dynamic": "dynamic port",
+      "custom": "custom port"
+    },
+    "security": {
+      "title": "Security",
+      "info": "This options can limit which frontend can connect. To restrict access one can configure a CORS compatible list of origins. A blank list will allow only the built in frontend to connect.",
+      "restricted": "allow only specific origins",
+      "open": "allow all origins"
+    }
   }
 }

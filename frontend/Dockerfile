@@ -1,5 +1,5 @@
 ### Frontend Setup
-FROM node:16-alpine as base
+FROM node:18-alpine as base
 
 # setup frontend
 WORKDIR /src/frontend
@@ -12,7 +12,7 @@ RUN yarn
 COPY ./frontend/ ./
 
 ### Build WASM
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dotnet-builder
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet-builder
 
 # copy sources
 COPY --from=base /src ./src
@@ -20,24 +20,25 @@ WORKDIR /src/backend
 
 # install python
 RUN apt-get update -y
+RUN apt-get install -y libatomic1
 RUN apt-get install -y python3
 
 # install wasm tools
 RUN dotnet workload install wasm-tools
 
 # copy project configs into /src/backend/<project>/<config>.csproj
-COPY ["./backend/ZwooWasmAdapter/ZwooWasmAdapter.csproj", "./ZwooWasmAdapter/"]
-COPY ["./backend/GameLogic/GameLogic.csproj", "./GameLogic/"]
-RUN dotnet restore "./ZwooWasmAdapter/ZwooWasmAdapter.csproj"
+COPY ["./backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj", "./Zwoo.GameEngine.Wasm/"]
+COPY ["./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj", "./Zwoo.GameEngine/"]
+RUN dotnet restore "./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj"
 
 # copy all backend projects into /src/backend (/src/backend/<project>)
 COPY ./backend .
 
 # build wasm project
-RUN dotnet publish -c Release -p:RunAOTCompilation=true ./ZwooWasmAdapter/ZwooWasmAdapter.csproj
+RUN dotnet publish -c Release -p:RunAOTCompilation=true ./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj
 
 ### Build Frontend
-FROM node:16-alpine as builder
+FROM node:18-alpine as builder
 
 # copy spurces + compiled wasm
 COPY --from=dotnet-builder /src ./src

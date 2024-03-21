@@ -1,7 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-echo "[HUSKY] pre-commit"
 cd frontend
-
+echo "[HUSKY] pre-commit"
 yarn lint-staged

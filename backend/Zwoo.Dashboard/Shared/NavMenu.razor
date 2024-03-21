@@ -1,0 +1,16 @@
+@using Zwoo.Dashboard.Data;
+@inject IDatabase _db;
+
+<RadzenPanelMenu>
+    <RadzenPanelMenuItem Text="Home" Icon="home" Path="/" />
+    <RadzenPanelMenuItem Text="Contact Requests" Icon="contact_support" Path="contact-requests" />
+    <RadzenPanelMenuItem Text="Games Overview" Icon="list_alt" Path="games-overview" />
+    <RadzenPanelMenuItem Text="Players" Icon="group" Path="players" />
+    <RadzenPanelMenuItem Text="Deleted Accounts" Icon="delete_sweep" Path="deleted-accounts" />
+    <RadzenPanelMenuItem Text="Account Events" Icon="event" Path="account-events" />
+    <RadzenPanelMenuItem Text="Changelog" Icon="edit_square" Path="changelog-editor" />
+    @if (_db.BetaCodes.AsQueryable().Count() != 0)
+    {
+        <RadzenPanelMenuItem Text="Beta Codes" Icon="qr_code" Path="betacodes" />
+    }
+</RadzenPanelMenu>
