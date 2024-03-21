@@ -117,7 +117,7 @@ internal class LastCardRule : BaseDrawRule
         return gameEvent.Type == ClientEventType.RequestEndTurn;
     }
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, IPile cardPile, IPlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         ClientEvent.RequestEndTurnEvent payload = gameEvent.CastPayload<ClientEvent.RequestEndTurnEvent>();
