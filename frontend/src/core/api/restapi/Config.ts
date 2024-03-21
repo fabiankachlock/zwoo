@@ -15,19 +15,21 @@ export class ConfigService {
     this.api = api;
   }
 
-  checkVersion = async (version: string, zrp: string): FetchResponse<ClientInfo> => {
+  checkVersion = async (version: string, zrp: string, mode: string): FetchResponse<ClientInfo> => {
     Logger.Api.log(`fetching version`);
 
     const response = await WrappedFetch<ClientInfo>(`${this.api.getUrl(Endpoint.Discover)}?t=${Date.now()}`, {
       useBackend: AppConfig.UseBackend,
       fallbackValue: {
         version: AppConfig.Version,
-        zrpVersion: '' // TODO: use real zrp version
+        zrpVersion: '', // TODO: use real zrp version
+        mode: ''
       },
       method: 'POST',
       body: JSON.stringify({
         version: version,
-        zrpVersion: zrp
+        zrpVersion: zrp,
+        mode
       })
     });
 

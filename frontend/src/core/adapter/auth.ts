@@ -56,7 +56,8 @@ export const useAuth = defineStore('auth', {
         useBackend: AppConfig.UseBackend,
         fallbackValue: {
           version: AppConfig.Version,
-          zrpVersion: '' // TODO: use real zrp version
+          zrpVersion: '', // TODO: use real zrp version
+          mode: 'local'
         },
         method: 'POST',
         body: JSON.stringify({
