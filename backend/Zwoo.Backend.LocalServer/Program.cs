@@ -48,7 +48,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.AddZwooLogging(false);
 var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
-    AppVersion = "1.0.0-beta.17"
+    AppVersion = "1.0.0-beta.17",
+    ServerMode = "local"
 });
 
 builder.Services.AddLocalAuthentication(config.ServerId);

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +24,7 @@ public static class DiscoverEndpoint
                     {
                         {"version", value.Version},
                         {"zrpVersion", value.ZRPVersion},
+                        {"mode", value.Mode}
                     }.ToDictionary()
                 }));
             }

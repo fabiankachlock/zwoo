@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Options;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Configuration;
 
@@ -23,7 +22,7 @@ public class BetaDiscoverService : IDiscoverService
     public bool CanConnect(ClientInfo client)
     {
         // only allow same version connects
-        return _options.App.AppVersion == client.Version;
+        return _options.App.AppVersion == client.Version && _options.App.ServerMode == client.Mode;
     }
 
     public ClientInfo GetVersion()
@@ -31,7 +30,8 @@ public class BetaDiscoverService : IDiscoverService
         return new ClientInfo()
         {
             Version = _options.App.AppVersion,
-            ZRPVersion = ""
+            Mode = _options.App.ServerMode,
+            ZRPVersion = "",
         };
     }
 }
