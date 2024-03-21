@@ -93,7 +93,7 @@ internal class LastCardRule : BaseDrawRule
         return interrupt.OriginRule == Name && interrupt.Reason == _interruptReason;
     }
 
-    public override GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, IPile cardPile, IPlayerCycle playerOrder)
+    public override GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, Pile cardPile, PlayerCycle playerOrder)
     {
         if (!IsResponsibleForInterrupt(interrupt, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new();
