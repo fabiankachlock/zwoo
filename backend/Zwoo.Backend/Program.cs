@@ -18,7 +18,8 @@ const string VERSION = "1.0.0-beta.17";
 builder.AddZwooLogging(false);
 var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
-    AppVersion = VERSION
+    AppVersion = VERSION,
+    ServerMode = "online"
 });
 builder.Services.AddZwooCors(conf);
 builder.Services.AddZwooAuthentication(conf);
