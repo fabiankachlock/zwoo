@@ -25,13 +25,13 @@ public class AsyncExecutionQueueTests
             count += 100;
         });
 
-        Assert.AreEqual(0, count);
+        Assert.That(count, Is.EqualTo(0));
         q.Start();
         Thread.Sleep(50);
-        Assert.AreEqual(1, count);
+        Assert.That(count, Is.EqualTo(1));
         Thread.Sleep(100);
-        Assert.AreEqual(11, count);
+        Assert.That(count, Is.EqualTo(11));
         Thread.Sleep(100);
-        Assert.AreEqual(111, count);
+        Assert.That(count, Is.EqualTo(111));
     }
 }
