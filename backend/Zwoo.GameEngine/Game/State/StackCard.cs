@@ -7,7 +7,7 @@ using Zwoo.GameEngine.Game.Cards;
 
 namespace Zwoo.GameEngine.Game.State;
 
-internal struct StackCard
+public struct StackCard
 {
     public Card Card;
     public bool EventActivated;

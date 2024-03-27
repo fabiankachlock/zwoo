@@ -1,2 +1,2 @@
 global using NUnit.Framework;
-global using ZwooGameLogic.Tests.Framework;
+global using Zwoo.GameEngine.Tests.Framework;

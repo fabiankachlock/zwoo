@@ -1,42 +1,42 @@
-using ZwooGameLogic.Game;
-using ZwooGameLogic.Game.State;
+using Zwoo.GameEngine.Game;
+using Zwoo.GameEngine.Game.State;
 
-namespace ZwooGameLogic.Tests.Framework;
+namespace Zwoo.GameEngine.Tests.Framework;
 
-internal class MockPlayerCycle : IPlayerCycle
+internal class MockPlayerCycle : PlayerCycle
 {
     private int _currentIndex;
     private List<long> _players;
 
-    public long ActivePlayer
+    public new long ActivePlayer
     {
         get => _players[_currentIndex];
     }
 
-    public List<long> Order
+    public new List<long> Order
     {
         get => _players;
     }
 
-    public MockPlayerCycle()
+    public MockPlayerCycle() : base([0])
     {
         _currentIndex = 0;
-        _players = new List<long>() { 0 };
+        _players = [0];
     }
 
-    public MockPlayerCycle(List<long> players)
+    public MockPlayerCycle(List<long> players) : base(players)
     {
         _currentIndex = 0;
         _players = players;
     }
 
-    public long Next()
+    public new long Next()
     {
         _currentIndex = (_currentIndex + 1) % _players.Count;
         return _players[_currentIndex];
     }
 
-    public long Next(GameDirection direction)
+    public new long Next(GameDirection direction)
     {
         if (direction == GameDirection.Left)
         {
@@ -45,18 +45,18 @@ internal class MockPlayerCycle : IPlayerCycle
         return Previous();
     }
 
-    public long Previous()
+    public new long Previous()
     {
         _currentIndex = (_players.Count + _currentIndex - 1) % _players.Count;
         return _players[_currentIndex];
     }
 
-    public int GetOrder(long playerId)
+    public new int GetOrder(long playerId)
     {
         return _players.FindIndex(id => playerId == id);
     }
 
-    public void RemovePlayer(long id, GameDirection direction)
+    public new void RemovePlayer(long id, GameDirection direction)
     {
         if (id == ActivePlayer)
         {

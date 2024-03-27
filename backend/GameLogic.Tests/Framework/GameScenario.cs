@@ -1,10 +1,10 @@
-using ZwooGameLogic.Game.State;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Rules;
-using ZwooGameLogic.Game.Cards;
-using ZwooGameLogic.Game;
+using Zwoo.GameEngine.Game.State;
+using Zwoo.GameEngine.Game.Events;
+using Zwoo.GameEngine.Game.Rules;
+using Zwoo.GameEngine.Game.Cards;
+using Zwoo.GameEngine.Game;
 
-namespace ZwooGameLogic.Tests.Framework;
+namespace Zwoo.GameEngine.Tests.Framework;
 
 internal class GameScenario
 {
@@ -12,8 +12,8 @@ internal class GameScenario
 
     private string _name;
     private GameState _state;
-    private IPile _pile = new MockPile();
-    private IPlayerCycle _players = new MockPlayerCycle();
+    private Pile _pile = new MockPile();
+    private PlayerCycle _players = new MockPlayerCycle();
     private List<BaseRule> _rules = new List<BaseRule>();
 
     private BaseRule? _selectedRule = null;
@@ -28,7 +28,6 @@ internal class GameScenario
             CardStack = new List<StackCard>(),
             CurrentPlayer = 0,
             PlayerDecks = new Dictionary<long, List<Card>> { { 0, new List<Card>() } },
-            TopCard = new StackCard()
         };
     }
 
@@ -37,7 +36,7 @@ internal class GameScenario
         return new GameScenario(name);
     }
 
-    public GameScenario WithPile(IPile cardPile)
+    public GameScenario WithPile(Pile cardPile)
     {
         _pile = cardPile;
         return this;
@@ -49,7 +48,7 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithPlayerCycle(IPlayerCycle playerCycle)
+    public GameScenario WithPlayerCycle(PlayerCycle playerCycle)
     {
         _players = playerCycle;
         return this;
@@ -85,7 +84,6 @@ internal class GameScenario
     public GameScenario WithStack(List<StackCard> stack)
     {
         _state.CardStack = stack;
-        _state.TopCard = stack.LastOrDefault();
         return this;
     }
 
@@ -97,7 +95,6 @@ internal class GameScenario
 
     public GameScenario WithTopCard(StackCard topCard)
     {
-        _state.TopCard = topCard;
         _state.CardStack.Add(topCard);
         return this;
     }
@@ -105,7 +102,6 @@ internal class GameScenario
     public GameScenario WithTopCard(CardColor c, CardType t)
     {
         StackCard topCard = new StackCard(new Card(c, t), false);
-        _state.TopCard = topCard;
         _state.CardStack.Add(topCard);
         return this;
     }
@@ -143,7 +139,7 @@ internal class GameScenario
 
     public GameScenario ExpectSelectedRule(string name)
     {
-        Assert.AreEqual(_selectedRule?.Name, name, "");
+        Assert.That(name, Is.EqualTo(_selectedRule?.Name), "");
         return this;
     }
 
@@ -161,7 +157,7 @@ internal class GameScenario
 
     public GameScenario ExpectState(GameState newState)
     {
-        Assert.AreEqual(_output?.NewState, newState);
+        Assert.That(newState, Is.EqualTo(_output?.NewState));
         return this;
     }
 
@@ -173,13 +169,13 @@ internal class GameScenario
 
     public GameScenario ExpectActivePlayer(long playerId)
     {
-        Assert.AreEqual(_output?.NewState.CurrentPlayer, playerId);
+        Assert.That(playerId, Is.EqualTo(_output?.NewState.CurrentPlayer));
         return this;
     }
 
     public GameScenario ExpectTopCard(StackCard card)
     {
-        Assert.AreEqual(_output?.NewState.TopCard, card);
+        Assert.That(card, Is.EqualTo(_output?.NewState.TopCard));
         return this;
     }
 
@@ -198,15 +194,15 @@ internal class GameScenario
 
     public GameScenario ShouldTriggerRule(BaseRule targetRule, ClientEvent clientEvent)
     {
-        this.WithRule(targetRule).Trigger(clientEvent).ExpectSelectedRule(targetRule.Name);
-        return this.Reset();
+        WithRule(targetRule).Trigger(clientEvent).ExpectSelectedRule(targetRule.Name);
+        return Reset();
     }
 
     public GameScenario ShouldNotTriggerRule(BaseRule targetRule, ClientEvent clientEvent)
     {
-        this.WithRule(targetRule).Trigger(clientEvent);
+        WithRule(targetRule).Trigger(clientEvent);
         Assert.IsNull(_selectedRule);
-        return this.Reset();
+        return Reset();
     }
 
     public GameScenario Reset()

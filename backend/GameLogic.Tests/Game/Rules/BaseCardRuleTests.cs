@@ -1,9 +1,9 @@
-using ZwooGameLogic.Game.Cards;
-using ZwooGameLogic.Game.Rules;
-using ZwooGameLogic.Game.State;
-using ZwooGameLogic.Game.Events;
+using Zwoo.GameEngine.Game.Cards;
+using Zwoo.GameEngine.Game.Rules;
+using Zwoo.GameEngine.Game.State;
+using Zwoo.GameEngine.Game.Events;
 
-namespace ZwooGameLogic.Tests.Game.Rules;
+namespace Zwoo.GameEngine.Tests.Game.Rules;
 
 public class BaseCardRuleTests
 {

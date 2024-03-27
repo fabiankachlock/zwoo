@@ -1,33 +1,34 @@
-using ZwooGameLogic.Game.Cards;
+using Zwoo.GameEngine.Game.Cards;
+using Zwoo.GameEngine.Game.Settings;
 
-namespace ZwooGameLogic.Tests.Framework;
+namespace Zwoo.GameEngine.Tests.Framework;
 
-public class MockPile : IPile
+public class MockPile : Pile
 {
-    private Pile _fallback = new Pile();
+    private Pile _fallback = new Pile(GameSettings.FromDefaults());
     private bool _useFallback;
     private List<Card> _programmed;
     private int _currentIdx = 0;
 
-    public MockPile(params Card[] cards)
+    public MockPile(params Card[] cards) : base(GameSettings.FromDefaults())
     {
         _useFallback = false;
         _programmed = new List<Card>(cards);
     }
 
-    public MockPile(bool useFallback, params Card[] cards)
+    public MockPile(bool useFallback, params Card[] cards) : base(GameSettings.FromDefaults())
     {
         _useFallback = useFallback;
         _programmed = new List<Card>(cards);
     }
 
-    public MockPile(List<Card> cards, bool useFallback)
+    public MockPile(List<Card> cards, bool useFallback) : base(GameSettings.FromDefaults())
     {
         _useFallback = useFallback;
         _programmed = new List<Card>(cards);
     }
 
-    public Card DrawCard()
+    public new Card DrawCard()
     {
         Card card;
 
@@ -49,7 +50,7 @@ public class MockPile : IPile
         return card;
     }
 
-    public List<Card> DrawCard(int amount)
+    public new List<Card> DrawCard(int amount)
     {
         List<Card> cards = new List<Card>();
         for (int i = 0; i < amount; i++)

@@ -6,7 +6,7 @@ using Zwoo.GameEngine.Logging;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal abstract class BaseRule
+public abstract class BaseRule
 {
     public abstract int Priority { get; }
 

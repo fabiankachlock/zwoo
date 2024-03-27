@@ -1,10 +1,7 @@
-using ZwooGameLogic.Game.State;
-using ZwooGameLogic.Game.Events;
-using ZwooGameLogic.Game.Rules;
-using ZwooGameLogic.Game.Cards;
-using ZwooGameLogic.Game;
+using Zwoo.GameEngine.Game.Events;
+using Zwoo.GameEngine.Game.Cards;
 
-namespace ZwooGameLogic.Tests.Framework;
+namespace Zwoo.GameEngine.Tests.Framework;
 
 public static class TestClient
 {

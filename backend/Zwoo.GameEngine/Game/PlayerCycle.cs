@@ -7,7 +7,7 @@ using Zwoo.GameEngine.Game.State;
 
 namespace Zwoo.GameEngine.Game;
 
-internal class PlayerCycle
+public class PlayerCycle
 {
     private int _currentIndex;
     private List<long> _players;

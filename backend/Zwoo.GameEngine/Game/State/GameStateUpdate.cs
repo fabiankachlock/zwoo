@@ -3,7 +3,7 @@ using Zwoo.GameEngine.Game.Feedback;
 
 namespace Zwoo.GameEngine.Game.State;
 
-internal struct GameStateUpdate
+public struct GameStateUpdate
 {
 
     public GameState NewState;
