@@ -5,7 +5,7 @@ using Zwoo.GameEngine.Game.Cards;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal class BaseDrawRule : BaseRule
+public class BaseDrawRule : BaseRule
 {
     public override int Priority
     {

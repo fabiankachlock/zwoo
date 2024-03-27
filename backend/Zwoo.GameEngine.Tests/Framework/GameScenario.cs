@@ -147,6 +147,12 @@ internal class GameScenario
         return this;
     }
 
+    public GameScenario ExpectNoEvents()
+    {
+        Assert.That(_output?.Events.Count, Is.EqualTo(0), $"{_name} - has unexpected events");
+        return this;
+    }
+
     public GameScenario ExpectSelectedRule(string name)
     {
         Assert.That(name, Is.EqualTo(_selectedRule?.Name), $"{_name} - wrong rule selected");
