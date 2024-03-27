@@ -99,9 +99,9 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithTopCard(CardColor c, CardType t)
+    public GameScenario WithTopCard(CardColor c, CardType t, bool eventActivated = false)
     {
-        StackCard topCard = new StackCard(new Card(c, t), false);
+        StackCard topCard = new StackCard(new Card(c, t), eventActivated);
         _state.CardStack.Add(topCard);
         return this;
     }
@@ -109,6 +109,10 @@ internal class GameScenario
     public GameScenario WithActivePlayer(long player)
     {
         _state.CurrentPlayer = player;
+        while (_players.ActivePlayer != player)
+        {
+            _players.Next();
+        }
         return this;
     }
 
@@ -126,7 +130,7 @@ internal class GameScenario
 
     public GameScenario Trigger(ClientEvent clientEvent)
     {
-        Assert.Greater(_rules.Count, 0, $"{_name} scenario has rules");
+        Assert.Greater(_rules.Count, 0, $"{_name} scenario has no rules");
 
         _selectedRule = _rules.Where(rule => rule.IsResponsible(clientEvent, _state)).OrderByDescending(rule => rule.Priority).FirstOrDefault();
         if (_selectedRule != null)
@@ -137,45 +141,69 @@ internal class GameScenario
         return this;
     }
 
+    public GameScenario ExpectNoOutput()
+    {
+        Assert.That(_output, Is.Null, $"{_name} - has unexpected output");
+        return this;
+    }
+
     public GameScenario ExpectSelectedRule(string name)
     {
-        Assert.That(name, Is.EqualTo(_selectedRule?.Name), "");
+        Assert.That(name, Is.EqualTo(_selectedRule?.Name), $"{_name} - wrong rule selected");
         return this;
     }
 
     public GameScenario ExpectEvent(GameEvent publishedEvent)
     {
-        Assert.IsTrue(_output?.Events.Contains(publishedEvent));
+        Assert.IsTrue(_output?.Events.Contains(publishedEvent), $"{_name} - expected event not present");
         return this;
     }
 
     public GameScenario ExpectEventsLike(Func<List<GameEvent>, bool> comparator)
     {
-        Assert.IsTrue(comparator(_output?.Events ?? new List<GameEvent>()));
+        Assert.IsTrue(comparator(_output?.Events ?? new List<GameEvent>()), $"{_name} - expected event not present");
         return this;
     }
 
     public GameScenario ExpectState(GameState newState)
     {
-        Assert.That(newState, Is.EqualTo(_output?.NewState));
+        Assert.That(newState, Is.EqualTo(_output?.NewState), $"{_name} - expected state not met");
         return this;
     }
 
     public GameScenario ExpectStateLike(Func<GameState, bool> comparator)
     {
-        Assert.IsTrue(comparator(_output?.NewState ?? new GameState()));
+        Assert.IsTrue(comparator(_output?.NewState ?? new GameState()), $"{_name} - expected state not met");
+        return this;
+    }
+
+    public GameScenario ExpectPlayerDeck(long playerId, List<Card> deck)
+    {
+        Assert.That(deck, Is.EqualTo(_output?.NewState.PlayerDecks[playerId]), $"{_name} - expected player deck not met");
         return this;
     }
 
     public GameScenario ExpectActivePlayer(long playerId)
     {
-        Assert.That(playerId, Is.EqualTo(_output?.NewState.CurrentPlayer));
+        Assert.That(playerId, Is.EqualTo(_output?.NewState.CurrentPlayer), $"{_name} - wrong player active");
         return this;
     }
 
     public GameScenario ExpectTopCard(StackCard card)
     {
-        Assert.That(card, Is.EqualTo(_output?.NewState.TopCard));
+        Assert.That(card, Is.EqualTo(_output?.NewState.TopCard), $"{_name} - wrong top card");
+        return this;
+    }
+
+    public GameScenario ExpectTopCard(CardColor color, CardType type, bool eventActivated = false)
+    {
+        Assert.That(new StackCard(new Card(color, type), eventActivated), Is.EqualTo(_output?.NewState.TopCard), $"{_name} - wrong top card");
+        return this;
+    }
+
+    public GameScenario ExpectTopCard(Card card, bool eventActivated = false)
+    {
+        Assert.That(new StackCard(card, eventActivated), Is.EqualTo(_output?.NewState.TopCard), $"{_name} - wrong top card");
         return this;
     }
 
@@ -203,6 +231,12 @@ internal class GameScenario
         WithRule(targetRule).Trigger(clientEvent);
         Assert.IsNull(_selectedRule);
         return Reset();
+    }
+
+    public GameScenario ExpectError()
+    {
+        Assert.IsTrue(_output?.Events.Any(e => e.Type == GameEventType.Error), $"{_name} - has no error");
+        return this;
     }
 
     public GameScenario Reset()

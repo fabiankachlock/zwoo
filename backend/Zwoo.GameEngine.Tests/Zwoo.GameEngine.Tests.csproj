@@ -6,6 +6,11 @@
     <Nullable>enable</Nullable>
     <LangVersion>12</LangVersion>
     <IsPackable>false</IsPackable>
+
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>
+      lcov</CoverletOutputFormat>
+    <CoverletOutput>./lcov.info</CoverletOutput>
   </PropertyGroup>
 
   <ItemGroup>
