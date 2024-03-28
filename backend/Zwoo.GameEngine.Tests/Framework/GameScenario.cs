@@ -141,7 +141,7 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario ExpectNoOutput()
+    public GameScenario ExpectNo()
     {
         Assert.That(_output, Is.Null, $"{_name} - has unexpected output");
         return this;
@@ -162,6 +162,12 @@ internal class GameScenario
     public GameScenario ExpectEvent(GameEvent publishedEvent)
     {
         Assert.IsTrue(_output?.Events.Contains(publishedEvent), $"{_name} - expected event not present");
+        return this;
+    }
+
+    public GameScenario ExpectEventLike(Func<GameEvent, bool> comparator)
+    {
+        Assert.IsTrue((_output?.Events ?? new List<GameEvent>()).Where(e => comparator(e)).Count() >= 1, $"{_name} - expected event not present");
         return this;
     }
 

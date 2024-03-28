@@ -22,6 +22,8 @@ public class BaseCardRuleTests
          .WithTopCard(CardColor.Red, CardType.Two)
          .ShouldTriggerRule(rule, TestClient.PlaceCard(CardColor.Red, CardType.Zero))
          .ShouldTriggerRule(rule, TestClient.PlaceCard(CardColor.Green, CardType.Five))
+         .ShouldNotTriggerRule(rule, TestClient.PlaceCard(CardColor.Green, CardType.Wild))
+         .ShouldNotTriggerRule(rule, TestClient.PlaceCard(CardColor.Green, CardType.WildFour))
          .ShouldNotTriggerRule(rule, TestClient.DrawCard())
          .ShouldNotTriggerRule(rule, TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
          .ShouldNotTriggerRule(rule, TestClient.RequestEndTurn());
@@ -107,16 +109,18 @@ public class BaseCardRuleTests
          .ExpectActivePlayer(1);
     }
 
-    [Test]
-    public void ShouldDisplayCurrentDrawAmount()
+    [TestCase(CardColor.Red, CardType.Three, null)]
+    [TestCase(CardColor.Red, CardType.DrawTwo, 2)]
+    [TestCase(CardColor.Red, CardType.WildFour, null)]
+    public void ShouldDisplayCurrentDrawAmount(CardColor color, CardType type, int? expected)
     {
-        Card card = new Card(CardColor.Red, CardType.Three);
+        Card card = new Card(color, type);
         GameScenario.Create($"{rule.Name} updates current draw amount")
          .WithTopCard(CardColor.Red, CardType.Two)
          .WithDeck([card])
          .WithRule(rule)
          .Trigger(TestClient.PlaceCard(card))
-         .ExpectStateLike(s => s.Ui.CurrentDrawAmount == null);
+         .ExpectStateLike(s => s.Ui.CurrentDrawAmount == expected);
     }
 
     [Test]
