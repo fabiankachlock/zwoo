@@ -5,14 +5,20 @@ using Zwoo.GameEngine.Game.Events;
 
 namespace Zwoo.GameEngine.Tests.Game.Rules;
 
+[TestFixture(typeof(BaseDrawRule))]
 public class BaseDrawRuleTests
 {
-    private BaseDrawRule rule = new();
+    private BaseRule rule;
+
+    public BaseDrawRuleTests(Type ruleImplementation)
+    {
+        rule = (BaseRule)Activator.CreateInstance(ruleImplementation)!;
+    }
 
     [Test]
     public void ShouldBeTriggered()
     {
-        GameScenario.Create("triggers base draw rule")
+        GameScenario.Create($"triggers {rule.Name}")
          .WithTopCard(CardColor.Red, CardType.Two)
          .ShouldTriggerRule(rule, TestClient.DrawCard())
          .ShouldNotTriggerRule(rule, TestClient.PlaceCard(CardColor.Red, CardType.Zero))
@@ -23,7 +29,7 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldDrawCard()
     {
-        GameScenario.Create("base draw rule draws card")
+        GameScenario.Create($"{rule.Name} draws card")
          .WithTopCard(CardColor.Red, CardType.Two)
          .WithRule(rule)
          .WithDeck([])
@@ -34,7 +40,7 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldDrawDrawTwo()
     {
-        GameScenario.Create("base draw rule draws draw two")
+        GameScenario.Create($"{rule.Name} rule draws draw two")
          .WithTopCard(CardColor.Red, CardType.DrawTwo)
          .WithRule(rule)
          .WithDeck([])
@@ -45,7 +51,7 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldDrawWild()
     {
-        GameScenario.Create("base draw rule draws draw four")
+        GameScenario.Create($"{rule.Name} rule draws draw four")
          .WithTopCard(CardColor.Black, CardType.WildFour)
          .WithRule(rule)
          .WithDeck([])
@@ -56,7 +62,7 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldHandleActivatedCards()
     {
-        GameScenario.Create("base draw rule handles activated events")
+        GameScenario.Create($"{rule.Name} rule handles activated events")
          .WithTopCard(CardColor.Black, CardType.WildFour, true)
          .WithRule(rule)
          .WithDeck([])
@@ -67,7 +73,7 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldActivateEvent()
     {
-        GameScenario.Create("base draw rule activated event")
+        GameScenario.Create($"{rule.Name} rule activated event")
          .WithTopCard(CardColor.Red, CardType.DrawTwo)
          .WithRule(rule)
          .WithDeck([])
@@ -78,7 +84,7 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldCheckActivePlayer()
     {
-        GameScenario.Create("base draw rule accepts only active player")
+        GameScenario.Create($"{rule.Name} rule accepts only active player")
          .WithTopCard(CardColor.Red, CardType.DrawTwo)
          .WithRule(rule)
          .WithDeck([])
@@ -89,7 +95,7 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldSwitchPlayer()
     {
-        GameScenario.Create("base draw rule switches player")
+        GameScenario.Create($"{rule.Name} rule switches player")
          .WithTopCard(CardColor.Red, CardType.Two)
          .WithPlayers([0, 1])
          .WithActivePlayer(0)
@@ -102,7 +108,7 @@ public class BaseDrawRuleTests
     public void ShouldDisplayCurrentDrawAmount()
     {
         Card card = new Card(CardColor.Red, CardType.Three);
-        GameScenario.Create("base draw rule updates current draw amount")
+        GameScenario.Create($"{rule.Name} rule updates current draw amount")
          .WithTopCard(CardColor.Red, CardType.Two)
          .WithDeck([card])
          .WithRule(rule)

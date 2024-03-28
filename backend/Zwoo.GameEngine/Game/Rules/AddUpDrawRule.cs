@@ -6,7 +6,7 @@ using Zwoo.GameEngine.Game.State;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal class AddUpDrawRule : BaseRule
+public class AddUpDrawRule : BaseRule
 {
     public override int Priority
     {
@@ -53,7 +53,7 @@ internal class AddUpDrawRule : BaseRule
     }
 }
 
-internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
+public class AddUpDrawRule_PlaceCard : BaseWildCardRule
 {
     public override string Name
     {
@@ -122,7 +122,7 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
     }
 }
 
-internal class AddUpDrawRule_Draw : BaseDrawRule
+public class AddUpDrawRule_Draw : BaseDrawRule
 {
     public override string Name
     {

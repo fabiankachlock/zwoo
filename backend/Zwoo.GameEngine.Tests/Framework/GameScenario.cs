@@ -203,7 +203,7 @@ internal class GameScenario
 
     public GameScenario ExpectTopCard(CardColor color, CardType type, bool eventActivated = false)
     {
-        Assert.That(new StackCard(new Card(color, type), eventActivated), Is.EqualTo(_output?.NewState.TopCard), $"{_name} - wrong top card");
+        Assert.That(new StackCard(new Card(color, type), eventActivated), Is.EqualTo(_output?.NewState.TopCard ?? _state.TopCard), $"{_name} - wrong top card");
         return this;
     }
 
@@ -242,6 +242,19 @@ internal class GameScenario
     public GameScenario ExpectError()
     {
         Assert.IsTrue(_output?.Events.Any(e => e.Type == GameEventType.Error), $"{_name} - has no error");
+        return this;
+    }
+
+    public GameScenario ExpectErrorOrNoOutput()
+    {
+        if (_output == null)
+        {
+            Assert.That(_output, Is.Null, $"{_name} - has unexpected output");
+        }
+        else
+        {
+            Assert.IsTrue(_output?.Events.Any(e => e.Type == GameEventType.Error), $"{_name} - has output but no error");
+        }
         return this;
     }
 
