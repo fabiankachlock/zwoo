@@ -3,6 +3,7 @@ using Zwoo.GameEngine.Game.Events;
 using Zwoo.GameEngine.Game.Rules;
 using Zwoo.GameEngine.Game.Cards;
 using Zwoo.GameEngine.Game;
+using Microsoft.VisualBasic;
 
 namespace Zwoo.GameEngine.Tests.Framework;
 
@@ -13,7 +14,7 @@ internal class GameScenario
     private string _name;
     private GameState _state;
     private Pile _pile = new MockPile();
-    private PlayerCycle _players = new MockPlayerCycle();
+    private IPlayerCycle _players = new MockPlayerCycle();
     private List<BaseRule> _rules = new List<BaseRule>();
 
     private BaseRule? _selectedRule = null;
@@ -48,9 +49,9 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithPlayerCycle(PlayerCycle playerCycle)
+    public GameScenario WithIPlayerCycle(IPlayerCycle IPlayerCycle)
     {
-        _players = playerCycle;
+        _players = IPlayerCycle;
         return this;
     }
 
@@ -62,7 +63,9 @@ internal class GameScenario
 
     public GameScenario WithPlayersAndCards(Dictionary<long, List<Card>> playersAndCards)
     {
-        _players = new MockPlayerCycle(playersAndCards.Keys.ToList());
+        var ids = playersAndCards.Keys.ToList();
+        ids.Sort();
+        _players = new MockPlayerCycle(ids);
         _state.PlayerDecks = playersAndCards;
         return this;
     }
@@ -116,9 +119,9 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithRules(List<BaseRule> rules)
+    public GameScenario WithRules(params BaseRule[] rules)
     {
-        _rules = rules;
+        _rules = rules.ToList();
         return this;
     }
 
@@ -197,7 +200,7 @@ internal class GameScenario
 
     public GameScenario ExpectActivePlayer(long playerId)
     {
-        Assert.That(playerId, Is.EqualTo(_output?.NewState.CurrentPlayer), $"{_name} - wrong player active");
+        Assert.That(_output?.NewState.CurrentPlayer, Is.EqualTo(playerId), $"{_name} - wrong player active");
         return this;
     }
 

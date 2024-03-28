@@ -6,7 +6,7 @@ using Zwoo.GameEngine.Game.Settings;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal class ReverseCardRule : BaseCardRule
+public class ReverseCardRule : BaseCardRule
 {
     public override int Priority
     {
@@ -26,13 +26,13 @@ internal class ReverseCardRule : BaseCardRule
     }
 
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events;
 
         ClientEvent.PlaceCardEvent payload = gameEvent.CastPayload<ClientEvent.PlaceCardEvent>();
-        bool isAllowed = IsFittingCard(state.TopCard.Card, payload.Card) && !(CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated);
+        bool isAllowed = IsAllowedCard(state.TopCard, payload.Card);
         if (IsActivePlayer(state, payload.Player) && isAllowed && PlayerHasCard(state, payload.Player, payload.Card))
         {
             state = PlayPlayerCard(state, payload.Player, payload.Card);

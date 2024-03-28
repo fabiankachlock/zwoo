@@ -3,40 +3,40 @@ using Zwoo.GameEngine.Game.State;
 
 namespace Zwoo.GameEngine.Tests.Framework;
 
-internal class MockPlayerCycle : PlayerCycle
+internal class MockPlayerCycle : IPlayerCycle
 {
     private int _currentIndex;
     private List<long> _players;
 
-    public new long ActivePlayer
+    public long ActivePlayer
     {
         get => _players[_currentIndex];
     }
 
-    public new List<long> Order
+    public List<long> Order
     {
         get => _players;
     }
 
-    public MockPlayerCycle() : base([0])
+    public MockPlayerCycle()
     {
         _currentIndex = 0;
         _players = [0];
     }
 
-    public MockPlayerCycle(List<long> players) : base(players)
+    public MockPlayerCycle(List<long> players)
     {
         _currentIndex = 0;
         _players = players;
     }
 
-    public new long Next()
+    public long Next()
     {
         _currentIndex = (_currentIndex + 1) % _players.Count;
         return _players[_currentIndex];
     }
 
-    public new long Next(GameDirection direction)
+    public long Next(GameDirection direction)
     {
         if (direction == GameDirection.Left)
         {
@@ -45,18 +45,18 @@ internal class MockPlayerCycle : PlayerCycle
         return Previous();
     }
 
-    public new long Previous()
+    public long Previous()
     {
         _currentIndex = (_players.Count + _currentIndex - 1) % _players.Count;
         return _players[_currentIndex];
     }
 
-    public new int GetOrder(long playerId)
+    public int GetOrder(long playerId)
     {
         return _players.FindIndex(id => playerId == id);
     }
 
-    public new void RemovePlayer(long id, GameDirection direction)
+    public void RemovePlayer(long id, GameDirection direction)
     {
         if (id == ActivePlayer)
         {

@@ -25,7 +25,7 @@ internal class SkipCardRule : BaseCardRule
     }
 
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events;
@@ -53,7 +53,7 @@ internal class SkipCardRule : BaseCardRule
     /// <param name="playerOrder">cycle of players</param>
     /// <param name="amount">amount of hops</param>
     /// <returns>the updates game state and events for the client</returns>
-    protected (GameState, List<GameEvent>) ChangeActivePlayerByAmount(GameState state, PlayerCycle playerOrder, int amount)
+    protected (GameState, List<GameEvent>) ChangeActivePlayerByAmount(GameState state, IPlayerCycle playerOrder, int amount)
     {
         long nextPlayer = playerOrder.Next(state.Direction);
         if (amount > 1)
