@@ -41,7 +41,7 @@ public class BaseDrawRule : BaseRule
         if (CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated)
         {
             amount = GetDrawAmount(state.TopCard.Card);
-            state.TopCard.ActivateEvent();
+            state.CardStack[state.CardStack.Count - 1] = new StackCard(state.CardStack[state.CardStack.Count - 1].Card, true);
         }
         else
         {

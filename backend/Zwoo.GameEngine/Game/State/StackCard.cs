@@ -28,4 +28,9 @@ public struct StackCard
     {
         EventActivated = true;
     }
+
+    public override string ToString()
+    {
+        return $"{Card.Color} {Card.Type} {(EventActivated ? "(activated)" : "(not activated)")}";
+    }
 }

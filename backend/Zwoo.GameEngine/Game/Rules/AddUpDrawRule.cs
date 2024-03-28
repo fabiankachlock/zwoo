@@ -155,7 +155,6 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
         {
             amount = GetRecursiveDrawAmount(state.CardStack);
             state.CardStack = ActivateCardsRecursive(state.CardStack);
-            state.TopCard.ActivateEvent();
         }
         else
         {
