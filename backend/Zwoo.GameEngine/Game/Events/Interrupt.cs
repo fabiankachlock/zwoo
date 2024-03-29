@@ -1,7 +1,7 @@
 
 namespace Zwoo.GameEngine.Game.Events;
 
-internal struct GameInterrupt
+public struct GameInterrupt
 {
     internal readonly string OriginRule;
     internal readonly string Reason;
@@ -15,7 +15,7 @@ internal struct GameInterrupt
     }
 }
 
-internal struct InterruptPayload
+public struct InterruptPayload
 {
     internal readonly List<long> TargetPlayers;
 

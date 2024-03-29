@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo.Migration", "Mongo.Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.GameEngine.Wasm", "Zwoo.GameEngine.Wasm\Zwoo.GameEngine.Wasm.csproj", "{DF9FA1A3-6E71-4C9E-A1F2-790535E02DB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Tests", "GameLogic.Tests\GameLogic.Tests.csproj", "{98E4BE8F-0602-4F5D-8682-71F07F321472}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.GameEngine.Tests", "Zwoo.GameEngine.Tests\Zwoo.GameEngine.Tests.csproj", "{98E4BE8F-0602-4F5D-8682-71F07F321472}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zwoo.Database", "Zwoo.Database\Zwoo.Database.csproj", "{25F30E59-46DE-4578-BFAA-287C9D684D20}"
 EndProject

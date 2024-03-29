@@ -31,13 +31,11 @@ public class NotificationDistributer : INotificationAdapter
     {
         try
         {
-            Console.WriteLine($"!!! Sending to {playerId} {code} {payload}");
             var result = await Task.WhenAll(_targets.Select(target => target.SendPlayer(playerId, code, payload)));
             return !result.Contains(false);
         }
-        catch (Exception e)
+        catch
         {
-            Console.WriteLine($"!!! failed: {e}");
             return false;
         }
     }

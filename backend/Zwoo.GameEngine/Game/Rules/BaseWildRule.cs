@@ -5,7 +5,7 @@ using Zwoo.GameEngine.Game.Cards;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal class BaseWildCardRule : BaseCardRule
+public class BaseWildCardRule : BaseCardRule
 {
     public override int Priority
     {
@@ -38,7 +38,7 @@ internal class BaseWildCardRule : BaseCardRule
     }
 
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
 
@@ -83,7 +83,7 @@ internal class BaseWildCardRule : BaseCardRule
     /// <param name="state">game state object</param>
     /// <param name="playerOrder">cycle of players</param>
     /// <returns></returns>
-    protected GameStateUpdate PerformHandleDecission(ClientEvent gameEvent, GameState state, PlayerCycle playerOrder)
+    protected GameStateUpdate PerformHandleDecission(ClientEvent gameEvent, GameState state, IPlayerCycle playerOrder)
     {
         List<GameEvent> events;
         ClientEvent.PlayerDecissionEvent payload = gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>();

@@ -6,7 +6,7 @@ using Zwoo.GameEngine.Game.State;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal class AddUpDrawRule : BaseRule
+public class AddUpDrawRule : BaseRule
 {
     public override int Priority
     {
@@ -39,7 +39,7 @@ internal class AddUpDrawRule : BaseRule
         return _placeCardRule.IsResponsible(clientEvent, state) || _drawRule.IsResponsible(clientEvent, state);
     }
 
-    public override GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         if (_placeCardRule.IsResponsible(clientEvent, state))
         {
@@ -53,7 +53,7 @@ internal class AddUpDrawRule : BaseRule
     }
 }
 
-internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
+public class AddUpDrawRule_PlaceCard : BaseWildCardRule
 {
     public override string Name
     {
@@ -69,7 +69,7 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
         ) || base.IsResponsible(gameEvent, state);
     }
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
 
@@ -122,7 +122,7 @@ internal class AddUpDrawRule_PlaceCard : BaseWildCardRule
     }
 }
 
-internal class AddUpDrawRule_Draw : BaseDrawRule
+public class AddUpDrawRule_Draw : BaseDrawRule
 {
     public override string Name
     {
@@ -137,7 +137,7 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
     }
 
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events;
@@ -155,7 +155,6 @@ internal class AddUpDrawRule_Draw : BaseDrawRule
         {
             amount = GetRecursiveDrawAmount(state.CardStack);
             state.CardStack = ActivateCardsRecursive(state.CardStack);
-            state.TopCard.ActivateEvent();
         }
         else
         {

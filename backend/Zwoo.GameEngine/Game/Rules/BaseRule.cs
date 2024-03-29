@@ -6,7 +6,7 @@ using Zwoo.GameEngine.Logging;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal abstract class BaseRule
+public abstract class BaseRule
 {
     public abstract int Priority { get; }
 
@@ -41,7 +41,7 @@ internal abstract class BaseRule
         return false;
     }
 
-    public virtual GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public virtual GameStateUpdate ApplyRule(ClientEvent clientEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         return GameStateUpdate.None(state);
     }
@@ -60,7 +60,7 @@ internal abstract class BaseRule
         return false;
     }
 
-    public virtual GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public virtual GameStateUpdate ApplyInterrupt(GameInterrupt interrupt, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         return GameStateUpdate.None(state);
     }
