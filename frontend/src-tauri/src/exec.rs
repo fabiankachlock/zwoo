@@ -64,9 +64,12 @@ impl Server {
         println!("[app] starting server with args: {:?}", self.build_args());
 
         // strip unc path prefix
-        let stripped_path = self.path.strip_prefix("\\\\?\\");
-        if stripped_path != Some(self.path.as_str()) {
+        println!("stripping path: {:?}", self.path.as_str());
+        let mut stripped_path = self.path.strip_prefix("\\\\?\\");
+        if stripped_path != Some(self.path.as_str()) && stripped_path != None {
             println!("[app] stripped path to: {:?}", stripped_path.unwrap());
+        } else {
+            stripped_path = Some(self.path.as_str());
         }
 
         let cmd = Command::new(stripped_path.unwrap())
