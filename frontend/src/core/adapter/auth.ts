@@ -62,7 +62,8 @@ export const useAuth = defineStore('auth', {
         method: 'POST',
         body: JSON.stringify({
           version: AppConfig.Version,
-          zrpVersion: ''
+          zrpVersion: '',
+          mode: 'local'
         })
       });
 
