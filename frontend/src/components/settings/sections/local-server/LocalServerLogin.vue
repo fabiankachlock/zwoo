@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+
+import { useLocalServer } from '@/core/adapter/tauri/localServer';
 
 const { t } = useI18n();
-const router = useRouter();
+const server = useLocalServer();
 
 const logIn = () => {
-  router.push('/login-local');
+  import('@tauri-apps/api').then(({ invoke }) => {
+    invoke('open_url', { url: `http://${server.config.ip || '127.0.0.1'}:${server.config.port}/login-local` }).then(() => {
+      console.log('success');
+    });
+  });
 };
 </script>
 

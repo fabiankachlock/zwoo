@@ -72,6 +72,14 @@ fn get_server_status(state: tauri::State<'_, State>) -> Result<bool, String> {
     }
 }
 
+#[tauri::command]
+fn open_url(url: String) -> Result<bool, String> {
+    match open::that(url) {
+        Ok(_) => Ok(true),
+        Err(err) => Err(err.to_string()),
+    }
+}
+
 #[tokio::main]
 async fn main() {
     // let system_menu = Submenu::new(
@@ -108,7 +116,8 @@ async fn main() {
             stop_local_server,
             get_local_server_config,
             update_local_server_config,
-            get_server_status
+            get_server_status,
+            open_url
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
