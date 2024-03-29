@@ -5,7 +5,7 @@ using Zwoo.GameEngine.Game.Feedback;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal class SkipCardRule : BaseCardRule
+public class SkipCardRule : BaseCardRule
 {
     public override int Priority
     {

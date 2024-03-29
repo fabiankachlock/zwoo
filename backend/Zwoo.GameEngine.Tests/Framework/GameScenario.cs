@@ -49,7 +49,7 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithIPlayerCycle(IPlayerCycle IPlayerCycle)
+    public GameScenario WithPlayerCycle(IPlayerCycle IPlayerCycle)
     {
         _players = IPlayerCycle;
         return this;
@@ -139,6 +139,7 @@ internal class GameScenario
         if (_selectedRule != null)
         {
             _output = _selectedRule.ApplyRule(clientEvent, _state, _pile, _players);
+            _state = _output.Value.NewState;
         }
 
         return this;
