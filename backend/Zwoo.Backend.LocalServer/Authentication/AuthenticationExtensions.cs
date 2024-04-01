@@ -20,7 +20,7 @@ public static class AppExtensions
             o.Cookie.Name = $"localSever__{serverId}";
             o.Cookie.HttpOnly = true;
             o.Cookie.MaxAge = o.ExpireTimeSpan;
-            o.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             o.Cookie.SameSite = SameSiteMode.None;
         });
         services.AddAuthorization();
