@@ -94,7 +94,7 @@
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.2",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12",
+    "vite": "^5.2.7",
     "vue-tsc": "^2.0.5",
     "vite-plugin-pwa": "^0.19.2",
     "workbox-precaching": "^7.0.0",
