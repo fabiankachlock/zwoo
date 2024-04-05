@@ -52,7 +52,7 @@ public class DumpBotDecisionManager : IBotDecisionHandler
 
     private void placeCard()
     {
-        if (_rand.Next(10) < 4)
+        if (_rand.Next(10) < 1)
         {
             // bad luck - be dump, just draw
             OnEvent.Invoke(ZRPCode.DrawCard, new DrawCardEvent());
