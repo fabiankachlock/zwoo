@@ -9,4 +9,8 @@
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Zwoo.BotDashboard.Distributor" Version="1.0.0" />
+  </ItemGroup>
+
 </Project>

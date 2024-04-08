@@ -51,7 +51,10 @@ public class ZwooRoom
         GameProfileProvider = new GameProfileProvider(externalGameProfileProvider);
 
         BotManager = new BotManager(Game, loggerFactory);
-        BotManager.OnEvent += _eventDistributer.DistributeEvent;
+        BotManager.OnEvent += async (msg) =>
+        {
+            await _eventDistributer.DistributeEvent(msg);
+        };
         _notificationDistributer.RegisterTarget(BotManager);
     }
 

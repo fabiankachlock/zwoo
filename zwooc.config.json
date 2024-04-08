@@ -97,6 +97,11 @@
     },
     "local": {
       "project": "Zwoo.Backend.LocalServer",
+      "env": [
+        "ZRP_DEBUG_ID=foo",
+        "ZRP_DEBUG_INSTANCE=//",
+        "ZRP_DEBUG_PROXY_URL=ws://localhost:9072/"
+      ],
       "build": {
         "args": {
           "output": "../frontend/src-tauri/resources/server",

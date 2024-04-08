@@ -4,6 +4,6 @@ namespace Zwoo.GameEngine.Events;
 
 public interface IUserEventReceiver
 {
-    void DistributeEvent(IIncomingZRPMessage message);
-    void DistributeEvent(ILocalZRPMessage message);
+    Task DistributeEvent(IIncomingZRPMessage message);
+    Task DistributeEvent(ILocalZRPMessage message);
 }
