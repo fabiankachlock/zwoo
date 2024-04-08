@@ -69,7 +69,7 @@ export const useRootApp = defineStore('app', {
     async configure() {
       // if env is locked setup must run static
       if (AppConfig.LockEnv && AppConfig.DefaultEnv) {
-        this.setupLocked();
+        await this.setupLocked();
         MigrationRunner.migrateTo(AppConfig.Version);
         this.isLoading = false;
         return;
@@ -93,7 +93,10 @@ export const useRootApp = defineStore('app', {
           this.environment = 'offline';
           console.warn('### zwoo entered offline mode');
           await auth.applyOfflineConfig();
-          RouterService.getRouter().push(window.location.pathname);
+          RouterService.getRouter().push({
+            path: window.location.pathname,
+            force: true
+          });
         }
         this._setServerVersion(this.clientVersion);
         this._setServerVersionMatches(true);
