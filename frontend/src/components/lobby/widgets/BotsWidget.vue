@@ -35,6 +35,38 @@
               <div v-else class="m-2 text-xl">
                 <p class="tc-main-light">{{ botName }}</p>
               </div>
+
+              <div class="w-full mb-4">
+                <div class="m-2">
+                  <label class="block tc-main-secondary text-sm font-bold mb-2" for="bot-type">
+                    {{ t('wait.botType') }}
+                  </label>
+                  <div class="w-full grid grid-cols-3">
+                    <button
+                      class="bg-main shadow appearance-none border bc-main rounded-l-lg w-full p-2 tc-main-light focus:outline-none focus:bc-primary focus:bg-dark"
+                      :class="{ 'bg-darkest tc-primary': botType === -1 }"
+                      @click="botType = -1"
+                    >
+                      {{ t('wait.dumpBot') }}
+                    </button>
+                    <button
+                      class="bg-main shadow appearance-none border bc-main w-full p-2 tc-main-light focus:outline-none focus:bc-primary focus:bg-dark"
+                      :class="{ 'bg-darkest tc-primary': botType === 0 }"
+                      @click="botType = 0"
+                    >
+                      {{ t('wait.normalBot') }}
+                    </button>
+                    <button
+                      class="bg-main shadow appearance-none border bc-main rounded-r-lg w-full p-2 tc-main-light focus:outline-none focus:bc-primary focus:bg-dark"
+                      :class="{ 'bg-darkest tc-primary': botType === 1 }"
+                      @click="botType = 1"
+                    >
+                      {{ t('wait.smartBot') }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <FormActions>
                 <FormSubmit @click="submitBot()">
                   {{ t(isBotUpdate ? 'wait.updateBot' : 'wait.createBot') }}
@@ -100,6 +132,7 @@ const fakeBots = computed(() =>
 const botDialogOpen = ref(false);
 const isBotUpdate = ref(false);
 const botName = ref('');
+const botType = ref(0);
 const botId = ref<number | undefined>(undefined);
 
 const createBot = () => {
@@ -125,11 +158,11 @@ const deleteBot = (id: number) => {
 const submitBot = () => {
   if (isBotUpdate.value && botId.value) {
     botManager.updateBot(botId.value, {
-      type: 1
+      type: botType.value
     });
   } else {
     botManager.addBot(botName.value, {
-      type: 1
+      type: botType.value
     });
   }
   botDialogOpen.value = false;
