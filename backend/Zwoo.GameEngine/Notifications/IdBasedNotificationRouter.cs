@@ -1,3 +1,4 @@
+using Zwoo.BotDashboard.Distributor;
 using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.GameEngine.Notifications;
@@ -40,6 +41,14 @@ public class IdBasedNotificationRouter : INotificationAdapter
 
     public async Task<bool> BroadcastGame<T>(long gameId, ZRPCode code, T payload)
     {
+        await DebuggingAdapter.Send(new OutgoingMessage
+        {
+            GameId = gameId,
+            Message = ZRPEncoder.Encode(code, payload),
+            Receiver = OutgoingMessage.BroadcastID,
+            Sender = OutgoingMessage.ServerID
+        });
+
         var result = await Task.WhenAll(_targets.Select(target => target.BroadcastGame(gameId, code, payload)));
         var defaultResult = await _defaultTarget.BroadcastGame(gameId, code, payload);
         return !result.Contains(false) && defaultResult;
@@ -71,6 +80,14 @@ public class IdBasedNotificationRouter : INotificationAdapter
     {
         var player = _room.GetPlayer(playerId);
         if (player == null) return false;
+
+        await DebuggingAdapter.Send(new OutgoingMessage
+        {
+            GameId = _room.Id,
+            Message = ZRPEncoder.Encode(code, payload),
+            Receiver = player.LobbyId,
+            Sender = OutgoingMessage.ServerID
+        });
 
         foreach (var target in _targets)
         {

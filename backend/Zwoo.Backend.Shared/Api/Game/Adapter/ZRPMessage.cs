@@ -7,7 +7,7 @@ public struct ZRPMessage : IIncomingZRPMessage
     public ZRPCode Code { get; private set; }
     public object? Payload { get; private set; }
     public long UserId { get; private set; }
-    public readonly string RawMessage;
+    public string RawMessage { get; }
 
 
     public ZRPMessage(long userId, ZRPCode code, string raw, object? payload = null)

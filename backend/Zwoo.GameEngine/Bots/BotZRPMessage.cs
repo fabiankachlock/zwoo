@@ -25,11 +25,14 @@ public readonly struct BotZRPEvent : ILocalZRPMessage
 
     public readonly long LobbyId { get; }
 
+    public string RawMessage { get; }
+
     public BotZRPEvent(long botId, ZRPCode code, object payload)
     {
         LobbyId = botId;
         Code = code;
         Payload = payload;
+        RawMessage = ZRPEncoder.Encode(code, payload);
     }
 
     public T? CastPayload<T>()

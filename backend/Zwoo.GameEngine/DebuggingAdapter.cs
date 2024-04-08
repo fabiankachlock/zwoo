@@ -14,6 +14,6 @@ public sealed class DebuggingAdapter
 
     public static async Task Send(OutgoingMessage outgoingMessage)
     {
-        await _instance._distributor.Send(outgoingMessage);
+        await _instance._distributor.SendAsync(outgoingMessage);
     }
 }

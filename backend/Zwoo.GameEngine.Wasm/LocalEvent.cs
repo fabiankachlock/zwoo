@@ -6,18 +6,18 @@ namespace ZwooWasm;
 public class LocalEvent : IIncomingZRPMessage
 {
 
-    public ZRPCode Code { get; private set; }
+    public ZRPCode Code { get; }
 
     public object? Payload { get; private set; }
 
     public long UserId => Constants.LocalUser;
 
-    private string _rawMessage;
+    public string RawMessage { get; }
 
     public LocalEvent(ZRPCode code, string message)
     {
         Code = code;
-        _rawMessage = message;
+        RawMessage = message;
     }
 
     public T? CastPayload<T>()
@@ -36,7 +36,7 @@ public class LocalEvent : IIncomingZRPMessage
     {
         try
         {
-            return ZRPDecoder.DecodePayload<T>(_rawMessage);
+            return ZRPDecoder.DecodePayload<T>(RawMessage);
         }
         catch
         {

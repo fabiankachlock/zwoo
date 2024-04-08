@@ -65,7 +65,7 @@ public class UserEventDistributer : IUserEventReceiver
         await DebuggingAdapter.Send(new OutgoingMessage
         {
             GameId = _room.Id,
-            Message = "xxx,{}",
+            Message = message.RawMessage,
             Receiver = OutgoingMessage.ServerID,
             Sender = context.LobbyId
         });

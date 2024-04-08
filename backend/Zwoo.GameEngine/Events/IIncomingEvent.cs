@@ -17,6 +17,11 @@ public interface IIncomingEvent
     public object? Payload { get; }
 
     /// <summary>
+    /// the raw zrp message
+    /// </summary>
+    public string RawMessage { get; }
+
+    /// <summary>
     /// cast the payload to a certain type
     /// </summary>
     /// <typeparam name="T">the type to cast the payload to</typeparam>
