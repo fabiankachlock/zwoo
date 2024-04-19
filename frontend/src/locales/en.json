@@ -81,6 +81,7 @@
     "title": "Guest Login",
     "server": "Server URL",
     "name": "Username",
+    "namePlaceholder": "Your name",
     "infoServer": "The guarantee of adequate data protection measures cannot be ensured on third-party servers. Therefore, the use and distribution of personal data on local servers should be avoided.",
     "submit": "Sign In"
   },

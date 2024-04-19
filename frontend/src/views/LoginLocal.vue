@@ -72,7 +72,7 @@ const logIn = async () => {
     <Form show-back-button>
       <FormTitle>{{ t('loginLocal.title') }}</FormTitle>
       <TextInput v-if="!serverHidden" v-model="server" id="serverUrl" label-key="loginLocal.server" placeholder="http://192.168.0.17/" />
-      <TextInput v-model="name" id="username" label-key="loginLocal.name" placeholder="loginLocal.namePlaceholder" />
+      <TextInput v-model="name" id="username" label-key="loginLocal.name" :placeholder="t('loginLocal.namePlaceholder')" />
       <FormError :error="error" />
 
       <div class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
