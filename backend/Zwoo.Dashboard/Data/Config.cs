@@ -23,10 +23,10 @@ public static class ZwooConfigurationExtensions
 {
     private static Dictionary<string, string> argMappings = new Dictionary<string, string>
     {
-        {"--auth-authority", "zwoo:auth:authority"},
-        {"--auth-role", "zwoo:auth:role"},
-        {"--auth-client-id", "zwoo:auth:clientId"},
-        {"--auth-client-secret", "zwoo:auth:clientSecret"},
+        {"--auth-authority", "ziad:auth:authority"},
+        {"--auth-role", "ziad:auth:role"},
+        {"--auth-client-id", "ziad:auth:clientId"},
+        {"--auth-client-secret", "ziad:auth:clientSecret"},
     };
 
     /// <summary>
