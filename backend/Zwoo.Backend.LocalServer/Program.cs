@@ -45,7 +45,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, ApiJsonSerializerContext.Default);
 });
 
-const string VERSION = "1.0.0-beta.17";
+const string VERSION = "1.0.0-beta.18";
 builder.AddZwooLogging(false);
 var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
