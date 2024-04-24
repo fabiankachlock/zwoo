@@ -11,7 +11,7 @@ launch_app() {
     # start env
     echo ""
     echo "starting application..."
-    docker compose -f ./e2e/docker-compose.e2e.yml up
+    docker compose -f ./e2e/docker-compose.e2e.yml up -d --wait
     echo "application started!"
 }
 
