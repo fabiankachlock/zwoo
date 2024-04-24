@@ -24,7 +24,7 @@ jobs:
           echo "===== COMMIT INFO ====="
           touch cypress.env
           echo "COMMIT_INFO_BRANCH=$BRANCH_NAME" >> cypress.env
-          echo "COMMIT_INFO_MESSAGE=$(git log -1 --pretty=%B)" >> cypress.env
+          echo "COMMIT_INFO_MESSAGE=$(git log -1 --pretty=%B | head -n 1)" >> cypress.env
           echo "COMMIT_INFO_EMAIL=$(git log -1 --pretty=%ae)" >> cypress.env
           echo "COMMIT_INFO_AUTHOR=$(git log -1 --pretty=%an)" >> cypress.env
           echo "COMMIT_INFO_SHA=$(git rev-parse HEAD)" >> cypress.env
