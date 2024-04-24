@@ -22,3 +22,5 @@ done
 
 echo "data import finished!"
 echo "===== zwoo-data-import ====="
+
+sleep 60
