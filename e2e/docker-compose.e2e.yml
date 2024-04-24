@@ -49,7 +49,7 @@ services:
       - db
     command: sh /app/import.sh
     healthcheck:
-      test: ["CMD", "true"]
+      disable: true
 
   docs:
     build:
