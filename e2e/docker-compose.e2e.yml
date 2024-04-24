@@ -12,6 +12,7 @@ services:
       dockerfile: ./frontend/Dockerfile
     depends_on:
       - backend
+      - docs
     ports:
       - 8080:80
 
@@ -47,6 +48,8 @@ services:
     depends_on:
       - db
     command: sh /app/import.sh
+    healthcheck:
+      test: ["CMD", "true"]
 
   docs:
     build:
