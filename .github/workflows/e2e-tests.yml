@@ -13,6 +13,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Setup up cypress env vars
+        working-directory: .
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        run: |
+          git log --oneline -10
+          echo "===== COMMIT INFO ====="
+          touch cypress.env
+          echo "COMMIT_INFO_BRANCH=$BRANCH_NAME" >> cypress.env
+          echo "COMMIT_INFO_MESSAGE=$(git log -1 --pretty=%B)" >> cypress.env
+          echo "COMMIT_INFO_EMAIL=$(git log -1 --pretty=%ae)" >> cypress.env
+          echo "COMMIT_INFO_AUTHOR=$(git log -1 --pretty=%an)" >> cypress.env
+          echo "COMMIT_INFO_SHA=$(git rev-parse HEAD)" >> cypress.env
+          echo "COMMIT_INFO_TIMESTAMP=$(git log -1 --pretty=%ct)" >> cypress.env
+          echo "COMMIT_INFO_REMOTE=$(git remote get-url origin)" >> cypress.env
+          cat cypress.env
       - name: Build Test Runner Image
         run: docker build -f ./e2e/Dockerfile -t zwoo-e2e .
       - name: Prepare Container
