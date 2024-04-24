@@ -17,11 +17,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup up cypress env vars
         working-directory: .
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
         run: |
           git log --oneline -10
           echo "===== COMMIT INFO ====="
           touch cypress.env
-          echo "COMMIT_INFO_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> cypress.env
+          echo "COMMIT_INFO_BRANCH=$BRANCH_NAME" >> cypress.env
           echo "COMMIT_INFO_MESSAGE=$(git log -1 --pretty=%B)" >> cypress.env
           echo "COMMIT_INFO_EMAIL=$(git log -1 --pretty=%ae)" >> cypress.env
           echo "COMMIT_INFO_AUTHOR=$(git log -1 --pretty=%an)" >> cypress.env
