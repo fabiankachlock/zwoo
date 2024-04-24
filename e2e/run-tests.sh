@@ -34,21 +34,7 @@ do
 done
 echo "docker ready!"
 
-COMMIT_INFO_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-COMMIT_INFO_MESSAGE=$(git log -1 --pretty=%B)
-COMMIT_INFO_EMAIL=$(git log -1 --pretty=%ae)
-COMMIT_INFO_AUTHOR=$(git log -1 --pretty=%an)
-COMMIT_INFO_SHA=$(git rev-parse HEAD)
-COMMIT_INFO_REMOTE=$(git remote get-url origin)
-
 echo "===== COMMIT INFO ====="
-touch cypress.env
-echo "COMMIT_INFO_BRANCH=$COMMIT_INFO_BRANCH" >> cypress.env
-echo "COMMIT_INFO_MESSAGE=$COMMIT_INFO_MESSAGE" >> cypress.env
-echo "COMMIT_INFO_EMAIL=$COMMIT_INFO_EMAIL" >> cypress.env
-echo "COMMIT_INFO_AUTHOR=$COMMIT_INFO_AUTHOR" >> cypress.env
-echo "COMMIT_INFO_SHA=$COMMIT_INFO_SHA" >> cypress.env
-echo "COMMIT_INFO_REMOTE=$COMMIT_INFO_REMOTE" >> cypress.env
 cat cypress.env
 
 # run tests
