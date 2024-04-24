@@ -1,8 +1,4 @@
-
 #!/bin/sh
-
-apk update
-apk add mongodb-tools
 
 BASE_DIR=/app/data
 echo "===== zwoo-data-import ====="

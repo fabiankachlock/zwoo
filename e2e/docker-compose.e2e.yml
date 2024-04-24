@@ -48,6 +48,13 @@ services:
       - db
     command: sh /app/import.sh
 
+  docs:
+    build:
+      context: ./docs
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:80
+
   # e2e-test:
   #   image: xy
   #   command: run-tests.sh
