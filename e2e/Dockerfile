@@ -1,4 +1,4 @@
-FROM docker:20.10.21-dind
+FROM docker:dind
 
 # copy everithing into the container
 WORKDIR /app

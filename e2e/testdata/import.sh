@@ -23,4 +23,5 @@ done
 echo "data import finished!"
 echo "===== zwoo-data-import ====="
 
+# keep the container running so that docker compose does not wait indefinitely
 sleep 60
