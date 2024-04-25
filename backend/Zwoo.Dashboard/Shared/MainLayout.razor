@@ -19,8 +19,14 @@
                         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
                             <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
                             <RadzenLabel>
-                                <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.Span" Class="rz-m-0">Zwoo
-                                    Info Admin Dashboard</RadzenText>
+                                <RadzenText TextStyle="TextStyle.DisplayH6" TagName="TagName.Span" Class="rz-m-0">
+                                    <span class="longName">
+                                        Zwoo Informations und
+                                        Administrations
+                                        Dashboard
+                                    </span>
+                                    <span class="shortName">ZIAD</span>
+                                </RadzenText>
                                 <RadzenText TextStyle="TextStyle.Caption" TagName="TagName.Span" Class="rz-m-0 rz-ml-2">
                                     @("@") @Options.App.AppVersion</RadzenText>
                             </RadzenLabel>

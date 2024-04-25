@@ -120,6 +120,7 @@ export default defineConfig(
             globIgnores: ['**/config.json'], // dont cache config.json, since it should be dynamic
             globPatterns: ['**/*.{js,css,html,ico,png,svg,json}', '**/wasm/**'],
             cleanupOutdatedCaches: true,
+            navigateFallbackDenylist: [/^\/docs/, /^\/api/],
             maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // dont cache more than 10 mib
           }
         }),

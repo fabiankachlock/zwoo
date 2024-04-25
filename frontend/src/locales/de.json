@@ -81,6 +81,7 @@
     "title": "Gast Anmeldung",
     "server": "Server URL",
     "name": "Benutzername",
+    "namePlaceholder": "Dein Name",
     "infoServer": "Die Gewährleistung angemessener Datenschutzmaßnahmen kann auf Servern von Dritten nicht garantiert werden. Daher sollte die Verwendung und Verbreitung von personenbezogenen Daten auf lokalen Server vermieden werden.",
     "submit": "Anmelden"
   },

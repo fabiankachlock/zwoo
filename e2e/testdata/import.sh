@@ -1,12 +1,8 @@
-
 #!/bin/sh
-
-apk update
-apk add mongodb-tools
 
 BASE_DIR=/app/data
 echo "===== zwoo-data-import ====="
-echo "searching data files in $BASE_DIR ..."
+echo "searching data files in $BASE_DIR"
 FILES=$(ls $BASE_DIR | grep .json)
 echo "found:\n$FILES"
 echo "starting data import..."
@@ -26,3 +22,6 @@ done
 
 echo "data import finished!"
 echo "===== zwoo-data-import ====="
+
+# keep the container running so that docker compose does not wait indefinitely
+sleep 60

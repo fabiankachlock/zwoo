@@ -30,12 +30,17 @@ const versionFiles = [
     replace: '"zwoo"\nversion = "###"',
   },
   {
-    path: "/backend/Zwoo.Backend/Globals.cs",
+    path: "/backend/Zwoo.Backend/Program.cs",
     regex: /const string VERSION = "(.*)";/,
     replace: 'const string VERSION = "###";',
   },
   {
-    path: "/backend/Zwoo.Dashboard/Data/Globals.cs",
+    path: "/backend/Zwoo.Backend.LocalServer/Program.cs",
+    regex: /const string VERSION = "(.*)";/,
+    replace: 'const string VERSION = "###";',
+  },
+  {
+    path: "/backend/Zwoo.Dashboard/Program.cs",
     regex: /const string VERSION = "(.*)";/,
     replace: 'const string VERSION = "###";',
   },

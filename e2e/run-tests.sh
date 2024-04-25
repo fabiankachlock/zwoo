@@ -34,6 +34,8 @@ do
 done
 echo "docker ready!"
 
+echo "===== COMMIT INFO ====="
+cat cypress.env
 
 # run tests
 # echo ""
@@ -57,10 +59,10 @@ echo ""
 launch_app
 echo "running tests in chrome..."
 if [ -n "$CY_KEY" ]; then
-    docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:13.5.0 --browser chrome --record --key $CY_KEY
+    docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --env-file ./cypress.env --network host cypress/included:13.5.0 --browser chrome --record --key $CY_KEY
 else
     # dont record when the key is not supplied
-    docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:13.5.0 --browser chrome
+    docker run -i --name e2e-test-runner-chrome --rm -v /app/frontend:/e2e -w /e2e --env-file ./cypress.env --network host cypress/included:13.5.0 --browser chrome
 fi
 CH_EXIT_CODE=$?
 cp /app/frontend/tests/e2e/screenshots /app/frontend/uploads/screenshots/chrome
@@ -74,10 +76,10 @@ echo ""
 launch_app
 echo "running tests in firefox..."
 if [ -n "$CY_KEY" ]; then
-    docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:13.5.0 --browser firefox --record --key $CY_KEY
+    docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --env-file ./cypress.env --network host cypress/included:13.5.0 --browser firefox --record --key $CY_KEY
 else
     # dont record when the key is not supplied
-    docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:13.5.0 --browser firefox
+    docker run -i --name e2e-test-runner-firefox --rm -v /app/frontend:/e2e -w /e2e --env-file ./cypress.env --network host cypress/included:13.5.0 --browser firefox
 fi
 FI_EXIT_CODE=$?
 cp /app/frontend/tests/e2e/screenshots /app/frontend/uploads/screenshots/firefox
@@ -91,10 +93,10 @@ echo ""
 launch_app
 echo "running tests in edge..."
 if [ -n "$CY_KEY" ]; then
-    docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:13.5.0 --browser edge --record --key $CY_KEY
+    docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --env-file ./cypress.env --network host cypress/included:13.5.0 --browser edge --record --key $CY_KEY
 else
     # dont record when the key is not supplied
-    docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --network host cypress/included:13.5.0 --browser edge
+    docker run -i --name e2e-test-runner-edge --rm -v /app/frontend:/e2e -w /e2e --env-file ./cypress.env --network host cypress/included:13.5.0 --browser edge
 fi
 ED_EXIT_CODE=$?
 cp /app/frontend/tests/e2e/screenshots /app/frontend/uploads/screenshots/egde
