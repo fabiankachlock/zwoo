@@ -1,8 +1,8 @@
 import { invoke } from '@tauri-apps/api/core';
 import { defineStore } from 'pinia';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref } from 'vue';
 
-import { LocalServerConfigManager } from '@/core/domain/localServer/localServerConfig';
+import { LocalServerConfig, LocalServerConfigManager } from '@/core/domain/localServer/localServerConfig';
 
 export const useLocalServer = defineStore('localServer', () => {
   const isRunning = ref(false);
@@ -50,9 +50,10 @@ export const useLocalServer = defineStore('localServer', () => {
     return `http://${listeningIp}:${listeningPort}/api/`;
   }
 
-  watch(config, newValue => {
+  const saveConfig = (newValue: LocalServerConfig) => {
     LocalServerConfigManager.save(newValue);
-  });
+    Object.assign(config, newValue);
+  };
 
   return {
     isRunning,
@@ -60,6 +61,7 @@ export const useLocalServer = defineStore('localServer', () => {
     startServer,
     stopServer,
     loadStatus,
+    saveConfig,
     getUrl
   };
 });
