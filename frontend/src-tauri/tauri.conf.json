@@ -10,7 +10,7 @@
     "active": true,
     "category": "CardGame",
     "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2024",
-    "targets": "all",
+    "targets": ["deb", "rpm", "appimage", "nsis", "app", "dmg", "updater"],
     "externalBin": [],
     "icon": [
       "icons/32x32.png",
@@ -23,7 +23,8 @@
     "windows": {
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
-      "timestampUrl": ""
+      "timestampUrl": "",
+      "wix": null
     },
     "longDescription": "zwoo",
     "macOS": {
@@ -33,9 +34,7 @@
       "providerShortName": null,
       "signingIdentity": null
     },
-    "resources": [
-      "resources/*"
-    ],
+    "resources": ["resources/*"],
     "shortDescription": "zwoo - The Second Challenge",
     "linux": {
       "deb": {
@@ -44,7 +43,7 @@
     }
   },
   "productName": "zwoo",
-  "version": "0.1.0",
+  "version": "1.0.0-beta.17",
   "identifier": "de.igd20ug.zwoo",
   "plugins": {},
   "app": {
