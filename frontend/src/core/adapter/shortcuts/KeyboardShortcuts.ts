@@ -1,4 +1,4 @@
-import { unregisterAll } from '@tauri-apps/api/globalShortcut';
+// import { unregisterAll } from '@tauri-apps/plugin-globalShortcut';
 
 import { AppConfig } from '@/config';
 
@@ -35,7 +35,7 @@ export class KeyboardShortcuts {
 
   detach() {
     if (AppConfig.IsTauri) {
-      unregisterAll();
+      // unregisterAll();
     } else {
       window.removeEventListener('keyup', this.eventHandler);
     }

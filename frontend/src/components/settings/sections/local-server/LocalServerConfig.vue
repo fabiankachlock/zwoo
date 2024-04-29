@@ -12,7 +12,7 @@ const config = computed(() => server.config);
 const editOpen = ref(false);
 
 const editDialogClosed = (newConfig: LocalServerConfig) => {
-  server.config = newConfig;
+  server.saveConfig(newConfig);
   editOpen.value = false;
 };
 </script>

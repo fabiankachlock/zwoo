@@ -3,76 +3,50 @@
   "build": {
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
-    "devPath": "http://localhost:8070/",
-    "distDir": "../dist-tmp"
+    "frontendDist": "../dist-tmp",
+    "devUrl": "http://localhost:8070/"
   },
-  "package": {
-    "productName": "zwoo",
-    "version": "1.0.0-beta.18"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "globalShortcut": {
-        "all": true
-      },
-      "fs": {
-        "scope": ["$RESOURCE/*", "$APP/*"],
-        "readFile": true,
-        "writeFile": true,
-        "exists": true
-      },
-      "path": {
-        "all": true
-      },
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "window": {
-        "all": true
-      }
+  "bundle": {
+    "active": true,
+    "category": "CardGame",
+    "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2024",
+    "targets": ["deb", "rpm", "appimage", "nsis", "app", "dmg", "updater"],
+    "externalBin": [],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico",
+      "icons/icon.png"
+    ],
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "wix": null
     },
-    "bundle": {
-      "active": true,
-      "category": "CardGame",
-      "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2024",
+    "longDescription": "zwoo",
+    "macOS": {
+      "entitlements": null,
+      "exceptionDomain": "",
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null
+    },
+    "resources": ["resources/*"],
+    "shortDescription": "zwoo - The Second Challenge",
+    "linux": {
       "deb": {
         "depends": []
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico",
-        "icons/icon.png"
-      ],
-      "identifier": "de.igd20ug.zwoo",
-      "longDescription": "zwoo",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": ["resources/*"],
-      "shortDescription": "zwoo - The Second Challenge",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
       }
-    },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": false
-    },
+    }
+  },
+  "productName": "zwoo",
+  "version": "1.0.0-beta.17",
+  "identifier": "de.igd20ug.zwoo",
+  "plugins": {},
+  "app": {
     "windows": [
       {
         "fullscreen": false,
@@ -81,6 +55,9 @@
         "title": "zwoo",
         "width": 900
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
   }
 }
