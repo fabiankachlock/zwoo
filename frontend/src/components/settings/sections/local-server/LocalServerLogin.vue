@@ -7,7 +7,7 @@ const { t } = useI18n();
 const server = useLocalServer();
 
 const logIn = () => {
-  import('@tauri-apps/api').then(({ invoke }) => {
+  import('@tauri-apps/api/core').then(({ invoke }) => {
     invoke('open_url', { url: `http://${server.config.ip || '127.0.0.1'}:${server.config.port}/login-local` }).then(() => {
       console.log('success');
     });
