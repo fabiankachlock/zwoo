@@ -17,6 +17,12 @@ public static class HttpContextExtensions
     public static void StoreGuestSession(this HttpContext context, Guest user)
     {
         context.Items.Add(UserContextKey, user);
+        // create a shallow user entry - used by shared services
+        context.StoreUserSession(new UserDao
+        {
+            Id = user.Id,
+            Username = user.Name,
+        }, "");
     }
 
     /// <summary>

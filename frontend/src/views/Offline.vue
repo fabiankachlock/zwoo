@@ -20,6 +20,12 @@
           </div>
         </div>
       </div>
+      <div v-if="!AppConfig.IsTauri" class="action bg-dark hover:bg-darkest cursor-pointer">
+        <router-link class="flex flex-row items-center" to="/login-local">
+          <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
+          <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
+        </router-link>
+      </div>
     </div>
   </MaxWidthLayout>
 </template>
@@ -30,6 +36,7 @@ import { useRouter } from 'vue-router';
 
 import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
+import { AppConfig } from '@/config';
 import { useGameConfig } from '@/core/adapter/game';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';

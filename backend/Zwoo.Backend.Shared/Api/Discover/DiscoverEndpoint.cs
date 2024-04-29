@@ -24,6 +24,7 @@ public static class DiscoverEndpoint
                     {
                         {"version", value.Version},
                         {"zrpVersion", value.ZRPVersion},
+                        {"mode", value.Mode}
                     }.ToDictionary()
                 }));
             }

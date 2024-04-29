@@ -95,6 +95,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
 import { useRootApp } from '@/core/adapter/app';
 import { useAuth } from '@/core/adapter/auth';
@@ -109,6 +110,7 @@ const auth = useAuth();
 const app = useRootApp();
 const isLoggedIn = computed(() => auth.isLoggedIn);
 const api = useApi();
+const router = useRouter();
 
 const server = computed(() => {
   const serverUrl = api.getServer().replace(/(^\w+:|^)\/\//, '');
@@ -119,8 +121,13 @@ const server = computed(() => {
 });
 
 const disconnect = () => {
+  const current = GuestSessionManager.tryGetSession();
   GuestSessionManager.destroySession();
+  router.push('/');
   app.configure();
+  if (current) {
+    GuestSessionManager.saveSession(current);
+  }
 };
 </script>
 

@@ -93,7 +93,7 @@ export interface ApiAdapter {
    * @param version the own application version
    * @param zrp the running zrp version
    */
-  checkVersion(version: string, zrp: string): FetchResponse<ClientInfo>;
+  checkVersion(version: string, zrp: string, mode: string): FetchResponse<ClientInfo>;
 
   /**
    * Load the versions with available changelogs from the server
@@ -113,12 +113,6 @@ export interface ApiAdapter {
    * @param password the games password (empty if public)
    */
   createGame(name: string, isPublic: boolean, password: string): FetchResponse<GameJoinResponse>;
-
-  /**
-   * Generate a url to join a game by id
-   * @param gameId id of the game to join
-   */
-  generateJoinUrl(gameId: string): string;
 
   /**
    * Load all games that a currently available

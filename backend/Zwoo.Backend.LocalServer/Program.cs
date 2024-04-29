@@ -21,31 +21,22 @@ if (args.Length >= 1 && args[0] == "-h")
 var builder = WebApplication.CreateSlimBuilder(args);
 
 var config = builder.AddServerConfiguration(args);
+// resolve listening options
+int listeningPort = config.Port == 0 ? 8001 : config.Port;
+if (config.UseDynamicPort) listeningPort = 0;
+
+string listeningIp = "0.0.0.0";
+if (config.UseAllIPs) listeningIp = "127.0.0.1";
+else if (config.UseLocalhost) listeningIp = "127.0.0.1";
+else if (IPAddress.TryParse(config.IP, out var ip)) listeningIp = config.IP;
+
 builder.WebHost.ConfigureKestrel(options =>
 {
-    var port = config.Port == 0 ? 8001 : config.Port;
-    if (config.UseDynamicPort)
-    {
-        port = 0;
-    }
-
-    if (config.UseAllIPs)
-    {
-        options.ListenAnyIP(port);
-        return;
-    }
-
-    if (config.UseLocalhost)
-    {
-        options.ListenLocalhost(port);
-    }
-
-    if (IPAddress.TryParse(config.IP, out var ip))
-    {
-        options.Listen(ip, port);
-    }
-
-    options.Listen(new IPAddress(0), port);
+    Console.WriteLine($"[Config] Configuring Server to listen on {listeningIp}:{listeningPort}");
+    if (config.UseAllIPs) options.ListenAnyIP(listeningPort);
+    else if (config.UseLocalhost) options.ListenLocalhost(listeningPort);
+    else if (IPAddress.TryParse(config.IP, out var ip)) options.Listen(ip, listeningPort);
+    else options.Listen(new IPAddress(0), listeningPort);
 });
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -54,18 +45,20 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, ApiJsonSerializerContext.Default);
 });
 
+const string VERSION = "1.0.0-beta.18";
 builder.AddZwooLogging(false);
 var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
-    AppVersion = "1.0.0-beta.17"
+    AppVersion = VERSION,
+    ServerMode = "local"
 });
 
-// TODO: get server id
 builder.Services.AddLocalAuthentication(config.ServerId);
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
 builder.Services.AddSingleton<IExternalGameProfileProvider, EmptyGameProfileProvider>();
 builder.Services.AddSingleton<ILocalUserManager, LocalUserManager>();
+
 
 // backend services
 builder.Services.AddZwooServices();
@@ -73,13 +66,41 @@ builder.Services.AddGameServices();
 
 var app = builder.Build();
 
+
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+
+if (config.UseStrictOrigins)
+{
+    Console.WriteLine($"[Config] Restricting websockets to: http://{listeningIp}:{listeningPort}");
+    webSocketOptions.AllowedOrigins.Add($"http://{listeningIp}:{listeningPort}");
+}
+else if (config.AllowedOrigins != string.Empty)
+{
+    Console.WriteLine($"[Config] Allowing websockets from: {config.AllowedOrigins}");
+    foreach (var origin in config.AllowedOrigins.Split(','))
+    {
+        webSocketOptions.AllowedOrigins.Add(origin);
+    }
+}
+else
+{
+    Console.WriteLine($"[Config] Allowing websockets from: *everywhere*");
+}
+app.UseWebSockets(webSocketOptions);
+
 app.UseZwooHttpLogging("/api");
 
 if (!config.UseStrictOrigins)
 {
     var allowedOrigins = config.AllowedOrigins == string.Empty ? null : config.AllowedOrigins;
+    Console.WriteLine($"[Config] Allowing origins: {allowedOrigins ?? "*all*"}");
     app.Use((context, next) =>
     {
+        if (context.WebSockets.IsWebSocketRequest) return next(context);
+
         context.Response.Headers.Append("Access-Control-Allow-Origin", allowedOrigins ?? context.Request.Headers["Origin"]);
         context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -92,7 +113,7 @@ if (!config.UseStrictOrigins)
             context.Response.StatusCode = 200;
             return Task.CompletedTask;
         }
-        return next();
+        return next(context);
     });
 }
 
@@ -111,27 +132,33 @@ if (app.Environment.IsDevelopment())
 
 // serve frontend files
 var provider = new ManifestEmbeddedFileProvider(typeof(Program).Assembly, "frontend");
+app.UseDefaultFiles(new DefaultFilesOptions
+{
+    FileProvider = provider,
+    DefaultFileNames = ["index.html"]
+});
 app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = provider,
     ServeUnknownFileTypes = true,
 });
 
-var webSocketOptions = new WebSocketOptions
-{
-    KeepAliveInterval = TimeSpan.FromMinutes(2)
-};
-webSocketOptions.AllowedOrigins.Add(conf.Server.Cors);
 
-app.UseWebSockets(webSocketOptions);
 api.UseDiscover();
 api.UseGame();
-
-// serve index.html for all other requests
-var index = provider.GetFileInfo("index.html");
-app.MapGet("", async context =>
+api.MapGet("/stats", (HttpContext context) =>
 {
-    await context.Response.SendFileAsync(index);
+    if (context.Request.Headers["X-Api-Secret"] != config.SecretKey)
+    {
+        return Results.Unauthorized();
+    }
+    return Results.Ok("##server stats");
+}).AllowAnonymous();
+
+app.MapFallbackToFile("index.html", new StaticFileOptions
+{
+    FileProvider = provider,
+    ServeUnknownFileTypes = true,
 });
 
 app.Run();

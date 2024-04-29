@@ -1,9 +1,11 @@
+using System.Net;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Authentication;
 using Zwoo.GameEngine.Lobby;
@@ -11,17 +13,33 @@ using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.Backend.Shared.Api.Game;
 
+public static class StringValuesExtensions
+{
+    public static int FirstInt(this StringValues values)
+    {
+        return int.Parse(values.FirstOrDefault() ?? "0");
+    }
+
+    public static string FirstString(this StringValues values)
+    {
+        return values.FirstOrDefault() ?? "";
+    }
+}
+
+
 public class GameEndpoints
 {
     public static void Map(IEndpointRouteBuilder app)
     {
-        app.MapGet("/game/list", ([FromQuery] bool recommended,
-            [FromQuery] int offset,
-            [FromQuery] int limit,
-            [FromQuery] string filter,
-            [FromQuery] bool publicOnly,
-            IGameProviderService _games) =>
+
+        app.MapGet("/game/list", (HttpContext context, IGameProviderService _games) =>
         {
+            bool recommended = context.Request.Query.ContainsKey("recommended");
+            int offset = context.Request.Query["offset"].FirstInt();
+            int limit = context.Request.Query["limit"].FirstInt();
+            string filter = context.Request.Query["filter"].FirstString();
+            bool publicOnly = context.Request.Query.ContainsKey("publicOnly");
+
             return Results.Ok(new GamesList()
             {
                 Games = _games.QueryGames(offset, limit, new GameQueryOptions()
@@ -153,12 +171,14 @@ public class GameEndpoints
         {
             if (!context.WebSockets.IsWebSocketRequest)
             {
-                return Results.BadRequest(new ProblemDetails()
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(new ProblemDetails()
                 {
                     Title = "Needs websocket request",
                     Detail = "This endpoint needs to be access via a websocket connection.",
                     Instance = context.Request.Path
                 });
+                return;
             }
 
 
@@ -166,26 +186,31 @@ public class GameEndpoints
             var game = _games.GetGame(id);
             if (game == null)
             {
-                return Results.NotFound(ApiError.GameNotFound.ToProblem(new ProblemDetails()
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await context.Response.WriteAsJsonAsync(ApiError.GameNotFound.ToProblem(new ProblemDetails()
                 {
                     Title = "Game not found",
                     Detail = "A game with this id cannot be found",
                     Instance = context.Request.Path
                 }));
+                return;
             }
 
             LobbyResult result = game.Lobby.IsPlayerAllowedToConnect((long)activeSession.User.Id);
             if (result != LobbyResult.Success)
             {
-                return Results.BadRequest(result.ToApi().ToProblem(new ProblemDetails()
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(result.ToApi().ToProblem(new ProblemDetails()
                 {
                     Title = "Cant connect to game",
                     Detail = "The request to connect was rejected by the lobby.",
                     Instance = context.Request.Path
                 }));
+                return;
             }
 
             _logger.LogInformation($"[{activeSession.User.Id}] accepting websocket");
+
             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
             CancellationTokenSource shouldStop = new CancellationTokenSource();
             TaskCompletionSource finished = new TaskCompletionSource();
@@ -204,7 +229,7 @@ public class GameEndpoints
             _logger.LogInformation($"[{activeSession.User.Id}] handle");
             try
             {
-                _handler.Handle(id, (long)activeSession.User.Id, webSocket, shouldStop.Token, finished);
+                await _handler.Handle(id, (long)activeSession.User.Id, webSocket, shouldStop.Token, finished);
             }
             catch (TaskCanceledException)
             {
@@ -223,9 +248,9 @@ public class GameEndpoints
                 _logger.LogError($"[{activeSession.User.Id}] cant remove connection");
             }
 
+
             _logger.LogInformation($"[{activeSession.User.Id}] disconnect");
             await game.PlayerManager.DisconnectPlayer((long)activeSession.User.Id);
-            return Results.Empty;
         });
     }
 }

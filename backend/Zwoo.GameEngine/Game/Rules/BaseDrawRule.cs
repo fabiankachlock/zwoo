@@ -5,7 +5,7 @@ using Zwoo.GameEngine.Game.Cards;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
-internal class BaseDrawRule : BaseRule
+public class BaseDrawRule : BaseRule
 {
     public override int Priority
     {
@@ -26,7 +26,7 @@ internal class BaseDrawRule : BaseRule
         return gameEvent.Type == ClientEventType.DrawCard;
     }
 
-    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, PlayerCycle playerOrder)
+    public override GameStateUpdate ApplyRule(ClientEvent gameEvent, GameState state, Pile cardPile, IPlayerCycle playerOrder)
     {
         if (!IsResponsible(gameEvent, state)) return GameStateUpdate.None(state);
         List<GameEvent> events;
@@ -41,7 +41,7 @@ internal class BaseDrawRule : BaseRule
         if (CardUtilities.IsDraw(state.TopCard.Card) && !state.TopCard.EventActivated)
         {
             amount = GetDrawAmount(state.TopCard.Card);
-            state.TopCard.ActivateEvent();
+            state.CardStack[state.CardStack.Count - 1] = new StackCard(state.CardStack[state.CardStack.Count - 1].Card, true);
         }
         else
         {

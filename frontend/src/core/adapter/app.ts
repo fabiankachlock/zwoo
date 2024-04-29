@@ -69,7 +69,7 @@ export const useRootApp = defineStore('app', {
     async configure() {
       // if env is locked setup must run static
       if (AppConfig.LockEnv && AppConfig.DefaultEnv) {
-        this.setupLocked();
+        await this.setupLocked();
         MigrationRunner.migrateTo(AppConfig.Version);
         this.isLoading = false;
         return;
@@ -81,7 +81,7 @@ export const useRootApp = defineStore('app', {
       const auth = useAuth();
       const hasLocalLogin = await auth.tryLocalLogin();
 
-      const response = await this.api.checkVersion(AppConfig.Version, '');
+      const response = await this.api.checkVersion(AppConfig.Version, '', this.environment);
       if (response.isError && response.error.code === BackendError.InvalidClient) {
         // backend marked client as invalid
         RouterService.getRouter().push('/invalid-version');
@@ -93,7 +93,10 @@ export const useRootApp = defineStore('app', {
           this.environment = 'offline';
           console.warn('### zwoo entered offline mode');
           await auth.applyOfflineConfig();
-          RouterService.getRouter().push(window.location.pathname);
+          RouterService.getRouter().push({
+            path: window.location.pathname,
+            force: true
+          });
         }
         this._setServerVersion(this.clientVersion);
         this._setServerVersionMatches(true);
@@ -114,7 +117,7 @@ export const useRootApp = defineStore('app', {
       Logger.warn(`### zwoo statically entered ${this.environment} mode`);
       if (AppConfig.DefaultEnv === 'online') {
         // setup for online mode
-        const response = await this.api.checkVersion(AppConfig.Version, '');
+        const response = await this.api.checkVersion(AppConfig.Version, '', this.environment);
         if (response.wasSuccessful) {
           this._setServerVersion(response.data.version);
           this._setServerVersionMatches(true);
@@ -185,8 +188,10 @@ export const useRootApp = defineStore('app', {
         return false;
       }
 
-      // TODO: handle ws url
-      this._apiMap.local.api = RestApi(serverUrl, AppConfig.WsUrl);
+      const wsUrl = serverUrl.replace(/^http/, 'ws');
+
+      this._apiMap.local.api = RestApi(serverUrl, wsUrl);
+      this._apiMap.local.realtime = WsGameAdapter(serverUrl, wsUrl);
       this.environment = 'local';
       Logger.warn('### zwoo entered local mode');
       return true;

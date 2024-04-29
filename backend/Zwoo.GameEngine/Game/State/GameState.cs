@@ -7,12 +7,12 @@ using Zwoo.GameEngine.Game.Cards;
 
 namespace Zwoo.GameEngine.Game.State;
 
-internal struct UiHints
+public struct UiHints
 {
     public int? CurrentDrawAmount;
 }
 
-internal struct GameState
+public struct GameState
 {
     public GameDirection Direction;
     public long CurrentPlayer;

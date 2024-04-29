@@ -1,33 +1,33 @@
 <template>
   <SettingsSection>
-    <div>
-      <button v-if="!serverIsRunning" @click="startServer">
-        {{ t('localServer.start') }}
-      </button>
-      <button v-else @click="stopServer">
-        {{ t('localServer.stop') }}
-      </button>
-    </div>
-    <div>
-      <p>...Server Stats...</p>
-    </div>
+    <SettingsRow :title="t('localServer.controls')">
+      <LocalServerControls />
+    </SettingsRow>
+    <SettingsRow title="" v-if="serverIsRunning">
+      <LocalServerLogin />
+    </SettingsRow>
+    <LocalServerConfig />
+    <LocalServerStats />
   </SettingsSection>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import LocalServerConfig from '@/components/settings/sections/local-server/LocalServerConfig.vue';
+import LocalServerControls from '@/components/settings/sections/local-server/LocalServerControls.vue';
+import LocalServerLogin from '@/components/settings/sections/local-server/LocalServerLogin.vue';
+import LocalServerStats from '@/components/settings/sections/local-server/LocalServerStats.vue';
+import SettingsRow from '@/components/settings/SettingsRow.vue';
+import SettingsSection from '@/components/settings/SettingsSection.vue';
+import { useLocalServer } from '@/core/adapter/tauri/localServer';
+
 const { t } = useI18n();
-const serverIsRunning = ref(false);
+const localServer = useLocalServer();
+const serverIsRunning = computed(() => localServer.isRunning);
 
-onMounted(async () => {
-  const status = await loadServerStatus();
-  serverIsRunning.value = status != undefined;
+onMounted(() => {
+  localServer.loadStatus();
 });
-
-const startServer = () => {};
-const stopServer = () => {};
-
-const loadServerStatus = (): void => {};
 </script>

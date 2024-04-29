@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zwoo.GameEngine.Game.State;
 
-internal enum GameDirection
+public enum GameDirection
 {
     Left = 1,
     Rigth = 2,

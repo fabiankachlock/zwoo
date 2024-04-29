@@ -4,6 +4,7 @@ public class ZwooAppConfiguration
 {
     public string AppVersion { get; set; } = "";
     public string ZRPVersion { get; set; } = "";
+    public string ServerMode { get; set; } = "";
 }
 
 public class EmailOptions

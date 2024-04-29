@@ -1,6 +1,6 @@
 [package]
 name = "zwoo"
-version = "1.0.0-beta.17"
+version = "1.0.0-beta.18"
 description = ""
 authors = ["IGD 2.0 UG (haftungsbeschränkt)"]
 license = ""
@@ -16,12 +16,22 @@ tauri-build = { version = "1.5", features = [] }
 
 [dependencies]
 tauri = { version = "1.5", features = [
+    "path-all",
+    "fs-exists",
+    "fs-read-file",
+    "fs-write-file",
     "global-shortcut-all",
     "shell-open",
     "window-all",
 ] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+open = "5"
+
+[dependencies.uuid]
+version = "1.7.0"
+features = ["v4", "fast-rng"]
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

@@ -11,6 +11,7 @@ import { UsernameValidator } from '@/core/services/validator/username';
 import { I18nInstance } from '@/i18n';
 
 import { UserSession } from '../api/entities/Authentication';
+import { RestApi } from '../api/restapi/RestApi';
 import { GuestSessionManager } from '../services/localGames/guestSessionManager';
 import { useRootApp } from './app';
 import { useConfig, ZwooConfigKey } from './config';
@@ -48,7 +49,7 @@ export const useAuth = defineStore('auth', {
       }
     },
     async loginToLocalServer(username: string, serverUrl: string): Promise<boolean> {
-      const api = useApi();
+      const api = RestApi(serverUrl, '');
       const backend = Backend.from(serverUrl, '');
 
       // first the version compatibility and server reachability needs to be checked
@@ -56,12 +57,14 @@ export const useAuth = defineStore('auth', {
         useBackend: AppConfig.UseBackend,
         fallbackValue: {
           version: AppConfig.Version,
-          zrpVersion: '' // TODO: use real zrp version
+          zrpVersion: '', // TODO: use real zrp version
+          mode: 'local'
         },
         method: 'POST',
         body: JSON.stringify({
           version: AppConfig.Version,
-          zrpVersion: ''
+          zrpVersion: '',
+          mode: 'local'
         })
       });
 

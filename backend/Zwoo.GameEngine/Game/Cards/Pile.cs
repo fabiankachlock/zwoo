@@ -9,7 +9,7 @@ namespace Zwoo.GameEngine.Game.Cards;
 
 public class EmptyPileException : Exception { }
 
-internal sealed class Pile
+public class Pile
 {
 
     private List<Card> AvailableCards;

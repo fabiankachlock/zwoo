@@ -4,7 +4,7 @@ namespace Zwoo.GameEngine.Tests.Helper;
 
 public class AsyncExecutionQueueTests
 {
-    [Fact]
+    [Test]
     public void ShouldBeAsync()
     {
         var q = new AsyncExecutionQueue();
@@ -25,13 +25,13 @@ public class AsyncExecutionQueueTests
             count += 100;
         });
 
-        Assert.Equal(0, count);
+        Assert.That(count, Is.EqualTo(0));
         q.Start();
         Thread.Sleep(50);
-        Assert.Equal(1, count);
+        Assert.That(count, Is.EqualTo(1));
         Thread.Sleep(100);
-        Assert.Equal(11, count);
+        Assert.That(count, Is.EqualTo(11));
         Thread.Sleep(100);
-        Assert.Equal(111, count);
+        Assert.That(count, Is.EqualTo(111));
     }
 }

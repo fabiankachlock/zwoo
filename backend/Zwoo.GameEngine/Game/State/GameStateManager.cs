@@ -16,7 +16,7 @@ public sealed class GameStateManager
     private PlayerManager _playerManager;
     private GameSettings _gameSettings;
     private GameState _gameState;
-    private PlayerCycle _playerCycle;
+    private IPlayerCycle _playerCycle;
     private Dictionary<long, int> _playerOrder;
     private Pile _cardPile;
     private AsyncExecutionQueue _actionsQueue;

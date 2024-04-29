@@ -72,7 +72,6 @@ public class BasicBotDecisionManager : IBotDecisionHandler
             ));
             if (state.Deck.Count == 2 && _rand.Next(10) > 4)
             {
-                Console.WriteLine("BOT ENDING TURN");
                 // after placing this card only on card will be left + 50% chance to miss
                 OnEvent.Invoke(ZRPCode.RequestEndTurn, new RequestEndTurnEvent());
             }
