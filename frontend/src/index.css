@@ -2,79 +2,156 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--duration-xs: 60ms;
+	--duration-md: 120ms;
+	--duration-lg: 200ms;
+	--duration-xl: 400ms;
+
+	--color-primary: #29a4e7;
+	--color-primary-hover: #279cdb;
+	--color-primary-contrast-text: #0f0f0e;
+
+	--color-secondary: #36397f;
+	--color-secondary-hover: #313473;
+	--color-secondary-contrast-text: #fdffdc;
+}
+
+[data-theme='light'] {
+	--color-bg: #d2d0d9;
+	--color-bg-surface: #eeebf5;
+	--color-bg-alt: #dfd8f2;
+	--color-bg-alt-hover: #d3cce6;
+
+	--color-border: #363645;
+	--color-divider: #181822;
+
+	--color-text: #07071c;
+	--color-text-secondary: #49495e;
+
+	--color-primary-text: #29a4e7;
+	--color-secondary-text: #36397f;
+}
+
+[data-theme='dark'] {
+	--color-bg: #2e2b36;
+	--color-bg-surface: #15131c;
+	--color-bg-alt: #211c2f;
+	--color-bg-alt-hover: #1b1726;
+
+	--color-border: #a6a5a1;
+	--color-divider: #d9d8d4;
+
+	--color-text: #e6e5e1;
+	--color-text-secondary: #bfbeba;
+
+	--color-primary-text: #2ba9ed;
+	--color-secondary-text: #9c8aff;
+}
+
 @layer utilities {
 	.bg-main {
-		@apply bg-_bg-light dark:bg-_bg-dark;
+		background-color: var(--color-bg);
 	}
-	.bg-light {
-		@apply bg-_bg-light-light dark:bg-_bg-dark-light;
+	.bg-surface {
+		background-color: var(--color-bg-surface);
 	}
-	.bg-lightest {
-		@apply bg-_bg-light-lightest dark:bg-_bg-dark-lightest;
-	}
-	.bg-dark {
-		@apply bg-_bg-light-dark dark:bg-_bg-dark-dark;
-	}
-	.bg-darkest {
-		@apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest;
+	.bg-alt {
+		background-color: var(--color-bg-alt);
 	}
 
+	/* Depracated */
+	.bg-light {
+		background-color: var(--color-bg-surface);
+	}
+	.bg-lightest {
+		background-color: var(--color-bg-surface);
+		/* @apply bg-_bg-light-lightest dark:bg-_bg-dark-lightest; */
+	}
+	.bg-dark {
+		background-color: var(--color-bg-alt);
+		/* @apply bg-_bg-light-dark dark:bg-_bg-dark-dark; */
+	}
+	.bg-darkest {
+		background-color: var(--color-bg-alt);
+		/* @apply bg-_bg-light-darkest dark:bg-_bg-dark-darkest; */
+	}
+	/* End Deprecated */
+
 	.tc-main {
-		@apply text-_text-dark dark:text-_text-light;
+		color: var(--color-text);
 	}
 	.tc-main-secondary {
-		@apply text-_text-dark-secondary dark:text-_text-light-secondary;
+		color: var(--color-text-secondary);
+		/* @apply text-_text-dark-secondary dark:text-_text-light-secondary; */
 	}
 	.tc-main-light {
-		@apply text-_text-dark-light dark:text-_text-light-dark;
+		color: var(--color-text);
+		/* @apply text-_text-dark-light dark:text-_text-light-dark; */
 	}
 	.tc-main-dark {
-		@apply text-_text-dark-dark dark:text-_text-light-light;
+		color: var(--color-text);
+		/* @apply text-_text-dark-dark dark:text-_text-light-light; */
 	}
 	.tc-primary {
-		@apply text-primary-text-dark dark:text-primary-text-light;
+		color: var(--color-primary-text);
+		/* @apply text-primary-text-dark dark:text-primary-text-light; */
 	}
 	.tc-secondary {
-		@apply text-secondary-text-dark dark:text-secondary-text-light;
+		color: var(--color-secondary-text);
+		/* @apply text-secondary-text-dark dark:text-secondary-text-light; */
 	}
 
 	.bc-main {
-		@apply border-_bg-light dark:border-_bg-dark;
+		border-color: var(--color-border);
+		/* @apply border-_bg-light dark:border-_bg-dark; */
 	}
 	.bc-light {
-		@apply border-_bg-light-light dark:border-_bg-dark-light;
+		border-color: var(--color-border);
+		/* @apply border-_bg-light-light dark:border-_bg-dark-light; */
 	}
 	.bc-lightest {
-		@apply border-_bg-light-lightest dark:border-_bg-dark-lightest;
+		border-color: var(--color-border);
+		/* @apply border-_bg-light-lightest dark:border-_bg-dark-lightest; */
 	}
 	.bc-dark {
-		@apply border-_bg-light-dark dark:border-_bg-dark-dark;
+		border-color: var(--color-border);
+		/* @apply border-_bg-light-dark dark:border-_bg-dark-dark; */
 	}
 	.bc-darkest {
-		@apply border-_bg-light-darkest dark:border-_bg-dark-darkest;
+		border-color: var(--color-border);
+		/* @apply border-_bg-light-darkest dark:border-_bg-dark-darkest; */
 	}
 
 	.bc-invert-main {
-		@apply border-_bg-dark dark:border-_bg-light;
+		border-color: var(--color-border);
+		/* @apply border-_bg-dark dark:border-_bg-light; */
 	}
 	.bc-invert-light {
-		@apply border-_bg-dark-light dark:border-_bg-light-light;
+		border-color: var(--color-border);
+		/* @apply border-_bg-dark-light dark:border-_bg-light-light; */
 	}
 	.bc-invert-lightest {
-		@apply border-_bg-dark-lightest dark:border-_bg-light-lightest;
+		border-color: var(--color-border);
+
+		/* @apply border-_bg-dark-lightest dark:border-_bg-light-lightest; */
 	}
 	.bc-invert-dark {
-		@apply border-_bg-dark-dark dark:border-_bg-light-dark;
+		border-color: var(--color-border);
+		/* @apply border-_bg-dark-dark dark:border-_bg-light-dark; */
 	}
 	.bc-invert-darkest {
-		@apply border-_bg-dark-darkest dark:border-_bg-light-darkest;
+		border-color: var(--color-border);
+		/* @apply border-_bg-dark-darkest dark:border-_bg-light-darkest; */
 	}
 
 	.bc-primary {
-		@apply border-primary-dark dark:border-primary-light;
+		border-color: var(--color-primary);
+		/* @apply border-primary-dark dark:border-primary-light; */
 	}
 	.bc-secondary {
-		@apply border-secondary-dark dark:border-secondary-light;
+		border-color: var(--color-secondary);
+		/* @apply border-secondary-dark dark:border-secondary-light; */
 	}
 
 	.border-1 {

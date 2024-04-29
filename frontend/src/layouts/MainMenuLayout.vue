@@ -1,6 +1,6 @@
 <template>
   <div id="_layout__main-menu" class="bg-main">
-    <div class="header fixed top-0 left-0 right-0 bg-darkest h-10 bc-primary border-b-1 shadow-sm z-30">
+    <div class="header fixed top-0 left-0 right-0 bg-surface h-10 bc-primary border-b-1 shadow-sm z-30">
       <header class="h-full">
         <div class="h-full mx-3 my-0 relative flex justify-between items-center flex-row">
           <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">

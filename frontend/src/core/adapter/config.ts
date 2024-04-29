@@ -72,9 +72,9 @@ const changeLanguage = (lng: string) => {
 const changeUIMode = (mode: string) => {
   const isDark = mode === 'dark';
   if (isDark) {
-    document.querySelector('html')?.classList.add('dark');
+    document.querySelector('body')?.setAttribute('data-theme', 'dark');
   } else {
-    document.querySelector('html')?.classList.remove('dark');
+    document.querySelector('body')?.setAttribute('data-theme', 'light');
   }
 };
 

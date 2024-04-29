@@ -1,7 +1,7 @@
 <template>
   <button @click.stop="toggle">
     <div
-      class="relative rounded bg-main hover:bg-dark transition border-2 switch-body"
+      class="relative rounded bg-main hover:bg-alt transition border-2 switch-body"
       :class="{
         'on tc-main bc-primary': modelValue,
         'off tc-main-light bc-lightest': !modelValue,
@@ -51,11 +51,11 @@ const toggle = () => {
 }
 .switch-body.off .thumb {
   left: 0;
-  @apply bg-_bg-light-lightest dark:bg-_bg-dark-lightest;
+  background: var(--color-bg-surface);
 }
 
 .switch-body.on .thumb {
   left: calc(100% - 1.5rem);
-  @apply bg-primary-dark dark:bg-primary-light;
+  background: var(--color-primary);
 }
 </style>

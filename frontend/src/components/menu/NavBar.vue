@@ -7,7 +7,7 @@
     <div :class="{ hidden: !isMenuOpen, block: isMenuOpen }" class="fixed inset-0" @click="closeMenu"></div>
     <div
       :class="{ 'max-h-0': !isMenuOpen, 'open max-h-[500px]': isMenuOpen }"
-      class="menu-container bg-darkest border-1 bc-primary fixed z-10 right-0 transition duration-300 overflow-hidden shadow-sm"
+      class="menu-container bg-surface border-1 bc-primary fixed z-10 right-0 transition duration-300 overflow-hidden shadow-sm"
       style="min-width: 14rem"
       @click="closeMenu"
     >

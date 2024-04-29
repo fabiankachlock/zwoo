@@ -46,11 +46,11 @@ const toggle = () => {
 }
 .switch-body.off .thumb {
   left: 0;
-  @apply bg-_bg-light-lightest dark:bg-_bg-dark-lightest;
+  background: var(--color-bg-surface);
 }
 
 .switch-body.on .thumb {
   left: calc(100% - 0.5rem);
-  @apply bg-primary-dark dark:bg-primary-light;
+  background: var(--color-primary);
 }
 </style>

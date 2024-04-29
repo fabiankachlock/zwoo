@@ -24,12 +24,12 @@ watch(
 
 <style>
 #changelog {
-  @apply text-_text-dark-secondary dark:text-_text-light-secondary;
+  /* @apply text-_text-dark-secondary dark:text-_text-light-secondary; */
 }
 
 #changelog h1 {
   @apply text-4xl;
-  @apply text-primary-text-dark dark:text-primary-text-light;
+  /* @apply text-primary-text-dark dark:text-primary-text-light; */
 }
 
 #changelog h2 {

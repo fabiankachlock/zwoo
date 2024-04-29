@@ -135,7 +135,7 @@ const disconnect = () => {
 
 .link::before {
   content: '';
-  @apply absolute left-0 bg-darkest top-0 bottom-0 w-7 transition-all;
+  @apply absolute left-0 bg-surface top-0 bottom-0 w-7 transition-all;
 }
 
 .link:hover::before {
