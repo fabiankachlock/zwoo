@@ -36,7 +36,7 @@ public class BetaDiscoverService : IDiscoverService
     {
         return new ClientInfo()
         {
-            Version = _options.App.AppVersion,
+            Version = _versionOverride ?? _options.App.AppVersion,
             Mode = _options.App.ServerMode,
             ZRPVersion = "",
         };
