@@ -32,7 +32,7 @@ public class UserGameProfileDao
     [BsonElement("_id")]
     public ObjectId Id { get; set; }
 
-    [BsonElement("expires")]
+    [BsonElement("name")]
     public string Name { get; set; } = "";
 
     [BsonElement("settings")]
@@ -110,6 +110,7 @@ public class UserDao : IDocument
     public bool AcceptedTerms { get; set; }
 
     [BsonElement("game_profiles")]
+    [BsonIgnoreIfDefault]
     public List<UserGameProfileDao> GameProfiles { get; set; } = new();
 
     [BsonElement("verified_at")]

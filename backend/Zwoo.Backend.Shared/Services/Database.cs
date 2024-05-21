@@ -1,12 +1,11 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Mongo.Migration.Documents;
 using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
-using MongoDB.Driver;
 using Zwoo.Backend.Shared.Configuration;
 using Zwoo.Database;
+using Zwoo.Migrations;
 
 namespace Zwoo.Backend.Shared.Services;
 
@@ -35,7 +34,7 @@ public static class DatabaseExtensions
         services.AddSingleton<IGameInfoService, GameInfoService>();
         services.AddSingleton<IContactRequestService, ContactRequestService>();
 
-        services.AddSingleton<IMongoClient>(sp =>
+        services.AddSingleton(sp =>
         {
             var db = sp.GetRequiredService<IDatabase>();
             return db.Client;
@@ -49,6 +48,7 @@ public static class DatabaseExtensions
 
         if (options.EnableMigrations)
         {
+            Console.WriteLine($"Migrations to version {conf.App.AppVersion} enabled.");
             services.AddMigration(new MongoMigrationSettings
             {
                 ConnectionString = conf.Database.ConnectionUri,
