@@ -12,12 +12,12 @@ using NLog;
 namespace Mongo.Migration.Migrations.Locators
 {
     public abstract class MigrationLocator<TMigrationType> : IMigrationLocator<TMigrationType>
-        where TMigrationType: class, IMigration
+        where TMigrationType : class, IMigration
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        
-        private IEnumerable<Assembly> _assemblies;
-        
+
+        private IEnumerable<Assembly> _assemblies = GetAssemblies();
+
         protected IEnumerable<Assembly> Assemblies => _assemblies ??= GetAssemblies();
 
         private IDictionary<Type, IReadOnlyCollection<TMigrationType>> _migrations;
@@ -28,10 +28,10 @@ namespace Mongo.Migration.Migrations.Locators
             {
                 if (_migrations == null)
                     Locate();
-                
+
                 if (_migrations.NullOrEmpty())
                     _logger.Warn(new NoMigrationsFoundException());
-                
+
                 return _migrations;
             }
             set => _migrations = value;
@@ -44,7 +44,7 @@ namespace Mongo.Migration.Migrations.Locators
 
             return migrations ?? Enumerable.Empty<TMigrationType>();
         }
-        
+
         public IEnumerable<TMigrationType> GetMigrationsFromTo(Type type, DocumentVersion version, DocumentVersion otherVersion)
         {
             var migrations = GetMigrations(type);
@@ -77,7 +77,7 @@ namespace Mongo.Migration.Migrations.Locators
         }
 
         public DocumentVersion GetLatestVersion(Type type)
-        {         
+        {
             var migrations = GetMigrations(type);
 
             if (migrations == null || !migrations.Any())
@@ -89,7 +89,7 @@ namespace Mongo.Migration.Migrations.Locators
         }
 
         public abstract void Locate();
-        
+
         private static IEnumerable<Assembly> GetAssemblies()
         {
             var location = AppDomain.CurrentDomain.BaseDirectory;
@@ -99,7 +99,7 @@ namespace Mongo.Migration.Migrations.Locators
                 throw new DirectoryNotFoundException(ErrorTexts.AppDirNotFound);
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            var migrationAssemblies = Directory.GetFiles(path, "*.MongoMigrations*.dll").Select(Assembly.LoadFile);
+            var migrationAssemblies = Directory.GetFiles(path, "*.Migrations*.dll").Select(Assembly.LoadFile);
 
             assemblies.AddRange(migrationAssemblies);
 

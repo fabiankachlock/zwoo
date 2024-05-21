@@ -7,6 +7,9 @@ using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Contact;
 using Zwoo.Backend.Shared.Api.Game;
+using Mongo.Migration.Migrations.Document;
+using Zwoo.Database.Dao;
+using Zwoo.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +30,20 @@ builder.Services.AddZwooDatabase(conf, new ZwooDatabaseOptions()
 {
     EnableMigrations = true
 });
+
+// var documentMigrations = typeof(DB100Beta7)
+//     .Assembly
+//     .GetTypes()
+//     .Where(t => t.BaseType != null && t.BaseType.IsGenericType && t.BaseType.GetGenericTypeDefinition() == typeof(DocumentMigration<>))
+//     .Where(t => t.BaseType?.GetGenericArguments()[0] == typeof(UserDao))
+//     .ToList();
+
+// Console.WriteLine($"Found {documentMigrations.Count} document migrations.");
+// foreach (var migration in documentMigrations)
+// {
+//     builder.Services.AddSingleton(typeof(IDocumentMigration), migration);
+// }
+
 
 // backend services
 builder.Services.AddZwooServices();
