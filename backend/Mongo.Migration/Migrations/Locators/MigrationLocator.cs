@@ -16,7 +16,7 @@ namespace Mongo.Migration.Migrations.Locators
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        private IEnumerable<Assembly> _assemblies = GetAssemblies();
+        private IEnumerable<Assembly> _assemblies;
 
         protected IEnumerable<Assembly> Assemblies => _assemblies ??= GetAssemblies();
 
