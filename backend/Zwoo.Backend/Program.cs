@@ -7,6 +7,9 @@ using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Contact;
 using Zwoo.Backend.Shared.Api.Game;
+using Mongo.Migration.Migrations.Document;
+using Zwoo.Database.Dao;
+using Zwoo.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
