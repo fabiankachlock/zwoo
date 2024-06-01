@@ -1,7 +1,7 @@
 <template>
   <MaxWidthLayout size="small" classes="pt-10">
     <div class="w-full flex justify-center">
-      <img style="width: 10rem; max-width: 80%" src="/img/logo/zwoo_logo_none.svg" alt="zwoo-logo" />
+      <img style="width: 10rem; max-width: 80%" src="/img/logo/pride/zwoo_logo_pride_none.svg" alt="zwoo-logo" />
     </div>
     <h1 class="text-6xl tc-primary text-center">zwoo</h1>
     <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
