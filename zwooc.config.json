@@ -1,0 +1,150 @@
+{
+  "$schema": "https://raw.githubusercontent.com/zwoo-hq/zwooc/main/zwooc.schema.json",
+  "frontend": {
+    "$adapter": "vite-yarn",
+    "$fragments": {
+      "test:unit": "yarn jest",
+      "test:e2e": "yarn cypress run",
+      "test:e2e:ui": "yarn cypress open",
+      "lint": "yarn eslint \"src/**/*.{js,ts,vue,html}\" --fix",
+      "lint:ci": "yarn eslint \"src/**/*.{js,ts,vue,html}\" --max-warnings 50",
+      "i18n:check": "node ./scripts/checkI18nFiles.js",
+      "format": "yarn prettier --write \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
+      "format:ci": "yarn prettier --check \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
+      "setup:version": "node ./scripts/version.js",
+      "deps:check": "yarn depcruise -m --config .dependency-cruiser.js src",
+      "deps:viz": "yarn depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg",
+      "typecheck": "yarn vue-tsc --noEmit && echo \"\"",
+      "build:cards": "node ./scripts/buildCardAssets.js",
+      "build:icons": "node ./src/modules/zwoo-icons/generate-icons.js",
+      "XXpreview": "yarn vite preview --mode preview",
+      "XXpreview:prod": "yarn vite preview --mode dev"
+    },
+    "__base": {
+      "mode": "-",
+      "build": {
+        "$pre": {
+          "fragments": ["typecheck", "build:cards", "build:icons"],
+          "profiles": {
+            "wasm": "build"
+          }
+        }
+      }
+    },
+    "dev": {
+      "base": "__base",
+      "mode": "dev",
+      "env": []
+    },
+    "prod": {
+      "base": "__base",
+      "mode": "prod"
+    },
+    "local-server": {
+      "base": "__base",
+      "mode": "local-server",
+      "build": {
+        "args": {
+          "outDir": "../backend/Zwoo.Backend.LocalServer/frontend"
+        }
+      }
+    },
+    "dev-instance": {
+      "base": "__base",
+      "mode": "dev-instance"
+    },
+    "tauri": {
+      "base": "__base",
+      "mode": "tauri",
+      "env": ["VUE_APP_IS_TAURI=true"],
+      "args": {
+        "port": "8070"
+      },
+      "build": {
+        "args": {
+          "outDir": "dist-tmp"
+        }
+      }
+    },
+    "preview": {
+      "base": "__base",
+      "mode": "preview"
+    },
+    "analyze": {
+      "mode": "dev",
+      "env": ["ANALYZE=true"],
+      "run": false,
+      "watch": false
+    }
+  },
+  "app": {
+    "$dir": "frontend/src-tauri",
+    "$adapter": "tauri-yarn",
+    "app": {
+      "env": ["RUST_BACKTRACE=1"],
+      "$pre": {
+        "profiles": {
+          "local": "build",
+          "tauri": "build"
+        }
+      }
+    }
+  },
+  "backend": {
+    "$adapter": "dotnet",
+    "server": {
+      "project": "Zwoo.Backend"
+    },
+    "local": {
+      "project": "Zwoo.Backend.LocalServer",
+      "build": {
+        "args": {
+          "output": "../frontend/src-tauri/resources/server",
+          "--self-contained": ""
+        },
+        "$pre": {
+          "profiles": {
+            "local-server": "build"
+          }
+        }
+      }
+    },
+    "ziad": {
+      "project": "Zwoo.Dashboard"
+    },
+    "wasm": {
+      "project": "Zwoo.GameEngine.Wasm",
+      "build": {
+        "args": {
+          "-p:RunAOTCompilation=true": ""
+        }
+      }
+    }
+  },
+  "$fragments": {
+    "docker": "docker compose -f ./docker-compose.local.yml up -d",
+    "docker:down": "docker compose -f ./docker-compose.local.yml down"
+  },
+  "$compounds": {
+    "dev": {
+      "$pre": {
+        "fragments": ["docker"]
+      },
+      "$post": {
+        "fragments": ["docker:down"]
+      },
+      "profiles": {
+        "dev": "watch",
+        "server": "watch",
+        "local": "watch",
+        "ziad": "watch"
+      }
+    },
+    "tauri": {
+      "profiles": {
+        "tauri": "watch",
+        "app": "watch"
+      }
+    }
+  }
+}

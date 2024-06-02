@@ -13,22 +13,32 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: 'contact',
-    component: () => import('../views/Contact.vue')
+    component: () => import('../views/Contact.vue'),
+    alias: ['kontakt'],
+    meta: {
+      excludeEnv: 'offline'
+    }
   },
   {
     path: 'login',
     component: () => import('../views/Login.vue'),
     meta: {
       noAuth: true,
-      onlineOnly: true
+      includeEnv: 'online',
+      envRedirect: '/login-local'
     }
+  },
+  {
+    path: 'login-local',
+    component: () => import('../views/LoginLocal.vue'),
+    meta: {}
   },
   {
     path: 'logout',
     component: () => import('../views/Logout.vue'),
     meta: {
       requiresAuth: true,
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   {
@@ -36,7 +46,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/CreateAccount.vue'),
     meta: {
       noAuth: true,
-      onlineOnly: true
+      includeEnv: 'online'
     }
   },
   {
@@ -44,7 +54,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/RequestPasswordReset.vue'),
     meta: {
       noAuth: true,
-      onlineOnly: true
+      includeEnv: 'online'
     }
   },
   {
@@ -52,14 +62,14 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/ResetPassword.vue'),
     meta: {
       noAuth: true,
-      onlineOnly: true
+      includeEnv: 'online'
     }
   },
   {
     path: 'verify-account',
     component: () => import('../views/VerifyAccount.vue'),
     meta: {
-      onlineOnly: true
+      includeEnv: 'online'
     }
   },
   {
@@ -71,7 +81,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/CreateGame.vue'),
     meta: {
       requiresAuth: true,
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   {
@@ -80,7 +90,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true,
       redirect: true,
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   {
@@ -89,21 +99,21 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     alias: ['available', 'list', 'games'],
     meta: {
       requiresAuth: true,
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   {
     path: 'missing-cookies',
     component: () => import('../views/MissingCookies.vue'),
     meta: {
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   {
     path: 'leaderboard',
     component: () => import('../views/Leaderboard.vue'),
     meta: {
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   {
@@ -114,15 +124,19 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     path: 'version-history',
     component: () => import('../views/VersionHistory.vue'),
     meta: {
-      onlineOnly: true
+      excludeEnv: 'offline'
     }
   },
   {
     path: 'offline',
     component: () => import('../views/Offline.vue'),
     meta: {
-      offlineOnly: true,
+      envOnly: 'offline',
       onlineRedirect: '/home'
     }
+  },
+  {
+    path: 'locked',
+    component: () => import('../views/EnvLock.vue')
   }
 ];

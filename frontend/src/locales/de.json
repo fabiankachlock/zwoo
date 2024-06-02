@@ -7,6 +7,7 @@
       "game": "Spiel",
       "account": "Account",
       "developers": "Entwickler",
+      "server": "Lokaler Server",
       "": "Fehler"
     },
     "update": {
@@ -61,6 +62,8 @@
     "help": "Hilfe",
     "contact": "Kontakt",
     "statusOffline": "Offline",
+    "statusLocal": "Verbunden",
+    "disconnect": "Verbindung trennen",
     "createGame": "Spiel erstellen",
     "joinGame": "Spiel beitreten"
   },
@@ -73,6 +76,14 @@
     "resetPassword": "Passwort zurücksetzten",
     "notVerifiedInfo": "Dein Account ist nicht verifiziert. Falls du keine Verifikationsemail erhalten hast, kannst du dir sie erneut senden lassen.",
     "resendVerifyEmail": "Email neu senden"
+  },
+  "loginLocal": {
+    "title": "Gast Anmeldung",
+    "server": "Server URL",
+    "name": "Benutzername",
+    "namePlaceholder": "Dein Name",
+    "infoServer": "Die Gewährleistung angemessener Datenschutzmaßnahmen kann auf Servern von Dritten nicht garantiert werden. Daher sollte die Verwendung und Verbreitung von personenbezogenen Daten auf lokalen Server vermieden werden.",
+    "submit": "Anmelden"
   },
   "createAccount": {
     "title": "Account Erstellen",
@@ -122,7 +133,8 @@
     "create": "Spiel Erstellen",
     "join": "Spiel Beitreten",
     "stats": "Statistiken zeigen",
-    "greeting": "Hallo, {name}!"
+    "greeting": "Hallo, {name}!",
+    "localGame": "Lokales Spiel"
   },
   "list": {
     "title": "Verfügbare Spiele",
@@ -220,6 +232,10 @@
     "editBot": "Bot bearbeiten",
     "updateBot": "Bot speichern",
     "createBot": "Bot erstellen",
+    "botType": "Schwierigkeitsstufe",
+    "dumpBot": "Einfach",
+    "normalBot": "Normal",
+    "smartBot": "Schwer",
     "edit": "Bearbeiten",
     "noPlayers": "keine Spieler vorhanden...",
     "noSpectators": "keine Zuschauer vorhanden...",
@@ -233,6 +249,19 @@
     "noWinsOfflineInfo": "Die Siege in Offline Spielen werden nicht in der Bestenliste gezählt."
   },
   "rules": {
+    "manageProfiles": "Profile verwalten",
+    "groupSystem": "Vorkonfigurierte Profile",
+    "groupUser": "Deine Profile",
+    "applyProfile": "Anwenden",
+    "newProfile": "Neues Profil erstellen",
+    "profileInfo": "Spiel-Profile sind eine Möglichkeit alle geänderten Einstellungen zu speichern und einfach wiederzuverwenden.",
+    "profileName": "Name des Profils",
+    "profilePlaceholder": "Mein Profil",
+    "createProfile": "Erstellen",
+    "profiles": {
+      "default": "Standartwerte",
+      "full": "Alle Regeln"
+    },
     "widget": {
       "numberPlaceholder": "Zahl"
     }
@@ -475,5 +504,55 @@
     "5-self+target": "{other} hat mir dir Karten getauscht",
     "6": "{target} hat die Farbe gewechselt",
     "6-self": "Du hast die Farbe gewechselt"
+  },
+  "envLock": {
+    "title": "Ungültige Umgebung",
+    "info": "zwoo ist in dieser Umgebung auf den {0} beschränkt. Der {1} ist nicht verfügbar.",
+    "reload": "Seite neu laden",
+    "online": "Online Modus",
+    "offline": "Offline Modus",
+    "local": "Lokaler Modus"
+  },
+  "localServer": {
+    "controls": "Server Aktionen",
+    "start": "Server starten",
+    "stop": "Server stoppen",
+    "config": "Konfiguration",
+    "configKey": {
+      "serverId": "Server ID",
+      "secretKey": "Server Schlüssel",
+      "port": "Port",
+      "ip": "IP",
+      "useDynamicPort": "Nutzt dynamischen Port",
+      "useLocalhost": "Höre auf localhost",
+      "useAllIps": "Höre auf allen Adressen",
+      "allowedOrigins": "Erlaubt Origins",
+      "useStrictOrigins": "Sktrikte Origins Kontrolle"
+    },
+    "noConfig": "Server-Konfiguration nicht verfügbar",
+    "stats": "Statistiken",
+    "logIn": "Lokal spielen",
+    "editConfig": "Bearbeiten",
+    "changeConfig": "Konfiguration ändern",
+    "save": "Speichern",
+    "ip": {
+      "title": "IP Adresse",
+      "info": "Die IP-Adresse des Adapter, auf dem der Server lauscht.",
+      "custom": "Eigener Adapter",
+      "localhost": "localhost Adapter",
+      "all": "Alle Adapter"
+    },
+    "port": {
+      "title": "Port",
+      "info": "Der Port, auf dem der Server lauscht. Die option dynamischer Port wählt selber einen freien Port aus.",
+      "dynamic": "Dynamischer Port",
+      "custom": "Eigener Port"
+    },
+    "security": {
+      "title": "Sicherheit",
+      "info": "Mit dieser Option lässt sich einschränken, von welchen Frontends auf den Server zugegriffen werden darf. Falls er Zugriff eingeschränkt werden soll, kann eine CORS compatible Liste an Origins konfiguriert werden. Eine leere Liste erlaubt ausschließlich das eingebaute Frontend.",
+      "restricted": "Nur bestimmte Origins erlauben",
+      "open": "Alle Origins erlauben"
+    }
   }
 }

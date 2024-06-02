@@ -1,10 +1,19 @@
 import { BackendErrorType } from './ApiError';
 
-export type FetchResponse<T> = {
-  isFallback?: boolean;
-  data?: T;
-  error?: BackendErrorType;
-};
+export type FetchResponse<T> = Promise<
+  | {
+      isFallback: false;
+      wasSuccessful: false;
+      isError: true;
+      error: BackendErrorType;
+    }
+  | {
+      isFallback: boolean;
+      wasSuccessful: true;
+      isError: false;
+      data: T;
+    }
+>;
 
 export type FetchOptions<T> = {
   /**

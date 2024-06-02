@@ -1,12 +1,14 @@
 import { FetchOptions, FetchResponse } from '../ApiEntities';
-import { BackendError, parseBackendError } from '../ApiError';
+import { BackendError, createEmptyProblem, parseBackendError } from '../ApiError';
 
 const defaultStatusValidator = (status: number) => status >= 200 && status < 300;
 
-export const WrappedFetch = async <T>(url: string, init: FetchOptions<T> = {}): Promise<FetchResponse<T>> => {
-  if (!init?.useBackend) {
+export const WrappedFetch = async <T = undefined>(url: string, init: FetchOptions<T> = {}): FetchResponse<T> => {
+  if (!init?.useBackend && init.fallbackValue) {
     return {
       isFallback: true,
+      wasSuccessful: true,
+      isError: false,
       data: init.fallbackValue
     };
   }
@@ -32,25 +34,38 @@ export const WrappedFetch = async <T>(url: string, init: FetchOptions<T> = {}): 
     const isStatusValid = (init.statusValidator ?? defaultStatusValidator)(response.status);
     if (!isStatusValid) {
       return {
+        isError: true,
+        isFallback: false,
+        wasSuccessful: false,
         error: parseBackendError(await response.text())
       };
     }
 
     if (init.responseOptions?.decodeJson === false) {
       return {
+        isError: false,
+        isFallback: false,
+        wasSuccessful: true,
         data: (await response.text()) as T
       };
     }
 
     const data = await response.json();
     return {
+      isError: false,
+      isFallback: false,
+      wasSuccessful: true,
       data
     };
   } catch (err: unknown) {
     return {
+      isError: true,
+      isFallback: false,
+      wasSuccessful: false,
       error: {
+        problem: createEmptyProblem(),
         code: BackendError._InternalError,
-        message: `${err}`
+        type: `${err}`
       }
     };
   }

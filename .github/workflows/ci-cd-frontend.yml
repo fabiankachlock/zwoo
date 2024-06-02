@@ -12,31 +12,26 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: zwoo-hq/setup-zwooc@v1
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "7.0.x"
+          dotnet-version: "8"
       - name: Install dotnet wasm-tools
         run: dotnet workload install wasm-tools
       - name: Setup
         working-directory: ./frontend
         run: "yarn"
       - name: Lint
-        working-directory: ./frontend
-        run: "yarn lint:ci"
+        run: "zwooc exec lint:ci"
       - name: Dependency Check
-        working-directory: ./frontend
-        run: "yarn deps:check"
+        run: "zwooc exec deps:check"
       - name: Check i18n
-        working-directory: ./frontend
-        run: "yarn i18n:check"
+        run: "zwooc exec i18n:check"
       - name: Format
-        working-directory: ./frontend
-        run: "yarn format:ci"
+        run: "zwooc exec format:ci"
       - name: Test
-        working-directory: ./frontend
-        run: "yarn test:unit"
+        run: "zwooc exec test:unit"
       - name: Build
-        working-directory: ./frontend
-        run: "yarn build"
+        run: "zwooc build prod"

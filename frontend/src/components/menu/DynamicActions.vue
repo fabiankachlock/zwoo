@@ -9,7 +9,7 @@
       </router-link>
     </div>
   </Environment>
-  <Environment show="online">
+  <Environment :include="['online', 'local']">
     <div class="flex items-center tc-main">
       <div class="hidden lg:block">
         <router-link to="/" class="link">
@@ -40,12 +40,14 @@
             {{ t('nav.createGame') }}
           </span>
         </router-link>
-        <router-link v-else to="/create-account" class="link">
-          <Icon icon="ic:outline-add-box" class="tc-primary"></Icon>
-          <span>
-            {{ t('nav.createAccount') }}
-          </span>
-        </router-link>
+        <Environment show="online">
+          <router-link v-if="!isLoggedIn" to="/create-account" class="link">
+            <Icon icon="ic:outline-add-box" class="tc-primary"></Icon>
+            <span>
+              {{ t('nav.createAccount') }}
+            </span>
+          </router-link>
+        </Environment>
       </div>
     </div>
   </Environment>

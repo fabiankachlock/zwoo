@@ -23,7 +23,6 @@ import ConsentManager from './components/cookies/ConsentManager.vue';
 import Loader from './components/misc/Loader.vue';
 import Snackbar from './components/misc/Snackbar.vue';
 import { useRootApp } from './core/adapter/app';
-import { useAuth } from './core/adapter/auth';
 import { useConfig } from './core/adapter/config';
 import { useCookies } from './core/adapter/cookies';
 import { CardTheme } from './core/domain/cards/CardTheme';
@@ -34,7 +33,6 @@ const app = useRootApp();
 const isLoading = computed(() => app.isLoading);
 
 app.configure(); // init app
-useAuth().configure(); // 'read' from may existing session
 const cookies = useCookies();
 cookies.setup();
 const asyncSetup = async () => {

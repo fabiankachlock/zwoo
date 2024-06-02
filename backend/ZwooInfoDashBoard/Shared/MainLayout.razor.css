@@ -1,6 +1,0 @@
-#notAuthorized {
-  display: grid;
-  place-items: center;
-  height: 100vh;
-  max-height: calc(100vh - 100%);
-}

@@ -8,59 +8,70 @@ import { joinQuery } from '@/core/helper/utils';
 type ExtractRouteParams<str extends string> = str extends ''
   ? {}
   : str extends `/${infer rest}`
-  ? ExtractRouteParams<rest>
-  : str extends `:${infer front}:${infer rest}`
-  ? { [K in front]: string } & ExtractRouteParams<rest>
-  : str extends `${string}/${infer rest}`
-  ? ExtractRouteParams<rest>
-  : str extends `${string}?${string}=:${infer paramName}:${infer rest}`
-  ? { [K in paramName]: string } & ExtractRouteParams<rest>
-  : str extends `&${string}=:${infer paramName}:${infer rest}`
-  ? { [K in paramName]: string } & ExtractRouteParams<rest>
-  : {};
+    ? ExtractRouteParams<rest>
+    : str extends `:${infer front}:${infer rest}`
+      ? { [K in front]: string } & ExtractRouteParams<rest>
+      : str extends `${string}/${infer rest}`
+        ? ExtractRouteParams<rest>
+        : str extends `${string}?${string}=:${infer paramName}:${infer rest}`
+          ? { [K in paramName]: string } & ExtractRouteParams<rest>
+          : str extends `&${string}=:${infer paramName}:${infer rest}`
+            ? { [K in paramName]: string } & ExtractRouteParams<rest>
+            : {};
 
 export enum Endpoint {
-  CreateAccount = 'auth/create',
-  AccountVerify = 'auth/verify?id=:id:&code=:code:',
+  Discover = 'discover',
   AccountLogin = 'auth/login',
+  GuestLogin = 'auth/login-guest',
   AccountLogout = 'auth/logout',
   UserInfo = 'auth/user',
-  DeleteAccount = 'auth/delete',
-  JoinGame = 'game/join',
-  Websocket = 'game/join/:id:',
-  LeaderBoard = 'game/leaderboard',
-  LeaderBoardPosition = 'game/leaderboard/position',
-  Games = 'game/games',
-  Game = 'game/games/:id:',
-  Version = 'version',
-  Changelog = 'changelog?version=:version:',
-  ChangePassword = 'account/changePassword',
-  RequestPasswordReset = 'account/requestPasswordReset',
-  ResetPassword = 'account/resetPassword',
-  ResendVerificationEmail = 'auth/resendVerificationEmail',
-  VersionHistory = 'versionHistory',
+  CreateAccount = 'account/create',
+  DeleteAccount = 'account/delete',
+  AccountVerify = 'account/verify?id=:id:&code=:code:',
+  ResendVerificationEmail = 'account/verify/resend',
   UserSettings = 'account/settings',
-  ContactFormSubmission = 'contactForm'
+  ChangePassword = 'account/password/change',
+  RequestPasswordReset = 'account/password/request-reset',
+  ResetPassword = 'account/password/reset',
+  LeaderBoard = 'leaderboard',
+  LeaderBoardPosition = 'leaderboard/self',
+  Games = 'game/list?recommended=:recommended:&offset=:offset:&limit=:limit:&filter=:filter:&publicOnly=:public:',
+  CreateGame = 'game/create',
+  JoinGame = 'game/join',
+  Game = 'game/:id:',
+  Websocket = 'game/:id:/connect',
+  VersionHistory = 'changelog',
+  Changelog = 'changelog/:version:',
+  ContactFormSubmission = 'contact'
 }
 
 export class Backend {
-  public static readonly isDev = AppConfig.IsDev;
-  public static readonly Url: string = AppConfig.ApiUrl;
-  public static readonly WsOverride: string | undefined = AppConfig.WsUrl;
+  public readonly isDev = AppConfig.IsDev;
+  public readonly apiUrl: string;
+  public readonly wsOverride: string;
 
-  public static getUrl(endpoint: Endpoint): string {
-    if (endpoint === Endpoint.Websocket) {
-      return Backend.WsOverride ? `${Backend.WsOverride}${endpoint}` : `${Backend.Url}${endpoint}`;
-    }
-    return `${Backend.Url}${endpoint}`;
+  public constructor(apiUrl: string = AppConfig.ApiUrl, wsUrl: string = AppConfig.WsUrl) {
+    this.apiUrl = apiUrl;
+    this.wsOverride = wsUrl;
   }
 
-  public static getDynamicUrl<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>): string {
+  public static from(apiUrl: string, wsUrl: string): Backend {
+    return new Backend(apiUrl, wsUrl);
+  }
+
+  public getUrl(endpoint: Endpoint): string {
+    if (endpoint === Endpoint.Websocket) {
+      return this.wsOverride ? `${this.wsOverride}${endpoint}` : `${this.apiUrl}${endpoint}`;
+    }
+    return `${this.apiUrl}${endpoint}`;
+  }
+
+  public getDynamicUrl<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>): string {
     let url = '';
     if (endpoint === Endpoint.Websocket) {
-      url = Backend.WsOverride ? `${Backend.WsOverride}${endpoint}` : `${Backend.Url}${endpoint}`;
+      url = this.wsOverride ? `${this.wsOverride}${endpoint}` : `${this.apiUrl}${endpoint}`;
     } else {
-      url = `${Backend.Url}${endpoint}`;
+      url = `${this.apiUrl}${endpoint}`;
     }
 
     for (const key in params) {
@@ -70,11 +81,11 @@ export class Backend {
     return url;
   }
 
-  public static getUrlWithQuery(endpoint: Endpoint, query: LocationQuery): string {
+  public getUrlWithQuery(endpoint: Endpoint, query: LocationQuery): string {
     return `${this.getUrl(endpoint)}?${joinQuery(query)}`;
   }
 
-  public static getDynamicUrlWithQuery<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>, query: LocationQuery): string {
+  public getDynamicUrlWithQuery<U extends Endpoint>(endpoint: U, params: ExtractRouteParams<U>, query: LocationQuery): string {
     return `${this.getDynamicUrl(endpoint, params)}?${joinQuery(query)}`;
   }
 }

@@ -7,6 +7,7 @@
       "game": "Game",
       "account": "Account",
       "developers": "Developer",
+      "server": "Local Server",
       "": "Error"
     },
     "update": {
@@ -61,6 +62,8 @@
     "help": "Help",
     "contact": "Contact",
     "statusOffline": "Offline",
+    "statusLocal": "Connected",
+    "disconnect": "Disconnect",
     "createGame": "Create Game",
     "joinGame": "Join Game"
   },
@@ -73,6 +76,14 @@
     "resetPassword": "Reset Password",
     "notVerifiedInfo": "You account seems to be not verified. If you did not get an email, you can resend the verification email to verify your account.",
     "resendVerifyEmail": "Resend email"
+  },
+  "loginLocal": {
+    "title": "Guest Login",
+    "server": "Server URL",
+    "name": "Username",
+    "namePlaceholder": "Your name",
+    "infoServer": "The guarantee of adequate data protection measures cannot be ensured on third-party servers. Therefore, the use and distribution of personal data on local servers should be avoided.",
+    "submit": "Sign In"
   },
   "createAccount": {
     "title": "Create Account",
@@ -122,7 +133,8 @@
     "create": "Create Game",
     "join": "Join Game",
     "stats": "Show Statistic",
-    "greeting": "Hello, {name}!"
+    "greeting": "Hello, {name}!",
+    "localGame": "Local Game"
   },
   "list": {
     "title": "Available Games",
@@ -220,6 +232,10 @@
     "editBot": "Edit bot",
     "updateBot": "Save Bot",
     "createBot": "Create Bot",
+    "botType": "Difficulty level",
+    "dumpBot": "Easy",
+    "normalBot": "Normal",
+    "smartBot": "Hard",
     "edit": "edit",
     "noPlayers": "no players available...",
     "noSpectators": "no spectators available...",
@@ -233,6 +249,19 @@
     "noWinsOfflineInfo": "Wins of offline games do not count in the leaderboard."
   },
   "rules": {
+    "manageProfiles": "Manage profiles",
+    "groupSystem": "Prepared profiles",
+    "groupUser": "Your profiles",
+    "applyProfile": "Apply",
+    "newProfile": "Create new profile",
+    "profileInfo": "Game Profiles are a possibility to save and reuse your game settings.",
+    "profileName": "Profile name",
+    "profilePlaceholder": "My profile",
+    "createProfile": "Create",
+    "profiles": {
+      "default": "Defaults",
+      "full": "All rules"
+    },
     "widget": {
       "numberPlaceholder": "Number"
     }
@@ -475,5 +504,55 @@
     "5-self+target": "{other} swapped cards with you",
     "6": "{target} changed the color",
     "6-self": "You changed the color"
+  },
+  "envLock": {
+    "title": "Environment Lock",
+    "info": "zwoo is locked to {0} in this environment. The {1} is not available.",
+    "reload": "Reload",
+    "online": "online mode",
+    "offline": "offline mode",
+    "local": "local mode"
+  },
+  "localServer": {
+    "controls": "Server Controls",
+    "start": "Start server",
+    "stop": "Stop server",
+    "config": "Configuration",
+    "configKey": {
+      "serverId": "Server ID",
+      "secretKey": "Server Secret",
+      "port": "Port",
+      "ip": "IP",
+      "useDynamicPort": "Use dynamic Port",
+      "useLocalhost": "Listen on localhost",
+      "useAllIps": "Listen on all addresses",
+      "allowedOrigins": "Allowed origins",
+      "useStrictOrigins": "Strict origins check"
+    },
+    "noConfig": "Server configuration not available",
+    "stats": "Statistic",
+    "logIn": "Play local",
+    "editConfig": "Edit",
+    "changeConfig": "Edit configuration",
+    "save": "Save",
+    "ip": {
+      "title": "IP Address",
+      "info": "The IP-Address of the adapter to listen on.",
+      "custom": "custom adapter",
+      "localhost": "localhost adapter",
+      "all": "all adapters"
+    },
+    "port": {
+      "title": "Port",
+      "info": "The port to listen on. The option dynamic port will choose a free port automatically.",
+      "dynamic": "dynamic port",
+      "custom": "custom port"
+    },
+    "security": {
+      "title": "Security",
+      "info": "This options can limit which frontend can connect. To restrict access one can configure a CORS compatible list of origins. A blank list will allow only the built in frontend to connect.",
+      "restricted": "allow only specific origins",
+      "open": "allow all origins"
+    }
   }
 }

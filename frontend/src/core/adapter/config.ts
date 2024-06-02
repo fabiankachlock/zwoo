@@ -1,3 +1,4 @@
+import { getCurrent } from '@tauri-apps/api/window';
 import { defineStore } from 'pinia';
 
 import { AppConfig } from '@//config';
@@ -79,9 +80,19 @@ const changeUIMode = (mode: string) => {
 
 const changeFullscreen = (enabled: boolean) => {
   if (enabled) {
-    document.documentElement.requestFullscreen();
-  } else if (document.fullscreenElement) {
-    document.exitFullscreen();
+    if (AppConfig.IsTauri) {
+      const appWindow = getCurrent();
+      appWindow.setFullscreen(true);
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+  } else {
+    if (AppConfig.IsTauri) {
+      const appWindow = getCurrent();
+      appWindow.setFullscreen(false);
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
   }
 };
 
@@ -135,8 +146,8 @@ export const useConfig = defineStore('config', {
     async loadProfile() {
       Logger.info(`loading config for the current user`);
       const config = await useApi().loadUserSettings();
-      if (config) {
-        const parsedConfig = this._deserializeConfig(config);
+      if (config.wasSuccessful) {
+        const parsedConfig = this._deserializeConfig(config.data.settings);
         this.applyConfig(parsedConfig ?? {});
       }
     },

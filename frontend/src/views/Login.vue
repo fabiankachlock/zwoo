@@ -43,7 +43,7 @@ import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { BackendError, BackendErrorType, getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { BackendError, BackendErrorType, getBackendErrorTranslation } from '@/core/api/ApiError';
 import { joinQuery } from '@/core/helper/utils';
 import { CaptchaValidator } from '@/core/services/validator/captcha';
 import FormLayout from '@/layouts/FormLayout.vue';
@@ -97,9 +97,8 @@ const logIn = async () => {
 const resendVerifyEmail = async () => {
   showNotVerifiedInfo.value = false;
   const res = await resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
-  const [, err] = unwrapBackendError(res);
-  if (err !== undefined) {
-    error.value = [getBackendErrorTranslation(err)];
+  if (res.isError) {
+    error.value = [getBackendErrorTranslation(res.error)];
   }
 };
 </script>

@@ -1,0 +1,19 @@
+#notAuthorized {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  max-height: calc(100vh - 100%);
+}
+
+.longName {
+  display: none;
+}
+
+@media only screen and (min-width: 710px) {
+  .longName {
+    display: unset !important;
+  }
+  .sortName {
+    display: none;
+  }
+}

@@ -1,5 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 
+import { AppConfig } from '@/config';
+
 export const SettingsRoutes: Array<RouteRecordRaw> = [
   {
     path: '/settings',
@@ -14,8 +16,8 @@ export const SettingsRoutes: Array<RouteRecordRaw> = [
         path: 'account',
         component: () => import('../views/settings/Account.vue'),
         meta: {
-          onlineOnly: true,
-          offlineRedirect: '/settings'
+          excludeEnv: 'offline',
+          envRedirect: '/settings'
         }
       },
       {
@@ -29,7 +31,15 @@ export const SettingsRoutes: Array<RouteRecordRaw> = [
       {
         path: 'about',
         component: () => import('../views/settings/About.vue')
-      }
+      },
+      ...(AppConfig.IsTauri
+        ? [
+            {
+              path: 'server',
+              component: () => import('../views/settings/LocalServer.vue')
+            }
+          ]
+        : [])
     ]
   },
   {

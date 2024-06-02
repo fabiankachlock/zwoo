@@ -79,7 +79,7 @@ import { useAuth } from '@/core/adapter/auth';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { useCookies } from '@/core/adapter/cookies';
 import { useApi } from '@/core/adapter/helper/useApi';
-import { getBackendErrorTranslation, unwrapBackendError } from '@/core/api/ApiError';
+import { getBackendErrorTranslation } from '@/core/api/ApiError';
 import { joinQuery } from '@/core/helper/utils';
 import { CaptchaValidator } from '@/core/services/validator/captcha';
 import { EmailValidator } from '@/core/services/validator/email';
@@ -170,9 +170,8 @@ const resendVerifyEmail = async () => {
   if (!showResend.value) return;
   showResend.value = false;
   const res = await resendVerificationEmail(email.value, config.get(ZwooConfigKey.Language));
-  const [, err] = unwrapBackendError(res);
-  if (err !== undefined) {
-    error.value = [getBackendErrorTranslation(err)];
+  if (res.isError) {
+    error.value = [getBackendErrorTranslation(res.error)];
   }
 };
 </script>

@@ -34,10 +34,18 @@
         </div>
         -->
       </div>
-      <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
-        <router-link class="flex flex-row items-center" to="/leaderboard">
-          <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
-          <p class="tc-main-light inline-block mx-1">{{ t('landing.leaderboard') }}</p>
+      <Environment show="online">
+        <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
+          <router-link class="flex flex-row items-center" to="/leaderboard">
+            <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
+            <p class="tc-main-light inline-block mx-1">{{ t('landing.leaderboard') }}</p>
+          </router-link>
+        </div>
+      </Environment>
+      <div v-if="!AppConfig.IsTauri" class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
+        <router-link class="flex flex-row items-center" to="/login-local">
+          <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
+          <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
         </router-link>
       </div>
       <!-- TODO tmp(beta): <div class="action px-4 py-1 rounded m-2 bg-dark hover:bg-darkest">
@@ -54,7 +62,9 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
+import { AppConfig } from '@/config';
 import { useAuth } from '@/core/adapter/auth';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
