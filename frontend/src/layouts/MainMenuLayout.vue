@@ -4,7 +4,7 @@
       <header class="h-full">
         <div class="h-full mx-3 my-0 relative flex justify-between items-center flex-row">
           <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">
-            <img src="/img/logo/zwoo_logo_simple_none.svg" class="h-8 w-8 mr-2" />
+            <img src="/img/logo/pride/zwoo_logo_simple_pride_none.svg" class="h-8 w-8 mr-2" />
             <h1 class="tc-primary text-3xl mb-[0.25rem]">ZWOO</h1>
           </router-link>
           <NavBar />

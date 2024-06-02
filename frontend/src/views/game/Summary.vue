@@ -5,7 +5,7 @@
         class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-dark mouse:hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
       >
         <div class="h-full flex-1 flex flex-nowrap items-center justify-start">
-          <img src="/img/logo/zwoo_logo_simple_none.png" alt="" class="max-h-full mr-3" />
+          <img src="/img/logo/pride/zwoo_logo_simple_pride_none.png" alt="" class="max-h-full mr-3" />
           <p class="tc-main text-xl">{{ winner.username }}</p>
           <template v-if="winner.isBot">
             <span class="tc-primary text-2xl ml-2">
