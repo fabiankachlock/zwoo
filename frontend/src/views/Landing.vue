@@ -1,7 +1,7 @@
 <template>
   <MaxWidthLayout size="small" classes="pt-10">
     <div class="w-full flex justify-center">
-      <img style="width: 10rem; max-width: 80%" src="/img/logo/zwoo_logo_none.svg" alt="zwoo-logo" />
+      <div style="max-width: 10rem" class="logo" v-html="Logo"></div>
     </div>
     <h1 class="text-6xl tc-primary text-center">zwoo</h1>
     <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
+import Logo from '@/assets/zwoo_logo_none_auto.svg?raw';
 import { Icon } from '@/components/misc/Icon';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
@@ -62,5 +63,10 @@ const { t } = useI18n();
 
 .action:hover .icon {
   @apply scale-125;
+}
+
+.logo :deep(svg) {
+  width: 100%;
+  height: auto;
 }
 </style>

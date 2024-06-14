@@ -3,50 +3,66 @@
 @tailwind utilities;
 
 :root {
-	--duration-xs: 60ms;
-	--duration-md: 120ms;
-	--duration-lg: 200ms;
-	--duration-xl: 400ms;
-
-	--color-primary: #29a4e7;
-	--color-primary-hover: #279cdb;
+	--color-primary: #0ea5e9;
+	--color-primary-hover: #0c91cf;
 	--color-primary-contrast-text: #0f0f0e;
 
-	--color-secondary: #36397f;
-	--color-secondary-hover: #313473;
+	--color-secondary: #7c3aed;
+	--color-secondary-hover: #6e33d4;
 	--color-secondary-contrast-text: #fdffdc;
-}
 
-[data-theme='light'] {
-	--color-bg: #d2d0d9;
-	--color-bg-surface: #eeebf5;
-	--color-bg-alt: #dfd8f2;
-	--color-bg-alt-hover: #d3cce6;
+	--color-error: #dc2626;
+	--color-error-hover: #c22121;
 
-	--color-border: #363645;
-	--color-divider: #181822;
+	--color-success: #16a34a;
+	--color-success-hover: #128a3e;
 
-	--color-text: #07071c;
-	--color-text-secondary: #49495e;
-
-	--color-primary-text: #29a4e7;
-	--color-secondary-text: #36397f;
+	--color-warning: #eab308;
+	--color-warning-hover: #d19e06;
 }
 
 [data-theme='dark'] {
 	--color-bg: #2e2b36;
-	--color-bg-surface: #15131c;
-	--color-bg-alt: #211c2f;
-	--color-bg-alt-hover: #1b1726;
+	--color-inverse-bg: #d2d0d9;
+	--color-bg-surface: #202023;
+	--color-bg-surface-hover: #38383d;
+	--color-bg-alt: #353550;
+	--color-bg-alt-hover: #454569;
 
-	--color-border: #a6a5a1;
-	--color-divider: #d9d8d4;
+	--color-border: #404040;
+	--color-border-light: #737373;
+	--color-divider: #d4d4d4;
 
-	--color-text: #e6e5e1;
-	--color-text-secondary: #bfbeba;
+	--color-text: #f4f4f5;
+	--color-text-secondary: #a1a1aa;
 
-	--color-primary-text: #2ba9ed;
-	--color-secondary-text: #9c8aff;
+	--color-primary-text: #0ea5e9;
+	--color-secondary-text: #a78bfa;
+	--color-error-text: #ff5768;
+	--color-success-text: #4ade80;
+	--color-warning-text: #eab308;
+}
+
+[data-theme='light'] {
+	--color-bg: #d2d0d9;
+	--color-inverse-bg: #2e2b36;
+	--color-bg-surface: #f4f4f5;
+	--color-bg-surface-hover: #dbdbdb;
+	--color-bg-alt: #d8dbf2;
+	--color-bg-alt-hover: #c1c4d9;
+
+	--color-border: #a3a3a3;
+	--color-border-light: #525252;
+	--color-divider: #262626;
+
+	--color-text: #07071c;
+	--color-text-secondary: #49495e;
+
+	--color-primary-text: #075985;
+	--color-secondary-text: #6d28d9;
+	--color-error-text: #991b1b;
+	--color-success-text: #166534;
+	--color-warning-text: #854d0e;
 }
 
 @layer utilities {

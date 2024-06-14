@@ -132,7 +132,7 @@ export const MenuRoutes: Array<RouteRecordRaw> = [
     component: () => import('../views/Offline.vue'),
     meta: {
       envOnly: 'offline',
-      onlineRedirect: '/home'
+      envRedirect: '/home'
     }
   },
   {
