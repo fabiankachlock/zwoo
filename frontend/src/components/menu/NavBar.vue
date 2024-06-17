@@ -1,13 +1,13 @@
 <template>
   <div class="h-full flex items-center relative">
     <DynamicActions></DynamicActions>
-    <div class="ml-2 text-3xl tc-main-secondary cursor-pointer" @click="toggleMenu">
-      <Icon :icon="icon" class="tc-main-secondary" />
+    <div class="ml-2 text-3xl text-text-secondary cursor-pointer" @click="toggleMenu">
+      <Icon :icon="icon" class="text-text-secondary" />
     </div>
     <div :class="{ hidden: !isMenuOpen, block: isMenuOpen }" class="fixed inset-0" @click="closeMenu"></div>
     <div
       :class="{ 'max-h-0': !isMenuOpen, 'open max-h-[500px]': isMenuOpen }"
-      class="menu-container bg-surface border-1 bc-primary fixed z-10 right-0 transition duration-300 overflow-hidden shadow-sm"
+      class="menu-container bg-surface border border-primary fixed z-10 right-0 transition duration-300 overflow-hidden shadow-sm"
       style="min-width: 14rem"
       @click="closeMenu"
     >

@@ -1,11 +1,11 @@
 <template>
-  <div id="_layout__main-menu" class="bg-main">
-    <div class="header fixed top-0 left-0 right-0 bg-surface h-10 bc-primary border-b-1 shadow-sm z-30">
+  <div id="_layout__main-menu" class="bg-bg">
+    <div class="header fixed top-0 left-0 right-0 bg-surface h-10 border-primary border-b shadow-sm z-30">
       <header class="h-full">
         <div class="h-full mx-3 my-0 relative flex justify-between items-center flex-row">
           <router-link to="/home" class="cursor-pointer flex flex-row items-center justify-start">
             <div class="logo h-8 w-8 mr-2" v-html="Logo"></div>
-            <h1 class="tc-primary text-3xl mb-[0.25rem]">ZWOO</h1>
+            <h1 class="text-primary-text text-3xl mb-[0.25rem]">ZWOO</h1>
           </router-link>
           <NavBar />
         </div>
@@ -25,7 +25,7 @@
         <!-- workaround for ios hidden content on the end of the side -->
         <div class="h-14"></div>
       </div>
-      <div class="footer fixed bottom-0 left-0 right-0 bg-surface bc-primary border-t-1 z-30">
+      <div class="footer fixed bottom-0 left-0 right-0 bg-surface border-primary border-t z-30">
         <Footer />
       </div>
     </div>

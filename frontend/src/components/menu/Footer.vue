@@ -3,15 +3,15 @@
     <div class="h-8 py-1 grid grid-cols-3 items-center mx-3">
       <div class="flex items-center">
         <router-link to="/">
-          <Icon icon="mi:home" class="text-xl tc-main hover:scale-110 transition-transform" />
+          <Icon icon="mi:home" class="text-xl text-text hover:scale-110 transition-transform" />
         </router-link>
         <Environment show="offline">
-          <Icon icon="ic:baseline-wifi-off" class="ml-3 text-xs tc-main-secondary"></Icon>
-          <p class="text-xs tc-main-secondary ml-1">{{ t('nav.statusOffline') }}</p>
+          <Icon icon="ic:baseline-wifi-off" class="ml-3 text-xs text-text-secondary"></Icon>
+          <p class="text-xs text-text-secondary ml-1">{{ t('nav.statusOffline') }}</p>
         </Environment>
         <Environment show="local">
-          <Icon icon="akar-icons:link-chain" class="ml-3 text-xs tc-main-secondary"></Icon>
-          <p class="text-xs tc-main-secondary ml-1 none hidden sm:block">
+          <Icon icon="akar-icons:link-chain" class="ml-3 text-xs text-text-secondary"></Icon>
+          <p class="text-xs text-text-secondary ml-1 none hidden sm:block">
             {{ t('nav.statusLocal') }}<span class="hidden lg:inline-block">: {{ server }}</span>
           </p>
         </Environment>
@@ -53,7 +53,7 @@ const server = computed(() => {
 
 <style lang="css" scoped>
 .footer-item:not(:last-child) {
-  @apply border-r bc-lightest px-3;
+  @apply border-r border-border px-3;
 }
 
 a.footer-item {
@@ -62,7 +62,7 @@ a.footer-item {
 
 .footer-item,
 .footer-item:last-child {
-  @apply px-3 tc-main-secondary;
+  @apply px-3 text-text-secondary;
 }
 
 .help:hover #icon {

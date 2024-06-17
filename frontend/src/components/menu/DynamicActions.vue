@@ -1,8 +1,8 @@
 <template>
   <Environment show="offline">
-    <div class="hidden xs:block tc-main">
+    <div class="hidden xs:block text-text">
       <router-link to="/" class="link">
-        <Icon icon="mi:home" class="tc-primary"></Icon>
+        <Icon icon="mi:home" class="text-primary-text"></Icon>
         <span>
           {{ t('nav.home') }}
         </span>
@@ -10,10 +10,10 @@
     </div>
   </Environment>
   <Environment :include="['online', 'local']">
-    <div class="flex items-center tc-main">
+    <div class="flex items-center text-text">
       <div class="hidden lg:block">
         <router-link to="/" class="link">
-          <Icon icon="mi:home" class="tc-primary"></Icon>
+          <Icon icon="mi:home" class="text-primary-text"></Icon>
           <span>
             {{ t('nav.home') }}
           </span>
@@ -21,13 +21,13 @@
       </div>
       <div class="hidden xs:block">
         <router-link v-if="isLoggedIn" to="/available-games" class="link">
-          <Icon icon="fluent:square-arrow-forward-32-regular" class="tc-primary"></Icon>
+          <Icon icon="fluent:square-arrow-forward-32-regular" class="text-primary-text"></Icon>
           <span>
             {{ t('nav.joinGame') }}
           </span>
         </router-link>
         <router-link v-else to="/login" class="link">
-          <Icon icon="mdi:login-variant" class="tc-primary"></Icon>
+          <Icon icon="mdi:login-variant" class="text-primary-text"></Icon>
           <span>
             {{ t('nav.login') }}
           </span>
@@ -35,14 +35,14 @@
       </div>
       <div class="hidden sm:block">
         <router-link v-if="isLoggedIn" to="/create-game" class="link">
-          <Icon icon="fluent:window-new-16-regular" class="tc-primary"></Icon>
+          <Icon icon="fluent:window-new-16-regular" class="text-primary-text"></Icon>
           <span>
             {{ t('nav.createGame') }}
           </span>
         </router-link>
         <Environment show="online">
           <router-link v-if="!isLoggedIn" to="/create-account" class="link">
-            <Icon icon="ic:outline-add-box" class="tc-primary"></Icon>
+            <Icon icon="ic:outline-add-box" class="text-primary-text"></Icon>
             <span>
               {{ t('nav.createAccount') }}
             </span>
