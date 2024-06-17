@@ -1,14 +1,14 @@
 <template>
   <MaxWidthLayout size="small">
-    <div class="w-full flex flex-row justify-between items-center sticky top-10 z-10 bg-main">
-      <h2 class="tc-main text-4xl pt-3 pb-1">{{ t('list.title') }}</h2>
+    <div class="w-full flex flex-row justify-between items-center sticky top-10 z-10 bg-bg">
+      <h2 class="text-text text-4xl pt-3 pb-1">{{ t('list.title') }}</h2>
       <div class="flex flex-nowrap">
-        <button class="scan-code btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="scanCode">
+        <button class="scan-code btn-wrapper bg-bg hover:bg-bg text-text-dark" @click="scanCode">
           <div class="icon-wrapper">
             <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
           </div>
         </button>
-        <button class="refresh btn-wrapper bg-lightest hover:bg-light tc-main-dark" @click="refresh">
+        <button class="refresh btn-wrapper bg-bg hover:bg-bg text-text-dark" @click="refresh">
           <div class="icon-wrapper">
             <Icon icon="iconoir:refresh" class="icon text-2xl" :class="{ 'animate-spin': refreshing }"></Icon>
           </div>
@@ -22,26 +22,32 @@
     </div>
     <div class="relative pt-6">
       <!-- Saved game -->
-      <div v-if="savedGame" class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-default mb-3">
+      <div
+        v-if="savedGame"
+        class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-bg-surface px-3 py-2 cursor-default mb-3"
+      >
         <div class="flex justify-between align-center mb-2">
-          <h3 class="tc-main text-xl">{{ t('list.savedGame') }}</h3>
+          <h3 class="text-text text-xl">{{ t('list.savedGame') }}</h3>
           <button @click="removeSavedGame()">
-            <Icon class="text-lg tc-main transition-transform hover:scale-110" icon="akar-icons:cross" />
+            <Icon class="text-lg text-text transition-transform hover:scale-110" icon="akar-icons:cross" />
           </button>
         </div>
         <div class="flex flex-row justify-between flex-wrap items-center">
-          <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">
+          <div class="text text-text-light flex flex-row flex-nowrap justify-start items-center">
             <p class="text-md mr-2">
               {{ savedGame.name }}
             </p>
-            <p v-if="!savedGame.isPublic" class="inline-flex align-baseline flex-row flex-nowrap items-center tc-main-secondary text-sm italic mx-1">
-              <Icon icon="iconoir:lock-key" class="text-sm tc-secondary mx-0.5" /><span>{{ t('list.private') }}</span>
+            <p
+              v-if="!savedGame.isPublic"
+              class="inline-flex align-baseline flex-row flex-nowrap items-center text-text-secondary text-sm italic mx-1"
+            >
+              <Icon icon="iconoir:lock-key" class="text-sm text-secondary-text mx-0.5" /><span>{{ t('list.private') }}</span>
             </p>
-            <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', savedGame.playerCount) }})</p>
+            <p class="text-text-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', savedGame.playerCount) }})</p>
           </div>
           <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
-            <div class="tc-primary">
-              <button class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2" @click.stop="joinSavedGame()">
+            <div class="text-primary-text">
+              <button class="flex flex-row flex-nowrap items-center h-full bg-bg hover:bg-bg rounded py-1 px-2" @click.stop="joinSavedGame()">
                 <span>{{ t('list.rejoin') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
               </button>
             </div>
@@ -53,32 +59,32 @@
         <div
           v-for="game of games"
           :key="game.id"
-          class="item my-1 rounded-xl border bc-darkest mouse:hover:bg-darkest mouse:hover:bc-primary bg-dark px-3 py-2 cursor-pointer"
+          class="item my-1 rounded-xl border border-border mouse:hover:bg-darkest mouse:hover:border-primary bg-bg-surface px-3 py-2 cursor-pointer"
         >
           <router-link :to="'/join/' + game.id">
             <div class="flex flex-row justify-between flex-wrap items-center">
-              <div class="text tc-main-light flex flex-row flex-nowrap justify-start items-center">
+              <div class="text text-text-light flex flex-row flex-nowrap justify-start items-center">
                 <p class="text-md mr-2">
                   {{ game.name }}
                 </p>
-                <p v-if="!game.isPublic" class="inline-flex align-baseline flex-row flex-nowrap items-center tc-main-secondary text-sm italic mx-1">
-                  <Icon icon="iconoir:lock-key" class="text-sm tc-secondary mx-0.5" /><span>{{ t('list.private') }}</span>
+                <p v-if="!game.isPublic" class="inline-flex align-baseline flex-row flex-nowrap items-center text-text-secondary text-sm italic mx-1">
+                  <Icon icon="iconoir:lock-key" class="text-sm text-secondary-text mx-0.5" /><span>{{ t('list.private') }}</span>
                 </p>
-                <p class="tc-main-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', game.playerCount) }})</p>
+                <p class="text-text-secondary text-xs italic mx-1 whitespace-nowrap">({{ t('list.players', game.playerCount) }})</p>
               </div>
               <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
                 <div v-tooltip="t('list.spectate')" class="mr-3">
                   <router-link
                     :to="'/join/' + game.id + '?spectate'"
-                    class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2"
+                    class="flex flex-row flex-nowrap items-center h-full bg-bg hover:bg-bg rounded py-1 px-2"
                   >
-                    <Icon icon="iconoir:eye-alt" class="text-xl tc-main" />
+                    <Icon icon="iconoir:eye-alt" class="text-xl text-text" />
                   </router-link>
                 </div>
-                <div class="tc-primary">
+                <div class="text-primary-text">
                   <router-link
                     :to="'/join/' + game.id + '?play'"
-                    class="flex flex-row flex-nowrap items-center h-full bg-light hover:bg-main rounded py-1 px-2"
+                    class="flex flex-row flex-nowrap items-center h-full bg-bg hover:bg-bg rounded py-1 px-2"
                   >
                     <span>{{ t('list.play') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
                   </router-link>
@@ -87,22 +93,22 @@
             </div>
           </router-link>
         </div>
-        <div class="item my-1 rounded-xl border bc-lightest hover:bg-darkest hover:bc-primary bg-dark px-3 py-2 cursor-default">
+        <div class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-bg-surface px-3 py-2 cursor-default">
           <div>
-            <p class="text-center tc-main my-1">
+            <p class="text-center text-text my-1">
               {{ t(games.length === 0 ? 'list.nothingFound' : 'list.noFit') }}
             </p>
             <div class="flex flex-row justify-center">
-              <button class="nothing-found-btn bg-main hover:bg-light">
-                <router-link to="/create-game" class="text-sm tc-main-secondary block">{{ t('home.create') }}</router-link>
+              <button class="nothing-found-btn bg-bg hover:bg-bg">
+                <router-link to="/create-game" class="text-sm text-text-secondary block">{{ t('home.create') }}</router-link>
               </button>
               <button
-                class="nothing-found-btn bg-main hover:bg-light transition-transform"
+                class="nothing-found-btn bg-bg hover:bg-bg transition-transform"
                 :class="{ 'scale-95 opacity-50 pointer-events-none cursor-default': refreshing }"
                 :disabled="refreshing"
                 @click="refresh()"
               >
-                <p class="text-sm tc-main-secondary">
+                <p class="text-sm text-text-secondary">
                   {{ t('list.reload') }}
                 </p>
               </button>

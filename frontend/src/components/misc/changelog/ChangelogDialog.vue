@@ -1,16 +1,16 @@
 <template>
   <FloatingDialog v-show="changelog" :without-padding="true">
-    <div class="sticky top-0 z-10 px-5 pt-5 bg-lightest">
-      <h2 class="tc-main text-xl text-center py-2 bc-darkest border-b">{{ t('changelog.title', [version]) }}</h2>
+    <div class="sticky top-0 z-10 px-5 pt-5 bg-bg">
+      <h2 class="text-text text-xl text-center py-2 border-border border-b">{{ t('changelog.title', [version]) }}</h2>
     </div>
     <Changelog :changelog="changelog" />
-    <div class="sticky -bottom-[0.5px] bg-lightest px-5 pb-3">
-      <div class="flex justify-end items-center bc-darkest border-t">
+    <div class="sticky -bottom-[0.5px] bg-bg px-5 pb-3">
+      <div class="flex justify-end items-center border-border border-t">
         <button
-          class="mt-4 flex justify-center items-center bg-main border-2 border-primary px-4 py-1 rounded transition hover:bg-dark cursor-pointer select-none"
+          class="mt-4 flex justify-center items-center bg-bg border-2 border-primary px-4 py-1 rounded transition hover:bg-bg-surface cursor-pointer select-none"
           @click="close"
         >
-          <p class="tc-primary text-center">{{ t('changelog.close') }}</p>
+          <p class="text-primary-text text-center">{{ t('changelog.close') }}</p>
         </button>
       </div>
     </div>

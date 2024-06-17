@@ -9,11 +9,21 @@
           <span>
             {{ t('createAccount.username') }}
           </span>
-          <Icon v-if="!nameInfoOpen" icon="akar-icons:info" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="nameInfoOpen = true" />
-          <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main hover:tc-primary cursor-pointer text-xl" @click="nameInfoOpen = false" />
+          <Icon
+            v-if="!nameInfoOpen"
+            icon="akar-icons:info"
+            class="text-text hover:text-primary-text cursor-pointer text-xl"
+            @click="nameInfoOpen = true"
+          />
+          <Icon
+            v-else
+            icon="akar-icons:circle-chevron-up"
+            class="text-text hover:text-primary-text cursor-pointer text-xl"
+            @click="nameInfoOpen = false"
+          />
         </div>
         <div class="grid overflow-hidden grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': nameInfoOpen }">
-          <p class="min-h-0 tc-main-secondary font-normal ml-4 text-xs">
+          <p class="min-h-0 text-text-secondary font-normal ml-4 text-xs">
             {{ t('createAccount.nameInfo') }}
           </p>
         </div>
@@ -54,11 +64,11 @@
           <router-link class="w-full block text-center" :to="'/login?' + joinQuery(route.query)">{{ t('nav.login') }}</router-link>
         </FormAlternativeAction>
       </FormActions>
-      <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
-        <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
-        <p class="tc-main-secondary">{{ t('createAccount.info') }}</p>
-        <p class="tc-main-secondary">{{ t('createAccount.emailInfo') }}</p>
-        <button class="tc-primary mt-2 bg-main hover:bg-dark rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
+      <div v-if="showInfo" class="info border-2 rounded-lg border-primary p-2 my-4 mx-2">
+        <Icon icon="akar-icons:info" class="text-primary-text text-xl mb-2" />
+        <p class="text-text-secondary">{{ t('createAccount.info') }}</p>
+        <p class="text-text-secondary">{{ t('createAccount.emailInfo') }}</p>
+        <button class="text-primary-text mt-2 bg-bg hover:bg-bg-surface rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
           {{ t('createAccount.resendVerifyEmail') }}
         </button>
       </div>

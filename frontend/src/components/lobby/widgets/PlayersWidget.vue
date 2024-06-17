@@ -67,16 +67,16 @@ const handlePlayerToSpectator = (id: number) => {
 </script>
 
 <template>
-  <Widget v-model="isOpen" title="wait.players" widget-class="bg-light" button-class="bg-main hover:bg-dark">
+  <Widget v-model="isOpen" title="wait.players" widget-class="bg-bg" button-class="bg-bg hover:bg-bg-surface">
     <template #actions>
       <div class="flex flex-row">
         <Environment :exclude="['offline']">
-          <button class="share rounded m-1 bg-main hover:bg-dark tc-main-light" @click="shareSheetOpen = true">
+          <button class="share rounded m-1 bg-bg hover:bg-bg-surface text-text-light" @click="shareSheetOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
             </div>
           </button>
-          <button class="scan-code rounded m-1 mr-2 bg-main hover:bg-dark tc-main-light" @click="qrCodeOpen = true">
+          <button class="scan-code rounded m-1 mr-2 bg-bg hover:bg-bg-surface text-text-light" @click="qrCodeOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
             </div>
@@ -86,7 +86,7 @@ const handlePlayerToSpectator = (id: number) => {
       <div v-if="shareSheetOpen">
         <FloatingDialog>
           <div class="absolute top-2 right-2 z-10">
-            <button class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded" @click="shareSheetOpen = false">
+            <button class="bg-bg hover:bg-bg p-1.5 text-text-dark rounded" @click="shareSheetOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>
@@ -98,12 +98,12 @@ const handlePlayerToSpectator = (id: number) => {
       <div v-if="qrCodeOpen" class="share-qr-dialog">
         <FloatingDialog>
           <div class="absolute top-2 right-2 z-10">
-            <button class="bg-lightest hover:bg-light p-1.5 tc-main-dark rounded" @click="qrCodeOpen = false">
+            <button class="bg-bg hover:bg-bg p-1.5 text-text-dark rounded" @click="qrCodeOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>
-          <h3 class="text-xl tc-main my-2">{{ t('wait.qrcode') }}</h3>
-          <p class="my-1 text-sm italic tc-main-secondary">
+          <h3 class="text-xl text-text my-2">{{ t('wait.qrcode') }}</h3>
+          <p class="my-1 text-sm italic text-text-secondary">
             {{ t('wait.qrcodeInfo') }}
           </p>
           <div class="qrcode-wrapper mx-auto max-w-xs">
@@ -115,28 +115,28 @@ const handlePlayerToSpectator = (id: number) => {
     <template #default>
       <div class="w-full flex flex-col">
         <div v-if="players.length === 0">
-          <p class="tc-main-dark italic">{{ t('wait.noPlayers') }}</p>
+          <p class="text-text-dark italic">{{ t('wait.noPlayers') }}</p>
         </div>
         <div
           v-for="player of players"
           :key="player.id"
-          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-dark border bc-darkest transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-darkest"
+          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg-surface border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-darkest"
         >
           <div class="flex justify-start items-center">
-            <p class="text-lg tc-main-dark">
-              <span :class="{ 'tc-primary': lobbyId === player.id }">
+            <p class="text-lg text-text-dark">
+              <span :class="{ 'text-primary-text': lobbyId === player.id }">
                 {{ player.username }}
               </span>
             </p>
             <!-- display bot badge -->
             <template v-if="player.role === ZRPRole.Bot">
-              <span class="tc-primary text-lg ml-2">
+              <span class="text-primary-text text-lg ml-2">
                 <Icon icon="fluent:bot-24-regular" />
               </span>
             </template>
             <!-- display host badge -->
             <template v-else-if="gameHost === player.id">
-              <span class="tc-primary text-lg ml-2">
+              <span class="text-primary-text text-lg ml-2">
                 <Icon icon="akar-icons:crown" />
               </span>
             </template>
@@ -144,7 +144,11 @@ const handlePlayerToSpectator = (id: number) => {
           <div class="flex items-center h-full justify-end">
             <!-- display player actions for player -->
             <template v-if="!isHost && lobbyId === player.id && player.role !== ZRPRole.Bot">
-              <button v-tooltip="t('wait.spectate')" class="tc-primary h-full bg-light hover:bg-main rounded p-1" @click="handleChangeToSpectator()">
+              <button
+                v-tooltip="t('wait.spectate')"
+                class="text-primary-text h-full bg-bg hover:bg-bg rounded p-1"
+                @click="handleChangeToSpectator()"
+              >
                 <Icon icon="iconoir:eye-alt" />
               </button>
             </template>
@@ -152,14 +156,14 @@ const handlePlayerToSpectator = (id: number) => {
             <template v-else-if="isHost && lobbyId !== player.id && player.role !== ZRPRole.Bot">
               <button
                 v-tooltip="t('wait.spectate')"
-                class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+                class="text-primary-text h-full bg-bg hover:bg-bg rounded p-1 mr-2"
                 @click="handlePlayerToSpectator(player.id)"
               >
                 <Icon icon="iconoir:eye-alt" />
               </button>
               <button
                 v-tooltip="t('wait.promote')"
-                class="tc-primary h-full bg-light hover:bg-main rounded p-1 mr-2"
+                class="text-primary-text h-full bg-bg hover:bg-bg rounded p-1 mr-2"
                 @click="askPromotePlayer(player.id)"
               >
                 <Icon icon="akar-icons:crown" />
@@ -170,7 +174,7 @@ const handlePlayerToSpectator = (id: number) => {
                 :is-open="playerToPromote === player.id"
                 @close="allowed => handlePromotePlayer(player.id, allowed)"
               />
-              <button v-tooltip="t('wait.kick')" class="tc-secondary h-full bg-light hover:bg-main rounded p-1" @click="askKickPlayer(player.id)">
+              <button v-tooltip="t('wait.kick')" class="text-secondary-text h-full bg-bg hover:bg-bg rounded p-1" @click="askKickPlayer(player.id)">
                 <Icon icon="iconoir:delete-circled-outline" />
               </button>
               <ReassureDialog
@@ -183,22 +187,22 @@ const handlePlayerToSpectator = (id: number) => {
           </div>
         </div>
         <!-- wins info section -->
-        <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-main">
+        <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-bg">
           <div class="flex justify-between items-center cursor-pointer" @click="winsInfoOpen = !winsInfoOpen">
-            <p class="tc-main-secondary">
+            <p class="text-text-secondary">
               {{ t('wait.noWinInfo') }}
             </p>
-            <Icon v-if="!winsInfoOpen" icon="akar-icons:info" class="tc-main hover:tc-primary cursor-pointer text-xl" />
-            <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main hover:tc-primary cursor-pointer text-xl" />
+            <Icon v-if="!winsInfoOpen" icon="akar-icons:info" class="text-text hover:text-primary-text cursor-pointer text-xl" />
+            <Icon v-else icon="akar-icons:circle-chevron-up" class="text-text hover:text-primary-text cursor-pointer text-xl" />
           </div>
           <div class="grid overflow-hidden grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': winsInfoOpen }">
             <Environment show="online">
-              <p class="min-h-0 tc-main-secondary">
+              <p class="min-h-0 text-text-secondary">
                 {{ t('wait.noWinsOnlineInfo') }}
               </p>
             </Environment>
             <Environment show="offline">
-              <p class="min-h-0 tc-main-secondary">
+              <p class="min-h-0 text-text-secondary">
                 {{ t('wait.noWinsOfflineInfo') }}
               </p>
             </Environment>

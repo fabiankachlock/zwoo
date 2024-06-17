@@ -16,7 +16,7 @@
     </div>
     <div class="main-content">
       <div class="pt-2 pb-2 margin-layout relative">
-        <div class="w-full sticky z-10 bg-main top-10">
+        <div class="w-full sticky z-10 bg-bg top-10">
           <slot name="sticky-content"></slot>
         </div>
         <div class="z-0">

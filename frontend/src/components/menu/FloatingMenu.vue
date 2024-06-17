@@ -1,12 +1,12 @@
 <template>
   <!-- TODO: this this is probably deprecated -->
-  <div v-if="visible" class="quick-menu fixed left-3 rounded-full bg-dark flex flex-row items-center">
+  <div v-if="visible" class="quick-menu fixed left-3 rounded-full bg-bg-surface flex flex-row items-center">
     <div
       class="h-full bg-darkest p-2 rounded-full transition-transform duration-300 ease-out hover:scale-90 cursor-pointer"
       :class="{ 'rotate-90': isOpen }"
       @click="toggleOpen"
     >
-      <Icon icon="carbon:settings" class="text-3xl sm:text-2xl tc-main-light" />
+      <Icon icon="carbon:settings" class="text-3xl sm:text-2xl text-text-light" />
     </div>
     <!-- can't be w-auto, otherwise the transition won't work -->
     <div
@@ -16,9 +16,9 @@
     >
       <div id="content" class="h-full flex flex-row items-center justify-end">
         <router-link to="/settings">
-          <Icon icon="akar-icons:settings-horizontal" class="tc-main text-xl ease-linear transition-transform hover:scale-110"></Icon>
+          <Icon icon="akar-icons:settings-horizontal" class="text-text text-xl ease-linear transition-transform hover:scale-110"></Icon>
         </router-link>
-        <div class="tc-main text-xl ease-linear transition-transform hover:scale-110" @click="toggleDarkMode">
+        <div class="text-text text-xl ease-linear transition-transform hover:scale-110" @click="toggleDarkMode">
           <Icon v-show="isDarkMode" icon="ri:moon-fill" />
           <Icon v-show="!isDarkMode" icon="ri:sun-fill" />
         </div>

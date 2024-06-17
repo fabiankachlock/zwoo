@@ -1,7 +1,7 @@
 <template>
   <div class="w-full mb-4">
     <div class="m-2">
-      <label class="block tc-main-secondary text-sm font-bold mb-2" :for="id">
+      <label class="block text-text-secondary text-sm font-bold mb-2" :for="id">
         {{ labelKey && t(labelKey) }}
         <slot></slot>
       </label>
@@ -14,7 +14,7 @@
             }
           "
           autocomplete=""
-          class="bg-dark shadow appearance-none border bc-main rounded w-full py-2 pl-3 pr-7 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
+          class="bg-bg-surface shadow appearance-none border border-border rounded w-full py-2 pl-3 pr-7 text-text-light leading-tight focus:outline-none focus:shadow-outline focus:border-primary focus:bg-darkest"
           :name="id"
           :type="isPassword ? (isPasswordVisible ? 'text' : 'password') : 'text'"
           :placeholder="placeholder"
@@ -25,7 +25,7 @@
         />
         <button
           v-if="isPassword"
-          class="absolute right-2 top-1/2 transform -translate-y-1/2 tc-main text-lg"
+          class="absolute right-2 top-1/2 transform -translate-y-1/2 text-text text-lg"
           @click.stop.prevent="togglePasswordMode"
         >
           <Icon v-show="!isPasswordVisible" icon="mdi:eye-outline" />

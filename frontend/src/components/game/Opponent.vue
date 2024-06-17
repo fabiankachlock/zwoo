@@ -5,19 +5,19 @@
       'border-secondary': isActive,
       'border-transparent': !isActive,
       'bg-darkest z-0': isConnected,
-      'bg-main bc-primary sticky left-0 z-10': !isConnected
+      'bg-bg border-primary sticky left-0 z-10': !isConnected
     }"
     class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border"
   >
     <div
-      :class="{ 'tc-main': isConnected, 'tc-main-secondary line-through': !isConnected }"
+      :class="{ 'text-text': isConnected, 'text-text-secondary line-through': !isConnected }"
       class="flex flex-row flex-nowrap w-full h-full items-center cursor-default overflow-hidden whitespace-nowrap"
     >
-      <span class="opponent-name" :class="{ 'tc-primary': isSelf }">
+      <span class="opponent-name" :class="{ 'text-primary-text': isSelf }">
         {{ name }}
       </span>
       <template v-if="isBot">
-        <span class="tc-primary text-lg ml-1">
+        <span class="text-primary-text text-lg ml-1">
           <Icon icon="fluent:bot-24-regular" />
         </span>
       </template>
@@ -27,7 +27,7 @@
           <Icon v-if="isMuted" icon="bi:mic-mute-fill" />
           <Icon v-else icon="bi:mic-fill" />
         </button>
-        <button v-if="isHost && !isConnected" class="transition-transform hover:scale-110 tc-secondary" @click="kickPlayer">
+        <button v-if="isHost && !isConnected" class="transition-transform hover:scale-110 text-secondary-text" @click="kickPlayer">
           <Icon icon="akar-icons:cross" />
         </button>
       </span>

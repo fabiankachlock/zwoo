@@ -1,11 +1,11 @@
 <template>
   <button @click.stop="toggle" :class="{ 'cursor-default': readonly }">
     <div
-      class="px-4 relative rounded bg-dark transition border-2 switch-body"
+      class="px-4 relative rounded bg-bg-surface transition border-2 switch-body"
       :class="{
         'hover:bg-darkest': !readonly,
-        'on tc-main bc-primary': modelValue,
-        'off tc-main-light bc-dark': !modelValue
+        'on text-text border-primary': modelValue,
+        'off text-text-light border-border': !modelValue
       }"
     >
       <div class="thumb"></div>

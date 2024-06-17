@@ -1,9 +1,9 @@
 <template>
   <button
-    class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
+    class="flex justify-center items-center bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg cursor-pointer select-none"
     @click="selectTheme"
   >
-    <p class="tc-main-light text-center">{{ t('cardThemes.select') }}</p>
+    <p class="text-text-light text-center">{{ t('cardThemes.select') }}</p>
   </button>
 </template>
 

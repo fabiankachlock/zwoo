@@ -1,10 +1,10 @@
 <template>
   <button @click.stop="toggle">
     <div
-      class="relative rounded bg-main hover:bg-alt transition border-2 switch-body"
+      class="relative rounded bg-bg hover:bg-alt transition border-2 switch-body"
       :class="{
-        'on tc-main bc-primary': modelValue,
-        'off tc-main-light bc-lightest': !modelValue,
+        'on text-text border-primary': modelValue,
+        'off text-text-light border-border': !modelValue,
         'pr-6': modelValue,
         'pl-6': !modelValue
       }"

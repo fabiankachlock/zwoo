@@ -7,7 +7,7 @@
         }
       "
       :value="selectedLng"
-      class="bg-light p-1 rounded tc-main-dark"
+      class="bg-bg p-1 rounded text-text-dark"
     >
       <option v-for="lng in supportedLanguages" :key="lng" :value="lng">{{ t('lng.' + lng) }}</option>
     </select>

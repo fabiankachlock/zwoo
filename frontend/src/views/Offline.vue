@@ -3,27 +3,27 @@
     <div class="w-full flex justify-center">
       <div style="max-width: 10rem" class="logo" v-html="Logo"></div>
     </div>
-    <h1 class="text-6xl tc-primary text-center">zwoo</h1>
-    <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
+    <h1 class="text-6xl text-primary-text text-center">zwoo</h1>
+    <p class="text-2xl italic text-text text-center">{{ t('landing.tagline') }}</p>
     <Environment show="offline">
       <div class="flex justify-center items-center">
-        <Icon icon="ic:baseline-wifi-off" class="text-sm tc-main-secondary"></Icon>
-        <p class="text-sm tc-main-secondary ml-1">{{ t('offline.statusOffline') }}</p>
+        <Icon icon="ic:baseline-wifi-off" class="text-sm text-text-secondary"></Icon>
+        <p class="text-sm text-text-secondary ml-1">{{ t('offline.statusOffline') }}</p>
       </div>
     </Environment>
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative flex-1 w-full">
-        <div class="action bg-dark hover:bg-darkest cursor-pointer">
+        <div class="action bg-bg-surface hover:bg-darkest cursor-pointer">
           <div class="link" @click="create">
-            <Icon class="icon tc-secondary" icon="fluent:window-new-16-regular" />
-            <p class="tc-main-light">{{ t('offline.create') }}</p>
+            <Icon class="icon text-secondary-text" icon="fluent:window-new-16-regular" />
+            <p class="text-text-light">{{ t('offline.create') }}</p>
           </div>
         </div>
       </div>
-      <div v-if="!AppConfig.IsTauri" class="action bg-dark hover:bg-darkest cursor-pointer">
+      <div v-if="!AppConfig.IsTauri" class="action bg-bg-surface hover:bg-darkest cursor-pointer">
         <router-link class="flex flex-row items-center" to="/login-local">
-          <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
-          <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
+          <Icon class="icon text-secondary-text" icon="akar-icons:link-chain" />
+          <p class="text-text-light inline-block mx-1">{{ t('home.localGame') }}</p>
         </router-link>
       </div>
     </div>

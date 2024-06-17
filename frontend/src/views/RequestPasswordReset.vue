@@ -2,7 +2,7 @@
   <FormLayout>
     <Form show-back-button>
       <FormTitle> {{ t('requestPasswordReset.title') }} </FormTitle>
-      <p class="m-2 tc-main-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
+      <p class="m-2 text-text-secondary text-sm">{{ t('requestPasswordReset.info') }}</p>
       <TextInput id="email" v-model="email" label-key="requestPasswordReset.email" :placeholder="t('requestPasswordReset.email')" />
       <CaptchaButton :validator="captchaValidator" :token="captchaResponse" @update:response="res => (captchaResponse = res)" />
       <FormError :error="error" />
@@ -14,9 +14,9 @@
           <router-link class="w-full block text-center" :to="'/login?' + joinQuery(route.query)">{{ t('requestPasswordReset.login') }}</router-link>
         </FormSecondaryAction>
       </FormActions>
-      <div v-if="showInfo" class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
-        <Icon icon="akar-icons:info" class="tc-primary text-xl mb-2" />
-        <p class="tc-main-secondary">{{ t('requestPasswordReset.info') }}</p>
+      <div v-if="showInfo" class="info border-2 rounded-lg border-primary p-2 my-4 mx-2">
+        <Icon icon="akar-icons:info" class="text-primary-text text-xl mb-2" />
+        <p class="text-text-secondary">{{ t('requestPasswordReset.info') }}</p>
       </div>
     </Form>
   </FormLayout>

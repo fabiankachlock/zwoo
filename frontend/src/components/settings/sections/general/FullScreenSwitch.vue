@@ -1,6 +1,6 @@
 <template>
   <SettingsSwitch :model-value="useFullScreen" @update:model-value="toggleFullScreen">
-    <div class="tc-main text-xl">
+    <div class="text-text text-xl">
       <Icon v-show="useFullScreen" icon="mdi:fullscreen" />
       <Icon v-show="!useFullScreen" icon="mdi:fullscreen-exit" />
     </div>

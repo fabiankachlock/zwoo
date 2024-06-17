@@ -1,10 +1,10 @@
 <template>
   <div>
     <button
-      class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
+      class="flex justify-center items-center bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg cursor-pointer select-none"
       @click="openDialog"
     >
-      <p class="tc-primary text-center">{{ t('settings.changePassword') }}</p>
+      <p class="text-primary-text text-center">{{ t('settings.changePassword') }}</p>
     </button>
     <div v-if="showDialog">
       <FloatingDialog content-class="max-w-lg">

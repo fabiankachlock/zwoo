@@ -1,15 +1,15 @@
 <template>
   <button
     v-if="isAllowed"
-    class="end-turn-btn bg-main hover:bg-light border-2 rounded px-3 py-1 mr-5"
+    class="end-turn-btn bg-bg hover:bg-bg border-2 rounded px-3 py-1 mr-5"
     :class="{
       hidden: !isEnabled || wasDisabled,
-      'bc-primary': isEnabled,
-      'bc-secondary x-animate-pulse': false
+      'border-primary': isEnabled,
+      'border-secondary x-animate-pulse': false
     }"
     @click="handlePress"
   >
-    <p class="text-lg tc-main whitespace-nowrap">{{ t('ingame.endTurn') }}</p>
+    <p class="text-lg text-text whitespace-nowrap">{{ t('ingame.endTurn') }}</p>
   </button>
 </template>
 

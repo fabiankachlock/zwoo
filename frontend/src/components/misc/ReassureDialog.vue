@@ -2,25 +2,25 @@
   <div v-if="isOpen">
     <FloatingDialog content-class="sm:max-w-lg">
       <div v-if="showCloseButton" class="absolute top-4 right-4 z-10">
-        <button class="bg-lightest hover:bg-light p-2 tc-main-dark rounded" @click="close(false)">
+        <button class="bg-bg hover:bg-bg p-2 text-text-dark rounded" @click="close(false)">
           <Icon icon="akar-icons:cross" class="text-2xl" />
         </button>
       </div>
       <div class="relative">
-        <h2 class="tc-main text-2xl mb-4">{{ t(title) }}</h2>
-        <p class="mb-2 tc-main-secondary">{{ t(body) }}</p>
+        <h2 class="text-text text-2xl mb-4">{{ t(title) }}</h2>
+        <p class="mb-2 text-text-secondary">{{ t(body) }}</p>
         <div class="grid grid-cols-2 gap-2 mt-4">
           <button
-            class="flex justify-center items-center bg-main border-2 border-secondary px-4 py-1 rounded transition hover:bg-dark cursor-pointer select-none"
+            class="flex justify-center items-center bg-bg border-2 border-secondary px-4 py-1 rounded transition hover:bg-bg-surface cursor-pointer select-none"
             @click="close(false)"
           >
-            <p class="tc-secondary text-center">{{ t(decline ?? 'reassureDialog.decline') }}</p>
+            <p class="text-secondary-text text-center">{{ t(decline ?? 'reassureDialog.decline') }}</p>
           </button>
           <button
-            class="flex justify-center items-center bg-main border-2 border-primary px-4 py-1 rounded transition hover:bg-dark cursor-pointer select-none"
+            class="flex justify-center items-center bg-bg border-2 border-primary px-4 py-1 rounded transition hover:bg-bg-surface cursor-pointer select-none"
             @click="close(true)"
           >
-            <p class="tc-primary text-center">{{ t(accept ?? 'reassureDialog.accept') }}</p>
+            <p class="text-primary-text text-center">{{ t(accept ?? 'reassureDialog.accept') }}</p>
           </button>
         </div>
       </div>

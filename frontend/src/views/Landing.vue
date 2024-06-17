@@ -3,31 +3,31 @@
     <div class="w-full flex justify-center">
       <div style="max-width: 10rem" class="logo" v-html="Logo"></div>
     </div>
-    <h1 class="text-6xl tc-primary text-center">zwoo</h1>
-    <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
+    <h1 class="text-6xl text-primary-text text-center">zwoo</h1>
+    <p class="text-2xl italic text-text text-center">{{ t('landing.tagline') }}</p>
     <div class="relative w-full flex flex-col my-3 px-5">
-      <div class="action bg-dark hover:bg-darkest">
+      <div class="action bg-bg-surface hover:bg-darkest">
         <router-link class="link" to="/login">
-          <Icon class="icon tc-secondary" icon="mdi:login-variant" />
-          <p class="tc-main-light">{{ t('landing.login') }}</p>
+          <Icon class="icon text-secondary-text" icon="mdi:login-variant" />
+          <p class="text-text-light">{{ t('landing.login') }}</p>
         </router-link>
       </div>
-      <div class="action bg-dark hover:bg-darkest">
+      <div class="action bg-bg-surface hover:bg-darkest">
         <router-link class="link" to="/create-account">
-          <Icon class="icon tc-secondary" icon="ic:outline-add-box" />
-          <p class="tc-main-light">{{ t('landing.create') }}</p>
+          <Icon class="icon text-secondary-text" icon="ic:outline-add-box" />
+          <p class="text-text-light">{{ t('landing.create') }}</p>
         </router-link>
       </div>
-      <div class="action bg-dark hover:bg-darkest">
+      <div class="action bg-bg-surface hover:bg-darkest">
         <router-link class="link" to="/leaderboard">
-          <Icon class="icon tc-secondary" icon="mdi:trophy-outline" />
-          <p class="tc-main-light">{{ t('landing.leaderboard') }}</p>
+          <Icon class="icon text-secondary-text" icon="mdi:trophy-outline" />
+          <p class="text-text-light">{{ t('landing.leaderboard') }}</p>
         </router-link>
       </div>
-      <!-- TODO tmp(beta): <div class="action bg-dark hover:bg-darkest">
+      <!-- TODO tmp(beta): <div class="action bg-bg-surface hover:bg-darkest">
         <router-link class="link" to="/tutorial">
-          <Icon class="icon tc-secondary" icon="mdi:arrow-right-bold-box-outline" />
-          <p class="tc-main-light">{{ t('landing.tutorial') }}</p>
+          <Icon class="icon text-secondary-text" icon="mdi:arrow-right-bold-box-outline" />
+          <p class="text-text-light">{{ t('landing.tutorial') }}</p>
         </router-link>
       </div> -->
     </div>

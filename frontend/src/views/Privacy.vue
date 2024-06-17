@@ -1,6 +1,6 @@
 <template>
-  <MaxWidthLayout size="normal" class="dataprotection tc-main-secondary break-words">
-    <h1 class="tc-main">Datenschutzerklärung</h1>
+  <MaxWidthLayout size="normal" class="dataprotection text-text-secondary break-words">
+    <h1 class="text-text">Datenschutzerklärung</h1>
 
     <p>
       Wir freuen uns sehr über Ihr Interesse an unserem Unternehmen. Datenschutz hat einen besonders hohen Stellenwert für die Geschäftsleitung der
@@ -28,7 +28,7 @@
       an uns zu übermitteln. -->
     </p>
 
-    <h2 class="tc-main">1. Begriffsbestimmungen</h2>
+    <h2 class="text-text">1. Begriffsbestimmungen</h2>
     <p>
       Die Datenschutzerklärung der IGD 2.0 UG (haftungsbeschränkt) beruht auf den Begrifflichkeiten, die durch den Europäischen Richtlinien- und
       Verordnungsgeber beim Erlass der Datenschutz-Grundverordnung (DS-GVO) verwendet wurden. Unsere Datenschutzerklärung soll sowohl für die
@@ -40,7 +40,7 @@
 
     <ul style="list-style: none">
       <li>
-        <h3 class="tc-main">a) personenbezogene Daten</h3>
+        <h3 class="text-text">a) personenbezogene Daten</h3>
         <p>
           Personenbezogene Daten sind alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person (im Folgenden
           „betroffene Person“) beziehen. Als identifizierbar wird eine natürliche Person angesehen, die direkt oder indirekt, insbesondere mittels
@@ -50,14 +50,14 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">b) betroffene Person</h3>
+        <h3 class="text-text">b) betroffene Person</h3>
         <p>
           Betroffene Person ist jede identifizierte oder identifizierbare natürliche Person, deren personenbezogene Daten von dem für die Verarbeitung
           Verantwortlichen verarbeitet werden.
         </p>
       </li>
       <li>
-        <h3 class="tc-main">c) Verarbeitung</h3>
+        <h3 class="text-text">c) Verarbeitung</h3>
         <p>
           Verarbeitung ist jeder mit oder ohne Hilfe automatisierter Verfahren ausgeführte Vorgang oder jede solche Vorgangsreihe im Zusammenhang mit
           personenbezogenen Daten wie das Erheben, das Erfassen, die Organisation, das Ordnen, die Speicherung, die Anpassung oder Veränderung, das
@@ -66,14 +66,14 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">d) Einschränkung der Verarbeitung</h3>
+        <h3 class="text-text">d) Einschränkung der Verarbeitung</h3>
         <p>
           Einschränkung der Verarbeitung ist die Markierung gespeicherter personenbezogener Daten mit dem Ziel, ihre künftige Verarbeitung
           einzuschränken.
         </p>
       </li>
       <li>
-        <h3 class="tc-main">e) Profiling</h3>
+        <h3 class="text-text">e) Profiling</h3>
         <p>
           Profiling ist jede Art der automatisierten Verarbeitung personenbezogener Daten, die darin besteht, dass diese personenbezogenen Daten
           verwendet werden, um bestimmte persönliche Aspekte, die sich auf eine natürliche Person beziehen, zu bewerten, insbesondere, um Aspekte
@@ -82,7 +82,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">f) Pseudonymisierung</h3>
+        <h3 class="text-text">f) Pseudonymisierung</h3>
         <p>
           Pseudonymisierung ist die Verarbeitung personenbezogener Daten in einer Weise, auf welche die personenbezogenen Daten ohne Hinzuziehung
           zusätzlicher Informationen nicht mehr einer spezifischen betroffenen Person zugeordnet werden können, sofern diese zusätzlichen
@@ -91,7 +91,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">g) Verantwortlicher oder für die Verarbeitung Verantwortlicher</h3>
+        <h3 class="text-text">g) Verantwortlicher oder für die Verarbeitung Verantwortlicher</h3>
         <p>
           Verantwortlicher oder für die Verarbeitung Verantwortlicher ist die natürliche oder juristische Person, Behörde, Einrichtung oder andere
           Stelle, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet. Sind die
@@ -100,14 +100,14 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">h) Auftragsverarbeiter</h3>
+        <h3 class="text-text">h) Auftragsverarbeiter</h3>
         <p>
           Auftragsverarbeiter ist eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die personenbezogene Daten im
           Auftrag des Verantwortlichen verarbeitet.
         </p>
       </li>
       <li>
-        <h3 class="tc-main">i) Empfänger</h3>
+        <h3 class="text-text">i) Empfänger</h3>
         <p>
           Empfänger ist eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, der personenbezogene Daten offengelegt
           werden, unabhängig davon, ob es sich bei ihr um einen Dritten handelt oder nicht. Behörden, die im Rahmen eines bestimmten
@@ -116,7 +116,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">j) Dritter</h3>
+        <h3 class="text-text">j) Dritter</h3>
         <p>
           Dritter ist eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle außer der betroffenen Person, dem
           Verantwortlichen, dem Auftragsverarbeiter und den Personen, die unter der unmittelbaren Verantwortung des Verantwortlichen oder des
@@ -124,7 +124,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">k) Einwilligung</h3>
+        <h3 class="text-text">k) Einwilligung</h3>
         <p>
           Einwilligung ist jede von der betroffenen Person freiwillig für den bestimmten Fall in informierter Weise und unmissverständlich abgegebene
           Willensbekundung in Form einer Erklärung oder einer sonstigen eindeutigen bestätigenden Handlung, mit der die betroffene Person zu verstehen
@@ -133,7 +133,7 @@
       </li>
     </ul>
 
-    <h2 class="tc-main">2. Name und Anschrift des für die Verarbeitung Verantwortlichen</h2>
+    <h2 class="text-text">2. Name und Anschrift des für die Verarbeitung Verantwortlichen</h2>
     <p>
       Verantwortlicher im Sinne der Datenschutz-Grundverordnung, sonstiger in den Mitgliedstaaten der Europäischen Union geltenden Datenschutzgesetze
       und anderer Bestimmungen mit datenschutzrechtlichem Charakter ist die:
@@ -160,7 +160,7 @@
       <a href="https://zwoo.igd20.de"> Webseite: <span style="text-decoration: underline">zwoo.igd20.de</span> </a>
     </p>
 
-    <h2 class="tc-main">3. Cookies</h2>
+    <h2 class="text-text">3. Cookies</h2>
     <p>
       Die Internetseiten der IGD 2.0 UG (haftungsbeschränkt) verwenden Cookies. Cookies sind Textdateien, welche über einen Internetbrowser auf einem
       Computersystem abgelegt und gespeichert werden.
@@ -196,7 +196,7 @@
       vollumfänglich nutzbar.
     </p>
 
-    <h2 class="tc-main">4. Erfassung von allgemeinen Daten und Informationen</h2>
+    <h2 class="text-text">4. Erfassung von allgemeinen Daten und Informationen</h2>
     <p>
       Die Internetseite der IGD 2.0 UG (haftungsbeschränkt) erfasst mit jedem Aufruf der Internetseite durch eine betroffene Person oder ein
       automatisiertes System eine Reihe von allgemeinen Daten und Informationen. Diese allgemeinen Daten und Informationen werden in den Logfiles des
@@ -218,7 +218,7 @@
       Server-Logfiles werden getrennt von allen durch eine betroffene Person angegebenen personenbezogenen Daten gespeichert.
     </p>
 
-    <h2 class="tc-main">5. Registrierung auf unserer Internetseite</h2>
+    <h2 class="text-text">5. Registrierung auf unserer Internetseite</h2>
     <p>
       Die betroffene Person hat die Möglichkeit, sich auf der Internetseite des für die Verarbeitung Verantwortlichen unter Angabe von
       personenbezogenen Daten zu registrieren. Welche personenbezogenen Daten dabei an den für die Verarbeitung Verantwortlichen übermittelt werden,
@@ -252,7 +252,7 @@
       des für die Verarbeitung Verantwortlichen stehen der betroffenen Person in diesem Zusammenhang als Ansprechpartner zur Verfügung.
     </p>
 
-    <h2 class="tc-main">6. Kontaktmöglichkeit über die Internetseite</h2>
+    <h2 class="text-text">6. Kontaktmöglichkeit über die Internetseite</h2>
     <p>
       Die Internetseite der IGD 2.0 UG (haftungsbeschränkt) enthält aufgrund von gesetzlichen Vorschriften Angaben, die eine schnelle elektronische
       Kontaktaufnahme zu unserem Unternehmen sowie eine unmittelbare Kommunikation mit uns ermöglichen, was ebenfalls eine allgemeine Adresse der
@@ -263,7 +263,7 @@
       Weitergabe dieser personenbezogenen Daten an Dritte.
     </p>
 
-    <h2 class="tc-main">7. Routinemäßige Löschung und Sperrung von personenbezogenen Daten</h2>
+    <h2 class="text-text">7. Routinemäßige Löschung und Sperrung von personenbezogenen Daten</h2>
     <p>
       Der für die Verarbeitung Verantwortliche verarbeitet und speichert personenbezogene Daten der betroffenen Person nur für den Zeitraum, der zur
       Erreichung des Speicherungszwecks erforderlich ist oder sofern dies durch den Europäischen Richtlinien- und Verordnungsgeber oder einen anderen
@@ -276,10 +276,10 @@
       gelöscht.
     </p>
 
-    <h2 class="tc-main">8. Rechte der betroffenen Person</h2>
+    <h2 class="text-text">8. Rechte der betroffenen Person</h2>
     <ul style="list-style: none">
       <li>
-        <h3 class="tc-main">a) Recht auf Bestätigung</h3>
+        <h3 class="text-text">a) Recht auf Bestätigung</h3>
         <p>
           Jede betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber eingeräumte Recht, von dem für die Verarbeitung
           Verantwortlichen eine Bestätigung darüber zu verlangen, ob sie betreffende personenbezogene Daten verarbeitet werden. Möchte eine betroffene
@@ -288,7 +288,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">b) Recht auf Auskunft</h3>
+        <h3 class="text-text">b) Recht auf Auskunft</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, jederzeit von dem für die Verarbeitung Verantwortlichen unentgeltliche Auskunft über die zu seiner Person gespeicherten
@@ -334,7 +334,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">c) Recht auf Berichtigung</h3>
+        <h3 class="text-text">c) Recht auf Berichtigung</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, die unverzügliche Berichtigung sie betreffender unrichtiger personenbezogener Daten zu verlangen. Ferner steht der betroffenen Person
@@ -348,7 +348,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">d) Recht auf Löschung (Recht auf Vergessen werden)</h3>
+        <h3 class="text-text">d) Recht auf Löschung (Recht auf Vergessen werden)</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, von dem Verantwortlichen zu verlangen, dass die sie betreffenden personenbezogenen Daten unverzüglich gelöscht werden, sofern einer
@@ -394,7 +394,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">e) Recht auf Einschränkung der Verarbeitung</h3>
+        <h3 class="text-text">e) Recht auf Einschränkung der Verarbeitung</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, von dem Verantwortlichen die Einschränkung der Verarbeitung zu verlangen, wenn eine der folgenden Voraussetzungen gegeben ist:
@@ -426,7 +426,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">f) Recht auf Datenübertragbarkeit</h3>
+        <h3 class="text-text">f) Recht auf Datenübertragbarkeit</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, die sie betreffenden personenbezogenen Daten, welche durch die betroffene Person einem Verantwortlichen bereitgestellt wurden, in
@@ -450,7 +450,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">g) Recht auf Widerspruch</h3>
+        <h3 class="text-text">g) Recht auf Widerspruch</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, aus Gründen, die sich aus ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung sie betreffender personenbezogener
@@ -487,7 +487,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">h) Automatisierte Entscheidungen im Einzelfall einschließlich Profiling</h3>
+        <h3 class="text-text">h) Automatisierte Entscheidungen im Einzelfall einschließlich Profiling</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, nicht einer ausschließlich auf einer automatisierten Verarbeitung — einschließlich Profiling — beruhenden Entscheidung unterworfen zu
@@ -512,7 +512,7 @@
         </p>
       </li>
       <li>
-        <h3 class="tc-main">i) Recht auf Widerruf einer datenschutzrechtlichen Einwilligung</h3>
+        <h3 class="text-text">i) Recht auf Widerruf einer datenschutzrechtlichen Einwilligung</h3>
         <p>
           Jede von der Verarbeitung personenbezogener Daten betroffene Person hat das vom Europäischen Richtlinien- und Verordnungsgeber gewährte
           Recht, eine Einwilligung zur Verarbeitung personenbezogener Daten jederzeit zu widerrufen.
@@ -524,7 +524,7 @@
         </p>
       </li>
     </ul>
-    <h2 class="tc-main">9. Rechtsgrundlage der Verarbeitung</h2>
+    <h2 class="text-text">9. Rechtsgrundlage der Verarbeitung</h2>
     <p>
       Art. 6 I lit. a DS-GVO dient unserem Unternehmen als Rechtsgrundlage für Verarbeitungsvorgänge, bei denen wir eine Einwilligung für einen
       bestimmten Verarbeitungszweck einholen. Ist die Verarbeitung personenbezogener Daten zur Erfüllung eines Vertrags, dessen Vertragspartei die
@@ -545,19 +545,19 @@
       (Erwägungsgrund 47 Satz 2 DS-GVO).
     </p>
 
-    <h2 class="tc-main">10. Berechtigte Interessen an der Verarbeitung, die von dem Verantwortlichen oder einem Dritten verfolgt werden</h2>
+    <h2 class="text-text">10. Berechtigte Interessen an der Verarbeitung, die von dem Verantwortlichen oder einem Dritten verfolgt werden</h2>
     <p>
       Basiert die Verarbeitung personenbezogener Daten auf Artikel 6 I lit. f DS-GVO ist unser berechtigtes Interesse die Durchführung unserer
       Geschäftstätigkeit zugunsten des Wohlergehens all unserer Mitarbeiter und unserer Anteilseigner.
     </p>
 
-    <h2 class="tc-main">11. Dauer, für die die personenbezogenen Daten gespeichert werden</h2>
+    <h2 class="text-text">11. Dauer, für die die personenbezogenen Daten gespeichert werden</h2>
     <p>
       Das Kriterium für die Dauer der Speicherung von personenbezogenen Daten ist die jeweilige gesetzliche Aufbewahrungsfrist. Nach Ablauf der Frist
       werden die entsprechenden Daten routinemäßig gelöscht, sofern sie nicht mehr zur Vertragserfüllung oder Vertragsanbahnung erforderlich sind.
     </p>
 
-    <h2 class="tc-main">
+    <h2 class="text-text">
       12. Gesetzliche oder vertragliche Vorschriften zur Bereitstellung der personenbezogenen Daten; Erforderlichkeit für den Vertragsabschluss;
       Verpflichtung der betroffenen Person, die personenbezogenen Daten bereitzustellen; mögliche Folgen der Nichtbereitstellung
     </h2>
@@ -573,7 +573,7 @@
       bereitzustellen, und welche Folgen die Nichtbereitstellung der personenbezogenen Daten hätte.
     </p>
 
-    <h2 class="tc-main">13. Bestehen einer automatisierten Entscheidungsfindung</h2>
+    <h2 class="text-text">13. Bestehen einer automatisierten Entscheidungsfindung</h2>
     <p>Als verantwortungsbewusstes Unternehmen verzichten wir auf eine automatische Entscheidungsfindung oder ein Profiling.</p>
 
     <p>

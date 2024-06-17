@@ -79,9 +79,9 @@ const submitForm = async () => {
 
 <template>
   <MaxWidthLayout size="small">
-    <h1 class="text-4xl tc-main mt-5 mb-3">{{ t('contact.title') }}</h1>
-    <p v-if="!wasSend" class="tc-main-secondary mb-5">{{ t('contact.info') }}</p>
-    <p v-else class="tc-main-secondary mb-5">{{ t('contact.thanks') }}</p>
+    <h1 class="text-4xl text-text mt-5 mb-3">{{ t('contact.title') }}</h1>
+    <p v-if="!wasSend" class="text-text-secondary mb-5">{{ t('contact.info') }}</p>
+    <p v-else class="text-text-secondary mb-5">{{ t('contact.thanks') }}</p>
     <FlatDialog v-if="!wasSend">
       <Form>
         <TextInput id="sender" labelKey="contact.sender" v-model="senderName" :placeholder="t('contact.namePlaceholder')"></TextInput>

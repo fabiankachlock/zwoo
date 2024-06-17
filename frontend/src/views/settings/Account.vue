@@ -2,7 +2,7 @@
   <template v-if="isLoggedIn">
     <SettingsSection>
       <SettingsRow v-if="isLoggedIn" :title="t('settings.logout')">
-        <router-link class="tc-main-light bg-light border-2 border-transparent px-2 rounded transition hover:bg-main" to="/logout">
+        <router-link class="text-text-light bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg" to="/logout">
           {{ t('settings.logout') }}
         </router-link>
       </SettingsRow>

@@ -2,15 +2,15 @@
   <!-- TODO tmp(beta): @click-outside="closeModal" -->
   <FloatingDialog :content-class="contentClass">
     <div class="mb-2 flex justify-between items-center">
-      <h1 class="tc-main text-2xl">
+      <h1 class="text-text text-2xl">
         {{ t(title ?? '') }}
       </h1>
       <!-- TODO tmp(beta): breaks game currently <button @click="closeModal">
-        <Icon class="text-2xl tc-main transition-transform hover:scale-110" icon="akar-icons:cross" />
+        <Icon class="text-2xl text-text transition-transform hover:scale-110" icon="akar-icons:cross" />
       </button> -->
     </div>
     <div class="mb-4">
-      <p class="tc-main-secondary text-lg">
+      <p class="text-text-secondary text-lg">
         {{ t(info ?? '') }}
       </p>
     </div>

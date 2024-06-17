@@ -1,12 +1,12 @@
 <template>
   <MaxWidthLayout size="normal">
-    <h1 class="tc-main text-4xl my-5">{{ t('settings.title') }}</h1>
+    <h1 class="text-text text-4xl my-5">{{ t('settings.title') }}</h1>
     <div class="flex flex-col lg:flex-row items-start">
-      <div class="relative w-full p-2 bg-lightest rounded-lg my-4 lg:mr-4 lg:max-w-xs">
+      <div class="relative w-full p-2 bg-bg rounded-lg my-4 lg:mr-4 lg:max-w-xs">
         <div class="flex justify-between items-center">
-          <h3 class="tc-main text-2xl mx-2 my-1">{{ t(`settings.sections.${currentSection}`) }}</h3>
+          <h3 class="text-text text-2xl mx-2 my-1">{{ t(`settings.sections.${currentSection}`) }}</h3>
           <button
-            class="toggle lg:hidden bg-dark hover:bg-darkest text-2xl tc-main relative p-4 rounded w-6 h-6 overflow-hidden"
+            class="toggle lg:hidden bg-bg-surface hover:bg-darkest text-2xl text-text relative p-4 rounded w-6 h-6 overflow-hidden"
             @click="toggleOpenState"
           >
             <Icon
@@ -25,8 +25,8 @@
           <router-link
             v-for="section in displaySections"
             :key="section"
-            class="block tc-main-light bg-dark px-3 py-1 my-2 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
-            :class="{ 'bc-primary': section === currentSection }"
+            class="block text-text-light bg-bg-surface px-3 py-1 my-2 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest"
+            :class="{ 'border-primary': section === currentSection }"
             :to="`/settings/${section}`"
           >
             {{ t(`settings.sections.${section}`) }}

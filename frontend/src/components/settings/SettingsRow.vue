@@ -1,10 +1,10 @@
 <template>
   <div
-    class="w-full flex flex-row justify-between items-center bg-dark px-1 py-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
+    class="w-full flex flex-row justify-between items-center bg-bg-surface px-1 py-3 my-3 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest"
   >
-    <div class="h-full flex-1 mx-2 tc-main-light flex justify-start items-center">
+    <div class="h-full flex-1 mx-2 text-text-light flex justify-start items-center">
       <span>{{ title }}</span>
-      <span v-if="status" class="text-sm mx-1 tc-main-secondary">({{ status }})</span>
+      <span v-if="status" class="text-sm mx-1 text-text-secondary">({{ status }})</span>
       <Environment show="online">
         <SettingsSyncToggle v-if="settingsKey && isLoggedIn" :settings-key="settingsKey"></SettingsSyncToggle>
       </Environment>

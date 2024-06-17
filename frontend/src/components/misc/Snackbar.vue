@@ -1,13 +1,13 @@
 <template>
   <div v-if="msg" class="snackbar-container fixed z-50 pointer-events-none" :class="SnackBarPositionClasses[msg.position]">
-    <div class="snackbar-box bg-lightest rounded overflow-hidden max-w-xs relative">
+    <div class="snackbar-box bg-bg rounded overflow-hidden max-w-xs relative">
       <div class="snackbar-content px-3 pt-2 pb-2 flex flex-row flex-nowrap items-center pointer-events-auto">
-        <p class="text-sm tc-main">
+        <p class="text-sm text-text">
           {{ msg.needsTranslation ? t(msg.message) : msg.message }}
         </p>
         <button
           v-if="msg.showClose !== undefined ? msg.showClose : true"
-          class="ml-2 p-1 tc-main-dark bg-main hover:bg-dark rounded"
+          class="ml-2 p-1 text-text-dark bg-bg hover:bg-bg-surface rounded"
           @click="close()"
         >
           <Icon icon="akar-icons:cross" class="text-xs" />

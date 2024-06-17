@@ -26,8 +26,8 @@
       </div>
       <!-- TODO: implement
         <button class="help flex items-center">
-        <Icon icon="material-symbols:help-outline-rounded" class="text-xl tc-main mr-1 transition-transform" />
-        <span class="tc-main"> {{ t('nav.help') }} </span>
+        <Icon icon="material-symbols:help-outline-rounded" class="text-xl text-text mr-1 transition-transform" />
+        <span class="text-text"> {{ t('nav.help') }} </span>
       </button> -->
       <div></div>
     </div>

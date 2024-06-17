@@ -2,68 +2,68 @@
   <div class="game-summary overflow-y-auto">
     <template v-if="winner">
       <div
-        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-dark mouse:hover:bg-darkest rounded-lg px-3 py-2 border bc-primary"
+        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-bg-surface mouse:hover:bg-darkest rounded-lg px-3 py-2 border border-primary"
       >
         <div class="h-full flex-1 flex flex-nowrap items-center justify-start">
           <img src="/img/logo/pride/zwoo_logo_simple_pride_none.png" alt="" class="max-h-full mr-3" />
-          <p class="tc-main text-xl">{{ winner.username }}</p>
+          <p class="text-text text-xl">{{ winner.username }}</p>
           <template v-if="winner.isBot">
-            <span class="tc-primary text-2xl ml-2">
+            <span class="text-primary-text text-2xl ml-2">
               <Icon icon="fluent:bot-24-regular" />
             </span>
           </template>
-          <p class="tc-main text-xl ml-1">- {{ t('summary.winner') }}</p>
+          <p class="text-text text-xl ml-1">- {{ t('summary.winner') }}</p>
         </div>
-        <p class="tc-main text-xl italic">{{ winner.score }}</p>
+        <p class="text-text text-xl italic">{{ winner.score }}</p>
       </div>
       <div
         v-for="player in notWinners"
         :key="player.username"
-        class="player flex justify-start items-center flex-nowrap m-1 bg-lightest mouse:hover:bg-light rounded px-3 py-2 border bc-dark"
+        class="player flex justify-start items-center flex-nowrap m-1 bg-bg mouse:hover:bg-bg rounded px-3 py-2 border border-border"
       >
-        <p class="tc-main-dark">
+        <p class="text-text-dark">
           <span class="mr-2">{{ player.position }}.</span>
           {{ player.username }}
         </p>
         <template v-if="player.isBot">
-          <span class="tc-primary text-lg ml-2">
+          <span class="text-primary-text text-lg ml-2">
             <Icon icon="fluent:bot-24-regular" />
           </span>
         </template>
         <div class="flex-1"></div>
-        <p class="tc-main-dark italic">{{ player.score }}</p>
+        <p class="text-text-dark italic">{{ player.score }}</p>
       </div>
       <div class="bottom-spacer h-32"></div>
     </template>
-    <div v-else class="flex flex-row justify-center flex-nowrap items-center tc-main">
-      <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
-      <p class="text-xl tc-main">{{ t('util.loading') }}</p>
+    <div v-else class="flex flex-row justify-center flex-nowrap items-center text-text">
+      <Icon icon="iconoir:system-restart" class="text-xl text-text-light animate-spin-slow mr-3" />
+      <p class="text-xl text-text">{{ t('util.loading') }}</p>
     </div>
   </div>
   <div class="actions">
     <div class="actions-grid w-full grid gap-2">
-      <button class="action bg-dark hover:bg-darkest" @click="handleLeaveClick()">
-        <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
-        <p class="text tc-main text-md">
+      <button class="action bg-bg-surface hover:bg-darkest" @click="handleLeaveClick()">
+        <Icon class="icon text-secondary-text" icon="mdi:logout-variant" />
+        <p class="text text-text text-md">
           {{ t('summary.leave') }}
         </p>
       </button>
-      <button class="action bg-dark hover:bg-darkest" @click="handlePlayClick()">
-        <Icon class="icon tc-secondary" icon="mdi:logout-variant" />
-        <p class="text tc-main text-md">
+      <button class="action bg-bg-surface hover:bg-darkest" @click="handlePlayClick()">
+        <Icon class="icon text-secondary-text" icon="mdi:logout-variant" />
+        <p class="text text-text text-md">
           {{ t('summary.playAgain') }}
         </p>
       </button>
 
-      <!-- TODO tmp(beta): might enabled later again <button :click="handleSpectatorClick()" class="action bg-dark hover:bg-darkest">
-        <Icon class="icon tc-secondary" icon="iconoir:eye-alt" />
-        <p class="text tc-main text-md">
+      <!-- TODO tmp(beta): might enabled later again <button :click="handleSpectatorClick()" class="action bg-bg-surface hover:bg-darkest">
+        <Icon class="icon text-secondary-text" icon="iconoir:eye-alt" />
+        <p class="text text-text text-md">
           {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
         </p>
       </button>
-      <button :click="handlePlayClick()" class="action bg-dark hover:bg-darkest">
-        <Icon class="icon tc-secondary" icon="iconoir:play-outline" />
-        <p class="text tc-main text-md">
+      <button :click="handlePlayClick()" class="action bg-bg-surface hover:bg-darkest">
+        <Icon class="icon text-secondary-text" icon="iconoir:play-outline" />
+        <p class="text text-text text-md">
           {{ t(isSpectator ? 'summary.startPlaying' : 'summary.playAgain') }}
         </p>
       </button> -->

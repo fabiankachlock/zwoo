@@ -1,7 +1,7 @@
 <template>
   <SettingsSection>
     <SettingsRow :title="t('settings.deviceId')">
-      <p class="tc-main text-right">{{ did }}</p>
+      <p class="text-text text-right">{{ did }}</p>
     </SettingsRow>
     <SettingsRow :title="t('settings.logging')">
       <LoggingSettings />

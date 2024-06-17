@@ -4,19 +4,19 @@
       <video :ref="r => (videoElement = r as HTMLVideoElement)" :srcObject="mediaStream" autoplay="true"></video>
     </div>
     <div>
-      <p class="tc-main-secondary text-center text-lg my-2">
+      <p class="text-text-secondary text-center text-lg my-2">
         {{ status }}
       </p>
     </div>
     <div>
       <div class="flex justify-center items-center my-2">
-        <button class="bg-dark tc-main px-6 py-2 rounded hover:bg-darkest transition-transform hover:scale-95" @click="handleButtonClick">
+        <button class="bg-bg-surface text-text px-6 py-2 rounded hover:bg-darkest transition-transform hover:scale-95" @click="handleButtonClick">
           {{ t(cameraOn ? 'join.closeCam' : 'join.scanCode') }}
         </button>
       </div>
     </div>
   </div>
-  <div v-else class="tc-main">Feature is not supported</div>
+  <div v-else class="text-text">Feature is not supported</div>
 </template>
 
 <script setup lang="ts">
