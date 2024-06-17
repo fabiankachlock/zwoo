@@ -1,5 +1,5 @@
 <template>
-  <button class="text-primary-text ml-3 bg-bg hover:bg-bg p-0.5 rounded border border-transparent hover:border-border" @click.prevent="toggle">
+  <button class="text-primary-text ml-3 bg-alt hover:bg-alt-hover p-0.5 rounded border border-border" @click.prevent="toggle">
     <Icon v-show="!synced" icon="mdi:cloud-off-outline" class="text-lg" />
     <Icon v-show="synced" icon="mdi:cloud-sync-outline" class="text-lg" />
   </button>

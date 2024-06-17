@@ -1,10 +1,10 @@
 <template>
   <div>
     <button
-      class="flex justify-center items-center bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg cursor-pointer select-none"
+      class="flex justify-center items-center bg-alt border-2 border-transparent px-2 rounded transition hover:bg-alt-hover cursor-pointer select-none"
       @click="openDialog"
     >
-      <p class="text-error-dark-border dark:text-error-light-border text-center">{{ t('settings.deleteAccount') }}</p>
+      <p class="text-error-text dark:text-error-light-border text-center">{{ t('settings.deleteAccount') }}</p>
     </button>
     <div v-if="showDialog">
       <FloatingDialog content-class="max-w-lg">

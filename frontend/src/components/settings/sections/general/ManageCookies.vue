@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex justify-center items-center bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg cursor-pointer select-none"
+    class="flex justify-center items-center bg-alt mouse:hover:bg-alt-hover border-2 border-transparent px-2 rounded transition cursor-pointer select-none"
     @click="manageCookies"
   >
     <!-- <p class="text-text text-center">{{ t('cookies.manage') }}</p> -->

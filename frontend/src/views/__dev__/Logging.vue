@@ -22,7 +22,7 @@
             <p class="italic text-sm text-text-secondary">
               {{ t('logging.storedCount', storedLogs.length) }}
             </p>
-            <button class="px-2 py-1 rounded bg-surface hover:bg-darkest text-error-dark-border dark:text-error-light-border mx-2" @click="clear()">
+            <button class="px-2 py-1 rounded bg-surface hover:bg-darkest text-error-text dark:text-error-light-border mx-2" @click="clear()">
               {{ t('logging.clearStore') }}
             </button>
           </div>
