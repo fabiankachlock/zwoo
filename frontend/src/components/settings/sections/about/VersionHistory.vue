@@ -3,7 +3,7 @@
     class="flex justify-center items-center bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg cursor-pointer select-none"
     @click="seeVersionHistory"
   >
-    <p class="text-text-light text-center">{{ t('versionHistory.see') }}</p>
+    <p class="text-text text-center">{{ t('versionHistory.see') }}</p>
   </button>
 </template>
 

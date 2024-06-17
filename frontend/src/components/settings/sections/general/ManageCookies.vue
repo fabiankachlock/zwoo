@@ -3,8 +3,8 @@
     class="flex justify-center items-center bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg cursor-pointer select-none"
     @click="manageCookies"
   >
-    <!-- <p class="text-text-light text-center">{{ t('cookies.manage') }}</p> -->
-    <p class="text-text-light text-center">{{ t('cookies.__info') }}</p>
+    <!-- <p class="text-text text-center">{{ t('cookies.manage') }}</p> -->
+    <p class="text-text text-center">{{ t('cookies.__info') }}</p>
   </button>
 </template>
 

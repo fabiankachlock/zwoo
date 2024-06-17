@@ -16,7 +16,7 @@
               </div>
               <div class="version-card-actions -mr-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
                 <button
-                  class="toggle text-2xl text-text relative p-4 rounded-md overflow-hidden bg-bg hover:bg-bg-surface"
+                  class="toggle text-2xl text-text relative p-4 rounded-md overflow-hidden bg-bg hover:bg-surface"
                   @click.stop="toggleVersionOpen(version)"
                 >
                   <Icon

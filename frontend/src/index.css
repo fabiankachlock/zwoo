@@ -88,6 +88,7 @@
 [data-theme='dark'] {
 	--color-bg: 46 43 54;
 	--color-inverse-bg: 210 208 217;
+	--hex-color-inverse-bg: #d2d0d9;
 	--color-bg-surface: 32 32 35;
 	--color-bg-surface-hover: 56 56 61;
 	--color-bg-alt: 53 53 80;
@@ -110,6 +111,7 @@
 [data-theme='light'] {
 	--color-bg: 210 208 217;
 	--color-inverse-bg: 46 43 54;
+	--hex-color-inverse-bg: #2e2b36;
 	--color-bg-surface: 244 244 245;
 	--color-bg-surface-hover: 219 219 219;
 	--color-bg-alt: 216 219 242;

@@ -11,7 +11,7 @@
             }
           "
           autocomplete=""
-          class="bg-bg-surface shadow appearance-none border border-border rounded w-full py-2 pl-3 pr-7 text-text-light leading-tight focus:outline-none focus:shadow-outline focus:border-primary focus:bg-darkest"
+          class="bg-surface shadow appearance-none border border-border rounded w-full py-2 pl-3 pr-7 text-text leading-tight focus:outline-none focus:shadow-outline focus:border-primary focus:bg-darkest"
           :name="id"
           :placeholder="placeholder"
           :value="modelValue"

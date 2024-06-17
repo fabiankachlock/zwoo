@@ -49,7 +49,7 @@
       <div class="grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-2 mt-4">
         <div></div>
         <button
-          class="flex justify-center items-center bg-bg px-4 py-1 rounded transition hover:bg-bg-surface cursor-pointer select-none"
+          class="flex justify-center items-center bg-bg px-4 py-1 rounded transition hover:bg-surface cursor-pointer select-none"
           @click="close"
         >
           <p class="text-text-secondary text-center">{{ t('cookies.__close') }}</p>
@@ -57,13 +57,13 @@
       </div>
       <!-- <div class="grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-2 mt-4">
         <button
-          class="flex justify-center items-center bg-bg px-4 py-1 rounded transition hover:bg-bg-surface cursor-pointer select-none"
+          class="flex justify-center items-center bg-bg px-4 py-1 rounded transition hover:bg-surface cursor-pointer select-none"
           @click="rejectAll"
         >
           <p class="text-text-secondary text-center">{{ t('cookies.rejectAll') }}</p>
         </button>
         <button
-          class="flex justify-center items-center bg-bg px-4 py-1 rounded transition hover:bg-bg-surface cursor-pointer select-none"
+          class="flex justify-center items-center bg-bg px-4 py-1 rounded transition hover:bg-surface cursor-pointer select-none"
           @click="acceptSelection"
         >
           <p class="text-text-secondary text-center">{{ t('cookies.acceptSelection') }}</p>

@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center">
           <h3 class="text-text text-2xl mx-2 my-1">{{ t(`settings.sections.${currentSection}`) }}</h3>
           <button
-            class="toggle lg:hidden bg-bg-surface hover:bg-darkest text-2xl text-text relative p-4 rounded w-6 h-6 overflow-hidden"
+            class="toggle lg:hidden bg-surface hover:bg-darkest text-2xl text-text relative p-4 rounded w-6 h-6 overflow-hidden"
             @click="toggleOpenState"
           >
             <Icon
@@ -25,7 +25,7 @@
           <router-link
             v-for="section in displaySections"
             :key="section"
-            class="block text-text-light bg-bg-surface px-3 py-1 my-2 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest"
+            class="block text-text bg-surface px-3 py-1 my-2 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest"
             :class="{ 'border-primary': section === currentSection }"
             :to="`/settings/${section}`"
           >

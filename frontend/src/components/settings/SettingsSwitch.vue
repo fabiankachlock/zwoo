@@ -4,7 +4,7 @@
       class="relative rounded bg-bg hover:bg-alt transition border-2 switch-body"
       :class="{
         'on text-text border-primary': modelValue,
-        'off text-text-light border-border': !modelValue,
+        'off text-text border-border': !modelValue,
         'pr-6': modelValue,
         'pl-6': !modelValue
       }"

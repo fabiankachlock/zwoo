@@ -68,7 +68,7 @@
         <Icon icon="akar-icons:info" class="text-primary-text text-xl mb-2" />
         <p class="text-text-secondary">{{ t('createAccount.info') }}</p>
         <p class="text-text-secondary">{{ t('createAccount.emailInfo') }}</p>
-        <button class="text-primary-text mt-2 bg-bg hover:bg-bg-surface rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
+        <button class="text-primary-text mt-2 bg-bg hover:bg-surface rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
           {{ t('createAccount.resendVerifyEmail') }}
         </button>
       </div>

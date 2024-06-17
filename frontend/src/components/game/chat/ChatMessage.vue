@@ -6,8 +6,8 @@
         'rounded-bl-none border-transparent mb-3': !isOwn && !isSystem,
         'rounded-br-none border-primary': isOwn,
         'border-secondary': isHost,
-        'bg-bg-surface text-text-secondary': isSpectator,
-        'bg-bg text-text-light': !isSpectator && !isSystem
+        'bg-surface text-text-secondary': isSpectator,
+        'bg-bg text-text': !isSpectator && !isSystem
       }"
       class="px-2 py-0.5 rounded-2xl border break-all"
     >

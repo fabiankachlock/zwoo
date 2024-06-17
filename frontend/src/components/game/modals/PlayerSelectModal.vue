@@ -5,7 +5,7 @@
         v-for="option in players"
         :key="option.key"
         @click="close(option.key)"
-        class="block bg-bg hover:bg-bg-surface rounded-lg px-4 py-2 text-center text-text"
+        class="block bg-bg hover:bg-surface rounded-lg px-4 py-2 text-center text-text"
       >
         {{ option.name }} {{ option.amount ? `(${option.amount})` : '' }}
       </button>

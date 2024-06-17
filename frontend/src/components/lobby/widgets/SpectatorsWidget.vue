@@ -1,5 +1,5 @@
 <template>
-  <Widget v-model="isOpen" title="wait.spectators" widget-class="bg-bg" button-class="bg-bg hover:bg-bg-surface">
+  <Widget v-model="isOpen" title="wait.spectators" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
     <div class="w-full flex flex-col">
       <div v-if="spectators.length === 0">
         <p class="text-text-dark italic">{{ t('wait.noSpectators') }}</p>
@@ -7,7 +7,7 @@
       <div
         v-for="player of spectators"
         :key="player.id"
-        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-bg-surface"
+        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-surface"
       >
         <p class="text-lg text-text-secondary" :class="{ 'text-primary-text': lobbyId === player.id }">
           {{ player.username }}

@@ -3,7 +3,7 @@
     <div class="w-full mr-2">
       <input
         v-model="message"
-        class="appearance-none outline-none w-full bg-bg text-text-light px-2 py-0.5 rounded transition hover:bg-bg focus:bg-bg border border-transparent focus:border-primary ring-0"
+        class="appearance-none outline-none w-full bg-bg text-text px-2 py-0.5 rounded transition hover:bg-bg focus:bg-bg border border-transparent focus:border-primary ring-0"
         type="text"
         @keyup.stop
         @keyup.enter="sendMessage"

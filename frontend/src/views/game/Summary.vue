@@ -2,7 +2,7 @@
   <div class="game-summary overflow-y-auto">
     <template v-if="winner">
       <div
-        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-bg-surface mouse:hover:bg-darkest rounded-lg px-3 py-2 border border-primary"
+        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-surface mouse:hover:bg-darkest rounded-lg px-3 py-2 border border-primary"
       >
         <div class="h-full flex-1 flex flex-nowrap items-center justify-start">
           <img src="/img/logo/pride/zwoo_logo_simple_pride_none.png" alt="" class="max-h-full mr-3" />
@@ -36,32 +36,32 @@
       <div class="bottom-spacer h-32"></div>
     </template>
     <div v-else class="flex flex-row justify-center flex-nowrap items-center text-text">
-      <Icon icon="iconoir:system-restart" class="text-xl text-text-light animate-spin-slow mr-3" />
+      <Icon icon="iconoir:system-restart" class="text-xl text-text animate-spin-slow mr-3" />
       <p class="text-xl text-text">{{ t('util.loading') }}</p>
     </div>
   </div>
   <div class="actions">
     <div class="actions-grid w-full grid gap-2">
-      <button class="action bg-bg-surface hover:bg-darkest" @click="handleLeaveClick()">
+      <button class="action bg-surface hover:bg-darkest" @click="handleLeaveClick()">
         <Icon class="icon text-secondary-text" icon="mdi:logout-variant" />
         <p class="text text-text text-md">
           {{ t('summary.leave') }}
         </p>
       </button>
-      <button class="action bg-bg-surface hover:bg-darkest" @click="handlePlayClick()">
+      <button class="action bg-surface hover:bg-darkest" @click="handlePlayClick()">
         <Icon class="icon text-secondary-text" icon="mdi:logout-variant" />
         <p class="text text-text text-md">
           {{ t('summary.playAgain') }}
         </p>
       </button>
 
-      <!-- TODO tmp(beta): might enabled later again <button :click="handleSpectatorClick()" class="action bg-bg-surface hover:bg-darkest">
+      <!-- TODO tmp(beta): might enabled later again <button :click="handleSpectatorClick()" class="action bg-surface hover:bg-darkest">
         <Icon class="icon text-secondary-text" icon="iconoir:eye-alt" />
         <p class="text text-text text-md">
           {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
         </p>
       </button>
-      <button :click="handlePlayClick()" class="action bg-bg-surface hover:bg-darkest">
+      <button :click="handlePlayClick()" class="action bg-surface hover:bg-darkest">
         <Icon class="icon text-secondary-text" icon="iconoir:play-outline" />
         <p class="text text-text text-md">
           {{ t(isSpectator ? 'summary.startPlaying' : 'summary.playAgain') }}

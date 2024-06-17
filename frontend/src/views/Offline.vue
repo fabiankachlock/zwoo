@@ -13,17 +13,17 @@
     </Environment>
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative flex-1 w-full">
-        <div class="action bg-bg-surface hover:bg-darkest cursor-pointer">
-          <div class="link" @click="create">
+        <div class="action list">
+          <div @click="create">
             <Icon class="icon text-secondary-text" icon="fluent:window-new-16-regular" />
-            <p class="text-text-light">{{ t('offline.create') }}</p>
+            <p class="text-text">{{ t('offline.create') }}</p>
           </div>
         </div>
       </div>
-      <div v-if="!AppConfig.IsTauri" class="action bg-bg-surface hover:bg-darkest cursor-pointer">
-        <router-link class="flex flex-row items-center" to="/login-local">
-          <Icon class="icon text-secondary-text" icon="akar-icons:link-chain" />
-          <p class="text-text-light inline-block mx-1">{{ t('home.localGame') }}</p>
+      <div v-if="!AppConfig.IsTauri" class="action list">
+        <router-link to="/login-local">
+          <Icon class="icon" icon="akar-icons:link-chain" />
+          <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
         </router-link>
       </div>
     </div>
@@ -75,19 +75,23 @@ const create = async () => {
 
 <style scoped>
 .action {
-  @apply px-4 py-1 rounded my-2;
+  @apply bg-alt hover:bg-alt-hover;
 }
 
-.link {
+.action.list {
+  @apply px-4 py-1 rounded m-2;
+}
+
+.action.list a {
   @apply flex flex-row items-center;
+}
+
+.icon {
+  @apply text-primary-text transform transition-transform inline-block mx-1;
 }
 
 .action p {
   @apply inline-block mx-1;
-}
-
-.icon {
-  @apply transform transition-transform inline-block mx-1;
 }
 
 .action:hover .icon {

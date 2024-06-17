@@ -1,5 +1,5 @@
 <template>
-  <Widget v-model="isOpen" title="wait.rules" widget-class="bg-bg" button-class="bg-bg hover:bg-bg-surface">
+  <Widget v-model="isOpen" title="wait.rules" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
     <template #actions>
       <div v-if="isHost" class="flex flex-row items-center">
         <div v-if="activeProfile" class="text-text m1 mr-2 py-0.5 px-1 border border-border bg-bg rounded flex items-center">
@@ -11,13 +11,13 @@
           </button>
         </div>
         <Environment show="online">
-          <button class="rounded m-1 bg-bg hover:bg-bg-surface text-text-light" @click="saveProfile">
+          <button class="rounded m-1 bg-bg hover:bg-surface text-text" @click="saveProfile">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon v-if="activeProfile" icon="iconoir:floppy-disk-arrow-in" class="icon text-2xl"></Icon>
               <Icon v-else icon="iconoir:save-floppy-disk" class="icon text-2xl"></Icon>
             </div>
           </button>
-          <button class="rounded m-1 mr-2 bg-bg hover:bg-bg-surface text-text-light" @click="openManageDialog">
+          <button class="rounded m-1 mr-2 bg-bg hover:bg-surface text-text" @click="openManageDialog">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:folder" class="icon text-2xl"></Icon>
             </div>

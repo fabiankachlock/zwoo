@@ -4,7 +4,7 @@
     <h1 class="text-text text-center text-4xl mb-2">{{ t('wrongVersion.title') }}</h1>
     <p class="text-text-secondary text-center">{{ t('wrongVersion.info', [config.clientVersion, serverVersion || 'unknown']) }}</p>
     <div v-if="!isReady" class="flex flex-row justify-center flex-nowrap items-center text-text mt-4">
-      <ZwooIcon icon="iconoir:system-restart" class="text-xl text-text-light animate-spin-slow mr-3" />
+      <ZwooIcon icon="iconoir:system-restart" class="text-xl text-text animate-spin-slow mr-3" />
       <p class="text-lg text-text-secondary">{{ t('wrongVersion.loading') }}</p>
     </div>
     <div class="flex flex-wrap justify-center items-center my-2">

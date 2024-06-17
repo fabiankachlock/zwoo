@@ -4,25 +4,25 @@
       <h2 class="text-text text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
     </div>
     <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center text-text">
-      <Icon icon="iconoir:system-restart" class="text-xl text-text-light animate-spin-slow mr-3" />
+      <Icon icon="iconoir:system-restart" class="text-xl text-text animate-spin-slow mr-3" />
       <p class="text-xl text-text">{{ t('util.loading') }}</p>
     </div>
     <div v-else class="flex flex-row flex-wrap items-center justify-center text-text">
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-bg-surface hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-surface hover:bg-darkest mx-2 my-1 rounded"
         @click="goBack()"
       >
         <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-1 text-secondary-text transition-transform" />{{ t('join.goBack') }}
       </button>
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-bg-surface hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-surface hover:bg-darkest mx-2 my-1 rounded"
         @click="joinAsSpectator()"
       >
         <Icon icon="iconoir:eye-alt" class="icon text-xl mr-1 text-secondary-text transition-transform" />
         <span class="whitespace-nowrap">{{ t('join.asSpectator') }}</span>
       </button>
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-bg-surface hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-surface hover:bg-darkest mx-2 my-1 rounded"
         @click="joinAsPlayer()"
       >
         <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 text-secondary-text transition-transform" />

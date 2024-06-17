@@ -24,7 +24,7 @@
       <!-- Saved game -->
       <div
         v-if="savedGame"
-        class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-bg-surface px-3 py-2 cursor-default mb-3"
+        class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-surface px-3 py-2 cursor-default mb-3"
       >
         <div class="flex justify-between align-center mb-2">
           <h3 class="text-text text-xl">{{ t('list.savedGame') }}</h3>
@@ -33,7 +33,7 @@
           </button>
         </div>
         <div class="flex flex-row justify-between flex-wrap items-center">
-          <div class="text text-text-light flex flex-row flex-nowrap justify-start items-center">
+          <div class="text text-text flex flex-row flex-nowrap justify-start items-center">
             <p class="text-md mr-2">
               {{ savedGame.name }}
             </p>
@@ -59,11 +59,11 @@
         <div
           v-for="game of games"
           :key="game.id"
-          class="item my-1 rounded-xl border border-border mouse:hover:bg-darkest mouse:hover:border-primary bg-bg-surface px-3 py-2 cursor-pointer"
+          class="item my-1 rounded-xl border border-border mouse:hover:bg-darkest mouse:hover:border-primary bg-surface px-3 py-2 cursor-pointer"
         >
           <router-link :to="'/join/' + game.id">
             <div class="flex flex-row justify-between flex-wrap items-center">
-              <div class="text text-text-light flex flex-row flex-nowrap justify-start items-center">
+              <div class="text text-text flex flex-row flex-nowrap justify-start items-center">
                 <p class="text-md mr-2">
                   {{ game.name }}
                 </p>
@@ -93,7 +93,7 @@
             </div>
           </router-link>
         </div>
-        <div class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-bg-surface px-3 py-2 cursor-default">
+        <div class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-surface px-3 py-2 cursor-default">
           <div>
             <p class="text-center text-text my-1">
               {{ t(games.length === 0 ? 'list.nothingFound' : 'list.noFit') }}

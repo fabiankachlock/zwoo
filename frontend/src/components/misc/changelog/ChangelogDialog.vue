@@ -7,7 +7,7 @@
     <div class="sticky -bottom-[0.5px] bg-bg px-5 pb-3">
       <div class="flex justify-end items-center border-border border-t">
         <button
-          class="mt-4 flex justify-center items-center bg-bg border-2 border-primary px-4 py-1 rounded transition hover:bg-bg-surface cursor-pointer select-none"
+          class="mt-4 flex justify-center items-center bg-bg border-2 border-primary px-4 py-1 rounded transition hover:bg-surface cursor-pointer select-none"
           @click="close"
         >
           <p class="text-primary-text text-center">{{ t('changelog.close') }}</p>

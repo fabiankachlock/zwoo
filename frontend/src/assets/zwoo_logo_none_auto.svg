@@ -37,7 +37,7 @@
     </defs>
     <style>
         #zwoo_logo_none_auto {
-        stroke: var(--color-inverse-bg);
+        stroke: var(--hex-color-inverse-bg);
         }
     </style>
 </svg>

@@ -1,16 +1,16 @@
 <template>
   <SettingsSection>
     <div
-      class="w-full flex flex-row justify-start items-center bg-bg-surface px-3 py-3 my-3 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest"
+      class="w-full flex flex-row justify-start items-center bg-surface px-3 py-3 my-3 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest"
     >
       <a
-        class="text-text-light bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg"
+        class="text-text bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg"
         rel="noopener noreferrer nofollow"
         href="https://github.com/fabiankachlock/zwoo/discussions/categories/bug-reports"
       >
         {{ t('settings.reportBug') }}
       </a>
-      <router-link class="ml-4 text-text-light bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg" to="/contact">
+      <router-link class="ml-4 text-text bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg" to="/contact">
         {{ t('settings.contact') }}
       </router-link>
     </div>

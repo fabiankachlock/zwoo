@@ -13,7 +13,7 @@
         <div v-if="showNotVerifiedInfo" class="info border-2 rounded-lg border-primary p-2 my-4 mx-2">
           <Icon icon="akar-icons:info" class="text-primary-text text-xl mb-2" />
           <p class="text-text-secondary">{{ t('login.notVerifiedInfo') }}</p>
-          <button class="text-primary-text mt-2 bg-bg hover:bg-bg-surface rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
+          <button class="text-primary-text mt-2 bg-bg hover:bg-surface rounded-sm px-2 py-1 text-center" @click="resendVerifyEmail">
             {{ t('login.resendVerifyEmail') }}
           </button>
         </div>

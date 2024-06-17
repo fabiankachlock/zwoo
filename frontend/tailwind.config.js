@@ -25,7 +25,7 @@ module.exports = {
           DEFAULT: 'rgb(var(--color-bg-surface) / <alpha-value>)',
           hover: 'rgb(var(--color-bg-surface-hover) / <alpha-value>)'
         },
-        'bg-alt': {
+        alt: {
           DEFAULT: 'rgb(var(--color-bg-alt) / <alpha-value>)',
           hover: 'rgb(var(--color-bg-alt-hover) / <alpha-value>)'
         },

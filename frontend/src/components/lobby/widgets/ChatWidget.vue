@@ -1,5 +1,5 @@
 <template>
-  <Widget v-model="isOpen" title="wait.chat" widget-class="bg-bg" button-class="bg-bg hover:bg-bg-surface">
+  <Widget v-model="isOpen" title="wait.chat" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
     <div class="bg-darkest rounded-md pb-2">
       <GameChat />
       <ChatInput />

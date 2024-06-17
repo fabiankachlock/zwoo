@@ -5,7 +5,7 @@
       <p class="text-text-secondary text-center my-6 mr-4">
         {{ t(`verifyAccount.verifying`) }}
       </p>
-      <Icon icon="iconoir:system-restart" class="text-2xl text-text-light animate-spin-slow mr-3" />
+      <Icon icon="iconoir:system-restart" class="text-2xl text-text animate-spin-slow mr-3" />
     </div>
     <div v-else>
       <p class="text-text-secondary text-center my-6">

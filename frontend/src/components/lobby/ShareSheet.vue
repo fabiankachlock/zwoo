@@ -6,7 +6,7 @@
   <div v-if="!canShare" class="">
     <div class="flex">
       <button
-        class="link-wrapper px-3 py-2 rounded-lg bg-bg text-text flex items-center mr-2 hover:bg-bg-surface active:scale-105 transition-transform"
+        class="link-wrapper px-3 py-2 rounded-lg bg-bg text-text flex items-center mr-2 hover:bg-surface active:scale-105 transition-transform"
         @click="copyLink()"
       >
         <Icon icon="akar-icons:copy" class="mr-2 text-primary-text text-xl" />
@@ -16,7 +16,7 @@
       </button>
 
       <a
-        class="link-wrapper px-3 py-2 rounded-lg bg-bg text-text flex items-center hover:bg-bg-surface active:scale-105 transition-transform"
+        class="link-wrapper px-3 py-2 rounded-lg bg-bg text-text flex items-center hover:bg-surface active:scale-105 transition-transform"
         :href="`mailto:?subject=${title}&body=${encodeURIComponent(`${text}\n${url}`)}`"
         target="_self"
         rel="noopener"

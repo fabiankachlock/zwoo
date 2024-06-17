@@ -67,16 +67,16 @@ const handlePlayerToSpectator = (id: number) => {
 </script>
 
 <template>
-  <Widget v-model="isOpen" title="wait.players" widget-class="bg-bg" button-class="bg-bg hover:bg-bg-surface">
+  <Widget v-model="isOpen" title="wait.players" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
     <template #actions>
       <div class="flex flex-row">
         <Environment :exclude="['offline']">
-          <button class="share rounded m-1 bg-bg hover:bg-bg-surface text-text-light" @click="shareSheetOpen = true">
+          <button class="share rounded m-1 bg-bg hover:bg-surface text-text" @click="shareSheetOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
             </div>
           </button>
-          <button class="scan-code rounded m-1 mr-2 bg-bg hover:bg-bg-surface text-text-light" @click="qrCodeOpen = true">
+          <button class="scan-code rounded m-1 mr-2 bg-bg hover:bg-surface text-text" @click="qrCodeOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
             </div>
@@ -120,7 +120,7 @@ const handlePlayerToSpectator = (id: number) => {
         <div
           v-for="player of players"
           :key="player.id"
-          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg-surface border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-darkest"
+          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-surface border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-darkest"
         >
           <div class="flex justify-start items-center">
             <p class="text-lg text-text-dark">

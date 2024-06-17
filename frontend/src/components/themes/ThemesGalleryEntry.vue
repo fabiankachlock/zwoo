@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-nowrap bg-bg-surface rounded-lg w-full border-2 border-border py-2 relative mb-2 overflow-hidden">
+  <div class="flex flex-col flex-nowrap bg-surface rounded-lg w-full border-2 border-border py-2 relative mb-2 overflow-hidden">
     <div class="flex flex-row flex-wrap justify-between items-center mb-1">
       <h3 class="text-text-dark text-xl mx-2">
         {{ props.theme.name }}
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="mx-2">
-      <p v-if="props.theme.description" class="text-text-light italic">
+      <p v-if="props.theme.description" class="text-text italic">
         {{ t(`cardThemes.description.${props.theme.description}`) }}
       </p>
       <p>

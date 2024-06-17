@@ -18,10 +18,10 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col bg-bg-surface p-3 my-3 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest">
+  <div class="w-full flex flex-col bg-surface p-3 my-3 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest">
     <LocalServerConfigEditor v-if="editOpen" :config="config" @close="editDialogClosed" />
     <div class="flex flex-row justify-between items-center mb-2">
-      <p class="text-text-light">
+      <p class="text-text">
         {{ t('localServer.config') }}
       </p>
       <button class="bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg select-none text-text-secondary" @click="editOpen = true">
@@ -30,13 +30,13 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
     </div>
     <div v-if="config" class="flex flex-col">
       <div v-for="kv in Object.entries(server.config)" :key="kv[0]" class="flex justify-between items-center">
-        <p class="text-text-light">{{ t(`localServer.configKey.${kv[0]}`) }}</p>
+        <p class="text-text">{{ t(`localServer.configKey.${kv[0]}`) }}</p>
         <div v-if="typeof kv[1] === 'boolean'" class="text-text">
           <p v-show="kv[1]">{{ t('controls.toggle.on') }}</p>
           <p v-show="!kv[1]">{{ t('controls.toggle.off') }}</p>
         </div>
-        <p v-else-if="kv[0] === 'secretKey'" class="text-text-light">*********</p>
-        <p v-else class="text-text-light">{{ Array.isArray(kv[1]) ? kv[1].join(', ') : kv[1] ? kv[1] : '""' }}</p>
+        <p v-else-if="kv[0] === 'secretKey'" class="text-text">*********</p>
+        <p v-else class="text-text">{{ Array.isArray(kv[1]) ? kv[1].join(', ') : kv[1] ? kv[1] : '""' }}</p>
       </div>
     </div>
     <div v-else>

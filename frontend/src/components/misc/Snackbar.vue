@@ -7,7 +7,7 @@
         </p>
         <button
           v-if="msg.showClose !== undefined ? msg.showClose : true"
-          class="ml-2 p-1 text-text-dark bg-bg hover:bg-bg-surface rounded"
+          class="ml-2 p-1 text-text-dark bg-bg hover:bg-surface rounded"
           @click="close()"
         >
           <Icon icon="akar-icons:cross" class="text-xs" />

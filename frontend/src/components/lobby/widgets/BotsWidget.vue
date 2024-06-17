@@ -1,9 +1,9 @@
 <template>
-  <Widget v-model="isOpen" title="wait.bots" widget-class="bg-bg" button-class="bg-bg hover:bg-bg-surface">
+  <Widget v-model="isOpen" title="wait.bots" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
     <template #actions>
       <div class="flex flex-row">
         <template v-if="isHost">
-          <button class="share rounded m-1 bg-bg hover:bg-bg-surface text-text-light" @click="createBot()">
+          <button class="share rounded m-1 bg-bg hover:bg-surface text-text" @click="createBot()">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="fluent:bot-add-20-regular" class="icon text-2xl"></Icon>
             </div>
@@ -33,7 +33,7 @@
                 :placeholder="t('wait.exampleBotName')"
               ></TextInput>
               <div v-else class="m-2 text-xl">
-                <p class="text-text-light">{{ botName }}</p>
+                <p class="text-text">{{ botName }}</p>
               </div>
 
               <div class="w-full mb-4">
@@ -43,21 +43,21 @@
                   </label>
                   <div class="w-full grid grid-cols-3">
                     <button
-                      class="bg-bg shadow appearance-none border border-border rounded-l-lg w-full p-2 text-text-light focus:outline-none focus:border-primary focus:bg-bg-surface"
+                      class="bg-bg shadow appearance-none border border-border rounded-l-lg w-full p-2 text-text focus:outline-none focus:border-primary focus:bg-surface"
                       :class="{ 'bg-darkest text-primary-text': botType === -1 }"
                       @click="botType = -1"
                     >
                       {{ t('wait.dumpBot') }}
                     </button>
                     <button
-                      class="bg-bg shadow appearance-none border border-border w-full p-2 text-text-light focus:outline-none focus:border-primary focus:bg-bg-surface"
+                      class="bg-bg shadow appearance-none border border-border w-full p-2 text-text focus:outline-none focus:border-primary focus:bg-surface"
                       :class="{ 'bg-darkest text-primary-text': botType === 0 }"
                       @click="botType = 0"
                     >
                       {{ t('wait.normalBot') }}
                     </button>
                     <button
-                      class="bg-bg shadow appearance-none border border-border rounded-r-lg w-full p-2 text-text-light focus:outline-none focus:border-primary focus:bg-bg-surface"
+                      class="bg-bg shadow appearance-none border border-border rounded-r-lg w-full p-2 text-text focus:outline-none focus:border-primary focus:bg-surface"
                       :class="{ 'bg-darkest text-primary-text': botType === 1 }"
                       @click="botType = 1"
                     >
@@ -78,7 +78,7 @@
         <div
           v-for="bot of isHost ? realBots : fakeBots"
           :key="bot.id"
-          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg-surface border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-darkest"
+          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-surface border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-darkest"
         >
           <div class="flex justify-start items-center">
             <p class="text-lg text-text-dark">

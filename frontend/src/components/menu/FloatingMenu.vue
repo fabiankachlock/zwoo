@@ -1,12 +1,12 @@
 <template>
   <!-- TODO: this this is probably deprecated -->
-  <div v-if="visible" class="quick-menu fixed left-3 rounded-full bg-bg-surface flex flex-row items-center">
+  <div v-if="visible" class="quick-menu fixed left-3 rounded-full bg-alt flex flex-row items-center">
     <div
-      class="h-full bg-darkest p-2 rounded-full transition-transform duration-300 ease-out hover:scale-90 cursor-pointer"
+      class="h-full bg-surface hover:bg-surface-hover p-2 rounded-full transition-transform duration-300 ease-out hover:scale-90 cursor-pointer"
       :class="{ 'rotate-90': isOpen }"
       @click="toggleOpen"
     >
-      <Icon icon="carbon:settings" class="text-3xl sm:text-2xl text-text-light" />
+      <Icon icon="carbon:settings" class="text-3xl sm:text-2xl text-text" />
     </div>
     <!-- can't be w-auto, otherwise the transition won't work -->
     <div
