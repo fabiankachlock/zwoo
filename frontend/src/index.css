@@ -24,6 +24,7 @@
 
 [data-theme='dark'] {
 	--color-bg: #2e2b36;
+	--color-bg-hover: #18161C;
 	--color-inverse-bg: #d2d0d9;
 	--color-bg-surface: #202023;
 	--color-bg-surface-hover: #38383d;
@@ -46,6 +47,7 @@
 
 [data-theme='light'] {
 	--color-bg: #d2d0d9;
+	--color-bg-hover: #B9B8BF;
 	--color-inverse-bg: #2e2b36;
 	--color-bg-surface: #f4f4f5;
 	--color-bg-surface-hover: #dbdbdb;
@@ -87,6 +89,7 @@
 
 [data-theme='dark'] {
 	--color-bg: 46 43 54;
+	--color-bg-hover: 24 22 28;
 	--color-inverse-bg: 210 208 217;
 	--hex-color-inverse-bg: #d2d0d9;
 	--color-bg-surface: 32 32 35;
@@ -110,6 +113,7 @@
 
 [data-theme='light'] {
 	--color-bg: 210 208 217;
+	--color-bg-hover: 185 184 191;
 	--color-inverse-bg: 46 43 54;
 	--hex-color-inverse-bg: #2e2b36;
 	--color-bg-surface: 244 244 245;

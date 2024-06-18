@@ -76,7 +76,7 @@ const logIn = async () => {
       <FormError :error="error" />
 
       <div class="info border-2 rounded-lg border-primary p-2 my-4 mx-2">
-        <Icon icon="akar-icons:info" class="text-secondary-text text-xl mb-2" />
+        <Icon icon="akar-icons:info" class="text-primary-text text-xl mb-2" />
         <p class="text-text-secondary">{{ t('loginLocal.infoServer') }}</p>
       </div>
 

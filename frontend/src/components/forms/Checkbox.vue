@@ -1,5 +1,5 @@
 <template>
-  <div class="m-2 my-4 flex no-wrap" :class="{ 'flex-row-reverse': position === 'start', [`items-${align}`]: true }">
+  <div class="m-2 my-4 flex no-wrap" :class="{ 'flex-row-reverse': position === 'start', [`items-${align ?? 'center'}`]: true }">
     <label class="text-text-secondary text-sm font-bold relative">
       <slot></slot>
     </label>

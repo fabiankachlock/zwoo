@@ -10,9 +10,9 @@
         </router-link>
       </p>
       <div class="py-1">
-        <div class="flex justify-between items-center bg-bg rounded p-1" @click="toggle('functional')">
+        <div class="flex justify-between items-center bg-surface hover:bg-surface-hover rounded p-1" @click="toggle('functional')">
           <h3 class="text-text text-lg ml-1">{{ t('cookies.functional.title') }}</h3>
-          <button class="text-2xl text-text hover:text-primary-text relative p-3 rounded w-6 h-4 overflow-hidden">
+          <button class="text-2xl text-text relative p-3 rounded w-6 h-4 overflow-hidden">
             <Icon
               icon="iconoir:nav-arrow-down"
               class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
@@ -37,9 +37,9 @@
                 <p class="text-xs text-text-secondary mb-1">{{ t('cookies.functional.auth.description') }}</p>
               </div>
               <div class="bg-bg border-2 border-transparent px-4 py-1 ml-4 rounded cursor-not-allowed select-none">
-                <p class="text-text-secondary flex flex-row flex-nowrap justify-end items-center">
+                <p class="text-text flex flex-row flex-nowrap justify-end items-center">
                   <span>{{ t('cookies.active') }}</span>
-                  <Icon icon="akar-icons:check" class="ml-2" />
+                  <Icon icon="akar-icons:check" class="ml-2 text-success" />
                 </p>
               </div>
             </div>
@@ -49,10 +49,10 @@
       <div class="grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-2 mt-4">
         <div></div>
         <button
-          class="flex justify-center items-center bg-bg px-4 py-1 rounded transition hover:bg-surface cursor-pointer select-none"
+          class="flex justify-center items-center bg-alt px-4 py-1 rounded transition hover:bg-alt-hover cursor-pointer select-none"
           @click="close"
         >
-          <p class="text-text-secondary text-center">{{ t('cookies.__close') }}</p>
+          <p class="text-text text-center">{{ t('cookies.__close') }}</p>
         </button>
       </div>
       <!-- <div class="grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-2 mt-4">

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col flex-nowrap bg-surface rounded-lg w-full border-2 border-border py-2 relative mb-2 overflow-hidden">
     <div class="flex flex-row flex-wrap justify-between items-center mb-1">
-      <h3 class="text-text-dark text-xl mx-2">
+      <h3 class="text-text text-xl mx-2">
         {{ props.theme.name }}
         <Icon v-if="props.isSelected" icon="fluent:checkmark-circle-32-regular" class="inline-block text-secondary-text ml-2" />
       </h3>
@@ -49,7 +49,9 @@
     <div class="divider border-border h-0 my-2 border-2 border-solid border-t-0"></div>
     <div class="mx-2">
       <div class="flex flex-row flex-nowrap justify-end items-center">
-        <button class="py-1 px-2 rounded ml-2 bg-bg hover:bg-bg text-primary-text" @click="selectAsTheme()">{{ t('cardThemes.useTheme') }}</button>
+        <button class="py-1 px-2 rounded ml-2 bg-alt hover:bg-alt-hover text-primary-text" @click="selectAsTheme()">
+          {{ t('cardThemes.useTheme') }}
+        </button>
       </div>
     </div>
   </div>

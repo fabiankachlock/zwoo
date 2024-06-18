@@ -51,11 +51,15 @@ const toggle = () => {
 }
 .switch-body.off .thumb {
   left: 0;
-  background: var(--color-bg-surface);
+  @apply bg-surface;
+}
+
+.switch-body.off:hover .thumb {
+  @apply bg-surface-hover;
 }
 
 .switch-body.on .thumb {
+  @apply bg-primary;
   left: calc(100% - 1.5rem);
-  background: var(--color-primary);
 }
 </style>
