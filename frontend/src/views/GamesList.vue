@@ -3,12 +3,12 @@
     <div class="w-full flex flex-row justify-between items-center sticky top-10 z-10 bg-bg">
       <h2 class="text-text text-4xl pt-3 pb-1">{{ t('list.title') }}</h2>
       <div class="flex flex-nowrap">
-        <button class="scan-code btn-wrapper bg-bg hover:bg-bg text-text-dark" @click="scanCode">
+        <button class="scan-code btn-wrapper" @click="scanCode">
           <div class="icon-wrapper">
             <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
           </div>
         </button>
-        <button class="refresh btn-wrapper bg-bg hover:bg-bg text-text-dark" @click="refresh">
+        <button class="refresh btn-wrapper" @click="refresh">
           <div class="icon-wrapper">
             <Icon icon="iconoir:refresh" class="icon text-2xl" :class="{ 'animate-spin': refreshing }"></Icon>
           </div>
@@ -22,10 +22,7 @@
     </div>
     <div class="relative pt-6">
       <!-- Saved game -->
-      <div
-        v-if="savedGame"
-        class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-surface px-3 py-2 cursor-default mb-3"
-      >
+      <div v-if="savedGame" class="item my-1 rounded-xl border border-border bg-surface px-3 py-2 cursor-default mb-3">
         <div class="flex justify-between align-center mb-2">
           <h3 class="text-text text-xl">{{ t('list.savedGame') }}</h3>
           <button @click="removeSavedGame()">
@@ -47,7 +44,10 @@
           </div>
           <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
             <div class="text-primary-text">
-              <button class="flex flex-row flex-nowrap items-center h-full bg-bg hover:bg-bg rounded py-1 px-2" @click.stop="joinSavedGame()">
+              <button
+                class="flex flex-row flex-nowrap items-center h-full bg-alt hover:bg-alt-hover rounded py-1 px-2 border border-border"
+                @click.stop="joinSavedGame()"
+              >
                 <span>{{ t('list.rejoin') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
               </button>
             </div>
@@ -59,7 +59,7 @@
         <div
           v-for="game of games"
           :key="game.id"
-          class="item my-1 rounded-xl border border-border mouse:hover:bg-darkest mouse:hover:border-primary bg-surface px-3 py-2 cursor-pointer"
+          class="item my-1 rounded-xl border border-border mouse:hover:bg-surface-hover mouse:hover:border-primary bg-surface px-3 py-2 cursor-pointer"
         >
           <router-link :to="'/join/' + game.id">
             <div class="flex flex-row justify-between flex-wrap items-center">
@@ -76,7 +76,7 @@
                 <div v-tooltip="t('list.spectate')" class="mr-3">
                   <router-link
                     :to="'/join/' + game.id + '?spectate'"
-                    class="flex flex-row flex-nowrap items-center h-full bg-bg hover:bg-bg rounded py-1 px-2"
+                    class="flex flex-row flex-nowrap items-center h-full bg-alt hover:bg-alt-hover rounded py-1 px-2 border border-border"
                   >
                     <Icon icon="iconoir:eye-alt" class="text-xl text-text" />
                   </router-link>
@@ -84,7 +84,7 @@
                 <div class="text-primary-text">
                   <router-link
                     :to="'/join/' + game.id + '?play'"
-                    class="flex flex-row flex-nowrap items-center h-full bg-bg hover:bg-bg rounded py-1 px-2"
+                    class="flex flex-row flex-nowrap items-center h-full bg-alt hover:bg-alt-hover rounded py-1 px-2 border border-border"
                   >
                     <span>{{ t('list.play') }}</span> <Icon icon="iconoir:play-outline" class="text-lg" />
                   </router-link>
@@ -93,22 +93,22 @@
             </div>
           </router-link>
         </div>
-        <div class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-surface px-3 py-2 cursor-default">
+        <div class="item my-1 rounded-xl bg-surface px-3 py-2 cursor-default">
           <div>
             <p class="text-center text-text my-1">
               {{ t(games.length === 0 ? 'list.nothingFound' : 'list.noFit') }}
             </p>
             <div class="flex flex-row justify-center">
-              <button class="nothing-found-btn bg-bg hover:bg-bg">
-                <router-link to="/create-game" class="text-sm text-text-secondary block">{{ t('home.create') }}</router-link>
+              <button class="nothing-found-btn">
+                <router-link to="/create-game" class="text-sm text-text block">{{ t('home.create') }}</router-link>
               </button>
               <button
-                class="nothing-found-btn bg-bg hover:bg-bg transition-transform"
+                class="nothing-found-btn"
                 :class="{ 'scale-95 opacity-50 pointer-events-none cursor-default': refreshing }"
                 :disabled="refreshing"
                 @click="refresh()"
               >
-                <p class="text-sm text-text-secondary">
+                <p class="text-sm text-text">
                   {{ t('list.reload') }}
                 </p>
               </button>
@@ -183,15 +183,15 @@ const removeSavedGame = () => {
 
 <style scoped>
 .icon-wrapper {
-  @apply transform transition-transform hover:scale-125 p-2;
+  @apply transform transition-transform hover:scale-125 p-2 text-text;
 }
 
 .btn-wrapper {
-  @apply rounded m-2;
+  @apply rounded m-2 bg-alt hover:bg-alt-hover border border-border;
 }
 
 .nothing-found-btn {
   flex-basis: 100%;
-  @apply rounded p-1 mx-2 my-1;
+  @apply rounded p-1 mx-2 my-1 bg-alt hover:bg-alt-hover border border-border;
 }
 </style>

@@ -32,7 +32,7 @@ const { t } = useI18n();
 }
 
 .info p kbd {
-  @apply bg-_bg-light-dark dark:bg-_bg-dark-dark px-2 py-0.5 rounded;
+  @apply bg-alt px-2 py-0.5 rounded text-text;
   user-select: none;
 }
 

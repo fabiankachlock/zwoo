@@ -6,7 +6,7 @@
       </div>
       <div class="relative flex flex-col flex-nowrap">
         <div v-if="versions">
-          <div v-for="version in versions" :key="version" class="item my-2 rounded-lg border border-border bg-bg px-3 py-2">
+          <div v-for="version in versions" :key="version" class="item my-2 rounded-lg border border-border bg-surface px-3 py-2">
             <div
               class="version-card-header flex flex-row flex-nowrap justify-between items-center cursor-pointer"
               @click="toggleVersionOpen(version)"
@@ -16,7 +16,7 @@
               </div>
               <div class="version-card-actions -mr-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
                 <button
-                  class="toggle text-2xl text-text relative p-4 rounded-md overflow-hidden bg-bg hover:bg-surface"
+                  class="toggle text-2xl text-text relative p-4 rounded-md overflow-hidden bg-alt hover:bg-alt-hover border border-border"
                   @click.stop="toggleVersionOpen(version)"
                 >
                   <Icon

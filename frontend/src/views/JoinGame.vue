@@ -9,20 +9,20 @@
     </div>
     <div v-else class="flex flex-row flex-wrap items-center justify-center text-text">
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-surface hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-alt hover:bg-alt-hover border border-border mx-2 my-1 rounded"
         @click="goBack()"
       >
         <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-1 text-secondary-text transition-transform" />{{ t('join.goBack') }}
       </button>
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-surface hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-alt hover:bg-alt-hover border border-border mx-2 my-1 rounded"
         @click="joinAsSpectator()"
       >
         <Icon icon="iconoir:eye-alt" class="icon text-xl mr-1 text-secondary-text transition-transform" />
         <span class="whitespace-nowrap">{{ t('join.asSpectator') }}</span>
       </button>
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-surface hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-alt hover:bg-alt-hover border border-border mx-2 my-1 rounded"
         @click="joinAsPlayer()"
       >
         <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 text-secondary-text transition-transform" />

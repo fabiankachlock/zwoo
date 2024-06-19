@@ -1,24 +1,24 @@
 <template>
   <MaxWidthLayout size="small" class="mt-8">
-    <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 w-fit text-error-light-border dark:text-error-dark-border"></Icon>
+    <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 w-fit text-error"></Icon>
     <h1 class="text-text text-center text-4xl mb-2">{{ t('wrongVersion.title') }}</h1>
     <p class="text-text-secondary text-center">{{ t('wrongVersion.info', [config.clientVersion, serverVersion || 'unknown']) }}</p>
     <div v-if="!isReady" class="flex flex-row justify-center flex-nowrap items-center text-text mt-4">
-      <ZwooIcon icon="iconoir:system-restart" class="text-xl text-text animate-spin-slow mr-3" />
+      <ZwooIcon icon="iconoir:system-restart" class="text-xl text-warning-text animate-spin-slow mr-3" />
       <p class="text-lg text-text-secondary">{{ t('wrongVersion.loading') }}</p>
     </div>
     <div class="flex flex-wrap justify-center items-center my-2">
       <button
-        class="flex justify-center items-center bg-bg border-2 border-transparent px-4 py-1 rounded transition hover:bg-bg cursor-pointer select-none m-1"
+        class="flex justify-center items-center bg-alt border border-border px-4 py-1 rounded transition hover:bg-alt-hover cursor-pointer select-none m-1"
         @click="reload"
       >
-        <p class="text-center" :class="{ 'text-primary-text': isReady, 'text-text-secondary': !isReady }">{{ t('wrongVersion.reload') }}</p>
+        <p class="text-center" :class="{ 'text-primary-text': isReady, 'text-text': !isReady }">{{ t('wrongVersion.reload') }}</p>
       </button>
       <button
-        class="flex justify-center items-center bg-bg border-2 border-transparent px-4 py-1 rounded transition hover:bg-bg cursor-pointer select-none m-1"
+        class="flex justify-center items-center bg-alt border border-border px-4 py-1 rounded transition hover:bg-alt-hover cursor-pointer select-none m-1"
         @click="toSettings"
       >
-        <p class="text-text-secondary text-center">{{ t('wrongVersion.toSettings') }}</p>
+        <p class="text-text text-center">{{ t('wrongVersion.toSettings') }}</p>
       </button>
     </div>
   </MaxWidthLayout>

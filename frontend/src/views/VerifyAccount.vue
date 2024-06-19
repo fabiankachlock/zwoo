@@ -13,7 +13,7 @@
       </p>
       <button
         v-if="isSuccess"
-        class="mx-auto flex justify-center items-center bg-bg border-2 border-transparent px-4 py-1 rounded transition hover:bg-bg cursor-pointer select-none"
+        class="mx-auto flex justify-center items-center bg-alt border border-border px-4 py-1 rounded transition hover:bg-alt-hover cursor-pointer select-none"
         @click="goToLogin()"
       >
         <p class="text-text-secondary text-center">{{ t('verifyAccount.login') }}</p>

@@ -25,7 +25,7 @@
           <router-link
             v-for="section in displaySections"
             :key="section"
-            class="block text-text bg-alt px-3 py-1 mt-2 rounded-lg border border-transparent mouse:hover:bg-alt-hover"
+            class="block text-text bg-alt px-3 py-1 mt-2 border-border rounded-lg border mouse:hover:bg-alt-hover"
             active-class="!border-primary"
             :class="{ 'border-primary': section === currentSection }"
             :to="`/settings/${section}`"
