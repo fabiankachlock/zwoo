@@ -36,7 +36,7 @@
                   <div class="menu-section items-center">
                     <p class="text-text text-lg">{{ t('ingame.actions') }}</p>
                     <div>
-                      <button class="text-text-dark bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded" @click="handleLeave">
+                      <button class="text-text bg-secondary hover:bg-secondary-dark mx-1 px-2 py-1 rounded" @click="handleLeave">
                         {{ t('ingame.leave') }}
                       </button>
                     </div>

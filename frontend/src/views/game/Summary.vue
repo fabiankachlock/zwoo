@@ -21,7 +21,7 @@
         :key="player.username"
         class="player flex justify-start items-center flex-nowrap m-1 bg-bg mouse:hover:bg-bg rounded px-3 py-2 border border-border"
       >
-        <p class="text-text-dark">
+        <p class="text-text">
           <span class="mr-2">{{ player.position }}.</span>
           {{ player.username }}
         </p>
@@ -31,7 +31,7 @@
           </span>
         </template>
         <div class="flex-1"></div>
-        <p class="text-text-dark italic">{{ player.score }}</p>
+        <p class="text-text italic">{{ player.score }}</p>
       </div>
       <div class="bottom-spacer h-32"></div>
     </template>

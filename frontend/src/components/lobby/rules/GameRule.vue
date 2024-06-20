@@ -6,7 +6,7 @@
           <Icon v-if="!isOpen" icon="akar-icons:circle-plus" class="text-text group-hover:text-primary-text text-xl" />
           <Icon v-else icon="akar-icons:circle-chevron-up" class="text-text group-hover:text-primary-text text-xl" />
         </button>
-        <p class="text-lg text-text-dark flex-grow">{{ translatedTitle }}</p>
+        <p class="text-lg text-text flex-grow">{{ translatedTitle }}</p>
       </div>
       <div class="relative">
         <slot></slot>

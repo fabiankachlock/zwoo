@@ -1,13 +1,13 @@
 <template>
-  <Widget v-model="isOpen" title="wait.spectators" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
+  <Widget v-model="isOpen" title="wait.spectators">
     <div class="w-full flex flex-col">
       <div v-if="spectators.length === 0">
-        <p class="text-text-dark italic">{{ t('wait.noSpectators') }}</p>
+        <p class="text-text italic">{{ t('wait.noSpectators') }}</p>
       </div>
       <div
         v-for="player of spectators"
         :key="player.id"
-        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-surface"
+        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg border border-border transition mouse:hover:border-primary rounded-lg"
       >
         <p class="text-lg text-text-secondary" :class="{ 'text-primary-text': lobbyId === player.id }">
           {{ player.username }}
@@ -16,14 +16,18 @@
           <template v-if="lobbyId === player.id">
             <button
               v-tooltip="t('wait.play')"
-              class="text-primary-text h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-bg mouse:hover:bg-bg rounded"
+              class="text-primary-text h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-alt hover:bg-alt-hover border border-border rounded"
               @click="startPlaying()"
             >
               <Icon icon="iconoir:play-outline" />
             </button>
           </template>
           <template v-if="isHost && lobbyId !== player.id">
-            <button v-tooltip="t('wait.kick')" class="text-secondary-text h-full bg-bg hover:bg-bg rounded p-1" @click="askKickPlayer(player.id)">
+            <button
+              v-tooltip="t('wait.kick')"
+              class="text-warning-text h-full bg-alt hover:bg-alt-hover border border-border rounded p-1"
+              @click="askKickPlayer(player.id)"
+            >
               <Icon icon="iconoir:delete-circled-outline" />
             </button>
             <ReassureDialog

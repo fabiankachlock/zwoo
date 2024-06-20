@@ -1,5 +1,5 @@
 <template>
-  <Widget v-model="isOpen" title="wait.rules" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
+  <Widget v-model="isOpen" title="wait.rules">
     <template #actions>
       <div v-if="isHost" class="flex flex-row items-center">
         <div v-if="activeProfile" class="text-text m1 mr-2 py-0.5 px-1 border border-border bg-bg rounded flex items-center">
@@ -11,13 +11,13 @@
           </button>
         </div>
         <Environment show="online">
-          <button class="rounded m-1 bg-bg hover:bg-surface text-text" @click="saveProfile">
+          <button class="rounded m-1 bg-alt hover:bg-alt-hover border border-border text-text" @click="saveProfile">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon v-if="activeProfile" icon="iconoir:floppy-disk-arrow-in" class="icon text-2xl"></Icon>
               <Icon v-else icon="iconoir:save-floppy-disk" class="icon text-2xl"></Icon>
             </div>
           </button>
-          <button class="rounded m-1 mr-2 bg-bg hover:bg-surface text-text" @click="openManageDialog">
+          <button class="rounded m-1 mr-2 bg-alt hover:bg-alt-hover border border-border text-text" @click="openManageDialog">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:folder" class="icon text-2xl"></Icon>
             </div>
@@ -27,7 +27,7 @@
       <div v-if="safeNewProfileOpen">
         <FloatingDialog content-class="sm:max-w-lg">
           <div class="absolute top-2 right-2 z-10">
-            <button class="bg-bg hover:bg-bg p-1.5 text-text-dark rounded" @click="safeNewProfileOpen = false">
+            <button class="bg-alt hover:bg-alt-hover border border-border p-1.5 text-text rounded" @click="safeNewProfileOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>
@@ -52,7 +52,7 @@
       <div v-if="manageProfilesOpen">
         <FloatingDialog content-class="sm:max-w-lg">
           <div class="absolute top-2 right-2 z-10">
-            <button class="bg-bg hover:bg-bg p-1.5 text-text-dark rounded" @click="manageProfilesOpen = false">
+            <button class="bg-alt hover:bg-alt-hover border border-border p-1.5 text-text rounded" @click="manageProfilesOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>

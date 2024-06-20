@@ -83,7 +83,7 @@ const save = () => {
             }
           "
           v-model="selectedIP"
-          class="bg-bg p-1 rounded text-text-dark"
+          class="bg-bg p-1 rounded text-text"
         >
           <option value="custom">{{ t('localServer.ip.custom') }}</option>
           <option value="localhost">{{ t('localServer.ip.localhost') }}</option>
@@ -105,7 +105,7 @@ const save = () => {
             }
           "
           v-model="selectedPort"
-          class="bg-bg p-1 rounded text-text-dark"
+          class="bg-bg p-1 rounded text-text"
         >
           <option value="dynamic">{{ t('localServer.port.dynamic') }}</option>
           <option value="custom">{{ t('localServer.port.custom') }}</option>
@@ -126,7 +126,7 @@ const save = () => {
             }
           "
           v-model="selectedSecurity"
-          class="bg-bg p-1 rounded text-text-dark"
+          class="bg-bg p-1 rounded text-text"
         >
           <option value="open">{{ t('localServer.security.open') }}</option>
           <option value="restricted">{{ t('localServer.security.restricted') }}</option>

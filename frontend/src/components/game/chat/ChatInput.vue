@@ -3,13 +3,13 @@
     <div class="w-full mr-2">
       <input
         v-model="message"
-        class="appearance-none outline-none w-full bg-bg text-text px-2 py-0.5 rounded transition hover:bg-bg focus:bg-bg border border-transparent focus:border-primary ring-0"
+        class="appearance-none outline-none w-full bg-surface text-text px-2 py-0.5 rounded transition hover:bg-surface-hover focus:bg-surface-hover border border-transparent hover:border-primary focus:border-primary ring-0"
         type="text"
         @keyup.stop
         @keyup.enter="sendMessage"
       />
     </div>
-    <div class="flex justify-center items-center bg-bg rounded transition hover:bg-bg">
+    <div class="flex justify-center items-center bg-alt rounded transition hover:bg-alt-hover">
       <button class="block text-primary-text px-3 py-0.5 h-full" @click="sendMessage">
         <Icon icon="teenyicons:send-outline" />
       </button>

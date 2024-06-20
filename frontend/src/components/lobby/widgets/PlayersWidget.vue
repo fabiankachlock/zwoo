@@ -67,16 +67,16 @@ const handlePlayerToSpectator = (id: number) => {
 </script>
 
 <template>
-  <Widget v-model="isOpen" title="wait.players" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
+  <Widget v-model="isOpen" title="wait.players">
     <template #actions>
       <div class="flex flex-row">
         <Environment :exclude="['offline']">
-          <button class="share rounded m-1 bg-bg hover:bg-surface text-text" @click="shareSheetOpen = true">
+          <button class="share rounded m-1 bg-alt hover:bg-alt-hover border border-border text-text" @click="shareSheetOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:share-android" class="icon text-2xl"></Icon>
             </div>
           </button>
-          <button class="scan-code rounded m-1 mr-2 bg-bg hover:bg-surface text-text" @click="qrCodeOpen = true">
+          <button class="scan-code rounded m-1 mr-2 bg-alt hover:bg-alt-hover border border-border text-text" @click="qrCodeOpen = true">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
             </div>
@@ -86,7 +86,7 @@ const handlePlayerToSpectator = (id: number) => {
       <div v-if="shareSheetOpen">
         <FloatingDialog>
           <div class="absolute top-2 right-2 z-10">
-            <button class="bg-bg hover:bg-bg p-1.5 text-text-dark rounded" @click="shareSheetOpen = false">
+            <button class="bg-alt hover:bg-alt-hover border border-border p-1.5 text-text rounded" @click="shareSheetOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>
@@ -98,7 +98,7 @@ const handlePlayerToSpectator = (id: number) => {
       <div v-if="qrCodeOpen" class="share-qr-dialog">
         <FloatingDialog>
           <div class="absolute top-2 right-2 z-10">
-            <button class="bg-bg hover:bg-bg p-1.5 text-text-dark rounded" @click="qrCodeOpen = false">
+            <button class="bg-alt hover:bg-alt-hover border border-border p-1.5 text-text rounded" @click="qrCodeOpen = false">
               <Icon icon="akar-icons:cross" class="text-xl" />
             </button>
           </div>
@@ -115,15 +115,15 @@ const handlePlayerToSpectator = (id: number) => {
     <template #default>
       <div class="w-full flex flex-col">
         <div v-if="players.length === 0">
-          <p class="text-text-dark italic">{{ t('wait.noPlayers') }}</p>
+          <p class="text-text italic">{{ t('wait.noPlayers') }}</p>
         </div>
         <div
           v-for="player of players"
           :key="player.id"
-          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-surface border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-darkest"
+          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg border border-border transition mouse:hover:border-primary rounded-lg"
         >
           <div class="flex justify-start items-center">
-            <p class="text-lg text-text-dark">
+            <p class="text-lg text-text">
               <span :class="{ 'text-primary-text': lobbyId === player.id }">
                 {{ player.username }}
               </span>
@@ -146,7 +146,7 @@ const handlePlayerToSpectator = (id: number) => {
             <template v-if="!isHost && lobbyId === player.id && player.role !== ZRPRole.Bot">
               <button
                 v-tooltip="t('wait.spectate')"
-                class="text-primary-text h-full bg-bg hover:bg-bg rounded p-1"
+                class="text-primary-text h-full bg-alt hover:bg-alt-hover border border-border rounded p-1"
                 @click="handleChangeToSpectator()"
               >
                 <Icon icon="iconoir:eye-alt" />
@@ -156,14 +156,14 @@ const handlePlayerToSpectator = (id: number) => {
             <template v-else-if="isHost && lobbyId !== player.id && player.role !== ZRPRole.Bot">
               <button
                 v-tooltip="t('wait.spectate')"
-                class="text-primary-text h-full bg-bg hover:bg-bg rounded p-1 mr-2"
+                class="text-primary-text h-full bg-alt hover:bg-alt-hover border border-border rounded p-1 mr-2"
                 @click="handlePlayerToSpectator(player.id)"
               >
                 <Icon icon="iconoir:eye-alt" />
               </button>
               <button
                 v-tooltip="t('wait.promote')"
-                class="text-primary-text h-full bg-bg hover:bg-bg rounded p-1 mr-2"
+                class="text-primary-text h-full bg-alt hover:bg-alt-hover border border-border rounded p-1 mr-2"
                 @click="askPromotePlayer(player.id)"
               >
                 <Icon icon="akar-icons:crown" />
@@ -174,7 +174,11 @@ const handlePlayerToSpectator = (id: number) => {
                 :is-open="playerToPromote === player.id"
                 @close="allowed => handlePromotePlayer(player.id, allowed)"
               />
-              <button v-tooltip="t('wait.kick')" class="text-secondary-text h-full bg-bg hover:bg-bg rounded p-1" @click="askKickPlayer(player.id)">
+              <button
+                v-tooltip="t('wait.kick')"
+                class="text-warning-text h-full bg-alt hover:bg-alt-hover border border-border rounded p-1"
+                @click="askKickPlayer(player.id)"
+              >
                 <Icon icon="iconoir:delete-circled-outline" />
               </button>
               <ReassureDialog
@@ -189,7 +193,7 @@ const handlePlayerToSpectator = (id: number) => {
         <!-- wins info section -->
         <div v-if="showWinsWarning" class="rounded-lg px-2 py-1 mt-4 bg-bg">
           <div class="flex justify-between items-center cursor-pointer" @click="winsInfoOpen = !winsInfoOpen">
-            <p class="text-text-secondary">
+            <p class="text-text">
               {{ t('wait.noWinInfo') }}
             </p>
             <Icon v-if="!winsInfoOpen" icon="akar-icons:info" class="text-text hover:text-primary-text cursor-pointer text-xl" />

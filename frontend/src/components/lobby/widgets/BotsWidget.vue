@@ -1,9 +1,9 @@
 <template>
-  <Widget v-model="isOpen" title="wait.bots" widget-class="bg-bg" button-class="bg-bg hover:bg-surface">
+  <Widget v-model="isOpen" title="wait.bots">
     <template #actions>
       <div class="flex flex-row">
         <template v-if="isHost">
-          <button class="share rounded m-1 bg-bg hover:bg-surface text-text" @click="createBot()">
+          <button class="share rounded m-1 bg-alt hover:bg-alt-hover border border-border text-text" @click="createBot()">
             <div class="transform transition-transform hover:scale-110 p-1">
               <Icon icon="fluent:bot-add-20-regular" class="icon text-2xl"></Icon>
             </div>
@@ -14,12 +14,12 @@
     <template #default>
       <div class="w-full flex flex-col">
         <div v-if="Object.keys(isHost ? realBots : fakeBots).length === 0">
-          <p class="text-text-dark italic">{{ t('wait.noBots') }}</p>
+          <p class="text-text italic">{{ t('wait.noBots') }}</p>
         </div>
         <div v-if="botDialogOpen && isHost">
           <FloatingDialog content-class="sm:max-w-lg">
             <div class="absolute top-2 right-2 z-10">
-              <button class="bg-bg hover:bg-bg p-1.5 text-text-dark rounded" @click="botDialogOpen = false">
+              <button class="bg-bg hover:bg-bg p-1.5 text-text rounded" @click="botDialogOpen = false">
                 <Icon icon="akar-icons:cross" class="text-xl" />
               </button>
             </div>
@@ -43,22 +43,22 @@
                   </label>
                   <div class="w-full grid grid-cols-3">
                     <button
-                      class="bg-bg shadow appearance-none border border-border rounded-l-lg w-full p-2 text-text focus:outline-none focus:border-primary focus:bg-surface"
-                      :class="{ 'bg-darkest text-primary-text': botType === -1 }"
+                      class="shadow appearance-none bg-alt hover:bg-alt-hover border border-border rounded-l-lg w-full p-2 text-text focus:outline-none focus:border-primary"
+                      :class="{ '!bg-surface text-primary-text': botType === -1 }"
                       @click="botType = -1"
                     >
                       {{ t('wait.dumpBot') }}
                     </button>
                     <button
-                      class="bg-bg shadow appearance-none border border-border w-full p-2 text-text focus:outline-none focus:border-primary focus:bg-surface"
-                      :class="{ 'bg-darkest text-primary-text': botType === 0 }"
+                      class="shadow appearance-none bg-alt hover:bg-alt-hover border border-border w-full p-2 text-text focus:outline-none focus:border-primary"
+                      :class="{ '!bg-surface text-primary-text': botType === 0 }"
                       @click="botType = 0"
                     >
                       {{ t('wait.normalBot') }}
                     </button>
                     <button
-                      class="bg-bg shadow appearance-none border border-border rounded-r-lg w-full p-2 text-text focus:outline-none focus:border-primary focus:bg-surface"
-                      :class="{ 'bg-darkest text-primary-text': botType === 1 }"
+                      class="shadow appearance-none bg-alt hover:bg-alt-hover border border-border rounded-r-lg w-full p-2 text-text focus:outline-none focus:border-primary"
+                      :class="{ '!bg-surface text-primary-text': botType === 1 }"
                       @click="botType = 1"
                     >
                       {{ t('wait.smartBot') }}
@@ -78,10 +78,10 @@
         <div
           v-for="bot of isHost ? realBots : fakeBots"
           :key="bot.id"
-          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-surface border border-border transition mouse:hover:border-primary rounded-lg mouse:hover:bg-darkest"
+          class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg border border-border transition mouse:hover:border-primary rounded-lg"
         >
           <div class="flex justify-start items-center">
-            <p class="text-lg text-text-dark">
+            <p class="text-lg text-text">
               <span>
                 {{ bot.name }}
               </span>
@@ -94,7 +94,11 @@
               </button>
             -->
             <template v-if="isHost">
-              <button v-tooltip="t('wait.kick')" class="text-secondary-text h-full bg-bg hover:bg-bg rounded p-1" @click="deleteBot(bot.id)">
+              <button
+                v-tooltip="t('wait.kick')"
+                class="text-warning-text h-full bg-alt hover:bg-alt-hover border border-border rounded p-1"
+                @click="deleteBot(bot.id)"
+              >
                 <Icon icon="iconoir:delete-circled-outline" />
               </button>
             </template>

@@ -1,12 +1,16 @@
 <template>
-  <div class="rounded-lg" :class="widgetClass">
+  <div class="rounded-lg bg-surface" :class="widgetClass">
     <div class="widget-header flex flex-row flex-nowrap justify-between items-center m-1">
       <div class="widget-title mx-1">
         <p class="text-xl text-text my-2">{{ t(title) }}</p>
       </div>
       <div class="widget-actions mx-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
         <slot name="actions"></slot>
-        <button class="toggle text-2xl text-text relative p-4 rounded w-6 h-6 overflow-hidden" :class="buttonClass" @click="toggleOpenState">
+        <button
+          class="toggle text-2xl text-text relative p-4 rounded w-6 h-6 overflow-hidden bg-alt hover:bg-alt-hover border border-border"
+          :class="buttonClass"
+          @click="toggleOpenState"
+        >
           <Icon
             icon="iconoir:nav-arrow-down"
             class="icon absolute left-1/2 top-1/2 -translate-x-1/2 transition duration-300"
