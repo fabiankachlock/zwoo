@@ -3,7 +3,6 @@
     <div
       class="px-4 relative rounded bg-alt hover:bg-alt-hover transition border-2 switch-body"
       :class="{
-        'hover:bg-darkest': !readonly,
         'on text-text border-primary': modelValue,
         'off text-text border-border': !modelValue
       }"

@@ -10,7 +10,10 @@
     </div>
     <div>
       <div class="flex justify-center items-center my-2">
-        <button class="bg-surface text-text px-6 py-2 rounded hover:bg-darkest transition-transform hover:scale-95" @click="handleButtonClick">
+        <button
+          class="bg-alt text-text px-6 py-2 rounded hover:bg-alt-hover transition-transform hover:scale-95 border border-border"
+          @click="handleButtonClick"
+        >
           {{ t(cameraOn ? 'join.closeCam' : 'join.scanCode') }}
         </button>
       </div>

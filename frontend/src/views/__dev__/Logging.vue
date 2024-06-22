@@ -22,12 +22,12 @@
             <p class="italic text-sm text-text-secondary">
               {{ t('logging.storedCount', storedLogs.length) }}
             </p>
-            <button class="px-2 py-1 rounded bg-surface hover:bg-darkest text-error-text dark:text-error-light-border mx-2" @click="clear()">
+            <button class="px-2 py-1 rounded bg-alt hover:bg-alt-hover border border-border text-error-text mx-2" @click="clear()">
               {{ t('logging.clearStore') }}
             </button>
           </div>
           <div class="flex justify-end w-full">
-            <button class="px-2 py-1 rounded bg-surface hover:bg-darkest text-text-secondary mx-2" @click="reload()">
+            <button class="px-2 py-1 rounded bg-alt hover:bg-alt-hover border border-border text-text mx-2" @click="reload()">
               {{ t('logging.reloadLogs') }}
             </button>
           </div>

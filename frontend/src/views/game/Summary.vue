@@ -52,19 +52,6 @@
           {{ t('summary.playAgain') }}
         </p>
       </button>
-
-      <!-- TODO tmp(beta): might enabled later again <button :click="handleSpectatorClick()" class="action bg-surface hover:bg-darkest">
-        <Icon class="icon text-secondary-text" icon="iconoir:eye-alt" />
-        <p class="text text-text text-md">
-          {{ t(isSpectator ? 'summary.spectateAgain' : 'summary.startSpectating') }}
-        </p>
-      </button>
-      <button :click="handlePlayClick()" class="action bg-surface hover:bg-darkest">
-        <Icon class="icon text-secondary-text" icon="iconoir:play-outline" />
-        <p class="text text-text text-md">
-          {{ t(isSpectator ? 'summary.startPlaying' : 'summary.playAgain') }}
-        </p>
-      </button> -->
     </div>
   </div>
 </template>

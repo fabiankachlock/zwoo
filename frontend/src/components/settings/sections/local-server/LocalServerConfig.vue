@@ -18,13 +18,13 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col bg-surface p-3 my-3 rounded-lg border border-transparent mouse:hover:border-primary mouse:hover:bg-darkest">
+  <div class="w-full flex flex-col py-3 rounded-lg">
     <LocalServerConfigEditor v-if="editOpen" :config="config" @close="editDialogClosed" />
     <div class="flex flex-row justify-between items-center mb-2">
       <p class="text-text">
         {{ t('localServer.config') }}
       </p>
-      <button class="bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg select-none text-text-secondary" @click="editOpen = true">
+      <button class="bg-alt border border-border px-2 rounded transition hover:bg-alt-hover select-none text-text" @click="editOpen = true">
         {{ t('localServer.editConfig') }}
       </button>
     </div>

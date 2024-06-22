@@ -4,7 +4,7 @@
     <p class="text-text-secondary text-center">{{ t('cookies.disallowed.info') }}</p>
     <div class="flex justify-center items-center my-2">
       <button
-        class="flex justify-center items-center bg-alt hover:bg-alt-hover border border-border px-4 py-1 rounded transition hover:bg-darkest cursor-pointer select-none"
+        class="flex justify-center items-center bg-alt hover:bg-alt-hover border border-border px-4 py-1 rounded transition cursor-pointer select-none"
         @click="manageSelection"
       >
         <p class="text-text text-center">{{ t('cookies.manage') }}</p>

@@ -9,7 +9,7 @@
           <div
             v-for="(player, index) in playerEntries"
             :key="index"
-            class="item my-1 rounded-xl border border-border mouse:hover:bg-darkest mouse:hover:border-primary bg-surface px-3 py-2"
+            class="item my-1 rounded-xl border border-border mouse:hover:border-primary bg-surface px-3 py-2"
           >
             <div class="flex flex-row justify-between flex-wrap items-center">
               <div class="text text-text flex flex-row flex-nowrap justify-start items-center">
@@ -26,7 +26,7 @@
             <div class="mb-2 -mt-1">
               <p class="ml-4 text-lg text-text">...</p>
             </div>
-            <div class="item my-1 rounded-xl border border-border hover:bg-darkest hover:border-primary bg-surface px-3 py-2">
+            <div class="item my-1 rounded-xl border border-border hover:border-primary bg-surface px-3 py-2">
               <div class="flex flex-row justify-between flex-wrap items-center">
                 <div class="text text-text flex flex-row flex-nowrap justify-start items-center">
                   <p class="mr-2">{{ ownPosition }}. {{ username }}</p>

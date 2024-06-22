@@ -68,12 +68,12 @@ const save = () => {
         <h1 class="text-text text-xl">
           {{ t('localServer.changeConfig') }}
         </h1>
-        <button class="bg-bg border-2 border-transparent px-2 rounded transition hover:bg-bg cursor-pointer select-none" @click="save">
+        <button class="bg-alt border border-border px-2 rounded transition hover:bg-alt-hover text-text cursor-pointer select-none" @click="save">
           {{ t('localServer.save') }}
         </button>
       </div>
       <div class="flex flex-row justify-between items-center mx-2">
-        <p class="tx-secondary">
+        <p class="text-text-secondary">
           {{ t('localServer.ip.title') }}
         </p>
         <select
@@ -83,7 +83,7 @@ const save = () => {
             }
           "
           v-model="selectedIP"
-          class="bg-bg p-1 rounded text-text"
+          class="bg-alt hover:bg-alt-hover border border-border p-1 rounded text-text"
         >
           <option value="custom">{{ t('localServer.ip.custom') }}</option>
           <option value="localhost">{{ t('localServer.ip.localhost') }}</option>
@@ -95,7 +95,7 @@ const save = () => {
       <div v-else class="h-2"></div>
 
       <div class="flex flex-row justify-between items-center mx-2">
-        <p class="tx-secondary">
+        <p class="text-text-secondary">
           {{ t('localServer.port.title') }}
         </p>
         <select
@@ -105,7 +105,7 @@ const save = () => {
             }
           "
           v-model="selectedPort"
-          class="bg-bg p-1 rounded text-text"
+          class="bg-alt hover:bg-alt-hover border border-border p-1 rounded text-text"
         >
           <option value="dynamic">{{ t('localServer.port.dynamic') }}</option>
           <option value="custom">{{ t('localServer.port.custom') }}</option>
@@ -116,7 +116,7 @@ const save = () => {
       <div v-else class="h-2"></div>
 
       <div class="flex flex-row justify-between items-center mx-2">
-        <p class="tx-secondary">
+        <p class="text-text-secondary">
           {{ t('localServer.security.title') }}
         </p>
         <select
@@ -126,7 +126,7 @@ const save = () => {
             }
           "
           v-model="selectedSecurity"
-          class="bg-bg p-1 rounded text-text"
+          class="bg-alt hover:bg-alt-hover border border-border p-1 rounded text-text"
         >
           <option value="open">{{ t('localServer.security.open') }}</option>
           <option value="restricted">{{ t('localServer.security.restricted') }}</option>

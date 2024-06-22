@@ -4,7 +4,7 @@
     v-else
     :id="name ?? 'rule-input'"
     autocomplete=""
-    class="bg-surface shadow appearance-none border border-border rounded w-20 h-full py-1 px-2 text-text leading-tight focus:outline-none focus:shadow-outline focus:border-primary focus:bg-darkest"
+    class="bg-surface shadow appearance-none border border-border rounded w-20 h-full py-1 px-2 text-text leading-tight focus:outline-none focus:shadow-outline focus:border-primary"
     :name="name ?? 'rule-input'"
     type="number"
     :min="min"

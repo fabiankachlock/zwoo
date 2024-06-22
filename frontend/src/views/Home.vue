@@ -48,7 +48,7 @@
           <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
         </router-link>
       </div>
-      <!-- TODO tmp(beta): <div class="action px-4 py-1 rounded m-2 bg-surface hover:bg-darkest">
+      <!-- TODO tmp(beta): <div class="action list">
         <router-link class="flex flex-row items-center" to="/tutorial">
           <Icon class="icon text-secondary-text" icon="mdi:arrow-right-bold-box-outline" />
           <p class="text-text inline-block mx-1">{{ t('landing.tutorial') }}</p>

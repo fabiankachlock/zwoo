@@ -24,7 +24,7 @@
           <p class="text-text">{{ t('landing.leaderboard') }}</p>
         </router-link>
       </div>
-      <!-- TODO tmp(beta): <div class="action bg-surface hover:bg-darkest">
+      <!-- TODO tmp(beta): <div class="action list">
         <router-link class="link" to="/tutorial">
           <Icon class="icon text-secondary-text" icon="mdi:arrow-right-bold-box-outline" />
           <p class="text-text">{{ t('landing.tutorial') }}</p>
