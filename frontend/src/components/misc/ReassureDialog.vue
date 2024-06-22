@@ -11,16 +11,16 @@
         <p class="mb-2 text-text-secondary">{{ t(body) }}</p>
         <div class="grid grid-cols-2 gap-2 mt-4">
           <button
-            class="flex justify-center items-center bg-bg border-2 border-secondary px-4 py-1 rounded transition hover:bg-surface cursor-pointer select-none"
+            class="flex justify-center items-center bg-alt border border-border px-4 py-1 rounded transition hover:bg-alt-hover hover:border-warning cursor-pointer select-none"
             @click="close(false)"
           >
-            <p class="text-secondary-text text-center">{{ t(decline ?? 'reassureDialog.decline') }}</p>
+            <p class="text-warning-text text-center">{{ t(decline ?? 'reassureDialog.decline') }}</p>
           </button>
           <button
-            class="flex justify-center items-center bg-bg border-2 border-primary px-4 py-1 rounded transition hover:bg-surface cursor-pointer select-none"
+            class="flex justify-center items-center bg-alt border border-border px-4 py-1 rounded transition hover:bg-alt-hover hover:border-success cursor-pointer select-none"
             @click="close(true)"
           >
-            <p class="text-primary-text text-center">{{ t(accept ?? 'reassureDialog.accept') }}</p>
+            <p class="text-success-text text-center">{{ t(accept ?? 'reassureDialog.accept') }}</p>
           </button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 <template>
   <button
     v-if="isAllowed"
-    class="end-turn-btn bg-bg hover:bg-bg border-2 rounded px-3 py-1 mr-5"
+    class="end-turn-btn bg-alt hover:bg-alt-hover border-2 rounded px-3 py-1 mr-5"
     :class="{
       hidden: !isEnabled || wasDisabled,
       'border-primary': isEnabled,

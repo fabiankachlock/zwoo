@@ -1,6 +1,6 @@
 <template>
   <div v-if="msg" class="snackbar-container fixed z-50 pointer-events-none" :class="SnackBarPositionClasses[msg.position]">
-    <div class="snackbar-box bg-surface rounded overflow-hidden max-w-xs relative">
+    <div class="snackbar-box bg-alt rounded overflow-hidden max-w-xs relative">
       <div class="snackbar-content px-3 pt-2 pb-2 flex flex-row flex-nowrap items-center pointer-events-auto">
         <p class="text-sm text-text">
           {{ msg.needsTranslation ? t(msg.message) : msg.message }}

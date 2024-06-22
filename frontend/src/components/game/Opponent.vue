@@ -4,10 +4,10 @@
     :class="{
       'border-secondary': isActive,
       'border-transparent': !isActive,
-      'bg-darkest z-0': isConnected,
-      'bg-bg border-primary sticky left-0 z-10': !isConnected
+      'z-0': isConnected,
+      'border-warning sticky left-0 z-10': !isConnected
     }"
-    class="opponent-wrapper px-2 py-1 rounded-sm mx-2 my-1 border"
+    class="opponent-wrapper bg-surface px-2 py-1 rounded-sm mx-2 my-1 border"
   >
     <div
       :class="{ 'text-text': isConnected, 'text-text-secondary line-through': !isConnected }"

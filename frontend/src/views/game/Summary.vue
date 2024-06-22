@@ -1,9 +1,7 @@
 <template>
   <div class="game-summary overflow-y-auto">
     <template v-if="winner">
-      <div
-        class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-surface mouse:hover:bg-darkest rounded-lg px-3 py-2 border border-primary"
-      >
+      <div class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-surface rounded-lg px-3 py-2 border border-primary">
         <div class="h-full flex-1 flex flex-nowrap items-center justify-start">
           <img src="/img/logo/pride/zwoo_logo_simple_pride_none.png" alt="" class="max-h-full mr-3" />
           <p class="text-text text-xl">{{ winner.username }}</p>
@@ -19,7 +17,7 @@
       <div
         v-for="player in notWinners"
         :key="player.username"
-        class="player flex justify-start items-center flex-nowrap m-1 bg-bg mouse:hover:bg-bg rounded px-3 py-2 border border-border"
+        class="player flex justify-start items-center flex-nowrap m-1 bg-surface rounded px-3 py-2 border border-border"
       >
         <p class="text-text">
           <span class="mr-2">{{ player.position }}.</span>
@@ -42,14 +40,14 @@
   </div>
   <div class="actions">
     <div class="actions-grid w-full grid gap-2">
-      <button class="action bg-surface hover:bg-darkest" @click="handleLeaveClick()">
-        <Icon class="icon text-secondary-text" icon="mdi:logout-variant" />
+      <button class="action bg-alt hover:bg-alt-hover border border-border" @click="handleLeaveClick()">
+        <Icon class="icon text-primary-text" icon="mdi:logout-variant" />
         <p class="text text-text text-md">
           {{ t('summary.leave') }}
         </p>
       </button>
-      <button class="action bg-surface hover:bg-darkest" @click="handlePlayClick()">
-        <Icon class="icon text-secondary-text" icon="mdi:logout-variant" />
+      <button class="action bg-alt hover:bg-alt-hover border border-border" @click="handlePlayClick()">
+        <Icon class="icon text-warning-text" icon="mdi:logout-variant" />
         <p class="text text-text text-md">
           {{ t('summary.playAgain') }}
         </p>
