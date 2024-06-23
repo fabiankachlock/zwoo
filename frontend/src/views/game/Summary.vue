@@ -3,7 +3,7 @@
     <template v-if="winner">
       <div class="sticky flex h-14 justify-between items-center flex-nowrap top-0 m-1 mt-0 bg-surface rounded-lg px-3 py-2 border border-primary">
         <div class="h-full flex-1 flex flex-nowrap items-center justify-start">
-          <img src="/img/logo/pride/zwoo_logo_simple_pride_none.png" alt="" class="max-h-full mr-3" />
+          <div class="logo w-10 h-10 mr-3" v-html="Logo"></div>
           <p class="text-text text-xl">{{ winner.username }}</p>
           <template v-if="winner.isBot">
             <span class="text-primary-text text-2xl ml-2">
@@ -60,6 +60,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import Logo from '@/assets/zwoo_logo_simple_none_auto.svg?raw';
 import { Icon } from '@/components/misc/Icon';
 import { useGameSummary } from '@/core/adapter/game/summary';
 
@@ -129,5 +130,9 @@ const handleLeaveClick = () => {
   .player {
     @apply mx-8;
   }
+}
+
+.logo :deep(svg) {
+  @apply w-full h-full;
 }
 </style>
