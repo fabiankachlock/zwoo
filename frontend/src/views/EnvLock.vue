@@ -17,16 +17,16 @@ const reload = () => {
 
 <template>
   <MaxWidthLayout size="small" class="mt-8">
-    <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 w-fit text-error-light-border dark:text-error-dark-border"></Icon>
-    <h1 class="tc-main text-center text-4xl mb-2">{{ t('envLock.title') }}</h1>
-    <p class="tc-main-secondary text-center">{{ t('envLock.info', [t('envLock.' + app.environment), t('envLock.' + target)]) }}</p>
+    <Icon icon="material-symbols:block" class="text-[6em] mx-auto mb-4 w-fit text-error dark:text-error-dark-border"></Icon>
+    <h1 class="text-text text-center text-4xl mb-2">{{ t('envLock.title') }}</h1>
+    <p class="text-text-secondary text-center">{{ t('envLock.info', [t('envLock.' + app.environment), t('envLock.' + target)]) }}</p>
 
     <div class="flex flex-wrap justify-center items-center my-2">
       <button
-        class="flex justify-center items-center bg-lightest border-2 border-transparent px-4 py-1 rounded transition hover:bg-light cursor-pointer select-none m-1"
+        class="flex justify-center items-center bg-alt border border-border px-4 py-1 rounded transition hover:bg-alt-hover cursor-pointer select-none m-1"
         @click="reload"
       >
-        <p class="text-center tc-main-secondary">{{ t('envLock.reload') }}</p>
+        <p class="text-center text-text">{{ t('envLock.reload') }}</p>
       </button>
     </div>
   </MaxWidthLayout>

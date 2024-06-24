@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full p-1 rounded bg-error-light-bg dark:bg-error-dark-bg border-2 border-error-light-border dark:border-error-dark-border">
-    <pre class="text-error-light-text dark:text-error-dark-text text-xs italic error-value">{{ errorText }}</pre>
+  <div class="w-full p-1 rounded bg-error/50 al border-2 border-error">
+    <pre class="text-text text-xs italic error-value">{{ errorText }}</pre>
   </div>
 </template>
 

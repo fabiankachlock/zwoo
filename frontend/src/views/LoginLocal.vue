@@ -75,9 +75,9 @@ const logIn = async () => {
       <TextInput v-model="name" id="username" label-key="loginLocal.name" :placeholder="t('loginLocal.namePlaceholder')" />
       <FormError :error="error" />
 
-      <div class="info border-2 rounded-lg bc-primary p-2 my-4 mx-2">
-        <Icon icon="akar-icons:info" class="tc-secondary text-xl mb-2" />
-        <p class="tc-main-secondary">{{ t('loginLocal.infoServer') }}</p>
+      <div class="info border-2 rounded-lg border-primary p-2 my-4 mx-2">
+        <Icon icon="akar-icons:info" class="text-primary-text text-xl mb-2" />
+        <p class="text-text-secondary">{{ t('loginLocal.infoServer') }}</p>
       </div>
 
       <FormActions>

@@ -1,22 +1,22 @@
 <template>
   <div class="max-w-lg sm:w-full mx-auto">
     <div class="mx-4 sm:mx-0 pb-2 relative">
-      <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-0">
-        <h2 class="tc-main text-4xl mb-1 pt-3">{{ t('versionHistory.title') }}</h2>
+      <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-bg top-0">
+        <h2 class="text-text text-4xl mb-1 pt-3">{{ t('versionHistory.title') }}</h2>
       </div>
       <div class="relative flex flex-col flex-nowrap">
         <div v-if="versions">
-          <div v-for="version in versions" :key="version" class="item my-2 rounded-lg border bc-darkest bg-light px-3 py-2">
+          <div v-for="version in versions" :key="version" class="item my-2 rounded-lg border border-border bg-surface px-3 py-2">
             <div
               class="version-card-header flex flex-row flex-nowrap justify-between items-center cursor-pointer"
               @click="toggleVersionOpen(version)"
             >
               <div class="version-card-title">
-                <p class="text-xl tc-main">{{ t('versionHistory.versionTitle', [version]) }}</p>
+                <p class="text-xl text-text">{{ t('versionHistory.versionTitle', [version]) }}</p>
               </div>
               <div class="version-card-actions -mr-1 flex flex-row flex-nowrap justify-between items-center overflow-hidden">
                 <button
-                  class="toggle text-2xl tc-main relative p-4 rounded-md overflow-hidden bg-main hover:bg-dark"
+                  class="toggle text-2xl text-text relative p-4 rounded-md overflow-hidden bg-alt hover:bg-alt-hover border border-border"
                   @click.stop="toggleVersionOpen(version)"
                 >
                   <Icon
@@ -36,14 +36,14 @@
               class="version-card-body transition duration-300"
               :class="{ open: openVersions[version], 'overflow-hidden': !openVersions[version] }"
             >
-              <div class="content relative border-t bc-darkest mt-2">
+              <div class="content relative border-t border-border mt-2">
                 <Changelog :changelog="versionChangelogs[version]" />
               </div>
             </div>
           </div>
         </div>
         <div v-else>
-          <p class="tc-main">
+          <p class="text-text">
             {{ t('versionHistory.failure') }}
           </p>
         </div>

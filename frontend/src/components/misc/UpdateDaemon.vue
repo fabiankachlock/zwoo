@@ -1,12 +1,12 @@
 <template>
-  <div v-if="updateExists" class="w-full px-2 my-2 mb-4">
-    <div class="bg-dark hover:bg-darkest rounded-lg px-3 py-3">
+  <div v-if="updateExists" class="w-full my-2 mb-4">
+    <div class="bg-surface rounded-lg p-2">
       <div class="flex justify-between items-center">
-        <p class="tc-main">{{ t('settings.update.available') }}</p>
-        <div class="bg-light hover:bg-main rounded px-2 py-1 tc-main">
-          <div v-if="!isReady" class="flex flex-row justify-center flex-nowrap items-center tc-main">
-            <ZwooIcon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-2" />
-            <p class="text-lg tc-main-secondary">{{ t('settings.update.downloading') }}</p>
+        <p class="text-text">{{ t('settings.update.available') }}</p>
+        <div class="bg-alt hover:bg-alt-hover border border-border rounded px-2 py-0.5 text-text">
+          <div v-if="!isReady" class="flex flex-row justify-center flex-nowrap items-center text-text select-none cursor-pointer">
+            <ZwooIcon icon="iconoir:system-restart" class="text-xl animate-spin-slow mr-2" />
+            <p class="text-lg">{{ t('settings.update.downloading') }}</p>
           </div>
           <button v-else @click="reload">{{ t('settings.update.updateNow') }}</button>
         </div>

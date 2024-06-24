@@ -1,10 +1,10 @@
 <template>
-  <p v-if="readonly" class="tc-main-light leading-tight">{{ modelValue }}</p>
+  <p v-if="readonly" class="text-text leading-tight">{{ modelValue }}</p>
   <input
     v-else
     :id="name ?? 'rule-input'"
     autocomplete=""
-    class="bg-dark shadow appearance-none border bc-main rounded w-20 h-full py-1 px-2 tc-main-light leading-tight focus:outline-none focus:shadow-outline focus:bc-primary focus:bg-darkest"
+    class="bg-surface shadow appearance-none border border-border rounded w-20 h-full py-1 px-2 text-text leading-tight focus:outline-none focus:shadow-outline focus:border-primary"
     :name="name ?? 'rule-input'"
     type="number"
     :min="min"

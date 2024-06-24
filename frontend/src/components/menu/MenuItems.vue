@@ -1,25 +1,25 @@
 <template>
-  <div class="flex flex-col tc-main-dark">
+  <div class="flex flex-col text-text">
     <Environment show="offline">
       <div>
         <div class="flex items-center p-1">
-          <Icon icon="ic:baseline-wifi-off" class="ml-3 text-xs tc-main-secondary"></Icon>
-          <p class="text-xs tc-main-secondary ml-1">{{ t('nav.statusOffline') }}</p>
+          <Icon icon="ic:baseline-wifi-off" class="ml-3 text-xs text-text-secondary"></Icon>
+          <p class="text-xs text-text-secondary ml-1">{{ t('nav.statusOffline') }}</p>
         </div>
-        <div class="divider bc-invert-main"></div>
+        <div class="divider border-border-divider"></div>
       </div>
     </Environment>
     <Environment show="local">
       <div>
         <div class="flex items-center p-1">
-          <Icon icon="akar-icons:link-chain" class="ml-3 text-xs tc-main-secondary"></Icon>
-          <p class="text-xs tc-main-secondary ml-1 none">{{ t('nav.statusLocal') }}: {{ server }}</p>
+          <Icon icon="akar-icons:link-chain" class="ml-3 text-xs text-text-secondary"></Icon>
+          <p class="text-xs text-text-secondary ml-1 none">{{ t('nav.statusLocal') }}: {{ server }}</p>
         </div>
         <button class="link" style="margin-top: 0" @click="disconnect">
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
           {{ t('nav.disconnect') }}
         </button>
-        <div class="divider bc-invert-main"></div>
+        <div class="divider border-border-divider"></div>
       </div>
     </Environment>
 
@@ -33,7 +33,7 @@
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
           {{ t('nav.createAccount') }}
         </router-link>
-        <div class="divider bc-invert-main"></div>
+        <div class="divider border-border-divider"></div>
       </div>
     </Environment>
     <Environment show="local">
@@ -42,7 +42,7 @@
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
           {{ t('nav.login') }}
         </router-link>
-        <div class="divider bc-invert-main"></div>
+        <div class="divider border-border-divider"></div>
       </div>
     </Environment>
     <Environment show="offline">
@@ -50,7 +50,7 @@
         <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
         {{ t('nav.home') }}
       </router-link>
-      <div class="divider bc-invert-main"></div>
+      <div class="divider border-border-divider"></div>
     </Environment>
     <Environment :include="['online', 'local']">
       <div v-if="isLoggedIn">
@@ -58,7 +58,7 @@
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
           {{ t('nav.home') }}
         </router-link>
-        <div class="divider bc-invert-main"></div>
+        <div class="divider border-border-divider"></div>
         <router-link to="/create-game" class="link">
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
           {{ t('nav.createGame') }}
@@ -67,7 +67,7 @@
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
           {{ t('nav.joinGame') }}
         </router-link>
-        <div class="divider bc-invert-main"></div>
+        <div class="divider border-border-divider"></div>
       </div>
     </Environment>
     <div>
@@ -82,7 +82,7 @@
     </div>
     <Environment :include="['online', 'local']">
       <div v-if="isLoggedIn">
-        <div class="divider bc-invert-main"></div>
+        <div class="divider border-border-divider"></div>
         <router-link to="/logout" class="link">
           <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
           {{ t('nav.logout') }}
@@ -133,7 +133,7 @@ const disconnect = () => {
 
 <style scoped>
 .divider {
-  @apply h-0 my-1 border border-solid border-t-0 opacity-50;
+  @apply h-0 my-1 border border-t-0 opacity-50;
 }
 
 .link {
@@ -142,7 +142,7 @@ const disconnect = () => {
 
 .link::before {
   content: '';
-  @apply absolute left-0 bg-darkest top-0 bottom-0 w-7 transition-all;
+  @apply absolute left-0 bg-surface top-0 bottom-0 w-7 transition-all;
 }
 
 .link:hover::before {

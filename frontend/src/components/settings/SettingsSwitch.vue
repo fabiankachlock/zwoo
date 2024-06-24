@@ -1,10 +1,10 @@
 <template>
   <button @click.stop="toggle">
     <div
-      class="relative rounded bg-main hover:bg-dark transition border-2 switch-body"
+      class="relative rounded bg-alt hover:bg-alt-hover transition border-2 switch-body"
       :class="{
-        'on tc-main bc-primary': modelValue,
-        'off tc-main-light bc-lightest': !modelValue,
+        'on text-text border-primary': modelValue,
+        'off text-text-secondary border-border': !modelValue,
         'pr-6': modelValue,
         'pl-6': !modelValue
       }"
@@ -51,11 +51,15 @@ const toggle = () => {
 }
 .switch-body.off .thumb {
   left: 0;
-  @apply bg-_bg-light-lightest dark:bg-_bg-dark-lightest;
+  @apply bg-surface;
+}
+
+.switch-body.off:hover .thumb {
+  @apply bg-surface-hover;
 }
 
 .switch-body.on .thumb {
+  @apply bg-primary;
   left: calc(100% - 1.5rem);
-  @apply bg-primary-dark dark:bg-primary-light;
 }
 </style>

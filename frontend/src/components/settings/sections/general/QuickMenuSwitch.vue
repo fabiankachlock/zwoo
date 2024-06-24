@@ -1,6 +1,6 @@
 <template>
   <SettingsSwitch :model-value="showQuickMenu" @update:model-value="toggleQuickMenu">
-    <div class="tc-main text-xl">
+    <div class="text-text text-xl">
       <Icon v-show="showQuickMenu" icon="mdi:eye-outline" />
       <Icon v-show="!showQuickMenu" icon="mdi:eye-off-outline" />
     </div>

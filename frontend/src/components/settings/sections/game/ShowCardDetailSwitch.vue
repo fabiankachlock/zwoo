@@ -1,6 +1,6 @@
 <template>
   <SettingsSwitch :model-value="shouldShowDetail" @update:model-value="toggleShouldShowDetail">
-    <div class="tc-main text-xl">
+    <div class="text-text text-xl">
       <Icon v-show="shouldShowDetail" icon="carbon:magnify" />
       <Icon v-show="!shouldShowDetail" icon="teenyicons:file-x-outline" />
     </div>

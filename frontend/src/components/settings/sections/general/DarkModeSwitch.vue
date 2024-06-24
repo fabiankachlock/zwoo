@@ -1,6 +1,6 @@
 <template>
   <SettingsSwitch :model-value="isDarkMode" @update:model-value="toggleDarkMode">
-    <div class="tc-main text-xl">
+    <div class="text-text text-xl">
       <Icon v-show="isDarkMode" icon="ri:moon-fill" />
       <Icon v-show="!isDarkMode" icon="ri:sun-fill" />
     </div>

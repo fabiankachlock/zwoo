@@ -1,21 +1,20 @@
 <template>
-  <div
-    class="w-full flex flex-row justify-between items-center bg-dark px-1 py-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
-  >
-    <div class="h-full flex-1 mx-2 tc-main-light flex justify-start items-center">
+  <div class="w-full flex flex-row justify-between py-3 items-center bg-surface border border-transparent">
+    <div class="h-full flex-1 mr-2 text-text flex justify-start items-center">
       <span>{{ title }}</span>
-      <span v-if="status" class="text-sm mx-1 tc-main-secondary">({{ status }})</span>
+      <span v-if="status" class="text-sm mx-1 text-text-secondary">({{ status }})</span>
       <Environment show="online">
         <SettingsSyncToggle v-if="settingsKey && isLoggedIn" :settings-key="settingsKey"></SettingsSyncToggle>
       </Environment>
     </div>
-    <div class="mx-2 h-full flex items-center justify-end">
+    <div class="h-full flex items-center justify-end">
       <Tooltip v-if="tooltip" :title="tooltip">
         <slot></slot>
       </Tooltip>
       <slot v-else></slot>
     </div>
   </div>
+  <div class="border-t border-border-light last:border-0"></div>
 </template>
 
 <script setup lang="ts">

@@ -1,10 +1,10 @@
 <template>
   <button
-    class="flex justify-center items-center bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none"
+    class="flex justify-center items-center bg-alt mouse:hover:bg-alt-hover border-2 border-transparent px-2 rounded transition cursor-pointer select-none"
     @click="manageCookies"
   >
-    <!-- <p class="tc-main-light text-center">{{ t('cookies.manage') }}</p> -->
-    <p class="tc-main-light text-center">{{ t('cookies.__info') }}</p>
+    <!-- <p class="text-text text-center">{{ t('cookies.manage') }}</p> -->
+    <p class="text-text text-center">{{ t('cookies.__info') }}</p>
   </button>
 </template>
 

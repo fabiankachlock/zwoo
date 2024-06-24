@@ -1,22 +1,22 @@
 <template>
   <MaxWidthLayout size="small">
-    <h1 class="tc-main text-center text-4xl mb-2">{{ t('verifyAccount.title') }}</h1>
-    <div v-if="isLoading" class="flex flex-row justify-center flex-nowrap items-center tc-main">
-      <p class="tc-main-secondary text-center my-6 mr-4">
+    <h1 class="text-text text-center text-4xl mb-2">{{ t('verifyAccount.title') }}</h1>
+    <div v-if="isLoading" class="flex flex-row justify-center flex-nowrap items-center text-text">
+      <p class="text-text-secondary text-center my-6 mr-4">
         {{ t(`verifyAccount.verifying`) }}
       </p>
-      <Icon icon="iconoir:system-restart" class="text-2xl tc-main-light animate-spin-slow mr-3" />
+      <Icon icon="iconoir:system-restart" class="text-2xl text-text animate-spin-slow mr-3" />
     </div>
     <div v-else>
-      <p class="tc-main-secondary text-center my-6">
+      <p class="text-text-secondary text-center my-6">
         {{ t(`verifyAccount.${displayText}`) }}
       </p>
       <button
         v-if="isSuccess"
-        class="mx-auto flex justify-center items-center bg-lightest border-2 border-transparent px-4 py-1 rounded transition hover:bg-light cursor-pointer select-none"
+        class="mx-auto flex justify-center items-center bg-alt border border-border px-4 py-1 rounded transition hover:bg-alt-hover cursor-pointer select-none"
         @click="goToLogin()"
       >
-        <p class="tc-main-secondary text-center">{{ t('verifyAccount.login') }}</p>
+        <p class="text-text-secondary text-center">{{ t('verifyAccount.login') }}</p>
       </button>
     </div>
   </MaxWidthLayout>

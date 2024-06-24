@@ -1,28 +1,28 @@
 <template>
-  <h3 class="text-xl tc-main my-2">{{ t('wait.sharesheet.title') }}</h3>
-  <p class="my-1 text-sm italic tc-main-secondary">
+  <h3 class="text-xl text-text my-2">{{ t('wait.sharesheet.title') }}</h3>
+  <p class="my-1 text-sm italic text-text-secondary">
     {{ t('wait.sharesheet.info') }}
   </p>
   <div v-if="!canShare" class="">
     <div class="flex">
       <button
-        class="link-wrapper px-3 py-2 rounded-lg bg-main tc-main flex items-center mr-2 hover:bg-dark active:scale-105 transition-transform"
+        class="link-wrapper px-3 py-2 rounded-lg bg-bg text-text flex items-center mr-2 hover:bg-surface active:scale-105 transition-transform"
         @click="copyLink()"
       >
-        <Icon icon="akar-icons:copy" class="mr-2 tc-primary text-xl" />
+        <Icon icon="akar-icons:copy" class="mr-2 text-primary-text text-xl" />
         <span>
           {{ t('share.link') }}
         </span>
       </button>
 
       <a
-        class="link-wrapper px-3 py-2 rounded-lg bg-main tc-main flex items-center hover:bg-dark active:scale-105 transition-transform"
+        class="link-wrapper px-3 py-2 rounded-lg bg-bg text-text flex items-center hover:bg-surface active:scale-105 transition-transform"
         :href="`mailto:?subject=${title}&body=${encodeURIComponent(`${text}\n${url}`)}`"
         target="_self"
         rel="noopener"
         :aria-label="t('share.email')"
       >
-        <Icon icon="mdi:email-outline" class="mr-2 tc-primary text-xl" />
+        <Icon icon="mdi:email-outline" class="mr-2 text-primary-text text-xl" />
         <span>
           {{ t('share.email') }}
         </span>

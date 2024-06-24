@@ -1,7 +1,7 @@
 <template>
   <MaxWidthLayout size="normal">
-    <div class="sticky z-10 bg-main top-10">
-      <h2 class="tc-main text-4xl py-2 text-center">{{ t('cardThemes.galleryTitle') }}</h2>
+    <div class="sticky z-10 bg-bg top-10">
+      <h2 class="text-text text-4xl py-2 text-center">{{ t('cardThemes.galleryTitle') }}</h2>
     </div>
     <div class="flex flex-col my-2">
       <ThemesGalleryEntry

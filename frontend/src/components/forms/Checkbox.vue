@@ -1,11 +1,11 @@
 <template>
-  <div class="m-2 my-4 flex no-wrap" :class="{ 'flex-row-reverse': position === 'start', [`items-${align}`]: true }">
-    <label class="tc-main-secondary text-sm font-bold relative">
+  <div class="m-2 my-4 flex no-wrap" :class="{ 'flex-row-reverse': position === 'start', [`items-${align ?? 'center'}`]: true }">
+    <label class="text-text-secondary text-sm font-bold relative">
       <slot></slot>
     </label>
     <!-- keep this next div, otherwise items-`x` might not be available when it is not used anywhere else -->
     <div class="items-start items-center items-end"></div>
-    <button :class="styles" class="hover:bc-primary border border-transparent rounded tc-primary mx-3 my-1" @click.prevent="toggle">
+    <button :class="styles" class="hover:border-primary border border-transparent rounded text-primary-text mx-3 my-1" @click.prevent="toggle">
       <Icon v-show="!checked" icon="akar-icons:box" />
       <Icon v-show="checked" icon="akar-icons:check" />
     </button>

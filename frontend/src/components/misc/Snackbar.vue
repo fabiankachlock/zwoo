@@ -1,13 +1,13 @@
 <template>
   <div v-if="msg" class="snackbar-container fixed z-50 pointer-events-none" :class="SnackBarPositionClasses[msg.position]">
-    <div class="snackbar-box bg-lightest rounded overflow-hidden max-w-xs relative">
+    <div class="snackbar-box bg-alt rounded overflow-hidden max-w-xs relative">
       <div class="snackbar-content px-3 pt-2 pb-2 flex flex-row flex-nowrap items-center pointer-events-auto">
-        <p class="text-sm tc-main">
+        <p class="text-sm text-text">
           {{ msg.needsTranslation ? t(msg.message) : msg.message }}
         </p>
         <button
           v-if="msg.showClose !== undefined ? msg.showClose : true"
-          class="ml-2 p-1 tc-main-dark bg-main hover:bg-dark rounded"
+          class="ml-2 p-1 text-text bg-alt hover:bg-alt-hover rounded"
           @click="close()"
         >
           <Icon icon="akar-icons:cross" class="text-xs" />
@@ -16,7 +16,7 @@
       <div v-if="!msg.hideProgress" class="snackbar-progress absolute bottom-0 left-0 right-0 h-1 rounded-b overflow-hidden">
         <div
           class="h-full relative"
-          :class="msg.color ? `bg-${msg.color}` : 'bg-_bg-dark-lightest dark:bg-_bg-light-darkest'"
+          :class="msg.color ? `bg-${msg.color}` : 'bg-bg-inverse'"
           :style="constructAnimationString()"
           style="animation-timing-function: linear"
         ></div>

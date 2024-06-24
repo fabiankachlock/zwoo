@@ -1,29 +1,33 @@
 <template>
-  <Widget v-model="isOpen" title="wait.spectators" widget-class="bg-light" button-class="bg-main hover:bg-dark">
+  <Widget v-model="isOpen" title="wait.spectators">
     <div class="w-full flex flex-col">
       <div v-if="spectators.length === 0">
-        <p class="tc-main-dark italic">{{ t('wait.noSpectators') }}</p>
+        <p class="text-text italic">{{ t('wait.noSpectators') }}</p>
       </div>
       <div
         v-for="player of spectators"
         :key="player.id"
-        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-main border bc-dark transition mouse:hover:bc-primary rounded-lg mouse:hover:bg-dark"
+        class="flex flex-nowrap justify-between items-center px-2 py-1 my-1 bg-bg border border-border transition mouse:hover:border-primary rounded-lg"
       >
-        <p class="text-lg tc-main-secondary" :class="{ 'tc-primary': lobbyId === player.id }">
+        <p class="text-lg text-text-secondary" :class="{ 'text-primary-text': lobbyId === player.id }">
           {{ player.username }}
         </p>
         <div class="flex items-center h-full justify-end">
           <template v-if="lobbyId === player.id">
             <button
               v-tooltip="t('wait.play')"
-              class="tc-primary h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-light mouse:hover:bg-main rounded"
+              class="text-primary-text h-full flex flex-row flex-nowrap items-center justify-center p-1 bg-alt hover:bg-alt-hover border border-border rounded"
               @click="startPlaying()"
             >
               <Icon icon="iconoir:play-outline" />
             </button>
           </template>
           <template v-if="isHost && lobbyId !== player.id">
-            <button v-tooltip="t('wait.kick')" class="tc-secondary h-full bg-light hover:bg-main rounded p-1" @click="askKickPlayer(player.id)">
+            <button
+              v-tooltip="t('wait.kick')"
+              class="text-warning-text h-full bg-alt hover:bg-alt-hover border border-border rounded p-1"
+              @click="askKickPlayer(player.id)"
+            >
               <Icon icon="iconoir:delete-circled-outline" />
             </button>
             <ReassureDialog

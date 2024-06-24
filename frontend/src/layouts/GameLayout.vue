@@ -1,5 +1,5 @@
 <template>
-  <div class="play-main bg-main">
+  <div class="play-main bg-bg">
     <slot></slot>
   </div>
 </template>

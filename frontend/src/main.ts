@@ -1,5 +1,6 @@
 import './registerServiceWorker';
 import './index.css';
+import './fonts.css';
 
 import { createPinia } from 'pinia';
 import { registerSW } from 'virtual:pwa-register';

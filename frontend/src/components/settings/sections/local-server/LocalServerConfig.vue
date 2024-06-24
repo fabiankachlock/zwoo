@@ -18,32 +18,29 @@ const editDialogClosed = (newConfig: LocalServerConfig) => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col bg-dark p-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest">
+  <div class="w-full flex flex-col py-3 rounded-lg">
     <LocalServerConfigEditor v-if="editOpen" :config="config" @close="editDialogClosed" />
     <div class="flex flex-row justify-between items-center mb-2">
-      <p class="tc-main-light">
+      <p class="text-text">
         {{ t('localServer.config') }}
       </p>
-      <button
-        class="bg-light border-2 border-transparent px-2 rounded transition hover:bg-main select-none tc-main-secondary"
-        @click="editOpen = true"
-      >
+      <button class="bg-alt border border-border px-2 rounded transition hover:bg-alt-hover select-none text-text" @click="editOpen = true">
         {{ t('localServer.editConfig') }}
       </button>
     </div>
     <div v-if="config" class="flex flex-col">
       <div v-for="kv in Object.entries(server.config)" :key="kv[0]" class="flex justify-between items-center">
-        <p class="tc-main-light">{{ t(`localServer.configKey.${kv[0]}`) }}</p>
-        <div v-if="typeof kv[1] === 'boolean'" class="tc-main">
+        <p class="text-text">{{ t(`localServer.configKey.${kv[0]}`) }}</p>
+        <div v-if="typeof kv[1] === 'boolean'" class="text-text">
           <p v-show="kv[1]">{{ t('controls.toggle.on') }}</p>
           <p v-show="!kv[1]">{{ t('controls.toggle.off') }}</p>
         </div>
-        <p v-else-if="kv[0] === 'secretKey'" class="tc-main-light">*********</p>
-        <p v-else class="tc-main-light">{{ Array.isArray(kv[1]) ? kv[1].join(', ') : kv[1] ? kv[1] : '""' }}</p>
+        <p v-else-if="kv[0] === 'secretKey'" class="text-text">*********</p>
+        <p v-else class="text-text">{{ Array.isArray(kv[1]) ? kv[1].join(', ') : kv[1] ? kv[1] : '""' }}</p>
       </div>
     </div>
     <div v-else>
-      <p class="tc-main-secondary">{{ t('localServer.noConfig') }}</p>
+      <p class="text-text-secondary">{{ t('localServer.noConfig') }}</p>
     </div>
   </div>
 </template>

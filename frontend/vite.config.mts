@@ -5,89 +5,91 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, UserConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-const manifestIcons = [
-  {
-    src: 'android-chrome-192x192.png',
-    sizes: '192x192',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'android-chrome-512x512.png',
-    sizes: '512x512',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'android-chrome-maskable-192x192.png',
-    sizes: '192x192',
-    type: 'image/png',
-    purpose: 'maskable'
-  },
-  {
-    src: 'android-chrome-maskable-512x512.png',
-    sizes: '512x512',
-    type: 'image/png',
-    purpose: 'maskable'
-  },
-  {
-    src: 'apple-touch-icon-180x180.png',
-    sizes: '180x180',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'coast-228x228.png',
-    sizes: '228x228',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'favicon-16x16.png',
-    sizes: '16x16',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'favicon-32x32.png',
-    sizes: '32x32',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'favicon-48x48.png',
-    sizes: '48x48',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'favicon-64x64.png',
-    sizes: '64x64',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'favicon-96x96.png',
-    sizes: '96x96',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'favicon-128x128.png',
-    sizes: '128x128',
-    type: 'image/png',
-    purpose: 'any'
-  },
-  {
-    src: 'favicon-256x256.png',
-    sizes: '256x256',
-    type: 'image/png',
-    purpose: 'any'
-  }
-].map(icon => ({
-  ...icon,
-  src: `/img/icons/${icon.src}`
-}));
+import icons from './icons.json';
+
+// const manifestIcons = [
+//   {
+//     src: 'android-chrome-192x192.png',
+//     sizes: '192x192',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'android-chrome-512x512.png',
+//     sizes: '512x512',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'android-chrome-maskable-192x192.png',
+//     sizes: '192x192',
+//     type: 'image/png',
+//     purpose: 'maskable'
+//   },
+//   {
+//     src: 'android-chrome-maskable-512x512.png',
+//     sizes: '512x512',
+//     type: 'image/png',
+//     purpose: 'maskable'
+//   },
+//   {
+//     src: 'apple-touch-icon-180x180.png',
+//     sizes: '180x180',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'coast-228x228.png',
+//     sizes: '228x228',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'favicon-16x16.png',
+//     sizes: '16x16',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'favicon-32x32.png',
+//     sizes: '32x32',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'favicon-48x48.png',
+//     sizes: '48x48',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'favicon-64x64.png',
+//     sizes: '64x64',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'favicon-96x96.png',
+//     sizes: '96x96',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'favicon-128x128.png',
+//     sizes: '128x128',
+//     type: 'image/png',
+//     purpose: 'any'
+//   },
+//   {
+//     src: 'favicon-256x256.png',
+//     sizes: '256x256',
+//     type: 'image/png',
+//     purpose: 'any'
+//   }
+// ].map(icon => ({
+//   ...icon,
+//   src: `/img/icons/${icon.src}`
+// }));
 
 // TODO: configure reload (settings and invalid version): https://vite-pwa-org.netlify.app/guide/prompt-for-update.html
 
@@ -108,13 +110,26 @@ export default defineConfig(
             id: '@zwoo/zwoo',
             name: 'zwoo',
             description: 'zwoo - The Second Challenge.',
-            background_color: '#404254',
+            background_color: '#2E2B36',
             orientation: 'any',
             short_name: 'zwoo',
-            theme_color: '#3066BE',
+            theme_color: '#0ea5e9',
             start_url: '.',
             display: 'standalone',
-            icons: manifestIcons
+            icons: icons
+              .map(icon => ({
+                ...icon,
+                type: 'image/png',
+                purpose: 'any'
+              }))
+              .concat([
+                {
+                  src: '/img/maskable-icon.png',
+                  sizes: '512x512',
+                  type: 'image/png',
+                  purpose: 'maskable'
+                }
+              ])
           },
           workbox: {
             globIgnores: ['**/config.json'], // dont cache config.json, since it should be dynamic

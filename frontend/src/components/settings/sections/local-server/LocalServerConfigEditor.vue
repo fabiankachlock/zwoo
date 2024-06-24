@@ -65,15 +65,15 @@ const save = () => {
   <FloatingDialog>
     <div class="flex flex-col">
       <div class="flex flex-row justify-between items-center mb-4">
-        <h1 class="tc-main text-xl">
+        <h1 class="text-text text-xl">
           {{ t('localServer.changeConfig') }}
         </h1>
-        <button class="bg-light border-2 border-transparent px-2 rounded transition hover:bg-main cursor-pointer select-none" @click="save">
+        <button class="bg-alt border border-border px-2 rounded transition hover:bg-alt-hover text-text cursor-pointer select-none" @click="save">
           {{ t('localServer.save') }}
         </button>
       </div>
       <div class="flex flex-row justify-between items-center mx-2">
-        <p class="tx-secondary">
+        <p class="text-text-secondary">
           {{ t('localServer.ip.title') }}
         </p>
         <select
@@ -83,19 +83,19 @@ const save = () => {
             }
           "
           v-model="selectedIP"
-          class="bg-light p-1 rounded tc-main-dark"
+          class="bg-alt hover:bg-alt-hover border border-border p-1 rounded text-text"
         >
           <option value="custom">{{ t('localServer.ip.custom') }}</option>
           <option value="localhost">{{ t('localServer.ip.localhost') }}</option>
           <option value="all">{{ t('localServer.ip.all') }}</option>
         </select>
       </div>
-      <p class="tc-main-secondary mx-2">{{ t('localServer.ip.info') }}</p>
+      <p class="text-text-secondary mx-2">{{ t('localServer.ip.info') }}</p>
       <TextInput v-model="customIP" v-if="selectedIP === 'custom'" id="server-ip"></TextInput>
       <div v-else class="h-2"></div>
 
       <div class="flex flex-row justify-between items-center mx-2">
-        <p class="tx-secondary">
+        <p class="text-text-secondary">
           {{ t('localServer.port.title') }}
         </p>
         <select
@@ -105,18 +105,18 @@ const save = () => {
             }
           "
           v-model="selectedPort"
-          class="bg-light p-1 rounded tc-main-dark"
+          class="bg-alt hover:bg-alt-hover border border-border p-1 rounded text-text"
         >
           <option value="dynamic">{{ t('localServer.port.dynamic') }}</option>
           <option value="custom">{{ t('localServer.port.custom') }}</option>
         </select>
       </div>
-      <p class="tc-main-secondary mx-2">{{ t('localServer.port.info') }}</p>
+      <p class="text-text-secondary mx-2">{{ t('localServer.port.info') }}</p>
       <TextInput v-if="selectedPort === 'custom'" v-model="customPort" id="server-port"></TextInput>
       <div v-else class="h-2"></div>
 
       <div class="flex flex-row justify-between items-center mx-2">
-        <p class="tx-secondary">
+        <p class="text-text-secondary">
           {{ t('localServer.security.title') }}
         </p>
         <select
@@ -126,13 +126,13 @@ const save = () => {
             }
           "
           v-model="selectedSecurity"
-          class="bg-light p-1 rounded tc-main-dark"
+          class="bg-alt hover:bg-alt-hover border border-border p-1 rounded text-text"
         >
           <option value="open">{{ t('localServer.security.open') }}</option>
           <option value="restricted">{{ t('localServer.security.restricted') }}</option>
         </select>
       </div>
-      <p class="tc-main-secondary mx-2">{{ t('localServer.security.info') }}</p>
+      <p class="text-text-secondary mx-2">{{ t('localServer.security.info') }}</p>
       <TextInput v-model="customOrigins" v-if="selectedSecurity === 'restricted'" id="server-origins"></TextInput>
     </div>
   </FloatingDialog>

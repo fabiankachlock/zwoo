@@ -1,5 +1,5 @@
 <template>
-  <div class="deck bg-darkest rounded-lg py-1 px-3 relative">
+  <div class="deck bg-surface rounded-lg py-1 px-3 relative">
     <div
       :class="{ 'pointer-events-none': !cardsActive }"
       :style="`height: ${cardWidth * CARD_ASPECT_RATIO}`"

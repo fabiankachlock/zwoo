@@ -1,12 +1,12 @@
 <template>
   <NonScrollableLayout>
     <div v-if="!isActive" class="mx-auto px-2 max-w-xl">
-      <p class="text-xl tc-main text-center m-2">{{ t('popoutChat.noActiveGame') }}</p>
+      <p class="text-xl text-text text-center m-2">{{ t('popoutChat.noActiveGame') }}</p>
     </div>
     <div v-else>
       <div class="pop-out-grid">
-        <div class="bg-darkest m-2 mb-0 rounded-lg p-1 flex flex-row justify-between items-center">
-          <p class="ml-2 tc-main text-xl" style="text-overflow: ellipsis; overflow: hidden">{{ gameName }}</p>
+        <div class="bg-surface m-2 mb-0 rounded-lg p-1 flex flex-row justify-between items-center">
+          <p class="ml-2 text-text text-xl" style="text-overflow: ellipsis; overflow: hidden">{{ gameName }}</p>
         </div>
         <div v-if="messages.length > 0" class="mx-auto px-2 max-w-xl overflow-y-auto w-full">
           <div :ref="r => (container = r as HTMLDivElement)" class="h-full py-2 px-3 flex flex-col flex-nowrap items-center overflow-y-auto">
@@ -23,25 +23,22 @@
           </div>
         </div>
         <div v-else class="mx-auto px-2 max-w-xl">
-          <p class="text-xl tc-main text-center m-2">{{ t('popoutChat.noMessages') }}</p>
+          <p class="text-xl text-text text-center m-2">{{ t('popoutChat.noMessages') }}</p>
         </div>
         <div>
-          <div class="m-2 flex flex-row flex-nowrap justify-between items-stretch">
+          <div class="py-2 px-3 flex flex-row flex-nowrap justify-between items-stretch">
             <div class="w-full mr-2">
               <input
                 v-model="message"
-                class="appearance-none outline-none w-full bg-darkest tc-main-light px-2 py-0.5 rounded transition focus:bg-darkest border border-transparent focus:bc-primary ring-0"
+                class="appearance-none outline-none w-full bg-surface text-text px-2 py-0.5 rounded transition hover:bg-surface-hover focus:bg-surface-hover border border-transparent hover:border-primary focus:border-primary ring-0"
                 type="text"
                 @keyup.stop
                 @keyup.enter="sendMessage"
               />
             </div>
-            <div
-              class="sendMessageButton flex justify-center items-center bg-darkest px-3 py-0.5 rounded transition cursor-pointer"
-              @click="sendMessage"
-            >
-              <button class="tc-primary">
-                <Icon icon="teenyicons:send-outline" class="trasform" />
+            <div class="flex justify-center items-center bg-alt rounded transition hover:bg-alt-hover">
+              <button class="block text-primary-text px-3 py-0.5 h-full" @click="sendMessage">
+                <Icon icon="teenyicons:send-outline" />
               </button>
             </div>
           </div>

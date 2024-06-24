@@ -1,6 +1,6 @@
 <template>
   <SettingsSwitch :model-value="value" @update:model-value="toggle">
-    <div class="tc-main text-lg">
+    <div class="text-text text-lg">
       <Icon v-show="value" icon="mdi:cloud-sync-outline" />
       <Icon v-show="!value" icon="mdi:cloud-off-outline" />
     </div>

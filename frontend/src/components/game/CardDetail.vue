@@ -3,14 +3,17 @@
     <div class="backdrop absolute inset-0 z-0 transition-all"></div>
     <div class="z-10 relative h-full w-full flex justify-center items-center flex-nowrap">
       <div class="absolute top-10 right-10">
-        <button class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded" @click.stop="closeDetail">
+        <button
+          class="bg-alt hover:bg-alt-hover border border-border flex flex-nowrap text-text text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+          @click.stop="closeDetail"
+        >
           <Icon icon="akar-icons:cross" />
         </button>
       </div>
       <div class="w-18 md:w-14 mr-4 md:mr-0">
         <button
           :class="{ 'opacity-0': !nextBefore }"
-          class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+          class="bg-alt hover:bg-alt-hover flex flex-nowrap text-text text-2xl p-3 m-3 md:p-2 md:m-2 rounded border border-border"
           @click.stop="handleNextBefore"
         >
           <Icon icon="akar-icons:arrow-left" />
@@ -46,7 +49,7 @@
               <Card :card="displayCard" image-class="h-full"></Card>
             </div>
           </div>
-          <button class="bg-lightest hover:bg-light px-4 py-2 my-2 rounded tc-main border-2 border-transparent" @click.stop="handlePlayCard()">
+          <button class="bg-alt hover:bg-alt-hover px-4 py-2 my-2 rounded text-text border border-border" @click.stop="handlePlayCard()">
             <!-- TODO: add back when implemented :class="{
               'border-green-600': canPlayCard === CardState.allowed,
               'border-red-500': canPlayCard === CardState.disallowed
@@ -58,7 +61,7 @@
       <div class="w-18 md:w-14 ml-4 md:ml-0">
         <button
           :class="{ 'opacity-0': !nextAfter }"
-          class="bg-lightest hover:bg-light flex flex-nowrap tc-main text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
+          class="bg-alt hover:bg-alt-hover border border-border flex flex-nowrap text-text text-2xl p-3 m-3 md:p-2 md:m-2 rounded"
           @click.stop="handleNextAfter"
         >
           <Icon icon="akar-icons:arrow-right" />

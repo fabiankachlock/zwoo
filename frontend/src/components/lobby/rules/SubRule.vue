@@ -1,12 +1,12 @@
 <template>
-  <div class="px-2 py-1 bg-light border bc-dark rounded-lg">
+  <div class="px-2 py-1 bg-bg border border-border rounded-lg">
     <div class="flex flex-row flex-nowrap justify-between items-center gap-2">
       <div class="flex items-center justify-start gap-2 flex-grow cursor-pointer" @click.stop="toggleOpenState">
         <button class="rounded-lg transition group active:scale-95">
-          <Icon v-if="!isOpen" icon="akar-icons:circle-plus" class="tc-main group-hover:tc-primary text-xl" />
-          <Icon v-else icon="akar-icons:circle-chevron-up" class="tc-main group-hover:tc-primary text-xl" />
+          <Icon v-if="!isOpen" icon="akar-icons:circle-plus" class="text-text group-hover:text-primary-text text-xl" />
+          <Icon v-else icon="akar-icons:circle-chevron-up" class="text-text group-hover:text-primary-text text-xl" />
         </button>
-        <p class="text-lg tc-main-dark flex-grow">{{ translatedTitle }}</p>
+        <p class="text-lg text-text flex-grow">{{ translatedTitle }}</p>
       </div>
       <div class="relative">
         <slot></slot>
@@ -14,7 +14,7 @@
     </div>
     <div class="grid grid-rows-[0fr] transition-[grid-template-rows]" :class="{ 'grid-rows-[1fr]': isOpen }">
       <div class="relative overflow-hidden px-1">
-        <p class="text-sm tc-main-secondary">
+        <p class="text-sm text-text-secondary">
           {{ translatedDescription }}
         </p>
       </div>

@@ -1,13 +1,13 @@
 <template>
-  <MaxWidthLayout size="small" classes="info tc-main-secondary">
-    <h1 class="tc-main">{{ t('shortcuts.title') }}</h1>
+  <MaxWidthLayout size="small" classes="info text-text-secondary">
+    <h1 class="text-text">{{ t('shortcuts.title') }}</h1>
 
-    <h2 class="tc-main">{{ t('shortcuts.ui') }}</h2>
+    <h2 class="text-text">{{ t('shortcuts.ui') }}</h2>
     <p><kbd>d</kbd>: {{ t('shortcuts.darkMode') }}</p>
     <p><kbd>q</kbd>: {{ t('shortcuts.quickMenu') }}</p>
     <p><kbd>f</kbd>: {{ t('shortcuts.fullScreen') }}</p>
 
-    <h2 class="tc-main">{{ t('shortcuts.navigation') }}</h2>
+    <h2 class="text-text">{{ t('shortcuts.navigation') }}</h2>
     <p><kbd>h</kbd>: {{ t('shortcuts.home') }}</p>
     <p><kbd>n</kbd>: {{ t('shortcuts.newGame') }}</p>
     <p><kbd>j</kbd>: {{ t('shortcuts.join') }}</p>
@@ -32,7 +32,7 @@ const { t } = useI18n();
 }
 
 .info p kbd {
-  @apply bg-_bg-light-dark dark:bg-_bg-dark-dark px-2 py-0.5 rounded;
+  @apply bg-alt px-2 py-0.5 rounded text-text;
   user-select: none;
 }
 

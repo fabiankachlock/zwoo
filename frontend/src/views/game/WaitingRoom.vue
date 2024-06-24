@@ -39,16 +39,16 @@ const startGame = () => {
 <template>
   <div class="w-full h-full relative flex flex-col flex-nowrap overflow-y-auto py-2">
     <header class="mx-2 sticky top-0 left-0 right-0 z-10">
-      <div class="w-full rounded-lg bg-darkest flex flex-nowrap flex-row px-2 py-1 justify-center items-center">
-        <p class="text-3xl tc-main font-bold m-2 text-center" style="text-overflow: ellipsis; overflow: hidden">{{ gameConfig.name }}</p>
+      <div class="w-full rounded-lg bg-surface flex flex-nowrap flex-row px-2 py-1 justify-center items-center">
+        <p class="text-3xl text-text font-bold m-2 text-center" style="text-overflow: ellipsis; overflow: hidden">{{ gameConfig.name }}</p>
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost && playerCount > 1">
-            <button class="tc-main-dark bg-primary hover:bg-primary-dark transition" @click="startGame()">
+            <button class="text-text bg-success hover:bg-success-hover transition" @click="startGame()">
               {{ t('wait.start') }}
             </button>
           </template>
-          <button class="tc-main-dark bg-secondary hover:bg-secondary-dark transition" @click="leave()">{{ t('wait.leave') }}</button>
+          <button class="text-text bg-warning hover:bg-warning-hover transition" @click="leave()">{{ t('wait.leave') }}</button>
         </div>
       </div>
     </header>

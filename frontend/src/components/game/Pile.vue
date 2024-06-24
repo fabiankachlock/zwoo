@@ -1,5 +1,5 @@
 <template>
-  <div class="pile absolute top-1/2 -translate-y-1/2 -left-3 bg-darkest rounded-r-lg z-10" :class="{ 'select-none pointer-events-none': !isActive }">
+  <div class="pile absolute top-1/2 -translate-y-1/2 -left-3 bg-surface rounded-r-lg z-10" :class="{ 'select-none pointer-events-none': !isActive }">
     <div class="relative h-full pile-card-wrapper">
       <div class="pile-card absolute top-1/2 right-2 -translate-y-1/2 h-full transition-all x-delay-0" style="max-height: 95%">
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
@@ -18,7 +18,7 @@
       >
         <Card :card="CardDescriptor.BackSideways" image-class="max-h-full ml-auto mr-0 absolute right-0" image-style="max-width: unset" />
         <div class="absolute text-2xl -top-6 -right-3 md:top-1/2 md:right-3 md:text-3xl -translate-y-1/2 select-none z-10">
-          <p class="tc-main">{{ drawAmount ? `+${drawAmount}` : '' }}</p>
+          <p class="text-text">{{ drawAmount ? `+${drawAmount}` : '' }}</p>
         </div>
       </div>
     </div>

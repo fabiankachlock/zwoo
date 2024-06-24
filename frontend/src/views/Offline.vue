@@ -1,29 +1,29 @@
 <template>
   <MaxWidthLayout size="small" class="pt-10">
     <div class="w-full flex justify-center">
-      <img style="max-width: 10rem" src="/img/logo/pride/zwoo_logo_pride_none.svg" alt="" />
+      <div style="max-width: 10rem" class="logo" v-html="Logo"></div>
     </div>
-    <h1 class="text-6xl tc-primary text-center">zwoo</h1>
-    <p class="text-2xl italic tc-main text-center">{{ t('landing.tagline') }}</p>
+    <h1 class="text-6xl text-primary-text text-center">zwoo</h1>
+    <p class="text-2xl italic text-text text-center">{{ t('landing.tagline') }}</p>
     <Environment show="offline">
       <div class="flex justify-center items-center">
-        <Icon icon="ic:baseline-wifi-off" class="text-sm tc-main-secondary"></Icon>
-        <p class="text-sm tc-main-secondary ml-1">{{ t('offline.statusOffline') }}</p>
+        <Icon icon="ic:baseline-wifi-off" class="text-sm text-text-secondary"></Icon>
+        <p class="text-sm text-text-secondary ml-1">{{ t('offline.statusOffline') }}</p>
       </div>
     </Environment>
     <div class="relative w-full flex flex-col my-3 px-5">
       <div class="relative flex-1 w-full">
-        <div class="action bg-dark hover:bg-darkest cursor-pointer">
-          <div class="link" @click="create">
-            <Icon class="icon tc-secondary" icon="fluent:window-new-16-regular" />
-            <p class="tc-main-light">{{ t('offline.create') }}</p>
+        <div class="action list">
+          <div @click="create">
+            <Icon class="icon text-secondary-text" icon="fluent:window-new-16-regular" />
+            <p class="text-text">{{ t('offline.create') }}</p>
           </div>
         </div>
       </div>
-      <div v-if="!AppConfig.IsTauri" class="action bg-dark hover:bg-darkest cursor-pointer">
-        <router-link class="flex flex-row items-center" to="/login-local">
-          <Icon class="icon tc-secondary" icon="akar-icons:link-chain" />
-          <p class="tc-main-light inline-block mx-1">{{ t('home.localGame') }}</p>
+      <div v-if="!AppConfig.IsTauri" class="action list">
+        <router-link to="/login-local">
+          <Icon class="icon" icon="akar-icons:link-chain" />
+          <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
         </router-link>
       </div>
     </div>
@@ -34,6 +34,7 @@
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+import Logo from '@/assets/zwoo_logo_none_auto.svg?raw';
 import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
 import { AppConfig } from '@/config';
@@ -74,22 +75,31 @@ const create = async () => {
 
 <style scoped>
 .action {
-  @apply px-4 py-1 rounded my-2;
+  @apply bg-alt hover:bg-alt-hover;
 }
 
-.link {
+.action.list {
+  @apply px-4 py-1 rounded m-2;
+}
+
+.action.list a {
   @apply flex flex-row items-center;
+}
+
+.icon {
+  @apply text-primary-text transform transition-transform inline-block mx-1;
 }
 
 .action p {
   @apply inline-block mx-1;
 }
 
-.icon {
-  @apply transform transition-transform inline-block mx-1;
-}
-
 .action:hover .icon {
   @apply scale-125;
+}
+
+.logo :deep(svg) {
+  width: 100%;
+  height: auto;
 }
 </style>

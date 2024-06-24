@@ -1,31 +1,31 @@
 <template>
   <MaxWidthLayout size="small">
-    <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-main top-10">
-      <h2 class="tc-main text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
+    <div class="w-full flex flex-row justify-between items-center sticky z-10 bg-bg top-10">
+      <h2 class="text-text text-4xl mb-2 py-3">{{ t('join.join', [gameName]) }}</h2>
     </div>
-    <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center tc-main">
-      <Icon icon="iconoir:system-restart" class="text-xl tc-main-light animate-spin-slow mr-3" />
-      <p class="text-xl tc-main">{{ t('util.loading') }}</p>
+    <div v-if="isLoading" class="flex flex-row justify-start flex-nowrap items-center text-text">
+      <Icon icon="iconoir:system-restart" class="text-xl text-text animate-spin-slow mr-3" />
+      <p class="text-xl text-text">{{ t('util.loading') }}</p>
     </div>
-    <div v-else class="flex flex-row flex-wrap items-center justify-center tc-main">
+    <div v-else class="flex flex-row flex-wrap items-center justify-center text-text">
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-alt hover:bg-alt-hover border border-border mx-2 my-1 rounded"
         @click="goBack()"
       >
-        <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-1 tc-secondary transition-transform" />{{ t('join.goBack') }}
+        <Icon icon="iconoir:nav-arrow-left" class="icon text-xl mr-1 text-secondary-text transition-transform" />{{ t('join.goBack') }}
       </button>
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-alt hover:bg-alt-hover border border-border mx-2 my-1 rounded"
         @click="joinAsSpectator()"
       >
-        <Icon icon="iconoir:eye-alt" class="icon text-xl mr-1 tc-secondary transition-transform" />
+        <Icon icon="iconoir:eye-alt" class="icon text-xl mr-1 text-secondary-text transition-transform" />
         <span class="whitespace-nowrap">{{ t('join.asSpectator') }}</span>
       </button>
       <button
-        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-dark hover:bg-darkest mx-2 my-1 rounded"
+        class="action flex flex-row flex-nowrap items-center justify-center px-3 py-1 bg-alt hover:bg-alt-hover border border-border mx-2 my-1 rounded"
         @click="joinAsPlayer()"
       >
-        <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 tc-secondary transition-transform" />
+        <Icon icon="iconoir:play-outline" class="icon text-xl mr-1 text-secondary-text transition-transform" />
         <span class="whitespace-nowrap">{{ t('join.asPlayer') }}</span>
       </button>
     </div>

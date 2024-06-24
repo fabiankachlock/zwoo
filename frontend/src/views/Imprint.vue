@@ -1,6 +1,6 @@
 <template>
-  <MaxWidthLayout size="normal" class="imprint tc-main-secondary break-words">
-    <h1 class="tc-main">Impressum</h1>
+  <MaxWidthLayout size="normal" class="imprint text-text-secondary break-words">
+    <h1 class="text-text">Impressum</h1>
 
     <p class="pb-4 italic">ZWOO ist eine Marke der IGD 2.0 UG (haftungsbeschränkt)</p>
 
@@ -32,9 +32,9 @@
       Registernummer: HRB 43974
     </p>
 
-    <h2 class="tc-main">Haftungsausschluss:</h2>
+    <h2 class="text-text">Haftungsausschluss:</h2>
 
-    <h3 class="tc-main">Haftung für Inhalte</h3>
+    <h3 class="text-text">Haftung für Inhalte</h3>
 
     <p>
       Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir
@@ -46,7 +46,7 @@
       Inhalte umgehend entfernen.
     </p>
 
-    <h3 class="tc-main">Haftung für Links</h3>
+    <h3 class="text-text">Haftung für Links</h3>
 
     <p>
       Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden
@@ -56,7 +56,7 @@
       einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
     </p>
 
-    <h3 class="tc-main">Urheberrecht</h3>
+    <h3 class="text-text">Urheberrecht</h3>
 
     <p>
       Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung,
@@ -67,7 +67,7 @@
       Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
     </p>
 
-    <h3 class="tc-main">Datenschutz</h3>
+    <h3 class="text-text">Datenschutz</h3>
 
     <p>
       Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten

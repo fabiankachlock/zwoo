@@ -7,7 +7,7 @@
         }
       "
       :value="selectedRange"
-      class="bg-light p-1 rounded tc-main-dark"
+      class="bg-alt hover:bg-alt-hover p-1 rounded text-text"
     >
       <option v-for="opt in availableRanges" :key="opt" :value="opt">{{ t('feedback.range.option.' + opt) }}</option>
     </select>

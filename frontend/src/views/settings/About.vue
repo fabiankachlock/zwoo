@@ -1,24 +1,20 @@
 <template>
   <SettingsSection>
-    <div
-      class="w-full flex flex-row justify-start items-center bg-dark px-3 py-3 my-3 rounded-lg border border-transparent mouse:hover:bc-primary mouse:hover:bg-darkest"
-    >
+    <div class="w-full flex flex-row justify-start items-center">
       <a
-        class="tc-main-light bg-light border-2 border-transparent px-2 rounded transition hover:bg-main"
+        class="text-warning-text bg-alt border-2 border-transparent px-2 rounded transition hover:bg-alt-hover"
         rel="noopener noreferrer nofollow"
         href="https://github.com/fabiankachlock/zwoo/discussions/categories/bug-reports"
       >
         {{ t('settings.reportBug') }}
       </a>
-      <router-link class="ml-4 tc-main-light bg-light border-2 border-transparent px-2 rounded transition hover:bg-main" to="/contact">
+      <router-link class="mx-2 text-text bg-alt border-2 border-transparent px-2 rounded transition hover:bg-alt-hover" to="/contact">
         {{ t('settings.contact') }}
       </router-link>
-    </div>
-    <Environment show="online">
-      <SettingsRow :title="t('settings.versionHistory')">
+      <Environment show="online">
         <VersionHistory />
-      </SettingsRow>
-    </Environment>
+      </Environment>
+    </div>
   </SettingsSection>
   <Version @click="clickVersion()" />
   <UpdateDaemon></UpdateDaemon>
@@ -31,7 +27,6 @@ import Environment from '@/components/misc/Environment.vue';
 import UpdateDaemon from '@/components/misc/UpdateDaemon.vue';
 import Version from '@/components/misc/Version.vue';
 import VersionHistory from '@/components/settings/sections/about/VersionHistory.vue';
-import SettingsRow from '@/components/settings/SettingsRow.vue';
 import SettingsSection from '@/components/settings/SettingsSection.vue';
 import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 

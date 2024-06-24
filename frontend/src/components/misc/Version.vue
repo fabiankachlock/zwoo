@@ -1,6 +1,6 @@
 <template>
   <div class="w-full my-2">
-    <p class="tc-main-secondary text-right text-sm italic">
+    <p class="text-text-secondary text-right text-sm italic">
       <span v-t="'version'"></span>{{ ': ' }}
       <span v-if="!info.override"> {{ info.version }} ({{ info.hash }})</span>
       <span v-else>{{ info.override }}</span>
