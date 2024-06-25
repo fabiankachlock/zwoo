@@ -25,7 +25,12 @@
       "mode": "-",
       "build": {
         "$pre": {
-          "fragments": ["typecheck", "build:cards", "build:icons"],
+          "fragments": [
+            "typecheck",
+            "build:cards",
+            "build:icons",
+            "build:themes"
+          ],
           "profiles": {
             "wasm": "build"
           }
