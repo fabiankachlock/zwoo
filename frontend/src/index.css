@@ -1,4 +1,4 @@
-@import './modules/zwoo-themes/themes.css';
+@import './modules/zwoo-themes/theme.css';
 
 @tailwind base;
 @tailwind components;

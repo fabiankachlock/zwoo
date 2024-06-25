@@ -477,6 +477,7 @@ function main() {
 
   console.log('creating bundle file');
   const bundle = themes
+    .filter(theme => theme.$name !== '$default')
     .map(theme => theme.$name + '.css')
     .map(fileName => `@import './${TARGET_DIR}/${fileName}';\n`)
     .join('');
