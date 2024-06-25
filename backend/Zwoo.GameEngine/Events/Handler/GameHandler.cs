@@ -41,7 +41,16 @@ public class GameHandler : IUserEventHandler
         foreach (var player in context.Game.AllPlayers)
         {
             websocketManager.SendPlayer(player, ZRPCode.GameStarted, new GameStartedNotification(
-                context.Game.State.GetPlayerDeck(player)?.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray() ?? new List<SendDeck_CardDTO>().ToArray(),
+                context.Game.State.GetPlayerDeck(player)?.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray() ?? [],
+                amounts.ToArray(),
+                pileTopNotification
+            ));
+        }
+
+        foreach (var spectator in context.Lobby.GetSpectators())
+        {
+            websocketManager.SendPlayer(spectator.LobbyId, ZRPCode.GameStarted, new GameStartedNotification(
+                [],
                 amounts.ToArray(),
                 pileTopNotification
             ));
