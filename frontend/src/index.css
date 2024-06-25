@@ -1,3 +1,5 @@
+@import './modules/zwoo-themes/themes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -68,7 +70,7 @@
 	--color-warning-text: #854d0e;
 }
 */
-:root {
+/* :root {
 	--color-primary: 14 165 233;
 	--color-primary-hover: 12 145 207;
 	--color-primary-contrast-text: 15 15 14;
@@ -133,8 +135,7 @@
 	--color-error-text: 153 27 27;
 	--color-success-text: 22 101 52;
 	--color-warning-text: 133 77 14;
-}
-
+} */
 html {
 	color-scheme: light;
 	font-size: 16px;

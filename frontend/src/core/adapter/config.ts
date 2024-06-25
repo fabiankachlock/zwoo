@@ -72,9 +72,13 @@ const changeLanguage = (lng: string) => {
 const changeUIMode = (mode: string) => {
   const isDark = mode === 'dark';
   if (isDark) {
-    document.querySelector('body')?.setAttribute('data-theme', 'dark');
+    // document.querySelector('body')?.setAttribute('data-theme', 'dark');
+    document.querySelector('body')?.classList.add('dark');
+    document.querySelector('body')?.classList.remove('light');
   } else {
-    document.querySelector('body')?.setAttribute('data-theme', 'light');
+    // document.querySelector('body')?.setAttribute('data-theme', 'light');
+    document.querySelector('body')?.classList.add('light');
+    document.querySelector('body')?.classList.remove('dark');
   }
 };
 
