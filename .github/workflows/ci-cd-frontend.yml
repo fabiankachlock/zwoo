@@ -23,17 +23,17 @@ jobs:
       - name: Setup
         working-directory: ./frontend
         run: "yarn"
-      # Prepare
-      - run: "zwooc exec build:themes"
-      - run: "zwooc exec build:icons"
       - name: Lint
         run: "zwooc exec lint:ci"
-      - name: Dependency Check
-        run: "zwooc exec deps:check"
       - name: Check i18n
         run: "zwooc exec i18n:check"
       - name: Format
         run: "zwooc exec format:ci"
+      # Prepare
+      - run: "zwooc exec build:themes"
+      - run: "zwooc exec build:icons"
+      - name: Dependency Check
+        run: "zwooc exec deps:check"
       - name: Test
         run: "zwooc exec test:unit"
       - name: Build
