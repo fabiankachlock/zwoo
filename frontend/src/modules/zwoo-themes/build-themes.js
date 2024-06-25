@@ -76,13 +76,11 @@ const THEME_CONFIG = {
  * @type {Record<string, (color: chroma.Color, context: ColorContext, theme: Theme) => chroma.Color>}
  */
 const variantAdapter = {
-  [VARIANT_HOVER]: (color, ctx) => {
-    // const luminance = color.luminance();
-    // return color.luminance(luminance > 0.4 ? luminance - 0.03 : luminance + 0.03);
-    // const lighness = color.get('hsl.l');
-    // return color.set('hsl.l', lighness > 0.4 ? lighness - 0.06 : lighness + 0.07);
+  [VARIANT_HOVER]: (color, { isHighContrast }) => {
     const lighness = color.get('oklch.l');
-    return color.set('oklch.l', lighness > 0.4 ? lighness - 0.11 : lighness + 0.07);
+    let change = lighness > 0.4 ? -0.11 : 0.07;
+    change = isHighContrast ? change * 1.5 : change;
+    return color.set('oklch.l', lighness + change);
   }
 };
 
@@ -93,30 +91,58 @@ const variantAdapter = {
 const defferedVariantAdapter = {
   [VARIANT_INVERRSE]: (_color, { key, variant, isDark, isHighContrast }, theme) => {
     return theme[key][VARIANT_BASE][modifierToKey(!isDark, isHighContrast)];
+  },
+  [VARIANT_TEXT]: (color, { isDark, isHighContrast }, theme) => {
+    let lighness = color.get('oklch.l');
+    const desiredBg = getClosestColor(
+      [
+        theme.bg[VARIANT_BASE][modifierToKey(isDark, isHighContrast)],
+        theme.surface[VARIANT_BASE][modifierToKey(isDark, isHighContrast)],
+        theme.alt[VARIANT_BASE][modifierToKey(isDark, isHighContrast)]
+      ],
+      color
+    );
+    const desiredContrast = isHighContrast ? 8 : 4;
+    const direction = chroma.contrast(desiredBg, color.set('oklch.l', lighness + 0.1)) > chroma.contrast(desiredBg, color) ? 1 : -1;
+
+    while (chroma.contrast(desiredBg, color) < desiredContrast && lighness >= 0 && lighness <= 1) {
+      lighness = color.get('oklch.l');
+      color = color.set('oklch.l', lighness + 0.02 * direction);
+    }
+    return color;
+  },
+  [VARIANT_CONTRAST_TEXT]: (color, { isHighContrast }, theme) => {
+    const lightText = theme.text[VARIANT_BASE][modifierToKey(false, isHighContrast)];
+    const darkText = theme.text[VARIANT_BASE][modifierToKey(true, isHighContrast)];
+    if (chroma.contrast(lightText, color) > chroma.contrast(darkText, color)) {
+      return lightText;
+    }
+    return darkText;
   }
-  // [VARIANT_TEXT]: (color, { isDark, isHighContrast }, theme) => {
-  //   const desiredBg = theme.bg.$base[modifierToKey(isDark, isHighContrast)];
-  //   const desiredContrast = isHighContrast ? 4.5 : 7;
-  //   console.log(color.hex());
-  //   while (chroma.contrast(desiredBg, color) < desiredContrast) {
-  //     console.log(chroma.contrast(desiredBg, color), color.hex());
-  //     const lighness = color.get('hsl.l');
-  //     color = color.set('hsl.l', lighness > 0.4 ? lighness + 0.06 : lighness - 0.06);
-  //   }
-  //   return color;
-  // }
-  // [VARIANT_CONTRAST_TEXT]: (color, { isDark, isHighContrast }, theme) => {
-  //   const desiredBg = theme.bg.$base[modifierToKey(isDark, isHighContrast)];
-  //   const desiredContrast = isHighContrast ? 4.5 : 8;
-  //   while (chroma.contrast(desiredBg, color) < desiredContrast) {
-  //     // might want to use set(hsl.l, x)
-  //     color = color.darken(0.01);
-  //   }
-  //   return color;
-  // },
 };
 
 // --- UTILITIES ---
+/**
+ * Returns the color with the minimum contrast to the target color
+ *
+ * @param {chroma.Color[]} colors a list of colors to choose from
+ * @param {chroma.Color} target the atregt color
+ */
+function getClosestColor(colors, target) {
+  let minimumContrast = Infinity;
+  let returnColor = colors[0];
+
+  colors.forEach(color => {
+    const contrast = chroma.contrast(target, color);
+    if (contrast < minimumContrast) {
+      minimumContrast = contrast;
+      returnColor = color;
+    }
+  });
+
+  return returnColor;
+}
+
 /**
  * Returns the color object key for the given modifiers
  * @param {boolean} isDark
