@@ -13,6 +13,18 @@ export const ToggleDarkModeShortcut: Shortcut<KeyboardEvent> = {
   }
 };
 
+export const ToggleHighContrastShortcut: Shortcut<KeyboardEvent> = {
+  id: 'toggle-high-contrast',
+  type: 'keyboard',
+  keyCombination: 'c',
+  execute(event) {
+    if (event.key === 'c') {
+      const config = useConfig();
+      config.set(ZwooConfigKey.UiContrastMode, !config.get(ZwooConfigKey.UiContrastMode));
+    }
+  }
+};
+
 export const FullScreenShortcut: Shortcut<KeyboardEvent> = {
   id: 'toggle-fullscreen',
   type: 'keyboard',

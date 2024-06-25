@@ -11,7 +11,7 @@ import {
   NewGameShortcut,
   SettingsShortcut
 } from './keyboard/NavigationShortcuts';
-import { FullScreenShortcut, QuickMenuShortcut, ToggleDarkModeShortcut } from './keyboard/UIShortcuts';
+import { FullScreenShortcut, QuickMenuShortcut, ToggleDarkModeShortcut, ToggleHighContrastShortcut } from './keyboard/UIShortcuts';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { Shortcut } from './types';
 
@@ -25,6 +25,7 @@ const AllShortcuts = [
   FullScreenShortcut,
   LoginShortcut,
   QuickMenuShortcut,
+  ToggleHighContrastShortcut,
   InfoShortcut
 ];
 

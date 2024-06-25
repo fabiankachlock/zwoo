@@ -44,11 +44,11 @@ const startGame = () => {
         <div class="space flex-1"></div>
         <div class="actions flex flex-row items-center justify-center m-2">
           <template v-if="isHost && playerCount > 1">
-            <button class="text-text bg-success hover:bg-success-hover transition" @click="startGame()">
+            <button class="text-success-contrast-text bg-success hover:bg-success-hover transition" @click="startGame()">
               {{ t('wait.start') }}
             </button>
           </template>
-          <button class="text-text bg-warning hover:bg-warning-hover transition" @click="leave()">{{ t('wait.leave') }}</button>
+          <button class="text-warning-contrast-text bg-warning hover:bg-warning-hover transition" @click="leave()">{{ t('wait.leave') }}</button>
         </div>
       </div>
     </header>

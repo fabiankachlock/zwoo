@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			.child {
+				width: 40px;
+				height: 40px;
+				display: block;
+			}
+
+			[data-color],
+			[data-color2],
+			[data-color3] {
+				display: flex;
+				margin: 10px;
+			}
+
+			[data-i='-0.00'],
+			[data-i='0.00'] {
+				border: 1px solid red;
+			}
+		</style>
+	</head>
+	<body>
+		<div data-color="#353550"></div>
+		<div data-color="#eab308"></div>
+		<div data-color="#0ea5e9"></div>
+		<div data-color2="#353550"></div>
+		<div data-color2="#eab308"></div>
+		<div data-color2="#0ea5e9"></div>
+		<div data-color3="#353550"></div>
+		<div data-color3="#eab308"></div>
+		<div data-color3="#0ea5e9"></div>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"
+			integrity="sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script>
+		<script>
+			document.querySelectorAll('[data-color]').forEach(node => {
+				const color = chroma(node.getAttribute('data-color'));
+				const lum = color.luminance();
+				for (let i = -0.2; i <= 0.2; i += 0.02) {
+					const c = document.createElement('span');
+					c.classList.add('child');
+					c.setAttribute('data-i', i.toFixed(2));
+					c.style.background = color.luminance(lum + i);
+					c.innerText = chroma
+						.contrast(color.luminance(lum + i), '#d2d0d9')
+						.toFixed(1);
+					node.appendChild(c);
+				}
+			});
+
+			document.querySelectorAll('[data-color2]').forEach(node => {
+				const color = chroma(node.getAttribute('data-color2'));
+				const lum = color.get('hsl.l');
+				for (let i = -0.2; i <= 0.2; i += 0.02) {
+					const c = document.createElement('span');
+					c.classList.add('child');
+					c.setAttribute('data-i', i.toFixed(2));
+					c.style.background = color.set('hsl.l', lum + i);
+					c.innerText = chroma
+						.contrast(color.set('hsl.l', lum + i), '#d2d0d9')
+						.toFixed(1);
+					node.appendChild(c);
+				}
+			});
+
+			document.querySelectorAll('[data-color3]').forEach(node => {
+				const color = chroma(node.getAttribute('data-color3'));
+				const lum = color.get('oklch.l');
+				for (let i = -0.2; i <= 0.2; i += 0.02) {
+					const c = document.createElement('span');
+					c.classList.add('child');
+					c.setAttribute('data-i', i.toFixed(2));
+					c.style.background = color.set('oklch.l', lum + i);
+					c.innerText = chroma
+						.contrast(color.set('oklch.l', lum + i), '#d2d0d9')
+						.toFixed(1);
+					node.appendChild(c);
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -19,19 +19,21 @@ module.exports = {
         bg: {
           DEFAULT: 'rgb(var(--color-bg) / <alpha-value>)',
           hover: 'rgb(var(--color-bg-hover) / <alpha-value>)',
-          inverse: 'rgb(var(--color-inverse-bg) / <alpha-value>)'
+          inverse: 'rgb(var(--color-bg-inverse) / <alpha-value>)'
         },
         surface: {
-          DEFAULT: 'rgb(var(--color-bg-surface) / <alpha-value>)',
-          hover: 'rgb(var(--color-bg-surface-hover) / <alpha-value>)'
+          DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
+          hover: 'rgb(var(--color-surface-hover) / <alpha-value>)',
+          inverse: 'rgb(var(--color-surface-inverse) / <alpha-value>)'
         },
         alt: {
-          DEFAULT: 'rgb(var(--color-bg-alt) / <alpha-value>)',
-          hover: 'rgb(var(--color-bg-alt-hover) / <alpha-value>)'
+          DEFAULT: 'rgb(var(--color-alt) / <alpha-value>)',
+          hover: 'rgb(var(--color-alt-hover) / <alpha-value>)',
+          inverse: 'rgb(var(--color-alt-inverse) / <alpha-value>)'
         },
         border: {
           DEFAULT: 'rgb(var(--color-border) / <alpha-value>)',
-          divider: 'rgb(var(--color-divider) / <alpha-value>)',
+          divider: 'rgb(var(--color-border-divider) / <alpha-value>)',
           light: 'rgb(var(--color-border-light) / <alpha-value>)'
         },
         text: {

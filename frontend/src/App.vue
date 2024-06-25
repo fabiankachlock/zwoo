@@ -12,6 +12,7 @@
   </template>
 
   <ChangelogManager />
+  <!-- <ColorThemesManager /> -->
   <ConsentManager />
   <Snackbar />
 </template>
@@ -28,6 +29,7 @@ import { useCookies } from './core/adapter/cookies';
 import { CardTheme } from './core/domain/cards/CardTheme';
 import { useRuntimeConfig } from './core/runtimeConfig';
 const ChangelogManager = defineAsyncComponent(() => import('./components/misc/changelog/ChangelogManager.vue'));
+// const ColorThemesManager = defineAsyncComponent(() => import('./modules/zwoo-themes/ThemeLoader.vue'));
 
 const app = useRootApp();
 const isLoading = computed(() => app.isLoading);

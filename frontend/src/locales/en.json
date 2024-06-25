@@ -22,7 +22,8 @@
       }
     },
     "": "",
-    "darkmode": "Dark Mode",
+    "darkmode": "Dark mode",
+    "highContrast": "High contrast",
     "language": "Language",
     "fullscreen": "Fullscreen",
     "quickMenu": "Quick Menu",
@@ -409,6 +410,7 @@
     "login": "Go to login",
     "info": "Show all keyboard shortcuts",
     "darkMode": "Toggle UI Mode",
+    "highContrast": "Toggle 'high contrast' option",
     "fullScreen": "Toggle full screen",
     "quickMenu": "Toggle quick menu"
   },

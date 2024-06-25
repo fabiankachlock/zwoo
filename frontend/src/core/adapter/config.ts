@@ -16,6 +16,7 @@ export enum ZwooConfigKey {
   Sync = 'sync',
   Language = 'lng',
   UiMode = 'ui',
+  UiContrastMode = 'uic',
   QuickMenu = 'qm',
   SortCards = 'sc',
   ShowCardsDetail = 'cd',
@@ -33,6 +34,7 @@ export type ZwooConfig = {
   [ZwooConfigKey.Sync]: boolean;
   [ZwooConfigKey.Language]: string;
   [ZwooConfigKey.UiMode]: string;
+  [ZwooConfigKey.UiContrastMode]: boolean;
   [ZwooConfigKey.QuickMenu]: boolean;
   [ZwooConfigKey.SortCards]: boolean;
   [ZwooConfigKey.ShowCardsDetail]: boolean;
@@ -49,6 +51,7 @@ const DefaultConfig: ZwooConfig = {
   _ignore: {},
   sync: true,
   ui: 'dark',
+  uic: false,
   lng: 'en',
   qm: false,
   sc: false,
@@ -71,11 +74,12 @@ const changeLanguage = (lng: string) => {
 
 const changeUIMode = (mode: string) => {
   const isDark = mode === 'dark';
-  if (isDark) {
-    document.querySelector('body')?.setAttribute('data-theme', 'dark');
-  } else {
-    document.querySelector('body')?.setAttribute('data-theme', 'light');
-  }
+  document.querySelector('body')?.classList.toggle('dark', isDark);
+  document.querySelector('body')?.classList.toggle('light', !isDark);
+};
+
+const changeUIContrastMode = (isHighContrast: boolean) => {
+  document.querySelector('body')?.classList.toggle('highContrast', isHighContrast);
 };
 
 const changeFullscreen = (enabled: boolean) => {
@@ -122,6 +126,8 @@ export const useConfig = defineStore('config', {
 
       if (ZwooConfigKey.UiMode === key) {
         changeUIMode(value as string);
+      } else if (ZwooConfigKey.UiContrastMode === key) {
+        changeUIContrastMode(value as boolean);
       } else if (ZwooConfigKey.Language === key) {
         changeLanguage(value as string);
       } else if (ZwooConfigKey.DevSettings === key && value) {

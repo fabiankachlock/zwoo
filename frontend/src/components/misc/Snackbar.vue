@@ -14,6 +14,9 @@
         </button>
       </div>
       <div v-if="!msg.hideProgress" class="snackbar-progress absolute bottom-0 left-0 right-0 h-1 rounded-b overflow-hidden">
+        <span class="bg-primary bg-secondary bg-success bg-error bg-warning">
+          <!-- make sure the classes are not purged -->
+        </span>
         <div
           class="h-full relative"
           :class="msg.color ? `bg-${msg.color}` : 'bg-bg-inverse'"

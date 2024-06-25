@@ -17,6 +17,7 @@
       "typecheck": "yarn vue-tsc --noEmit && echo \"\"",
       "build:cards": "node ./scripts/buildCardAssets.js",
       "build:icons": "node ./src/modules/zwoo-icons/generate-icons.js",
+      "build:themes": "node ./src/modules/zwoo-themes/build-themes.js",
       "XXpreview": "yarn vite preview --mode preview",
       "XXpreview:prod": "yarn vite preview --mode dev"
     },
@@ -24,7 +25,12 @@
       "mode": "-",
       "build": {
         "$pre": {
-          "fragments": ["typecheck", "build:cards", "build:icons"],
+          "fragments": [
+            "typecheck",
+            "build:cards",
+            "build:icons",
+            "build:themes"
+          ],
           "profiles": {
             "wasm": "build"
           }

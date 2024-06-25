@@ -7,6 +7,13 @@
     >
       <DarkModeSwitch />
     </SettingsRow>
+    <SettingsRow
+      :title="t('settings.highContrast')"
+      :settings-key="ZwooConfigKey.UiContrastMode"
+      :status="t('settings.status.boolean.' + (highContrastOn ? 'on' : 'off'))"
+    >
+      <HighContrastSwitch />
+    </SettingsRow>
     <SettingsRow :title="t('settings.fullscreen')" :status="t('settings.status.boolean.' + (fullScreenOn ? 'on' : 'off'))">
       <FullScreenSwitch />
     </SettingsRow>
@@ -35,6 +42,7 @@ import { useI18n } from 'vue-i18n';
 import Environment from '@/components/misc/Environment.vue';
 import DarkModeSwitch from '@/components/settings/sections/general/DarkModeSwitch.vue';
 import FullScreenSwitch from '@/components/settings/sections/general/FullScreenSwitch.vue';
+import HighContrastSwitch from '@/components/settings/sections/general/HighContrastSwitch.vue';
 import LanguageSelection from '@/components/settings/sections/general/LanguageSelection.vue';
 import ManageCookies from '@/components/settings/sections/general/ManageCookies.vue';
 import QuickMenuSwitch from '@/components/settings/sections/general/QuickMenuSwitch.vue';
@@ -45,6 +53,7 @@ import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 const { t } = useI18n();
 const config = useConfig();
 const darkModeOn = computed(() => config.get(ZwooConfigKey.UiMode) === 'dark');
+const highContrastOn = computed(() => config.get(ZwooConfigKey.UiContrastMode));
 const fullScreenOn = computed(() => config.useFullScreen);
 const quickMenuOn = computed(() => config.get(ZwooConfigKey.QuickMenu));
 </script>
