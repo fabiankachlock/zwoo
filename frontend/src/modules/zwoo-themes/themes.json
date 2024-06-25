@@ -1,62 +1,64 @@
 {
-    "$default": {
-        "primary": "#0ea5e9",
-        "secondary": "#7c3aed",
-        "error": "#dc2626",
-        "success": "#16a34a",
-        "warning": "#eab308",
-        "bg": {
-            "dark": "#2e2b36",
-            "light": "#d2d0d9"
+  "$default": {
+    "primary": "#0ea5e9",
+    "secondary": "#7c3aed",
+    "error": "#dc2626",
+    "success": "#16a34a",
+    "warning": "#eab308",
+    "bg": {
+      "dark": "#2e2b36",
+      "light": "#d2d0d9"
+    },
+    "surface": {
+      "dark": "#202023",
+      "darkHighContrast": "#101012",
+      "light": "#f4f4f5",
+      "lightHighContrast": "#ffffff"
+    },
+    "alt": {
+      "dark": "#353550",
+      "light": "#d8dbf2"
+    },
+    "border": {
+      "dark": "#404040",
+      "light": "#a3a3a3",
+      "overrides": {
+        "divider": {
+          "dark": "#d4d4d4",
+          "light": "#262626"
         },
-        "surface": {
-            "dark": "#202023",
-            "light": "#f4f4f5"
-        },
-        "alt": {
-            "dark": "#353550",
-            "light": "#d8dbf2"
-        },
-        "border": {
-            "dark": "#404040",
-            "light": "#a3a3a3",
-            "overrides": {
-                "divider": {
-                    "dark": "#d4d4d4",
-                    "light": "#262626"
-                },
-                "light": {
-                    "dark": "#737373",
-                    "light": "#525252"
-                }
-            }
-        },
-        "text": {
-            "dark": "#f4f4f5",
-            "light": "#07071c",
-            "overrides": {
-                "secondary": {
-                    "dark": "#a1a1aa",
-                    "light": "#49495e"
-                }
-            }
+        "light": {
+          "dark": "#737373",
+          "light": "#525252"
         }
+      }
     },
-    "swapped": {
-        "$inherits": "$default",
-        "primary": "#7c3aed",
-        "secondary": "#0ea5e9"
-    },
-    "gamer": {
-        "$inherits": "$default",
-        "primary": "#99030d"
-    },
-    "natural": {
-        "$inherits": "$default",
-        "primary": "#2fa331"
-    },
-    "soft": {
-        "$inherits": "$default",
-        "primary": "#80edaf"
+    "text": {
+      "dark": "#f4f4f5",
+      "light": "#07071c",
+      "overrides": {
+        "secondary": {
+          "dark": "#a1a1aa",
+          "light": "#49495e"
+        }
+      }
     }
+  },
+  "swapped": {
+    "$inherits": "$default",
+    "primary": "#7c3aed",
+    "secondary": "#0ea5e9"
+  },
+  "gamer": {
+    "$inherits": "$default",
+    "primary": "#99030d"
+  },
+  "natural": {
+    "$inherits": "$default",
+    "primary": "#2fa331"
+  },
+  "soft": {
+    "$inherits": "$default",
+    "primary": "#80edaf"
+  }
 }
