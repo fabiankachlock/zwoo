@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* TODO: auto generate those from hex
+/* TODO: auto generate those from hex*/
 :root {
 	--color-primary: #0ea5e9;
 	--color-primary-hover: #0c91cf;
@@ -26,7 +26,7 @@
 
 [data-theme='dark'] {
 	--color-bg: #2e2b36;
-	--color-bg-hover: #18161C;
+	--color-bg-hover: #18161c;
 	--color-inverse-bg: #d2d0d9;
 	--color-bg-surface: #202023;
 	--color-bg-surface-hover: #38383d;
@@ -46,7 +46,7 @@
 	--color-success-text: #4ade80;
 	--color-warning-text: #eab308;
 }
-
+/*
 [data-theme='light'] {
 	--color-bg: #d2d0d9;
 	--color-bg-hover: #B9B8BF;

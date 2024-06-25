@@ -77,8 +77,12 @@ const THEME_CONFIG = {
  */
 const variantAdapter = {
   [VARIANT_HOVER]: (color, ctx) => {
-    const lighness = color.get('hsl.l');
-    return color.set('hsl.l', lighness > 0.4 ? lighness - 0.06 : lighness + 0.07);
+    // const luminance = color.luminance();
+    // return color.luminance(luminance > 0.4 ? luminance - 0.03 : luminance + 0.03);
+    // const lighness = color.get('hsl.l');
+    // return color.set('hsl.l', lighness > 0.4 ? lighness - 0.06 : lighness + 0.07);
+    const lighness = color.get('oklch.l');
+    return color.set('oklch.l', lighness > 0.4 ? lighness - 0.11 : lighness + 0.07);
   }
 };
 
@@ -88,7 +92,7 @@ const variantAdapter = {
  */
 const defferedVariantAdapter = {
   [VARIANT_INVERRSE]: (_color, { key, variant, isDark, isHighContrast }, theme) => {
-    return theme[key][variant][modifierToKey(!isDark, isHighContrast)];
+    return theme[key][VARIANT_BASE][modifierToKey(!isDark, isHighContrast)];
   }
   // [VARIANT_TEXT]: (color, { isDark, isHighContrast }, theme) => {
   //   const desiredBg = theme.bg.$base[modifierToKey(isDark, isHighContrast)];
