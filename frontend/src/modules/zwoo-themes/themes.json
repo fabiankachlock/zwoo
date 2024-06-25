@@ -3,6 +3,18 @@
         "primary": {
             "color": "#0ea5e9"
         },
+        "secondary": {
+            "color": "#7c3aed"
+        },
+        "error": {
+            "color": "#dc2626"
+        },
+        "success": {
+            "color": "#16a34a"
+        },
+        "warning": {
+            "color": "#eab308"
+        },
         "bg": {
             "dark": "#2e2b36",
             "light": "#d2d0d9"
@@ -11,15 +23,32 @@
             "dark": "#202023",
             "light": "#f4f4f5"
         },
-        "secondary": {
-            "dark": "#7c3aed",
-            "light": "#6e33d4"
+        "alt": {
+            "dark": "#353550",
+            "light": "#d8dbf2"
         },
         "border": {
-            "color": "#404040",
+            "dark": "#404040",
+            "light": "#a3a3a3",
             "overrides": {
-                "divider": "#d4d4d4",
-                "light": "#737373"
+                "divider": {
+                    "dark": "#d4d4d4",
+                    "light": "#262626"
+                },
+                "light": {
+                    "dark": "#737373",
+                    "light": "#525252"
+                }
+            }
+        },
+        "text": {
+            "dark": "#f4f4f5",
+            "light": "#07071c",
+            "overrides": {
+                "secondary": {
+                    "dark": "#a1a1aa",
+                    "light": "#49495e"
+                }
             }
         }
     }
