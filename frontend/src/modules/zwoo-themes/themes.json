@@ -1,20 +1,10 @@
 {
     "$default": {
-        "primary": {
-            "color": "#0ea5e9"
-        },
-        "secondary": {
-            "color": "#7c3aed"
-        },
-        "error": {
-            "color": "#dc2626"
-        },
-        "success": {
-            "color": "#16a34a"
-        },
-        "warning": {
-            "color": "#eab308"
-        },
+        "primary": "#0ea5e9",
+        "secondary": "#7c3aed",
+        "error": "#dc2626",
+        "success": "#16a34a",
+        "warning": "#eab308",
         "bg": {
             "dark": "#2e2b36",
             "light": "#d2d0d9"
@@ -51,5 +41,22 @@
                 }
             }
         }
+    },
+    "swapped": {
+        "$inherits": "$default",
+        "primary": "#7c3aed",
+        "secondary": "#0ea5e9"
+    },
+    "gamer": {
+        "$inherits": "$default",
+        "primary": "#99030d"
+    },
+    "natural": {
+        "$inherits": "$default",
+        "primary": "#2fa331"
+    },
+    "soft": {
+        "$inherits": "$default",
+        "primary": "#80edaf"
     }
 }

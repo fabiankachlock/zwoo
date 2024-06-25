@@ -47,7 +47,7 @@ const VARIANT_INVERRSE = 'inverse';
  */
 
 /**
- * @typedef {Record<Color, ThemeColorVariants> & { "$name": string }} Theme
+ * @typedef {Record<Color, ThemeColorVariants> & { "$name": string, "$inherits": boolean }} Theme
  */
 
 /**
@@ -92,7 +92,7 @@ const defferedVariantAdapter = {
   [VARIANT_INVERRSE]: (_color, { key, variant, isDark, isHighContrast }, theme) => {
     return theme[key][VARIANT_BASE][modifierToKey(!isDark, isHighContrast)];
   },
-  [VARIANT_TEXT]: (color, { isDark, isHighContrast }, theme) => {
+  [VARIANT_TEXT]: (color, { key, variant, isDark, isHighContrast }, theme) => {
     let lighness = color.get('oklch.l');
     const desiredBg = getClosestColor(
       [
@@ -102,18 +102,29 @@ const defferedVariantAdapter = {
       ],
       color
     );
+    if (!desiredBg) return color;
+
     const desiredContrast = isHighContrast ? 8 : 4;
-    const direction = chroma.contrast(desiredBg, color.set('oklch.l', lighness + 0.1)) > chroma.contrast(desiredBg, color) ? 1 : -1;
+    const direction = chroma.contrast(desiredBg, color.set('oklch.l', lighness + 0.01)) > chroma.contrast(desiredBg, color) ? 1 : -1;
+    let failSave = 0;
 
     while (chroma.contrast(desiredBg, color) < desiredContrast && lighness >= 0 && lighness <= 1) {
       lighness = color.get('oklch.l');
       color = color.set('oklch.l', lighness + 0.02 * direction);
+      if (failSave++ > 1000) {
+        console.error(
+          `${theme.$name} color ${key} in variant ${variant} does not meet contrast resitrictions for ${modifierToKey(isDark, isHighContrast)}`
+        );
+        break;
+      }
     }
     return color;
   },
   [VARIANT_CONTRAST_TEXT]: (color, { isHighContrast }, theme) => {
     const lightText = theme.text[VARIANT_BASE][modifierToKey(false, isHighContrast)];
     const darkText = theme.text[VARIANT_BASE][modifierToKey(true, isHighContrast)];
+    if (!lightText || !darkText) return color;
+
     if (chroma.contrast(lightText, color) > chroma.contrast(darkText, color)) {
       return lightText;
     }
@@ -132,13 +143,15 @@ function getClosestColor(colors, target) {
   let minimumContrast = Infinity;
   let returnColor = colors[0];
 
-  colors.forEach(color => {
-    const contrast = chroma.contrast(target, color);
-    if (contrast < minimumContrast) {
-      minimumContrast = contrast;
-      returnColor = color;
-    }
-  });
+  colors
+    .filter(col => !!col)
+    .forEach(color => {
+      const contrast = chroma.contrast(target, color);
+      if (contrast < minimumContrast) {
+        minimumContrast = contrast;
+        returnColor = color;
+      }
+    });
 
   return returnColor;
 }
@@ -290,16 +303,17 @@ function getThemeColor(config, context, theme) {
     }
   }
 
-  return chroma(color);
+  return color ? chroma(color) : undefined;
 }
 
 /**
  * Transforms a json theme definitions into a full css theme
  * @param {string} name
+ * @param {boolean} inherits
  * @param {JsonThemeConfig} config
  * @returns {Theme} the created theme
  */
-function buildTheme(name, config) {
+function buildTheme(name, inherits, config) {
   const modifiers = [
     [false, false],
     [true, false],
@@ -307,23 +321,26 @@ function buildTheme(name, config) {
     [true, true]
   ];
   const currentTheme = {
-    $name: name
+    $name: name,
+    $inherits: inherits
   };
   console.log('building ' + name);
   console.log(`  with modifiers: ${modifiers.map((a, b) => modifierToKey(a, b)).join(', ')}`);
 
   // for all defined theme colors
   for (const colorDef in THEME_CONFIG) {
-    if (!config[colorDef]) {
-      console.warn(`Invalid config: theme '${name}' has no defintion for color ${colorDef}`);
-      continue;
-    }
-
     currentTheme[colorDef] = {};
     // for every color variant defined for that color
     for (const variant of THEME_CONFIG[colorDef]) {
       const currentVariant = {};
       currentTheme[colorDef][variant] = currentVariant;
+
+      if (!config[colorDef]) {
+        if (!config['$inherits']) {
+          console.warn(`Invalid config: theme '${name}' has no defintion for color ${colorDef}`);
+        }
+        continue;
+      }
 
       // for every modifier combination
       for (const [isDark, isHighContrast] of modifiers) {
@@ -348,8 +365,9 @@ function buildTheme(name, config) {
 }
 
 /**
+ *  Caculate some colors that cant be caculated initially
  *
- * @param {Theme} theme
+ * @param {Theme} theme the theme to work with
  */
 function postprocessTheme(theme) {
   loopOverTheme(theme, ({ key, variant, isDark, isHighContrast, color }) => {
@@ -430,12 +448,25 @@ function main() {
 
   const config = JSON.parse(fs.readFileSync(path.join(__dirname, THEME_CONFIG_FILENAME)).toString());
 
-  const themes = [];
-  for (const themeName in config) {
-    const newTheme = buildTheme(themeName, config[themeName]);
-    const processed = postprocessTheme(newTheme);
-    themes.push(processed);
+  console.log('running theme builders...');
+  let themes = Object.keys(config).map(themeName => buildTheme(themeName, config[themeName]['$inherits'], config[themeName]));
+
+  console.log('running inheritations...');
+  for (const theme of themes) {
+    const parentTheme = themes.find(otherTheme => otherTheme.$name === theme.$inherits);
+    if (parentTheme) {
+      console.log(`inheriting missing colors of ${theme.$name} from ${parentTheme.$name}`);
+      for (const color in THEME_CONFIG) {
+        if (!config[theme.$name]?.[color]) {
+          theme[color] = parentTheme[color];
+        }
+      }
+    }
   }
+
+  console.log('running post processing...');
+  themes = themes.map(postprocessTheme);
+
   console.log(`processed ${themes.length} themes`);
   console.log('creating css files');
 
@@ -448,7 +479,7 @@ function main() {
   const bundle = themes
     .map(theme => theme.$name + '.css')
     .map(fileName => `@import './${TARGET_DIR}/${fileName}';\n`)
-    .join();
+    .join('');
   fs.writeFileSync(path.join(__dirname, THEME_OUT_FILENAME), bundle);
   console.log('done');
 }
