@@ -441,10 +441,11 @@ function renderTheme(theme) {
 function main() {
   console.log('build color themes');
   // clean build output directory
-  if (fs.existsSync(TARGET_DIR)) {
-    fs.rmSync(TARGET_DIR, { recursive: true });
+  const targetPath = path.join(__dirname, TARGET_DIR);
+  if (fs.existsSync(targetPath)) {
+    fs.rmSync(targetPath, { recursive: true });
   }
-  fs.mkdirSync(TARGET_DIR);
+  fs.mkdirSync(targetPath);
 
   const config = JSON.parse(fs.readFileSync(path.join(__dirname, THEME_CONFIG_FILENAME)).toString());
 

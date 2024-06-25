@@ -1,1 +1,3 @@
 @import './themes/$default.css';
+/* TODO: ZWOO-478 deferred theme loading */
+@import './themes.css';
