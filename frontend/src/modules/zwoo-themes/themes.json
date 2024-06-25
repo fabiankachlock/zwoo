@@ -1,0 +1,26 @@
+{
+    "$default": {
+        "primary": {
+            "color": "#0ea5e9"
+        },
+        "bg": {
+            "dark": "#2e2b36",
+            "light": "#d2d0d9"
+        },
+        "surface": {
+            "dark": "#202023",
+            "light": "#f4f4f5"
+        },
+        "secondary": {
+            "dark": "#7c3aed",
+            "light": "#6e33d4"
+        },
+        "border": {
+            "color": "#404040",
+            "overrides": {
+                "divider": "#d4d4d4",
+                "light": "#737373"
+            }
+        }
+    }
+}
