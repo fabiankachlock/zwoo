@@ -124,7 +124,8 @@ public class GameEndpoints
             }
 
             var activeSession = context.GetActiveUser();
-            if (_connections.HasConnection((long)activeSession.User.Id) || game.Lobby.GetPossiblyPreparedPlayerByUserId((long)activeSession.User.Id) != null)
+            var preparedPlayer = game.Lobby.GetPossiblyPreparedPlayerByUserId((long)activeSession.User.Id);
+            if (_connections.HasConnection((long)activeSession.User.Id) || (preparedPlayer != null && preparedPlayer.State == ZRPPlayerState.Connected))
             {
                 return Results.BadRequest(ApiError.AlreadyInGame.ToProblem(new ProblemDetails()
                 {

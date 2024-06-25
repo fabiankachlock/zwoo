@@ -41,13 +41,13 @@
   <div class="actions">
     <div class="actions-grid w-full grid gap-2">
       <button class="action bg-alt hover:bg-alt-hover border border-border" @click="handleLeaveClick()">
-        <Icon class="icon text-primary-text" icon="mdi:logout-variant" />
+        <Icon class="icon text-warning-text" icon="mdi:logout-variant" />
         <p class="text text-text text-md">
           {{ t('summary.leave') }}
         </p>
       </button>
       <button class="action bg-alt hover:bg-alt-hover border border-border" @click="handlePlayClick()">
-        <Icon class="icon text-warning-text" icon="mdi:logout-variant" />
+        <Icon class="icon text-primary-text" icon="mdi:logout-variant" />
         <p class="text text-text text-md">
           {{ t('summary.playAgain') }}
         </p>
