@@ -4,6 +4,7 @@
 
     <h2 class="text-text">{{ t('shortcuts.ui') }}</h2>
     <p><kbd>d</kbd>: {{ t('shortcuts.darkMode') }}</p>
+    <p><kbd>c</kbd>: {{ t('shortcuts.highContrast') }}</p>
     <p><kbd>q</kbd>: {{ t('shortcuts.quickMenu') }}</p>
     <p><kbd>f</kbd>: {{ t('shortcuts.fullScreen') }}</p>
 

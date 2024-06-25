@@ -23,6 +23,7 @@
     },
     "": "",
     "darkmode": "Dunkler Modus",
+    "highContrast": "Hoher Kontrast",
     "fullscreen": "Vollbildschirm",
     "quickMenu": "Schnellmenü",
     "language": "Sprache",
@@ -409,6 +410,7 @@
     "login": "Gehe zum Login",
     "info": "Zeige alle Tastenkombinationen",
     "darkMode": "UI Modus umschalten",
+    "highContrast": "Option 'Hoher Kontrast' umschalten",
     "fullScreen": "Vollbildschirm umschalten",
     "quickMenu": "Quick Menu umschalten"
   },
