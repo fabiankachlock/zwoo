@@ -168,8 +168,6 @@
     "fillIn": "Bitte fülle alle erforderlichen Felder aus.",
     "inputTooLong": "Die Eingabe ist zu lang.",
     "backend": {
-      "-2": "Interner Fehler",
-      "-1": "Unbekannter Fehler",
       "100": "Fehler im Backend.",
       "101": "Der Captcha-Check ist fehlgeschlagen",
       "110": "Der Account ist nicht verifiziert.",
@@ -193,7 +191,9 @@
       "144": "Der OPCode is ungültig (dies ist ein interner fehler).",
       "145": "Die Spiele ID ist ungültig.",
       "146": "Du bist bereits in einem Spiel.",
-      "147": "Das Spiel ist bereits voll."
+      "147": "Das Spiel ist bereits voll.",
+      "-2": "Interner Fehler",
+      "-1": "Unbekannter Fehler"
     },
     "zrp": {
       "400": "Ein Fehler is aufgetreten",
@@ -483,6 +483,12 @@
     "emailPlaceholder": "Deine E-Mail Adresse"
   },
   "feedback": {
+    "1": "{target} musste aussetzen",
+    "2": "Richtungswechsel!",
+    "3": "{target} musste {amount} Karte(n) ziehen",
+    "4": "{target} hat vergessen seinen Zug zu beenden",
+    "5": "{target} und {origin} haben Karten getauscht",
+    "6": "{target} hat die Farbe gewechselt",
     "range": {
       "option": {
         "self": "Nur meine",
@@ -494,17 +500,11 @@
       "chat": "Chat",
       "snackbar": "Mitteilungen"
     },
-    "1": "{target} musste aussetzen",
     "1-self": "Du musstest aussetzen",
-    "2": "Richtungswechsel!",
-    "3": "{target} musste {amount} Karte(n) ziehen",
     "3-self": "Du musstest {amount} Karte(n) ziehen",
-    "4": "{target} hat vergessen seinen Zug zu beenden",
     "4-self": "Du hast vergessen deinen Zug zu beenden",
-    "5": "{target} und {origin} haben Karten getauscht",
     "5-self+origin": "Du hast mit {other} Karten getauscht",
     "5-self+target": "{other} hat mir dir Karten getauscht",
-    "6": "{target} hat die Farbe gewechselt",
     "6-self": "Du hast die Farbe gewechselt"
   },
   "envLock": {
@@ -555,6 +555,31 @@
       "info": "Mit dieser Option lässt sich einschränken, von welchen Frontends auf den Server zugegriffen werden darf. Falls er Zugriff eingeschränkt werden soll, kann eine CORS compatible Liste an Origins konfiguriert werden. Eine leere Liste erlaubt ausschließlich das eingebaute Frontend.",
       "restricted": "Nur bestimmte Origins erlauben",
       "open": "Alle Origins erlauben"
+    }
+  },
+  "zwooUi": {
+    "search": {
+      "motivationGreeting": "Hi, Ich bin das cheat-Sheep",
+      "buttonText": "Suchen",
+      "resetButtonTitle": "Suche zurücksetzen",
+      "openDocs": "Wiki öffnen",
+      "noResultsText": "Keine Ergebnisse für",
+      "motivationText": "Starte zu tippen und Ich helfe dir das zu finden, was du suchst.",
+      "mode": {
+        "docs": "Zwoo",
+        "dev": "Entwickler",
+        "api": "Api"
+      },
+      "footer": {
+        "navigateUpKeyAriaLabel": "Pfeil nach oben",
+        "navigateDownKeyAriaLabel": "Pfeil nach unten",
+        "navigateText": "zum navigieren",
+        "selectKeyAriaLabel": "Enter",
+        "selectText": "zum auswählen",
+        "closeKeyAriaLabel": "Escape",
+        "closeText": "zum schließen",
+        "helpButtonTitle": "Hilfe anzeigen"
+      }
     }
   }
 }

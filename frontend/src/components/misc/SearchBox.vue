@@ -302,7 +302,10 @@ useEventListener('popstate', event => {
           <span class="motivation-icon">
             <ZwooIcon icon="mdi:sheep" />
           </span>
-          <span>
+          <span class="greeting">
+            {{ t('zwooUi.search.motivationGreeting') }}
+          </span>
+          <span class="info">
             {{ t('zwooUi.search.motivationText') }}
           </span>
         </li>
@@ -624,8 +627,16 @@ useEventListener('popstate', event => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  text-align: center;
+}
+
+.motivation .greeting {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+.motivation .info {
+  font-size: 0.8rem;
 }
 
 .motivation-icon {

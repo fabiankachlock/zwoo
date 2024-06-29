@@ -168,8 +168,6 @@
     "fillIn": "Please fill in all required fields.",
     "inputTooLong": "Your input is too long.",
     "backend": {
-      "-2": "Internal Error",
-      "-1": "Unknown Error",
       "100": "An error occurred in the backend.",
       "101": "The captcha check failed.",
       "110": "The account is not verified.",
@@ -193,7 +191,9 @@
       "144": "The opcode is invalid (this is an internal error).",
       "145": "The game ID is invalid.",
       "146": "You are already in a game.",
-      "147": "The game is already full"
+      "147": "The game is already full",
+      "-2": "Internal Error",
+      "-1": "Unknown Error"
     },
     "zrp": {
       "400": "An Error occurred",
@@ -483,6 +483,12 @@
     "emailPlaceholder": "Your E-Mail address"
   },
   "feedback": {
+    "1": "{target} was skipped",
+    "2": "direction changed!",
+    "3": "{target} had to draw {amount} Card(s)",
+    "4": "{target} forgot to end its turn",
+    "5": "{target} and {origin} swapped cards",
+    "6": "{target} changed the color",
     "range": {
       "option": {
         "self": "Only mine",
@@ -494,17 +500,11 @@
       "chat": "Chat",
       "snackbar": "Notifications"
     },
-    "1": "{target} was skipped",
     "1-self": "You were skipped",
-    "2": "direction changed!",
-    "3": "{target} had to draw {amount} Card(s)",
     "3-self": "You had to draw {amount} Card(s)",
-    "4": "{target} forgot to end its turn",
     "4-self": "You forgot to end your turn",
-    "5": "{target} and {origin} swapped cards",
     "5-self+origin": "You swapped cards with {other}",
     "5-self+target": "{other} swapped cards with you",
-    "6": "{target} changed the color",
     "6-self": "You changed the color"
   },
   "envLock": {
@@ -555,6 +555,31 @@
       "info": "This options can limit which frontend can connect. To restrict access one can configure a CORS compatible list of origins. A blank list will allow only the built in frontend to connect.",
       "restricted": "allow only specific origins",
       "open": "allow all origins"
+    }
+  },
+  "zwooUi": {
+    "search": {
+      "buttonText": "Search",
+      "resetButtonTitle": "Reset search",
+      "openDocs": "Open wiki",
+      "noResultsText": "No results for",
+      "motivationText": "Start typing and I'll help you to find what you search.",
+      "mode": {
+        "docs": "Zwoo",
+        "dev": "Developer",
+        "api": "Api"
+      },
+      "footer": {
+        "navigateUpKeyAriaLabel": "up arrow",
+        "navigateDownKeyAriaLabel": "down arrow",
+        "navigateText": "to navigate",
+        "selectKeyAriaLabel": "enter",
+        "selectText": "to select",
+        "closeKeyAriaLabel": "escape",
+        "closeText": "to close",
+        "helpButtonTitle": "show help"
+      },
+      "motivationGreeting": "Hi, I'm the cheat-sheep"
     }
   }
 }
