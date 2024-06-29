@@ -579,7 +579,8 @@
         "closeKeyAriaLabel": "Escape",
         "closeText": "zum schließen",
         "helpButtonTitle": "Hilfe anzeigen"
-      }
+      },
+      "closeButtonTitle": "Schließen"
     }
   }
 }

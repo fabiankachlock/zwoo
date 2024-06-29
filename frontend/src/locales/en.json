@@ -579,7 +579,8 @@
         "closeText": "to close",
         "helpButtonTitle": "show help"
       },
-      "motivationGreeting": "Hi, I'm the cheat-sheep"
+      "motivationGreeting": "Hi, I'm the cheat-sheep",
+      "closeButtonTitle": "Close"
     }
   }
 }

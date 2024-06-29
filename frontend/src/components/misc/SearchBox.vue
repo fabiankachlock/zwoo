@@ -227,6 +227,7 @@ useEventListener('popstate', event => {
     aria-haspopup="listbox"
     aria-labelledby="search-label"
     class="ZwooSearchBox"
+    @click.stop=""
   >
     <div class="shell">
       <form class="search-bar" @pointerup="onSearchBarClick($event)" @submit.prevent="">
@@ -242,6 +243,7 @@ useEventListener('popstate', event => {
           id="search-input"
           aria-labelledby="search-label"
           class="search-input"
+          @keyup.stop=""
         />
         <div class="search-actions">
           <button class="clear-button" type="reset" :disabled="disableReset" :title="t('zwooUi.search.resetButtonTitle')" @click="resetSearch">
@@ -253,6 +255,12 @@ useEventListener('popstate', event => {
           <button class="open-button" type="button" :title="t('zwooUi.search.openDocs')" @click="openDocs">
             <span class="local-search-icon">
               <ZwooIcon icon="akar-icons:link-out" />
+            </span>
+          </button>
+
+          <button class="close-button" :title="t('zwooUi.search.closeButtonTitle')" @click="emit('close')">
+            <span class="local-search-icon">
+              <ZwooIcon icon="akar-icons:cross" />
             </span>
           </button>
         </div>
@@ -372,6 +380,7 @@ useEventListener('popstate', event => {
       </div>
     </div>
   </div>
+  <div @click="emit('close')" class="click-outside"></div>
 </template>
 
 <style scoped>
@@ -384,6 +393,12 @@ useEventListener('popstate', event => {
   color: var(--color-text-hex);
 }
 
+.click-outside {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
 .shell {
   position: relative;
   padding: 0.75rem;
@@ -391,7 +406,7 @@ useEventListener('popstate', event => {
   flex-direction: column;
   gap: 1rem;
   background: var(--color-surface-hex);
-  width: min(100vw, 400px);
+  width: min(calc(100vw - 2rem), 600px);
   height: min(80vh, 500px);
   border-radius: 0.5rem;
   border: 1px solid var(--color-border-hex);
@@ -496,7 +511,7 @@ useEventListener('popstate', event => {
   opacity: 75%;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.25rem 1rem;
   line-height: 14px;
   align-items: flex-end;
   height: 2.3rem;
@@ -510,6 +525,9 @@ useEventListener('popstate', event => {
 
 @media (max-width: 767px) {
   .search-keyboard-shortcuts {
+    display: none;
+  }
+  .help-button {
     display: none;
   }
 }
@@ -539,6 +557,10 @@ useEventListener('popstate', event => {
   overflow-y: auto;
   overscroll-behavior: contain;
   flex: 1;
+  padding: 0.5rem;
+  height: 100%;
+  background-color: var(--color-bg-hex);
+  border-radius: 0.5rem;
 }
 
 .result {
@@ -548,7 +570,7 @@ useEventListener('popstate', event => {
   border-radius: 4px;
   transition: none;
   line-height: 1rem;
-  border: solid 2px var(--color-border-hex);
+  border: solid 2px var(--color-border-light-hex);
   outline: none;
 }
 
@@ -595,8 +617,8 @@ useEventListener('popstate', event => {
 }
 
 .result.selected {
-  border-color: var(--color-border-hex);
-  background-color: var(--color-bg);
+  border-color: var(--color-border-divider-hex);
+  background-color: var(--color-bg-hover-hex);
 }
 
 .result.selected .excerpt {
