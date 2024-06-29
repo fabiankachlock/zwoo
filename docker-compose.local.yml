@@ -1,0 +1,72 @@
+version: "3.4"
+
+services:
+  # zwoo-dashbaord:
+  #   image: artireg.igd20.de/zwoo-dashboard/admin-info-dashboard:dev
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - 19080:80
+  #     - 19443:443
+  #   environment:
+  #     - ZWOO_DATABASE_CONNECTION_STRING=mongodb://zwoo:27017
+  #     - ZWOO_DATABASE_NAME=zwoo
+  #     - ZWOO_AUTH_AUTHORITY=http://localhost:9080/realms/test
+  #     - ZWOO_AUTH_CLIENT_ID=zwoo-admin-dashbaord
+  #     - ZWOO_AUTH_ROLE=zwoo-admin-dashboard-access
+  #     - ZWOO_AUTH_CLIENT_SECRET=**********
+
+  db:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - db-data:/data/db
+
+  # postgres:
+  #   image: postgres
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_DB: keycloak
+  #     POSTGRES_USER: keycloak
+  #     POSTGRES_PASSWORD: password
+
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak
+  #   command:
+  #     - start-dev
+  #     - --import-realm
+  #   volumes:
+  #     - ./backend/ZwooInfoDashboard/realm-export.json:/opt/keycloak/data/import/realm.json
+  #   environment:
+  #     - KEYCLOAK_ADMIN=admin
+  #     - KEYCLOAK_ADMIN_PASSWORD=admin
+  #   ports:
+  #     - 9080:8080
+  #   depends_on:
+  #     - postgres
+
+  docs:
+    image: artireg.igd20.de/zwoo/docs:latest
+    volumes:
+      - ./docs-nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8001:80
+
+  mails:
+    image: maildev/maildev
+    ports:
+      - 9587:9587
+      - 9090:9090
+    environment:
+      - MAILDEV_WEB_PORT=9090
+      - MAILDEV_SMTP_PORT=9587
+      - MAILDEV_INCOMING_USER=local
+      - MAILDEV_INCOMING_PASS=admin
+
+volumes:
+  db-data:
+  zwoo-encryption-keys:
+  postgres_data:
+    driver: local
