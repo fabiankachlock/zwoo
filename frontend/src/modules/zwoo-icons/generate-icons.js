@@ -55,7 +55,6 @@ const icons = [
   'mdi:cloud-off-outline',
   'fluent:bot-add-20-regular',
   'fluent:bot-24-regular',
-  'material-symbols:help-outline-rounded',
   'mdi:email-outline',
   'ic:baseline-wifi-off',
   'akar-icons:settings-horizontal',
@@ -68,7 +67,17 @@ const icons = [
   'iconoir:floppy-disk-arrow-in',
   'akar-icons:link-chain',
   'ri:contrast-fill',
-  'ri:circle-line'
+  'ri:circle-line',
+  'akar-icons:backspace',
+  'akar-icons:circle-x',
+  'akar-icons:link-out',
+  'akar-icons:question',
+  'akar-icons:search',
+  'iconoir:arrow-down',
+  'iconoir:arrow-up',
+  'iconoir:long-arrow-down-left',
+  'iconoir:nav-arrow-right',
+  'mdi:sheep'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');

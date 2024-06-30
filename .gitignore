@@ -7,7 +7,7 @@
 login_data.h
 backend/test.db
 tmp/
-docker-compose.local.yml
+docker-compose.local.old.yml
 docker-compose.prod.yml
 backend/Zwoo.Backend.sln.DotSettings.user
 backend/Zwoo.Backend/Properties/launchSettings.json

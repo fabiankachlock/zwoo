@@ -151,7 +151,13 @@ export default defineConfig(
       envPrefix: 'VUE_APP',
       envDir: 'env',
       server: {
-        port: 8080
+        port: 8080,
+        proxy: {
+          '/docs': {
+            target: 'http://localhost:8001/'
+            // rewrite: path => path.replace(/^\/docs/, '')
+          }
+        }
       },
       build: {
         sourcemap: mode === 'dev-instance'
