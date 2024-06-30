@@ -27,9 +27,9 @@ const languagePrefix = computed(() => {
       dev: '/docs/dev'
     }"
     :indexUris="{
-      docs: `/docs${languagePrefix}/assets/searchIndex.js`,
-      api: `/docs${languagePrefix}/api/assets/searchIndex.js`,
-      dev: `/docs${languagePrefix}/dev/assets/searchIndex.js`
+      docs: `/docs${languagePrefix}/searchIndex.js`,
+      api: `/docs${languagePrefix}/api/searchIndex.js`,
+      dev: `/docs${languagePrefix}/dev/searchIndex.js`
     }"
     @close="search.closeSearch()"
   />
