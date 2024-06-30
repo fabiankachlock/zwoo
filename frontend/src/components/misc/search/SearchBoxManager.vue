@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { useSearch } from '@/core/adapter/controller/search';
 
 import SearchBox from './SearchBox.vue';
 
 const search = useSearch();
+const { locale } = useI18n();
 const isOpen = computed(() => search.isOpen);
+const languagePrefix = computed(() => {
+  if (locale.value === 'en') {
+    return '';
+  }
+  return `/${locale.value}`;
+});
 </script>
 
 <template>
@@ -19,9 +27,9 @@ const isOpen = computed(() => search.isOpen);
       dev: '/docs/dev'
     }"
     :indexUris="{
-      docs: '/docs/assets/searchIndex.js',
-      api: '/docs/api/assets/searchIndex.js',
-      dev: '/docs/dev/assets/searchIndex.js'
+      docs: `/docs${languagePrefix}/assets/searchIndex.js`,
+      api: `/docs${languagePrefix}/api/assets/searchIndex.js`,
+      dev: `/docs${languagePrefix}/dev/assets/searchIndex.js`
     }"
     @close="search.closeSearch()"
   />
