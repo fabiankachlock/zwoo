@@ -24,44 +24,31 @@
           <router-link to="/contact" class="footer-item">{{ t('nav.contact') }}</router-link>
         </Environment>
       </div>
-      <button @click="helpOpen = true" class="help flex items-center justify-end gap-2 group">
+      <button @click="openSearch()" class="help flex items-center justify-end gap-2 group">
         <span class="text-text group-hover:text-primary"> {{ t('nav.help') }} </span>
         <Icon icon="akar-icons:question" class="text-xl text-text mr-1 transition-transform group-hover:scale-110" />
       </button>
     </div>
   </footer>
-  <SearchBox
-    v-if="helpOpen"
-    defaultMode="docs"
-    :urlPrefix="{
-      docs: '/docs',
-      api: '/docs/api',
-      dev: '/docs/dev'
-    }"
-    :indexUris="{
-      docs: 'http://localhost:8001/assets/searchIndex.js',
-      api: 'http://localhost:8001/api/assets/searchIndex.js',
-      dev: 'http://localhost:8001/dev/assets/searchIndex.js'
-    }"
-    @close="helpOpen = false"
-  />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
+import { useSearch } from '@/core/adapter/controller/search';
 import { useApi } from '@/core/adapter/helper/useApi';
-
-import SearchBox from '../misc/SearchBox.vue';
 
 const { t } = useI18n();
 const api = useApi();
+const search = useSearch();
 
-const helpOpen = ref(false);
+const openSearch = () => {
+  search.openSearch();
+};
+
 const server = computed(() => {
   return api.getServer().replace(/(^\w+:|^)\/\//, '');
 });
