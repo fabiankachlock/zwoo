@@ -22,9 +22,9 @@ const languagePrefix = computed(() => {
     v-if="isOpen"
     default-mode="docs"
     :urlPrefix="{
-      docs: '/docs',
-      api: '/docs/api',
-      dev: '/docs/dev'
+      docs: '',
+      api: '',
+      dev: ''
     }"
     :indexUris="{
       docs: `/docs${languagePrefix}/searchIndex.js`,

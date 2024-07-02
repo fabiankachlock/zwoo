@@ -13,6 +13,10 @@ export class AuthGuard implements RouterInterceptor {
     const auth = useAuth();
     const app = useRootApp();
 
+    if (app.environment !== 'offline') {
+      return false;
+    }
+
     if (to.meta['requiresAuth'] === true || to.meta['noAuth'] === true) {
       this.Logger.debug(to.meta['requiresAuth'] === true ? `${to.fullPath} needs auth` : `${to.fullPath} only available without auth`);
       if (!auth.isInitialized) {

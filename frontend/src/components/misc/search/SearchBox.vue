@@ -203,7 +203,8 @@ onKeyStroke('Enter', e => {
   }
 
   if (selectedPackage) {
-    window.location.href = urlPrefix.value[currentMode.value] + selectedPackage.id;
+    const targetUrl = urlPrefix.value[currentMode.value] + selectedPackage.id;
+    window.open(`/redirect?t=${targetUrl}`, '_blank');
     emit('close');
   }
 });
@@ -276,7 +277,8 @@ useEventListener('popstate', event => {
       >
         <li v-for="(p, index) in results" :key="p.id" role="option" :aria-selected="selectedIndex === index ? 'true' : 'false'">
           <a
-            :href="urlPrefix[currentMode] + p.id"
+            :href="`/redirect?t=${urlPrefix[currentMode] + p.id}`"
+            target="_black"
             class="result"
             :class="{
               selected: selectedIndex === index

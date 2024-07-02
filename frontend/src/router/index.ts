@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import { AppConfig } from '@/config';
+import { useRootApp } from '@/core/adapter/app';
 import { ShortcutManager } from '@/core/adapter/shortcuts/ShortcutManager';
 import { AuthGuard } from '@/router/guards/AuthGuard';
 import { CookieGuard } from '@/router/guards/CookieGuard';
 import { InGameGuard } from '@/router/guards/GameGuard';
 // import { ReCaptchaTermsRouteInterceptor } from '@/router/guards/ReCaptchaTerms';
 import { VersionGuard } from '@/router/guards/VersionGuard';
+import Redirect from '@/views/Redirect.vue';
 
 import Menu from '../views/_Layout.vue';
 import CatchAll from '../views/404.vue';
@@ -63,6 +65,10 @@ const routes: Array<RouteRecordRaw> = [
   DeveloperRoute,
   InternalRoute,
   {
+    path: '/redirect',
+    component: Redirect
+  },
+  {
     path: '/invalid-version',
     component: Version,
     meta: {
@@ -102,7 +108,16 @@ const BeforeEachSyncGuards: RouterInterceptor['beforeEach'][] = [
 const BeforeEachAsyncGuards: RouterInterceptor['beforeEachAsync'][] = [];
 
 router.beforeEach(async (to, from, next) => {
-  console.debug('router.beforeEach', to.fullPath, from.fullPath);
+  if (to.path === '/redirect') {
+    next();
+    return;
+  }
+
+  // wait until everything is configured (to enable save env based redirects)
+  const app = useRootApp();
+  await app.isConfigured.promise;
+  console.trace('router.beforeEach', to.fullPath, from.fullPath);
+
   let called = false;
   for (const guard of BeforeEachSyncGuards) {
     if (guard) {
