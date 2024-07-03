@@ -17,6 +17,7 @@ import MiniSearch, { type SearchResult } from 'minisearch';
 import { computed, markRaw, nextTick, onBeforeUnmount, onMounted, type Ref, ref, shallowRef, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { useConfig, ZwooConfigKey } from '@/core/adapter/config';
 import { LRUCache } from '@/core/helper/lru';
 import ZwooIcon from '@/modules/zwoo-icons/ZwooIcon.vue';
 
@@ -34,6 +35,9 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const config = useConfig();
+const showDevSettings = computed(() => config.get(ZwooConfigKey.DevSettings));
+
 const cache = new LRUCache<string, Map<string, string>>(16); // 16 files
 const { defaultMode, urlPrefix, indexUris } = toRefs(props);
 
@@ -322,7 +326,7 @@ useEventListener('popstate', event => {
       </ul>
 
       <div class="search-footer">
-        <div v-if="!isHelpOpen" class="search-mode">
+        <div v-if="showDevSettings && !isHelpOpen" class="search-mode">
           <button
             class="mode-button docs"
             :class="{ active: currentMode === 'docs' }"
@@ -346,7 +350,7 @@ useEventListener('popstate', event => {
             {{ t('zwooUi.search.mode.api') }}
           </button>
         </div>
-        <div v-else class="search-keyboard-shortcuts">
+        <div v-else-if="!showDevSettings || isHelpOpen" class="search-keyboard-shortcuts">
           <span>
             <kbd :aria-label="t('zwooUi.search.footer.navigateUpKeyAriaLabel')">
               <span class="navigate-icon">
@@ -373,7 +377,7 @@ useEventListener('popstate', event => {
             {{ t('zwooUi.search.footer.closeText') }}
           </span>
         </div>
-        <button class="help-button" :title="t('zwooUi.search.footer.helpButtonTitle')" @click="isHelpOpen = !isHelpOpen">
+        <button class="help-button" :title="t('zwooUi.search.footer.helpButtonTitle')" @click="isHelpOpen = !isHelpOpen" v-if="showDevSettings">
           <span class="local-search-icon">
             <ZwooIcon icon="akar-icons:circle-x" v-if="isHelpOpen" />
             <ZwooIcon icon="akar-icons:question" v-else />
