@@ -28,6 +28,7 @@ export const useRootApp = defineStore('app', {
     return {
       // global app state
       isLoading: true,
+      isConfigured: new Awaiter(),
       environment: (AppConfig.DefaultEnv ?? 'online') as AppEnv,
       // versions
       serverVersionMatches: new Awaiter() as boolean | Awaiter<boolean>,
@@ -72,6 +73,7 @@ export const useRootApp = defineStore('app', {
         await this.setupLocked();
         MigrationRunner.migrateTo(AppConfig.Version);
         this.isLoading = false;
+        this.isConfigured.callback(void 0);
         return;
       }
 
@@ -93,10 +95,6 @@ export const useRootApp = defineStore('app', {
           this.environment = 'offline';
           console.warn('### zwoo entered offline mode');
           await auth.applyOfflineConfig();
-          RouterService.getRouter().push({
-            path: window.location.pathname,
-            force: true
-          });
         }
         this._setServerVersion(this.clientVersion);
         this._setServerVersionMatches(true);
@@ -111,6 +109,7 @@ export const useRootApp = defineStore('app', {
 
       MigrationRunner.migrateTo(AppConfig.Version);
       this.isLoading = false;
+      this.isConfigured.callback(void 0);
     },
     async setupLocked() {
       this.environment = AppConfig.DefaultEnv as AppEnv;
