@@ -7,11 +7,14 @@ import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '
 import { Icon } from '@/components/misc/Icon';
 import { useRedirect } from '@/composables/useRedirect';
 import { AppConfig } from '@/config';
+import { useRootApp } from '@/core/adapter/app';
 import { useAuth } from '@/core/adapter/auth';
+import { useApi } from '@/core/adapter/helper/useApi';
 import { BackendErrorType, getBackendErrorTranslation } from '@/core/api/ApiError';
 import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
+const app = useRootApp();
 const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
@@ -32,7 +35,13 @@ onMounted(async () => {
 
   if (isLocked && AppConfig.DefaultEnv === 'local') {
     serverHidden.value = true;
-    server.value = 'http://localhost:8001/api/'; //'/api/';
+    server.value = '/api/';
+    return;
+  }
+
+  if (app.environment === 'local') {
+    serverHidden.value = true;
+    server.value = useApi().getServer();
     return;
   }
 
@@ -72,6 +81,13 @@ const logIn = async () => {
     <Form show-back-button>
       <FormTitle>{{ t('loginLocal.title') }}</FormTitle>
       <TextInput v-if="!serverHidden" v-model="server" id="serverUrl" label-key="loginLocal.server" placeholder="http://192.168.0.17/" />
+      <div v-else class="m-2">
+        <label class="block text-text-secondary text-sm font-bold mb-2">
+          {{ t('loginLocal.server') }}
+          <slot></slot>
+        </label>
+        <p class="rounded text-text w-full py-2 px-3">{{ server }}</p>
+      </div>
       <TextInput v-model="name" id="username" label-key="loginLocal.name" :placeholder="t('loginLocal.namePlaceholder')" />
       <FormError :error="error" />
 

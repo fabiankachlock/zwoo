@@ -63,8 +63,10 @@
       "base": "__base",
       "mode": "tauri",
       "env": ["VUE_APP_IS_TAURI=true"],
-      "args": {
-        "port": "8070"
+      "watch": {
+        "args": {
+          "port": "8070"
+        }
       },
       "build": {
         "args": {

@@ -49,6 +49,10 @@ export const useAuth = defineStore('auth', {
       }
     },
     async loginToLocalServer(username: string, serverUrl: string): Promise<boolean> {
+      if (!serverUrl.endsWith('/api/')) {
+        serverUrl += 'api/';
+      }
+
       const api = RestApi(serverUrl, '');
       const backend = Backend.from(serverUrl, '');
 

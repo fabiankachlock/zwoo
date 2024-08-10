@@ -32,7 +32,7 @@ public static class AppExtensions
             if (options.Server.UseSsl)
             {
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                o.Cookie.SameSite = SameSiteMode.None;
+                o.Cookie.SameSite = SameSiteMode.Strict;
             }
             o.Cookie.Domain = options.Server.CookieDomain;
         });

@@ -116,7 +116,6 @@ router.beforeEach(async (to, from, next) => {
   // wait until everything is configured (to enable save env based redirects)
   const app = useRootApp();
   await app.isConfigured.promise;
-  console.trace('router.beforeEach', to.fullPath, from.fullPath);
 
   let called = false;
   for (const guard of BeforeEachSyncGuards) {
