@@ -24,12 +24,16 @@
           <p class="text-text">{{ t('landing.leaderboard') }}</p>
         </router-link>
       </div>
-      <div v-if="!AppConfig.IsTauri" class="action list">
-        <router-link class="flex flex-row items-center" to="/login-local">
-          <Icon class="icon text-secondary-text" icon="akar-icons:link-chain" />
-          <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
-        </router-link>
-      </div>
+      <Environment :exclude="['local']">
+        <Platform :exclude="['linux']">
+          <div class="action list">
+            <router-link class="flex flex-row items-center" to="/login-local">
+              <Icon class="icon text-secondary-text" icon="akar-icons:link-chain" />
+              <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
+            </router-link>
+          </div>
+        </Platform>
+      </Environment>
     </div>
   </MaxWidthLayout>
 </template>
@@ -39,7 +43,7 @@ import { useI18n } from 'vue-i18n';
 
 import Logo from '@/assets/zwoo_logo_none_auto.svg?raw';
 import { Icon } from '@/components/misc/Icon';
-import { AppConfig } from '@/config';
+import Platform from '@/components/misc/Platform.vue';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';
 
 const { t } = useI18n();

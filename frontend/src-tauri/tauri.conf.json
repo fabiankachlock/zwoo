@@ -10,7 +10,7 @@
     "active": true,
     "category": "CardGame",
     "copyright": "© IGD 2.0 UG (haftungsbeschränkt) 2024",
-    "targets": ["deb", "rpm", "appimage", "nsis", "app", "dmg", "updater"],
+    "targets": ["deb", "rpm", "appimage", "nsis", "app", "dmg"],
     "externalBin": [],
     "icon": [
       "icons/32x32.png",

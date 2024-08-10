@@ -94,6 +94,7 @@ pub async fn run() {
     // let menu = Menu::new().add_submenu(system_menu);
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
         .setup(|app| {
             let resource_path = app
                 .path()
