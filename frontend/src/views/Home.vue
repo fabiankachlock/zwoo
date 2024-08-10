@@ -42,12 +42,14 @@
           </router-link>
         </div>
       </Environment>
-      <div v-if="!AppConfig.IsTauri" class="action list">
-        <router-link class="flex flex-row items-center" to="/login-local">
-          <Icon class="icon text-secondary-text" icon="akar-icons:link-chain" />
-          <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
-        </router-link>
-      </div>
+      <Environment :exclude="['local']">
+        <div v-if="!AppConfig.IsTauri" class="action list">
+          <router-link class="flex flex-row items-center" to="/login-local">
+            <Icon class="icon text-secondary-text" icon="akar-icons:link-chain" />
+            <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
+          </router-link>
+        </div>
+      </Environment>
       <!-- TODO tmp(beta): <div class="action list">
         <router-link class="flex flex-row items-center" to="/tutorial">
           <Icon class="icon text-secondary-text" icon="mdi:arrow-right-bold-box-outline" />
