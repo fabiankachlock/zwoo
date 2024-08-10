@@ -14,10 +14,12 @@ onMounted(() => {
   if (AppConfig.IsTauri) {
     import('@tauri-apps/plugin-os').then(async ({ platform }) => {
       const currentPlatform = await platform();
-      if ((props.exclude ?? []).includes(currentPlatform)) {
-        show.value = false;
+      const excludes = (props.exclude ?? []).includes(currentPlatform);
+      const includes = (props.include ?? []).includes(currentPlatform);
+      if ((!excludes && !includes) || includes) {
+        show.value = true;
       } else {
-        show.value = (props.include ?? []).includes(currentPlatform);
+        show.value = !excludes;
       }
     });
   }
