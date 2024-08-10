@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <div v-if="!AppConfig.IsTauri" class="action list">
+      <div class="action list">
         <router-link to="/login-local">
           <Icon class="icon" icon="akar-icons:link-chain" />
           <p class="text-text inline-block mx-1">{{ t('home.localGame') }}</p>
@@ -37,7 +37,6 @@ import { useRouter } from 'vue-router';
 import Logo from '@/assets/zwoo_logo_none_auto.svg?raw';
 import Environment from '@/components/misc/Environment.vue';
 import { Icon } from '@/components/misc/Icon';
-import { AppConfig } from '@/config';
 import { useGameConfig } from '@/core/adapter/game';
 import { SnackBarPosition, useSnackbar } from '@/core/adapter/snackbar';
 import MaxWidthLayout from '@/layouts/MaxWidthLayout.vue';

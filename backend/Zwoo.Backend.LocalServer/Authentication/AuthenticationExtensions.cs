@@ -22,6 +22,7 @@ public static class AppExtensions
             o.Cookie.MaxAge = o.ExpireTimeSpan;
             o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             o.Cookie.SameSite = SameSiteMode.None;
+            o.Cookie.Extensions.Add("Partitioned");
         });
         services.AddAuthorization();
         services.AddScoped<LocalServerAuthenticationEvents>();
