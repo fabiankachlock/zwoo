@@ -154,7 +154,7 @@ export default defineConfig(
         port: 8080,
         proxy: {
           '/docs': {
-            target: 'http://localhost:8001/'
+            target: 'http://localhost:8002/'
             // rewrite: path => path.replace(/^\/docs/, '')
           }
         }

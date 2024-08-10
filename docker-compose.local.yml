@@ -52,7 +52,7 @@ services:
     volumes:
       - ./docs-nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - 8001:8001
+      - 8002:8002
 
   mails:
     image: maildev/maildev
