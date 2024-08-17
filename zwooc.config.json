@@ -44,7 +44,7 @@
     },
     "prod": {
       "base": "__base",
-      "mode": "prod"
+      "mode": "production"
     },
     "local-server": {
       "base": "__base",

@@ -1,23 +1,23 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["./Zwoo.Dashboard/Zwoo.Dashboard.csproj", "./Zwoo.Dashboard/"]
-COPY ["./Zwoo.Database/Zwoo.Database.csproj", "./Zwoo.Database/"]
-RUN dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
-COPY . .
-WORKDIR "/src/"
-RUN dotnet build "./Zwoo.Dashboard/Zwoo.Dashboard.csproj" -c Release -o /app/build
+COPY ./zwooc.config.json ./
 
-FROM build AS publish
-RUN dotnet publish "./Zwoo.Dashboard/Zwoo.Dashboard.csproj" -c Release -o /app/publish
+WORKDIR /src/backend
 
-FROM base AS final
+COPY ./backend/Zwoo.Dashboard/Zwoo.Dashboard.csproj ./Zwoo.Dashboard/
+COPY ./backend/Zwoo.Database/Zwoo.Database.csproj ./Zwoo.Database/
+
+RUN dotnet restore ./Zwoo.Dashboard/Zwoo.Dashboard.csproj
+
+COPY ./backend .
+
+RUN zwooc build ziad -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=builder /app/publish .
 
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS=http://*:80;https://*:443

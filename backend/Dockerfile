@@ -1,30 +1,22 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+COPY ./zwooc.config.json ./
 
-# copy project configs into /src/<project>/<config>.csproj
-COPY ["./Zwoo.Backend/Zwoo.Backend.csproj", "./Zwoo.Backend/"]
-COPY ["./Zwoo.GameEngine/Zwoo.GameEngine.csproj", "./Zwoo.GameEngine/"]
-COPY ["./BackendHelper/BackendHelper.csproj", "./BackendHelper/"]
-COPY ["./Zwoo.Database/Zwoo.Database.csproj", "./Zwoo.Database/"]
-RUN dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
+WORKDIR /src/backend
 
-# copy all projects into /src (/src/<project>)
-COPY . .
-WORKDIR "/src/"
+COPY ./backend/Zwoo.Backend/Zwoo.Backend.csproj ./Zwoo.Backend/
+COPY ./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj ./Zwoo.GameEngine/
+COPY ./backend/BackendHelper/BackendHelper.csproj ./BackendHelper/
+COPY ./backend/Zwoo.Database/Zwoo.Database.csproj ./Zwoo.Database/
 
-# build backend project
-RUN dotnet build "./Zwoo.Backend/Zwoo.Backend.csproj" -c Release -o /app/build
+RUN dotnet restore ./Zwoo.Backend/Zwoo.Backend.csproj
 
-FROM build AS publish
-# publish project
-RUN dotnet publish "./Zwoo.Backend/Zwoo.Backend.csproj" -c Release -o /app/publish
+COPY ./backend .
 
-FROM base AS final
+RUN zwooc build server -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
 # version override
 ARG version_override
@@ -32,7 +24,7 @@ ENV ZWOO_VERSION_OVERRIDE=${version_override}
 
 # run project
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=builder /app/publish .
 
 ENV ASPNETCORE_ENVIRONMENT=Production
 
