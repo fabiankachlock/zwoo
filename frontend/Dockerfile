@@ -1,5 +1,8 @@
 FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
 
+WORKDIR /src
+COPY ./zwooc.config.json ./
+
 # setup frontend
 WORKDIR /src/frontend
 COPY ./frontend/package.json ./
@@ -30,7 +33,7 @@ COPY ./frontend .
 ARG version_override
 ARG profile=prod
 
-RUN VUE_APP_VERSION_OVERRIDE=$version_override zwooc build -e wasm "$build_command"
+RUN VUE_APP_VERSION_OVERRIDE=$version_override zwooc build -e wasm "$profile"
 
 
 ### Production Stage
