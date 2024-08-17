@@ -1,17 +1,18 @@
 FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
 
 WORKDIR /src
+COPY ./zwooc.config.json ./
 
-# copy project configs into /src/<project>/<config>.csproj
-COPY ["./Zwoo.Backend/Zwoo.Backend.csproj", "./Zwoo.Backend/"]
-COPY ["./Zwoo.GameEngine/Zwoo.GameEngine.csproj", "./Zwoo.GameEngine/"]
-COPY ["./BackendHelper/BackendHelper.csproj", "./BackendHelper/"]
-COPY ["./Zwoo.Database/Zwoo.Database.csproj", "./Zwoo.Database/"]
-RUN dotnet restore "./Zwoo.Backend/Zwoo.Backend.csproj"
+WORKDIR /src/backend
 
-# copy all projects into /src (/src/<project>)
-COPY . .
-WORKDIR "/src/"
+COPY ./backend/Zwoo.Backend/Zwoo.Backend.csproj ./Zwoo.Backend/
+COPY ./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj ./Zwoo.GameEngine/
+COPY ./backend/BackendHelper/BackendHelper.csproj ./BackendHelper/
+COPY ./backend/Zwoo.Database/Zwoo.Database.csproj ./Zwoo.Database/
+
+RUN dotnet restore ./Zwoo.Backend/Zwoo.Backend.csproj
+
+COPY ./backend .
 
 RUN zwooc build server -o /app/publish
 

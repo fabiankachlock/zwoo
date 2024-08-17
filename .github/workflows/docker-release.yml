@@ -32,8 +32,7 @@ jobs:
       - name: Show ref
         run: echo "$GITHUB_REF"
       - name: Build Backend Image
-        working-directory: ./backend
-        run: "docker build . -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ env.RELEASE_VERSION }}"
+        run: "docker build . -f ./backend/Dockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:${{ env.RELEASE_VERSION }}"
       - name: Log into JFrog
         run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
       - name: Push Image (version latest)
@@ -50,8 +49,7 @@ jobs:
       - name: Show ref
         run: echo "$GITHUB_REF"
       - name: Build Backend Image
-        working-directory: ./backend
-        run: "docker build . -f ./DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:${{ env.RELEASE_VERSION }}"
+        run: "docker build . -f ./backend/DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:latest  -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:${{ env.RELEASE_VERSION }}"
       - name: Log into JFrog
         run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
       - name: Push Image (version latest)

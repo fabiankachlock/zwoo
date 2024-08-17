@@ -17,7 +17,9 @@ services:
       - 8080:80
 
   backend:
-    build: ../backend
+    build:
+      context: ..
+      dockerfile: ./backend/Dockerfile
     depends_on:
       - testdata
     ports:

@@ -15,7 +15,6 @@ RUN yarn
 WORKDIR /src/backend
 COPY ./backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj ./Zwoo.GameEngine.Wasm/
 COPY ./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj ./Zwoo.GameEngine/
-COPY ./backend/ZwooBackend.sln ./
 
 RUN dotnet workload install wasm-tools \
     && dotnet restore ./Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj

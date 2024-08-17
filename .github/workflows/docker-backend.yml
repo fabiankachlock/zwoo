@@ -15,8 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build Backend Image
-        working-directory: ./backend
-        run: "docker build . -f ./Dockerfile --build-arg version_override=$(git rev-parse HEAD) -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:nightly"
+        run: "docker build . -f ./backend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:nightly"
       - name: Log into JFrog
         run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
       - name: Push Image
@@ -27,8 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build Admin Dashboard Image
-        working-directory: ./backend
-        run: "docker build . -f ./DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:nightly"
+        run: "docker build . -f ./backend/DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:nightly"
       - name: Log into JFrog
         run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
       - name: Push Image

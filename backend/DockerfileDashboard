@@ -1,13 +1,16 @@
 FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
 
 WORKDIR /src
+COPY ./zwooc.config.json ./
 
-COPY ["./Zwoo.Dashboard/Zwoo.Dashboard.csproj", "./Zwoo.Dashboard/"]
-COPY ["./Zwoo.Database/Zwoo.Database.csproj", "./Zwoo.Database/"]
-RUN dotnet restore "./Zwoo.Dashboard/Zwoo.Dashboard.csproj"
+WORKDIR /src/backend
 
-COPY . .
-WORKDIR "/src/"
+COPY ./backend/Zwoo.Dashboard/Zwoo.Dashboard.csproj ./Zwoo.Dashboard
+COPY ./backend/Zwoo.Database/Zwoo.Database.csproj ./Zwoo.Database
+
+RUN dotnet restore ./Zwoo.Dashboard/Zwoo.Dashboard.csproj
+
+COPY ./backend .
 
 RUN zwooc build ziad -o /app/publish
 
