@@ -5,8 +5,8 @@ COPY ./zwooc.config.json ./
 
 WORKDIR /src/backend
 
-COPY ./backend/Zwoo.Dashboard/Zwoo.Dashboard.csproj ./Zwoo.Dashboard
-COPY ./backend/Zwoo.Database/Zwoo.Database.csproj ./Zwoo.Database
+COPY ./backend/Zwoo.Dashboard/Zwoo.Dashboard.csproj ./Zwoo.Dashboard/
+COPY ./backend/Zwoo.Database/Zwoo.Database.csproj ./Zwoo.Database/
 
 RUN dotnet restore ./Zwoo.Dashboard/Zwoo.Dashboard.csproj
 
