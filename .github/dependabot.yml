@@ -7,21 +7,24 @@ version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/frontend" # Location of package manifests
-    open-pull-requests-limit: 10
     schedule:
       interval: "monthly"
     assignees:
       - "fabiankachlock"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+    groups:
+      npm-patch:
+        update-types:
+          - patch
   - package-ecosystem: "nuget"
     directory: "/backend"
-    open-pull-requests-limit: 10
     schedule:
       interval: "monthly"
     assignees:
       - "fabiankachlock"
+    groups:
+      nuget-patch:
+        update-types:
+          - patch
   - package-ecosystem: github-actions
     directory: /
     schedule:
