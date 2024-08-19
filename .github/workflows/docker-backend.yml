@@ -13,7 +13,7 @@ jobs:
   backend-docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build Backend Image
         run: "docker build . -f ./backend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:nightly"
       - name: Log into JFrog
@@ -24,7 +24,7 @@ jobs:
   backend-dashboard:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build Admin Dashboard Image
         run: "docker build . -f ./backend/DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:nightly"
       - name: Log into JFrog

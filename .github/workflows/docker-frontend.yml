@@ -13,7 +13,7 @@ jobs:
   frontend-docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build Image
         run: "docker build -f ./frontend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:nightly ."
       - name: Log into JFrog
