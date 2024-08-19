@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import CaptchaButton from '@/components/forms/CaptchaButton.vue';
 import { Form, FormActions, FormError, FormSubmit, FormTitle, TextInput } from '@/components/forms/index';
@@ -51,11 +51,8 @@ import FormLayout from '@/layouts/FormLayout.vue';
 
 const { t } = useI18n();
 const auth = useAuth();
+const router = useRouter();
 const route = useRoute();
-
-onMounted(() => {
-  useCookies().loadRecaptcha();
-});
 
 const code = route.query['code'] as string;
 const password = ref('');
@@ -76,6 +73,13 @@ const isSubmitEnabled = computed(
 const passwordValidator = new PasswordValidator();
 const passwordMatchValidator = new PasswordMatchValidator();
 const captchaValidator = new CaptchaValidator();
+
+onMounted(() => {
+  useCookies().loadRecaptcha();
+  if (!code) {
+    router.push('/');
+  }
+});
 
 watch([password, passwordRepeat], ([password, passwordRepeat]) => {
   const result = passwordMatchValidator.validate([password, passwordRepeat]);
