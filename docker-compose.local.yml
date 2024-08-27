@@ -1,21 +1,6 @@
 version: "3.4"
 
 services:
-  # zwoo-dashbaord:
-  #   image: artireg.igd20.de/zwoo-dashboard/admin-info-dashboard:dev
-  #   depends_on:
-  #     - db
-  #   ports:
-  #     - 19080:80
-  #     - 19443:443
-  #   environment:
-  #     - ZWOO_DATABASE_CONNECTION_STRING=mongodb://zwoo:27017
-  #     - ZWOO_DATABASE_NAME=zwoo
-  #     - ZWOO_AUTH_AUTHORITY=http://localhost:9080/realms/test
-  #     - ZWOO_AUTH_CLIENT_ID=zwoo-admin-dashbaord
-  #     - ZWOO_AUTH_ROLE=zwoo-admin-dashboard-access
-  #     - ZWOO_AUTH_CLIENT_SECRET=**********
-
   db:
     image: mongo
     ports:
