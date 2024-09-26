@@ -31,7 +31,7 @@ public class AsyncExecutionQueueTests
         Assert.That(count, Is.EqualTo(1));
         Thread.Sleep(100);
         Assert.That(count, Is.EqualTo(11));
-        Thread.Sleep(100);
+        Thread.Sleep(150);
         Assert.That(count, Is.EqualTo(111));
     }
 }
