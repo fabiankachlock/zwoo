@@ -24,7 +24,7 @@ for (const relPath of paths) {
   console.log("Setup version for", project, ":", version, "(" + gitHash + ")");
   const newContent = content.replace(
     replaceHashRegex,
-    'const string HASH = "' + version + '";'
+    'const string HASH = "' + gitHash + '";'
   );
   write(absolutePath, newContent);
 }
