@@ -211,7 +211,16 @@
       "loading": "Connecting..."
     }
   },
-  "version": "Version",
+  "version": {
+    "client": "Client",
+    "server": "Server",
+    "modeTitle": "Mode",
+    "mode": {
+      "online": "Online",
+      "offline": "Offline",
+      "local": "Local"
+    }
+  },
   "wait": {
     "start": "Start",
     "leave": "Leave",

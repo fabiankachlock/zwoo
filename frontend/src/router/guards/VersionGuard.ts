@@ -31,7 +31,7 @@ export class VersionGuard implements RouterInterceptor {
       this.versionMatches = app.serverVersionMatches;
     }
 
-    this.Logger.debug(`version lock initialized; client: ${app.clientVersion}, server: ${this.versionMatches ? 'compatible' : 'incompatible'}`);
+    this.Logger.debug(`version lock initialized; client: ${app.versionInfo.version}, server: ${this.versionMatches ? 'compatible' : 'incompatible'}`);
     this.Logger.debug(`version match: ${this.versionMatches}`);
     return this.beforeEach(to, _from, next);
   };

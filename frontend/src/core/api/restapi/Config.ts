@@ -15,7 +15,7 @@ export class ConfigService {
     this.api = api;
   }
 
-  checkVersion = async (version: string, hash: string, zrp: string, mode: string): FetchResponse<ClientInfo> => {
+  checkVersion = async (version: ClientInfo): FetchResponse<ClientInfo> => {
     Logger.Api.log(`fetching version`);
 
     const response = await WrappedFetch<ClientInfo>(`${this.api.getUrl(Endpoint.Discover)}?t=${Date.now()}`, {
@@ -28,10 +28,7 @@ export class ConfigService {
       },
       method: 'POST',
       body: JSON.stringify({
-        version: version,
-        hash: hash,
-        zrpVersion: zrp,
-        mode
+        ...version
       })
     });
 

@@ -12,7 +12,7 @@ export const useChangelog = defineStore('changelog', {
   actions: {
     setup() {
       const lastVersion = MigrationRunner.lastVersion;
-      const version = useRootApp().clientVersion;
+      const version = useRootApp().versionInfo.version;
 
       if (lastVersion) {
         this.popupOpen = lastVersion !== version;

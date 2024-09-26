@@ -6,6 +6,7 @@ import { Awaiter } from '@/core/helper/Awaiter';
 
 import { ApiAdapter } from '../api/ApiAdapter';
 import { BackendError } from '../api/ApiError';
+import { ClientInfo } from '../api/entities/Misc';
 import { GameAdapter } from '../api/GameAdapter';
 import { RestApi } from '../api/restapi/RestApi';
 import { WasmApi } from '../api/wasmapi/WasmApi';
@@ -17,12 +18,6 @@ import { SnackBarPosition, useSnackbar } from './snackbar';
 
 type AppEnv = 'offline' | 'online' | 'local';
 
-const versionInfo = {
-  override: AppConfig.VersionOverride,
-  version: AppConfig.Version,
-  hash: AppConfig.VersionHash
-};
-
 export const useRootApp = defineStore('app', {
   state: () => {
     return {
@@ -32,8 +27,7 @@ export const useRootApp = defineStore('app', {
       environment: (AppConfig.DefaultEnv ?? 'online') as AppEnv,
       // versions
       serverVersionMatches: new Awaiter() as boolean | Awaiter<boolean>,
-      serverVersion: new Awaiter() as string | Awaiter<string>,
-      clientVersion: AppConfig.VersionOverride || AppConfig.Version,
+      serverVersion: new Awaiter() as ClientInfo | Awaiter<ClientInfo>,
       // updates
       updateAvailable: false,
       offlineReady: false,
@@ -56,8 +50,13 @@ export const useRootApp = defineStore('app', {
     };
   },
   getters: {
-    versionInfo() {
-      return versionInfo;
+    versionInfo: (state): ClientInfo => {
+      return {
+        version: AppConfig.VersionOverride || AppConfig.Version,
+        hash: AppConfig.VersionHash,
+        zrpVersion: '',
+        mode: state.environment
+      };
     },
     api: state => {
       return state._apiMap[state.environment].api;
@@ -83,7 +82,7 @@ export const useRootApp = defineStore('app', {
       const auth = useAuth();
       const hasLocalLogin = await auth.tryLocalLogin();
 
-      const response = await this.api.checkVersion(AppConfig.VersionOverride || AppConfig.Version, AppConfig.VersionHash, '', this.environment);
+      const response = await this.api.checkVersion(this.versionInfo);
       if (response.isError && response.error.code === BackendError.InvalidClient) {
         // backend marked client as invalid
         RouterService.getRouter().push('/invalid-version');
@@ -96,14 +95,14 @@ export const useRootApp = defineStore('app', {
           console.warn('### zwoo entered offline mode');
           await auth.applyOfflineConfig();
         }
-        this._setServerVersion(this.clientVersion);
+        this._setServerVersion(this.versionInfo);
         this._setServerVersionMatches(true);
       } else if (response.wasSuccessful) {
         // TODO: check version
         if (!hasLocalLogin) {
           await auth.configure();
         }
-        this._setServerVersion(response.data.version);
+        this._setServerVersion(response.data);
         this._setServerVersionMatches(true);
       }
 
@@ -116,9 +115,9 @@ export const useRootApp = defineStore('app', {
       Logger.warn(`### zwoo statically entered ${this.environment} mode`);
       if (AppConfig.DefaultEnv === 'online') {
         // setup for online mode
-        const response = await this.api.checkVersion(AppConfig.VersionOverride || AppConfig.Version, AppConfig.VersionHash, '', this.environment);
+        const response = await this.api.checkVersion(this.versionInfo);
         if (response.wasSuccessful) {
-          this._setServerVersion(response.data.version);
+          this._setServerVersion(response.data);
           this._setServerVersionMatches(true);
         } else if (response.isError && response.error.code === BackendError.InvalidClient) {
           // backend marked client as invalid
@@ -127,17 +126,17 @@ export const useRootApp = defineStore('app', {
           this._setServerVersionMatches(false);
         } else {
           RouterService.getRouter().push('/locked?target=offline');
-          this._setServerVersion(this.clientVersion);
+          this._setServerVersion(this.versionInfo);
           this._setServerVersionMatches(true);
         }
       } else if (AppConfig.DefaultEnv === 'offline') {
         // setup for offline mode
-        this._setServerVersion(this.clientVersion);
+        this._setServerVersion(this.versionInfo);
         this._setServerVersionMatches(true);
         await useAuth().applyOfflineConfig();
       } else if (AppConfig.DefaultEnv === 'local') {
         // setup for local mode
-        this._setServerVersion(this.clientVersion);
+        this._setServerVersion(this.versionInfo);
         this._setServerVersionMatches(true);
         const hasLocalLogin = await useAuth().tryLocalLogin();
         if (!hasLocalLogin) {
@@ -145,11 +144,11 @@ export const useRootApp = defineStore('app', {
         }
       }
     },
-    _setServerVersion(version: string) {
-      if (typeof this.serverVersion === 'string') {
+    _setServerVersion(version: ClientInfo) {
+      if ('callback' in this.serverVersion) {
+        this.serverVersion.callback(version);
         this.serverVersion = version;
       } else {
-        this.serverVersion.callback(version);
         this.serverVersion = version;
       }
     },
