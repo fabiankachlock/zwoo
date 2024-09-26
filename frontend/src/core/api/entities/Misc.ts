@@ -1,5 +1,6 @@
 export type ClientInfo = {
   version: string;
+  hash: string;
   zrpVersion: string;
   mode: string;
 };
