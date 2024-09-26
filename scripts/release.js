@@ -58,7 +58,9 @@ for (const file of versionFiles) {
 }
 
 const frontendPath = path.join(__dirname, "..", "frontend");
-child_process.execSync(`cd ${frontendPath} && yarn setup:version`);
+child_process.execSync(
+  `cd ${frontendPath} && zwooc exec setup:version:de && zwooc exec setup:version:be`
+);
 child_process.execSync("git add -A");
 child_process.execSync(`git commit -m "release: v${newVersion}"`);
 child_process.execSync(`git tag v${newVersion}`);

@@ -32,7 +32,7 @@ COPY ./frontend .
 ARG version_override
 ARG profile=prod
 
-RUN VUE_APP_VERSION_OVERRIDE=$version_override zwooc build -e wasm "$profile"
+RUN VUE_APP_VERSION_OVERRIDE=$version_override zwooc build -e wasm -e setup:version:fe "$profile"
 
 
 ### Production Stage
