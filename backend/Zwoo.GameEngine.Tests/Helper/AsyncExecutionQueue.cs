@@ -8,30 +8,31 @@ public class AsyncExecutionQueueTests
     public void ShouldBeAsync()
     {
         var q = new AsyncExecutionQueue();
-        var count = 0;
+        List<int> nums = [0];
 
         var _ = q.Enqueue(() =>
         {
-            count += 1;
+            nums.Add(1);
         });
         _ = q.Enqueue(() =>
         {
-            Thread.Sleep(100);
-            count += 10;
+            Thread.Sleep(20);
+            nums.Add(10);
         });
         _ = q.Enqueue(() =>
         {
-            Thread.Sleep(100);
-            count += 100;
+            Thread.Sleep(20);
+            nums.Add(100);
         });
 
-        Assert.That(count, Is.EqualTo(0));
+        Assert.That(nums, Is.EqualTo(new List<int>() { 0 }));
         q.Start();
-        Thread.Sleep(50);
-        Assert.That(count, Is.EqualTo(1));
-        Thread.Sleep(100);
-        Assert.That(count, Is.EqualTo(11));
-        Thread.Sleep(150);
-        Assert.That(count, Is.EqualTo(111));
+        Assert.That(nums, Is.EqualTo(new List<int>() { 0 }));
+        Thread.Sleep(10);
+        Assert.That(nums, Is.EqualTo(new List<int>() { 0, 1 }));
+        Thread.Sleep(20);
+        Assert.That(nums, Is.EqualTo(new List<int>() { 0, 1, 10 }));
+        Thread.Sleep(20);
+        Assert.That(nums, Is.EqualTo(new List<int>() { 0, 1, 10, 100 }));
     }
 }
