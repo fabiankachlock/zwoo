@@ -3,6 +3,7 @@ namespace Zwoo.Backend.Shared.Configuration;
 public class ZwooAppConfiguration
 {
     public string AppVersion { get; set; } = "";
+    public string AppVersionHash { get; set; } = "";
     public string ZRPVersion { get; set; } = "";
     public string ServerMode { get; set; } = "";
 }

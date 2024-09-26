@@ -11,6 +11,7 @@ public class AuthOptions
 public class ZiadAppConfiguration
 {
     public string AppVersion { get; set; } = "";
+    public string AppVersionHash { get; set; } = "";
 }
 
 public class ZiadOptions
