@@ -2,10 +2,13 @@ const fs = require("fs");
 const path = require("path");
 const child_process = require("child_process");
 
-const newVersion = process.argv[2];
+let newVersion = process.argv[2];
 if (newVersion === undefined) {
   console.log("please enter a new version");
   process.exit(1);
+}
+if (newVersion.startsWith("v")) {
+  newVersion = newVersion.substring(1);
 }
 
 const versionFiles = [
@@ -25,7 +28,7 @@ const versionFiles = [
     replace: 'version = "###"',
   },
   {
-    path: "/frontend/src-tauri/Cargo.lock",
+    path: "/Cargo.lock",
     regex: /"zwoo"\nversion = "(.*)"/,
     replace: '"zwoo"\nversion = "###"',
   },
@@ -57,9 +60,8 @@ for (const file of versionFiles) {
   fs.writeFileSync(path.join(__dirname, "..", file.path), newContent);
 }
 
-const frontendPath = path.join(__dirname, "..", "frontend");
 child_process.execSync(
-  `cd ${frontendPath} && zwooc exec setup:version:de && zwooc exec setup:version:be`
+  `zwooc exec setup:version:fe && zwooc exec setup:version:be`
 );
 child_process.execSync("git add -A");
 child_process.execSync(`git commit -m "release: v${newVersion}"`);
