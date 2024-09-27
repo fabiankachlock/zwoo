@@ -43,7 +43,7 @@
     }
   },
   "productName": "zwoo",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "identifier": "de.igd20ug.zwoo",
   "plugins": {},
   "app": {
