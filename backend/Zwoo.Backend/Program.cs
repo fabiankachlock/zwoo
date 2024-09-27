@@ -7,9 +7,6 @@ using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Contact;
 using Zwoo.Backend.Shared.Api.Game;
-using Mongo.Migration.Migrations.Document;
-using Zwoo.Database.Dao;
-using Zwoo.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-const string VERSION = "1.0.0-beta.18";
 builder.AddZwooLogging(false);
 var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
-    AppVersion = VERSION,
+    AppVersion = Zwoo.Backend.VersionProvider.VERSION,
+    AppVersionHash = Zwoo.Backend.VersionProvider.HASH,
     ServerMode = "online"
 });
 builder.Services.AddZwooCors(conf);

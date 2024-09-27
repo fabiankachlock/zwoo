@@ -93,7 +93,7 @@ export interface ApiAdapter {
    * @param version the own application version
    * @param zrp the running zrp version
    */
-  checkVersion(version: string, zrp: string, mode: string): FetchResponse<ClientInfo>;
+  checkVersion(version: ClientInfo): FetchResponse<ClientInfo>;
 
   /**
    * Load the versions with available changelogs from the server

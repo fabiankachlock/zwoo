@@ -30,17 +30,17 @@ const versionFiles = [
     replace: '"zwoo"\nversion = "###"',
   },
   {
-    path: "/backend/Zwoo.Backend/Program.cs",
+    path: "/backend/Zwoo.Backend/Version.cs",
     regex: /const string VERSION = "(.*)";/,
     replace: 'const string VERSION = "###";',
   },
   {
-    path: "/backend/Zwoo.Backend.LocalServer/Program.cs",
+    path: "/backend/Zwoo.Backend.LocalServer/Version.cs",
     regex: /const string VERSION = "(.*)";/,
     replace: 'const string VERSION = "###";',
   },
   {
-    path: "/backend/Zwoo.Dashboard/Program.cs",
+    path: "/backend/Zwoo.Dashboard/Version.cs",
     regex: /const string VERSION = "(.*)";/,
     replace: 'const string VERSION = "###";',
   },
@@ -58,7 +58,9 @@ for (const file of versionFiles) {
 }
 
 const frontendPath = path.join(__dirname, "..", "frontend");
-child_process.execSync(`cd ${frontendPath} && yarn setup:version`);
+child_process.execSync(
+  `cd ${frontendPath} && zwooc exec setup:version:de && zwooc exec setup:version:be`
+);
 child_process.execSync("git add -A");
 child_process.execSync(`git commit -m "release: v${newVersion}"`);
 child_process.execSync(`git tag v${newVersion}`);

@@ -14,7 +14,7 @@ RUN dotnet restore ./Zwoo.Backend/Zwoo.Backend.csproj
 
 COPY ./backend .
 
-RUN zwooc build server -o /app/publish
+RUN zwooc build -e setup:version:be server -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 

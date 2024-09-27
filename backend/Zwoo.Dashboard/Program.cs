@@ -18,12 +18,12 @@ builder.Services.AddServerSideBlazor();
 builder.WebHost.UseStaticWebAssets();
 builder.Services.AddScoped<DialogService>();
 
-const string VERSION = "1.0.0-beta.18";
 builder.AddZwooLogging(false);
 var zwooConf = builder.AddZwooConfiguration(args, new() { });
 var conf = builder.AddZiadConfiguration(args, new ZiadAppConfiguration()
 {
-    AppVersion = VERSION
+    AppVersion = VersionProvider.VERSION,
+    AppVersionHash = VersionProvider.HASH,
 });
 
 Console.WriteLine($"Zwoo Dashboard v{conf.App.AppVersion}");

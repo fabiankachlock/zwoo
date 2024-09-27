@@ -23,6 +23,7 @@ public static class DiscoverEndpoint
                     Extensions = new Dictionary<string, object?>()
                     {
                         {"version", value.Version},
+                        {"hash", value.Hash},
                         {"zrpVersion", value.ZRPVersion},
                         {"mode", value.Mode}
                     }.ToDictionary()

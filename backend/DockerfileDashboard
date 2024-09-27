@@ -12,7 +12,7 @@ RUN dotnet restore ./Zwoo.Dashboard/Zwoo.Dashboard.csproj
 
 COPY ./backend .
 
-RUN zwooc build ziad -o /app/publish
+RUN zwooc build -e setup:version:be ziad -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
