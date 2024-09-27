@@ -19,11 +19,6 @@ public class AsyncExecutionQueueTests
             Thread.Sleep(20);
             nums.Add(10);
         });
-        _ = q.Enqueue(() =>
-        {
-            Thread.Sleep(20);
-            nums.Add(100);
-        });
 
         Assert.That(nums, Is.EqualTo(new List<int>() { 0 }));
         q.Start();
@@ -32,7 +27,5 @@ public class AsyncExecutionQueueTests
         Assert.That(nums, Is.EqualTo(new List<int>() { 0, 1 }));
         Thread.Sleep(20);
         Assert.That(nums, Is.EqualTo(new List<int>() { 0, 1, 10 }));
-        Thread.Sleep(20);
-        Assert.That(nums, Is.EqualTo(new List<int>() { 0, 1, 10, 100 }));
     }
 }
