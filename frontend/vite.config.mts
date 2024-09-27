@@ -136,7 +136,7 @@ export default defineConfig(
             globPatterns: ['**/*.{js,css,html,ico,png,svg,json}', '**/wasm/**'],
             cleanupOutdatedCaches: true,
             navigateFallbackDenylist: [/^\/docs/, /^\/api/],
-            maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // dont cache more than 10 mib
+            maximumFileSizeToCacheInBytes: 15 * 1024 * 1024 // allow caching larger files (like dotnet.native.wasm)
           }
         }),
         ...(process.env.ANALYZE !== undefined
