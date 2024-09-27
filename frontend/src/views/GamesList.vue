@@ -3,7 +3,7 @@
     <div class="w-full flex flex-row justify-between items-center sticky top-10 z-10 bg-bg">
       <h2 class="text-text text-4xl pt-3 pb-1">{{ t('list.title') }}</h2>
       <div class="flex flex-nowrap">
-        <button class="scan-code btn-wrapper" @click="scanCode">
+        <button v-if="isSupported" class="scan-code btn-wrapper" @click="scanCode">
           <div class="icon-wrapper">
             <Icon icon="iconoir:scan-qr-code" class="icon text-2xl"></Icon>
           </div>
@@ -141,6 +141,7 @@ const games = ref<GameMeta[]>([]);
 const refreshing = ref(false);
 const scanDialogOpen = ref(false);
 const savedGame = ref<(GameMeta & SavedGame) | undefined>(undefined);
+const isSupported = ref('BarcodeDetector' in window);
 
 onMounted(async () => {
   games.value = await gameConfig.listGames();
