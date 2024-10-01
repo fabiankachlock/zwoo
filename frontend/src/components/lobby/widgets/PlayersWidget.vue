@@ -103,11 +103,11 @@ const handlePlayerToSpectator = (id: number) => {
             </button>
           </div>
           <h3 class="text-xl text-text my-2">{{ t('wait.qrcode') }}</h3>
-          <p class="my-1 text-sm italic text-text-secondary">
+          <p class="mb-2 text-sm text-text-secondary">
             {{ t('wait.qrcodeInfo') }}
           </p>
-          <div class="qrcode-wrapper mx-auto max-w-xs">
-            <QRCode :data="joinUrl" :width="256" :height="256" />
+          <div class="qrcode-wrapper">
+            <QRCode :data="joinUrl" :width="256" :height="256" class="block mx-auto" image-class="h-[30vh] max-w-full" />
           </div>
         </FloatingDialog>
       </div>
