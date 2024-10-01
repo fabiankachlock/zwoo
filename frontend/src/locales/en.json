@@ -247,9 +247,9 @@
     "normalBot": "Normal",
     "smartBot": "Hard",
     "edit": "edit",
-    "noPlayers": "no players available...",
-    "noSpectators": "no spectators available...",
-    "noBots": "no bots available...",
+    "noPlayers": "There are no  players.",
+    "noSpectators": "There are no spectators.",
+    "noBots": "No bots configured.",
     "sharesheet": {
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."

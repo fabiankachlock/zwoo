@@ -14,7 +14,7 @@
     <template #default>
       <div class="w-full flex flex-col">
         <div v-if="Object.keys(isHost ? realBots : fakeBots).length === 0">
-          <p class="text-text italic">{{ t('wait.noBots') }}</p>
+          <p class="text-text-secondary">{{ t('wait.noBots') }}</p>
         </div>
         <div v-if="botDialogOpen && isHost">
           <FloatingDialog content-class="sm:max-w-lg">

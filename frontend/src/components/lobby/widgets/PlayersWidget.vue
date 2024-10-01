@@ -115,7 +115,7 @@ const handlePlayerToSpectator = (id: number) => {
     <template #default>
       <div class="w-full flex flex-col">
         <div v-if="players.length === 0">
-          <p class="text-text italic">{{ t('wait.noPlayers') }}</p>
+          <p class="text-text-secondary">{{ t('wait.noPlayers') }}</p>
         </div>
         <div
           v-for="player of players"
