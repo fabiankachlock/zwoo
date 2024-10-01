@@ -357,7 +357,10 @@
       "light": "Light",
       "@auto": "Auto"
     },
-    "description": {}
+    "description": {},
+    "builtins": {
+      "__default__": "Default theme"
+    }
   },
   "util": {
     "loading": "Wird geladen..."

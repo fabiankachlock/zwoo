@@ -357,7 +357,10 @@
       "light": "Hell",
       "@auto": "Automatisch"
     },
-    "description": {}
+    "description": {},
+    "builtins": {
+      "__default__": "Standard-Theme"
+    }
   },
   "util": {
     "loading": "Wird geladen..."
