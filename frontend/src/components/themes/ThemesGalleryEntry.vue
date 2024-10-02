@@ -83,7 +83,7 @@ const previewVariant = ref('');
 const previewTheme = ref<CardTheme | undefined>(undefined);
 
 onMounted(async () => {
-  const variant = props.theme.variants.includes(CARD_THEME_VARIANT_AUTO) ? colorMode.value : props.theme.variants[0] ?? '';
+  const variant = props.theme.variants.includes(CARD_THEME_VARIANT_AUTO) ? colorMode.value : (props.theme.variants[0] ?? '');
   if (props.isSelected) {
     previewVariant.value = props.selectedVariant !== '' ? props.selectedVariant : variant;
     await loadTheme(previewVariant.value);
