@@ -73,7 +73,7 @@ const toggleOpenState = () => {
 };
 
 onMounted(() => {
-  if (isOpen.value !== props.modelValue ?? false) {
+  if (isOpen.value !== props.modelValue) {
     toggleOpenState();
   }
 });
