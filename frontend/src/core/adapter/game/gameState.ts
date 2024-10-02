@@ -158,6 +158,13 @@ export const useGameState = defineStore('game-state', () => {
     currentDrawAmount.value = null;
   };
 
+  const mappedPlayers = computed<GamePlayer[]>(() =>
+    players.value.map(p => ({
+      ...p,
+      isConnected: playerManager.isPlayerActive(p.id)
+    }))
+  );
+
   gameWatcher.onMessage(_receiveMessage);
   gameWatcher.onReset(reset);
   gameWatcher.onClose(reset);
@@ -167,13 +174,21 @@ export const useGameState = defineStore('game-state', () => {
     isActivePlayer,
     activePlayerId: activePlayerId,
     currentDrawAmount: currentDrawAmount,
-    players: computed<GamePlayer[]>(() =>
-      players.value.map(p => ({
-        ...p,
-        isConnected: playerManager.isPlayerActive(p.id)
-      }))
-    ),
+    players: mappedPlayers,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     __init__: () => {}
   };
 });
+
+const useExample = defineStore('example', () => {
+  const a = ref(0);
+  const b = computed(() => a.value + 1);
+
+  return {
+    a,
+    b
+  };
+});
+
+const exampleStore = useExample();
+exampleStore.b;
