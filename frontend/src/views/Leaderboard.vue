@@ -9,17 +9,14 @@
           <div
             v-for="(player, index) in playerEntries"
             :key="index"
-            class="item my-1 rounded-xl border border-border mouse:hover:border-primary bg-surface px-3 py-2"
+            class="item my-1 rounded-xl border border-border bg-surface px-3 py-2"
+            :class="{ 'border-primary': index === ownPosition }"
           >
             <div class="flex flex-row justify-between flex-wrap items-center">
-              <div class="text text-text flex flex-row flex-nowrap justify-start items-center">
-                <p class="mr-2">{{ player.position }}. {{ player.name }}</p>
-              </div>
-              <div class="flex flex-1 flex-row flex-nowrap justify-end items-stretch">
-                <p class="text-md text-text-secondary italic">
-                  {{ t('leaderboard.wins', player.wins) }}
-                </p>
-              </div>
+              <p class="mr-2 text-text" :class="{ '!text-primary-text': index === ownPosition }">{{ player.position }}. {{ player.name }}</p>
+              <p class="text-md text-text" :class="{ '!text-text-secondary italic': index !== ownPosition }">
+                {{ t('leaderboard.wins', player.wins) }}
+              </p>
             </div>
           </div>
           <div v-if="isLoggedIn && ownPosition > 100 && wins >= 0">
@@ -70,8 +67,11 @@ const isLoggedIn = computed(() => authStore.isLoggedIn);
 onMounted(async () => {
   playerEntries.value = (await leaderBoardStore.getLeaderBoard()) ?? [];
 
-  if ((playerEntries.value ?? []).findIndex(player => player.name === authStore.username) < 0) {
+  const ownIndex = (playerEntries.value ?? []).findIndex(player => player.name === username.value);
+  if (ownIndex < 0) {
     ownPosition.value = await leaderBoardStore.getOwnPosition();
+  } else {
+    ownPosition.value = ownIndex;
   }
 });
 </script>

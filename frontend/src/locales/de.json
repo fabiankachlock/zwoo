@@ -66,7 +66,8 @@
     "statusLocal": "Verbunden",
     "disconnect": "Verbindung trennen",
     "createGame": "Spiel erstellen",
-    "joinGame": "Spiel beitreten"
+    "joinGame": "Spiel beitreten",
+    "docs": "Dokumentation"
   },
   "login": {
     "title": "Anmeldung",
@@ -247,9 +248,9 @@
     "normalBot": "Normal",
     "smartBot": "Schwer",
     "edit": "Bearbeiten",
-    "noPlayers": "keine Spieler vorhanden...",
-    "noSpectators": "keine Zuschauer vorhanden...",
-    "noBots": "keine Bots vorhanden...",
+    "noPlayers": "Es gibt keine Spieler.",
+    "noSpectators": "Es gibt keine Zuschauer.",
+    "noBots": "Es sind keine Bots angelegt.",
     "sharesheet": {
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."
@@ -356,7 +357,10 @@
       "light": "Hell",
       "@auto": "Automatisch"
     },
-    "description": {}
+    "description": {},
+    "builtins": {
+      "__default__": "Standard-Theme"
+    }
   },
   "util": {
     "loading": "Wird geladen..."

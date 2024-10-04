@@ -66,7 +66,8 @@
     "statusLocal": "Connected",
     "disconnect": "Disconnect",
     "createGame": "Create Game",
-    "joinGame": "Join Game"
+    "joinGame": "Join Game",
+    "docs": "Documentation"
   },
   "login": {
     "title": "Login",
@@ -247,9 +248,9 @@
     "normalBot": "Normal",
     "smartBot": "Hard",
     "edit": "edit",
-    "noPlayers": "no players available...",
-    "noSpectators": "no spectators available...",
-    "noBots": "no bots available...",
+    "noPlayers": "There are no  players.",
+    "noSpectators": "There are no spectators.",
+    "noBots": "No bots configured.",
     "sharesheet": {
       "title": "Share your game!",
       "info": "Share a link to join your game with your friends."
@@ -356,7 +357,10 @@
       "light": "Light",
       "@auto": "Auto"
     },
-    "description": {}
+    "description": {},
+    "builtins": {
+      "__default__": "Default theme"
+    }
   },
   "util": {
     "loading": "Wird geladen..."

@@ -2,7 +2,7 @@
   <Widget v-model="isOpen" title="wait.spectators">
     <div class="w-full flex flex-col">
       <div v-if="spectators.length === 0">
-        <p class="text-text italic">{{ t('wait.noSpectators') }}</p>
+        <p class="text-text-secondary">{{ t('wait.noSpectators') }}</p>
       </div>
       <div
         v-for="player of spectators"
