@@ -1,7 +1,7 @@
 {
   "themesList": [
-    "__default-legacy__",
     "__default__",
+    "__default-legacy__",
     "test"
   ],
   "defaultTheme": {
@@ -10,52 +10,6 @@
     "variant": "@auto"
   },
   "themes": {
-    "__default-legacy__": {
-      "files": {
-        "previews": {
-          "dark": "__default-legacy__.dark.preview.json",
-          "light": "__default-legacy__.light.preview.json"
-        },
-        "dark": "__default-legacy__.dark.json",
-        "light": "__default-legacy__.light.json"
-      },
-      "config": {
-        "name": "__default-legacy__",
-        "description": "",
-        "author": "",
-        "version": "1",
-        "isMultiLayer": true,
-        "variants": [
-          "dark",
-          "light",
-          "@auto"
-        ],
-        "previews": [
-          "back_u",
-          "front_1_1",
-          "front_2_a",
-          "front_3_b",
-          "front_4_d",
-          "front_5_e"
-        ],
-        "colors": {
-          "dark": {
-            "1": "#7D3111",
-            "2": "#417617",
-            "3": "#AFA32F",
-            "4": "#293A60",
-            "5": "#11001A"
-          },
-          "light": {
-            "1": "#D94506",
-            "2": "#6EC729",
-            "3": "#EDDD50",
-            "4": "#2D5CCB",
-            "5": "#11001A"
-          }
-        }
-      }
-    },
     "__default__": {
       "files": {
         "previews": {
@@ -98,6 +52,52 @@
             "3": "#FBD003",
             "4": "#4228C0",
             "5": "#211C2F"
+          }
+        }
+      }
+    },
+    "__default-legacy__": {
+      "files": {
+        "previews": {
+          "dark": "__default-legacy__.dark.preview.json",
+          "light": "__default-legacy__.light.preview.json"
+        },
+        "dark": "__default-legacy__.dark.json",
+        "light": "__default-legacy__.light.json"
+      },
+      "config": {
+        "name": "__default-legacy__",
+        "description": "",
+        "author": "",
+        "version": "1",
+        "isMultiLayer": true,
+        "variants": [
+          "dark",
+          "light",
+          "@auto"
+        ],
+        "previews": [
+          "back_u",
+          "front_1_1",
+          "front_2_a",
+          "front_3_b",
+          "front_4_d",
+          "front_5_e"
+        ],
+        "colors": {
+          "dark": {
+            "1": "#7D3111",
+            "2": "#417617",
+            "3": "#AFA32F",
+            "4": "#293A60",
+            "5": "#11001A"
+          },
+          "light": {
+            "1": "#D94506",
+            "2": "#6EC729",
+            "3": "#EDDD50",
+            "4": "#2D5CCB",
+            "5": "#11001A"
           }
         }
       }

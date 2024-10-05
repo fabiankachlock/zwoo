@@ -310,7 +310,7 @@ async function createMetaFiles(themes) {
     defaultTheme = themes[0];
   }
   const data = {
-    themesList: themes.map(t => t.name),
+    themesList: themes.sort(theme => (theme.isDefault ? -1 : 1)).map(t => t.name),
     defaultTheme: {
       name: defaultTheme.name,
       version: defaultTheme.version,

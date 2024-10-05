@@ -1,5 +1,5 @@
 {
-  "__default-legacy__": {
+  "__default__": {
     "dark": {
       "back": [
         "back_s.svg",
@@ -57,7 +57,7 @@
       ]
     }
   },
-  "__default__": {
+  "__default-legacy__": {
     "dark": {
       "back": [
         "back_s.svg",

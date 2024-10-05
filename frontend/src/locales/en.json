@@ -359,7 +359,8 @@
     },
     "description": {},
     "builtins": {
-      "__default__": "Default theme"
+      "__default__": "Default theme",
+      "__default-legacy__": "Default theme (legacy design)"
     }
   },
   "util": {

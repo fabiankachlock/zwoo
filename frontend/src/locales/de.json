@@ -359,7 +359,8 @@
     },
     "description": {},
     "builtins": {
-      "__default__": "Standard-Theme"
+      "__default__": "Standard-Theme",
+      "__default-legacy__": "Standard-Theme (altes Design)"
     }
   },
   "util": {
