@@ -85,7 +85,7 @@ const submitBot = () => {
         <div v-if="botDialogOpen && isHost">
           <FloatingDialog content-class="sm:max-w-lg">
             <div class="absolute top-2 right-2 z-10">
-              <button class="bg-bg hover:bg-bg p-1.5 text-text rounded" @click="botDialogOpen = false">
+              <button class="bg-alt hover:bg-alt-hover border border-border p-1.5 text-text rounded" @click="botDialogOpen = false">
                 <Icon icon="akar-icons:cross" class="text-xl" />
               </button>
             </div>

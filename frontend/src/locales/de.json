@@ -269,6 +269,7 @@
     "profileName": "Name des Profils",
     "profilePlaceholder": "Mein Profil",
     "createProfile": "Erstellen",
+    "noProfiles": "Keine Profile vorhanden",
     "profiles": {
       "default": "Standartwerte",
       "full": "Alle Regeln"
