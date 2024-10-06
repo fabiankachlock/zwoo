@@ -13,11 +13,11 @@
     "__default__": {
       "files": {
         "previews": {
-          "dark": "__default__.dark.preview.json",
-          "light": "__default__.light.preview.json"
+          "dark": "__default__.dark.v2.preview.json",
+          "light": "__default__.light.v2.preview.json"
         },
-        "dark": "__default__.dark.json",
-        "light": "__default__.light.json"
+        "dark": "__default__.dark.v2.json",
+        "light": "__default__.light.v2.json"
       },
       "config": {
         "name": "__default__",
@@ -59,11 +59,11 @@
     "__default-legacy__": {
       "files": {
         "previews": {
-          "dark": "__default-legacy__.dark.preview.json",
-          "light": "__default-legacy__.light.preview.json"
+          "dark": "__default-legacy__.dark.v1.preview.json",
+          "light": "__default-legacy__.light.v1.preview.json"
         },
-        "dark": "__default-legacy__.dark.json",
-        "light": "__default-legacy__.light.json"
+        "dark": "__default-legacy__.dark.v1.json",
+        "light": "__default-legacy__.light.v1.json"
       },
       "config": {
         "name": "__default-legacy__",
@@ -105,9 +105,9 @@
     "test": {
       "files": {
         "previews": {
-          "dark": "test.dark.preview.json"
+          "dark": "test.dark.v1.preview.json"
         },
-        "dark": "test.dark.json"
+        "dark": "test.dark.v1.json"
       },
       "config": {
         "name": "test",
