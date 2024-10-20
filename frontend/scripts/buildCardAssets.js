@@ -469,8 +469,18 @@ async function buildTheme(theme) {
     console.log('     selected previews cards: ' + previews.join(', '));
 
     const previewImages = theme.isMultiLayer
-      ? unique(previews.map(card => resolveLayersForCard(card, BaseThemeConfig.overrides.layerWildcard)).flat())
+      ? unique(
+          previews
+            .map(card => {
+              if (theme.overrides?.cards?.includes(card)) {
+                return [card];
+              }
+              return resolveLayersForCard(card, BaseThemeConfig.overrides.layerWildcard);
+            })
+            .flat()
+        )
       : previews;
+    console.log(theme.name, variant, previews, previewImages);
     const previewData = combineToObject(previewImages.map(card => ({ [card]: sheetData[card] })));
     const previewFileSize = await writeJSONFile(join(OUT_DIR, previewFileName), previewData);
     outFiles += 1;
