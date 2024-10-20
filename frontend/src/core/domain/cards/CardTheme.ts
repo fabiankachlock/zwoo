@@ -73,6 +73,11 @@ export class CardTheme {
   }
 
   private cardDescriptionToLayers(descriptor: string): string[] {
+    // If the descriptor is a custom card in a multi layer theme, return it as is
+    if (this.config.isMultiLayer && this.config.customCards.includes(descriptor)) {
+      return [descriptor];
+    }
+
     const firstLayer = descriptor.replace(new RegExp(CardLayerSeparator + '.$'), CardLayerSeparator + CardLayerWildcard);
     const secondLayer = descriptor.replace(
       new RegExp(CardLayerSeparator + '.' + CardLayerSeparator),
