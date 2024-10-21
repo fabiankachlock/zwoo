@@ -25,6 +25,7 @@ export type CardThemeInformation = {
   isMultiLayer: boolean;
   variants: string[];
   previews: string[];
+  customCards: string[];
   colors: Record<string, Record<CardColor, string>>;
 };
 

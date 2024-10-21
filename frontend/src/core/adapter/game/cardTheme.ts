@@ -16,6 +16,7 @@ const ThemeManager = CardThemeManager.global;
 export const useCardTheme = CreateUseHook(() => {
   const colorMode = useColorTheme();
   const config = useConfig();
+  // TODO: mark theme as raw
   const theme = ref<CardTheme>(new CardTheme('', '', {}, {} as CardThemeInformation));
   let debounceTimeout: number | undefined = undefined;
 
