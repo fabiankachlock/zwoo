@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { asyncComputed } from '@vueuse/core';
 
 import { useCardTheme } from '@/core/adapter/game/cardTheme';
 import { CardTheme } from '@/core/domain/cards/CardTheme';
@@ -35,7 +35,7 @@ const props = defineProps<{
 }>();
 
 const cardTheme = useCardTheme();
-const cardData = computed(async () => await (props.overrideTheme ?? cardTheme.theme).getCard(props.card));
+const cardData = asyncComputed(async () => await (props.overrideTheme ?? cardTheme.theme).getCard(props.card));
 </script>
 <style scoped>
 .zwoo-card:not(:first-of-type) {
