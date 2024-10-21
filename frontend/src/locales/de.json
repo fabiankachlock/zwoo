@@ -356,7 +356,9 @@
       "light": "Hell",
       "@auto": "Automatisch"
     },
-    "description": {}
+    "description": {},
+    "themeIncompatible": "Karten-Theme inkompatibel",
+    "incompatibleInfo": "Dein ausgewähltes Karten-Theme ist mit der aktuellen Version nicht kompatibel. Es kann passieren das bestimmte Karten im Design des Standardthemes angezeigt werden."
   },
   "util": {
     "loading": "Wird geladen..."

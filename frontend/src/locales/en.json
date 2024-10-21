@@ -356,7 +356,9 @@
       "light": "Light",
       "@auto": "Auto"
     },
-    "description": {}
+    "description": {},
+    "themeIncompatible": "Card theme incompatible",
+    "incompatibleInfo": "Your selected card theme is not compatible with the current version. It might happen, that some cards are shown in the design of the default theme."
   },
   "util": {
     "loading": "Wird geladen..."
