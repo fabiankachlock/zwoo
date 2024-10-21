@@ -25,7 +25,8 @@ const DEFAULT_CARD_PREVIEWS = ['back_u', 'front_1_1', 'front_2_a', 'front_3_b', 
  */
 const BaseThemeConfig = {
   name: 'the theme name', // required
-  version: '1', // optional, but recommended
+  version: '1', // required
+  zrpVersion: '1', // required
   description: 'a theme description', // optional
   author: 'the theme author', // optional
   isMultiLayer: true, // optional,
@@ -168,7 +169,14 @@ function createThemeFileName(theme, variant, isPreview) {
  * @returns {boolean} whether it is valid
  */
 function validateThemeConfig(config) {
-  return 'name' in config && 'variants' in config && Array.isArray(config.variants) && config.variants.length >= 1;
+  return (
+    'name' in config &&
+    'variants' in config &&
+    'version' in config &&
+    'zrpVersion' in config &&
+    Array.isArray(config.variants) &&
+    config.variants.length >= 1
+  );
 }
 
 /**
@@ -330,6 +338,7 @@ async function createMetaFiles(themes) {
             description: theme.description ?? '',
             author: theme.author ?? '',
             version: theme.version ?? '',
+            zrpVersion: theme.zrpVersion ?? '',
             isMultiLayer: theme.isMultiLayer,
             variants: computeThemeVariants(theme.variants),
             previews: computeThemePreviews(theme.previews),

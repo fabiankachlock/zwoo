@@ -23,6 +23,7 @@
         "description": "",
         "author": "",
         "version": "1",
+        "zrpVersion": "4.3.0",
         "isMultiLayer": true,
         "variants": [
           "dark",
@@ -67,6 +68,7 @@
         "description": "",
         "author": "",
         "version": "1",
+        "zrpVersion": "4.3.0",
         "isMultiLayer": false,
         "variants": [
           "dark"

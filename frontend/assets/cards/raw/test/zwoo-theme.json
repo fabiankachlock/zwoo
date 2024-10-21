@@ -2,5 +2,6 @@
   "name": "test",
   "isMultiLayer": false,
   "version": "1",
+  "zrpVersion": "4.3.0",
   "variants": ["dark"]
 }

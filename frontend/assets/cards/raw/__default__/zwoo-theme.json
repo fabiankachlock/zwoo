@@ -4,6 +4,7 @@
   "isMultiLayer": true,
   "variants": ["dark", "light"],
   "version": "1",
+  "zrpVersion": "4.3.0",
   "colors": {
     "dark": {
       "1": "#7D3111",
