@@ -35,7 +35,7 @@ const props = defineProps<{
 }>();
 
 const cardTheme = useCardTheme();
-const cardData = computed(() => (props.overrideTheme ?? cardTheme.theme).getCard(props.card));
+const cardData = computed(async () => await (props.overrideTheme ?? cardTheme.theme).getCard(props.card));
 </script>
 <style scoped>
 .zwoo-card:not(:first-of-type) {
