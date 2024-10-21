@@ -62,14 +62,14 @@ export class CardTheme {
   }
 
   private cardToAbsoluteUri(card: Card): string {
-    return `front_${card.color}_${card.type.toString(16)}`;
+    return `front_${card.color}_${card.type.toString(36)}`;
   }
 
   private cardToURI(card: Card): string[] {
     if (this.config.isMultiLayer) {
-      return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(16)}`];
+      return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(36)}`];
     }
-    return [`front_${card.color}_${card.type.toString(16)}`];
+    return [`front_${card.color}_${card.type.toString(36)}`];
   }
 
   private cardDescriptionToLayers(descriptor: string): string[] {
