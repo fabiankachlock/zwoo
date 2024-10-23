@@ -8,31 +8,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build Image
-        run: "docker build -f ./frontend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) --build-arg profile=dev-instance -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:dev ."
-      - name: Log into JFrog
-        run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
-      - name: Push Image
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:dev"
+      - name: Build frontend image
+        run: "docker build -f ./frontend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) --build-arg profile=dev-instance -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:dev ."
+      - name: Login to gitea
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REPO_URL}}
+          username: ${{ secrets.DOCKER_REPO_USER }}
+          password: ${{ secrets.DOCKER_REPO_PASS }}
+      - name: Push image
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:dev"
 
   backend-docker-dev:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build Backend Image
-        run: "docker build . -f ./backend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:dev"
-      - name: Log into JFrog
-        run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
-      - name: Push Image
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:dev"
+      - name: Build backend image
+        run: "docker build . -f ./backend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend:dev"
+      - name: Login to gitea
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REPO_URL}}
+          username: ${{ secrets.DOCKER_REPO_USER }}
+          password: ${{ secrets.DOCKER_REPO_PASS }}
+      - name: Push image
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend:dev"
 
   backend-dashboard-dev:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build Admin Dashboard Image
-        run: "docker build . -f ./backend/DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:dev"
-      - name: Log into JFrog
-        run: "docker login ${{ secrets.DOCKER_REPO_URL }} -p ${{ secrets.DOCKER_REPO_PASS }} -u ${{ secrets.DOCKER_REPO_USER }}"
-      - name: Push Image
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:dev"
+      - name: Build ZIAD image
+        run: "docker build . -f ./backend/DockerfileDashboard -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard:dev"
+      - name: Login to gitea
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REPO_URL}}
+          username: ${{ secrets.DOCKER_REPO_USER }}
+          password: ${{ secrets.DOCKER_REPO_PASS }}
+      - name: Push image
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard:dev"
