@@ -23,7 +23,7 @@ jobs:
           username: ${{ secrets.DOCKER_REPO_USER }}
           password: ${{ secrets.DOCKER_REPO_PASS }}
       - name: Push image
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend/backend:nightly"
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend:nightly"
 
   backend-dashboard:
     runs-on: ubuntu-latest
@@ -38,4 +38,4 @@ jobs:
           username: ${{ secrets.DOCKER_REPO_USER }}
           password: ${{ secrets.DOCKER_REPO_PASS }}
       - name: Push image
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard/admin-info-dashboard:nightly"
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-dashboard:nightly"
