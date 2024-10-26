@@ -1,4 +1,3 @@
-
 namespace Zwoo.Backend.Shared.Api.Model;
 
 public class ClientInfo

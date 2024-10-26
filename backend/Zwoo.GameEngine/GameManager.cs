@@ -38,7 +38,7 @@ public sealed class GameManager
         };
 
         _activeGames.Add(room.Game.Id, room);
-        _logger.Info($"created game {room.Game.Id}");
+        _logger.Info($"created game {room.Game.Id} with ZRP version {VersionProvider.ZRPVersion}");
         return room;
     }
 

@@ -26,10 +26,10 @@ public class BetaDiscoverService : IDiscoverService
         // only allow same version connects
         if (_versionOverride != null)
         {
-            return _versionOverride == client.Version && client.Mode == "online";
+            return _versionOverride == client.Version && client.Mode == "online" && _options.App.ZRPVersion == client.ZRPVersion;
         }
 
-        return _options.App.AppVersion == client.Version && _options.App.ServerMode == client.Mode;
+        return _options.App.AppVersion == client.Version && _options.App.ServerMode == client.Mode && _options.App.ZRPVersion == client.ZRPVersion;
     }
 
     public ClientInfo GetVersion()
@@ -39,7 +39,7 @@ public class BetaDiscoverService : IDiscoverService
             Version = _versionOverride ?? _options.App.AppVersion,
             Hash = _options.App.AppVersionHash,
             Mode = _options.App.ServerMode,
-            ZRPVersion = "",
+            ZRPVersion = _options.App.ZRPVersion,
         };
     }
 }
