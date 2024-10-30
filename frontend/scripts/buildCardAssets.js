@@ -158,8 +158,8 @@ function unique(arr) {
  * @param {boolean} isPreview whether it is a preview file
  * @returns {string} the filename
  */
-function createThemeFileName(theme, variant, isPreview) {
-  return theme + '.' + variant + (isPreview ? '.preview' : '') + '.json';
+function createThemeFileName(theme, variant, version, isPreview) {
+  return theme + '.' + variant + '.v' + version + (isPreview ? '.preview' : '') + '.json';
 }
 
 /**
@@ -197,13 +197,13 @@ function computeThemePreviews(previews) {
 /**
  * Create a object with theme themes name as keys and der variants as sub keys
  * @param {(typeof BaseThemeConfig)[]} themes the list of themes
- * @param {(name: string, variant: string) => any} transformer
+ * @param {(theme: typeof BaseThemeConfig, variant: string) => any} transformer
  * @returns
  */
 function toThemesObjectWithVariants(themes, transformer) {
   return combineToObject(
     themes.map(theme => ({
-      [theme.name]: theme.variants.reduce((acc, variant) => ({ ...acc, [variant]: transformer(theme.name, variant) }), {})
+      [theme.name]: theme.variants.reduce((acc, variant) => ({ ...acc, [variant]: transformer(theme, variant) }), {})
     }))
   );
 }
@@ -287,7 +287,7 @@ async function searchThemeSources(themeConfig) {
     }
   }
 
-  const generateFileName = isPreview => (name, variant) => createThemeFileName(name, variant, isPreview);
+  const generateFileName = isPreview => (theme, variant) => createThemeFileName(theme.name, variant, theme.version, isPreview);
   return {
     ...themeConfig,
     _sources: themeSources,
@@ -310,7 +310,7 @@ async function createMetaFiles(themes) {
     defaultTheme = themes[0];
   }
   const data = {
-    themesList: themes.map(t => t.name),
+    themesList: themes.sort(theme => (theme.isDefault ? -1 : 1)).map(t => t.name),
     defaultTheme: {
       name: defaultTheme.name,
       version: defaultTheme.version,
