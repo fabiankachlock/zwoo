@@ -50,7 +50,7 @@
     "@log-rush/client": "^1.1.1",
     "@tauri-apps/api": "^2.0.0-beta.8",
     "@tauri-apps/plugin-os": "^2.0.0-rc.1",
-    "@vueuse/core": "^11.0.3",
+    "@vueuse/core": "^11.2.0",
     "@vueuse/integrations": "^11.0.3",
     "dexie": "^4.0.8",
     "focus-trap": "^7.5.4",
