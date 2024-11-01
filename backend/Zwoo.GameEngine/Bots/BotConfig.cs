@@ -5,5 +5,5 @@ public struct BotConfig
 {
 
     public int Type;
-
+    public string? JSScript;
 }
