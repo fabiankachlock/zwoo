@@ -97,4 +97,6 @@ public class DumpBotDecisionManager : IBotDecisionHandler
     {
         _stateManager.Reset();
     }
+
+    public void Dispose() { }
 }

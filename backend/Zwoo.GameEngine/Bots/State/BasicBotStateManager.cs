@@ -6,28 +6,28 @@ namespace Zwoo.GameEngine.Bots.State;
 /// <summary>
 /// a bot state manager managing only the bare minimum state need for the bot to make decisions
 /// </summary>
-internal class BasicBotStateManager
+public class BasicBotStateManager
 {
 
     /// <summary>
     /// the state object
     /// </summary>
-    internal struct BotState
+    public struct BotState
     {
         /// <summary>
         /// a list of all cards the bot has currently
         /// </summary>
-        internal List<Card> Deck = new List<Card>();
+        public List<Card> Deck = new List<Card>();
 
         /// <summary>
         /// the card thats on top of the current stack
         /// </summary>
-        internal Card StackTop = new Card();
+        public Card StackTop = new Card();
 
         /// <summary>
         /// whether the bot is the active player or not
         /// </summary>
-        internal bool IsActive = false;
+        public bool IsActive = false;
 
         public BotState() { }
     }
@@ -37,7 +37,7 @@ internal class BasicBotStateManager
     /// </summary>
     private BotState _state;
 
-    internal BasicBotStateManager()
+    public BasicBotStateManager()
     {
         _state = new BotState();
     }
@@ -46,7 +46,7 @@ internal class BasicBotStateManager
     /// create a snapshot of the current state
     /// </summary>
     /// <returns>the current state</returns>
-    internal BotState GetState()
+    public BotState GetState()
     {
         return _state;
     }
@@ -55,7 +55,7 @@ internal class BasicBotStateManager
     /// handle an incoming zrp notification
     /// </summary>
     /// <param name="message">the incoming message</param>
-    internal void AggregateNotification(BotZRPNotification<object> message)
+    public void AggregateNotification(BotZRPNotification<object> message)
     {
         switch (message.Code)
         {
@@ -86,7 +86,7 @@ internal class BasicBotStateManager
     /// <summary>
     /// reset the current state
     /// </summary>
-    internal void Reset()
+    public void Reset()
     {
         _state = new BotState();
     }
