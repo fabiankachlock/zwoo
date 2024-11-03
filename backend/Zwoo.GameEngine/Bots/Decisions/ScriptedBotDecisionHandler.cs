@@ -2,6 +2,8 @@ using Zwoo.GameEngine.ZRP;
 using Zwoo.GameEngine.Logging;
 using Microsoft.ClearScript.V8;
 using Zwoo.GameEngine.Bots.State;
+using Zwoo.GameEngine.Game.Cards;
+using Microsoft.ClearScript;
 
 namespace Zwoo.GameEngine.Bots.Decisions;
 
@@ -13,104 +15,61 @@ internal interface ScriptedBot
 
 internal static class BotScripts
 {
-    public static string SetupScript = @"
+    public static string SetupScript = """
+import("internal--bot.js").then(module => {
+    const Bot = module.default;
+    const currentInstance = new Bot();
+    return currentInstance;
+})
+""";
+
+    public static string InjectGlobals = """
 var globals = { 
         logger: _logger, 
         rand: _rand, 
-        onEvent: (code, payload) => {
+        triggerEvent: (code, payload) => {
             _logger.Info('!!! invoking event: ' + code);
-            _onEvent.Invoke(code, payload); 
+            _triggerEvent.Invoke(code, payload); 
         },
         toInt: (value) => {
             return _helper.CastToInt(value);
         }
-}; 
-var _currentBot = new SetupZwooBot();";
+};
+""";
 
-    public static string DummyScriptBot = @"
-function SetupZwooBot() {
-    this.onEvent = globals.onEvent;
-    this.state = new WholeGameBotStateManager();
-    this.placedCard = -1;
+    public static string DummyScriptBot = """
+var s=class{};var Bot=class extends s{triggerEvent=globals.triggerEvent;state=new WholeGameBotStateManager;placedCard=-1;AggregateNotification(message){switch(globals.logger.Info("Received message: "+message),message.Code){case ZRPCode.GameStarted:this.triggerEvent(ZRPCode.GetHand,new GetDeckEvent);break;case ZRPCode.GetPlayerDecision:globals.logger.Info("making decision"),this.makeDecision(message.Payload);return;case ZRPCode.PlaceCardError:this.placeCard();return;default:this.state.AggregateNotification(message);break}var currentState=this.state.GetState();currentState.IsActive&&message.Code!=ZRPCode.StateUpdated&&(globals.logger.Info("starting turn"),this.placedCard=-1,this.placeCard())}Reset(){globals.logger.Info("Resetting bot")}placeCard(){if(globals.rand.Next(10)<1){this.triggerEvent(ZRPCode.DrawCard,new DrawCardEvent);return}var state=this.state.GetState();if(this.placedCard=this.placedCard+1,this.placedCard>=state.Deck.Count){globals.logger.Info("bailing with draw"),this.triggerEvent(ZRPCode.DrawCard,new DrawCardEvent);return}try{this.triggerEvent(ZRPCode.PlaceCard,new PlaceCardEvent(globals.toInt(state.Deck[this.placedCard].Color),globals.toInt(state.Deck[this.placedCard].Type))),state.Deck.Count==2&&globals.rand.Next(10)>4&&this.triggerEvent(ZRPCode.RequestEndTurn,new RequestEndTurnEvent)}catch(ex){globals.logger.Error("cant place card ["+this.placedCard+"]: "+ex)}}makeDecision(data){let decision=globals.rand.Next(data.Options.Count);this.triggerEvent(ZRPCode.ReceiveDecision,new PlayerDecisionEvent(data.Type,decision))}},main_default=Bot;export{Bot,main_default as default};
+""";
 
-    this.AggregateNotification = function(message) {
-        globals.logger.Info('Received message: ' + message);
-
-        switch (message.Code)
-        {
-            case ZRPCode.GameStarted:
-                this.onEvent(ZRPCode.GetHand, new GetDeckEvent());
-                break;
-            case ZRPCode.GetPlayerDecision:
-                globals.logger.Info('making decision');
-                this.makeDecision(message.Payload);
-                return;
-            case ZRPCode.PlaceCardError:
-                this.placeCard();
-                return;
-            default:
-                this.state.AggregateNotification(message);
-                break;
-        }
-
-        var currentState = this.state.GetState();
-        if (currentState.IsActive && message.Code != ZRPCode.StateUpdated)
-        {
-            globals.logger.Info('starting turn');
-            this.placedCard = -1;
-            this.placeCard();
-        }
-
-    }
-
-    this.Reset = function() {
-        globals.logger.Info('Resetting bot');
-    }
-
-    this.placeCard = function()
-    {
-        if (globals.rand.Next(10) < 1)
-        {
-            // bad luck - be dump, just draw
-            this.onEvent(ZRPCode.DrawCard, new DrawCardEvent());
-            return;
-        }
-
-        var state = this.state.GetState();
-        this.placedCard = this.placedCard + 1;
-
-        if (this.placedCard >= state.Deck.Count)
-        {
-            globals.logger.Info('bailing with draw');
-            this.onEvent(ZRPCode.DrawCard, new DrawCardEvent());
-            return;
-        }
-
-        try
-        {
-            this.onEvent(ZRPCode.PlaceCard, new PlaceCardEvent(
-                globals.toInt(state.Deck[this.placedCard].Color),
-                globals.toInt(state.Deck[this.placedCard].Type)
-            ));
-
-            if (state.Deck.Count == 2 && globals.rand.Next(10) > 4)
-            {
-                // after placing this card only on card will be left + 50% chance to miss
-                this.onEvent(ZRPCode.RequestEndTurn, new RequestEndTurnEvent());
-            }
-        }
-        catch (ex)
-        {
-            globals.logger.Error('cant place card [' + this.placedCard + ']: ' + ex);
-        }
-    }
-
-    this.makeDecision = function(data) {
-        const decision = globals.rand.Next(data.Options.Count);
-        this.onEvent(ZRPCode.ReceiveDecision, new PlayerDecisionEvent(data.Type, decision));
-    }
 }
-";
+
+class MyCustomModuleLoader : DocumentLoader
+{
+    private readonly Dictionary<string, string> _modules;
+
+    public MyCustomModuleLoader(Dictionary<string, string> modules)
+    {
+        _modules = modules;
+    }
+
+    public override Task<Document> LoadDocumentAsync(DocumentSettings settings, DocumentInfo? sourceInfo, string specifier, DocumentCategory category, DocumentContextCallback contextCallback)
+    {
+        if (_modules.TryGetValue(specifier, out var content))
+        {
+            return Task.FromResult<Document>(
+                new StringDocument(
+                    new DocumentInfo(specifier)
+                    {
+                        Category = category,
+                        ContextCallback = contextCallback
+                    },
+                    content
+                )
+            );
+        }
+
+        throw new FileNotFoundException($"Module '{specifier}' not found in predefined modules.");
+    }
 }
 
 public class DelegateWrapper
@@ -149,22 +108,24 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
     private V8ScriptEngine _engine;
     private ILogger _logger;
     private Random _rand { get; set; } = new();
-
-    private dynamic _bot
-    {
-        get => _engine.Script._currentBot;
-    }
+    private ScriptObject _bot;
 
     public ScriptedBotDecisionManager(string script, ILogger logger)
     {
+        var flags = V8ScriptEngineFlags.EnableDynamicModuleImports | V8ScriptEngineFlags.EnableTaskPromiseConversion;
         _logger = logger;
-        _engine = new V8ScriptEngine();
-        var delegateWrapper = new DelegateWrapper(TriggerEvent, logger);
+        _engine = new V8ScriptEngine(flags);
 
-        _engine.Execute(script);
+        var delegateWrapper = new DelegateWrapper(TriggerEvent, logger);
+        _engine.DocumentSettings.Loader = new MyCustomModuleLoader(new Dictionary<string, string>
+        {
+            { "internal--bot.js", BotScripts.InjectGlobals + script },
+        });
+        // _engine.DocumentSettings.AddSystemDocument("internal--bot.js", BotScripts.InjectGlobals + script);
+
         _engine.AddRestrictedHostObject("_logger", _logger);
         _engine.AddRestrictedHostObject("_rand", _rand);
-        _engine.AddHostObject("_onEvent", delegateWrapper);
+        _engine.AddHostObject("_triggerEvent", delegateWrapper);
         _engine.AddHostObject("_helper", new Helper());
         _engine.AddHostType(typeof(WholeGameBotStateManager));
         _engine.AddHostType(typeof(BasicBotStateManager));
@@ -175,8 +136,12 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
         _engine.AddHostType(typeof(RequestEndTurnEvent));
         _engine.AddHostType(typeof(PlaceCardEvent));
         _engine.AddHostType(typeof(DrawCardEvent));
+        _engine.AddHostType(typeof(Card));
+        _engine.AddHostType(typeof(CardColor));
+        _engine.AddHostType(typeof(CardType));
 
-        _engine.Execute(BotScripts.SetupScript);
+        dynamic currentBot = ((Task<object>)_engine.Evaluate(BotScripts.SetupScript)).Result;
+        _bot = (ScriptObject)currentBot;
     }
 
     public void AggregateNotification(BotZRPNotification<object> message)
@@ -184,7 +149,8 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
         _logger.Info("### Received message: " + message.Code);
         try
         {
-            _bot.AggregateNotification(message);
+            // use InvokeMethod to avoid trimming warnings 
+            _bot.InvokeMethod("AggregateNotification", message);
         }
         catch (Exception ex)
         {
@@ -200,7 +166,8 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
 
     public void Reset()
     {
-        _bot.Reset();
+        // use InvokeMethod to avoid trimming warnings 
+        _bot.InvokeMethod("Reset");
     }
 
     public void Dispose()
