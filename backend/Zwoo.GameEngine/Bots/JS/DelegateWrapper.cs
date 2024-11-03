@@ -8,7 +8,7 @@ namespace Zwoo.GameEngine.Bots.JS;
 /// 
 /// This wrapper is specifically built for the bot on event callback to send zrp events
 /// </summary>
-internal class DelegateWrapper
+public class DelegateWrapper
 {
 
     private readonly Action<ZRPCode, object> _action;

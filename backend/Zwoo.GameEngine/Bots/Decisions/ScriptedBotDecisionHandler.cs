@@ -27,15 +27,16 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
         var delegateWrapper = new DelegateWrapper(TriggerEvent, logger);
         _engine.DocumentSettings.Loader = new StaticModuleLoader(new Dictionary<string, string>
         {
-            { "internal--bot.js", ScriptConstants.InjectGlobals + script },
+            { "internal--bot.js", script },
+            { "@zwoo/bots-builder/globals", ScriptConstants.InjectGlobals }
         });
 
         _engine.AddRestrictedHostObject("_logger", _logger);
         _engine.AddRestrictedHostObject("_rand", _rand);
         _engine.AddHostObject("_triggerEvent", delegateWrapper);
         _engine.AddHostObject("_helper", new ScriptHelper());
-        _engine.AddHostType(typeof(WholeGameBotStateManager));
-        _engine.AddHostType(typeof(BasicBotStateManager));
+        _engine.AddHostType("_WholeGameBotStateManager", typeof(WholeGameBotStateManager));
+        _engine.AddHostType("_BasicBotStateManager", typeof(BasicBotStateManager));
         _engine.AddHostType(typeof(ZRPCode));
         _engine.AddHostType(typeof(IBotDecisionHandler.EventHandler));
         _engine.AddHostType(typeof(GetDeckEvent));
