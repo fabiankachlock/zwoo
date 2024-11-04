@@ -22,8 +22,7 @@ public class DelegateWrapper
 
     public void Invoke(ZRPCode code, object payload)
     {
-        _logger.Info("??? Invoking event in wrapper: " + code);
+        _logger.Info($"!!! Invoking delegate with code {code} and payload {payload}");
         _action(code, payload);
-        _logger.Info("??? AFTER Invoking event in wrapper: " + code);
     }
 }

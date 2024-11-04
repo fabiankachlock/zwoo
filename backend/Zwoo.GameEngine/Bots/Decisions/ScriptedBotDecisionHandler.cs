@@ -5,6 +5,9 @@ using Zwoo.GameEngine.Bots.State;
 using Zwoo.GameEngine.Game.Cards;
 using Microsoft.ClearScript;
 using Zwoo.GameEngine.Bots.JS;
+using Zwoo.GameEngine.Game.Feedback;
+using Zwoo.GameEngine.Lobby.Features;
+using Zwoo.GameEngine.Game.Settings;
 
 namespace Zwoo.GameEngine.Bots.Decisions;
 
@@ -27,7 +30,7 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
         var delegateWrapper = new DelegateWrapper(TriggerEvent, logger);
         _engine.DocumentSettings.Loader = new StaticModuleLoader(new Dictionary<string, string>
         {
-            { "internal--bot.js", script },
+            { ScriptConstants.BotScriptIdentifier, script },
             { "@zwoo/bots-builder/globals", ScriptConstants.InjectGlobals }
         });
 
@@ -35,18 +38,88 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
         _engine.AddRestrictedHostObject("_rand", _rand);
         _engine.AddHostObject("_triggerEvent", delegateWrapper);
         _engine.AddHostObject("_helper", new ScriptHelper());
-        _engine.AddHostType("_WholeGameBotStateManager", typeof(WholeGameBotStateManager));
-        _engine.AddHostType("_BasicBotStateManager", typeof(BasicBotStateManager));
-        _engine.AddHostType(typeof(ZRPCode));
         _engine.AddHostType(typeof(IBotDecisionHandler.EventHandler));
-        _engine.AddHostType(typeof(GetDeckEvent));
-        _engine.AddHostType(typeof(PlayerDecisionEvent));
-        _engine.AddHostType(typeof(RequestEndTurnEvent));
-        _engine.AddHostType(typeof(PlaceCardEvent));
-        _engine.AddHostType(typeof(DrawCardEvent));
-        _engine.AddHostType(typeof(Card));
-        _engine.AddHostType(typeof(CardColor));
-        _engine.AddHostType(typeof(CardType));
+        _engine.AddHostTypes(typeof(Card), typeof(CardColor), typeof(CardType));
+        _engine.AddHostTypes(typeof(List<>), typeof(Dictionary<,>));
+        _engine.AddHostTypes(typeof(ZRPCode), typeof(ZRPPlayerState), typeof(ZRPRole), typeof(UIFeedbackKind), typeof(UIFeedbackType), typeof(GameProfileGroup), typeof(GameSettingsType));
+
+        _engine.AddHostTypes(
+            typeof(PlayerJoinedNotification),
+            typeof(SpectatorJoinedNotification),
+            typeof(PlayerLeftNotification),
+            typeof(SpectatorLeftNotification),
+            typeof(ChatMessageEvent),
+            typeof(ChatMessageNotification),
+            typeof(LeaveEvent),
+            typeof(GetLobbyEvent),
+            typeof(GetLobby_PlayerDTO),
+            typeof(GetLobbyNotification),
+            typeof(SpectatorToPlayerEvent),
+            typeof(PlayerToSpectatorEvent),
+            typeof(PlayerToHostEvent),
+            typeof(YouAreHostNotification),
+            typeof(NewHostNotification),
+            typeof(KickPlayerEvent),
+            typeof(PlayerChangedRoleNotification),
+            typeof(PlayerDisconnectedNotification),
+            typeof(PlayerReconnectedNotification),
+            typeof(KeepAliveEvent),
+            typeof(AckKeepAliveNotification),
+            typeof(UpdateSettingEvent),
+            typeof(SettingChangedNotification),
+            typeof(GetSettingsEvent),
+            typeof(AllSettings_SettingDTO),
+            typeof(AllSettingsNotification),
+            typeof(GetAllGameProfilesEvent),
+            typeof(AllGameProfiles_ProfileDTO),
+            typeof(AllGameProfilesNotification),
+            typeof(SafeToGameProfileEvent),
+            typeof(UpdateGameProfileEvent),
+            typeof(ApplyGameProfileEvent),
+            typeof(DeleteGameProfileEvent),
+            typeof(StartGameEvent),
+            typeof(BotConfigDTO),
+            typeof(CreateBotEvent),
+            typeof(BotJoinedNotification),
+            typeof(BotLeftNotification),
+            typeof(UpdateBotEvent),
+            typeof(DeleteBotEvent),
+            typeof(GetBotsEvent),
+            typeof(AllBots_BotDTO),
+            typeof(AllBotsNotification),
+            typeof(GameStartedNotification),
+            typeof(StartTurnNotification),
+            typeof(EndTurnNotification),
+            typeof(RequestEndTurnEvent),
+            typeof(PlaceCardEvent),
+            typeof(DrawCardEvent),
+            typeof(SendCard_CardDTO),
+            typeof(SendCardsNotification),
+            typeof(RemoveCard_CardDTO),
+            typeof(RemoveCardNotification),
+            typeof(StateUpdate_PileTopDTO),
+            typeof(StateUpdate_FeedbackDTO),
+            typeof(StateUpdateNotification),
+            typeof(GetDeckEvent),
+            typeof(SendDeck_CardDTO),
+            typeof(SendDeckNotification),
+            typeof(GetPlayerStateEvent),
+            typeof(SendPlayerState_PlayerDTO),
+            typeof(SendPlayerStateNotification),
+            typeof(GetPileTopEvent),
+            typeof(SendPileTopNotification),
+            typeof(GetPlayerDecisionNotification),
+            typeof(PlayerDecisionEvent),
+            typeof(PlayerWon_PlayerSummaryDTO),
+            typeof(PlayerWonNotification),
+            typeof(Error),
+            typeof(AccessDeniedError),
+            typeof(LobbyFullError),
+            typeof(BotNameExistsError),
+            typeof(EmptyPileError),
+            typeof(PlaceCardError)
+        );
+
 
         dynamic currentBot = ((Task<object>)_engine.Evaluate(ScriptConstants.SetupScript)).Result;
         _bot = (ScriptObject)currentBot;
@@ -54,7 +127,6 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
 
     public void AggregateNotification(BotZRPNotification<object> message)
     {
-        _logger.Info("### Received message: " + message.Code);
         try
         {
             // use InvokeMethod to avoid trimming warnings 
@@ -62,9 +134,8 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
         }
         catch (Exception ex)
         {
-            _logger.Error("### Error in bot: " + ex);
+            _logger.Error("error in bot: " + ex);
         }
-        _logger.Info("### AFTER Received message: " + message.Code);
     }
 
     private void TriggerEvent(ZRPCode code, object payload)
