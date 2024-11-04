@@ -131,6 +131,13 @@ const submitBot = () => {
                     >
                       {{ t('wait.smartBot') }}
                     </button>
+                    <button
+                      class="shadow appearance-none bg-alt hover:bg-alt-hover border border-border rounded-r-lg w-full p-2 text-text focus:outline-none focus:border-primary"
+                      :class="{ '!bg-alt-hover !text-primary-text': botType === 1 }"
+                      @click="botType = 200"
+                    >
+                      custom
+                    </button>
                   </div>
                 </div>
               </div>

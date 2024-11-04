@@ -5,7 +5,7 @@ namespace Zwoo.GameEngine.Bots.State;
 /// <summary>
 /// a bot state manager managing the bots state while also keeping track of other players
 /// </summary>
-internal class WholeGameBotStateManager
+public class WholeGameBotStateManager
 {
     private BasicBotStateManager _basicState;
     private Dictionary<long, int> _otherPlayers;
@@ -15,7 +15,7 @@ internal class WholeGameBotStateManager
     public Dictionary<long, int> GetOtherPlayers() => _otherPlayers;
     public int? GetCurrentDraw() => _currentDraw;
 
-    internal WholeGameBotStateManager()
+    public WholeGameBotStateManager()
     {
         _basicState = new BasicBotStateManager();
         _otherPlayers = new Dictionary<long, int>();
@@ -23,7 +23,7 @@ internal class WholeGameBotStateManager
     }
 
 
-    internal void AggregateNotification(BotZRPNotification<object> message)
+    public void AggregateNotification(BotZRPNotification<object> message)
     {
         _basicState.AggregateNotification(message);
 
@@ -50,7 +50,7 @@ internal class WholeGameBotStateManager
     /// <summary>
     /// reset the current state
     /// </summary>
-    internal void Reset()
+    public void Reset()
     {
         _basicState.Reset();
         _otherPlayers.Clear();

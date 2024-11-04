@@ -92,4 +92,6 @@ public class BasicBotDecisionManager : IBotDecisionHandler
     {
         _stateManager.Reset();
     }
+
+    public void Dispose() { }
 }

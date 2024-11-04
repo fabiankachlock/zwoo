@@ -143,4 +143,6 @@ public class SmartBotDecisionManager : IBotDecisionHandler
     {
         _stateManager.Reset();
     }
+
+    public void Dispose() { }
 }
