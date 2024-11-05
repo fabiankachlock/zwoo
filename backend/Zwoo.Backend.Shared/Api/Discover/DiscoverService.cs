@@ -18,7 +18,8 @@ public class BetaDiscoverService : IDiscoverService
     public BetaDiscoverService(ZwooOptions options)
     {
         _options = options;
-        _versionOverride = Environment.GetEnvironmentVariable("ZWOO_VERSION_OVERRIDE");
+        var rawOverride = Environment.GetEnvironmentVariable("ZWOO_VERSION_OVERRIDE");
+        _versionOverride = string.IsNullOrEmpty(rawOverride) ? null : rawOverride;
     }
 
     public bool CanConnect(ClientInfo client)
