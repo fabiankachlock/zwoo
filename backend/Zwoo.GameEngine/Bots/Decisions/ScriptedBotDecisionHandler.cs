@@ -30,8 +30,7 @@ public class ScriptedBotDecisionManager : IBotDecisionHandler
         var delegateWrapper = new DelegateWrapper(TriggerEvent, logger);
         _engine.DocumentSettings.Loader = new StaticModuleLoader(new Dictionary<string, string>
         {
-            { ScriptConstants.BotScriptIdentifier, script },
-            { "@zwoo/bots-builder/globals", ScriptConstants.InjectGlobals }
+            { ScriptConstants.BotScriptIdentifier, script }
         });
 
         _engine.AddRestrictedHostObject("_logger", _logger);
