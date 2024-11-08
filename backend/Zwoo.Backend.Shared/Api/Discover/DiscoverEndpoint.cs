@@ -2,15 +2,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Zwoo.Backend.Shared.Api.Model;
 
 namespace Zwoo.Backend.Shared.Api.Discover;
+
+public class DiscoverEndpointLog { }
 
 public static class DiscoverEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
     {
-        app.MapPost("/discover", ([FromBody] ClientInfo client, IDiscoverService _service, HttpContext context) =>
+        app.MapPost("/discover", ([FromBody] ClientInfo client, IDiscoverService _service, HttpContext context, ILogger<DiscoverEndpointLog> _logger) =>
         {
             ClientInfo value = _service.GetVersion();
             if (!_service.CanConnect(client))
