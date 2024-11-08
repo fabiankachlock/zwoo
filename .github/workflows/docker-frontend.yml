@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build image
-        run: "docker build -f ./frontend/Dockerfile --build-arg version_override=$(git rev-parse HEAD) -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:nightly ."
+        run: "docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:nightly ."
       - name: Login to gitea
         uses: docker/login-action@v3
         with:
@@ -23,4 +23,4 @@ jobs:
           username: ${{ secrets.DOCKER_REPO_USER }}
           password: ${{ secrets.DOCKER_REPO_PASS }}
       - name: Push image
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:nightly"
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:nightly"
