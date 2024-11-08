@@ -1,8 +1,8 @@
 <template>
   <div class="group relative">
     <div class="absolute top-1 left-1 hidden group-hover:block bg-bg rounded transition active:scale-95 z-10">
-      <button class="block text-error-text px-1 py-1 h-full" @click="clearChat">
-        <Icon icon="akar-icons:trash-can" />
+      <button class="block text-error-text group/clear px-1 py-1 h-full" @click="clearChat">
+        <Icon icon="akar-icons:trash-can" class="group-hover/clear:scale-110 transition-transform" />
       </button>
     </div>
     <div

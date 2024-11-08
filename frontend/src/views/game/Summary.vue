@@ -47,7 +47,7 @@
         </p>
       </button>
       <button class="action bg-alt hover:bg-alt-hover border border-border" @click="handlePlayClick()">
-        <Icon class="icon text-primary-text" icon="mdi:logout-variant" />
+        <Icon class="icon text-primary-text" icon="mdi:arrow-back" />
         <p class="text text-text text-md">
           {{ t('summary.playAgain') }}
         </p>

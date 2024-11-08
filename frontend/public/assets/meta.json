@@ -1,25 +1,72 @@
 {
   "themesList": [
     "__default__",
+    "__default-legacy__",
     "test"
   ],
   "defaultTheme": {
     "name": "__default__",
-    "version": "1",
+    "version": "2",
     "variant": "@auto"
   },
   "themes": {
     "__default__": {
       "files": {
         "previews": {
-          "dark": "__default__.dark.preview.json",
-          "light": "__default__.light.preview.json"
+          "dark": "__default__.dark.v2.preview.json",
+          "light": "__default__.light.v2.preview.json"
         },
-        "dark": "__default__.dark.json",
-        "light": "__default__.light.json"
+        "dark": "__default__.dark.v2.json",
+        "light": "__default__.light.v2.json"
       },
       "config": {
         "name": "__default__",
+        "description": "",
+        "author": "",
+        "version": "2",
+        "isMultiLayer": true,
+        "variants": [
+          "dark",
+          "light",
+          "@auto"
+        ],
+        "previews": [
+          "back_u",
+          "front_1_1",
+          "front_2_a",
+          "front_3_b",
+          "front_4_d",
+          "front_5_e"
+        ],
+        "colors": {
+          "dark": {
+            "1": "#E91802",
+            "2": "#02753A",
+            "3": "#FBD003",
+            "4": "#4228C0",
+            "5": "#211C2F"
+          },
+          "light": {
+            "1": "#E91802",
+            "2": "#02753A",
+            "3": "#FBD003",
+            "4": "#4228C0",
+            "5": "#211C2F"
+          }
+        }
+      }
+    },
+    "__default-legacy__": {
+      "files": {
+        "previews": {
+          "dark": "__default-legacy__.dark.v1.preview.json",
+          "light": "__default-legacy__.light.v1.preview.json"
+        },
+        "dark": "__default-legacy__.dark.v1.json",
+        "light": "__default-legacy__.light.v1.json"
+      },
+      "config": {
+        "name": "__default-legacy__",
         "description": "",
         "author": "",
         "version": "1",
@@ -58,9 +105,9 @@
     "test": {
       "files": {
         "previews": {
-          "dark": "test.dark.preview.json"
+          "dark": "test.dark.v1.preview.json"
         },
-        "dark": "test.dark.json"
+        "dark": "test.dark.v1.json"
       },
       "config": {
         "name": "test",
