@@ -65,7 +65,7 @@
   "devDependencies": {
     "@iconify/json": "^2.2.255",
     "@iconify/json-tools": "^1.0.10",
-    "@intlify/vite-plugin-vue-i18n": "^7.0.0",
+    "@intlify/unplugin-vue-i18n": "^5.3.0",
     "@tauri-apps/cli": "2.0.0-rc.16",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.9.0",
