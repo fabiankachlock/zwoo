@@ -7,6 +7,7 @@ using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Contact;
 using Zwoo.Backend.Shared.Api.Game;
+using Zwoo.GameEngine.ZRP;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
     AppVersion = Zwoo.Backend.VersionProvider.VERSION,
     AppVersionHash = Zwoo.Backend.VersionProvider.HASH,
+    ZRPVersion = ZRPVersion.CURRENT,
     ServerMode = "online"
 });
 builder.Services.AddZwooCors(conf);

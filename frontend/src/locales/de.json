@@ -66,7 +66,8 @@
     "statusLocal": "Verbunden",
     "disconnect": "Verbindung trennen",
     "createGame": "Spiel erstellen",
-    "joinGame": "Spiel beitreten"
+    "joinGame": "Spiel beitreten",
+    "docs": "Dokumentation"
   },
   "login": {
     "title": "Anmeldung",
@@ -247,9 +248,9 @@
     "normalBot": "Normal",
     "smartBot": "Schwer",
     "edit": "Bearbeiten",
-    "noPlayers": "keine Spieler vorhanden...",
-    "noSpectators": "keine Zuschauer vorhanden...",
-    "noBots": "keine Bots vorhanden...",
+    "noPlayers": "Es gibt keine Spieler.",
+    "noSpectators": "Es gibt keine Zuschauer.",
+    "noBots": "Es sind keine Bots angelegt.",
     "sharesheet": {
       "title": "Teile dein Spiel!",
       "info": "Teile einen Link um deinem Spiel beizutreten mit deinen Freunden."
@@ -268,6 +269,7 @@
     "profileName": "Name des Profils",
     "profilePlaceholder": "Mein Profil",
     "createProfile": "Erstellen",
+    "noProfiles": "Keine Profile vorhanden",
     "profiles": {
       "default": "Standartwerte",
       "full": "Alle Regeln"
@@ -356,7 +358,11 @@
       "light": "Hell",
       "@auto": "Automatisch"
     },
-    "description": {}
+    "description": {},
+    "builtins": {
+      "__default__": "Standard-Theme",
+      "__default-legacy__": "Standard-Theme (altes Design)"
+    }
   },
   "util": {
     "loading": "Wird geladen..."

@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, Ref, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { Icon } from '@/components/misc/Icon';
@@ -115,7 +115,7 @@ const nextAfter = ref<(CardTyping & { index: number }) | undefined>(undefined);
 const isAnimatingFromLeft = ref<boolean>(false);
 const isAnimatingFromRight = ref<boolean>(false);
 const isPlayingCard = ref<boolean>(false);
-const detailCard = ref<HTMLElement | undefined>(undefined);
+const detailCard: Ref<HTMLElement | undefined> = ref(undefined);
 const canPlayCard = ref<CardState>(CardState.none);
 
 onMounted(() => {

@@ -5,7 +5,7 @@ using Zwoo.GameEngine.Lobby.Features;
 
 namespace Zwoo.GameEngine.ZRP;
 
-public static class Version
+public static class ZRPVersion
 {
     public static readonly string CURRENT = "4.3.0";
 }

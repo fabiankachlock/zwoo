@@ -79,6 +79,10 @@
         <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
         {{ t('nav.settings') }}
       </router-link>
+      <a href="/docs/" class="link">
+        <Icon icon="material-symbols:keyboard-double-arrow-right-rounded" />
+        {{ t('nav.docs') }}
+      </a>
     </div>
     <Environment :include="['online', 'local']">
       <div v-if="isLoggedIn">

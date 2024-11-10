@@ -1,0 +1,26 @@
+{
+  "name": "__default-legacy__",
+  "isDefault": false,
+  "isMultiLayer": true,
+  "variants": ["dark", "light"],
+  "version": "1",
+  "colors": {
+    "dark": {
+      "1": "#7D3111",
+      "2": "#417617",
+      "3": "#AFA32F",
+      "4": "#293A60",
+      "5": "#11001A"
+    },
+    "light": {
+      "1": "#D94506",
+      "2": "#6EC729",
+      "3": "#EDDD50",
+      "4": "#2D5CCB",
+      "5": "#11001A"
+    }
+  },
+  "overrides": {
+    "layerWildcard": "x"
+  }
+}
