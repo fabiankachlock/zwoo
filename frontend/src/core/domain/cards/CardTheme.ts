@@ -62,7 +62,7 @@ export class CardTheme {
   }
 
   private cardToDescription(card: Card): string {
-    return `front_${card.color}_${card.type.toString(16)}`;
+    return `front_${card.color}_${card.type.toString(36)}`;
   }
 
   private cardToLayers(card: Card): string[] {
