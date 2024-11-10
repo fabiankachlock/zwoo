@@ -62,13 +62,13 @@ export class CardTheme {
   }
 
   private cardToDescription(card: Card): string {
-    return `front_${card.color}_${card.type.toString(16)}`;
+    return `front_${card.color}_${card.type.toString(36)}`;
   }
 
   private cardToLayers(card: Card): string[] {
     const descriptor = this.cardToDescription(card);
     if (this.config.isMultiLayer && !this.config.customCards?.includes(descriptor)) {
-      return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(16)}`];
+      return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(36)}`];
     }
     return [descriptor];
   }
