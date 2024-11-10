@@ -2,7 +2,7 @@
   <Widget v-model="isOpen" title="wait.rules">
     <template #actions>
       <div v-if="isHost" class="flex flex-row items-center">
-        <div v-if="activeProfile" class="text-text m1 mr-2 py-0.5 px-1 border border-border bg-bg rounded flex items-center">
+        <div v-if="activeProfile" class="text-text m1 mr-2 py-0.5 px-1 h-full border border-border bg-bg rounded flex items-center">
           <p>
             {{ activeProfile.group === GameProfileGroup.System ? t(activeProfile.name) : activeProfile.name }}
           </p>
@@ -59,7 +59,7 @@
           <div class="relative text-text">
             <h3 class="text-xl text-text my-2">{{ t('rules.manageProfiles') }}</h3>
             <div class="flex flex-col">
-              <h4>{{ t('rules.groupSystem') }}</h4>
+              <h4 class="text-text font-medium">{{ t('rules.groupSystem') }}</h4>
               <GameProfileVue
                 v-for="profile in profiles.filter(p => p.group === GameProfileGroup.System)"
                 :key="profile.id"
@@ -67,7 +67,10 @@
                 @apply="applyProfile(profile.id)"
                 @delete="deleteProfile(profile.id)"
               />
-              <h4>{{ t('rules.groupUser') }}</h4>
+              <p v-if="profiles.filter(p => p.group === GameProfileGroup.System).length === 0" class="text-text-secondary ml-2">
+                {{ t('rules.noProfiles') }}
+              </p>
+              <h4 class="mt-4 text-text font-medium">{{ t('rules.groupUser') }}</h4>
               <GameProfileVue
                 v-for="profile in profiles.filter(p => p.group === GameProfileGroup.User)"
                 :key="profile.id"
@@ -75,6 +78,9 @@
                 @apply="applyProfile(profile.id)"
                 @delete="deleteProfile(profile.id)"
               />
+              <p v-if="profiles.filter(p => p.group === GameProfileGroup.User).length === 0" class="text-text-secondary ml-2">
+                {{ t('rules.noProfiles') }}
+              </p>
             </div>
           </div>
         </FloatingDialog>

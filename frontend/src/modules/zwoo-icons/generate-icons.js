@@ -77,7 +77,8 @@ const icons = [
   'iconoir:arrow-up',
   'iconoir:long-arrow-down-left',
   'iconoir:nav-arrow-right',
-  'mdi:sheep'
+  'mdi:sheep',
+  'mdi:arrow-back'
 ];
 
 const { SVG, Collection } = require('@iconify/json-tools');
