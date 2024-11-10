@@ -53,26 +53,32 @@ export class CardTheme {
     } else if (typeof card === 'string') {
       layers.push(card);
     } else {
-      layers.push(...this.cardToURI(card));
+      layers.push(...this.cardToLayers(card));
     }
     return {
       layers: layers.map(identifier => this.data[identifier] ?? ''),
-      description: typeof card === 'string' ? card : this.cardToAbsoluteUri(card)
+      description: typeof card === 'string' ? card : this.cardToDescription(card)
     };
   }
 
-  private cardToAbsoluteUri(card: Card): string {
+  private cardToDescription(card: Card): string {
     return `front_${card.color}_${card.type.toString(16)}`;
   }
 
-  private cardToURI(card: Card): string[] {
-    if (this.config.isMultiLayer) {
+  private cardToLayers(card: Card): string[] {
+    const descriptor = this.cardToDescription(card);
+    if (this.config.isMultiLayer && !this.config.customCards?.includes(descriptor)) {
       return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(16)}`];
     }
-    return [`front_${card.color}_${card.type.toString(16)}`];
+    return [descriptor];
   }
 
   private cardDescriptionToLayers(descriptor: string): string[] {
+    // If the descriptor is a custom card in a multi layer theme, return it as is
+    if (this.config.isMultiLayer && this.config.customCards?.includes(descriptor)) {
+      return [descriptor];
+    }
+
     const firstLayer = descriptor.replace(new RegExp(CardLayerSeparator + '.$'), CardLayerSeparator + CardLayerWildcard);
     const secondLayer = descriptor.replace(
       new RegExp(CardLayerSeparator + '.' + CardLayerSeparator),

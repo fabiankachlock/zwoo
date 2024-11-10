@@ -23,9 +23,9 @@ jobs:
           username: ${{ secrets.DOCKER_REPO_USER }}
           password: ${{ secrets.DOCKER_REPO_PASS }}
       - name: Push image (version latest)
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:latest"
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:latest"
       - name: Push image (actual version)
-        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend/frontend:${{ env.RELEASE_VERSION }}"
+        run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:${{ env.RELEASE_VERSION }}"
 
   backend-release:
     runs-on: ubuntu-latest

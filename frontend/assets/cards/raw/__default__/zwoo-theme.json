@@ -3,24 +3,25 @@
   "isDefault": true,
   "isMultiLayer": true,
   "variants": ["dark", "light"],
-  "version": "1",
+  "version": "3",
   "colors": {
     "dark": {
-      "1": "#7D3111",
-      "2": "#417617",
-      "3": "#AFA32F",
-      "4": "#293A60",
-      "5": "#11001A"
+      "1": "#E91802",
+      "2": "#02753A",
+      "3": "#FBD003",
+      "4": "#4228C0",
+      "5": "#211C2F"
     },
     "light": {
-      "1": "#D94506",
-      "2": "#6EC729",
-      "3": "#EDDD50",
-      "4": "#2D5CCB",
-      "5": "#11001A"
+      "1": "#E91802",
+      "2": "#02753A",
+      "3": "#FBD003",
+      "4": "#4228C0",
+      "5": "#211C2F"
     }
   },
   "overrides": {
-    "layerWildcard": "x"
+    "layerWildcard": "x",
+    "cards": ["front_5_e", "front_5_f"]
   }
 }

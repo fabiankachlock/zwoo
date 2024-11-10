@@ -3,6 +3,6 @@
     "captcha": "10000000-ffff-ffff-ffff-000000000001"
   },
   "features": {
-    "beta": true
+    "beta": false
   }
 }
