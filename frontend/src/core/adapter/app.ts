@@ -11,6 +11,7 @@ import { GameAdapter } from '../api/GameAdapter';
 import { RestApi } from '../api/restapi/RestApi';
 import { WasmApi } from '../api/wasmapi/WasmApi';
 import { WsGameAdapter } from '../api/wsgame/WsGameAdapter';
+import { ZRP_VERSION } from '../domain/zrp/zrpTypes';
 import Logger from '../services/logging/logImport';
 import { useAuth } from './auth';
 import { MigrationRunner } from './migrations/MigrationRunner';
@@ -54,7 +55,7 @@ export const useRootApp = defineStore('app', {
       return {
         version: AppConfig.VersionOverride || AppConfig.Version,
         hash: AppConfig.VersionHash,
-        zrpVersion: '',
+        zrpVersion: ZRP_VERSION,
         mode: state.environment
       };
     },

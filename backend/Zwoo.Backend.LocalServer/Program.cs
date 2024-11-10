@@ -11,6 +11,7 @@ using Zwoo.Backend.Shared.Configuration;
 using Zwoo.Backend.Shared.Services;
 using Zwoo.Database.Dao;
 using Zwoo.GameEngine.Lobby.Features;
+using Zwoo.GameEngine.ZRP;
 
 if (args.Length >= 1 && args[0] == "-h")
 {
@@ -50,6 +51,7 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 {
     AppVersion = Zwoo.Backend.LocalServer.VersionProvider.VERSION,
     AppVersionHash = Zwoo.Backend.LocalServer.VersionProvider.HASH,
+    ZRPVersion = ZRPVersion.CURRENT,
     ServerMode = "local"
 });
 
