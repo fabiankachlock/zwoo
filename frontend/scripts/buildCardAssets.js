@@ -338,7 +338,7 @@ async function createMetaFiles(themes) {
             isMultiLayer: theme.isMultiLayer,
             variants: computeThemeVariants(theme.variants),
             previews: computeThemePreviews(theme.previews),
-            customCards: theme.overrides?.cards,
+            customCards: theme.overrides?.cards ?? [],
             colors: theme.variants.reduce(
               (acc, variant) => ({
                 ...acc,

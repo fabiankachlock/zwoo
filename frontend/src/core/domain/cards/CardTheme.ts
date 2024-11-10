@@ -67,7 +67,7 @@ export class CardTheme {
 
   private cardToLayers(card: Card): string[] {
     const descriptor = this.cardToDescription(card);
-    if (this.config.isMultiLayer && !this.config.customCards.includes(descriptor)) {
+    if (this.config.isMultiLayer && !this.config.customCards?.includes(descriptor)) {
       return [`front_${card.color}_${CardLayerWildcard}`, `front_${CardLayerWildcard}_${card.type.toString(16)}`];
     }
     return [descriptor];
@@ -75,7 +75,7 @@ export class CardTheme {
 
   private cardDescriptionToLayers(descriptor: string): string[] {
     // If the descriptor is a custom card in a multi layer theme, return it as is
-    if (this.config.isMultiLayer && this.config.customCards.includes(descriptor)) {
+    if (this.config.isMultiLayer && this.config.customCards?.includes(descriptor)) {
       return [descriptor];
     }
 

@@ -3,7 +3,7 @@
   "isDefault": true,
   "isMultiLayer": true,
   "variants": ["dark", "light"],
-  "version": "2",
+  "version": "3",
   "colors": {
     "dark": {
       "1": "#E91802",
@@ -21,6 +21,7 @@
     }
   },
   "overrides": {
-    "layerWildcard": "x"
+    "layerWildcard": "x",
+    "cards": ["front_5_e", "front_5_f"]
   }
 }
