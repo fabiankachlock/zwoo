@@ -1,4 +1,4 @@
-FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
+FROM ghcr.io/zwoo-hq/docker-base:v1.0.0 AS builder
 
 WORKDIR /src
 COPY ./zwooc.config.json ./
@@ -8,7 +8,8 @@ WORKDIR /src/frontend
 COPY ./frontend/package.json ./
 COPY ./frontend/pnpm-lock.yaml ./
 
-RUN pnpm i
+RUN corepack enable
+RUN pnpm install --frozen-lockfile
 
 
 # setup wasm related backend stuff
