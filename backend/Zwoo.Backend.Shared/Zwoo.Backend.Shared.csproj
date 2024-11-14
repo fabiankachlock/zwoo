@@ -1,10 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <IsAotCompatible>true</IsAotCompatible>
     <NoWarn>IL2026,IL3050</NoWarn>
   </PropertyGroup>

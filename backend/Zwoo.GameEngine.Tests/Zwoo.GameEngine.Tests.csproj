@@ -1,15 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <LangVersion>12</LangVersion>
     <IsPackable>false</IsPackable>
-
     <CollectCoverage>true</CollectCoverage>
-    <CoverletOutputFormat>
-      lcov</CoverletOutputFormat>
+    <CoverletOutputFormat>lcov</CoverletOutputFormat>
     <CoverletOutput>./lcov.info</CoverletOutput>
   </PropertyGroup>
 
