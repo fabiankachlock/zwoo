@@ -27,10 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: "22"
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -44,16 +43,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8"
+          dotnet-version: "9"
       - name: Install dotnet wasm-tools
         run: dotnet workload install wasm-tools
 
       - name: install app dependencies and build it
         working-directory: ./frontend
-        run: pnpm && pnpm build:tauri
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build:tauri
 
       - uses: tauri-apps/tauri-action@v0
         env:

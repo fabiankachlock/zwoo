@@ -16,10 +16,9 @@ jobs:
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8"
+          dotnet-version: "9"
       - name: Install dependencies
         working-directory: ./backend
         run: |
@@ -37,10 +36,9 @@ jobs:
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8"
+          dotnet-version: "9"
       - name: Install dependencies
         working-directory: ./backend
         run: |
@@ -55,10 +53,9 @@ jobs:
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8"
+          dotnet-version: "9"
       - name: Install dependencies
         working-directory: ./backend
         run: |
@@ -73,10 +70,9 @@ jobs:
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8"
+          dotnet-version: "9"
       - name: Install dependencies
         working-directory: ./backend
         run: |
