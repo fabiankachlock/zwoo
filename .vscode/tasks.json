@@ -65,7 +65,7 @@
     },
     {
       "label": "frontend preview",
-      "command": "yarn serve",
+      "command": "pnpm serve",
       "type": "shell",
       "options": {
         "cwd": "${workspaceFolder}/frontend"
@@ -75,7 +75,7 @@
     },
     {
       "label": "frontend serve",
-      "command": "yarn serve:prod",
+      "command": "pnpm serve:prod",
       "type": "shell",
       "options": {
         "cwd": "${workspaceFolder}/frontend"

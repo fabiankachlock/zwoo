@@ -6,9 +6,9 @@ COPY ./zwooc.config.json ./
 # setup frontend
 WORKDIR /src/frontend
 COPY ./frontend/package.json ./
-COPY ./frontend/yarn.lock ./
+COPY ./frontend/pnpm-lock.yaml ./
 
-RUN yarn
+RUN pnpm i
 
 
 # setup wasm related backend stuff

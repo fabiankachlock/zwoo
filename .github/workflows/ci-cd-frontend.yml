@@ -23,7 +23,7 @@ jobs:
         run: dotnet workload install wasm-tools
       - name: Setup
         working-directory: ./frontend
-        run: "yarn"
+        run: "pnpm"
       - name: Lint
         run: "zwooc exec lint:ci"
       - name: Check i18n

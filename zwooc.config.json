@@ -1,25 +1,25 @@
 {
   "$schema": "https://raw.githubusercontent.com/zwoo-hq/zwooc/main/zwooc.schema.json",
   "frontend": {
-    "$adapter": "vite-yarn",
+    "$adapter": "vite-pnpm",
     "$fragments": {
-      "test:unit": "yarn jest",
-      "test:e2e": "yarn cypress run",
-      "test:e2e:ui": "yarn cypress open",
-      "lint": "yarn eslint \"src/**/*.{js,ts,vue,html}\" --fix",
-      "lint:ci": "yarn eslint \"src/**/*.{js,ts,vue,html}\" --max-warnings 50",
+      "test:unit": "pnpm jest",
+      "test:e2e": "pnpm cypress run",
+      "test:e2e:ui": "pnpm cypress open",
+      "lint": "pnpm eslint \"src/**/*.{js,ts,vue,html}\" --fix",
+      "lint:ci": "pnpm eslint \"src/**/*.{js,ts,vue,html}\" --max-warnings 50",
       "i18n:check": "node ./scripts/checkI18nFiles.js",
-      "format": "yarn prettier --write \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
-      "format:ci": "yarn prettier --check \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
+      "format": "pnpm prettier --write \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
+      "format:ci": "pnpm prettier --check \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
       "setup:version:fe": "node ./scripts/version.js",
-      "deps:check": "yarn depcruise -m --config .dependency-cruiser.js src",
-      "deps:viz": "yarn depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg",
-      "typecheck": "yarn vue-tsc --noEmit && echo \"\"",
+      "deps:check": "pnpm depcruise -m --config .dependency-cruiser.js src",
+      "deps:viz": "pnpm depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg",
+      "typecheck": "pnpm vue-tsc --noEmit && echo \"\"",
       "build:cards": "node ./scripts/buildCardAssets.js",
       "build:icons": "node ./src/modules/zwoo-icons/generate-icons.js",
       "build:themes": "node ./src/modules/zwoo-themes/build-themes.js",
-      "XXpreview": "yarn vite preview --mode preview",
-      "XXpreview:prod": "yarn vite preview --mode dev"
+      "XXpreview": "pnpm vite preview --mode preview",
+      "XXpreview:prod": "pnpm vite preview --mode dev"
     },
     "__fe_base": {
       "mode": "-",
@@ -90,7 +90,7 @@
   },
   "app": {
     "$dir": "frontend/src-tauri",
-    "$adapter": "tauri-yarn",
+    "$adapter": "tauri-pnpm",
     "app": {
       "env": ["RUST_BACKTRACE=1"],
       "$pre": {
