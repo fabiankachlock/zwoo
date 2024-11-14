@@ -111,6 +111,10 @@
   "resolutions": {
     "jackspeak": "2.1.1"
   },
+  "engines": {
+    "node": ">=22.11.0",
+    "pnpm": ">=9.13.0"
+  },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [
       "pnpm lint",
