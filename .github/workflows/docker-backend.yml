@@ -11,7 +11,7 @@ name: Backend Docker Pipeline
 
 jobs:
   backend-docker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build backend image
@@ -26,7 +26,7 @@ jobs:
         run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend:nightly"
 
   backend-dashboard:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build ZIAD image

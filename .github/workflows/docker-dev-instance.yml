@@ -5,7 +5,7 @@ name: Docker Dev Instance Pipeline
 
 jobs:
   frontend-docker-dev:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build frontend image
@@ -20,7 +20,7 @@ jobs:
         run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:dev"
 
   backend-docker-dev:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build backend image
@@ -35,7 +35,7 @@ jobs:
         run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend:dev"
 
   backend-dashboard-dev:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build ZIAD image

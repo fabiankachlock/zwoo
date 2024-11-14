@@ -7,7 +7,7 @@ on:
 
 jobs:
   frontend-release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Get release version
@@ -28,7 +28,7 @@ jobs:
         run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-frontend:${{ env.RELEASE_VERSION }}"
 
   backend-release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Get release version
@@ -49,7 +49,7 @@ jobs:
         run: "docker push ${{ secrets.DOCKER_REPO_URL }}/zwoo-backend:${{ env.RELEASE_VERSION }}"
 
   dashboard-release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Get release version

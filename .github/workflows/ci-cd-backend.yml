@@ -12,7 +12,7 @@ on:
 
 jobs:
   backend:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
         run: dotnet test Zwoo.GameEngine.Tests --verbosity normal
 
   ziad:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
         run: zwooc build ziad
 
   wasm-gamelogic:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
@@ -66,7 +66,7 @@ jobs:
         run: zwooc build wasm
 
   local-server:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: zwoo-hq/setup-zwooc@v1
       - uses: actions/checkout@v4
