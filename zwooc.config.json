@@ -95,7 +95,6 @@
       "env": ["RUST_BACKTRACE=1"],
       "$pre": {
         "profiles": {
-          "local": "build",
           "tauri": "build"
         }
       }
