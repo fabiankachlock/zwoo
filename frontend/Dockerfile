@@ -25,7 +25,7 @@ RUN dotnet workload install wasm-tools \
 ### build wasm project
 COPY ./backend .
 
-RUN zwooc build wasm
+RUN zwooc build -e setup:version:be wasm
 
 ### Build Fronten
 WORKDIR /src/frontend
