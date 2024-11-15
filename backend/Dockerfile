@@ -5,7 +5,7 @@ COPY ./zwooc.config.json ./
 
 WORKDIR /src/backend
 
-COPY ./backend/Directories.Build.props ./
+COPY ./backend/Directory.Build.props ./
 COPY ./backend/Zwoo.Backend/Zwoo.Backend.csproj ./Zwoo.Backend/
 COPY ./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj ./Zwoo.GameEngine/
 COPY ./backend/BackendHelper/BackendHelper.csproj ./BackendHelper/
