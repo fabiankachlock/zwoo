@@ -14,6 +14,7 @@ RUN pnpm install --frozen-lockfile
 
 # setup wasm related backend stuff
 WORKDIR /src/backend
+COPY ./backend/Directory.Build.props ./
 COPY ./backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj ./Zwoo.GameEngine.Wasm/
 COPY ./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj ./Zwoo.GameEngine/
 
