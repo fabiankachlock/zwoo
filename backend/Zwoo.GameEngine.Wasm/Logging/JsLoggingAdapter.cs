@@ -1,9 +1,8 @@
-using System;
-using System.Runtime.Versioning;
 using System.Runtime.InteropServices.JavaScript;
+using System.Runtime.Versioning;
 using Zwoo.GameEngine.Logging;
 
-namespace ZwooWasm.Logging;
+namespace Zwoo.GameEngine.Wasm.Logging;
 
 [SupportedOSPlatform("browser")]
 public partial class WasmLoggerFactory : ILoggerFactory
@@ -41,25 +40,25 @@ public partial class WasmLoggerFactory : ILoggerFactory
     private Action<string> _logError = (string msg) => { };
 
     [JSExport]
-    public static void OnDebug([JSMarshalAsAttribute<JSType.Function<JSType.String>>] Action<string> callback)
+    public static void OnDebug([JSMarshalAs<JSType.Function<JSType.String>>] Action<string> callback)
     {
         Instance._logDebug = callback;
     }
 
     [JSExport]
-    public static void OnInfo([JSMarshalAsAttribute<JSType.Function<JSType.String>>] Action<string> callback)
+    public static void OnInfo([JSMarshalAs<JSType.Function<JSType.String>>] Action<string> callback)
     {
         Instance._logInfo = callback;
     }
 
     [JSExport]
-    public static void OnWarn([JSMarshalAsAttribute<JSType.Function<JSType.String>>] Action<string> callback)
+    public static void OnWarn([JSMarshalAs<JSType.Function<JSType.String>>] Action<string> callback)
     {
         Instance._logWarn = callback;
     }
 
     [JSExport]
-    public static void OnError([JSMarshalAsAttribute<JSType.Function<JSType.String>>] Action<string> callback)
+    public static void OnError([JSMarshalAs<JSType.Function<JSType.String>>] Action<string> callback)
     {
         Instance._logError = callback;
     }

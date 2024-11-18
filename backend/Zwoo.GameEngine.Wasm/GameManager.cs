@@ -1,11 +1,10 @@
-using Zwoo.GameEngine;
-using Zwoo.GameEngine.ZRP;
-using Zwoo.GameEngine.Logging;
-using ZwooWasm.Logging;
-using System.Runtime.Versioning;
 using System.Runtime.InteropServices.JavaScript;
+using System.Runtime.Versioning;
+using Zwoo.Api.ZRP;
+using Zwoo.GameEngine.Logging;
+using Zwoo.GameEngine.Wasm.Logging;
 
-namespace ZwooWasm;
+namespace Zwoo.GameEngine.Wasm;
 
 [SupportedOSPlatform("browser")]
 public partial class GameManager
@@ -20,7 +19,7 @@ public partial class GameManager
 
     public GameManager()
     {
-        _gameManager = new Zwoo.GameEngine.GameManager(LocalNotificationAdapter.Instance, LocalGameProfileProvider.Instance, WasmLoggerFactory.Instance);
+        _gameManager = new Zwoo.GameEngine.GameManager(LocalNotificationAdapter.Instance, WasmLoggerFactory.Instance);
         _logger = WasmLoggerFactory.Instance.CreateLogger("LocalGameManager");
     }
 

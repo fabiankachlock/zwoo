@@ -1,6 +1,7 @@
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.ZRP;
 
-namespace ZwooWasm;
+namespace Zwoo.GameEngine.Wasm;
 
 
 public class LocalEvent : IIncomingZRPMessage

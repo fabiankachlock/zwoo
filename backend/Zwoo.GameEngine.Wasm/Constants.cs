@@ -1,4 +1,4 @@
-namespace ZwooWasm;
+namespace Zwoo.GameEngine.Wasm;
 
 public class Constants
 {

@@ -1,11 +1,9 @@
-using System;
-using System.Runtime.Versioning;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices.JavaScript;
+using System.Runtime.Versioning;
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.Notifications;
-using Zwoo.GameEngine.ZRP;
 
-namespace ZwooWasm;
+namespace Zwoo.GameEngine.Wasm;
 
 [SupportedOSPlatform("browser")]
 public partial class LocalNotificationAdapter : INotificationAdapter
@@ -47,7 +45,7 @@ public partial class LocalNotificationAdapter : INotificationAdapter
     private Action<string> _messageHandler = (string msg) => { };
 
     [JSExport]
-    public static void OnMessage([JSMarshalAsAttribute<JSType.Function<JSType.String>>] Action<string> callback)
+    public static void OnMessage([JSMarshalAs<JSType.Function<JSType.String>>] Action<string> callback)
     {
         Instance._messageHandler = callback;
     }
@@ -55,7 +53,7 @@ public partial class LocalNotificationAdapter : INotificationAdapter
     private Action _disconnectHandler = () => { };
 
     [JSExport]
-    public static void OnDisconnect([JSMarshalAsAttribute<JSType.Function>] Action callback)
+    public static void OnDisconnect([JSMarshalAs<JSType.Function>] Action callback)
     {
         Instance._disconnectHandler = callback;
     }

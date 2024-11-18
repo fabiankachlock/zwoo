@@ -11,4 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Zwoo.GameEngine\Zwoo.GameEngine.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Zwoo.Api.ZRP" Version="1.0.0" />
+  </ItemGroup>
 </Project>
