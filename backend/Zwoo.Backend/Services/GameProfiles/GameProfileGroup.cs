@@ -1,4 +1,4 @@
-namespace Zwoo.GameEngine.Lobby.Features;
+namespace Zwoo.Backend.Services.GameProfiles;
 
 public enum GameProfileGroup
 {

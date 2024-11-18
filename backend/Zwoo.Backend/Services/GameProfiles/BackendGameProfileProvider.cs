@@ -1,68 +1,53 @@
 using Zwoo.Database;
 using Zwoo.Database.Dao;
 using Zwoo.GameEngine.Game.State;
-using Zwoo.GameEngine.Lobby.Features;
 
-namespace Zwoo.Backend.Shared.Api.Game;
+namespace Zwoo.Backend.Services.GameProfiles;
 
-public class BackendGameProfile : IExternalGameProfile
+public interface IGameProfileProvider
 {
-    public string Id { get; set; }
-
-    public string Name { get; set; }
-
-    public GameProfile Settings { get; set; }
-
-    public BackendGameProfile(string id, string name, GameProfile settings)
-    {
-        Id = id;
-        Name = name;
-        Settings = settings;
-    }
+    IEnumerable<GameProfile> GetConfigsOfPlayer(UserDao user);
+    void SaveConfig(UserDao user, string name, Dictionary<string, int> config);
+    void UpdateConfig(UserDao user, string id, string name, Dictionary<string, int> config);
+    void DeleteConfig(UserDao user, string id);
 }
 
-public class BackendGameProfileProvider : IExternalGameProfileProvider
+public class GameProfileProvider : IGameProfileProvider
 {
     private readonly IUserService _userService;
 
-    public BackendGameProfileProvider(IUserService userService)
+    public GameProfileProvider(IUserService userService)
     {
         _userService = userService;
     }
 
-    public IEnumerable<IExternalGameProfile> GetConfigsOfPlayer(long playerId)
+    public IEnumerable<GameProfile> GetConfigsOfPlayer(UserDao user)
     {
-        var user = _userService.GetUserById((ulong)playerId);
-        if (user == null) return new List<BackendGameProfile>();
-        return user.GameProfiles.Select(p => new BackendGameProfile(p.Id.ToString(), p.Name, new GameProfile(new Dictionary<string, int>(p.Settings))));
+        return user.GameProfiles.Select(p => new GameProfile(p.Id.ToString(), p.Name, GameProfileGroup.User,
+            new Dictionary<string, int>(p.Settings)));
     }
 
-    public void SaveConfig(long playerId, string name, GameProfile config)
+    public void SaveConfig(UserDao user, string name, Dictionary<string, int> config)
     {
-        var user = _userService.GetUserById((ulong)playerId);
-        if (user == null) return;
         user.GameProfiles.Add(new UserGameProfileDao()
         {
             Name = name,
-            Settings = config.Settings
+            Settings = config
         });
         _userService.UpdateUser(user, AuditOptions.WithMessage("saved new game profile"));
     }
 
-    public void UpdateConfig(long playerId, string id, GameProfile config)
+    public void UpdateConfig(UserDao user, string id, string name, Dictionary<string, int> config)
     {
-        var user = _userService.GetUserById((ulong)playerId);
-        if (user == null) return;
         var profile = user.GameProfiles.FirstOrDefault(p => p.Id.ToString() == id);
         if (profile == null) return;
-        profile.Settings = config.Settings;
+        profile.Name = name;
+        profile.Settings = config;
         _userService.UpdateUser(user, AuditOptions.WithMessage("updated game profile"));
     }
 
-    public void DeleteConfig(long playerId, string id)
+    public void DeleteConfig(UserDao user, string id)
     {
-        var user = _userService.GetUserById((ulong)playerId);
-        if (user == null) return;
         user.GameProfiles = user.GameProfiles.Where(p => p.Id.ToString() != id).ToList();
         _userService.UpdateUser(user, AuditOptions.WithMessage("updated game profile"));
     }

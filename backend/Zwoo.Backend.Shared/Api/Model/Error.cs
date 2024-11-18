@@ -37,6 +37,9 @@ public enum ApiError
     OpCodeMissing = 144,
     AlreadyInGame = 146,
     GameIsFull = 147,
+    
+    GameProfileNameExists = 150,
+    GameProfileNotFound = 151,
 }
 
 public static class ErrorCodeExtensions

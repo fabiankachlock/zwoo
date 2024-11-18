@@ -1,26 +1,23 @@
-using Zwoo.GameEngine.Game.State;
-
-namespace Zwoo.GameEngine.Lobby.Features;
+namespace Zwoo.Backend.Services.GameProfiles;
 
 
 public class SystemGameProfiles
 {
 
-    public static ExternalGameProfile DefaultFeatures = new ExternalGameProfile(
-        "default", "rules.profiles.default", GameProfileGroup.System, new GameProfile(new Dictionary<string, int>() { })
-        );
+    public static GameProfile DefaultFeatures = new (
+        "default", "rules.profiles.default", GameProfileGroup.System, new Dictionary<string, int>());
 
-    public static ExternalGameProfile FullFeatureSet = new ExternalGameProfile(
-        "full", "rules.profiles.full", GameProfileGroup.System, new GameProfile(new Dictionary<string, int>()
+    public static GameProfile FullFeatureSet = new (
+        "full", "rules.profiles.full", GameProfileGroup.System, new Dictionary<string, int>()
         {
             {"deckChange", 1},
-        }));
+        });
 
 
-    public static List<ExternalGameProfile> All = new List<ExternalGameProfile>()
-    {
+    public static List<GameProfile> All =
+    [
         DefaultFeatures,
         FullFeatureSet
-    };
+    ];
 
 }

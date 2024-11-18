@@ -47,7 +47,7 @@ public class AccountController : Controller
         }
         if (!StringHelper.IsValidUsername(body.Username))
         {
-            return this.BadRequest(ApiError.InvalidEmail, "Invalid username", "The username is in an invalid format.");
+            return this.BadRequest(ApiError.InvalidUsername, "Invalid username", "The username is in an invalid format.");
         }
         if (!StringHelper.IsValidPassword(body.Password))
         {

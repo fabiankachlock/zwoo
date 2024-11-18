@@ -136,30 +136,4 @@ public class GameSettings : IGameSettingsStore
         return new GameSettings(settings);
     }
 
-
-    public GameProfile SaveCurrent()
-    {
-        var changes = new Dictionary<string, int>();
-        var allSettings = FromDefaults().GetSettings();
-
-        foreach (var setting in allSettings)
-        {
-            // if not default value --> save
-            if (setting.Value != _settingValues[setting.Key])
-            {
-                changes[setting.Key] = _settingValues[setting.Key];
-            }
-        }
-
-        return new GameProfile(changes);
-    }
-
-    public void ApplyProfile(GameProfile settings)
-    {
-        Reset();
-        foreach (var key in settings.Settings.Keys)
-        {
-            _settingValues[key] = settings.Settings[key];
-        }
-    }
 }
