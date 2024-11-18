@@ -2,6 +2,7 @@ using System.Net.WebSockets;
 using System.Text;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Zwoo.Api.ZRP;
 using Zwoo.Backend.Shared.Api.Game.Adapter;
 using Zwoo.GameEngine.ZRP;
 
@@ -52,7 +53,7 @@ public class GameConnectionHandlerService : IGameConnectionHandlerService
             else if (hasTooLongMessage)
             {
                 _logger.LogWarning($"[{userId}] received too long message");
-                await webSocket.SendAsync(ZRPEncoder.EncodeToBytes(ZRPCode.MessageToLongError, new Error((int)ZRPCode.MessageToLongError, "message to long")), WebSocketMessageType.Text, true, CancellationToken.None);
+                await webSocket.SendAsync(ZRPEncoder.EncodeToBytes(ZRPCode.MessageTooLongError, new Error((int)ZRPCode.MessageTooLongError, "message to long")), WebSocketMessageType.Text, true, CancellationToken.None);
                 hasTooLongMessage = false;
             }
             else

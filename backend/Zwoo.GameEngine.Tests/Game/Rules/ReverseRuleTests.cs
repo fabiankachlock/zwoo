@@ -27,23 +27,23 @@ public class ReverseRuleTest
     public void ShouldBeTriggered()
     {
         GameScenario.Create($"triggers {_rule.Name}")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Red, CardType.Reverse))
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Reverse))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Five))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Skip))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Wild))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.WildFour))
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Red, GameCardType.Reverse))
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Reverse))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Five))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Skip))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Wild))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.WildFour))
          .ShouldNotTriggerRule(_rule, TestClient.DrawCard())
          .ShouldNotTriggerRule(_rule, TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
          .ShouldNotTriggerRule(_rule, TestClient.RequestEndTurn());
     }
 
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.Reverse)]
-    [TestCase(CardColor.Red, CardType.Reverse, CardColor.Blue, CardType.Reverse)]
-    public void ShouldPlaceCardIfAllowed(CardColor topColor, CardType topType, CardColor placeColor, CardType placeType)
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.Reverse)]
+    [TestCase(GameCardColor.Red, GameCardType.Reverse, GameCardColor.Blue, GameCardType.Reverse)]
+    public void ShouldPlaceCardIfAllowed(GameCardColor topColor, GameCardType topType, GameCardColor placeColor, GameCardType placeType)
     {
-        Card card = new Card(placeColor, placeType);
+        GameCard card = new GameCard(placeColor, placeType);
         GameScenario.Create($"{_rule.Name} places card")
          .WithTopCard(topColor, topType)
          .WithRule(_rule)
@@ -52,10 +52,10 @@ public class ReverseRuleTest
          .ExpectTopCard(new StackCard(card, false));
     }
 
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Blue, CardType.Reverse)]
-    public void ShouldNotPlaceCardIfDisallowed(CardColor topColor, CardType topType, CardColor placeColor, CardType placeType)
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Blue, GameCardType.Reverse)]
+    public void ShouldNotPlaceCardIfDisallowed(GameCardColor topColor, GameCardType topType, GameCardColor placeColor, GameCardType placeType)
     {
-        Card card = new Card(placeColor, placeType);
+        GameCard card = new GameCard(placeColor, placeType);
         GameScenario.Create($"{_rule.Name} rejects card")
          .WithTopCard(topColor, topType)
          .WithRule(_rule)
@@ -68,9 +68,9 @@ public class ReverseRuleTest
     [Test]
     public void ShouldCheckActivePlayer()
     {
-        Card card = new Card(CardColor.Red, CardType.Reverse);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Reverse);
         GameScenario.Create($"{_rule.Name} accepts only active player")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.As(1).PlaceCard(card))
@@ -80,9 +80,9 @@ public class ReverseRuleTest
     [Test]
     public void ShouldCheckPlayerHasCard()
     {
-        Card card = new Card(CardColor.Red, CardType.Reverse);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Reverse);
         GameScenario.Create($"{_rule.Name} checks player has card")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.PlaceCard(card))
@@ -92,9 +92,9 @@ public class ReverseRuleTest
     [Test]
     public void ShouldRemoveCardFromDeck()
     {
-        Card card = new Card(CardColor.Red, CardType.Reverse);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Reverse);
         GameScenario.Create($"{_rule.Name} removes card from deck")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([card, card])
          .Trigger(TestClient.PlaceCard(card))
@@ -104,10 +104,10 @@ public class ReverseRuleTest
     [Test]
     public void ShouldSwitchPlayer()
     {
-        Card card = new Card(CardColor.Red, CardType.Reverse);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Reverse);
         GameScenario.Create($"{_rule.Name} switches player")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .WithPlayersAndCards(new Dictionary<long, List<Card>> { { 0, [card] }, { 1, [] } })
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .WithPlayersAndCards(new Dictionary<long, List<GameCard>> { { 0, [card] }, { 1, [] } })
          .WithActivePlayer(0)
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -116,9 +116,9 @@ public class ReverseRuleTest
 
     public void ShouldDisplayCurrentDrawAmount()
     {
-        Card card = new Card(CardColor.Red, CardType.Reverse);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Reverse);
         GameScenario.Create($"{_rule.Name} updates current draw amount")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -128,9 +128,9 @@ public class ReverseRuleTest
     [Test]
     public void ShouldNotAllowOnDrawCard()
     {
-        Card card = new Card(CardColor.Red, CardType.Reverse);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Reverse);
         GameScenario.Create($"{_rule.Name} does not allow on draw")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -140,34 +140,34 @@ public class ReverseRuleTest
     [Test]
     public void ShouldAllowOnDrawOnceActivated()
     {
-        Card card = new Card(CardColor.Red, CardType.Reverse);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Reverse);
         GameScenario.Create($"{_rule.Name} allows on activated draw")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo, true)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo, true)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
-         .ExpectTopCard(CardColor.Red, CardType.Reverse);
+         .ExpectTopCard(GameCardColor.Red, GameCardType.Reverse);
     }
 
     [Test]
     public void ShouldReverse()
     {
         GameScenario.Create($"{_rule.Name} reverses direction")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .WithPlayersAndCards(new Dictionary<long, List<Card>>{
-            {0, [new Card(CardColor.Red, CardType.Three), new Card(CardColor.Red, CardType.Four)]},
-            {1, [new Card(CardColor.Red, CardType.Reverse)]},
-            {2, [new Card(CardColor.Red, CardType.Reverse)]},
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .WithPlayersAndCards(new Dictionary<long, List<GameCard>>{
+            {0, [new GameCard(GameCardColor.Red, GameCardType.Three), new GameCard(GameCardColor.Red, GameCardType.Four)]},
+            {1, [new GameCard(GameCardColor.Red, GameCardType.Reverse)]},
+            {2, [new GameCard(GameCardColor.Red, GameCardType.Reverse)]},
          })
          .WithActivePlayer(0)
          .WithRules(_rule, new BaseCardRule())
-         .Trigger(TestClient.PlaceCard(CardColor.Red, CardType.Three))
+         .Trigger(TestClient.PlaceCard(GameCardColor.Red, GameCardType.Three))
          .ExpectActivePlayer(1)
-         .Trigger(TestClient.As(1).PlaceCard(CardColor.Red, CardType.Reverse))
+         .Trigger(TestClient.As(1).PlaceCard(GameCardColor.Red, GameCardType.Reverse))
          .ExpectActivePlayer(0)
-         .Trigger(TestClient.PlaceCard(CardColor.Red, CardType.Four))
+         .Trigger(TestClient.PlaceCard(GameCardColor.Red, GameCardType.Four))
          .ExpectActivePlayer(2)
-         .Trigger(TestClient.As(2).PlaceCard(CardColor.Red, CardType.Reverse))
+         .Trigger(TestClient.As(2).PlaceCard(GameCardColor.Red, GameCardType.Reverse))
          .ExpectActivePlayer(0);
 
     }

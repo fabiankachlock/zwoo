@@ -1,7 +1,8 @@
 using Zwoo.GameEngine.Game.Events;
-using Zwoo.GameEngine.Game.Cards;
 using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
+using Zwoo.GameEngine.Game.Cards;
 
 namespace Zwoo.GameEngine.Events.Handler;
 
@@ -11,12 +12,12 @@ public class GameHandler : IUserEventHandler
     {
         return new Dictionary<ZRPCode, Action<UserContext, IIncomingEvent, INotificationAdapter>>() {
             { ZRPCode.StartGame, StartGame},
-            { ZRPCode.GetHand, SendHand},
+            { ZRPCode.GetDeck, SendHand},
             { ZRPCode.GetPileTop, SendPileTop},
-            { ZRPCode.GetCardAmount, SendCardAmount},
+            { ZRPCode.GetPlayerState, SendCardAmount},
             { ZRPCode.PlaceCard, HandleCardPlace},
             { ZRPCode.DrawCard, HandleCardDraw},
-            { ZRPCode.ReceiveDecision, HandleSendDecision},
+            { ZRPCode.SendPlayerDecision, HandleSendDecision},
             { ZRPCode.RequestEndTurn, HandleRequestEndTurn},
         };
     }
@@ -36,14 +37,13 @@ public class GameHandler : IUserEventHandler
 
         List<SendPlayerState_PlayerDTO> amounts = GetCardAmounts(context);
         var top = context.Game.State.GetPileTop();
-        var pileTopNotification = new SendPileTopNotification(top.Color, top.Type);
 
         foreach (var player in context.Game.AllPlayers)
         {
             websocketManager.SendPlayer(player, ZRPCode.GameStarted, new GameStartedNotification(
-                context.Game.State.GetPlayerDeck(player)?.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray() ?? [],
+                context.Game.State.GetPlayerDeck(player)?.Select(card => card.ToZRP()).ToArray() ?? [],
                 amounts.ToArray(),
-                pileTopNotification
+                top.ToZRP()
             ));
         }
 
@@ -52,7 +52,7 @@ public class GameHandler : IUserEventHandler
             websocketManager.SendPlayer(spectator.LobbyId, ZRPCode.GameStarted, new GameStartedNotification(
                 [],
                 amounts.ToArray(),
-                pileTopNotification
+                top.ToZRP()
             ));
         }
 
@@ -64,7 +64,7 @@ public class GameHandler : IUserEventHandler
         if (context.Role == ZRPRole.Spectator) return;
 
         PlaceCardEvent payload = message.DecodePayload<PlaceCardEvent>();
-        context.Game.HandleEvent(ClientEvent.PlaceCard(context.LobbyId, new Card(payload.Type, payload.Symbol)));
+        context.Game.HandleEvent(ClientEvent.PlaceCard(context.LobbyId, payload.Card.ToGame()));
     }
 
     private void HandleCardDraw(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
@@ -86,20 +86,20 @@ public class GameHandler : IUserEventHandler
     {
         if (context.Role == ZRPRole.Spectator) return;
 
-        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendHand, new SendDeckNotification(context.Game.State.GetPlayerDeck(context.LobbyId)!.Select(card => new SendDeck_CardDTO(card.Color, card.Type)).ToArray()));
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendDeck, new SendDeckNotification(context.Game.State.GetPlayerDeck(context.LobbyId)!.Select(card => card.ToZRP()).ToArray()));
     }
 
     private void SendCardAmount(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         List<SendPlayerState_PlayerDTO> amounts = GetCardAmounts(context);
 
-        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendCardAmount, new SendPlayerStateNotification(amounts.ToArray()));
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendPlayerState, new SendPlayerStateNotification(amounts.ToArray()));
     }
 
     private void SendPileTop(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         var top = context.Game.State.GetPileTop();
-        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendPileTop, new SendPileTopNotification(top.Color, top.Type));
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendPileTop, new SendPileTopNotification(top.ToZRP()));
     }
 
     private void HandleRequestEndTurn(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)

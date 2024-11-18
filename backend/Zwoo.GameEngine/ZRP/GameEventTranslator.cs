@@ -1,3 +1,4 @@
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.Game.Events;
 using Zwoo.GameEngine.Game;
 using Zwoo.GameEngine.Notifications;
@@ -57,15 +58,15 @@ public class GameEventTranslator : IGameEventManager
         );
     }
 
-    public void RemoveCard(Zwoo.GameEngine.Game.Events.RemoveCardDTO data)
+    public void RemoveCard(RemoveCardDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCards, new ZRP.RemoveCardNotification(data.Cards.Select(card => new RemoveCard_CardDTO(card.Color, card.Type)).ToArray()));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.RemoveCards, new RemoveCardNotification(data.Cards.Select(card => card.ToZRP()).ToArray()));
     }
 
     // TODO: utilize, that multiple cards can be sent at once
-    public void SendCard(Zwoo.GameEngine.Game.Events.SendCardDTO data)
+    public void SendCard(SendCardDTO data)
     {
-        _wsAdapter.SendPlayer(data.Player, ZRPCode.SendCards, new ZRP.SendCardsNotification(data.Cards.Select(card => new SendCard_CardDTO(card.Color, card.Type)).ToArray()));
+        _wsAdapter.SendPlayer(data.Player, ZRPCode.SendCards, new SendCardsNotification(data.Cards.Select(card => card.ToZRP()).ToArray()));
     }
 
     public void StartTurn(long player)
@@ -78,11 +79,11 @@ public class GameEventTranslator : IGameEventManager
         _wsAdapter.BroadcastGame(
             _game!.Id,
             ZRPCode.StateUpdated,
-            new ZRP.StateUpdateNotification(
-                new StateUpdate_PileTopDTO(data.PileTop.Color, data.PileTop.Type),
+            new StateUpdateNotification(
+                data.PileTop.ToZRP(),
                 data.ActivePlayer,
                 data.CardAmounts,
-                data.Feedback.Select(f => new StateUpdate_FeedbackDTO(f.Type, f.Kind, f.Args)).ToList(),
+                data.Feedback.Select(f => new StateUpdate_FeedbackDTO(f.Type.ToZRP(), f.Kind.ToZRP(), f.Args)).ToList(),
                 data.CurrentDrawAmount
             )
         );

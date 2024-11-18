@@ -79,9 +79,9 @@ public sealed class GameStateManager
     /// </summary>
     /// <param name="players">the list of players to generate decks for</param>
     /// <returns>a list of cards for every player id</returns>
-    private Dictionary<long, List<Card>> GeneratePlayerDecks(List<long> players)
+    private Dictionary<long, List<GameCard>> GeneratePlayerDecks(List<long> players)
     {
-        Dictionary<long, List<Card>> decks = new Dictionary<long, List<Card>>();
+        Dictionary<long, List<GameCard>> decks = new Dictionary<long, List<GameCard>>();
         foreach (long player in players)
         {
             decks[player] = _cardPile.DrawCard(_gameSettings.NumberOfCards);
@@ -147,7 +147,7 @@ public sealed class GameStateManager
                         topCard: newState.TopCard.Card,
                         activePlayer: newState.CurrentPlayer,
                         cardAmounts: new Dictionary<long, int>(),
-                        feedback: new List<UIFeedback>(),
+                        feedback: new List<GameFeedback>(),
                         currentDrawAmount: null
                     )
                 };
@@ -240,7 +240,7 @@ public sealed class GameStateManager
 
     private GameEvent? IsGameFinished(GameState state)
     {
-        foreach (KeyValuePair<long, List<Card>> entry in state.PlayerDecks)
+        foreach (KeyValuePair<long, List<GameCard>> entry in state.PlayerDecks)
         {
             if (entry.Value.Count() == 0)
             {
@@ -305,7 +305,7 @@ public sealed class GameStateManager
         return _gameState.CurrentPlayer;
     }
 
-    public List<Card>? GetPlayerDeck(long playerId)
+    public List<GameCard>? GetPlayerDeck(long playerId)
     {
         if (_gameState.PlayerDecks.ContainsKey(playerId))
         {
@@ -332,7 +332,7 @@ public sealed class GameStateManager
         return null;
     }
 
-    public Card GetPileTop()
+    public GameCard GetPileTop()
     {
         return _gameState.TopCard.Card;
     }

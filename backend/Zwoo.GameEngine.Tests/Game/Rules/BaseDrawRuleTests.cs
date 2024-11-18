@@ -27,9 +27,9 @@ public class BaseDrawRuleTests
     public void ShouldBeTriggered()
     {
         GameScenario.Create($"triggers {_rule.Name}")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .ShouldTriggerRule(_rule, TestClient.DrawCard())
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Red, CardType.Zero))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Red, GameCardType.Zero))
          .ShouldNotTriggerRule(_rule, TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
          .ShouldNotTriggerRule(_rule, TestClient.RequestEndTurn());
     }
@@ -38,7 +38,7 @@ public class BaseDrawRuleTests
     public void ShouldDrawCard()
     {
         GameScenario.Create($"{_rule.Name} draws card")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.DrawCard())
@@ -49,7 +49,7 @@ public class BaseDrawRuleTests
     public void ShouldDrawDrawTwo()
     {
         GameScenario.Create($"{_rule.Name} rule draws draw two")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.DrawCard())
@@ -60,7 +60,7 @@ public class BaseDrawRuleTests
     public void ShouldDrawWild()
     {
         GameScenario.Create($"{_rule.Name} rule draws draw four")
-         .WithTopCard(CardColor.Black, CardType.WildFour)
+         .WithTopCard(GameCardColor.Black, GameCardType.WildFour)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.DrawCard())
@@ -71,7 +71,7 @@ public class BaseDrawRuleTests
     public void ShouldHandleActivatedCards()
     {
         GameScenario.Create($"{_rule.Name} rule handles activated events")
-         .WithTopCard(CardColor.Black, CardType.WildFour, true)
+         .WithTopCard(GameCardColor.Black, GameCardType.WildFour, true)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.DrawCard())
@@ -82,18 +82,18 @@ public class BaseDrawRuleTests
     public void ShouldActivateEvent()
     {
         GameScenario.Create($"{_rule.Name} rule activated event")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.DrawCard())
-         .ExpectTopCard(CardColor.Red, CardType.DrawTwo, true);
+         .ExpectTopCard(GameCardColor.Red, GameCardType.DrawTwo, true);
     }
 
     [Test]
     public void ShouldCheckActivePlayer()
     {
         GameScenario.Create($"{_rule.Name} rule accepts only active player")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.As(1).DrawCard())
@@ -104,7 +104,7 @@ public class BaseDrawRuleTests
     public void ShouldSwitchPlayer()
     {
         GameScenario.Create($"{_rule.Name} rule switches player")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithPlayers([0, 1])
          .WithActivePlayer(0)
          .WithRule(_rule)
@@ -115,9 +115,9 @@ public class BaseDrawRuleTests
     [Test]
     public void ShouldDisplayCurrentDrawAmount()
     {
-        Card card = new Card(CardColor.Red, CardType.Three);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Three);
         GameScenario.Create($"{_rule.Name} rule updates current draw amount")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.DrawCard())

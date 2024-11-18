@@ -3,6 +3,7 @@ using Zwoo.GameEngine.Game.Settings;
 using Zwoo.GameEngine.Game.State;
 using Zwoo.GameEngine.Game.Cards;
 using Zwoo.GameEngine.Logging;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.Game.Settings;
 
@@ -12,7 +13,7 @@ public struct GameSetting
     public Dictionary<string, string> Title;
     public Dictionary<string, string> Description;
 
-    public GameSettingsType Type;
+    public SettingsType Type;
     public int Value;
     public int? Min;
     public int? Max;

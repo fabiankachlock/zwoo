@@ -28,12 +28,12 @@ public class BaseWildRuleTests
     public void ShouldBeTriggered()
     {
         GameScenario.Create($"triggers {_rule.Name}")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Black, CardType.Wild))
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Black, CardType.WildFour))
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Black, GameCardType.Wild))
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Black, GameCardType.WildFour))
          .ShouldTriggerRule(_rule, TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
          .ShouldNotTriggerRule(_rule, TestClient.PlayerDecision(PlayerDecision.SelectPlayer, 0))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Blue, CardType.Two))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Blue, GameCardType.Two))
          .ShouldNotTriggerRule(_rule, TestClient.DrawCard())
          .ShouldNotTriggerRule(_rule, TestClient.RequestEndTurn());
     }
@@ -41,9 +41,9 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldSendDecisionEvent()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} sends decisoon event")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.PlaceCard(card))
@@ -59,23 +59,23 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldPlaceCard()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} places card")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([card, card])
          .Trigger(TestClient.PlaceCard(card))
          .Trigger(TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
-         .ExpectTopCard(CardColor.Red, CardType.Wild);
+         .ExpectTopCard(GameCardColor.Red, GameCardType.Wild);
     }
 
 
     [Test]
     public void ShouldCheckActivePlayer()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} accepts only active player")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.As(1).PlaceCard(card))
@@ -85,9 +85,9 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldCheckPlayerHasCard()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} checks player has card")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.PlaceCard(card))
@@ -97,9 +97,9 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldRemoveCardFromDeck()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} removes card from deck")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([card, card])
          .Trigger(TestClient.PlaceCard(card))
@@ -110,10 +110,10 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldSwitchPlayer()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} switches player")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .WithPlayersAndCards(new Dictionary<long, List<Card>> { { 0, [card] }, { 1, [] } })
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .WithPlayersAndCards(new Dictionary<long, List<GameCard>> { { 0, [card] }, { 1, [] } })
          .WithActivePlayer(0)
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -125,7 +125,7 @@ public class BaseWildRuleTests
     public void ShouldPassNonExistingDecisions()
     {
         GameScenario.Create($"{_rule.Name} passes if no decision is active")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
@@ -135,9 +135,9 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldCheckDecisionOrigin()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} check decision origin")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.PlaceCard(card))
@@ -145,13 +145,13 @@ public class BaseWildRuleTests
          .ExpectNoEvents();
     }
 
-    [TestCase(CardColor.Black, CardType.Wild, null)]
-    [TestCase(CardColor.Black, CardType.WildFour, 4)]
-    public void ShouldDisplayCurrentDrawAmount(CardColor color, CardType type, int? amount)
+    [TestCase(GameCardColor.Black, GameCardType.Wild, null)]
+    [TestCase(GameCardColor.Black, GameCardType.WildFour, 4)]
+    public void ShouldDisplayCurrentDrawAmount(GameCardColor color, GameCardType type, int? amount)
     {
-        var card = new Card(color, type);
+        var card = new GameCard(color, type);
         GameScenario.Create($"{_rule.Name} updates current draw amount")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -162,14 +162,14 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldResetInternalEvent()
     {
-        Card card = new Card(CardColor.Black, CardType.Wild);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.Wild);
         GameScenario.Create($"{_rule.Name} reset internal state")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.PlaceCard(card))
          .Trigger(TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
-         .ExpectTopCard(CardColor.Red, CardType.Wild)
+         .ExpectTopCard(GameCardColor.Red, GameCardType.Wild)
          .Trigger(TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
          .ExpectNoEvents();
     }
@@ -177,9 +177,9 @@ public class BaseWildRuleTests
     [Test]
     public void ShouldRejectDisallowedCards()
     {
-        Card card = new Card(CardColor.Black, CardType.WildFour);
+        GameCard card = new GameCard(GameCardColor.Black, GameCardType.WildFour);
         GameScenario.Create($"{_rule.Name} reject disallowed cards")
-         .WithTopCard(CardColor.Red, CardType.WildFour)
+         .WithTopCard(GameCardColor.Red, GameCardType.WildFour)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.PlaceCard(card))

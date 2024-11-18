@@ -17,16 +17,16 @@ public class BaseWildCardRule : BaseCardRule
         get => "BaseWildRule";
     }
 
-    private record struct StoredEvent(long Player, Card Card);
+    private record struct StoredEvent(long Player, GameCard Card);
 
     private StoredEvent? _storedEvent = null;
 
-    private readonly List<CardColor> _optionsMapper = new List<CardColor>()
+    private readonly List<GameCardColor> _optionsMapper = new List<GameCardColor>()
     {
-         CardColor.Red,
-         CardColor.Yellow,
-         CardColor.Blue,
-         CardColor.Green,
+         GameCardColor.Red,
+         GameCardColor.Yellow,
+         GameCardColor.Blue,
+         GameCardColor.Green,
     };
 
     public BaseWildCardRule() : base() { }
@@ -90,15 +90,15 @@ public class BaseWildCardRule : BaseCardRule
 
         if (_storedEvent.HasValue && _storedEvent?.Player == payload.Player)
         {
-            CardColor color = _optionsMapper[payload.Value];
-            Card newCard = new Card(color, _storedEvent.Value.Card.Type);
+            GameCardColor color = _optionsMapper[payload.Value];
+            GameCard newCard = new GameCard(color, _storedEvent.Value.Card.Type);
             state.PlayerDecks[payload.Player].Remove(_storedEvent.Value.Card);
             state = AddCardToStack(state, newCard);
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, _storedEvent.Value.Card));
             state.Ui.CurrentDrawAmount = GetActiveDrawAmount(state.TopCard);
             _storedEvent = null;
-            return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.ColorChanged, payload.Player));
+            return GameStateUpdate.New(state, events, GameFeedback.Individual(FeedbackType.ColorChanged, payload.Player));
         }
         return GameStateUpdate.None(state);
     }

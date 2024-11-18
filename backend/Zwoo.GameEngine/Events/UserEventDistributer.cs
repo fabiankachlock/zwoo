@@ -1,6 +1,7 @@
 using Zwoo.GameEngine.Events.Handler;
 using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.Game.Cards;
 
 namespace Zwoo.GameEngine.Events;

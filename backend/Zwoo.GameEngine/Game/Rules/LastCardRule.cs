@@ -97,16 +97,16 @@ internal class LastCardRule : BaseDrawRule
     {
         if (!IsResponsibleForInterrupt(interrupt, state)) return GameStateUpdate.None(state);
         List<GameEvent> events = new();
-        List<UIFeedback> feedback = new();
+        List<GameFeedback> feedback = new();
 
         foreach (var player in interrupt.TargetPlayers)
         {
             _pendingTimeouts.Remove(player);
-            List<Card> newCards;
+            List<GameCard> newCards;
             (state, newCards) = DrawCardsForPlayer(state, player, _penaltyCards, cardPile);
             events.Add(GameEvent.SendCards(player, newCards));
-            feedback.Add(UIFeedback.Individual(UIFeedbackType.MissedLast, player));
-            feedback.Add(UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, player).WithArg(UIFeedbackArgKey.DrawAmount, newCards.Count));
+            feedback.Add(GameFeedback.Individual(FeedbackType.MissedLast, player));
+            feedback.Add(GameFeedback.Individual(FeedbackType.PlayerHasDrawn, player).WithArg(FeedbackArgKey.DrawAmount, newCards.Count));
         }
 
         return GameStateUpdate.New(state, events, feedback);

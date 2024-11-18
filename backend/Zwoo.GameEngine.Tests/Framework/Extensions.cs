@@ -15,12 +15,12 @@ public class EventCreator
         _playerId = id ?? 0;
     }
 
-    public ClientEvent PlaceCard(CardColor c, CardType t)
+    public ClientEvent PlaceCard(GameCardColor c, GameCardType t)
     {
-        return ClientEvent.PlaceCard(_playerId, new Card(c, t));
+        return ClientEvent.PlaceCard(_playerId, new GameCard(c, t));
     }
 
-    public ClientEvent PlaceCard(Card c)
+    public ClientEvent PlaceCard(GameCard c)
     {
         return ClientEvent.PlaceCard(_playerId, c);
     }
@@ -52,12 +52,12 @@ public static class TestClient
 
     public static long ID => _instance.ID;
 
-    public static ClientEvent PlaceCard(CardColor c, CardType t)
+    public static ClientEvent PlaceCard(GameCardColor c, GameCardType t)
     {
-        return _instance.PlaceCard(new Card(c, t));
+        return _instance.PlaceCard(new GameCard(c, t));
     }
 
-    public static ClientEvent PlaceCard(Card c)
+    public static ClientEvent PlaceCard(GameCard c)
     {
         return _instance.PlaceCard(c);
     }

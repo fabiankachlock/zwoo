@@ -1,6 +1,6 @@
 namespace Zwoo.GameEngine.Game.Feedback;
 
-public enum UIFeedbackKind
+public enum FeedbackKind
 {
     Individual = 1,
     Interaction = 2,

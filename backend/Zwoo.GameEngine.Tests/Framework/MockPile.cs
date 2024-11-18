@@ -7,30 +7,30 @@ public class MockPile : Pile
 {
     private Pile _fallback = new Pile(GameSettings.FromDefaults());
     private bool _useFallback;
-    private List<Card> _programmed;
+    private List<GameCard> _programmed;
     private int _currentIdx = 0;
 
-    public MockPile(params Card[] cards) : base(GameSettings.FromDefaults())
+    public MockPile(params GameCard[] cards) : base(GameSettings.FromDefaults())
     {
         _useFallback = false;
-        _programmed = new List<Card>(cards);
+        _programmed = new List<GameCard>(cards);
     }
 
-    public MockPile(bool useFallback, params Card[] cards) : base(GameSettings.FromDefaults())
+    public MockPile(bool useFallback, params GameCard[] cards) : base(GameSettings.FromDefaults())
     {
         _useFallback = useFallback;
-        _programmed = new List<Card>(cards);
+        _programmed = new List<GameCard>(cards);
     }
 
-    public MockPile(List<Card> cards, bool useFallback) : base(GameSettings.FromDefaults())
+    public MockPile(List<GameCard> cards, bool useFallback) : base(GameSettings.FromDefaults())
     {
         _useFallback = useFallback;
-        _programmed = new List<Card>(cards);
+        _programmed = new List<GameCard>(cards);
     }
 
-    public new Card DrawCard()
+    public new GameCard DrawCard()
     {
-        Card card;
+        GameCard card;
 
         if (_programmed.Count < _currentIdx)
         {
@@ -50,9 +50,9 @@ public class MockPile : Pile
         return card;
     }
 
-    public new List<Card> DrawCard(int amount)
+    public new List<GameCard> DrawCard(int amount)
     {
-        List<Card> cards = new List<Card>();
+        List<GameCard> cards = new List<GameCard>();
         for (int i = 0; i < amount; i++)
         {
             cards.Add(DrawCard());

@@ -162,13 +162,13 @@ public class AddUpDrawRule_Draw : BaseDrawRule
         }
 
 
-        List<Card> newCards;
+        List<GameCard> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
         state.Ui.CurrentDrawAmount = null;
         events.Add(GameEvent.SendCards(payload.Player, newCards));
 
-        return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, payload.Player).WithArg(UIFeedbackArgKey.DrawAmount, amount));
+        return GameStateUpdate.New(state, events, GameFeedback.Individual(FeedbackType.PlayerHasDrawn, payload.Player).WithArg(FeedbackArgKey.DrawAmount, amount));
     }
 
     protected int GetRecursiveDrawAmount(List<StackCard> stack)

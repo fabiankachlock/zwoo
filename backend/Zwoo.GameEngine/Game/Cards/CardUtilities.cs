@@ -8,13 +8,13 @@ namespace Zwoo.GameEngine.Game.Cards;
 
 internal sealed class CardUtilities
 {
-    public static bool IsDraw(Card card)
+    public static bool IsDraw(GameCard card)
     {
-        return card.Type == CardType.DrawTwo || card.Type == CardType.WildFour;
+        return card.Type == GameCardType.DrawTwo || card.Type == GameCardType.WildFour;
     }
 
-    public static bool IsWild(Card card)
+    public static bool IsWild(GameCard card)
     {
-        return card.Type == CardType.Wild || card.Type == CardType.WildFour;
+        return card.Type == GameCardType.Wild || card.Type == GameCardType.WildFour;
     }
 }

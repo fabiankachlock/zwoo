@@ -1,3 +1,4 @@
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.Backend.Shared.Api.Model;

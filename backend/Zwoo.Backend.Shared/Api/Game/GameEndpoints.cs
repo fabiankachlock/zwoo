@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -6,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+using Zwoo.Api.ZRP;
 using Zwoo.Backend.Shared.Api.Model;
 using Zwoo.Backend.Shared.Authentication;
 using Zwoo.GameEngine.Lobby;
-using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.Backend.Shared.Api.Game;
 

@@ -21,7 +21,7 @@ public class SkipCardRule : BaseCardRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return gameEvent.Type == ClientEventType.PlaceCard && gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card.Type == CardType.Skip;
+        return gameEvent.Type == ClientEventType.PlaceCard && gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card.Type == GameCardType.Skip;
     }
 
 
@@ -43,7 +43,7 @@ public class SkipCardRule : BaseCardRule
 
             events.Add(GameEvent.StartTurn(state.CurrentPlayer));
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.Skipped, skippedPlayer));
+            return GameStateUpdate.New(state, events, GameFeedback.Individual(FeedbackType.Skipped, skippedPlayer));
         }
 
         return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));

@@ -1,5 +1,6 @@
 using Zwoo.GameEngine.Lobby;
 using Zwoo.GameEngine.Bots;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.ZRP;
 

@@ -7,7 +7,7 @@ using Zwoo.Backend.Shared.Authentication;
 using Zwoo.Backend.Shared.Api.Discover;
 using Zwoo.Backend.Shared.Api.Contact;
 using Zwoo.Backend.Shared.Api.Game;
-using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
 
 var builder = WebApplication.CreateBuilder(args);
 

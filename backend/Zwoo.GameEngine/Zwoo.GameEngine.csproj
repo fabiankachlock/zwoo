@@ -5,4 +5,8 @@
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Zwoo.Api.ZRP" Version="1.0.0" />
+  </ItemGroup>
+
 </Project>

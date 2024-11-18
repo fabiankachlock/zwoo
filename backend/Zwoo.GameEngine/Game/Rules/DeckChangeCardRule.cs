@@ -25,7 +25,7 @@ internal class DeckChangeRule : BaseCardRule
         .Localize("en", "Deck-swap", "When a player lays a 2, he can choose any player with whom to exchange all cards.")
         .ToMeta();
 
-    private record struct StoredEvent(long Player, List<long> Options, Card Card);
+    private record struct StoredEvent(long Player, List<long> Options, GameCard Card);
 
     private StoredEvent? _storedEvent = null;
 
@@ -33,7 +33,7 @@ internal class DeckChangeRule : BaseCardRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return (gameEvent.Type == ClientEventType.PlaceCard && gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card.Type == CardType.Two)
+        return (gameEvent.Type == ClientEventType.PlaceCard && gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card.Type == GameCardType.Two)
             || (gameEvent.Type == ClientEventType.SendPlayerDecision && gameEvent.CastPayload<ClientEvent.PlayerDecissionEvent>().Decission == PlayerDecision.SelectPlayer);
     }
 
@@ -113,7 +113,7 @@ internal class DeckChangeRule : BaseCardRule
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.AddRange(swapEvents);
             _storedEvent = null;
-            return GameStateUpdate.New(state, events, UIFeedback.Interaction(UIFeedbackType.DeckSwapped, payload.Player, targetPlayer));
+            return GameStateUpdate.New(state, events, GameFeedback.Interaction(FeedbackType.DeckSwapped, payload.Player, targetPlayer));
         }
         return GameStateUpdate.None(state);
     }

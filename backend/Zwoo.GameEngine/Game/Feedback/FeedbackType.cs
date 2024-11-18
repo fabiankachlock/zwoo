@@ -1,6 +1,6 @@
 namespace Zwoo.GameEngine.Game.Feedback;
 
-public enum UIFeedbackType
+public enum FeedbackType
 {
     Skipped = 1,
     DirectionChanged = 2,

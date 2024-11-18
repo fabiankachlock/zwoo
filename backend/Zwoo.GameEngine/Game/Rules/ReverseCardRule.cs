@@ -22,7 +22,7 @@ public class ReverseCardRule : BaseCardRule
 
     public override bool IsResponsible(ClientEvent gameEvent, GameState state)
     {
-        return gameEvent.Type == ClientEventType.PlaceCard && gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card.Type == CardType.Reverse;
+        return gameEvent.Type == ClientEventType.PlaceCard && gameEvent.CastPayload<ClientEvent.PlaceCardEvent>().Card.Type == GameCardType.Reverse;
     }
 
 
@@ -39,7 +39,7 @@ public class ReverseCardRule : BaseCardRule
             state.Direction = state.Direction == GameDirection.Left ? GameDirection.Rigth : GameDirection.Left;
             (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
             events.Add(GameEvent.RemoveCard(payload.Player, payload.Card));
-            return GameStateUpdate.New(state, events, UIFeedback.Unaffected(UIFeedbackType.DirectionChanged));
+            return GameStateUpdate.New(state, events, GameFeedback.Unaffected(FeedbackType.DirectionChanged));
         }
 
         return GameStateUpdate.NoneWithEvents(state, GameEvent.Error(payload.Player, GameError.CantPlaceCard));

@@ -28,7 +28,7 @@ internal class GameScenario
             Direction = GameDirection.Left,
             CardStack = new List<StackCard>(),
             CurrentPlayer = 0,
-            PlayerDecks = new Dictionary<long, List<Card>> { { 0, new List<Card>() } },
+            PlayerDecks = new Dictionary<long, List<GameCard>> { { 0, new List<GameCard>() } },
         };
     }
 
@@ -43,7 +43,7 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithPileWithCards(params Card[] cards)
+    public GameScenario WithPileWithCards(params GameCard[] cards)
     {
         _pile = new MockPile(false, cards);
         return this;
@@ -61,7 +61,7 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithPlayersAndCards(Dictionary<long, List<Card>> playersAndCards)
+    public GameScenario WithPlayersAndCards(Dictionary<long, List<GameCard>> playersAndCards)
     {
         var ids = playersAndCards.Keys.ToList();
         ids.Sort();
@@ -70,9 +70,9 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithDeck(params Card[] cards)
+    public GameScenario WithDeck(params GameCard[] cards)
     {
-        Dictionary<long, List<Card>> playersAndCards = new() { { 0, new List<Card>(cards) } };
+        Dictionary<long, List<GameCard>> playersAndCards = new() { { 0, new List<GameCard>(cards) } };
         _players = new MockPlayerCycle(playersAndCards.Keys.ToList());
         _state.PlayerDecks = playersAndCards;
         return this;
@@ -102,9 +102,9 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario WithTopCard(CardColor c, CardType t, bool eventActivated = false)
+    public GameScenario WithTopCard(GameCardColor c, GameCardType t, bool eventActivated = false)
     {
-        StackCard topCard = new StackCard(new Card(c, t), eventActivated);
+        StackCard topCard = new StackCard(new GameCard(c, t), eventActivated);
         _state.CardStack.Add(topCard);
         return this;
     }
@@ -193,7 +193,7 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario ExpectPlayerDeck(long playerId, List<Card> deck)
+    public GameScenario ExpectPlayerDeck(long playerId, List<GameCard> deck)
     {
         Assert.That(deck, Is.EqualTo(_output?.NewState.PlayerDecks[playerId]), $"{_name} - expected player deck not met");
         return this;
@@ -211,13 +211,13 @@ internal class GameScenario
         return this;
     }
 
-    public GameScenario ExpectTopCard(CardColor color, CardType type, bool eventActivated = false)
+    public GameScenario ExpectTopCard(GameCardColor color, GameCardType type, bool eventActivated = false)
     {
-        Assert.That(new StackCard(new Card(color, type), eventActivated), Is.EqualTo(_output?.NewState.TopCard ?? _state.TopCard), $"{_name} - wrong top card");
+        Assert.That(new StackCard(new GameCard(color, type), eventActivated), Is.EqualTo(_output?.NewState.TopCard ?? _state.TopCard), $"{_name} - wrong top card");
         return this;
     }
 
-    public GameScenario ExpectTopCard(Card card, bool eventActivated = false)
+    public GameScenario ExpectTopCard(GameCard card, bool eventActivated = false)
     {
         Assert.That(new StackCard(card, eventActivated), Is.EqualTo(_output?.NewState.TopCard), $"{_name} - wrong top card");
         return this;

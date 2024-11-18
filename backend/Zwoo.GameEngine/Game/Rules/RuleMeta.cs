@@ -3,6 +3,7 @@ using Zwoo.GameEngine.Game.Settings;
 using Zwoo.GameEngine.Game.State;
 using Zwoo.GameEngine.Game.Cards;
 using Zwoo.GameEngine.Logging;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.Game.Rules;
 
@@ -32,7 +33,7 @@ public struct RuleMeta
 public class RuleMetaBuilder
 {
     public readonly string SettingsKey;
-    public GameSettingsType SettingsType;
+    public SettingsType SettingsType;
     public Dictionary<string, string> Title;
     public Dictionary<string, string> Description;
     public int? DefaultValue;
@@ -43,7 +44,7 @@ public class RuleMetaBuilder
     private RuleMetaBuilder(string key)
     {
         SettingsKey = key;
-        SettingsType = GameSettingsType.Readonly;
+        SettingsType = SettingsType.Readonly;
         Title = new();
         Description = new();
         DefaultValue = null;
@@ -57,7 +58,7 @@ public class RuleMetaBuilder
 
     public RuleMetaBuilder IsTogglable()
     {
-        SettingsType = GameSettingsType.Boolean;
+        SettingsType = SettingsType.Boolean;
         return this;
     }
 

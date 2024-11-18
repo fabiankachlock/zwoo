@@ -5,19 +5,19 @@ namespace Zwoo.GameEngine.Game.Events;
 
 public readonly record struct SendCardDTO(
     long Player,
-    List<Card> Cards
+    List<GameCard> Cards
 );
 
 public readonly record struct RemoveCardDTO(
     long Player,
-    List<Card> Cards
+    List<GameCard> Cards
 );
 
 public readonly record struct StateUpdateDTO(
-    Card PileTop,
+    GameCard PileTop,
     long ActivePlayer,
     Dictionary<long, int> CardAmounts,
-    List<UIFeedback> Feedback,
+    List<GameFeedback> Feedback,
     int? CurrentDrawAmount
 );
 

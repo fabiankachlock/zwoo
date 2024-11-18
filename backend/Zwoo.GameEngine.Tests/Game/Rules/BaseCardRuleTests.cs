@@ -27,25 +27,25 @@ public class BaseCardRuleTests
     public void ShouldBeTriggered()
     {
         GameScenario.Create($"triggers {_rule.Name}")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Red, CardType.Zero))
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Five))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Wild))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.WildFour))
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Red, GameCardType.Zero))
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Five))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Wild))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.WildFour))
          .ShouldNotTriggerRule(_rule, TestClient.DrawCard())
          .ShouldNotTriggerRule(_rule, TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
          .ShouldNotTriggerRule(_rule, TestClient.RequestEndTurn());
     }
 
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.Two)]
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.Three)]
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Green, CardType.Two)]
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.DrawTwo)]
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.Skip)]
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.Reverse)]
-    public void ShouldPlaceCardIfAllowed(CardColor topColor, CardType topType, CardColor placeColor, CardType placeType)
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.Two)]
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.Three)]
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Green, GameCardType.Two)]
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.DrawTwo)]
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.Skip)]
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.Reverse)]
+    public void ShouldPlaceCardIfAllowed(GameCardColor topColor, GameCardType topType, GameCardColor placeColor, GameCardType placeType)
     {
-        Card card = new Card(placeColor, placeType);
+        GameCard card = new GameCard(placeColor, placeType);
         GameScenario.Create($"{_rule.Name} places card")
          .WithTopCard(topColor, topType)
          .WithRule(_rule)
@@ -54,11 +54,11 @@ public class BaseCardRuleTests
          .ExpectTopCard(new StackCard(card, false));
     }
 
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Blue, CardType.DrawTwo)]
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.Wild)]
-    public void ShouldNotPlaceCardIfDisallowed(CardColor topColor, CardType topType, CardColor placeColor, CardType placeType)
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Blue, GameCardType.DrawTwo)]
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.Wild)]
+    public void ShouldNotPlaceCardIfDisallowed(GameCardColor topColor, GameCardType topType, GameCardColor placeColor, GameCardType placeType)
     {
-        Card card = new Card(placeColor, placeType);
+        GameCard card = new GameCard(placeColor, placeType);
         GameScenario.Create($"{_rule.Name} rejects card")
          .WithTopCard(topColor, topType)
          .WithRule(_rule)
@@ -71,9 +71,9 @@ public class BaseCardRuleTests
     [Test]
     public void ShouldCheckActivePlayer()
     {
-        Card card = new Card(CardColor.Red, CardType.Three);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Three);
         GameScenario.Create($"{_rule.Name} accepts only active player")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.As(1).PlaceCard(card))
@@ -83,9 +83,9 @@ public class BaseCardRuleTests
     [Test]
     public void ShouldCheckPlayerHasCard()
     {
-        Card card = new Card(CardColor.Red, CardType.Three);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Three);
         GameScenario.Create($"{_rule.Name} checks player has card")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.PlaceCard(card))
@@ -95,9 +95,9 @@ public class BaseCardRuleTests
     [Test]
     public void ShouldRemoveCardFromDeck()
     {
-        Card card = new Card(CardColor.Red, CardType.Three);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Three);
         GameScenario.Create($"{_rule.Name} removes card from deck")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([card, card])
          .Trigger(TestClient.PlaceCard(card))
@@ -107,24 +107,24 @@ public class BaseCardRuleTests
     [Test]
     public void ShouldSwitchPlayer()
     {
-        Card card = new Card(CardColor.Red, CardType.Three);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Three);
         GameScenario.Create($"{_rule.Name} switches player")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .WithPlayersAndCards(new Dictionary<long, List<Card>> { { 0, [card] }, { 1, [] } })
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .WithPlayersAndCards(new Dictionary<long, List<GameCard>> { { 0, [card] }, { 1, [] } })
          .WithActivePlayer(0)
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
          .ExpectActivePlayer(1);
     }
 
-    [TestCase(CardColor.Red, CardType.Three, null)]
-    [TestCase(CardColor.Red, CardType.DrawTwo, 2)]
-    [TestCase(CardColor.Red, CardType.WildFour, null)]
-    public void ShouldDisplayCurrentDrawAmount(CardColor color, CardType type, int? expected)
+    [TestCase(GameCardColor.Red, GameCardType.Three, null)]
+    [TestCase(GameCardColor.Red, GameCardType.DrawTwo, 2)]
+    [TestCase(GameCardColor.Red, GameCardType.WildFour, null)]
+    public void ShouldDisplayCurrentDrawAmount(GameCardColor color, GameCardType type, int? expected)
     {
-        Card card = new Card(color, type);
+        GameCard card = new GameCard(color, type);
         GameScenario.Create($"{_rule.Name} updates current draw amount")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -134,9 +134,9 @@ public class BaseCardRuleTests
     [Test]
     public void ShouldNotAllowOnDrawCard()
     {
-        Card card = new Card(CardColor.Red, CardType.DrawTwo);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.DrawTwo);
         GameScenario.Create($"{_rule.Name} does not allow on draw")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -146,13 +146,13 @@ public class BaseCardRuleTests
     [Test]
     public void ShouldAllowOnDrawOnceActivated()
     {
-        Card card = new Card(CardColor.Red, CardType.Two);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Two);
         GameScenario.Create($"{_rule.Name} allows on activated draw")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo, true)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo, true)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
-         .ExpectTopCard(CardColor.Red, CardType.Two);
+         .ExpectTopCard(GameCardColor.Red, GameCardType.Two);
     }
 
 }

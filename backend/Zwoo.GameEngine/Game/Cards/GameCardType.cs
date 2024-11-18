@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zwoo.GameEngine.Game.Cards;
 
-public enum CardType
+public enum GameCardType
 {
     None = 0,
     Zero = 1,

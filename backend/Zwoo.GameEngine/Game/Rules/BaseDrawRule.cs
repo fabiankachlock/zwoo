@@ -48,13 +48,13 @@ public class BaseDrawRule : BaseRule
             amount = 1;
         }
 
-        List<Card> newCards;
+        List<GameCard> newCards;
         (state, newCards) = DrawCardsForPlayer(state, payload.Player, amount, cardPile);
         (state, events) = ChangeActivePlayer(state, playerOrder.Next(state.Direction));
         state.Ui.CurrentDrawAmount = null;
         events.Add(GameEvent.SendCards(payload.Player, newCards));
 
-        return GameStateUpdate.New(state, events, UIFeedback.Individual(UIFeedbackType.PlayerHasDrawn, payload.Player).WithArg(UIFeedbackArgKey.DrawAmount, newCards.Count));
+        return GameStateUpdate.New(state, events, GameFeedback.Individual(FeedbackType.PlayerHasDrawn, payload.Player).WithArg(FeedbackArgKey.DrawAmount, newCards.Count));
     }
 
     // Rule utilities
@@ -67,9 +67,9 @@ public class BaseDrawRule : BaseRule
     /// <param name="amount">amount of cards to draw</param>
     /// <param name="pile">games card pile</param>
     /// <returns>updated game state and drawn cards</returns>
-    protected (GameState, List<Card>) DrawCardsForPlayer(GameState state, long player, int amount, Pile pile)
+    protected (GameState, List<GameCard>) DrawCardsForPlayer(GameState state, long player, int amount, Pile pile)
     {
-        List<Card> newCards = new List<Card>();
+        List<GameCard> newCards = new List<GameCard>();
         for (int i = 0; i < amount; i++)
         {
             newCards.Add(pile.DrawCard());

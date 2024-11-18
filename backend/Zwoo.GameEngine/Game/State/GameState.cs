@@ -19,7 +19,7 @@ public struct GameState
     public List<StackCard> CardStack;
     public StackCard TopCard => CardStack.Last();
 
-    public Dictionary<long, List<Card>> PlayerDecks;
+    public Dictionary<long, List<GameCard>> PlayerDecks;
     public UiHints Ui;
 
     public GameState()
@@ -27,7 +27,7 @@ public struct GameState
         Direction = GameDirection.Left;
         CurrentPlayer = 0;
         CardStack = new List<StackCard>() { };
-        PlayerDecks = new Dictionary<long, List<Card>>();
+        PlayerDecks = new Dictionary<long, List<GameCard>>();
         Ui = new UiHints();
     }
 
@@ -35,7 +35,7 @@ public struct GameState
         GameDirection direction,
         long currentPlayer,
         List<StackCard> cardStack,
-        Dictionary<long, List<Card>> playerDecks,
+        Dictionary<long, List<GameCard>> playerDecks,
         UiHints ui
     )
     {
@@ -52,7 +52,7 @@ public struct GameState
             Direction,
             CurrentPlayer,
             new List<StackCard>(CardStack),
-            PlayerDecks.ToDictionary(kv => kv.Key, kv => new List<Card>(kv.Value)),
+            PlayerDecks.ToDictionary(kv => kv.Key, kv => new List<GameCard>(kv.Value)),
             Ui
         );
     }

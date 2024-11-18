@@ -55,7 +55,7 @@ public class BaseCardRule : BaseRule
     /// <param name="top">stack top card</param>
     /// <param name="newCard">card to throw</param>
     /// <returns></returns>
-    protected bool IsFittingCard(Card top, Card newCard)
+    protected bool IsFittingCard(GameCard top, GameCard newCard)
     {
         return top.Type == newCard.Type || top.Color == newCard.Color || CardUtilities.IsWild(newCard);
     }
@@ -68,7 +68,7 @@ public class BaseCardRule : BaseRule
     /// <param name="top">stack top card</param>
     /// <param name="newCard">card to throw</param>
     /// <returns></returns>
-    protected bool IsAllowedCard(StackCard top, Card newCard)
+    protected bool IsAllowedCard(StackCard top, GameCard newCard)
     {
         // only allowed when the topmost card is no draw card or the event is already activated
         return IsFittingCard(top.Card, newCard) && (!CardUtilities.IsDraw(top.Card) || top.EventActivated);
@@ -80,7 +80,7 @@ public class BaseCardRule : BaseRule
     /// <param name="state">games state object</param>
     /// <param name="card">card to put onto the stack</param>
     /// <returns>updated game state</returns>
-    protected GameState AddCardToStack(GameState state, Card card)
+    protected GameState AddCardToStack(GameState state, GameCard card)
     {
         state.CardStack.Add(new StackCard(card));
         return state;
@@ -93,7 +93,7 @@ public class BaseCardRule : BaseRule
     /// <param name="player">players ID</param>
     /// <param name="card">card to play</param>
     /// <returns>updated game state</returns>
-    protected GameState PlayPlayerCard(GameState state, long player, Card card)
+    protected GameState PlayPlayerCard(GameState state, long player, GameCard card)
     {
         state.PlayerDecks[player].Remove(card);
         return AddCardToStack(state, card);

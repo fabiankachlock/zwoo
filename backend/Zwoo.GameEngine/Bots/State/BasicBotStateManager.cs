@@ -1,4 +1,5 @@
 using Zwoo.GameEngine.Game.Cards;
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.ZRP;
 
 namespace Zwoo.GameEngine.Bots.State;
@@ -17,12 +18,12 @@ internal class BasicBotStateManager
         /// <summary>
         /// a list of all cards the bot has currently
         /// </summary>
-        internal List<Card> Deck = new List<Card>();
+        internal List<GameCard> Deck = new List<GameCard>();
 
         /// <summary>
         /// the card thats on top of the current stack
         /// </summary>
-        internal Card StackTop = new Card();
+        internal GameCard StackTop = new GameCard();
 
         /// <summary>
         /// whether the bot is the active player or not
@@ -68,7 +69,7 @@ internal class BasicBotStateManager
             case ZRPCode.RemoveCards:
                 aggregateRemoveCard((RemoveCardNotification)message.Payload);
                 break;
-            case ZRPCode.SendHand:
+            case ZRPCode.SendDeck:
                 aggregateSendHand((SendDeckNotification)message.Payload);
                 break;
             case ZRPCode.SendPileTop:
@@ -95,7 +96,7 @@ internal class BasicBotStateManager
     {
         foreach (var card in data.Cards)
         {
-            _state.Deck.Add(new Card(card.Type, card.Symbol));
+            _state.Deck.Add(card.ToGame());
         }
     }
 
@@ -103,7 +104,7 @@ internal class BasicBotStateManager
     {
         foreach (var card in data.Cards)
         {
-            int index = _state.Deck.FindIndex(c => c.Color == card.Type && c.Type == card.Symbol);
+            int index = _state.Deck.FindIndex(c => c.Color == card.Color.ToGame() && c.Type == card.Type.ToGame());
             if (index >= 0)
             {
                 _state.Deck.RemoveAt(index);
@@ -113,17 +114,17 @@ internal class BasicBotStateManager
 
     private void aggregateSendHand(SendDeckNotification data)
     {
-        _state.Deck = data.Hand.Select(card => new Card(card.Type, card.Symbol)).ToList();
+        _state.Deck = data.Hand.Select(card => card.ToGame()).ToList();
     }
 
     private void aggregatePileTop(SendPileTopNotification data)
     {
-        _state.StackTop = new Card(data.Type, data.Symbol);
+        _state.StackTop = data.Card.ToGame();
     }
 
     private void aggregateStateUpdate(StateUpdateNotification data)
     {
-        _state.StackTop = new Card(data.PileTop.Type, data.PileTop.Symbol);
+        _state.StackTop = data.PileTop.ToGame();
     }
 
     private void setActive()

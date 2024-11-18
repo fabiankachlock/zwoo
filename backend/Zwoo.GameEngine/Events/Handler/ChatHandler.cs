@@ -1,5 +1,6 @@
 using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.Events.Handler;
 
@@ -16,6 +17,6 @@ public class ChatHandler : IUserEventHandler
     public void HandleMessage(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
         ChatMessageEvent payload = message.DecodePayload<ChatMessageEvent>();
-        websocketManager.BroadcastGame(context.GameId, ZRPCode.SendChatMessage, new ChatMessageNotification(context.LobbyId, payload.Message));
+        websocketManager.BroadcastGame(context.GameId, ZRPCode.BroadcastChatMessage, new ChatMessageNotification(context.LobbyId, payload.Message));
     }
 }

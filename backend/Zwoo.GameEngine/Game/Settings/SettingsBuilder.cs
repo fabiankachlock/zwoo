@@ -1,8 +1,4 @@
-using Zwoo.GameEngine.Game.Events;
-using Zwoo.GameEngine.Game.Settings;
-using Zwoo.GameEngine.Game.State;
-using Zwoo.GameEngine.Game.Cards;
-using Zwoo.GameEngine.Logging;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.Game.Settings;
 
@@ -12,7 +8,7 @@ public class GameSettingBuilder
     public Dictionary<string, string> Title;
     public Dictionary<string, string> Description;
 
-    public GameSettingsType Type;
+    public SettingsType Type;
     public int? DefaultValue;
     public int? Min;
     public int? Max;
@@ -22,7 +18,7 @@ public class GameSettingBuilder
         Key = key;
         Title = new();
         Description = new();
-        Type = GameSettingsType.Readonly;
+        Type = SettingsType.Readonly;
     }
 
     public static GameSettingBuilder New(string key) => new GameSettingBuilder(key);

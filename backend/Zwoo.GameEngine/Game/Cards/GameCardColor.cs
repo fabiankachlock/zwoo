@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zwoo.GameEngine.Game.Cards;
 
-public enum CardColor
+public enum GameCardColor
 {
     None = 0,
     Red = 1,
@@ -20,8 +20,8 @@ public class CardColorHelper
 {
     private static Random _random = new Random();
 
-    public static CardColor Random()
+    public static GameCardColor Random()
     {
-        return (CardColor)(_random.Next(4));
+        return (GameCardColor)(_random.Next(4));
     }
 }

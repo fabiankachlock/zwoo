@@ -50,16 +50,16 @@ public struct ClientEvent
     public struct PlaceCardEvent
     {
         public readonly long Player;
-        public readonly Card Card;
+        public readonly GameCard Card;
 
-        public PlaceCardEvent(long player, Card card)
+        public PlaceCardEvent(long player, GameCard card)
         {
             Player = player;
             Card = card;
         }
     }
 
-    public static ClientEvent PlaceCard(long player, Card card)
+    public static ClientEvent PlaceCard(long player, GameCard card)
     {
         return new ClientEvent(ClientEventType.PlaceCard, new PlaceCardEvent(player, card));
     }

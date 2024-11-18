@@ -2,7 +2,6 @@ using Zwoo.GameEngine.ZRP;
 using Zwoo.GameEngine.Logging;
 using Zwoo.GameEngine.Lobby;
 using Zwoo.GameEngine.Notifications;
-using Zwoo.GameEngine.Lobby.Features;
 
 namespace Zwoo.GameEngine;
 
@@ -14,15 +13,13 @@ public sealed class GameManager
     private long _gameId;
     private Dictionary<long, ZwooRoom> _activeGames;
     private INotificationAdapter _notificationAdapter;
-    private IExternalGameProfileProvider _gameProfileProvider;
 
 
-    public GameManager(INotificationAdapter notificationAdapter, IExternalGameProfileProvider gameProfileProvider, ILoggerFactory loggerFactory)
+    public GameManager(INotificationAdapter notificationAdapter, ILoggerFactory loggerFactory)
     {
         _gameId = 0;
         _activeGames = new Dictionary<long, ZwooRoom>();
         _notificationAdapter = notificationAdapter;
-        _gameProfileProvider = gameProfileProvider;
         _loggerFactory = loggerFactory;
         _logger = _loggerFactory.CreateLogger("GameManager");
     }
@@ -30,7 +27,7 @@ public sealed class GameManager
     public ZwooRoom CreateGame(string name, bool isPublic)
     {
         long id = nextGameId();
-        var room = new ZwooRoom(id, name, isPublic, _notificationAdapter, _gameProfileProvider, _loggerFactory);
+        var room = new ZwooRoom(id, name, isPublic, _notificationAdapter, _loggerFactory);
         room.OnClosed += () =>
         {
             RemoveGame(room.Id);

@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Zwoo.GameEngine.Game.State;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.Game.Settings;
 
@@ -29,7 +25,7 @@ public class GameSettings : IGameSettingsStore
                 {"de", "Lege eine maximale Anzahl an Mitspielern für dein Spiel fest."},
                 {"en", "Change maximum amount of players for your game."},
             },
-            Type = GameSettingsType.Numeric,
+            Type = SettingsType.Numeric,
             Min = 1,
             Max = 20
         },
@@ -44,7 +40,7 @@ public class GameSettings : IGameSettingsStore
                 {"de", "Lege die Anzahl an Karten fest, die ein Spieler am Anfang bekommt."},
                 {"en", "Choose the amount of cards each player is supplied with at the start of a game."},
             },
-            Type = GameSettingsType.Numeric,
+            Type = SettingsType.Numeric,
             Min = 1,
             Max = 30
         }

@@ -1,5 +1,5 @@
 
-using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.Logging;
 
 namespace Zwoo.GameEngine.Notifications;

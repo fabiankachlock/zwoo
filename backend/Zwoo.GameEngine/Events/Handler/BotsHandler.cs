@@ -1,6 +1,7 @@
 using Zwoo.GameEngine.ZRP;
 using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.Bots;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.Events.Handler;
 
@@ -54,6 +55,6 @@ public class BotsHandler : IUserEventHandler
 
     private void GetBots(UserContext context, IIncomingEvent message, INotificationAdapter websocketManager)
     {
-        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendBots, new AllBotsNotification(context.BotManager.ListBots().Select(bot => new AllBots_BotDTO(bot.AsPlayer().LobbyId, bot.Username, new BotConfigDTO(bot.Config.Type), 0)).ToArray()));
+        websocketManager.SendPlayer(context.LobbyId, ZRPCode.SendBots, new SendBotsNotification(context.BotManager.ListBots().Select(bot => new SendBots_BotDTO(bot.AsPlayer().LobbyId, bot.Username, new BotConfigDTO(bot.Config.Type), 0)).ToArray()));
     }
 }

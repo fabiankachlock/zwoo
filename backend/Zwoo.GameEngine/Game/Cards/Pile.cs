@@ -12,7 +12,7 @@ public class EmptyPileException : Exception { }
 public class Pile
 {
 
-    private List<Card> AvailableCards;
+    private List<GameCard> AvailableCards;
     private Random random = new Random();
     private IGameSettingsStore _settings;
 
@@ -20,37 +20,37 @@ public class Pile
     public Pile(IGameSettingsStore settings)
     {
         _settings = settings;
-        AvailableCards = new List<Card>();
+        AvailableCards = new List<GameCard>();
         PopulateStack();
     }
 
-    private List<Card> GetScrambeledCardSet()
+    private List<GameCard> GetScrambeledCardSet()
     {
         int amount;
-        List<Card> cards = new List<Card>();
+        List<GameCard> cards = new List<GameCard>();
         for (int color = 1; color <= 4; color++)
         {
             for (int type = 1; type <= 13; type++)
             {
-                amount = _settings.Get(PileSettings.GetKeyForType((CardType)type));
+                amount = _settings.Get(PileSettings.GetKeyForType((GameCardType)type));
                 for (int i = 0; i < amount; i++)
                 {
-                    cards.Add(new Card(color, type));
+                    cards.Add(new GameCard(color, type));
                 }
             }
         }
 
 
-        amount = _settings.Get(PileSettings.GetKeyForType(CardType.Wild));
+        amount = _settings.Get(PileSettings.GetKeyForType(GameCardType.Wild));
         for (int i = 0; i < amount; i++)
         {
-            cards.Add(new Card(CardColor.Black, CardType.Wild));
+            cards.Add(new GameCard(GameCardColor.Black, GameCardType.Wild));
         }
 
-        amount = _settings.Get(PileSettings.GetKeyForType(CardType.WildFour));
+        amount = _settings.Get(PileSettings.GetKeyForType(GameCardType.WildFour));
         for (int i = 0; i < amount; i++)
         {
-            cards.Add(new Card(CardColor.Black, CardType.WildFour));
+            cards.Add(new GameCard(GameCardColor.Black, GameCardType.WildFour));
         }
 
 
@@ -59,7 +59,7 @@ public class Pile
         {
             n--;
             int k = random.Next(n + 1);
-            Card value = cards[k];
+            GameCard value = cards[k];
             cards[k] = cards[n];
             cards[n] = value;
         }
@@ -72,7 +72,7 @@ public class Pile
         AvailableCards = AvailableCards.Concat(GetScrambeledCardSet()).ToList();
     }
 
-    public Card DrawCard()
+    public GameCard DrawCard()
     {
         if (AvailableCards.Count == 0)
         {
@@ -80,14 +80,14 @@ public class Pile
         }
         if (AvailableCards.Count == 0) throw new EmptyPileException();
 
-        Card card = AvailableCards[0];
+        GameCard card = AvailableCards[0];
         AvailableCards.RemoveAt(0);
         return card;
     }
 
-    public List<Card> DrawCard(int amount)
+    public List<GameCard> DrawCard(int amount)
     {
-        List<Card> cards = new List<Card>();
+        List<GameCard> cards = new List<GameCard>();
         for (int i = 0; i < amount; i++)
         {
             cards.Add(DrawCard());
@@ -95,7 +95,7 @@ public class Pile
         return cards;
     }
 
-    public Card DrawSaveCard()
+    public GameCard DrawSaveCard()
     {
         if (AvailableCards.Count == 0)
         {
@@ -103,13 +103,13 @@ public class Pile
         }
         if (AvailableCards.Count == 0) throw new EmptyPileException();
 
-        int idx = AvailableCards.FindIndex(0, card => card.Color != CardColor.Black && card.Type <= CardType.Nine);
+        int idx = AvailableCards.FindIndex(0, card => card.Color != GameCardColor.Black && card.Type <= GameCardType.Nine);
         if (idx == -1)
         {
             // fall back to first card
             idx = 0;
         }
-        Card card = AvailableCards[idx];
+        GameCard card = AvailableCards[idx];
         AvailableCards.RemoveAt(idx);
         return card;
     }

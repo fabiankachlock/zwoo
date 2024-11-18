@@ -1,5 +1,5 @@
 using Zwoo.GameEngine.Notifications;
-using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.Bots.Decisions;
 using Zwoo.GameEngine.Logging;
 using Zwoo.GameEngine.Lobby;

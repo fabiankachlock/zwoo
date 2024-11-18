@@ -67,16 +67,16 @@ public struct GameEvent
     public struct GetCardEvent
     {
         public readonly long Player;
-        public readonly List<Card> Cards;
+        public readonly List<GameCard> Cards;
 
-        public GetCardEvent(long player, List<Card> cards)
+        public GetCardEvent(long player, List<GameCard> cards)
         {
             Player = player;
             Cards = cards;
         }
     }
 
-    public static GameEvent SendCards(long player, List<Card> cards)
+    public static GameEvent SendCards(long player, List<GameCard> cards)
     {
         return new GameEvent(GameEventType.GetCard, new GetCardEvent(player, cards));
     }
@@ -85,37 +85,37 @@ public struct GameEvent
     public struct RemoveCardEvent
     {
         public readonly long Player;
-        public readonly List<Card> Cards;
+        public readonly List<GameCard> Cards;
 
-        public RemoveCardEvent(long player, List<Card> cards)
+        public RemoveCardEvent(long player, List<GameCard> cards)
         {
             Player = player;
             Cards = cards;
         }
     }
 
-    public static GameEvent RemoveCard(long player, List<Card> cards)
+    public static GameEvent RemoveCard(long player, List<GameCard> cards)
     {
         return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, cards));
     }
 
     // added for compatibility reasons
-    public static GameEvent RemoveCard(long player, Card card)
+    public static GameEvent RemoveCard(long player, GameCard card)
     {
-        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, new List<Card>() { card }));
+        return new GameEvent(GameEventType.RemoveCard, new RemoveCardEvent(player, new List<GameCard>() { card }));
     }
 
 
     // StateUpdateEvent
     public struct StateUpdateEvent
     {
-        public readonly Card TopCard;
+        public readonly GameCard TopCard;
         public readonly long ActivePlayer;
         public readonly Dictionary<long, int> CardAmounts;
-        public readonly List<UIFeedback> Feedback;
+        public readonly List<GameFeedback> Feedback;
         public readonly int? CurrentDrawAmount;
 
-        public StateUpdateEvent(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<UIFeedback> feedback, int? currentDrawAmount)
+        public StateUpdateEvent(GameCard topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<GameFeedback> feedback, int? currentDrawAmount)
         {
             TopCard = topCard;
             ActivePlayer = activePlayer;
@@ -125,7 +125,7 @@ public struct GameEvent
         }
     }
 
-    public static GameEvent CreateStateUpdate(Card topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<UIFeedback> feedback, int? currentDrawAmount)
+    public static GameEvent CreateStateUpdate(GameCard topCard, long activePlayer, Dictionary<long, int> cardAmounts, List<GameFeedback> feedback, int? currentDrawAmount)
     {
         return new GameEvent(GameEventType.StateUpdate, new StateUpdateEvent(topCard, activePlayer, cardAmounts, feedback, currentDrawAmount));
     }

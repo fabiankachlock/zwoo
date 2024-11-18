@@ -1,6 +1,7 @@
-using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.Bots.State;
 using Zwoo.GameEngine.Logging;
+using Zwoo.GameEngine.ZRP;
 
 
 namespace Zwoo.GameEngine.Bots.Decisions;
@@ -27,7 +28,7 @@ public class DumpBotDecisionManager : IBotDecisionHandler
         switch (message.Code)
         {
             case ZRPCode.GameStarted:
-                OnEvent.Invoke(ZRPCode.GetHand, new GetDeckEvent());
+                OnEvent.Invoke(ZRPCode.GetDeck, new GetDeckEvent());
                 break;
             case ZRPCode.GetPlayerDecision:
                 _logger.Info("making decision");
@@ -72,8 +73,7 @@ public class DumpBotDecisionManager : IBotDecisionHandler
         try
         {
             OnEvent.Invoke(ZRPCode.PlaceCard, new PlaceCardEvent(
-                (int)state.Deck[placedCard].Color,
-                (int)state.Deck[placedCard].Type
+                state.Deck[placedCard].ToZRP()
             ));
             if (state.Deck.Count == 2 && _rand.Next(10) > 4)
             {
@@ -90,7 +90,7 @@ public class DumpBotDecisionManager : IBotDecisionHandler
     private void makeDecision(GetPlayerDecisionNotification data)
     {
         var decision = _rand.Next(data.Options.Count);
-        OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent(data.Type, decision));
+        OnEvent.Invoke(ZRPCode.SendPlayerDecision, new PlayerDecisionEvent(data.Type, decision));
     }
 
     public void Reset()

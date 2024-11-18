@@ -27,23 +27,23 @@ public class SkipRuleTests
     public void ShouldBeTriggered()
     {
         GameScenario.Create($"triggers {_rule.Name}")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Red, CardType.Skip))
-         .ShouldTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Skip))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Five))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Reverse))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.Wild))
-         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(CardColor.Green, CardType.WildFour))
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Red, GameCardType.Skip))
+         .ShouldTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Skip))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Five))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Reverse))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.Wild))
+         .ShouldNotTriggerRule(_rule, TestClient.PlaceCard(GameCardColor.Green, GameCardType.WildFour))
          .ShouldNotTriggerRule(_rule, TestClient.DrawCard())
          .ShouldNotTriggerRule(_rule, TestClient.PlayerDecision(PlayerDecision.SelectColor, 0))
          .ShouldNotTriggerRule(_rule, TestClient.RequestEndTurn());
     }
 
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Red, CardType.Skip)]
-    [TestCase(CardColor.Red, CardType.Skip, CardColor.Blue, CardType.Skip)]
-    public void ShouldPlaceCardIfAllowed(CardColor topColor, CardType topType, CardColor placeColor, CardType placeType)
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Red, GameCardType.Skip)]
+    [TestCase(GameCardColor.Red, GameCardType.Skip, GameCardColor.Blue, GameCardType.Skip)]
+    public void ShouldPlaceCardIfAllowed(GameCardColor topColor, GameCardType topType, GameCardColor placeColor, GameCardType placeType)
     {
-        Card card = new Card(placeColor, placeType);
+        GameCard card = new GameCard(placeColor, placeType);
         GameScenario.Create($"{_rule.Name} places card")
          .WithTopCard(topColor, topType)
          .WithRule(_rule)
@@ -52,10 +52,10 @@ public class SkipRuleTests
          .ExpectTopCard(new StackCard(card, false));
     }
 
-    [TestCase(CardColor.Red, CardType.Two, CardColor.Blue, CardType.Skip)]
-    public void ShouldNotPlaceCardIfDisallowed(CardColor topColor, CardType topType, CardColor placeColor, CardType placeType)
+    [TestCase(GameCardColor.Red, GameCardType.Two, GameCardColor.Blue, GameCardType.Skip)]
+    public void ShouldNotPlaceCardIfDisallowed(GameCardColor topColor, GameCardType topType, GameCardColor placeColor, GameCardType placeType)
     {
-        Card card = new Card(placeColor, placeType);
+        GameCard card = new GameCard(placeColor, placeType);
         GameScenario.Create($"{_rule.Name} rejects card")
          .WithTopCard(topColor, topType)
          .WithRule(_rule)
@@ -68,9 +68,9 @@ public class SkipRuleTests
     [Test]
     public void ShouldCheckActivePlayer()
     {
-        Card card = new Card(CardColor.Red, CardType.Skip);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Skip);
         GameScenario.Create($"{_rule.Name} accepts only active player")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck(card)
          .Trigger(TestClient.As(1).PlaceCard(card))
@@ -80,9 +80,9 @@ public class SkipRuleTests
     [Test]
     public void ShouldCheckPlayerHasCard()
     {
-        Card card = new Card(CardColor.Red, CardType.Skip);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Skip);
         GameScenario.Create($"{_rule.Name} checks player has card")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([])
          .Trigger(TestClient.PlaceCard(card))
@@ -92,9 +92,9 @@ public class SkipRuleTests
     [Test]
     public void ShouldRemoveCardFromDeck()
     {
-        Card card = new Card(CardColor.Red, CardType.Skip);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Skip);
         GameScenario.Create($"{_rule.Name} removes card from deck")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithRule(_rule)
          .WithDeck([card, card])
          .Trigger(TestClient.PlaceCard(card))
@@ -104,10 +104,10 @@ public class SkipRuleTests
     [Test]
     public void ShouldSwitchPlayer()
     {
-        Card card = new Card(CardColor.Red, CardType.Skip);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Skip);
         GameScenario.Create($"{_rule.Name} switches player")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .WithPlayersAndCards(new Dictionary<long, List<Card>> { { 0, [card] }, { 1, [] }, { 2, [] } })
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .WithPlayersAndCards(new Dictionary<long, List<GameCard>> { { 0, [card] }, { 1, [] }, { 2, [] } })
          .WithActivePlayer(0)
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -116,9 +116,9 @@ public class SkipRuleTests
 
     public void ShouldDisplayCurrentDrawAmount()
     {
-        Card card = new Card(CardColor.Red, CardType.Skip);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Skip);
         GameScenario.Create($"{_rule.Name} updates current draw amount")
-         .WithTopCard(CardColor.Red, CardType.Two)
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -128,9 +128,9 @@ public class SkipRuleTests
     [Test]
     public void ShouldNotAllowOnDrawCard()
     {
-        Card card = new Card(CardColor.Red, CardType.Skip);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Skip);
         GameScenario.Create($"{_rule.Name} does not allow on draw")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
@@ -140,34 +140,34 @@ public class SkipRuleTests
     [Test]
     public void ShouldAllowOnDrawOnceActivated()
     {
-        Card card = new Card(CardColor.Red, CardType.Skip);
+        GameCard card = new GameCard(GameCardColor.Red, GameCardType.Skip);
         GameScenario.Create($"{_rule.Name} allows on activated draw")
-         .WithTopCard(CardColor.Red, CardType.DrawTwo, true)
+         .WithTopCard(GameCardColor.Red, GameCardType.DrawTwo, true)
          .WithDeck([card])
          .WithRule(_rule)
          .Trigger(TestClient.PlaceCard(card))
-         .ExpectTopCard(CardColor.Red, CardType.Skip);
+         .ExpectTopCard(GameCardColor.Red, GameCardType.Skip);
     }
 
     [Test]
     public void ShouldSkip()
     {
         GameScenario.Create($"{_rule.Name} skips a player")
-         .WithTopCard(CardColor.Red, CardType.Two)
-         .WithPlayersAndCards(new Dictionary<long, List<Card>>{
-            {0, [new Card(CardColor.Red, CardType.Three), new Card(CardColor.Red, CardType.Skip)]},
-            {1, [new Card(CardColor.Red, CardType.Skip)]},
-            {2, [new Card(CardColor.Red, CardType.Four)]},
+         .WithTopCard(GameCardColor.Red, GameCardType.Two)
+         .WithPlayersAndCards(new Dictionary<long, List<GameCard>>{
+            {0, [new GameCard(GameCardColor.Red, GameCardType.Three), new GameCard(GameCardColor.Red, GameCardType.Skip)]},
+            {1, [new GameCard(GameCardColor.Red, GameCardType.Skip)]},
+            {2, [new GameCard(GameCardColor.Red, GameCardType.Four)]},
          })
          .WithActivePlayer(0)
          .WithRules(_rule, new BaseCardRule())
-         .Trigger(TestClient.PlaceCard(CardColor.Red, CardType.Three))
+         .Trigger(TestClient.PlaceCard(GameCardColor.Red, GameCardType.Three))
          .ExpectActivePlayer(1)
-         .Trigger(TestClient.As(1).PlaceCard(CardColor.Red, CardType.Skip))
+         .Trigger(TestClient.As(1).PlaceCard(GameCardColor.Red, GameCardType.Skip))
          .ExpectActivePlayer(0)
-         .Trigger(TestClient.PlaceCard(CardColor.Red, CardType.Skip))
+         .Trigger(TestClient.PlaceCard(GameCardColor.Red, GameCardType.Skip))
          .ExpectActivePlayer(2)
-         .Trigger(TestClient.As(2).PlaceCard(CardColor.Red, CardType.Four))
+         .Trigger(TestClient.As(2).PlaceCard(GameCardColor.Red, GameCardType.Four))
          .ExpectActivePlayer(0);
 
     }

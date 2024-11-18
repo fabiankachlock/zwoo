@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
+using Zwoo.Api.ZRP;
 using Zwoo.Backend.LocalServer.Authentication;
 using Zwoo.Backend.LocalServer.Services;
 using Zwoo.Backend.Shared.Api;
@@ -10,7 +11,6 @@ using Zwoo.Backend.Shared.Api.Game;
 using Zwoo.Backend.Shared.Configuration;
 using Zwoo.Backend.Shared.Services;
 using Zwoo.Database.Dao;
-using Zwoo.GameEngine.Lobby.Features;
 using Zwoo.GameEngine.ZRP;
 
 if (args.Length >= 1 && args[0] == "-h")
@@ -58,7 +58,6 @@ var conf = builder.AddZwooConfiguration(args, new ZwooAppConfiguration()
 builder.Services.AddLocalAuthentication(config.ServerId);
 
 builder.Services.AddSingleton<IGameDatabaseAdapter, Mock>();
-builder.Services.AddSingleton<IExternalGameProfileProvider, EmptyGameProfileProvider>();
 builder.Services.AddSingleton<ILocalUserManager, LocalUserManager>();
 
 

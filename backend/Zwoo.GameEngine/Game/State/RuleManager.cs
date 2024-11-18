@@ -2,6 +2,7 @@ using Zwoo.GameEngine.Game.Rules;
 using Zwoo.GameEngine.Game.Events;
 using Zwoo.GameEngine.Game.Settings;
 using Zwoo.GameEngine.Logging;
+using Zwoo.Api.ZRP;
 
 namespace Zwoo.GameEngine.Game.State;
 
@@ -37,7 +38,7 @@ internal class RuleManager
         _activeRules = AllRules()
             .Where(rule =>
             {
-                if (rule.Meta == null || rule.Meta.Value.RootSetting.Type != GameSettingsType.Boolean) return true;
+                if (rule.Meta == null || rule.Meta.Value.RootSetting.Type != SettingsType.Boolean) return true;
                 return _settings.Get(rule.Meta.Value.RootSetting.Key) > 0;
             })
             .ToList();

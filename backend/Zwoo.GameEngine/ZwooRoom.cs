@@ -4,7 +4,6 @@ using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.Bots;
 using Zwoo.GameEngine.Events;
 using Zwoo.GameEngine.Logging;
-using Zwoo.GameEngine.Lobby.Features;
 
 namespace Zwoo.GameEngine;
 
@@ -14,7 +13,6 @@ public class ZwooRoom
     public readonly LobbyManager Lobby;
     public readonly ZRPPlayerManager PlayerManager;
     public readonly BotManager BotManager;
-    public readonly GameProfileProvider GameProfileProvider;
 
     public delegate void ClosedHandler();
     public event ClosedHandler OnClosed = delegate { };
@@ -39,7 +37,7 @@ public class ZwooRoom
         get => Game.Id;
     }
 
-    public ZwooRoom(long id, string name, bool isPublic, INotificationAdapter notificationAdapter, IExternalGameProfileProvider externalGameProfileProvider, ILoggerFactory loggerFactory)
+    public ZwooRoom(long id, string name, bool isPublic, INotificationAdapter notificationAdapter, ILoggerFactory loggerFactory)
     {
         _notificationDistributer = new(this, notificationAdapter);
         _eventDistributer = new UserEventDistributer(this);
@@ -48,7 +46,6 @@ public class ZwooRoom
         Game = new(id, name, isPublic, notificationTranslator, loggerFactory);
         Lobby = new(Game.Id, Game.Settings);
         PlayerManager = new ZRPPlayerManager(_notificationDistributer, this, loggerFactory.CreateLogger("PlayerManager"));
-        GameProfileProvider = new GameProfileProvider(externalGameProfileProvider);
 
         BotManager = new BotManager(Game, loggerFactory);
         BotManager.OnEvent += _eventDistributer.DistributeEvent;

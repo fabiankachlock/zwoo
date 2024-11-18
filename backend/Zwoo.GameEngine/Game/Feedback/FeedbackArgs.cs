@@ -1,6 +1,6 @@
 namespace Zwoo.GameEngine.Game.Feedback;
 
-public static class UIFeedbackArgKey
+public static class FeedbackArgKey
 {
     // core keys
     public static readonly string Target = "target";

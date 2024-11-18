@@ -9,16 +9,16 @@ namespace Zwoo.GameEngine.Game.State;
 
 public struct StackCard
 {
-    public Card Card;
+    public GameCard Card;
     public bool EventActivated;
 
-    public StackCard(Card card, bool eventActivated)
+    public StackCard(GameCard card, bool eventActivated)
     {
         Card = card;
         EventActivated = eventActivated;
     }
 
-    public StackCard(Card card)
+    public StackCard(GameCard card)
     {
         Card = card;
         EventActivated = false;

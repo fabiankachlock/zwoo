@@ -1,6 +1,7 @@
 using System.Net.WebSockets;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Zwoo.Api.ZRP;
 using Zwoo.Backend.Shared.Api.Game.Adapter;
 using Zwoo.GameEngine.Notifications;
 using Zwoo.GameEngine.ZRP;

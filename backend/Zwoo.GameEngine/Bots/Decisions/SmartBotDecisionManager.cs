@@ -1,8 +1,9 @@
-using Zwoo.GameEngine.ZRP;
+using Zwoo.Api.ZRP;
 using Zwoo.GameEngine.Bots.State;
 using Zwoo.GameEngine.Logging;
 using Zwoo.GameEngine.Game.Cards;
 using Zwoo.GameEngine.Game.Events;
+using Zwoo.GameEngine.ZRP;
 
 
 namespace Zwoo.GameEngine.Bots.Decisions;
@@ -29,7 +30,7 @@ public class SmartBotDecisionManager : IBotDecisionHandler
         switch (message.Code)
         {
             case ZRPCode.GameStarted:
-                OnEvent.Invoke(ZRPCode.GetHand, new GetDeckEvent());
+                OnEvent.Invoke(ZRPCode.GetDeck, new GetDeckEvent());
                 break;
             case ZRPCode.GetPlayerDecision:
                 _logger.Info("making decision");
@@ -67,8 +68,7 @@ public class SmartBotDecisionManager : IBotDecisionHandler
         try
         {
             OnEvent.Invoke(ZRPCode.PlaceCard, new PlaceCardEvent(
-                (int)state.Deck[placedCard].Color,
-                (int)state.Deck[placedCard].Type
+                state.Deck[placedCard].ToZRP()
             ));
             if (state.Deck.Count == 2 && _rand.Next(10) > 4)
             {
@@ -94,15 +94,15 @@ public class SmartBotDecisionManager : IBotDecisionHandler
             decidePlayer(data);
         }
         var decision = _rand.Next(data.Options.Count);
-        OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent(data.Type, decision));
+        OnEvent.Invoke(ZRPCode.SendPlayerDecision, new PlayerDecisionEvent(data.Type, decision));
     }
 
     private void decideColor(GetPlayerDecisionNotification data)
     {
-        List<CardColor> options = [];
+        List<GameCardColor> options = [];
         _stateManager.GetState().Deck.ForEach(card =>
         {
-            if (card.Type != CardType.Wild && card.Type != CardType.WildFour)
+            if (card.Type != GameCardType.Wild && card.Type != GameCardType.WildFour)
             {
                 options.Add(card.Color);
             }
@@ -111,15 +111,15 @@ public class SmartBotDecisionManager : IBotDecisionHandler
         if (options.Count == 0)
         {
             options = [
-                CardColor.Red,
-                CardColor.Yellow,
-                CardColor.Blue,
-                CardColor.Green
+                GameCardColor.Red,
+                GameCardColor.Yellow,
+                GameCardColor.Blue,
+                GameCardColor.Green
             ];
         }
 
         var decision = options[_rand.Next(options.Count)];
-        OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent(data.Type, data.Options.IndexOf(((int)decision).ToString())));
+        OnEvent.Invoke(ZRPCode.SendPlayerDecision, new PlayerDecisionEvent(data.Type, data.Options.IndexOf(((int)decision).ToString())));
     }
 
     private void decidePlayer(GetPlayerDecisionNotification data)
@@ -132,11 +132,11 @@ public class SmartBotDecisionManager : IBotDecisionHandler
 
         if (lowestAmount.Key == null)
         {
-            OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent(data.Type, _rand.Next(data.Options.Count)));
+            OnEvent.Invoke(ZRPCode.SendPlayerDecision, new PlayerDecisionEvent(data.Type, _rand.Next(data.Options.Count)));
             return;
         }
 
-        OnEvent.Invoke(ZRPCode.ReceiveDecision, new PlayerDecisionEvent(data.Type, data.Options.IndexOf(lowestAmount.Key)));
+        OnEvent.Invoke(ZRPCode.SendPlayerDecision, new PlayerDecisionEvent(data.Type, data.Options.IndexOf(lowestAmount.Key)));
     }
 
     public void Reset()

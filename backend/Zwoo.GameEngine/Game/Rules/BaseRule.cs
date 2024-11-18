@@ -105,7 +105,7 @@ public abstract class BaseRule
     /// <param name="player">ID of the player</param>
     /// <param name="card">card the player should have</param>
     /// <returns></returns>
-    protected bool PlayerHasCard(GameState state, long player, Card card)
+    protected bool PlayerHasCard(GameState state, long player, GameCard card)
     {
         if (!IsValidPlayer(state, player)) return false;
         bool isValid = state.PlayerDecks[player].Contains(card);
@@ -137,10 +137,10 @@ public abstract class BaseRule
     /// </summary>
     /// <param name="card">card</param>
     /// <returns>the amount of card a player should draw</returns>
-    protected int GetDrawAmount(Card card)
+    protected int GetDrawAmount(GameCard card)
     {
-        if (card.Type == CardType.DrawTwo) return 2;
-        else if (card.Type == CardType.WildFour) return 4;
+        if (card.Type == GameCardType.DrawTwo) return 2;
+        else if (card.Type == GameCardType.WildFour) return 4;
         else return 0;
     }
 
@@ -152,8 +152,8 @@ public abstract class BaseRule
     protected int? GetActiveDrawAmount(StackCard card)
     {
         if (card.EventActivated) return null;
-        else if (card.Card.Type == CardType.DrawTwo) return 2;
-        else if (card.Card.Type == CardType.WildFour) return 4;
+        else if (card.Card.Type == GameCardType.DrawTwo) return 2;
+        else if (card.Card.Type == GameCardType.WildFour) return 4;
         return null;
     }
 }
