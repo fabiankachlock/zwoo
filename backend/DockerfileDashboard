@@ -1,10 +1,11 @@
-FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
+FROM ghcr.io/zwoo-hq/docker-base:v1.0.0 AS builder
 
 WORKDIR /src
 COPY ./zwooc.config.json ./
 
 WORKDIR /src/backend
 
+COPY ./backend/Directory.Build.props ./
 COPY ./backend/Zwoo.Dashboard/Zwoo.Dashboard.csproj ./Zwoo.Dashboard/
 COPY ./backend/Zwoo.Database/Zwoo.Database.csproj ./Zwoo.Database/
 
@@ -14,7 +15,7 @@ COPY ./backend .
 
 RUN zwooc build -e setup:version:be ziad -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 
 WORKDIR /app
 COPY --from=builder /app/publish .

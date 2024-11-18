@@ -1,4 +1,4 @@
-FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
+FROM ghcr.io/zwoo-hq/docker-base:v1.0.0 AS builder
 
 WORKDIR /src
 COPY ./zwooc.config.json ./
@@ -6,13 +6,15 @@ COPY ./zwooc.config.json ./
 # setup frontend
 WORKDIR /src/frontend
 COPY ./frontend/package.json ./
-COPY ./frontend/yarn.lock ./
+COPY ./frontend/pnpm-lock.yaml ./
 
-RUN yarn
+RUN corepack enable
+RUN pnpm install --frozen-lockfile
 
 
 # setup wasm related backend stuff
 WORKDIR /src/backend
+COPY ./backend/Directory.Build.props ./
 COPY ./backend/Zwoo.GameEngine.Wasm/Zwoo.GameEngine.Wasm.csproj ./Zwoo.GameEngine.Wasm/
 COPY ./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj ./Zwoo.GameEngine/
 
@@ -23,7 +25,7 @@ RUN dotnet workload install wasm-tools \
 ### build wasm project
 COPY ./backend .
 
-RUN zwooc build wasm
+RUN zwooc build -e setup:version:be wasm
 
 ### Build Fronten
 WORKDIR /src/frontend

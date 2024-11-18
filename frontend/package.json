@@ -12,19 +12,19 @@
     "typecheck": "vue-tsc --noEmit && echo \"\"",
     "__preview": "vite preview --mode preview",
     "__preview:prod": "vite preview --mode dev",
-    "build": "yarn pre:build && vite build --mode production",
-    "build-fe-only": "yarn pre:build-fe-only && vite build --mode production",
-    "build:dev-instance": "yarn pre:build && vite build --mode dev-instance",
-    "build-fe-only:dev-instance": "yarn pre:build-fe-only && vite build --mode dev-instance",
-    "build:tauri": "yarn pre:build && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
-    "build-fe-only:tauri": "yarn pre:build-fe-only && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
-    "build:preview": "yarn pre:build && vite build --mode preview --outDir dist-preview",
-    "build-fe-only:preview": "yarn pre:build-fe-only && vite build --mode preview --outDir dist-preview",
+    "build": "pnpm pre:build && vite build --mode production",
+    "build-fe-only": "pnpm pre:build-fe-only && vite build --mode production",
+    "build:dev-instance": "pnpm pre:build && vite build --mode dev-instance",
+    "build-fe-only:dev-instance": "pnpm pre:build-fe-only && vite build --mode dev-instance",
+    "build:tauri": "pnpm pre:build && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
+    "build-fe-only:tauri": "pnpm pre:build-fe-only && cross-env VUE_APP_IS_TAURI=true vite build --mode production --outDir dist-preview && cp -r dist-preview ./dist-tmp",
+    "build:preview": "pnpm pre:build && vite build --mode preview --outDir dist-preview",
+    "build-fe-only:preview": "pnpm pre:build-fe-only && vite build --mode preview --outDir dist-preview",
     "build:analyze": "pre:build-fe-only && cross-env ANALYZE=true vite build",
-    "pre:build": "yarn typecheck && yarn build:assets",
-    "pre:build-fe-only": "yarn typecheck && yarn build-fe-only:assets",
-    "build:assets": "yarn build:cards && yarn build:icons && yarn build:themes && yarn build:wasm",
-    "build-fe-only:assets": "yarn build:cards && yarn build:icons && yarn build:themes",
+    "pre:build": "pnpm typecheck && pnpm build:assets",
+    "pre:build-fe-only": "pnpm typecheck && pnpm build-fe-only:assets",
+    "build:assets": "pnpm build:cards && pnpm build:icons && pnpm build:themes && pnpm build:wasm",
+    "build-fe-only:assets": "pnpm build:cards && pnpm build:icons && pnpm build:themes",
     "build:cards": "node ./scripts/buildCardAssets.js",
     "build:icons": "node ./src/modules/zwoo-icons/generate-icons.js",
     "build:themes": "node ./src/modules/zwoo-themes/build-themes.js",
@@ -40,7 +40,7 @@
     "format": "prettier --write \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
     "format:ci": "prettier --check \"src/**/*.{js,ts,vue,html,css}\" \"./*.{js,ts,vue,html,css}\"",
     "prepare": "cd .. && husky frontend/.husky",
-    "postversion": "yarn setup:version && git add .env",
+    "postversion": "pnpm setup:version && git add .env",
     "setup:version": "node ./scripts/version.js",
     "deps:check": "depcruise -m --config .dependency-cruiser.js src",
     "deps:viz": "depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg"
@@ -48,8 +48,8 @@
   "dependencies": {
     "@hcaptcha/vue3-hcaptcha": "^1.3.0",
     "@log-rush/client": "^1.1.1",
-    "@tauri-apps/api": "^2.0.0-beta.8",
-    "@tauri-apps/plugin-os": "^2.0.0-rc.1",
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-os": "^2.0.0",
     "@vueuse/core": "^11.0.3",
     "@vueuse/integrations": "^11.0.3",
     "dexie": "^4.0.9",
@@ -66,14 +66,14 @@
     "@iconify/json": "^2.2.270",
     "@iconify/json-tools": "^1.0.10",
     "@intlify/unplugin-vue-i18n": "^5.3.0",
-    "@tauri-apps/cli": "2.0.0-rc.16",
+    "@tauri-apps/cli": "2.1.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.9.0",
     "@types/semver": "^7.5.8",
     "@types/vue-router": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "@vitejs/plugin-vue": "^5.1.4",
+    "@vitejs/plugin-vue": "^5.2.0",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.6",
@@ -100,30 +100,37 @@
     "tailwindcss": "^3.4.14",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3",
-    "vite": "^5.4.10",
-    "vite-plugin-pwa": "^0.20.5",
+    "vite": "^5.4.11",
+    "vite-plugin-pwa": "^0.21.0",
     "vue-tsc": "^2.1.10",
-    "workbox-precaching": "^7.1.0",
+    "workbox-build": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-window": "^7.3.0",
     "ws": "^8.18.0"
   },
   "//1": "This solves an ERR_REQUIRE_ESM issue originated from cypress",
-  "//2": "seems to be an issue with specific to yarn v1, might upgrade or change to pnpm later",
+  "//2": "seems to be an issue with specific to pnpm v1, might upgrade or change to pnpm later",
   "resolutions": {
     "jackspeak": "2.1.1"
   },
+  "engines": {
+    "node": ">=22.10.0",
+    "pnpm": ">=9.13.0"
+  },
   "lint-staged": {
     "src/**/!(*test).(ts|vue|html)": [
-      "yarn lint",
-      "yarn typecheck"
+      "pnpm lint",
+      "pnpm typecheck"
     ],
     "src/**/*.(ts|vue|css|html)": [
-      "yarn format"
+      "pnpm format"
     ],
     "src/**/*.json": [
-      "yarn i18n:check"
+      "pnpm i18n:check"
     ],
     "src/**/*.*": [
-      "yarn deps:check"
+      "pnpm deps:check"
     ]
-  }
+  },
+  "packageManager": "pnpm@9.13.0+sha512.beb9e2a803db336c10c9af682b58ad7181ca0fbd0d4119f2b33d5f2582e96d6c0d93c85b23869295b765170fbdaa92890c0da6ada457415039769edf3c959efe"
 }

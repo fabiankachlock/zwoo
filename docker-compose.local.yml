@@ -33,7 +33,7 @@ services:
   #     - postgres
 
   docs:
-    image: artireg.igd20.de/zwoo/docs:latest
+    image: git.igd20.de/igd_2.0_ug/zwoo-docs:latest
     volumes:
       - ./docs-nginx.conf:/etc/nginx/nginx.conf
     ports:

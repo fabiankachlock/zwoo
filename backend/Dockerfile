@@ -1,10 +1,11 @@
-FROM ghcr.io/zwoo-hq/docker-base:v0.2.0 AS builder
+FROM ghcr.io/zwoo-hq/docker-base:v1.0.0 AS builder
 
 WORKDIR /src
 COPY ./zwooc.config.json ./
 
 WORKDIR /src/backend
 
+COPY ./backend/Directory.Build.props ./
 COPY ./backend/Zwoo.Backend/Zwoo.Backend.csproj ./Zwoo.Backend/
 COPY ./backend/Zwoo.GameEngine/Zwoo.GameEngine.csproj ./Zwoo.GameEngine/
 COPY ./backend/BackendHelper/BackendHelper.csproj ./BackendHelper/
@@ -16,7 +17,7 @@ COPY ./backend .
 
 RUN zwooc build -e setup:version:be server -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 
 # version override
 ARG version_override

@@ -11,31 +11,34 @@ on:
 
 jobs:
   frontend:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: zwoo-hq/setup-zwooc@v1
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8"
+          dotnet-version: "9"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: corepack enable
       - name: Install dotnet wasm-tools
         run: dotnet workload install wasm-tools
       - name: Setup
         working-directory: ./frontend
-        run: "yarn"
+        run: pnpm install --frozen-lockfile
       - name: Lint
-        run: "zwooc exec lint:ci"
+        run: zwooc exec lint:ci
       - name: Check i18n
-        run: "zwooc exec i18n:check"
+        run: zwooc exec i18n:check
       - name: Format
-        run: "zwooc exec format:ci"
+        run: zwooc exec format:ci
       # Prepare
-      - run: "zwooc exec build:themes"
-      - run: "zwooc exec build:icons"
+      - run: zwooc exec build:themes
+      - run: zwooc exec build:icons
       - name: Dependency Check
-        run: "zwooc exec deps:check"
+        run: zwooc exec deps:check
       - name: Test
-        run: "zwooc exec test:unit"
+        run: zwooc exec test:unit
       - name: Build
-        run: "zwooc build prod"
+        run: zwooc build prod

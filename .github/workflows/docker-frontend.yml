@@ -11,7 +11,7 @@ name: Frontend Docker Pipeline
 
 jobs:
   frontend-docker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Build image
