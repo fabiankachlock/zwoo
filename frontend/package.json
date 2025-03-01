@@ -52,9 +52,9 @@
     "@tauri-apps/plugin-os": "^2.0.0",
     "@vueuse/core": "^11.0.3",
     "@vueuse/integrations": "^11.0.3",
-    "dexie": "^4.0.10",
+    "dexie": "^4.0.11",
     "focus-trap": "^7.5.4",
-    "minisearch": "^7.1.1",
+    "minisearch": "^7.1.2",
     "pinia": "^2.2.8",
     "register-service-worker": "^1.7.2",
     "semver": "^7.6.3",
@@ -63,7 +63,7 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.282",
+    "@iconify/json": "^2.2.311",
     "@iconify/json-tools": "^1.0.10",
     "@intlify/unplugin-vue-i18n": "^5.3.0",
     "@tauri-apps/cli": "2.1.0",
@@ -86,7 +86,7 @@
     "dependency-cruiser": "^16.7.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-vue": "^9.32.0",
     "fs-extra": "^11.2.0",
@@ -98,7 +98,7 @@
     "prettier": "^3.3.3",
     "rollup-plugin-visualizer": "^5.12.0",
     "tailwindcss": "^3.4.16",
-    "ts-jest": "^29.2.5",
+    "ts-jest": "^29.2.6",
     "typescript": "^5.6.3",
     "vite": "^6.0.6",
     "vite-plugin-pwa": "^0.21.1",
@@ -106,7 +106,7 @@
     "workbox-build": "^7.3.0",
     "workbox-precaching": "^7.3.0",
     "workbox-window": "^7.3.0",
-    "ws": "^8.18.0"
+    "ws": "^8.18.1"
   },
   "//1": "This solves an ERR_REQUIRE_ESM issue originated from cypress",
   "//2": "seems to be an issue with specific to pnpm v1, might upgrade or change to pnpm later",
