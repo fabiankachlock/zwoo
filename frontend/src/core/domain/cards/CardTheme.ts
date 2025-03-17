@@ -9,6 +9,7 @@ import {
   CardThemeInformation,
   MAX_THEME_PREVIEWS
 } from './CardThemeConfig';
+import { CardThemeManager } from './ThemeManager';
 
 export type SerializedCardTheme = {
   name: string;
@@ -44,7 +45,7 @@ export class CardTheme {
     return this.config.colors[this.variant];
   }
 
-  public getCard(card: Card | CardDescriptor | string): CardImageData {
+  public async getCard(card: Card | CardDescriptor | string): Promise<CardImageData> {
     const layers: string[] = [];
     if (Object.values(CardDescriptor).includes(card as CardDescriptor)) {
       layers.push(card as string);
@@ -55,10 +56,18 @@ export class CardTheme {
     } else {
       layers.push(...this.cardToLayers(card));
     }
-    return {
+
+    const cardData = {
       layers: layers.map(identifier => this.data[identifier] ?? ''),
       description: typeof card === 'string' ? card : this.cardToDescription(card)
     };
+
+    if (cardData.layers.some(layer => !layer)) {
+      const defaultTheme = await this.getDefaultTheme();
+      return defaultTheme.getCard(card);
+    }
+
+    return cardData;
   }
 
   private cardToDescription(card: Card): string {
@@ -85,6 +94,11 @@ export class CardTheme {
       CardLayerSeparator + CardLayerWildcard + CardLayerSeparator
     );
     return [firstLayer, secondLayer];
+  }
+
+  private async getDefaultTheme(): Promise<CardTheme> {
+    const defaultThemeIdentifier = await CardThemeManager.global.getDefaultTheme();
+    return CardThemeManager.global.loadTheme(defaultThemeIdentifier);
   }
 
   public toJson(): SerializedCardTheme {
